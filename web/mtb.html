@@ -1,0 +1,326 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//NL">
+
+<html>
+<head>
+  <title>TheBusinessAssistant administrator pages</title>
+  <meta name="Description" content="Uw virtueel secretariaat.">
+  <meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+<!--  <base href="http://tba.dnsalias.com:8080/TheBusinessAssistant/admin.html"> -->
+  <meta HTTP-EQUIV="Content-Language" content="NL">
+  <meta name="Copyright" content="Copyright © 2003 TheBusinessAssistant, All rights reserved.">
+  <meta name="Distribution" content="Global">
+  <meta content=Global name=Distribution>
+  <link rel="stylesheet" type="text/css" href=".TheBusinessAssistant.css" title="main">
+<!--  <link title=main href="TheBusinessAssistant.css" type=text/css rel=stylesheet> -->
+</head>
+<body bgcolor="a3d082">
+  <br>
+  <br>
+  <br>
+  <form name="mtbselection" method="POST" action="/TheBusinessAssistant/Login">
+  <table width="700" cellspacing='20' cellpadding='0' border='0' >
+  <tr>
+    <td width="20"></td>
+    <td width="680" valign="top" class="mtbtitle">
+    WinterKalender 2004-2005<br><br>
+    Stel uw favoriete kalender samen voor het komende MTB winterseizoen. De ritten met de meeste voorkeurstemmen zullen het halen!<br>
+    </td>
+  </tr>
+  </table>
+  <table width="700" cellspacing='20' cellpadding='0' border='0' >
+  <tr>
+    <td width="40"></td>
+    <td width="660" valign="top" class="adminsubsubtitle">
+    Selecteer hier uw naam (breng slechts een stem uit aub. Ik heb niet de tijd gehad om dit ding waterdicht te maken voor onnozeltijden).<br>
+    Waar niet echt veel keuze is heb ik een 'Thuis toer' toegevoegd. Dit wil zeggen den toer van Herentals naar Kasterlee en terug naar de hut voor een trappisje.<br>
+    <br>
+    En nu, uw naam selecteren en stemmen maar......<br>
+    </td>
+  </tr>
+  <tr>
+    <td width="40"></td>
+    <td width="660" valign="top">
+    <select name="naam">
+        <option value="niks" selected>kies hier uw naam
+        <option value="Yves" >Yves
+        <option value="JanLang" >Jan De Vos
+        <option value="JanKort" >Jan De Voeght
+        <option value="Gert" >Gert
+        <option value="Leo" >Leo
+        <option value="Leon" >Leon
+        <option value="Chris" >Chris
+        <option value="Wim" >Wim
+        <option value="HansV" >Hans Vets
+        <option value="HansL" >Hans Van looy
+        <option value="Willy" >William
+        <option value="Johan" >Johan
+        <option value="Danny" >Danny
+        <option value="Cisse" >Cisse
+        <option value="JanVE" >Jan Van Eemeren
+        <option value="Paul" >Paul
+        <option value="Charel" >Charel
+    </select>
+    </td>
+  </tr>
+  </table>
+  <br>
+  <br>
+  <table  width="700" cellspacing='2' cellpadding='2' border='1'>
+  <tr>
+    <td width="40"></td>
+    <td width="80" valign="top" class="adminsubsubtitle">26/sept</td>
+    <td width="580" valign="top" class="adminsubsubtitle">
+      <input type=radio name="26sept" value="Rijkevorsel" >Rijkevorsel &nbsp;&nbsp;&nbsp;
+      <input type=radio name="26sept" value="Kessel-lo" >Kessel-lo &nbsp;&nbsp;&nbsp;
+      <input type=radio name="26sept" value="Nijlen" >Nijlen &nbsp;&nbsp;&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td width="40"></td>
+    <td width="80" valign="top" class="adminsubsubtitle">3/okt</td>
+    <td width="580" valign="top" class="adminsubsubtitle">
+      <input type=radio name="3okt" value="Arendonk" >Arendonk &nbsp;&nbsp;&nbsp;
+      <input type=radio name="3okt" value="Langdorp" >Langdorp (Wolfsdonk) &nbsp;&nbsp;&nbsp;
+      <input type=radio name="3okt" value="St-Lenaerts" >St-Lenaerts &nbsp;&nbsp;&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td width="40"></td>
+    <td width="80" valign="top" class="adminsubsubtitle">10/okt</td>
+    <td width="580" valign="top" class="adminsubsubtitle">
+      <input type=radio name="10okt" value="Mol-Millegem" >Mol Millegem &nbsp;&nbsp;&nbsp;
+      <input type=radio name="10okt" value="Westmeerbeek" >Westmeerbeek &nbsp;&nbsp;&nbsp;
+      <input type=radio name="10okt" value="Halle-Zoersel" >Halle-Zoersel &nbsp;&nbsp;&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td width="40"></td>
+    <td width="80" valign="top" class="adminsubsubtitle">17/okt</td>
+    <td width="580" valign="top" class="adminsubsubtitle">
+      <input type=radio name="17okt" value="Dessel" >Dessel(witgoor) &nbsp;&nbsp;&nbsp;
+      <input type=radio name="17okt" value="Rillaar" >Rillaar &nbsp;&nbsp;&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td width="40"></td>
+    <td width="80" valign="top" class="adminsubsubtitle">24/okt</td>
+    <td width="580" valign="top" class="adminsubsubtitle">
+      <input type=radio name="24okt" value="Kortenberg" >Kortenberg &nbsp;&nbsp;&nbsp;
+      <input type=radio name="24okt" value="ThuisToer" >Thuis toer &nbsp;&nbsp;&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td width="40"></td>
+    <td width="80" valign="top" class="adminsubsubtitle">31/okt</td>
+    <td width="580" valign="top" class="adminsubsubtitle">
+      <input type=radio name="31okt" value="Lommel" >Lommel &nbsp;&nbsp;&nbsp;
+      <input type=radio name="31okt" value="Gooik" >Gooik &nbsp;&nbsp;&nbsp;
+      <input type=radio name="31okt" value="Bierbeek" >Bierbeek &nbsp;&nbsp;&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td width="40"></td>
+    <td width="80" valign="top" class="adminsubsubtitle">1/nov</td>
+    <td width="580" valign="top" class="adminsubsubtitle">
+      <input type=radio name="1nov" value="As" >As &nbsp;&nbsp;&nbsp;
+      <input type=radio name="1nov" value="ThuisToer" >Thuis toer &nbsp;&nbsp;&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td width="40"></td>
+    <td width="80" valign="top" class="adminsubsubtitle">7/nov</td>
+    <td width="580" valign="top" class="adminsubsubtitle">
+      <input type=radio name="7nov" value="Tessenderlo" >Tessenderlo &nbsp;&nbsp;&nbsp;
+      <input type=radio name="7nov" value="Langdorp" >Langdorp &nbsp;&nbsp;&nbsp;
+      <input type=radio name="7nov" value="Pulle" >Pulle &nbsp;&nbsp;&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td width="40"></td>
+    <td width="80" valign="top" class="adminsubsubtitle">11/nov</td>
+    <td width="580" valign="top" class="adminsubsubtitle">
+      <input type=radio name="11nov" value="Beringen" >Beringen &nbsp;&nbsp;&nbsp;
+      <input type=radio name="11nov" value="Oostmalle" >Oostmalle &nbsp;&nbsp;&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td width="40"></td>
+    <td width="80" valign="top" class="adminsubsubtitle">14/nov</td>
+    <td width="580" valign="top" class="adminsubsubtitle">
+      <input type=radio name="14nov" value="Heusden" >Heusden &nbsp;&nbsp;&nbsp;
+      <input type=radio name="14nov" value="Aarschot" >Aarschot &nbsp;&nbsp;&nbsp;
+      <input type=radio name="14nov" value="Brecht" >Brecht &nbsp;&nbsp;&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td width="40"></td>
+    <td width="80" valign="top" class="adminsubsubtitle">21/nov</td>
+    <td width="580" valign="top" class="adminsubsubtitle">
+      <input type=radio name="21nov" value="Hoogstraten" >Hoogstraten &nbsp;&nbsp;&nbsp;
+      <input type=radio name="21nov" value="Rotselaar" >Rotselaar &nbsp;&nbsp;&nbsp;
+      <input type=radio name="21nov" value="ThuisToer" >Thuis toer &nbsp;&nbsp;&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td width="40"></td>
+    <td width="80" valign="top" class="adminsubsubtitle">28/nov</td>
+    <td width="580" valign="top" class="adminsubsubtitle">
+      <input type=radio name="28nov" value="Genk" >Genk (Winterslag) &nbsp;&nbsp;&nbsp;
+      <input type=radio name="28nov" value="Zandhoven" >Zandhoven &nbsp;&nbsp;&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td width="40"></td>
+    <td width="80" valign="top" class="adminsubsubtitle">5/dec</td>
+    <td width="580" valign="top" class="adminsubsubtitle">
+      <input type=radio name="5dec" value="Lommel" >Lommel &nbsp;&nbsp;&nbsp;
+      <input type=radio name="5dec" value="ThuisToer" >Thuis toer &nbsp;&nbsp;&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td width="40"></td>
+    <td width="80" valign="top" class="adminsubsubtitle">12/dec</td>
+    <td width="580" valign="top" class="adminsubsubtitle">
+      <input type=radio name="12dec" value="Oostham" >Ham (Oostham) &nbsp;&nbsp;&nbsp;
+      <input type=radio name="12dec" value="Wilsele" >Wilsele-putkappelen &nbsp;&nbsp;&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td width="40"></td>
+    <td width="80" valign="top" class="adminsubsubtitle">19/dec</td>
+    <td width="580" valign="top" class="adminsubsubtitle">
+      <input type=radio name="19dec" value="Rijkevorsel" >Rijkevorsel &nbsp;&nbsp;&nbsp;
+      <input type=radio name="19dec" value="ThuisToer" >Thuis toer &nbsp;&nbsp;&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td width="40"></td>
+    <td width="80" valign="top" class="adminsubsubtitle">26/dec</td>
+    <td width="580" valign="top" class="adminsubsubtitle">
+      <input type=radio name="26dec" value="Westmalle" >Westmalle &nbsp;&nbsp;&nbsp;
+      <input type=radio name="26dec" value="Poederlee" >Poederlee &nbsp;&nbsp;&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td width="40"></td>
+    <td width="80" valign="top" class="adminsubsubtitle">31/dec</td>
+    <td width="580" valign="top" class="adminsubsubtitle">
+      <input type=radio name="31dec" value="Retie" >Retie &nbsp;&nbsp;&nbsp;
+      <input type=radio name="31dec" value="ThuisToer" >Thuis toer &nbsp;&nbsp;&nbsp;
+    </td>
+  </tr>
+
+  <tr>
+    <td width="40"></td>
+    <td width="80" valign="top" class="adminsubsubtitle">2/jan</td>
+    <td width="580" valign="top" class="adminsubsubtitle">
+      <input type=radio name="2jan" value="St-Job" >St Job in 't Goor &nbsp;&nbsp;&nbsp;
+      <input type=radio name="2jan" value="ThuisToer" >Thuis toer &nbsp;&nbsp;&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td width="40"></td>
+    <td width="80" valign="top" class="adminsubsubtitle">9/jan</td>
+    <td width="580" valign="top" class="adminsubsubtitle">
+      <input type=radio name="9jan" value="Beverlo" >Beverlo &nbsp;&nbsp;&nbsp;
+      <input type=radio name="9jan" value="Bonheiden" >Bonheiden &nbsp;&nbsp;&nbsp;
+      <input type=radio name="9jan" value="Wortel" >Wortel &nbsp;&nbsp;&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td width="40"></td>
+    <td width="80" valign="top" class="adminsubsubtitle">16/jan</td>
+    <td width="580" valign="top" class="adminsubsubtitle">
+      <input type=radio name="16jan" value="Oostmalle" >Oostmalle &nbsp;&nbsp;&nbsp;
+      <input type=radio name="16jan" value="ThuisToer" >Thuis toer &nbsp;&nbsp;&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td width="40"></td>
+    <td width="80" valign="top" class="adminsubsubtitle">23/jan</td>
+    <td width="580" valign="top" class="adminsubsubtitle">
+      <input type=radio name="23jan" value="Dessel" >Dessel (Witgoor) &nbsp;&nbsp;&nbsp;
+      <input type=radio name="23jan" value="Zoersel" >Halle-Zoersel &nbsp;&nbsp;&nbsp;
+      <input type=radio name="23jan" value="Werchter" >Werchter &nbsp;&nbsp;&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td width="40"></td>
+    <td width="80" valign="top" class="adminsubsubtitle">30/jan</td>
+    <td width="580" valign="top" class="adminsubsubtitle">
+      <input type=radio name="30jan" value="Brasschaat" >Brasschaat &nbsp;&nbsp;&nbsp;
+      <input type=radio name="30jan" value="ThuisToer" >Thuis toer &nbsp;&nbsp;&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td width="40"></td>
+    <td width="80" valign="top" class="adminsubsubtitle">6/feb</td>
+    <td width="580" valign="top" class="adminsubsubtitle">
+      <input type=radio name="6feb" value="Hoogstraten" >Hoogstraten &nbsp;&nbsp;&nbsp;
+      <input type=radio name="6feb" value="Heverlee" >Heverlee &nbsp;&nbsp;&nbsp;
+      <input type=radio name="6feb" value="ThuisToer" >Thuis toer &nbsp;&nbsp;&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td width="40"></td>
+    <td width="80" valign="top" class="adminsubsubtitle">13/feb</td>
+    <td width="580" valign="top" class="adminsubsubtitle">
+      <input type=radio name="13feb" value="Linkhout" >Linkhout (Lummen) &nbsp;&nbsp;&nbsp;
+      <input type=radio name="13feb" value="Turnhout" >Turnhout &nbsp;&nbsp;&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td width="40"></td>
+    <td width="80" valign="top" class="adminsubsubtitle">20/feb</td>
+    <td width="580" valign="top" class="adminsubsubtitle">
+      <input type=radio name="20feb" value="Lommel" >Lommel &nbsp;&nbsp;&nbsp;
+      <input type=radio name="20feb" value="Schilde" >Schilde &nbsp;&nbsp;&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td width="40"></td>
+    <td width="80" valign="top" class="adminsubsubtitle">27/feb</td>
+    <td width="580" valign="top" class="adminsubsubtitle">
+      <input type=radio name="27feb" value="Mol-Wezel" >Mol Wezel &nbsp;&nbsp;&nbsp;
+      <input type=radio name="27feb" value="Oelegem" >Oelegem &nbsp;&nbsp;&nbsp;
+      <input type=radio name="27feb" value="Aarschot" >Aarschot &nbsp;&nbsp;&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td width="40"></td>
+    <td width="80" valign="top" class="adminsubsubtitle">6/mrt</td>
+    <td width="580" valign="top" class="adminsubsubtitle">
+      <input type=radio name="6mrt" value="Schaffen" >Schaffen &nbsp;&nbsp;&nbsp;
+      <input type=radio name="6mrt" value="ThuisToer" >ThuisToer &nbsp;&nbsp;&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td width="40"></td>
+    <td width="80" valign="top" class="adminsubsubtitle">13/mrt</td>
+    <td width="580" valign="top" class="adminsubsubtitle">
+      <input type=radio name="13mrt" value="Schaffen" >Bierbeek &nbsp;&nbsp;&nbsp;
+      <input type=radio name="13mrt" value="ThuisToer" >ThuisToer &nbsp;&nbsp;&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td width="40"></td>
+    <td width="80" valign="top" class="adminsubsubtitle">20/mrt</td>
+    <td width="580" valign="top" class="adminsubsubtitle">
+      <input type=radio name="20mrt" value="Schaffen" >Wemmel &nbsp;&nbsp;&nbsp;
+      <input type=radio name="20mrt" value="ThuisToer" >ThuisToer &nbsp;&nbsp;&nbsp;
+    </td>
+  </tr>
+  </table>  <br>
+  <table width="650" cellspacing='0' cellpadding='0' border='0'>
+  <tr>
+    <td width="50"></td>
+    <td width="600" valign="top" class="bodytitle">
+      <input type=hidden name="_act" value="MTB" >
+      <input type=submit name=action value=" Keuze gemaakt ">
+    </td>
+  </tr>
+  </table>
+  </form>
+  <br>
+  <br>
+</body></html>

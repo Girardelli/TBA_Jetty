@@ -1,0 +1,101 @@
+
+.welkom { font-family: "Harlow Solid Italic", sans-serif; font-size : 11pt; color: #FFFFFF; }
+
+a.leftMenu:link, a.leftMenu:visited, a.leftMenu:active { color: #FFFFFF; 
+                                             text-decoration : none;
+                                             font-weight : bold;
+                                             font-size : 9pt; 
+                                             font-family: "Arial", sans-serif;}
+a.leftMenu:hover { color: #FF9900; }
+a.leftSubMenu:link, a.leftSubMenu:visited, a.leftSubMenu:active { color: #FFFFFF; 
+                                             text-decoration : none;
+                                             font-size : 9pt; 
+                                             font-family: "Arial", sans-serif;}
+a.leftSubMenu:hover { color: #FF9900; }
+a.topMenu:link, a.topMenu:visited, a.topMenu:active { color: #FFFFFF; 
+                                             text-decoration : none;
+                                             font-weight : bold;
+                                             font-size : 9pt; 
+                                             font-family: "Arial", sans-serif;}
+a.topMenu:hover { color: #FF9900; }
+a.bottom:link, a.bottom:visited, a.bottom:active { color: #FFFFFF; 
+                                             text-decoration : none;
+                                             font-size : 8pt; 
+                                             font-family: "Arial", sans-serif;}
+a.bottom:hover { color: #FF9900; }
+a.bodyMenu:link, a.bodyMenu:visited, a.bodyMenu:active { color: #000066; 
+                                             text-decoration : none;
+                                             font-weight : bold;
+                                             font-size : 10pt; 
+                                             font-family: "Arial", sans-serif;}
+a.bodyMenu:hover { color: #FF9900; }
+a.afmeldMenu:link, a.afmeldMenu:visited, a.afmeldMenu:active { color: #FFFFFF; 
+                                             text-decoration : none;
+                                             font-weight : bold;
+                                             font-size : 9pt; 
+                                             font-family: "Arial", sans-serif;}
+a.afmeldMenu:hover { color: #000066; }
+
+
+a.bodytekst:link, a.bodytekst:visited, a.bodytekst:active { color: #000000; font-size : 8pt; font-family: "Arial"}
+a.bodytekst:hover { color: #FF9900; }
+
+.bodytekst { font-family: "Arial"; color: #000000; font-size : 10pt; }
+.bodybold { font-family: "Arial"; color: #000000; font-weight : bold;  font-size : 10pt; }
+.bodytitle { font-family: "Times New Roman"; color: #000066; font-size : 14pt; }
+.bodysubtitle { font-family: "Times New Roman"; font-weight : bold; color: #000066; font-size : 12pt; }
+.bodysubsubtitle { font-family: "Times New Roman"; font-weight : bold; color: #000066; font-size : 11pt; }
+.bodyredbold { font-family: "Times New Roman"; font-weight : bold; color: #FF0000; font-size : 11pt; }
+.bodygreenbold { font-family: "Arial"; font-weight : bold; color: #48771E; font-size : 10pt; }
+.findtekst { font-family: "Arial"; color: #000000; font-weight : bold; text-decoration : underline; font-size : 10pt; }
+
+.mtbtitle { font-family: "Arial"; color: #FF0000; font-size : 18pt; }
+
+.admintitle { font-family: "Arial"; color: #000066; font-size : 14pt; }
+.adminsubtitle { font-family: "Arial"; font-weight : bold; color: #000066; font-size : 11pt; }
+.adminsubsubtitle { font-family: "Arial"; font-weight : bold; color: #000066; font-size : 10pt; }
+.arialred10 { font-family: "Arial"; font-weight : bold; color: #FF0000; font-size : 10pt; }
+
+.bottom { font-family: "Arial"; color: #FFFFFF; font-size : 8pt; }
+.mailtowhite { font-family: "Arial"; color: #FFFFFF; text-decoration : underline; font-size : 8pt; }
+.mailtoblack { font-family: "Arial"; color: #000000; text-decoration : underline; font-size : 8pt; }
+.tableheading { font-family: "Arial"; color: #000000; text-decoration : bold; font-size : 9pt; }
+.topMenu { color: #FFFFFF; text-decoration : none; font-weight : bold; font-size : 9pt; font-family: "Arial", sans-serif;}
+.afmeldMenu { color: #FFFFFF; text-decoration : none; font-weight : bold; font-size : 9pt; font-family: "Arial", sans-serif;}
+.startingDate { color: #FF0000; text-decoration : none; font-weight : bold; font-size : 20pt; font-family: "Arial", sans-serif;}
+.topMenuFix { color: #FFFFFF; text-decoration : none; font-weight : bold; font-size : 9pt; font-family: "Arial", sans-serif;}
+.topMenuNoLnk:link, topMenuNoLnk:visited, topMenuNoLnk:active { color: #FFFFFF; 
+                                             text-decoration : none;
+                                             font-weight : bold;
+                                             font-size : 9pt; 
+                                             font-family: "Arial", sans-serif;}
+.topMenuNoLnk:hover { color: #FF9900; }
+
+body {margin:0px; width:100%;font-family:arial;}
+a.norm{color:#FFFFFF;
+    text-decoration:none;
+    font-weight : bold;
+    font-size : 9pt; 
+    font-family: "Arial", sans-serif;}
+a.norm:hover{color:#FF9900}
+td.menu{background:#0099FF;color:#0099FF}
+table.menu
+{
+background:#0099FF;
+color:#0099FF;
+font-size:100%;
+position:absolute;
+visibility:hidden;
+}
+
+#content{position:relative; width:100%; height:19px; background-color:#ff0066;}
+#menu1 {position:absolute; left:20px; top:0px;}
+#menu2 {position:absolute; left:120px; top:0px;}
+#menu3 {position:absolute; left:240px; top:0px;}
+#menu4 {position:absolute; left:360px; top:0px;}
+#menu5 {position:absolute; left:440px; top:0px;}
+.fademenu {position:relative; font-family: "Arial"; cursor:pointer; font-weight:bold; color:#ffffff; padding:2px; z-index:999; font-size:12px;}
+.fadesub {position:relative; font-family: "Arial"; width:120px; background-color:#0099FF; visibility:hidden; cursor:pointer; padding:7px; z-index:999;}
+.fadesub a {color:#ffffff; font-family: "Arial"; text-decoration:none; font-size:12px;}
+.fadesub a:hover{color:#FF9900; font-family: "Arial"; text-decoration:none;  font-size:12px;}
+.disfadesub {color:#777777; font-family: "Arial"; text-decoration:none; font-size:12px;}

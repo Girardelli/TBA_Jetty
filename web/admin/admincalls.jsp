@@ -1,0 +1,515 @@
+<html>
+<%@ include file="adminheader.jsp" %>
+
+<head>
+<meta HTTP-EQUIV="Refresh" content="<%=Constants.REFRESH%>;URL=\TheBusinessAssistant\admin\admincalls.jsp">
+<title>TheBusinessAssistant administrator pages</title>
+</head>
+
+<%@ page
+	import="java.util.*,
+	java.lang.*,
+javax.naming.InitialContext,
+be.tba.ejb.account.interfaces.*,
+be.tba.ejb.pbx.interfaces.*,
+be.tba.util.constants.EjbJndiNames,
+be.tba.ejb.pbx.session.CallRecordSqlAdapter,
+be.tba.util.constants.Constants,
+be.tba.util.exceptions.AccessDeniedException,
+be.tba.util.exceptions.InvalidValueException,
+be.tba.servlets.session.SessionManager,
+be.tba.util.session.AccountCache,
+be.tba.util.session.MailError"%>
+
+<%!
+private StringBuilder allEntryIds;
+%>
+
+<%
+try
+{
+vSession.setCallingJsp(Constants.ADMIN_CALLS_JSP);
+allEntryIds = new StringBuilder("[");
+
+CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
+
+// filters
+boolean vCallDirectionFilterOn = false;
+
+String vCustomerFilter = (String) vSession.getCallFilter().getCustFilter();//request.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER);
+if (vCustomerFilter != null)
+{
+  if (vCustomerFilter.equals(Constants.ACCOUNT_FILTER_ALL))
+    vCustomerFilter = null;
+}
+String vCallStateFilter = (String) vSession.getCallFilter().getStateFilter();//request.getParameter(Constants.ACCOUNT_FILTER_CALL_STATE);
+if (vCallStateFilter == null)
+{
+  vCallStateFilter = Constants.ACCOUNT_FILTER_ALL;
+}
+String vCallDirectionFilter = (String) vSession.getCallFilter().getDirFilter();//request.getParameter(Constants.ACCOUNT_FILTER_CALL_DIR);
+if (vCallDirectionFilter != null)
+  vCallDirectionFilterOn = !vCallDirectionFilter.equals(Constants.ACCOUNT_FILTER_ALL);
+else
+  vCallDirectionFilter = Constants.ACCOUNT_FILTER_ALL;
+
+Collection vRecords = null;
+if (vCallDirectionFilterOn)
+{
+  if (vCallDirectionFilter.equals(Constants.ACCOUNT_FILTER_IN))
+  {
+    if (vCallStateFilter.equals(Constants.ACCOUNT_FILTER_UNFINISHED))
+      vRecords = vQuerySession.getInUnDocumented(vSession, vCustomerFilter);
+    else if (vCallStateFilter.equals(Constants.ACCOUNT_FILTER_FINISHED)) 
+      vRecords = vQuerySession.getInDocumented(vSession, vCustomerFilter);
+    else  
+      vRecords = vQuerySession.getIn(vSession, vCustomerFilter);
+  }
+  else if (vCallDirectionFilter.equals(Constants.ACCOUNT_FILTER_OUT))
+  {
+    if (vCallStateFilter.equals(Constants.ACCOUNT_FILTER_UNFINISHED))
+      vRecords = vQuerySession.getOutUnDocumented(vSession, vCustomerFilter);
+    else if (vCallStateFilter.equals(Constants.ACCOUNT_FILTER_FINISHED)) 
+      vRecords = vQuerySession.getOutDocumented(vSession, vCustomerFilter);
+    else  
+      vRecords = vQuerySession.getOut(vSession, vCustomerFilter);
+  }
+}
+else
+{
+  if (vCallStateFilter.equals(Constants.ACCOUNT_FILTER_UNFINISHED))
+    vRecords = vQuerySession.getUnDocumented(vSession, vCustomerFilter);
+  else if (vCallStateFilter.equals(Constants.ACCOUNT_FILTER_FINISHED)) 
+    vRecords = vQuerySession.getDocumentedUnReleased(vSession, vCustomerFilter);
+  else
+  {
+	if (vCustomerFilter == null)
+      vRecords = vQuerySession.getxDaysBack(vSession, vSession.getDaysBack(), vCustomerFilter);
+	else
+      vRecords = vQuerySession.getDocumentedForMonth(vSession, vCustomerFilter, vSession.getMonthsBack(), vSession.getYear());
+  }
+}
+
+
+// convert fwd number into full name
+
+if (vCustomerFilter == null) vCustomerFilter = Constants.ACCOUNT_FILTER_ALL;
+
+%>
+<body>
+<p><span class="admintitle"> Oproepenlijst: <%=vRecords.size()%> oproepen </span></p>
+<form name="calllistform" method="POST"
+	action="/TheBusinessAssistant/AdminDispatch"><input type=hidden
+	name=<%=Constants.RECORD_TO_DELETE%> value=""> 
+	<input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.GOTO_RECORD_ADMIN%>"> 
+<table width='100%' cellspacing='0' cellpadding='0' border='0'
+	bgcolor="FFFFFF">
+
+	<tr>
+		<!-- white space -->
+		<td valign="top" width="20" bgcolor="FFFFFF"></td>
+
+		<!-- account list -->
+		<td valign="top" width="865" bgcolor="FFFFFF"><br>
+		<table width="330" border="0" cellspacing="0" cellpadding="0">
+			<tr>
+				<td width="150" valign="top" class="adminsubtitle">&nbsp;Klant</td>
+				<td width="10" valign="top">:</td>
+				<%
+out.println("<td width=\"170\" valign=\"top\"><select name=\"" + Constants.ACCOUNT_FILTER_CUSTOMER + "\" onchange=\"submit()\">");
+
+				Collection list = AccountCache.getInstance().getCustomerList();
+				synchronized(list) 
+				{
+				    for (Iterator vIter = list.iterator(); vIter.hasNext();)
+				    {
+				        AccountEntityData vData = (AccountEntityData) vIter.next();
+				        out.println("<option value=\"" + vData.getFwdNumber() + (vCustomerFilter.equals(vData.getFwdNumber()) ? "\" selected>" : "\">") + vData.getFullName());
+				    }
+				}
+out.println("<option value=\"" + Constants.NUMBER_BLOCK[0][0] + (vCustomerFilter.equals(Constants.NUMBER_BLOCK[0][0]) ? "\" selected>" : "\">") + Constants.NUMBER_BLOCK[0][3]);
+out.println("<option value=\"" + Constants.NUMBER_BLOCK[1][0] + (vCustomerFilter.equals(Constants.NUMBER_BLOCK[1][0]) ? "\" selected>" : "\">") + Constants.NUMBER_BLOCK[1][3]);
+out.println("<option value=\"" + Constants.NUMBER_BLOCK[2][0] + (vCustomerFilter.equals(Constants.NUMBER_BLOCK[2][0]) ? "\" selected>" : "\">") + Constants.NUMBER_BLOCK[2][3]);
+out.println("<option value=\"" + Constants.ACCOUNT_FILTER_ALL + (vCustomerFilter.equals(Constants.ACCOUNT_FILTER_ALL) ? "\" selected>" : "\">") + "Alle klanten");
+out.println("</select></td>");
+%>
+			</tr>
+			<tr>
+				<td width="150" valign="top" class="adminsubtitle">&nbsp;Oproep	status</td>
+				<td width="10" valign="top">:</td>
+				<%
+out.println("<td width=\"170\" valign=\"top\">");
+out.println("  <select name=\"" + Constants.ACCOUNT_FILTER_CALL_STATE + "\" onchange=\"submit()\">");
+out.println("  <option value=\"" + Constants.ACCOUNT_FILTER_UNFINISHED + (vCallStateFilter.equals(Constants.ACCOUNT_FILTER_UNFINISHED) ? "\" selected>" : "\">") + "Onvolledige");
+out.println("  <option value=\"" + Constants.ACCOUNT_FILTER_FINISHED + (vCallStateFilter.equals(Constants.ACCOUNT_FILTER_FINISHED) ? "\" selected>" : "\">") + "Volledige");
+out.println("  <option value=\"" + Constants.ACCOUNT_FILTER_ALL + (vCallStateFilter.equals(Constants.ACCOUNT_FILTER_ALL) ? "\" selected>" : "\">") + "Alle");
+out.println("  </select>");
+out.println("</td>");
+%>
+			</tr>
+			<tr>
+				<td width="150" valign="top" class="adminsubtitle">&nbsp;Inkomend/Uitgaand</td>
+				<td width="10" valign="top">:</td>
+				<%
+out.println("<td width=\"170\" valign=\"top\">");
+out.println("  <select name=\"" + Constants.ACCOUNT_FILTER_CALL_DIR + "\" onchange=\"submit()\">");
+out.println("  <option value=\"" + Constants.ACCOUNT_FILTER_IN + (vCallDirectionFilter.equals(Constants.ACCOUNT_FILTER_IN) ? "\" selected>" : "\">") + "InKomende");
+out.println("  <option value=\"" + Constants.ACCOUNT_FILTER_OUT + (vCallDirectionFilter.equals(Constants.ACCOUNT_FILTER_OUT) ? "\" selected>" : "\">") + "Uitgaande");
+out.println("  <option value=\"" + Constants.ACCOUNT_FILTER_ALL + (vCallDirectionFilter.equals(Constants.ACCOUNT_FILTER_ALL) ? "\" selected>" : "\">") + "In- en Uitgaande");
+out.println("  </select>");
+out.println("</td>");
+%>
+			</tr>
+		</table>
+		<br>
+		<input type=submit name=action value="Refresh" onclick="filterCalls()">
+		<input type=submit name=action value="Verwijderen" onclick="deleteCalls()"> 
+		<input type=submit name=action value="Toevoegen" onclick="addRecord()"> 
+		<input type=submit name=action value="Oproep" onclick="newCall('/TheBusinessAssistant/admin/newcall.jsp','New_Call_arrived','toolbar=yes,location=no,directories=no,status=no,member=no,scrollbars=yes,resizable=yes,copyhistory=no,width=900,height=650,screenX=0,screenY=0,top=0,left=0');">
+
+		<input type=submit name=action value="verzend mail"	onclick="testMail()"><br>
+<%if (MailError.getInstance().getError() != null) 
+{
+%>      
+        <input type=submit name=action value="Mail Error" onclick="mailError()"><br>
+<% 
+}
+%>      
+		<br>
+<%if (vCustomerFilter == null || vCustomerFilter.equals(Constants.ACCOUNT_FILTER_ALL)) 
+{
+%>		
+		<input type=submit name=action value="10 dagen vroeger" onclick="showPrevious10()"> 
+		<input type=submit name=action value="1 dag vroeger" onclick="showPrevious()"> 
+<%
+	if (vSession.getDaysBack() > 0)
+	{
+	  out.println("<input type=submit name=action value=\"1 dag later\"  onclick=\"showNext()\">");
+	}
+	if (vSession.getDaysBack() >= 10)
+	{
+	  out.println("<input type=submit name=action value=\"10 dagen later\"  onclick=\"showNext10()\">");
+	}
+}
+else
+{
+%>
+        <input type=submit name=action value="1 maand vroeger" onclick="showPrevious()"> 
+<%
+//	if (vSession.getMonthsBack() < 0)
+	  out.println("<input type=submit name=action value=\"1 maand later\"  onclick=\"showNext()\">");
+}
+%>
+<%
+
+if (vRecords == null || vRecords.size() == 0)
+{
+	if (vCustomerFilter == null || vCustomerFilter.equals(Constants.ACCOUNT_FILTER_ALL))
+	  out.println("<br><br><span class=\"adminsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Er zijn geen oproepgegevens beschikbaar (" + vSession.getDaysBack() + " dagen terug).</span>");
+	else
+      out.println("<br><br><span class=\"adminsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Er zijn geen oproepgegevens beschikbaar (" + vSession.getMonthsBack() + " maanden terug).</span>");
+}
+else
+{
+  if (vSession.getDaysBack() > 0)
+  {
+	    if (vCustomerFilter == null || vCustomerFilter.equals(Constants.ACCOUNT_FILTER_ALL))
+	        out.println("<br><br><span class=\"adminsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Oproepen van " + vSession.getDaysBack() + " dagen terug.</span><br>");
+      else
+    	    out.println("<br><br><span class=\"adminsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Oproepen van " + vSession.getMonthsBack() + " maanden terug.</span><br>");
+  }
+  out.println("<table width=\"100%\" border=\"0\" cellspacing=\"2\" cellpadding=\"4\">");
+  out.println("              <br><tr>");
+  out.println("                <td width=\"20\" bgcolor=\"FFFFFF\"></td>");
+  out.println("                <td width=\"10\" valign=\"top\" class=\"topMenu\" bgcolor=\"FF9900\"></td>");
+  out.println("                <td width=\"140\" valign=\"top\" class=\"topMenu\" bgcolor=\"FF9900\">&nbsp;Klant</td>");
+  out.println("                <td width=\"55\"  valign=\"top\" class=\"topMenu\" bgcolor=\"FF9900\">&nbsp;Datum</td>");
+  out.println("                <td width=\"35\"  valign=\"top\" class=\"topMenu\" bgcolor=\"FF9900\">&nbsp;Uur</td>");
+  out.println("                <td width=\"85\"  valign=\"top\" class=\"topMenu\" bgcolor=\"FF9900\">&nbsp;Nummer</td>");
+  out.println("                <td width=\"140\" valign=\"top\" class=\"topMenu\" bgcolor=\"FF9900\">&nbsp;Naam</td>");
+  out.println("                <td width=\"280\" valign=\"top\" class=\"topMenu\" bgcolor=\"FF9900\">&nbsp;Omschrijving</td>");
+  out.println("                <td width=\"100\" valign=\"top\" class=\"topMenu\" bgcolor=\"FF9900\">&nbsp;Duur</td>");
+  out.println("                <td width=\"100\"  valign=\"top\" class=\"topMenu\" bgcolor=\"FF9900\">&nbsp;Infos</td>");
+  out.println("              </tr>");
+
+  int vRowInd = 0;
+  AccountEntityData vAccountEntityData;
+
+  for (Iterator i = vRecords.iterator(); i.hasNext();)
+  {
+      CallRecordEntityData vEntry = (CallRecordEntityData) i.next();
+
+      String vId = "id" + vEntry.getId();
+      vAccountEntityData = AccountCache.getInstance().get(vEntry.getFwdNr());
+      if (vAccountEntityData == null)
+      {
+        throw new InvalidValueException("Oproepen database refereert naar een klantnummer 014/" + vEntry.getFwdNr() +
+                                        " die niet gekend is. Maak een klant aan met deze klantnummer om deze oproepen zichtbaar te maken.", null);
+      }
+      String vDate = vEntry.getDate();
+      String vTime = vEntry.getTime();
+      String vNumber = vEntry.getNumber();
+      String vName = vEntry.getName();
+      vName = vName == null ? "" : vName;
+      String vShortDesc = (String) vEntry.getShortDescription();
+      vShortDesc = vShortDesc == null ? "" : vShortDesc;
+      String vLongDesc = (String) vEntry.getLongDescription();
+      vLongDesc = vLongDesc == null ? "" : vLongDesc;
+      String vStyleStart = "";
+      String vStyleEnd = "";
+      String vInOut;
+      if (vEntry.getIsIncomingCall())
+        vInOut = "\"/TheBusinessAssistant/images/incall.gif\"";
+      else
+        vInOut = "\"/TheBusinessAssistant/images/outcall.gif\"";
+      String vInfoGifs = "";
+      if (vLongDesc.length() > 0)
+      {
+        vInfoGifs = vInfoGifs.concat("<img src=\"/TheBusinessAssistant/images/info.gif\" alt=\"dubbel klik om de info te bekijken\" height=\"16\" border=\"0\">&nbsp;");
+      }
+      if (vEntry.getIsAgendaCall())
+      {
+        vInfoGifs = vInfoGifs.concat("<img src=\"/TheBusinessAssistant/images/agenda.gif\" height=\"13\" border=\"0\">&nbsp;");
+      }
+      if (vEntry.getIsSmsCall())
+      {
+        vInfoGifs = vInfoGifs.concat("<img src=\"/TheBusinessAssistant/images/sms.gif\"  height=\"13\" border=\"0\">&nbsp");
+      }
+      if (vEntry.getIsForwardCall())
+      {
+        vInfoGifs = vInfoGifs.concat("<img src=\"/TheBusinessAssistant/images/telefoon.gif\"  height=\"13\" border=\"0\">&nbsp;");
+      }
+      if (vEntry.getIsFaxCall())
+      {
+        vInfoGifs = vInfoGifs.concat("<img src=\"/TheBusinessAssistant/images/fax.gif\"  height=\"13\" border=\"0\">&nbsp;");
+      }
+      if (vEntry.getIs3W_call())
+      {
+        vInfoGifs = vInfoGifs.concat("<img src=\"/TheBusinessAssistant/images/3w.gif\"  height=\"13\" border=\"0\">&nbsp;");
+      }
+      String vImportant = "";
+      if (vEntry.getIsImportantCall())
+      {
+        vImportant = vImportant.concat("<img src=\"/TheBusinessAssistant/images/important.gif\"  height=\"13\" border=\"0\">&nbsp;");
+      }
+      if (!vEntry.getIsDocumented())
+      {
+        vStyleStart = vStyleStart.concat("<b>");
+        vStyleEnd = vStyleEnd.concat("</b>");
+      }
+      if (vEntry.getIsMailed())
+      {
+        vStyleStart = vStyleStart.concat("<i>");
+        vStyleEnd = vStyleEnd.concat("</i>");
+      }
+
+  %>
+	<tr bgcolor="FFCC66" id=<%=vId%> class="bodytekst"
+		onmouseover="hooverOnRow('<%=vId%>','<%=vRowInd%>')"
+		onmouseout="hooverOffRow('<%=vId%>','<%=vRowInd%>')"
+		onclick="updateDeleteFlag('<%=vId%>','<%=vEntry.getId()%>','<%=vRowInd%>')"
+		ondblclick="changeUrl('/TheBusinessAssistant/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.RECORD_UPDATE%>&<%=Constants.RECORD_ID%>=<%=vEntry.getId()%>');">
+		<td width="20" bgcolor="FFFFFF"><img src=<%=vInOut%> height="13"
+			border="0"></td>
+		<td width="10" valign="top"><%=vImportant%></td>
+		<td width="140" valign="top"><%=vStyleStart%><%=vAccountEntityData.getFullName()%><%=vStyleEnd%></td>
+		<td width="55" valign="top"><%=vStyleStart%><%=vDate%><%=vStyleEnd%></td>
+		<td width="35" valign="top"><%=vStyleStart%><%=vTime%><%=vStyleEnd%></td>
+		<td width="85" valign="top"><%=vStyleStart%><%=vNumber%><%=vStyleEnd%></td>
+		<td width="140" valign="top"><%=vStyleStart%><%=vName%><%=vStyleEnd%></td>
+		<td width="280" valign="top"><%=vStyleStart%><%=vShortDesc%><%=vStyleEnd%></td>
+		<td width="100" valign="top"><%=vStyleStart%><%=vEntry.getCost()%><%=vStyleEnd%></td>
+		<td width="100" valign="top"><%=vInfoGifs%></td>
+	</tr>
+	<%
+      vRowInd++;
+      allEntryIds.append("\"");
+      allEntryIds.append(vId);
+      allEntryIds.append("\"");
+      allEntryIds.append(",");
+  }
+  if (vRowInd > 0)
+  {
+      allEntryIds.deleteCharAt(allEntryIds.length() - 1);
+  }
+}
+allEntryIds.append("]");
+
+out.println("</table>");
+if (vRecords != null && vRecords.size() > 0)
+{
+  out.println("<br><br><input type=submit name=action value=\"Vorige Oproepen\"  onclick=\"showPrevious()\">");
+  if (vSession.getDaysBack() > 0)
+    out.println("&nbsp;&nbsp;&nbsp;<input type=submit name=action value=\"Volgende Oproepen\"  onclick=\"showNext()\">");
+}
+}
+catch (Exception e)
+{
+    e.printStackTrace();
+}
+%>
+
+<script type="text/javascript">
+var linesToDelete = new Array();
+
+window.name="callswindow"; 
+
+
+function hooverOnRow(id, rowInd)
+{
+  var entry = document.getElementById(id) ;
+  if (linesToDelete[rowInd] == null)
+    entry.style.backgroundColor= "FFFF99";
+  else
+    entry.style.backgroundColor= "FF9966";
+}
+
+function hooverOffRow(id, rowInd)
+{
+  var entry = document.getElementById(id) ;
+  if (linesToDelete[rowInd] == null)
+    entry.style.backgroundColor= "FFCC66";
+  else
+    entry.style.backgroundColor= "FF9966";
+}
+
+function updateDeleteFlag(rowid, id, rowInd)
+{
+  var entry = document.getElementById(rowid) ;
+  if (linesToDelete[rowInd] == null)
+  {
+    linesToDelete[rowInd] = id;
+    entry.style.backgroundColor= "FF9966";
+  }
+  else
+  {
+    linesToDelete[rowInd] = null;
+    entry.style.backgroundColor= "FFFF99";
+  }
+}
+
+function deleteCalls()
+{
+  var shorterArr = new Array();
+  var j = 0;
+  for (var i = 0; i < linesToDelete.length; i++)
+    if (linesToDelete[i] != null)
+      shorterArr[j++] = linesToDelete[i];
+  document.calllistform.<%=Constants.RECORD_TO_DELETE%>.value=shorterArr.join();
+  document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.RECORD_DELETE%>";
+
+  document.<%=Constants.RECORD_TO_DELETE%>.value=shorterArr.join();
+}
+
+function selectAll()
+{
+  var allArr = <%=allEntryIds.toString()%>;
+  for (var i = 0; i < allArr.length; i++) // length -1 because we have entered an extra ',' at the end
+  {
+    linesToDelete[i] = allArr[i].substring(2);
+    var entry = document.getElementById(allArr[i]) ;
+    entry.style.backgroundColor= "FF9966";
+  }
+}
+
+function deselectAll()
+{
+  var allArr = <%=allEntryIds.toString()%>;
+  for (var i = 0; i < allArr.length; i++) // length -1 because we have entered an extra ',' at the end
+  {
+    linesToDelete[i] = null;
+    var entry = document.getElementById(allArr[i]) ;
+    entry.style.backgroundColor= "FFCC66";
+  }
+}
+
+function reverseSelection()
+{
+  var allArr = <%=allEntryIds.toString()%>;
+  for (var i = 0; i < allArr.length; i++) // length -1 because we have entered an extra ',' at the end
+  {
+    if (linesToDelete[i] == null)
+    {
+      linesToDelete[i] = allArr[i].substring(2);
+      var entry = document.getElementById(allArr[i]) ;
+      entry.style.backgroundColor= "FF9966";
+    }
+    else
+    {
+      linesToDelete[i] = null;
+      var entry = document.getElementById(allArr[i]) ;
+      entry.style.backgroundColor= "FFCC66";
+    }
+  }
+}
+
+
+function filterCalls()
+{
+  document.calllistform.<%=Constants.RECORD_TO_DELETE%>.value="";
+  document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.GOTO_RECORD_ADMIN%>";
+}
+
+function addRecord()
+{
+  document.calllistform.<%=Constants.RECORD_TO_DELETE%>.value="";
+  document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.GOTO_ADD_RECORD%>";
+}
+
+function showPrevious10()
+{
+  document.calllistform.<%=Constants.RECORD_TO_DELETE%>.value="";
+  document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.RECORD_SHOW_PREV_10%>";
+}
+
+function showPrevious()
+{
+  document.calllistform.<%=Constants.RECORD_TO_DELETE%>.value="";
+  document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.RECORD_SHOW_PREV%>";
+}
+
+function showNext()
+{
+  document.calllistform.<%=Constants.RECORD_TO_DELETE%>.value="";
+  document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.RECORD_SHOW_NEXT%>";
+}
+
+function showNext10()
+{
+  document.calllistform.<%=Constants.RECORD_TO_DELETE%>.value="";
+  document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.RECORD_SHOW_NEXT_10%>";
+}
+
+function changeUrl(newURL) 
+{
+  location=newURL;
+}
+
+function testMail()
+{
+  document.calllistform.<%=Constants.RECORD_TO_DELETE%>.value="";
+  document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.MAIL_IT%>";
+}
+
+function mailError()
+{
+  document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.SHOW_MAIL_ERROR%>";
+}
+
+var newwindow = '';
+
+function newCall(url)
+{
+  newwindow = window.open(url);
+
+  if (!newwindow.opener) newwindow.opener = self;
+  if (window.focus) {newwindow.focus()}
+  return false;
+}
+
+</script>
+
+</body>
+
+</html>
+

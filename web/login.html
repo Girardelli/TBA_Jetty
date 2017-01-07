@@ -1,0 +1,77 @@
+<html>
+<head>
+  <title>TheBusinessAssistant administrator pages</title>
+  <meta name="Keywords" content="virtueel secretariaat telefoondiensten antwoorddiensten kantoor automatisering tekstverwerking administratie afsprakendienst dactylo">
+  <meta name="Description" content="Uw virtueel secretariaat.">
+  <meta name="Owner" content="yves.willems@theBusinessAssistant.be">
+  <meta HTTP-EQUIV="Content-Language" content="NL">
+ <!-- <meta HTTP-EQUIV="Refresh" content="30">-->
+  <meta name="Copyright" content="Copyright © 2003 TheBusinessAssistant, All rights reserved.">
+  <meta name="Distribution" content="Global">
+  <link rel="stylesheet" type="text/css" href="TheBusinessAssistant.css" title="main">
+</head>
+<body>
+<table border="0" cellspacing="0" cellpadding="0">
+
+<!--header 1-->
+
+  <tr>
+    <td height="50"  bgcolor=000066>
+      <img src="images\tba-lightblue-trans-500-50.gif" height="50" border="0" alt="">
+    </td>
+  </tr>
+<!--Customer Login window-->
+    <td>
+      <table border="0" cellpadding="0" cellspacing="0">
+        <tr>
+          <td valign="top" width="60" bgcolor="FFFFFF">
+          </td>
+          <td valign="top" bgcolor="FFFFFF">
+            <br><br>
+            <span class="bodysubtitle"> Geef uw gebruikersnaam en paswoord in om uw persoonlijke assistent te starten.
+Bent u een nieuwe klant, registreer dan eerst.
+            </span>
+            <br>
+            <p>
+            <span class="bodytekst">
+              <!-- action name must be a URI name as it is set in the <application>.xml servlet-mapping tag.-->
+              <form name="loginform" method="GET" action="/TheBusinessAssistant/Login">
+                <table width="520" border="0" cellspacing="2" cellpadding="2">
+                  <tr>
+                    <td width="120" valign="top" class="bodytekst">&nbsp;&nbsp;&nbsp;&nbsp;Login naam</td>
+                    <td width="400" valign="top">&nbsp;<input type=text name=_uid size=20></td>
+                  </tr>
+                  <tr>
+                    <td width="120" valign="top" class="bodytekst">&nbsp;&nbsp;&nbsp;&nbsp;paswoord</td>
+                    <td width="400" valign="top">&nbsp;<input type=password name=_pwd size=20></td>
+                  </tr>
+                </table>
+                <br><br>
+                <input type=hidden name=_act value="">
+                <input type=submit name=action value="Login" onclick="login()">
+                <input type=reset> &nbsp;&nbsp;&nbsp;
+                <input type=submit name=action value="Registreren" onclick="register()">
+                <input type=reset value=" Exit " onclick="window.close();return false;">
+              </form>
+            </span>
+            <br>
+            </p>
+          </td>
+        </tr>
+      </table>
+    </td>
+
+<script>
+function login()
+{
+  document.loginform._act.value="ACTION_LOGIN";
+}
+
+function register()
+{
+  document.loginform._act.value="ACTION_REGISTER";
+}
+</script>
+</table>
+</body>
+</html>
