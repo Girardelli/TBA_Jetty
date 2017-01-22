@@ -374,7 +374,7 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
          InitialContext vContext = new InitialContext();
          Session vSession = null;
 
-         vSession = (Session) PortableRemoteObject.narrow(vContext.lookup("java:Mail"), Session.class);
+         vSession = (Session) PortableRemoteObject.narrow(vContext.lookup("java:comp/env/mail/Session"), Session.class);
          MimeMessage m = new MimeMessage(vSession);
          m.setFrom();
 

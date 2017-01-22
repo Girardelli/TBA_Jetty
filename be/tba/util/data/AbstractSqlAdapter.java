@@ -2,6 +2,12 @@ package be.tba.util.data;
 
 import java.util.Collection;
 import java.util.Vector;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import be.tba.servlets.AdminDispatchServlet;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -9,7 +15,9 @@ import java.sql.ResultSet;
 
 public abstract class AbstractSqlAdapter<T>
 {
-   public AbstractSqlAdapter(String tableName)
+	//private static Log log = LogFactory.getLog(AbstractSqlAdapter.class);
+
+	public AbstractSqlAdapter(String tableName)
    {
       mTableName = tableName;
    }
@@ -93,6 +101,7 @@ public abstract class AbstractSqlAdapter<T>
             rs = stmt.executeQuery(queryStr);
             Collection<T> col = translateRsToValueObjects(rs);
             System.out.println(col.size() + " entries: SQL querry: " + queryStr);
+           //log.info(col.size() + " entries: SQL querry: " + queryStr);
             return col;
          }
          else

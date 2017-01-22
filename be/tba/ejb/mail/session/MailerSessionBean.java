@@ -63,13 +63,13 @@ public class MailerSessionBean
    // Methods
    // -------------------------------------------------------------------------
 
-   
+
    // private constructor; static class
    private MailerSessionBean()
    {
    }
-   
-   
+
+
    /**
     * @ejb:interface-method view-type="remote"
     */
@@ -131,7 +131,11 @@ public class MailerSessionBean
                   int i = 0;
                   while (vMailTokens.hasMoreTokens())
                   {
-                     vTo[i++] = new InternetAddress(vMailTokens.nextToken());
+                     String addr = vMailTokens.nextToken();
+                     if (addr != null && addr.contains("@"))
+                     {
+                     	vTo[i++] = new InternetAddress(addr);
+					 }
                   }
                }
                else

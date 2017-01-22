@@ -18,6 +18,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
@@ -42,6 +46,7 @@ public class AdminDispatchServlet extends HttpServlet
      *
      */
    private static final long serialVersionUID = 1L;
+   private static Log log = LogFactory.getLog(AdminDispatchServlet.class);
 
    public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
    {
@@ -49,7 +54,8 @@ public class AdminDispatchServlet extends HttpServlet
       ServletContext sc = null;
       try
       {
-         sc = getServletContext();
+         log.info("doGet()");
+    	  sc = getServletContext();
          res.setContentType("text/html");
          String vAction = (String) req.getParameter(Constants.SRV_ACTION);
 

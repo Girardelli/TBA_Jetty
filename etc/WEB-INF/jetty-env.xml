@@ -35,7 +35,7 @@ org.eclipse.jetty.servlet.WebApplicationContext object
           <New class="java.util.Properties">
             <Put name="mail.smtp.host">mail-out.telenet.be</Put>
             <Put name="mail.from">nancy.olyslaegers@thebusinessassistant.be</Put>
-            <Put name="mail.debug">true</Put>
+            <Put name="mail.debug">false</Put>
           </New>
         </Set>
       </New>
