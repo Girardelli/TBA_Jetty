@@ -2,7 +2,8 @@
 
 <%@ include file="adminheader.jsp" %>
 
-<%@ page
+<%@ page 
+contentType="text/html;charset=UTF-8" language="java"
 		import="javax.ejb.*,
 java.util.*,
 javax.rmi.PortableRemoteObject,

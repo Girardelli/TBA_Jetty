@@ -88,7 +88,7 @@ public abstract class AbstractSqlAdapter<T>
 	   }
 	   return str;
    }
-   
+
    protected Collection<T> executeSqlQuery(Connection con, String queryStr)
    {
       Statement stmt = null;
@@ -153,6 +153,15 @@ public abstract class AbstractSqlAdapter<T>
          }
       }
       return new Vector<T>();
+   }
+
+   protected String escapeQuotes(String in)
+   {
+	   if (in.indexOf('\'') >= 0)
+	   {
+	   	  return in.replace("'", "''");
+	   }
+	   return in;
    }
 
 }

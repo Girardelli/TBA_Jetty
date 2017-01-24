@@ -4,7 +4,7 @@
 	content="virtueel secretariaat telefoondiensten antwoorddiensten kantoor automatisering tekstverwerking administratie afsprakendienst dactylo">
 <meta name="Description" content="Uw virtueel secretariaat.">
 <meta name="Owner" content="yves.willems@theBusinessAssistant.be">
-<meta HTTP-EQUIV="Content-Language" content="NL">
+<meta HTTP-EQUIV="Content-Language" content="text/html; charset=utf-8">
 <!-- <meta HTTP-EQUIV="Refresh" content="30">-->
 <meta name="Copyright"
 	content="Copyright © 2003 TheBusinessAssistant, All rights reserved.">

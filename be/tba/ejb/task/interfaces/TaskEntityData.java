@@ -221,12 +221,12 @@ public class TaskEntityData extends be.tba.util.data.AbstractData
 
       str.append(
 		  "FwdNr='" + ((this.fwdNr != null) ? this.fwdNr : "") +
-		  "',Date='" + ((this.date != null) ? this.date : "") +
+		  "',Date='" + ((this.date != null) ? escapeQuotes(this.date) : "") +
 		  "',TimeStamp=" + getTimeStamp() +
 		  ",IsFixedPrice=" + getIsFixedPrice() +
 		  ",FixedPrice=" + getFixedPrice() +
 		  ",TimeSpend=" + getTimeSpend() +
-		  ",Description='" + ((this.description != null) ? this.description : "") +
+		  ",Description='" + ((this.description != null) ? escapeQuotes(this.description) : "") +
 		  "',IsInvoiced=" + getIsInvoiced() +
 		  ",IsRecuring=" + getIsRecuring() +
 		  ",StartTime=" + getStartTime() +
@@ -241,7 +241,7 @@ public class TaskEntityData extends be.tba.util.data.AbstractData
 
       // "(1, '409031', '04/10/05', 1128528272192, 1, 220, 0, 'Nabelactie voor
       // client'. ',0 ,0 ,0 ,0 ,'')
-      str.append("'0','" + ((this.fwdNr != null) ? this.fwdNr : "") + "','" + ((this.date != null) ? this.date : "") + "'," + getTimeStamp() + "," + getIsFixedPrice() + "," + getFixedPrice() + "," + getTimeSpend() + ",'" + ((this.description != null) ? this.description : "") + "'," + getIsInvoiced() + "," + getIsRecuring() + "," + getStartTime() + "," + getStopTime() + ",'" + ((this.doneBy != null) ? this.doneBy : "") + "'");
+      str.append("'0','" + ((this.fwdNr != null) ? this.fwdNr : "") + "','" + ((this.date != null) ? escapeQuotes(this.date) : "") + "'," + getTimeStamp() + "," + getIsFixedPrice() + "," + getFixedPrice() + "," + getTimeSpend() + ",'" + ((this.description != null) ? escapeQuotes(this.description) : "") + "'," + getIsInvoiced() + "," + getIsRecuring() + "," + getStartTime() + "," + getStopTime() + ",'" + ((this.doneBy != null) ? this.doneBy : "") + "'");
       return (str.toString());
    }
 

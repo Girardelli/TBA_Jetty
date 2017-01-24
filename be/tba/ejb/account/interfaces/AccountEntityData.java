@@ -967,7 +967,7 @@ public class AccountEntityData extends be.tba.util.data.AbstractData
 		"',Password='" + ((this.password != null) ? this.password : "") +
 		"',FwdNumber='" + ((this.fwdNumber != null) ? this.fwdNumber : "") +
 		"',Role='" + ((this.role != null) ? this.role : "") +
-		"',FullName='" + ((this.fullName != null) ? this.fullName : "") +
+		"',FullName='" + ((this.fullName != null) ? escapeQuotes(this.fullName) : "") +
 		"',CustFilter='" + ((this.custFilter != null) ? this.custFilter : "") +
 		"',StateFilter='" + ((this.stateFilter != null) ? this.stateFilter : "") +
 		"',DirFilter='" + ((this.dirFilter != null) ? this.dirFilter : "") +
@@ -981,7 +981,7 @@ public class AccountEntityData extends be.tba.util.data.AbstractData
 		",W3_PersonId='" + ((this.w3_PersonId != null) ? this.w3_PersonId : "") +
 		"',W3_CompanyId='" + ((this.w3_CompanyId != null) ? this.w3_CompanyId : "") +
 		"',Email='" + ((this.email != null) ? this.email : "") +
-		"',Gsm='" + ((this.gsm != null) ? this.gsm : "") +
+		"',Gsm='" + ((this.gsm != null) ? escapeQuotes(this.gsm) : "") +
 		"',InvoiceType=" + getInvoiceType() +
 		",LastInvoiceTime=" + getLastInvoiceTime() +
 		",LastMailTime=" + getLastMailTime() +
@@ -1002,9 +1002,9 @@ public class AccountEntityData extends be.tba.util.data.AbstractData
 		",FacCallForward=" + getFacCallForward() +
 		",FacStdOutCall=" + getFacStdOutCall() +
 		",TaskHourRate=" + getTaskHourRate() +
-		",CompanyName='" + ((this.companyName != null) ? this.companyName : "") +
-		"',AttToName='" + ((this.attToName != null) ? this.attToName : "") +
-		"',Street='" + ((this.street != null) ? this.street : "") +
+		",CompanyName='" + ((this.companyName != null) ? escapeQuotes(this.companyName) : "") +
+		"',AttToName='" + ((this.attToName != null) ? escapeQuotes(this.attToName) : "") +
+		"',Street='" + ((this.street != null) ? escapeQuotes(this.street) : "") +
 		"',City='" + ((this.city != null) ? this.city : "") +
 		"',BtwNumber='" + ((this.btwNumber != null) ? this.btwNumber : "") +
 		"',NoInvoice=" + getNoInvoice() +

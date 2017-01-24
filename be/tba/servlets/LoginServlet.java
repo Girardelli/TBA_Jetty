@@ -41,6 +41,8 @@ public class LoginServlet extends HttpServlet
 
    public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
    {
+      res.setCharacterEncoding("UTF-8");
+      req.setCharacterEncoding("UTF-8");
       res.setContentType("text/html");
       AccountSqlAdapter vAccountSession = null;
       RequestDispatcher rd = null;

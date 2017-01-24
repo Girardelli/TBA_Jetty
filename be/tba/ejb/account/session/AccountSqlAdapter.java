@@ -59,7 +59,7 @@ public class AccountSqlAdapter extends AbstractSqlAdapter<AccountEntityData>
 
    public AccountEntityData logIn(WebSession webSession, String userid, String password) throws AccountNotFoundException
    {
-      Collection<AccountEntityData> collection = executeSqlQuery(webSession.getConnection(), "SELECT * FROM AccountEntity WHERE Userid='" + userid + "' AND Password=" + password);
+      Collection<AccountEntityData> collection = executeSqlQuery(webSession.getConnection(), "SELECT * FROM AccountEntity WHERE Userid='" + userid + "' AND Password='" + password + "'");
       if (collection.size() == 1)
       {
          AccountEntityData account = collection.iterator().next();
@@ -69,7 +69,7 @@ public class AccountSqlAdapter extends AbstractSqlAdapter<AccountEntityData>
          account.setPreviousLoginTS(account.getLastLoginTS());
          account.setLastLoginTS(vCalendar.getTimeInMillis());
          account.setLastLogin(vLoginTime);
-         executeSqlQuery(webSession.getConnection(), "UPDATE AccountEntity SET LastLogin='" + vLoginTime + "' WHERE Id=" + account.getId());
+         executeSqlQuery(webSession.getConnection(), "UPDATE AccountEntity SET LastLogin='" + vLoginTime + "' WHERE Id='" + account.getId() + "'");
          System.out.println("Login: userid=" + userid + " (" + account.getFullName() + ")");
          return account;
       }

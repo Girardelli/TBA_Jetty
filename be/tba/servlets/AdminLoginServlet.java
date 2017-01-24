@@ -22,12 +22,14 @@ import be.tba.util.exceptions.AccessDeniedException;
 public class AdminLoginServlet extends HttpServlet
 {
    /**
-    * 
+    *
     */
    private static final long serialVersionUID = 10001L;
 
    public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
    {
+      res.setCharacterEncoding("UTF-8");
+      req.setCharacterEncoding("UTF-8");
       res.setContentType("text/html");
       String vUserId = "";
       String vPassword = "";
@@ -60,13 +62,6 @@ public class AdminLoginServlet extends HttpServlet
             String vKey = SessionManager.getInstance().add(vSession);
             vSession.init(vUserId, vKey);
             vSession.setRole(AccountRole.fromShort(vAccount.getRole()));
-
-            CallFilter vFilter = new CallFilter();
-
-            vFilter.setCustFilter(vAccount.getCustFilter());
-            vFilter.setStateFilter(vAccount.getStateFilter());
-            vFilter.setDirFilter(vAccount.getDirFilter());
-            vSession.setCallFilter(vFilter);
 
             vSession.setFwdNumber(vAccount.getFwdNumber());
 

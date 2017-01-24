@@ -5,8 +5,8 @@
 <meta HTTP-EQUIV="Refresh" content="<%=Constants.REFRESH%>;URL=\TheBusinessAssistant\admin\admincalls.jsp">
 <title>TheBusinessAssistant administrator pages</title>
 </head>
-
-<%@ page
+<%@ page 
+contentType="text/html;charset=UTF-8" language="java"
 	import="java.util.*,
 	java.lang.*,
 javax.naming.InitialContext,

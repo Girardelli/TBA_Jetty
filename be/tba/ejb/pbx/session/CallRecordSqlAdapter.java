@@ -785,7 +785,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
       }
       return hit;
    }
-   
+
    public void addCallRecord(WebSession webSession, Forum700CallRecord record)
    {
       try
@@ -1010,7 +1010,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
       setUnRelease(webSession, Integer.parseInt(key));
    }
 
-   static private void setIsDocumentedFlag(CallRecordEntityData record)
+   static public void setIsDocumentedFlag(CallRecordEntityData record)
    {
       if (record.getNumber().length() != 0 && record.getName().length() != 0 && ((String) record.getShortDescription()).length() != 0 && (!record.getIs3W_call() || (record.getW3_CustomerId() != null && record.getW3_CustomerId().length() != 0)))
 	  {

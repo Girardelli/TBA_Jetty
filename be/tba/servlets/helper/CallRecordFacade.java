@@ -172,7 +172,7 @@ public class CallRecordFacade
          else
             newRecord.setInvoiceLevel(InvoiceHelper.kLevel1);
       }
-
+      CallRecordSqlAdapter.setIsDocumentedFlag(newRecord);
       // Check the record and add it if it is a valid one.
       System.out.println("saveManualRecord: id=" + newRecord.getId() + ", cust=" + newRecord.getFwdNr() + ", number=" + newRecord.getNumber());
       CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
@@ -188,7 +188,7 @@ public class CallRecordFacade
       {
          StringTokenizer vStrTok = new StringTokenizer(vLtd, ",");
          CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
-         
+
          while (vStrTok.hasMoreTokens())
          {
             int key = Integer.parseInt(vStrTok.nextToken());

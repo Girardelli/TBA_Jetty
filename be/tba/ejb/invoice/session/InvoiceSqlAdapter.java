@@ -38,17 +38,17 @@ import java.sql.ResultSet;
 
 /**
  * Session Bean Template
- * 
+ *
  * ATTENTION: Some of the XDoclet tags are hidden from XDoclet by adding a "--"
  * between @ and the namespace. Please remove this "--" to make it active or add
  * a space to make an active tag inactive.
- * 
+ *
  * @ejb:bean name="InvoiceSession" display-name="Invoice query" type="Stateless"
  *           transaction-type="Container"
  *           jndi-name="be/tba/ejb/task/InvoiceSession"
- * 
+ *
  * @ejb:ejb-ref ejb-name="InvoiceEntity"
- * 
+ *
  */
 public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
 {
@@ -62,7 +62,7 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
    // -------------------------------------------------------------------------
 
    /**
-     * 
+     *
      */
    @SuppressWarnings("unused")
    private static final long serialVersionUID = 1L;
@@ -307,7 +307,7 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
          // replace windows style '\\' with unix style '/'. DB does not seem
          // to handle good the windows style
          String unixStyle = vInvoiceData.getFileName().replace('\\', '/');
-         executeSqlQuery(webSession.getConnection(), "UPDATE InvoiceEntity SET FileName='" + unixStyle + "', YearSeqNr=" + vInvoiceData.getYearSeqNr() + ",InvoiceNr='" + vInvoiceData.getInvoiceNr() + "',FrozenFlag=true WHERE id=" + key);
+         executeSqlQuery(webSession.getConnection(), "UPDATE InvoiceEntity SET FileName='" + escapeQuotes(unixStyle) + "', YearSeqNr=" + vInvoiceData.getYearSeqNr() + ",InvoiceNr='" + vInvoiceData.getInvoiceNr() + "',FrozenFlag=true WHERE id=" + key);
 
          // vInvoice.setValueObject(vInvoiceData);
          return true;
@@ -452,7 +452,7 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
 
    /**
     * Describes the instance and its content for debugging purpose
-    * 
+    *
     * @return Debugging information about the instance and its content
     */
    public String toString()

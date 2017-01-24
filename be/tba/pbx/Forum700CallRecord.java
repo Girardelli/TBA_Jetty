@@ -18,282 +18,293 @@ import java.io.Serializable;
 
 public final class Forum700CallRecord implements Serializable
 {
-   private static final int mInitialUserLen = 5;
+    private static final int mInitialUserLen = 5;
 
-   private static final int mChargedUserLen = 5;
+    private static final int mChargedUserLen = 5;
 
-   private static final int mTypeLen = 3;
+    private static final int mTypeLen = 3;
 
-   private static final int mLineLen = 3;
+    private static final int mLineLen = 3;
 
-   private static final int mDateLen = 8;
+    private static final int mDateLen = 8;
 
-   private static final int mTimeLen = 5;
+    private static final int mTimeLen = 5;
 
-   private static final int mDurationLen = 8;
+    private static final int mDurationLen = 8;
 
-   private static final int mTaxesLen = 4; // maybe 4, was 5
+    private static final int mTaxesLen = 4; // maybe 4, was 5
 
-   private static final int mServLen = 2;
+    private static final int mServLen = 2;
 
-   private static final int mFacilitiesLen = 6;
+    private static final int mFacilitiesLen = 6;
 
-   private static final int mExtCorrNumberLen = 26;
+    private static final int mExtCorrNumberLen = 26;
 
-   private static final int mModeLen = 1;
+    private static final int mModeLen = 1;
 
-   private static final int mRingLen = 5;
+    private static final int mRingLen = 5;
 
-   private static final int mCostLen = 10;
+    private static final int mCostLen = 10;
 
-   private static final int mBusinCodeLen = 16;
+    private static final int mBusinCodeLen = 16;
 
-   private static final int mSubscriberNameLen = 16;
+    private static final int mSubscriberNameLen = 16;
 
-   private static final int mNodeLen = 3;
+    private static final int mNodeLen = 3;
 
-   private static final int mOpIdLen = 1;
+    private static final int mOpIdLen = 1;
 
-   private static final int mInitialUser2Len = 9;
+    private static final int mInitialUser2Len = 9;
 
-   private static final int mChargedUser2Len = 8; // maybe 8, was 9
+    private static final int mChargedUser2Len = 8; // maybe 8, was 9
 
-   private static final int mLine4Len = 4;
+    private static final int mLine4Len = 4;
 
-   public String mInitialUser;
+    public String mInitialUser;
 
-   public String mChargedUser;
+    public String mChargedUser;
 
-   public String mType;
+    public String mType;
 
-   public String mLine;
+    public String mLine;
 
-   public String mDate;
+    public String mDate;
 
-   public String mTime;
+    public String mTime;
 
-   public String mDuration;
+    public String mDuration;
 
-   public String mTaxes;
+    public String mTaxes;
 
-   public String mServ;
+    public String mServ;
 
-   public String mFacilities;
+    public String mFacilities;
 
-   public String mExtCorrNumber;
+    public String mExtCorrNumber;
 
-   public String mMode;
+    public String mMode;
 
-   public String mRing;
+    public String mRing;
 
-   public String mCost;
+    public String mCost;
 
-   public String mBusinCode;
+    public String mBusinCode;
 
-   public String mSubscriberName;
+    public String mSubscriberName;
 
-   public String mNode;
+    public String mNode;
 
-   public String mOpId;
+    public String mOpId;
 
-   public String mInitialUser2;
+    public String mInitialUser2;
 
-   public String mChargedUser2;
+    public String mChargedUser2;
 
-   public String mLine4;
+    public String mLine4;
 
-   boolean mIsLonger = false;
+    boolean mIsLonger = false;
 
-   boolean mIsValid = false;
+    boolean mIsValid = false;
 
-   static boolean isStarted = false;
+    static boolean isStarted = false;
 
-   static final int recordLen = 173;
+    static final int recordLen = 173;
 
-   static final char separator = ',';
+    static final char separator = ',';
 
-   public Forum700CallRecord(String aRecord)
-   {
-      super();
-      if (aRecord.length() < recordLen)
-      {
-         mIsValid = false;
-      }
-      else
-      {
-         // String convert = new String(aRecord);
-         char[] charArr = aRecord.toCharArray();
-         int offset = 1;
-         mInitialUser = String.copyValueOf(charArr, offset++, mInitialUserLen);
-         mInitialUser = mInitialUser.trim();
-         offset += mInitialUserLen;
-         mChargedUser = String.copyValueOf(charArr, offset++, mChargedUserLen);
-         mChargedUser = mChargedUser.trim();
-         offset += mChargedUserLen;
-         mType = String.copyValueOf(charArr, offset++, mTypeLen);
-         mType = mType.trim();
-         offset += mTypeLen;
-         mLine = String.copyValueOf(charArr, offset++, mLineLen);
-         mLine = mLine.trim();
-         offset += mLineLen;
-         mDate = String.copyValueOf(charArr, offset++, mDateLen);
-         mDate = mDate.trim();
-         offset += mDateLen;
-         mTime = String.copyValueOf(charArr, offset++, mTimeLen);
-         offset += mTimeLen;
-         mTime = mTime.trim();
-         mDuration = String.copyValueOf(charArr, offset++, mDurationLen);
-         offset += mDurationLen;
-         mTaxes = String.copyValueOf(charArr, offset++, mTaxesLen);
-         mTaxes = mTaxes.trim();
-         offset += mTaxesLen;
-         mServ = String.copyValueOf(charArr, offset++, mServLen);
-         mServ = mServ.trim();
-         offset += mServLen;
-         mFacilities = String.copyValueOf(charArr, offset++, mFacilitiesLen);
-         mFacilities = mFacilities.trim();
-         offset += mFacilitiesLen;
-         mExtCorrNumber = String.copyValueOf(charArr, offset++, mExtCorrNumberLen);
-         mExtCorrNumber = mExtCorrNumber.trim();
-         offset += mExtCorrNumberLen;
-         mMode = String.copyValueOf(charArr, offset++, mModeLen);
-         mMode = mMode.trim();
-         offset += mModeLen;
-         mRing = String.copyValueOf(charArr, offset++, mRingLen);
-         mRing = mRing.trim();
-         offset += mRingLen;
-         mCost = String.copyValueOf(charArr, offset++, mCostLen);
-         mCost = mCost.trim();
-         offset += mCostLen;
-         mBusinCode = String.copyValueOf(charArr, offset++, mBusinCodeLen);
-         mBusinCode = mBusinCode.trim();
-         offset += mBusinCodeLen;
-         mSubscriberName = String.copyValueOf(charArr, offset++, mSubscriberNameLen);
-         mSubscriberName = mSubscriberName.trim();
-         offset += mSubscriberNameLen;
-         mNode = String.copyValueOf(charArr, offset++, mNodeLen);
-         mNode = mNode.trim();
-         offset += mNodeLen;
-         mOpId = String.copyValueOf(charArr, offset++, mOpIdLen);
-         mOpId = mOpId.trim();
-         offset += mOpIdLen;
-         mInitialUser2 = String.copyValueOf(charArr, offset++, mInitialUser2Len);
-         mInitialUser2 = mInitialUser2.trim();
-         offset += mInitialUser2Len;
-         mChargedUser2 = String.copyValueOf(charArr, offset++, mChargedUser2Len);
-         mChargedUser2 = mChargedUser2.trim();
-         offset += mChargedUser2Len;
-         offset++;
-         if (charArr[offset] == ' ')
-         {
-            offset++; // this time mChargedUser2Len = 9
-            mIsLonger = true;
-         }
-         mLine4 = String.copyValueOf(charArr, offset, mLine4Len);
-         mLine4 = mLine4.trim();
+    public Forum700CallRecord(String aRecord)
+    {
+        super();
+        if (aRecord.length() < recordLen)
+        {
+            mIsValid = false;
+        }
+        else
+        {
+            // String convert = new String(aRecord);
+            char[] charArr = aRecord.toCharArray();
+            int offset = 1;
+            mInitialUser = String.copyValueOf(charArr, offset++, mInitialUserLen);
+            mInitialUser = mInitialUser.trim();
+            offset += mInitialUserLen;
+            mChargedUser = String.copyValueOf(charArr, offset++, mChargedUserLen);
+            mChargedUser = mChargedUser.trim();
+            offset += mChargedUserLen;
+            mType = String.copyValueOf(charArr, offset++, mTypeLen);
+            mType = mType.trim();
+            offset += mTypeLen;
+            mLine = String.copyValueOf(charArr, offset++, mLineLen);
+            mLine = mLine.trim();
+            offset += mLineLen;
+            mDate = String.copyValueOf(charArr, offset++, mDateLen);
+            mDate = mDate.trim();
+            offset += mDateLen;
+            mTime = String.copyValueOf(charArr, offset++, mTimeLen);
+            offset += mTimeLen;
+            mTime = mTime.trim();
+            mDuration = String.copyValueOf(charArr, offset++, mDurationLen);
+            offset += mDurationLen;
+            mTaxes = String.copyValueOf(charArr, offset++, mTaxesLen);
+            mTaxes = mTaxes.trim();
+            offset += mTaxesLen;
+            mServ = String.copyValueOf(charArr, offset++, mServLen);
+            mServ = mServ.trim();
+            offset += mServLen;
+            mFacilities = String.copyValueOf(charArr, offset++, mFacilitiesLen);
+            mFacilities = mFacilities.trim();
+            offset += mFacilitiesLen;
+            mExtCorrNumber = String.copyValueOf(charArr, offset++, mExtCorrNumberLen);
+            mExtCorrNumber = mExtCorrNumber.trim();
+            offset += mExtCorrNumberLen;
+            mMode = String.copyValueOf(charArr, offset++, mModeLen);
+            mMode = mMode.trim();
+            offset += mModeLen;
+            mRing = String.copyValueOf(charArr, offset++, mRingLen);
+            mRing = mRing.trim();
+            offset += mRingLen;
+            mCost = String.copyValueOf(charArr, offset++, mCostLen);
+            mCost = mCost.trim();
+            offset += mCostLen;
+            mBusinCode = String.copyValueOf(charArr, offset++, mBusinCodeLen);
+            mBusinCode = mBusinCode.trim();
+            offset += mBusinCodeLen;
+            mSubscriberName = String.copyValueOf(charArr, offset++, mSubscriberNameLen);
+            mSubscriberName = mSubscriberName.trim();
+            offset += mSubscriberNameLen;
+            mNode = String.copyValueOf(charArr, offset++, mNodeLen);
+            mNode = mNode.trim();
+            offset += mNodeLen;
+            mOpId = String.copyValueOf(charArr, offset++, mOpIdLen);
+            mOpId = mOpId.trim();
+            offset += mOpIdLen;
+            mInitialUser2 = String.copyValueOf(charArr, offset++, mInitialUser2Len);
+            mInitialUser2 = mInitialUser2.trim();
+            offset += mInitialUser2Len;
+            mChargedUser2 = String.copyValueOf(charArr, offset++, mChargedUser2Len);
+            mChargedUser2 = mChargedUser2.trim();
+            offset += mChargedUser2Len;
+            offset++;
+            if (charArr[offset] == ' ')
+            {
+                offset++; // this time mChargedUser2Len = 9
+                mIsLonger = true;
+            }
+            mLine4 = String.copyValueOf(charArr, offset, mLine4Len);
+            mLine4 = mLine4.trim();
 
-         mInitialUser = stripNonAlphanum(mInitialUser);
-         mChargedUser = stripNonAlphanum(mChargedUser);
-         mInitialUser2 = stripNonAlphanum(mInitialUser2);
-         mChargedUser2 = stripNonAlphanum(mChargedUser2);
+            mInitialUser = stripNonAlphanum(mInitialUser);
+            mChargedUser = stripNonAlphanum(mChargedUser);
+            mInitialUser2 = stripNonAlphanum(mInitialUser2);
+            mChargedUser2 = stripNonAlphanum(mChargedUser2);
 
-         mExtCorrNumber = stripDots(mExtCorrNumber);
-         mBusinCode = stripDots(mBusinCode);
-         mSubscriberName = stripDots(mSubscriberName);
-         if ((mType.equals("<--") || mType.equals("-->")))// &&
-         // !mDuration.startsWith("00:00:00"))
-         {
-            mIsValid = true;
-         }
-         else
-            System.out.println("Invalid record detected.");
-      }
-   }
+            mExtCorrNumber = stripDots(mExtCorrNumber);
+            mBusinCode = stripDots(mBusinCode);
+            mSubscriberName = stripDots(mSubscriberName);
+            mDuration = fix24h_bugOn2016NewYear(mDuration);
+            if ((mType.equals("<--") || mType.equals("-->")))// &&
+            // !mDuration.startsWith("00:00:00"))
+            {
+                mIsValid = true;
+            }
+            else
+                System.out.println("Invalid record detected.");
+        }
+    }
 
-   public boolean isIncomingCall()
-   {
-      return mType.equals("<--");
-   }
+    public boolean isIncomingCall()
+    {
+        return mType.equals("<--");
+    }
 
-   public boolean isLonger()
-   {
-      return mIsLonger;
-   }
+    public boolean isLonger()
+    {
+        return mIsLonger;
+    }
 
-   static public int getRecordLen()
-   {
-      return recordLen;
-   }
+    static public int getRecordLen()
+    {
+        return recordLen;
+    }
 
-   public void resetHeader()
-   {
-      isStarted = false;
-   }
+    public void resetHeader()
+    {
+        isStarted = false;
+    }
 
-   public boolean isValid()
-   {
-      return mIsValid;
-   }
+    public boolean isValid()
+    {
+        return mIsValid;
+    }
 
-   public void printRecord()
-   {
-      if (!isStarted)
-      {
-         System.out.println("User  Office Dir Corespondent              Line Date     Time   Cost Duration Code Name");
-      }
-      isStarted = true;
-      System.out.print(mInitialUser + " ");
-      System.out.print(mChargedUser + "  ");
-      System.out.print(mType + " ");
-      System.out.print(mExtCorrNumber + " ");
-      System.out.print(mLine + "  ");
-      System.out.print(mDate + " ");
-      System.out.print(mTime + " ");
-      System.out.print(mDuration + " ");
-      System.out.print(mCost + " ");
-      System.out.print(mBusinCode + " ");
-      System.out.println(mSubscriberName + " ");
-   }
+    public void printRecord()
+    {
+        if (!isStarted)
+        {
+            System.out.println("User  Office Dir Corespondent              Line Date     Time   Cost Duration Code Name");
+        }
+        isStarted = true;
+        System.out.print(mInitialUser + " ");
+        System.out.print(mChargedUser + "  ");
+        System.out.print(mType + " ");
+        System.out.print(mExtCorrNumber + " ");
+        System.out.print(mLine + "  ");
+        System.out.print(mDate + " ");
+        System.out.print(mTime + " ");
+        System.out.print(mDuration + " ");
+        System.out.print(mCost + " ");
+        System.out.print(mBusinCode + " ");
+        System.out.println(mSubscriberName + " ");
+    }
 
-   public String getFileRecord()
-   {
-      return new String(mInitialUser + separator + mChargedUser + separator + mType + separator + mExtCorrNumber + separator + mLine + separator + mDate + separator + mTime + separator +
-      // System.out.print(mDuration + " ");
-            mCost + separator + mDuration + separator + mBusinCode + separator + mSubscriberName + "\r\n");
-   }
+    public String getFileRecord()
+    {
+        return new String(mInitialUser + separator + mChargedUser + separator + mType + separator + mExtCorrNumber + separator + mLine + separator + mDate + separator + mTime + separator +
+        // System.out.print(mDuration + " ");
+                mCost + separator + mDuration + separator + mBusinCode + separator + mSubscriberName + "\r\n");
+    }
 
-   private String stripDots(String toStrip)
-   {
-      int vLastIndex = toStrip.length();
-      if (vLastIndex > 0)
-      {
-         do
-         {
-            --vLastIndex;
-         } while (vLastIndex >= 0 && (toStrip.charAt(vLastIndex) == '.'));
-         if (vLastIndex >= 0)
-            return toStrip.substring(0, ++vLastIndex);
-         else
-            return "";
-      }
-      return toStrip;
-   }
+    private String stripDots(String toStrip)
+    {
+        int vLastIndex = toStrip.length();
+        if (vLastIndex > 0)
+        {
+            do
+            {
+                --vLastIndex;
+            } while (vLastIndex >= 0 && (toStrip.charAt(vLastIndex) == '.'));
+            if (vLastIndex >= 0)
+                return toStrip.substring(0, ++vLastIndex);
+            else
+                return "";
+        }
+        return toStrip;
+    }
 
-   private String stripNonAlphanum(String nrToStrip)
-   {
-      int vLastIndex = nrToStrip.length();
-      if (vLastIndex > 0)
-      {
-         do
-         {
-            --vLastIndex;
-         } while (vLastIndex >= 0 && Character.isDigit(nrToStrip.charAt(vLastIndex)));
-         if (vLastIndex >= 0)
-         {
-            return nrToStrip.substring(vLastIndex + 1);
-         }
-      }
-      return nrToStrip;
-   }
+    private String stripNonAlphanum(String nrToStrip)
+    {
+        int vLastIndex = nrToStrip.length();
+        if (vLastIndex > 0)
+        {
+            do
+            {
+                --vLastIndex;
+            } while (vLastIndex >= 0 && Character.isDigit(nrToStrip.charAt(vLastIndex)));
+            if (vLastIndex >= 0)
+            {
+                return nrToStrip.substring(vLastIndex + 1);
+            }
+        }
+        return nrToStrip;
+    }
 
+	private String fix24h_bugOn2016NewYear(String duration)
+	{
+		if (duration.length() > 0 &&
+		    duration.startsWith("24"))
+		{
+			//System.out.print("replace 24 in " + duration);
+			return new String("00" + duration.substring(2));
+		}
+		return duration;
+	}
 }

@@ -29,7 +29,7 @@ import be.tba.util.session.AccountCache;
 public class CustomerDispatchServlet extends HttpServlet
 {
    /**
-    * 
+    *
     */
    private static final long serialVersionUID = 10002L;
 
@@ -39,6 +39,8 @@ public class CustomerDispatchServlet extends HttpServlet
       RequestDispatcher rd = null;
       try
       {
+         res.setCharacterEncoding("UTF-8");
+         req.setCharacterEncoding("UTF-8");
          res.setContentType("text/html");
          String vAction = (String) req.getParameter(Constants.SRV_ACTION);
 
@@ -73,7 +75,7 @@ public class CustomerDispatchServlet extends HttpServlet
 
             System.out.println("\nCustomerDispatchServlet: userid:" + vSession.getUserId() + ", page sessionid:" + vSession.getSessionId() + ", websessionid:" + vSession.getSessionId() + " action=" + vAction);
 
-            
+
             // ==============================================================================================
             // DELETE RECORD
             // ==============================================================================================

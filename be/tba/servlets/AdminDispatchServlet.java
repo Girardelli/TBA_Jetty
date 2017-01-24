@@ -40,6 +40,9 @@ import be.tba.util.exceptions.LostSessionException;
 import be.tba.util.exceptions.SystemErrorException;
 import be.tba.util.session.AccountCache;
 
+import be.tba.ejb.pbx.session.CallRecordSqlAdapter;
+import be.tba.ejb.pbx.interfaces.CallRecordEntityData;
+
 public class AdminDispatchServlet extends HttpServlet
 {
    /**
@@ -57,6 +60,8 @@ public class AdminDispatchServlet extends HttpServlet
          log.info("doGet()");
     	  sc = getServletContext();
          res.setContentType("text/html");
+         res.setCharacterEncoding("UTF-8");
+         req.setCharacterEncoding("UTF-8");
          String vAction = (String) req.getParameter(Constants.SRV_ACTION);
 
          HttpSession httpSession = req.getSession();
@@ -109,9 +114,6 @@ public class AdminDispatchServlet extends HttpServlet
                   Connection con = null;
                   try
                   {
-//                     InitialContext ctx = new InitialContext();
-//					 DataSource ds = (DataSource)ctx.lookup("java:comp/env/jdbc/MySqlDS");
-//					 con = ds.getConnection();
                      AccountEntityData vAccountData = AccountCache.getInstance().get(vCustomerFilter);
                      if (vAccountData != null)
                      {
@@ -130,18 +132,6 @@ public class AdminDispatchServlet extends HttpServlet
                   }
                   finally
                   {
-//                     if (con != null)
-//                     {
-//                        try
-//                        {
-//                           con.close();
-//                           con = null;
-//                        }
-//                        catch (SQLException ex)
-//                        {
-//                           System.out.println("Error in Mailer: SQL connection could not be closed.");
-//                        }
-//                     }
                   }
                }
 
