@@ -173,6 +173,11 @@ public class CallRecordFacade
             newRecord.setInvoiceLevel(InvoiceHelper.kLevel1);
       }
       CallRecordSqlAdapter.setIsDocumentedFlag(newRecord);
+      if (newRecord.getIsImportantCall())
+      {
+		  MailNowTask.send(newRecord.getFwdNr());
+	  }
+
       // Check the record and add it if it is a valid one.
       System.out.println("saveManualRecord: id=" + newRecord.getId() + ", cust=" + newRecord.getFwdNr() + ", number=" + newRecord.getNumber());
       CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
