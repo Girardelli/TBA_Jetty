@@ -896,7 +896,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
             else
                newRecord.setIsMailed(true);
             addRow(webSession.getConnection(), newRecord);
-            System.out.println("addCallRecord: id = " + newRecord.getId() + ", fwdnr=" + newRecord.getFwdNr());
+            System.out.println("addCallRecord: id = " + newRecord.getId() + ", fwdnr=" + newRecord.getFwdNr() + ", isMailed=" + newRecord.getIsMailed());
 
          }
 
