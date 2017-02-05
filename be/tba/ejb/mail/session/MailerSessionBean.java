@@ -73,7 +73,7 @@ public class MailerSessionBean
    /**
     * @ejb:interface-method view-type="remote"
     */
-   static public void sendMail(WebSession webSession, String fwdNr)
+   static public boolean sendMail(WebSession webSession, String fwdNr)
    {
       AccountEntityData vCustomer = null;
       try
@@ -90,7 +90,7 @@ public class MailerSessionBean
          String vEmailAddr = vCustomer.getEmail();
          if (vEmailAddr == null || vEmailAddr.length() == 0)
          {
-            return;
+            return false;
          }
 
          CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
@@ -164,6 +164,7 @@ public class MailerSessionBean
             	if (vCustomer != null)
             		MailError.getInstance().setError("Mail send failed to " + vCustomer.getFullName() + "\n" + e.getMessage());
                e.printStackTrace();
+               return false;
             }
          }
       }
@@ -172,7 +173,9 @@ public class MailerSessionBean
          if (vCustomer != null)
         	 MailError.getInstance().setError("Mail send failed to " + vCustomer.getFullName() + "\n" + e.getMessage());
          e.printStackTrace();
+         return false;
       }
+      return true;
    }
 
    static private StringBuffer buildMailBody(AccountEntityData account, Collection<CallRecordEntityData> records, AtomicBoolean isImportant) throws RemoteException
