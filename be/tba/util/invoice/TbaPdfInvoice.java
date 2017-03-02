@@ -5,10 +5,10 @@ import java.text.DecimalFormat;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.apache.pdfbox.exceptions.COSVisitorException;
+//import org.apache.pdfbox.exceptions.COSVisitorException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.edit.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
@@ -52,8 +52,8 @@ public class TbaPdfInvoice
          // Every document requires at least one page, so we will add one
          // blank page.
 
-         mPage1 = (PDPage) mDocument.getDocumentCatalog().getAllPages().get(0);
-         mPage2 = (PDPage) mDocument.getDocumentCatalog().getAllPages().get(1);
+         mPage1 = (PDPage) mDocument.getDocumentCatalog().getPages().get(0);
+         mPage2 = (PDPage) mDocument.getDocumentCatalog().getPages().get(1);
 
       }
       catch (Exception ex)
