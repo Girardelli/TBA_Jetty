@@ -456,9 +456,9 @@ public class TbaPdfInvoice
    private void drawLine(PDPage page, float x1, float y1, float x2, float y2) throws IOException
    {
       PDPageContentStream contentStream = new PDPageContentStream(mDocument, page, true, false);
-      contentStream.beginText();
-      contentStream.drawLine(x1, y1, x2, y2);
-      contentStream.endText();
+	  contentStream.moveTo(x1,y1);
+      contentStream.lineTo(x2,y2);
+      contentStream.stroke();
       contentStream.close();
    }
 
