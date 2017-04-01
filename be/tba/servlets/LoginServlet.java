@@ -342,7 +342,7 @@ public class LoginServlet extends HttpServlet
             vTo[0] = new InternetAddress(Constants.NANCY_EMAIL);
 
             InitialContext vContext = new InitialContext();
-            Session vMailSession = (Session) PortableRemoteObject.narrow(vContext.lookup("java:Mail"), Session.class);
+            Session vMailSession = (Session) PortableRemoteObject.narrow(vContext.lookup("java:comp/env/mail/Session"), Session.class);
             MimeMessage m = new MimeMessage(vMailSession);
             m.setFrom();
 
