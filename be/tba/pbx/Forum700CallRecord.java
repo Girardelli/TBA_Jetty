@@ -2,6 +2,9 @@ package be.tba.pbx;
 
 import java.io.Serializable;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 // Example record (old format)
 //
 // 12345 12345 123 123 12345678 12345 12345678 1234 12 123456 12345678901234567890123456 1 12345 1234567890 1234567890123456 1234567890123456 123 1 123456789 12345678 1234
@@ -18,6 +21,7 @@ import java.io.Serializable;
 
 public final class Forum700CallRecord implements Serializable
 {
+	final static Logger sLogger = LoggerFactory.getLogger(Forum700CallRecord.class);
     private static final int mInitialUserLen = 5;
 
     private static final int mChargedUserLen = 5;
@@ -115,9 +119,11 @@ public final class Forum700CallRecord implements Serializable
     public Forum700CallRecord(String aRecord)
     {
         super();
+        sLogger.info("Parse record:{}", aRecord);
         if (aRecord.length() < recordLen)
         {
-            mIsValid = false;
+        	sLogger.error("record length {} < {}", aRecord.length(), recordLen);
+        	mIsValid = false;
         }
         else
         {
@@ -207,7 +213,9 @@ public final class Forum700CallRecord implements Serializable
                 mIsValid = true;
             }
             else
-                System.out.println("Invalid record detected.");
+            {
+                sLogger.info("Invalid record detected.");
+            }
         }
     }
 
@@ -236,30 +244,20 @@ public final class Forum700CallRecord implements Serializable
         return mIsValid;
     }
 
-    public void printRecord()
+    public void logRecord()
     {
         if (!isStarted)
         {
-            System.out.println("User  Office Dir Corespondent              Line Date     Time   Cost Duration Code Name");
+            sLogger.info("User  Office Dir Corespondent              Line Date     Time   Cost Duration Code Name");
         }
         isStarted = true;
-        System.out.print(mInitialUser + " ");
-        System.out.print(mChargedUser + "  ");
-        System.out.print(mType + " ");
-        System.out.print(mExtCorrNumber + " ");
-        System.out.print(mLine + "  ");
-        System.out.print(mDate + " ");
-        System.out.print(mTime + " ");
-        System.out.print(mDuration + " ");
-        System.out.print(mCost + " ");
-        System.out.print(mBusinCode + " ");
-        System.out.println(mSubscriberName + " ");
+        sLogger.info("{} {}  {} {} {}  {} {} {} {} {} {} ", mInitialUser, mChargedUser, mType, mExtCorrNumber, mLine, mDate, mTime, mDuration, mCost, mBusinCode, mSubscriberName);
     }
 
     public String getFileRecord()
     {
         return new String(mInitialUser + separator + mChargedUser + separator + mType + separator + mExtCorrNumber + separator + mLine + separator + mDate + separator + mTime + separator +
-        // System.out.print(mDuration + " ");
+        // sLogger.info(mDuration + " ");
                 mCost + separator + mDuration + separator + mBusinCode + separator + mSubscriberName + "\r\n");
     }
 
@@ -302,7 +300,7 @@ public final class Forum700CallRecord implements Serializable
 		if (duration.length() > 0 &&
 		    duration.startsWith("24"))
 		{
-			//System.out.print("replace 24 in " + duration);
+			//sLogger.info("replace 24 in {}", duration);
 			return new String("00" + duration.substring(2));
 		}
 		return duration;

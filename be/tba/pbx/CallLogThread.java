@@ -17,8 +17,12 @@ import javax.comm.SerialPortEvent;
 import javax.comm.SerialPortEventListener;
 import javax.comm.UnsupportedCommOperationException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class CallLogThread extends Thread implements SerialPortEventListener, CommPortOwnershipListener
 {
+   final static Logger sLogger = LoggerFactory.getLogger(CallLogThread.class);
    private static final String mVersion = "ver 1.4";
 
    private static final int SLEEP_TIME = 5000; // 5 seconden
@@ -54,16 +58,16 @@ public class CallLogThread extends Thread implements SerialPortEventListener, Co
 
    public void run()
    {
-      System.out.println("CallLogThread.run()");
+      sLogger.info("CallLogThread.run()");
       mPortList = CommPortIdentifier.getPortIdentifiers();
-      System.out.println("CommPortIdentifier retrieved");
+      sLogger.info("CommPortIdentifier retrieved");
 	  int i = 0;
 	  while (mPortList.hasMoreElements())
       {
 		  i++;
-		 System.out.println("Com port found");
+		  sLogger.info("Com port found");
          mPortId = (CommPortIdentifier) mPortList.nextElement();
-		 System.out.println("port name: " + mPortId.getName());
+         sLogger.info("port name: " + mPortId.getName());
          if (mPortId.getPortType() == CommPortIdentifier.PORT_SERIAL)
          {
             try
@@ -78,7 +82,7 @@ public class CallLogThread extends Thread implements SerialPortEventListener, Co
                   }
                   catch (PortInUseException e)
                   {
-                     System.out.println("portId.open failed. Owned by " + mPortId.getCurrentOwner());
+                	  sLogger.error("portId.open failed. Owned by {}", mPortId.getCurrentOwner());
                      throw e;
                   }
                   try
@@ -87,7 +91,7 @@ public class CallLogThread extends Thread implements SerialPortEventListener, Co
                   }
                   catch (IOException e)
                   {
-                     System.out.println("mSerialPort.getInputStream() failed");
+                	  sLogger.error("mSerialPort.getInputStream() failed");
                      throw e;
                   }
                   try
@@ -96,7 +100,7 @@ public class CallLogThread extends Thread implements SerialPortEventListener, Co
                   }
                   catch (TooManyListenersException e)
                   {
-                     System.out.println("mSerialPort.addEventListener() failed");
+                	  sLogger.error("mSerialPort.addEventListener() failed");
                      throw e;
                   }
                   mSerialPort.notifyOnDataAvailable(true);
@@ -106,7 +110,7 @@ public class CallLogThread extends Thread implements SerialPortEventListener, Co
                   }
                   catch (UnsupportedCommOperationException e)
                   {
-                     System.out.println("mSerialPort.setSerialPortParams() failed");
+                	  sLogger.error("mSerialPort.setSerialPortParams() failed");
                      throw e;
                   }
 
@@ -114,7 +118,7 @@ public class CallLogThread extends Thread implements SerialPortEventListener, Co
                   // handling.
                   mPortId.addPortOwnershipListener(this);
 
-                  System.out.println("CallLogThread running version 1.1.");
+                  sLogger.info("CallLogThread running");
 
                   // for (;;) Thread.sleep(10000);
 
@@ -130,16 +134,16 @@ public class CallLogThread extends Thread implements SerialPortEventListener, Co
             }
             catch (Exception e)
             {
-               e.printStackTrace();
+            	sLogger.error("Can not open serial port", e);
             }
 
          }
 		 else
 		 {
-			 System.out.println("port not of type COM");
+			 sLogger.error("port not of type COM");
 		 }
       }
-	  System.out.println("processed " + i + "ports");
+	  sLogger.info("processed " + i + "ports");
    }
 
    public void serialEvent(SerialPortEvent event)
@@ -195,7 +199,7 @@ public class CallLogThread extends Thread implements SerialPortEventListener, Co
          }
          catch (Exception e)
          {
-            e.printStackTrace();
+        	 sLogger.error("Incomming event can not be processed.", e);
             return;
          }
          break;
@@ -214,7 +218,7 @@ public class CallLogThread extends Thread implements SerialPortEventListener, Co
          mSerialPort.removeEventListener();
          mSerialPort.close();
          mIsOpen = false;
-         System.out.println("Ownership passed further to requster.");
+         sLogger.info("Ownership passed further to requster.");
          break;
       }
    }
@@ -224,7 +228,7 @@ public class CallLogThread extends Thread implements SerialPortEventListener, Co
       mSerialPort.removeEventListener();
       mSerialPort.close();
       mIsOpen = false;
-      System.out.println("CallLogThread destroyed!!");
+      sLogger.info("CallLogThread destroyed!!");
    }
 
    public String getFileDir()
@@ -287,7 +291,7 @@ public class CallLogThread extends Thread implements SerialPortEventListener, Co
             fileName = new String(year + "-" + month + "-" + day + ".log");
          }
 
-         System.out.println("Open file: dir=" + mFileDir + "; filename=" + fileName);
+         sLogger.info("Open file: dir={}; filename={}", mFileDir, fileName);
 
          File file = new File(mFileDir, fileName);
          if (!file.exists())
@@ -296,13 +300,9 @@ public class CallLogThread extends Thread implements SerialPortEventListener, Co
          fileStream.write(record.getBytes());
          fileStream.close();
       }
-      catch (FileNotFoundException e)
-      {
-
-      }
       catch (Exception e)
       {
-         e.printStackTrace();
+    	  sLogger.error("printToFile failed", e);
          return;
       }
    }
@@ -341,14 +341,11 @@ public class CallLogThread extends Thread implements SerialPortEventListener, Co
          fileStream.write(mByteBuffer, 0, size);
          fileStream.close();
       }
-      catch (FileNotFoundException e)
-      {
-
-      }
       catch (Exception e)
       {
-         e.printStackTrace();
-         return;
+    	  sLogger.error("printDebugFile failed", e);
+          return;
+
       }
    }
 

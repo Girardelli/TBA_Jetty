@@ -5,6 +5,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.Calendar;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import jssc.SerialPort;
 import jssc.SerialPortException;
 import jssc.SerialPortList;
@@ -13,7 +16,8 @@ import jssc.SerialPortEventListener;
 
 public class JsscSerial64ReaderThread extends Thread implements SerialPortEventListener
 {
-
+	final static Logger sLogger = LoggerFactory.getLogger(JsscSerial64ReaderThread.class);
+    
 	// Event mask & SerialPortEventListener interface
 
 	// Note: The mask is an additive quantity, thus to set a mask on the
@@ -50,17 +54,17 @@ public class JsscSerial64ReaderThread extends Thread implements SerialPortEventL
 
 	public void run()
 	{
-		System.out.println("jsscSerial64ReaderThread.run()");
-		System.out.println("Find available serial port names:");
+		sLogger.info("jsscSerial64ReaderThread.run()");
+		sLogger.info("Find available serial port names:");
 
 		String[] portNames = SerialPortList.getPortNames();
 		for (int i = 0; i < portNames.length; i++)
 		{
-			System.out.println(portNames[i]);
+			sLogger.info("Port name {}: {}", i, portNames[i]);
 		}
 		if (portNames.length == 0)
 		{
-			System.out.println("No ports found");
+			sLogger.error("No ports found");
 			return;
 		}
 
@@ -73,11 +77,11 @@ public class JsscSerial64ReaderThread extends Thread implements SerialPortEventL
 																												// params.
 
 			mSerialPort.addEventListener(this);
-			System.out.println("jsscSerial64ReaderThread listenig for events on " + portNames[0]);
+			sLogger.info("jsscSerial64ReaderThread listenig for events on {}", portNames[0]);
 
 		} catch (SerialPortException ex)
 		{
-			System.out.println(ex);
+			sLogger.error("Cannot open port", ex);
 		}
 	}
 
@@ -101,7 +105,7 @@ public class JsscSerial64ReaderThread extends Thread implements SerialPortEventL
 				{// Check bytes count in the input buffer
 					// Read data, if 10 bytes available
 					String newBytes = mSerialPort.readString(event.getEventValue());
-
+					sLogger.info("received:{}", newBytes);
 					mReadStrBuf.append(newBytes);
 
 					int eol = 0;
@@ -127,12 +131,9 @@ public class JsscSerial64ReaderThread extends Thread implements SerialPortEventL
 					}
 
 				}
-			} catch (SerialPortException ex)
-			{
-				System.out.println(ex);
 			} catch (Exception e)
 			{
-				e.printStackTrace();
+				sLogger.error("Cannot process event", e);
 				return;
 			}
 			break;
@@ -146,10 +147,10 @@ public class JsscSerial64ReaderThread extends Thread implements SerialPortEventL
 			mSerialPort.removeEventListener();
 			mSerialPort.closePort();
 			mIsOpen = false;
-			System.out.println("CallLogThread destroyed!!");
+			sLogger.info("CallLogThread destroyed!!");
 		} catch (SerialPortException ex)
 		{
-			System.out.println(ex);
+			sLogger.error("Destroy failed", ex);
 		}
 	}
 
@@ -190,13 +191,14 @@ public class JsscSerial64ReaderThread extends Thread implements SerialPortEventL
 
 	private void printToFile(String record)
 	{
+		String fileName = "";
 		try
 		{
 			Calendar calendar = Calendar.getInstance();
 
 			int year = calendar.get(Calendar.YEAR);
 			int month = calendar.get(Calendar.MONTH) + 1;
-			String fileName;
+			
 			if (mFileScope.equals("month"))
 			{
 				fileName = new String(year + "-" + month + ".log");
@@ -211,33 +213,35 @@ public class JsscSerial64ReaderThread extends Thread implements SerialPortEventL
 				fileName = new String(year + "-" + month + "-" + day + ".log");
 			}
 
-			System.out.println("Open file: dir=" + mFileDir + "; filename=" + fileName);
+			sLogger.info("Open file: dir={}; filename={}",mFileDir, fileName);
 
 			File file = new File(mFileDir, fileName);
 			if (!file.exists())
+			{
 				file.createNewFile();
+			}
 			FileOutputStream fileStream = new FileOutputStream(file, true);
 			fileStream.write(record.getBytes());
 			fileStream.close();
 		} catch (FileNotFoundException e)
 		{
-
+			sLogger.error("printToFile failed.\r\n{}/{} could not be created or does not exist", mFileDir, fileName, e);
 		} catch (Exception e)
 		{
-			e.printStackTrace();
-			return;
+			sLogger.error("printToFile failed", e);
 		}
 	}
 
 	private void printDebugFile(int size)
 	{
+		String fileName = "";
 		try
 		{
 			Calendar calendar = Calendar.getInstance();
 
 			int year = calendar.get(Calendar.YEAR);
 			int month = calendar.get(Calendar.MONTH) + 1;
-			String fileName;
+			
 			if (mFileScope.equals("month"))
 			{
 				fileName = new String(year + "-" + month + ".dbg");
@@ -253,7 +257,9 @@ public class JsscSerial64ReaderThread extends Thread implements SerialPortEventL
 			}
 			File file = new File(mFileDir, fileName);
 			if (!file.exists())
+			{
 				file.createNewFile();
+			}
 			FileOutputStream fileStream = new FileOutputStream(file, true);
 
 			String tmp = new String("\r\nLen=" + size + " ");
@@ -262,12 +268,12 @@ public class JsscSerial64ReaderThread extends Thread implements SerialPortEventL
 			fileStream.close();
 		} catch (FileNotFoundException e)
 		{
-
+			sLogger.error("printDebugFile failed.\r\n{}/{} could not be created or does not exist", mFileDir, fileName, e);
 		} catch (Exception e)
 		{
-			e.printStackTrace();
-			return;
+			sLogger.error("printDebugFile failed", e);
 		}
+
 	}
 
 	protected void writeToDb(Forum700CallRecord record)

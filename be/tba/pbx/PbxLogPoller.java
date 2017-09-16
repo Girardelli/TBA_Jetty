@@ -14,22 +14,27 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /* run it as follows:
  *
  * on our server:
  * java -classpath %jetty_base%\lib\tba.jar;%jetty_base%\lib\ext\comm.jar; be.tba.pbx.PbxLogPoller
  * java -classpath %jetty_base%\lib\tba.jar;%jetty_base%\lib\ext\jssc.jar;%jetty_base%\lib\ext\mysql-connector-java-5.1.34-bin.jar be.tba.pbx.PbxLogPoller
  *
+ * logback.xml must be on classpath (explicit listed)
  */
 public class PbxLogPoller
 {
    static private CallLogDbWriter mLogWriter = null;
+   final static Logger sLogger = LoggerFactory.getLogger(PbxLogPoller.class);
 
    static private CallLogDbWriter getWriter() throws NamingException
    {
       if (mLogWriter == null)
       {
-         System.out.println("PbxLogPoller.getWriter(): set properties");
+         sLogger.info("PbxLogPoller.getWriter(): set properties");
          //yves System.setProperty(Context.INITIAL_CONTEXT_FACTORY, "com.mysql.jdbc.jdbc2.optional.MysqlDataSource");
          // create the cash without the container support
          AccountCache.getInstance(Constants.MYSQL_URL);
@@ -42,40 +47,47 @@ public class PbxLogPoller
    {
       try
       {
-          Class.forName("com.mysql.jdbc.Driver").newInstance();
+    	  sLogger.info("");
+    	  sLogger.info("########## new start ############");
+    	  
+    	  Class.forName("com.mysql.jdbc.Driver").newInstance();
 
     	  CallLogDbWriter vLogWriter = getWriter();
          vLogWriter.start();
-         System.out.println("from PbxLogPoller: CallLogDbWriter started!");
+         sLogger.info("from PbxLogPoller: CallLogDbWriter started!");
          for (;;)
             Thread.sleep(10000);
 
       }
       catch (InterruptedException e)
       {
-         e.printStackTrace();
+         //e.printStackTrace();
+         sLogger.error("InterruptedException when creating calllog thread", e);
       }
       catch (NoClassDefFoundError e)
       {
-         e.printStackTrace();
-         System.out.println("NoClassDefFoundError when creating calllog thread");
+         //e.printStackTrace();
+         sLogger.error("NoClassDefFoundError when creating calllog thread", e);
       }
       catch (NamingException e)
       {
-         e.printStackTrace();
-         System.out.println("NamingException when getting InitialContext");
+         //e.printStackTrace();
+         sLogger.error("NamingException when getting InitialContext", e);
       } catch (InstantiationException e)
 	{
 		// TODO Auto-generated catch block
-		e.printStackTrace();
+		//e.printStackTrace();
+		sLogger.error("InstantiationException when getting InitialContext", e);
 	} catch (IllegalAccessException e)
 	{
 		// TODO Auto-generated catch block
-		e.printStackTrace();
+		//e.printStackTrace();
+		sLogger.error("IllegalAccessException when getting InitialContext", e);
 	} catch (ClassNotFoundException e)
 	{
 		// TODO Auto-generated catch block
-		e.printStackTrace();
+		//e.printStackTrace();
+		sLogger.error("ClassNotFoundException when getting InitialContext", e);
 	}
    }
 
@@ -83,7 +95,7 @@ public class PbxLogPoller
    {
       try
       {
-         System.out.println("Destroy CallLogDbWriter");
+    	 sLogger.info("Destroy CallLogDbWriter");
          CallLogDbWriter vLogWriter = getWriter();
          vLogWriter.stopLogging();
          Thread.sleep(vLogWriter.getSleepTime()); // give callLogThread
@@ -93,7 +105,7 @@ public class PbxLogPoller
       catch (Exception e)
       {
          e.printStackTrace();
-         System.out.println("Error during CallLogServlet destroy.");
+         sLogger.error("Error during CallLogServlet destroy.");
       }
    }
 }

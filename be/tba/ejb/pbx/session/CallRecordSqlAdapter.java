@@ -790,7 +790,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
    {
       try
       {
-         record.printRecord();
+         record.logRecord();
          CallRecordEntityData newRecord = new CallRecordEntityData();
          newRecord.setIsNotLogged(false);
          newRecord.setIsDocumented(false);

@@ -1,9 +1,7 @@
 package be.tba.pbx;
 
-import java.sql.Connection;
-
-import javax.naming.InitialContext;
-import javax.sql.DataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import be.tba.ejb.pbx.session.CallRecordSqlAdapter;
 import be.tba.servlets.session.WebSession;
@@ -11,12 +9,14 @@ import be.tba.util.constants.Constants;
 
 public final class CallLogDbWriter extends JsscSerial64ReaderThread
 {
+   final static Logger sLogger = LoggerFactory.getLogger(CallLogDbWriter.class);
+
    public CallLogDbWriter()
    {
       super();
       this.setFileDir(Constants.CALLLOG_PATH);
       this.setFileScope("day");
-      System.out.println("Path set to " + Constants.CALLLOG_PATH);
+      sLogger.info("Path set to {}", Constants.CALLLOG_PATH);
    }
 
    protected void writeToDb(Forum700CallRecord record)
@@ -32,9 +32,9 @@ public final class CallLogDbWriter extends JsscSerial64ReaderThread
       }
       catch (Exception e)
       {
-         System.out.println("Failed to store the following call record:");
-         System.out.println(record.getFileRecord());
-         e.printStackTrace();
+         sLogger.error("Failed to store the following call record:");
+         sLogger.error(record.getFileRecord());
+         sLogger.error("", e);
       }
       finally
       {
