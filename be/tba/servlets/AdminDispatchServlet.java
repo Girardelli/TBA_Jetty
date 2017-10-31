@@ -80,7 +80,7 @@ public class AdminDispatchServlet extends HttpServlet
 
             if (vAction == null)
             {
-               throw new SystemErrorException("Interne fout.");
+               throw new SystemErrorException("Interne fout. geen actie.");
             }
 
             // if (!vAction.equals(Constants.GOTO_INVOICE)

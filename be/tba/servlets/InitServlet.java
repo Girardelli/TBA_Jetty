@@ -11,18 +11,22 @@ import javax.servlet.ServletResponse;
 import be.tba.util.session.AccountCache;
 import be.tba.util.timer.TimerManager;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class InitServlet extends GenericServlet
 {
    /**
     * 
     */
+ //  final static Logger sLogger = LoggerFactory.getLogger(InitServlet.class);
    private static final long serialVersionUID = 10003L;
 
    @SuppressWarnings("unused")
    public void init(ServletConfig config) throws ServletException
    {
       System.out.println("init servlet called.");
-
+//	sLogger.info("CallLogThread.run()");
       try
       {
          TimerManager vTimerManager = TimerManager.getInstance();

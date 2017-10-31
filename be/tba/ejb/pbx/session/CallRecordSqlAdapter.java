@@ -865,7 +865,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
             if (i == Constants.NUMBER_BLOCK.length)
             {
                System.out.println("Outgoing call with unknown Billing code (" + record.mBusinCode + "): " + record.mInitialUser + "-->" + record.mExtCorrNumber);
-               return;
+               //return;
             }
          }
          else
@@ -873,7 +873,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
             // outgoing call without billingCode.
             // System.out.println("Outgoing call without Billing: " +
             // record.mChargedUser + "-->" + record.mExtCorrNumber);
-            return;
+            //return;
          }
          newRecord.setIsVirgin(true);
          newRecord.setDate(record.mDate);

@@ -105,7 +105,7 @@ public class JsscSerial64ReaderThread extends Thread implements SerialPortEventL
 				{// Check bytes count in the input buffer
 					// Read data, if 10 bytes available
 					String newBytes = mSerialPort.readString(event.getEventValue());
-					sLogger.info("received:{}", newBytes);
+					//sLogger.debug("received:{}", newBytes);
 					mReadStrBuf.append(newBytes);
 
 					int eol = 0;
@@ -213,7 +213,7 @@ public class JsscSerial64ReaderThread extends Thread implements SerialPortEventL
 				fileName = new String(year + "-" + month + "-" + day + ".log");
 			}
 
-			sLogger.info("Open file: dir={}; filename={}",mFileDir, fileName);
+			//sLogger.info("Open file: dir={}; filename={}",mFileDir, fileName);
 
 			File file = new File(mFileDir, fileName);
 			if (!file.exists())

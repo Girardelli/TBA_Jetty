@@ -88,11 +88,21 @@ public class MailerSessionBean
          vCustomer = AccountCache.getInstance().get(fwdNr);
 
          String vEmailAddr = vCustomer.getEmail();
-         if (vEmailAddr == null || vEmailAddr.length() == 0)
+		 if (vEmailAddr == null)
          {
             return false;
          }
-
+		 vEmailAddr = vEmailAddr.trim();
+		 if (vEmailAddr.length() == 0)
+         {
+            return false;
+         }
+		 
+		if (vEmailAddr.endsWith(";") || vEmailAddr.endsWith(","))
+		{
+			vEmailAddr = vEmailAddr.substring(0, vEmailAddr.length() - 1);
+		}
+		 
          CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
          CallRecordSqlAdapter vWriterSession = new CallRecordSqlAdapter();
 
