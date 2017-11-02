@@ -120,6 +120,10 @@ public class JsscSerial64ReaderThread extends Thread implements SerialPortEventL
 							printToFile(record.getFileRecord());
 							writeToDb(record);
 						}
+						else
+						{
+							sLogger.info("Invalid record");
+						}
 						if (mReadStrBuf.length() == ++eol)
 						{
 							mReadStrBuf = new StringBuffer();

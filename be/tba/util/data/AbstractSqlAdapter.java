@@ -13,10 +13,15 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.ResultSet;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public abstract class AbstractSqlAdapter<T>
 {
 	//private static Log log = LogFactory.getLog(AbstractSqlAdapter.class);
 
+	final static Logger sLogger = LoggerFactory.getLogger(AbstractSqlAdapter.class);
+   
 	public AbstractSqlAdapter(String tableName)
    {
       mTableName = tableName;
@@ -102,12 +107,14 @@ public abstract class AbstractSqlAdapter<T>
             Collection<T> col = translateRsToValueObjects(rs);
             System.out.println(col.size() + " entries: SQL querry: " + queryStr);
            //log.info(col.size() + " entries: SQL querry: " + queryStr);
+		   sLogger.info("{} entries: SQL querry: {}", col.size(), queryStr);
             return col;
          }
          else
          {
             int cnt = stmt.executeUpdate(queryStr);
             System.out.println(cnt + " entries: SQL querry: " + queryStr);
+			sLogger.info("{} entries: SQL querry: {}", cnt, queryStr);
             return new Vector<T>(cnt);
          }
       }
@@ -118,6 +125,9 @@ public abstract class AbstractSqlAdapter<T>
          System.out.println("SQLException: " + ex.getMessage());
          System.out.println("SQLState: " + ex.getSQLState());
          System.out.println("VendorError: " + ex.getErrorCode());
+		 
+		 sLogger.error("FAILED SQL statement: {}", queryStr);
+         sLogger.error("", ex);
       }
       finally
       {

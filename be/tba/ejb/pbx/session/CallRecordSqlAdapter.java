@@ -21,6 +21,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 /**
  * Session Bean Template
  *
@@ -37,7 +39,8 @@ import java.sql.ResultSet;
  */
 public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityData>
 {
-
+   final static Logger sLogger = LoggerFactory.getLogger(CallRecordSqlAdapter.class);
+   
    public CallRecordSqlAdapter()
    {
       super("CallRecordEntity");
@@ -865,7 +868,8 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
             if (i == Constants.NUMBER_BLOCK.length)
             {
                System.out.println("Outgoing call with unknown Billing code (" + record.mBusinCode + "): " + record.mInitialUser + "-->" + record.mExtCorrNumber);
-               //return;
+               newRecord.setFwdNr(Constants.NUMBER_BLOCK[0][0]);
+                  //return;
             }
          }
          else
@@ -873,6 +877,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
             // outgoing call without billingCode.
             // System.out.println("Outgoing call without Billing: " +
             // record.mChargedUser + "-->" + record.mExtCorrNumber);
+			newRecord.setFwdNr(Constants.NUMBER_BLOCK[0][0]);
             //return;
          }
          newRecord.setIsVirgin(true);
@@ -897,10 +902,16 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
                newRecord.setIsMailed(true);
             addRow(webSession.getConnection(), newRecord);
             System.out.println("addCallRecord: id = " + newRecord.getId() + ", fwdnr=" + newRecord.getFwdNr() + ", isMailed=" + newRecord.getIsMailed());
+			sLogger.info("addCallRecord: id={}, fwdnr={}, isMailed={}", newRecord.getId(), newRecord.getFwdNr(), newRecord.getIsMailed());
 
          }
+		 else
+		 {
+			 sLogger.info("addCallRecord failed: no account found for {}", newRecord.getFwdNr());
+		 }
 
          System.out.println("Call logged: " + newRecord.getFwdNr() + (newRecord.getIsIncomingCall() ? "<--" : "-->") + newRecord.getNumber());
+		 sLogger.info("Call logged: " + newRecord.getFwdNr() + (newRecord.getIsIncomingCall() ? "<--" : "-->") + newRecord.getNumber());
          return;
       }
       catch (Exception e)
@@ -908,6 +919,8 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
          System.out.println("Failed to store the following call record:");
          System.out.println(record.getFileRecord());
          e.printStackTrace();
+		 sLogger.error("addCallRecord failed");
+		 sLogger.error("", e);
       }
    }
 

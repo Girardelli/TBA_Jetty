@@ -29,6 +29,7 @@ public final class CallLogDbWriter extends JsscSerial64ReaderThread
 
          // Check the record and add it if it is a valid one.
          callRecordSqlAdapter.addCallRecord(session, record);
+		 sLogger.info("new call added");
       }
       catch (Exception e)
       {

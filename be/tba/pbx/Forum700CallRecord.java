@@ -248,10 +248,10 @@ public final class Forum700CallRecord implements Serializable
     {
         if (!isStarted)
         {
-            sLogger.info("User  Office Dir Corespondent              Line Date     Time   Cost Duration Code Name");
+            sLogger.info("User Office Dir Corespondent    Line Date     Time   Cost     Duration Code Name");
         }
         isStarted = true;
-        sLogger.info("{} {}  {} {} {}  {} {} {} {} {} {} ", mInitialUser, mChargedUser, mType, mExtCorrNumber, mLine, mDate, mTime, mDuration, mCost, mBusinCode, mSubscriberName);
+        sLogger.info("{}  {}    {}      {} {}  {} {}  {} {}    {}   {} ", mInitialUser, mChargedUser, mType, mExtCorrNumber, mLine, mDate, mTime, mDuration, mCost, mBusinCode, mSubscriberName);
     }
 
     public String getFileRecord()
