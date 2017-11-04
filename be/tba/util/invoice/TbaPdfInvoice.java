@@ -443,6 +443,8 @@ public class TbaPdfInvoice
          System.out.println("TbaPdfInvoice.writeText: '" + text + "' is null!");
          return;
       }
+	  text = text.replaceAll("\r","");
+	  text = text.replaceAll("\n","");
       PDPageContentStream contentStream = new PDPageContentStream(mDocument, page, true, false);
       contentStream.beginText();
       contentStream.setFont(font, fontSize);
