@@ -27,85 +27,89 @@ import org.slf4j.LoggerFactory;
  */
 public class PbxLogPoller
 {
-   static private CallLogDbWriter mLogWriter = null;
-   final static Logger sLogger = LoggerFactory.getLogger(PbxLogPoller.class);
+    static private CallLogDbWriter mLogWriter = null;
+    final static Logger sLogger = LoggerFactory.getLogger(PbxLogPoller.class);
 
-   static private CallLogDbWriter getWriter() throws NamingException
-   {
-      if (mLogWriter == null)
-      {
-         sLogger.info("PbxLogPoller.getWriter(): set properties");
-         //yves System.setProperty(Context.INITIAL_CONTEXT_FACTORY, "com.mysql.jdbc.jdbc2.optional.MysqlDataSource");
-         // create the cash without the container support
-         AccountCache.getInstance(Constants.MYSQL_URL);
-         mLogWriter = new CallLogDbWriter();
-      }
-      return mLogWriter;
-   }
+    static private CallLogDbWriter getWriter() throws NamingException
+    {
+        if (mLogWriter == null)
+        {
+            sLogger.info("PbxLogPoller.getWriter(): set properties");
+            // yves System.setProperty(Context.INITIAL_CONTEXT_FACTORY,
+            // "com.mysql.jdbc.jdbc2.optional.MysqlDataSource");
+            // create the cash without the container support
+            AccountCache.getInstance(Constants.MYSQL_URL);
+            mLogWriter = new CallLogDbWriter();
+        }
+        return mLogWriter;
+    }
 
-   static public void main(String[] argv)
-   {
-      try
-      {
-    	  sLogger.info("");
-    	  sLogger.info("########## new start ############");
-    	  
-    	  Class.forName("com.mysql.jdbc.Driver").newInstance();
+    static public void main(String[] argv)
+    {
+        try
+        {
+            sLogger.info("");
+            sLogger.info("########## new start ############");
 
-    	  CallLogDbWriter vLogWriter = getWriter();
-         vLogWriter.start();
-         sLogger.info("from PbxLogPoller: CallLogDbWriter started!");
-         for (;;)
-            Thread.sleep(10000);
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
 
-      }
-      catch (InterruptedException e)
-      {
-         //e.printStackTrace();
-         sLogger.error("InterruptedException when creating calllog thread", e);
-      }
-      catch (NoClassDefFoundError e)
-      {
-         //e.printStackTrace();
-         sLogger.error("NoClassDefFoundError when creating calllog thread", e);
-      }
-      catch (NamingException e)
-      {
-         //e.printStackTrace();
-         sLogger.error("NamingException when getting InitialContext", e);
-      } catch (InstantiationException e)
-	{
-		// TODO Auto-generated catch block
-		//e.printStackTrace();
-		sLogger.error("InstantiationException when getting InitialContext", e);
-	} catch (IllegalAccessException e)
-	{
-		// TODO Auto-generated catch block
-		//e.printStackTrace();
-		sLogger.error("IllegalAccessException when getting InitialContext", e);
-	} catch (ClassNotFoundException e)
-	{
-		// TODO Auto-generated catch block
-		//e.printStackTrace();
-		sLogger.error("ClassNotFoundException when getting InitialContext", e);
-	}
-   }
+            CallLogDbWriter vLogWriter = getWriter();
+            vLogWriter.start();
+            sLogger.info("from PbxLogPoller: CallLogDbWriter started!");
+            for (;;)
+                Thread.sleep(10000);
 
-   public void stop()
-   {
-      try
-      {
-    	 sLogger.info("Destroy CallLogDbWriter");
-         CallLogDbWriter vLogWriter = getWriter();
-         vLogWriter.stopLogging();
-         Thread.sleep(vLogWriter.getSleepTime()); // give callLogThread
-         // time to stop itsself
-         vLogWriter = null;
-      }
-      catch (Exception e)
-      {
-         e.printStackTrace();
-         sLogger.error("Error during CallLogServlet destroy.");
-      }
-   }
+        }
+        catch (InterruptedException e)
+        {
+            // e.printStackTrace();
+            sLogger.error("InterruptedException when creating calllog thread", e);
+        }
+        catch (NoClassDefFoundError e)
+        {
+            // e.printStackTrace();
+            sLogger.error("NoClassDefFoundError when creating calllog thread", e);
+        }
+        catch (NamingException e)
+        {
+            // e.printStackTrace();
+            sLogger.error("NamingException when getting InitialContext", e);
+        }
+        catch (InstantiationException e)
+        {
+            // TODO Auto-generated catch block
+            // e.printStackTrace();
+            sLogger.error("InstantiationException when getting InitialContext", e);
+        }
+        catch (IllegalAccessException e)
+        {
+            // TODO Auto-generated catch block
+            // e.printStackTrace();
+            sLogger.error("IllegalAccessException when getting InitialContext", e);
+        }
+        catch (ClassNotFoundException e)
+        {
+            // TODO Auto-generated catch block
+            // e.printStackTrace();
+            sLogger.error("ClassNotFoundException when getting InitialContext", e);
+        }
+    }
+
+    public void stop()
+    {
+        try
+        {
+            sLogger.info("Destroy CallLogDbWriter");
+            CallLogDbWriter vLogWriter = getWriter();
+            vLogWriter.stopLogging();
+            Thread.sleep(vLogWriter.getSleepTime()); // give callLogThread
+            // time to stop itsself
+            vLogWriter = null;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            sLogger.error("Error during CallLogServlet destroy.");
+        }
+    }
 }

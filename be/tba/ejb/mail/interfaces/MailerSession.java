@@ -11,6 +11,6 @@ package be.tba.ejb.mail.interfaces;
 public interface MailerSession
 {
 
-   public void sendMail(java.sql.Connection con, java.lang.String fwdNumber);
+    public void sendMail(java.sql.Connection con, java.lang.String fwdNumber);
 
 }

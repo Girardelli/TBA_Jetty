@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 
 public final class Forum700CallRecord implements Serializable
 {
-	final static Logger sLogger = LoggerFactory.getLogger(Forum700CallRecord.class);
+    final static Logger sLogger = LoggerFactory.getLogger(Forum700CallRecord.class);
     private static final int mInitialUserLen = 5;
 
     private static final int mChargedUserLen = 5;
@@ -122,8 +122,8 @@ public final class Forum700CallRecord implements Serializable
         sLogger.info("Parse record:{}", aRecord);
         if (aRecord.length() < recordLen)
         {
-        	sLogger.error("record length {} < {}", aRecord.length(), recordLen);
-        	mIsValid = false;
+            sLogger.error("record length {} < {}", aRecord.length(), recordLen);
+            mIsValid = false;
         }
         else
         {
@@ -295,14 +295,13 @@ public final class Forum700CallRecord implements Serializable
         return nrToStrip;
     }
 
-	private String fix24h_bugOn2016NewYear(String duration)
-	{
-		if (duration.length() > 0 &&
-		    duration.startsWith("24"))
-		{
-			//sLogger.info("replace 24 in {}", duration);
-			return new String("00" + duration.substring(2));
-		}
-		return duration;
-	}
+    private String fix24h_bugOn2016NewYear(String duration)
+    {
+        if (duration.length() > 0 && duration.startsWith("24"))
+        {
+            // sLogger.info("replace 24 in {}", duration);
+            return new String("00" + duration.substring(2));
+        }
+        return duration;
+    }
 }

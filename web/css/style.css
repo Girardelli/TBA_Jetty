@@ -20,6 +20,9 @@ body {
   width: 1180px;
   margin: 0 auto;
 }
+.wrap.small {
+  width: 900px;
+}
 .wrap.big {
   width: 1280px;
 }
@@ -1380,6 +1383,16 @@ Menu
 /*====================================================
 INDEX
 =====================================================*/
+.tba-training {
+  background-color: rgba(0, 153, 255, 0.05);
+  margin: 20px;
+  padding: 10px;
+}
+.tba-training  table{
+  background-color: rgba(200, 153, 255, 0.05);
+  max-width: 400px;
+  width: 100%
+}
 .center-block {
   float: none !important;
   margin: auto !important;
@@ -1416,6 +1429,11 @@ INDEX
   .row.big.top {
     margin-top: 20px;
   }
+}
+.row.invert_tba {
+  margin: 0;
+  padding: 20px;
+  position: relative;
 }
 .row.invert {
   margin: 0;

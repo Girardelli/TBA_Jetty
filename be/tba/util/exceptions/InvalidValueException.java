@@ -19,96 +19,96 @@ import java.util.Collection;
 public class InvalidValueException extends Exception
 {
 
-   // -------------------------------------------------------------------------
-   // Static
-   // -------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
+    // Static
+    // -------------------------------------------------------------------------
 
-   // -------------------------------------------------------------------------
-   // Members
-   // -------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
+    // Members
+    // -------------------------------------------------------------------------
 
-   private Object[] mParameters = new Object[0];
+    private Object[] mParameters = new Object[0];
 
-   // -------------------------------------------------------------------------
-   // Constructor
-   // -------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
+    // Constructor
+    // -------------------------------------------------------------------------
 
-   /**
-    * Constructor with a message handler and a list of parameters
-    * 
-    * @param pMessageHandler
-    *           Handler to lookup the right message
-    * @param pParameters
-    *           One Parameter, array of parameters or a Collection of parameters
-    *           or null
-    */
-   public InvalidValueException(String pMessageHandler, Object pParameters)
-   {
-      super(pMessageHandler);
-      if (pParameters != null)
-      {
-         if (pParameters instanceof Collection)
-         {
-            mParameters = ((Collection) pParameters).toArray(new Object[0]);
-         }
-         else
-         {
-            if (pParameters instanceof Object[])
+    /**
+     * Constructor with a message handler and a list of parameters
+     * 
+     * @param pMessageHandler
+     *            Handler to lookup the right message
+     * @param pParameters
+     *            One Parameter, array of parameters or a Collection of parameters
+     *            or null
+     */
+    public InvalidValueException(String pMessageHandler, Object pParameters)
+    {
+        super(pMessageHandler);
+        if (pParameters != null)
+        {
+            if (pParameters instanceof Collection)
             {
-               mParameters = (Object[]) pParameters;
+                mParameters = ((Collection) pParameters).toArray(new Object[0]);
             }
             else
             {
-               mParameters = new Object[] { pParameters };
+                if (pParameters instanceof Object[])
+                {
+                    mParameters = (Object[]) pParameters;
+                }
+                else
+                {
+                    mParameters = new Object[] { pParameters };
+                }
             }
-         }
-      }
-   }
+        }
+    }
 
-   // -------------------------------------------------------------------------
-   // Methods
-   // -------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
+    // Methods
+    // -------------------------------------------------------------------------
 
-   /**
-    * Returns the array of parameters coming along
-    * 
-    * @return Array of parameters which are always defined but can be empty
-    */
-   public Object[] getParameters()
-   {
-      return mParameters;
-   }
+    /**
+     * Returns the array of parameters coming along
+     * 
+     * @return Array of parameters which are always defined but can be empty
+     */
+    public Object[] getParameters()
+    {
+        return mParameters;
+    }
 
-   /**
-    * Describes the instance and its content for debugging purpose
-    * 
-    * @return Using the one from the super class
-    */
-   public String toString()
-   {
-      return super.toString();
-   }
+    /**
+     * Describes the instance and its content for debugging purpose
+     * 
+     * @return Using the one from the super class
+     */
+    public String toString()
+    {
+        return super.toString();
+    }
 
-   /**
-    * Determines if the given instance is the same as this instance based on its
-    * content. This means that it has to be of the same class ( or subclass )
-    * and it has to have the same content
-    * 
-    * @return Returns the equals value from the super class
-    */
-   public boolean equals(Object pTest)
-   {
-      return super.equals(pTest);
-   }
+    /**
+     * Determines if the given instance is the same as this instance based on its
+     * content. This means that it has to be of the same class ( or subclass ) and
+     * it has to have the same content
+     * 
+     * @return Returns the equals value from the super class
+     */
+    public boolean equals(Object pTest)
+    {
+        return super.equals(pTest);
+    }
 
-   /**
-    * Returns the hashcode of this instance
-    * 
-    * @return Hashcode of the super class
-    */
-   public int hashCode()
-   {
-      return super.hashCode();
-   }
+    /**
+     * Returns the hashcode of this instance
+     * 
+     * @return Hashcode of the super class
+     */
+    public int hashCode()
+    {
+        return super.hashCode();
+    }
 
 }

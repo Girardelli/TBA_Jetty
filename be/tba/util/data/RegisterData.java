@@ -14,73 +14,73 @@ import java.io.Serializable;
  */
 final public class RegisterData implements Serializable
 {
-   /**
+    /**
     * 
     */
-   private static final long serialVersionUID = 10004L;
+    private static final long serialVersionUID = 10004L;
 
-   private String mCode = "";
+    private String mCode = "";
 
-   private String mUserId = "";
+    private String mUserId = "";
 
-   private String mPassword = "";
+    private String mPassword = "";
 
-   private String mFullName = "";
+    private String mFullName = "";
 
-   private String mEmail = "";
+    private String mEmail = "";
 
-   public void setCode(String code)
-   {
-      mCode = code;
-   }
+    public void setCode(String code)
+    {
+        mCode = code;
+    }
 
-   public String getCode()
-   {
-      return mCode;
-   }
+    public String getCode()
+    {
+        return mCode;
+    }
 
-   public void setUserId(String userId)
-   {
-      mUserId = userId;
-   }
+    public void setUserId(String userId)
+    {
+        mUserId = userId;
+    }
 
-   public String getUserId()
-   {
-      return mUserId;
-   }
+    public String getUserId()
+    {
+        return mUserId;
+    }
 
-   public void setPassword(String password)
-   {
-      mPassword = password;
-   }
+    public void setPassword(String password)
+    {
+        mPassword = password;
+    }
 
-   public String getPassword()
-   {
-      return mPassword;
-   }
+    public String getPassword()
+    {
+        return mPassword;
+    }
 
-   public void setFullName(String name)
-   {
-      mFullName = name;
-   }
+    public void setFullName(String name)
+    {
+        mFullName = name;
+    }
 
-   public String getFullName()
-   {
-      return mFullName;
-   }
+    public String getFullName()
+    {
+        return mFullName;
+    }
 
-   public void setEmail(String email)
-   {
-      mEmail = email;
-   }
+    public void setEmail(String email)
+    {
+        mEmail = email;
+    }
 
-   public String getEmail()
-   {
-      return mEmail;
-   }
+    public String getEmail()
+    {
+        return mEmail;
+    }
 
-   public String toString()
-   {
-      return new String("Code:" + mCode + " UserId:" + mUserId + " name:" + mFullName);
-   }
+    public String toString()
+    {
+        return new String("Code:" + mCode + " UserId:" + mUserId + " name:" + mFullName);
+    }
 }

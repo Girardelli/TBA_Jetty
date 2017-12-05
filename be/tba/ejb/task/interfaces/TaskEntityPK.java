@@ -10,76 +10,76 @@ package be.tba.ejb.task.interfaces;
  */
 public class TaskEntityPK extends java.lang.Object implements java.io.Serializable
 {
-   /**
+    /**
     * 
     */
-   private static final long serialVersionUID = 1L;
-   private int _hashCode = 0;
-   private StringBuffer _toStringValue = null;
+    private static final long serialVersionUID = 1L;
+    private int _hashCode = 0;
+    private StringBuffer _toStringValue = null;
 
-   public int id;
+    public int id;
 
-   public TaskEntityPK()
-   {
-   }
+    public TaskEntityPK()
+    {
+    }
 
-   public TaskEntityPK(int id)
-   {
-      this.id = id;
-   }
+    public TaskEntityPK(int id)
+    {
+        this.id = id;
+    }
 
-   public int getId()
-   {
-      return id;
-   }
+    public int getId()
+    {
+        return id;
+    }
 
-   public void setId(int id)
-   {
-      this.id = id;
-      _hashCode = 0;
-   }
+    public void setId(int id)
+    {
+        this.id = id;
+        _hashCode = 0;
+    }
 
-   public int hashCode()
-   {
-      if (_hashCode == 0)
-      {
-         _hashCode += (int) this.id;
-      }
+    public int hashCode()
+    {
+        if (_hashCode == 0)
+        {
+            _hashCode += (int) this.id;
+        }
 
-      return _hashCode;
-   }
+        return _hashCode;
+    }
 
-   public boolean equals(Object obj)
-   {
-      boolean eq = true;
+    public boolean equals(Object obj)
+    {
+        boolean eq = true;
 
-      if (obj == null)
-      {
-         return false;
-      }
+        if (obj == null)
+        {
+            return false;
+        }
 
-      if (!(obj instanceof be.tba.ejb.task.interfaces.TaskEntityPK))
-         return false;
+        if (!(obj instanceof be.tba.ejb.task.interfaces.TaskEntityPK))
+            return false;
 
-      be.tba.ejb.task.interfaces.TaskEntityPK pk = (be.tba.ejb.task.interfaces.TaskEntityPK) obj;
-      eq = eq && this.id == pk.id;
-      return eq;
-   }
+        be.tba.ejb.task.interfaces.TaskEntityPK pk = (be.tba.ejb.task.interfaces.TaskEntityPK) obj;
+        eq = eq && this.id == pk.id;
+        return eq;
+    }
 
-   /**
-    * @return String representation of this pk in the form of
-    *         [.field1.field2.field3].
-    */
-   public String toString()
-   {
-      if (_toStringValue == null)
-      {
-         _toStringValue = new StringBuffer("[.");
-         _toStringValue.append(this.id).append('.');
-         _toStringValue.append(']');
-      }
+    /**
+     * @return String representation of this pk in the form of
+     *         [.field1.field2.field3].
+     */
+    public String toString()
+    {
+        if (_toStringValue == null)
+        {
+            _toStringValue = new StringBuffer("[.");
+            _toStringValue.append(this.id).append('.');
+            _toStringValue.append(']');
+        }
 
-      return _toStringValue.toString();
-   }
+        return _toStringValue.toString();
+    }
 
 }

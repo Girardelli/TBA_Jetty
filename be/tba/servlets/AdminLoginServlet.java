@@ -21,85 +21,85 @@ import be.tba.util.exceptions.AccessDeniedException;
 
 public class AdminLoginServlet extends HttpServlet
 {
-   /**
+    /**
     *
     */
-   private static final long serialVersionUID = 10001L;
+    private static final long serialVersionUID = 10001L;
 
-   public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
-   {
-      res.setCharacterEncoding("UTF-8");
-      req.setCharacterEncoding("UTF-8");
-      res.setContentType("text/html");
-      String vUserId = "";
-      String vPassword = "";
-      WebSession vSession = null;
+    public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
+    {
+        res.setCharacterEncoding("UTF-8");
+        req.setCharacterEncoding("UTF-8");
+        res.setContentType("text/html");
+        String vUserId = "";
+        String vPassword = "";
+        WebSession vSession = null;
 
-      try
-      {
-         HttpSession httpSession = req.getSession();
-         vUserId = req.getParameter(Constants.ACCOUNT_USERID);
-         vPassword = req.getParameter(Constants.ACCOUNT_PASSWORD);
+        try
+        {
+            HttpSession httpSession = req.getSession();
+            vUserId = req.getParameter(Constants.ACCOUNT_USERID);
+            vPassword = req.getParameter(Constants.ACCOUNT_PASSWORD);
 
-         AccountEntityData vAccount = null;
-         if (vUserId.equals(Constants.MASTER_LOGIN_NAME))
-         {
-            vAccount = new AccountEntityData();
-            vAccount.setRole(AccountRole.ADMIN.getShort());
-         }
-         else
-         {
-            vSession = new WebSession();
-            AccountSqlAdapter vAccountSession = new AccountSqlAdapter();
-            vAccount = vAccountSession.logIn(vSession, vUserId, vPassword);
-            System.out.println("LoginServlet: " + vAccount.getFullName() + " logged in.");
-         }
-
-         if (vAccount.getRole().equals(AccountRole.ADMIN.getShort()) || vAccount.getRole().equals(AccountRole.EMPLOYEE.getShort()))
-         {
-            if (vSession == null)
-               vSession = new WebSession();
-            String vKey = SessionManager.getInstance().add(vSession);
-            vSession.init(vUserId, vKey);
-            vSession.setRole(AccountRole.fromShort(vAccount.getRole()));
-
-            vSession.setFwdNumber(vAccount.getFwdNumber());
-
-            // do your thing
-            // res.setHeader("fullname", acctValue.getFullName());
-            httpSession.setAttribute(Constants.SESSION_OBJ, vSession);
-
-            // req.setAttribute(Constants.SESSION_ID, vKey);
-            // req.setAttribute(Constants.SESSION_OBJ, vSession);
-            ServletContext sc = getServletContext();
-            RequestDispatcher rd = sc.getRequestDispatcher(Constants.ADMIN_CALLS_JSP);
-            rd.forward(req, res);
-            System.out.println("LoginServlet: " + vAccount.getUserId() + " got session id " + vSession.getSessionId());
-         }
-         else
-         {
-            if (vSession != null)
+            AccountEntityData vAccount = null;
+            if (vUserId.equals(Constants.MASTER_LOGIN_NAME))
             {
-               vSession.Close();
+                vAccount = new AccountEntityData();
+                vAccount.setRole(AccountRole.ADMIN.getShort());
             }
-            throw new AccessDeniedException("U hebt geen administrator rechten!");
-         }
-      }
-      catch (Exception e)
-      {
-         System.out.println("AdminLoginServlet: Mallicious admin access attempt. userid:" + vUserId + ", password:" + vPassword);
-         // print error page!!
-         String vMsg = e.getMessage();
-         req.setAttribute(Constants.ERROR_TXT, vMsg == null ? "Onbekende error." : vMsg);
-         ServletContext sc = getServletContext();
-         RequestDispatcher rd = sc.getRequestDispatcher(Constants.ADMIN_FAIL_JSP);
-         rd.forward(req, res);
-      }
-   }
+            else
+            {
+                vSession = new WebSession();
+                AccountSqlAdapter vAccountSession = new AccountSqlAdapter();
+                vAccount = vAccountSession.logIn(vSession, vUserId, vPassword);
+                System.out.println("LoginServlet: " + vAccount.getFullName() + " logged in.");
+            }
 
-   public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
-   {
-      doGet(req, res);
-   }
+            if (vAccount.getRole().equals(AccountRole.ADMIN.getShort()) || vAccount.getRole().equals(AccountRole.EMPLOYEE.getShort()))
+            {
+                if (vSession == null)
+                    vSession = new WebSession();
+                String vKey = SessionManager.getInstance().add(vSession);
+                vSession.init(vUserId, vKey);
+                vSession.setRole(AccountRole.fromShort(vAccount.getRole()));
+
+                vSession.setFwdNumber(vAccount.getFwdNumber());
+
+                // do your thing
+                // res.setHeader("fullname", acctValue.getFullName());
+                httpSession.setAttribute(Constants.SESSION_OBJ, vSession);
+
+                // req.setAttribute(Constants.SESSION_ID, vKey);
+                // req.setAttribute(Constants.SESSION_OBJ, vSession);
+                ServletContext sc = getServletContext();
+                RequestDispatcher rd = sc.getRequestDispatcher(Constants.ADMIN_CALLS_JSP);
+                rd.forward(req, res);
+                System.out.println("LoginServlet: " + vAccount.getUserId() + " got session id " + vSession.getSessionId());
+            }
+            else
+            {
+                if (vSession != null)
+                {
+                    vSession.Close();
+                }
+                throw new AccessDeniedException("U hebt geen administrator rechten!");
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println("AdminLoginServlet: Mallicious admin access attempt. userid:" + vUserId + ", password:" + vPassword);
+            // print error page!!
+            String vMsg = e.getMessage();
+            req.setAttribute(Constants.ERROR_TXT, vMsg == null ? "Onbekende error." : vMsg);
+            ServletContext sc = getServletContext();
+            RequestDispatcher rd = sc.getRequestDispatcher(Constants.ADMIN_FAIL_JSP);
+            rd.forward(req, res);
+        }
+    }
+
+    public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
+    {
+        doGet(req, res);
+    }
 
 }

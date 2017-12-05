@@ -16,40 +16,40 @@ import org.slf4j.LoggerFactory;
 
 public class InitServlet extends GenericServlet
 {
-   /**
+    /**
     * 
     */
- //  final static Logger sLogger = LoggerFactory.getLogger(InitServlet.class);
-   private static final long serialVersionUID = 10003L;
+    // final static Logger sLogger = LoggerFactory.getLogger(InitServlet.class);
+    private static final long serialVersionUID = 10003L;
 
-   @SuppressWarnings("unused")
-   public void init(ServletConfig config) throws ServletException
-   {
-      System.out.println("init servlet called.");
-//	sLogger.info("CallLogThread.run()");
-      try
-      {
-         TimerManager vTimerManager = TimerManager.getInstance();
-         AccountCache vAccountCache = AccountCache.getInstance();
-         // The newInstance() call is a work around for some
-         // broken Java implementations
+    @SuppressWarnings("unused")
+    public void init(ServletConfig config) throws ServletException
+    {
+        System.out.println("init servlet called.");
+        // sLogger.info("CallLogThread.run()");
+        try
+        {
+            TimerManager vTimerManager = TimerManager.getInstance();
+            AccountCache vAccountCache = AccountCache.getInstance();
+            // The newInstance() call is a work around for some
+            // broken Java implementations
 
-         Class.forName("com.mysql.jdbc.Driver").newInstance();
-      }
-      catch (Exception e)
-      {
-         e.printStackTrace();
-         throw new ServletException("AccountCache init failed: " + e.getMessage());
-      }
-   }
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            throw new ServletException("AccountCache init failed: " + e.getMessage());
+        }
+    }
 
-   public void destroy()
-   {
-      System.out.println("init servlet destroyed.");
-   }
+    public void destroy()
+    {
+        System.out.println("init servlet destroyed.");
+    }
 
-   public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException
-   {
-   }
+    public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException
+    {
+    }
 
 }

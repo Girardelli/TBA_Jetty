@@ -10,79 +10,79 @@ package be.tba.ejb.pbx.interfaces;
  */
 public class CallRecordEntityPK extends java.lang.Object implements java.io.Serializable
 {
-   /**
+    /**
     * 
     */
-   private static final long serialVersionUID = 1L;
-   private int _hashCode = 0;
-   private StringBuffer _toStringValue = null;
+    private static final long serialVersionUID = 1L;
+    private int _hashCode = 0;
+    private StringBuffer _toStringValue = null;
 
-   public int id;
+    public int id;
 
-   public CallRecordEntityPK()
-   {
-   }
+    public CallRecordEntityPK()
+    {
+    }
 
-   public CallRecordEntityPK(int id)
-   {
-      this.id = id;
-   }
+    public CallRecordEntityPK(int id)
+    {
+        this.id = id;
+    }
 
-   public int getId()
-   {
-      return id;
-   }
+    public int getId()
+    {
+        return id;
+    }
 
-   public void setId(int id)
-   {
-      this.id = id;
-      _hashCode = 0;
-   }
+    public void setId(int id)
+    {
+        this.id = id;
+        _hashCode = 0;
+    }
 
-   public int hashCode()
-   {
-      if (_hashCode == 0)
-      {
-         _hashCode += (int) this.id;
-      }
+    public int hashCode()
+    {
+        if (_hashCode == 0)
+        {
+            _hashCode += (int) this.id;
+        }
 
-      return _hashCode;
-   }
+        return _hashCode;
+    }
 
-   public boolean equals(Object obj)
-   {
-      if (!(obj instanceof be.tba.ejb.pbx.interfaces.CallRecordEntityPK))
-         return false;
+    public boolean equals(Object obj)
+    {
+        if (!(obj instanceof be.tba.ejb.pbx.interfaces.CallRecordEntityPK))
+            return false;
 
-      be.tba.ejb.pbx.interfaces.CallRecordEntityPK pk = (be.tba.ejb.pbx.interfaces.CallRecordEntityPK) obj;
-      boolean eq = true;
+        be.tba.ejb.pbx.interfaces.CallRecordEntityPK pk = (be.tba.ejb.pbx.interfaces.CallRecordEntityPK) obj;
+        boolean eq = true;
 
-      if (obj == null)
-      {
-         eq = false;
-      }
-      else
-      {
-         eq = eq && this.id == pk.id;
-      }
+        if (obj == null)
+        {
+            eq = false;
+        }
+        else
+        {
+            eq = eq && this.id == pk.id;
+        }
 
-      return eq;
-   }
+        return eq;
+    }
 
-   /**
-    * @return String representation of this pk in the form of
-    *         [.field1.field2.field3].
-    */
-   public String toString()
-   {
-      if (_toStringValue == null)
-      {
-         _toStringValue = new StringBuffer("[.");
-         _toStringValue.append(this.id).append('.');
-         _toStringValue.append(']');
-      }
+    /**
+     * @return String representation of this pk in the form of
+     *         [.field1.field2.field3].
+     */
+    public String toString()
+    {
+        if (_toStringValue == null)
+        {
+            _toStringValue = new StringBuffer("[.");
+            _toStringValue.append(this.id).append('.');
+            _toStringValue.append(']');
+        }
 
-      return _toStringValue.toString();
-   }
+        return _toStringValue.toString();
+    }
 
 }

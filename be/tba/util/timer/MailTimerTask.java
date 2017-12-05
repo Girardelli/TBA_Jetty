@@ -18,85 +18,85 @@ import be.tba.util.session.MailError;
 
 final public class MailTimerTask extends TimerTask
 {
-   public MailTimerTask()
-   {
-   }
+    public MailTimerTask()
+    {
+    }
 
-   static public long getPeriod()
-   {
-      return Constants.MINUTES * 3;
-   }
+    static public long getPeriod()
+    {
+        return Constants.MINUTES * 3;
+    }
 
-   public void run()
-   {
-      // System.out.println("Mail send for " + mAccountNr + ". Schedule time "
-      // + long2String(scheduledExecutionTime()));
-      // return;
-      if (System.getenv("TBA_MAIL_ON") == null)
-      {
-         return;
-      }
-      WebSession session = null;
-      System.out.println("MailTimerTask run");
+    public void run()
+    {
+        // System.out.println("Mail send for " + mAccountNr + ". Schedule time "
+        // + long2String(scheduledExecutionTime()));
+        // return;
+        if (System.getenv("TBA_MAIL_ON") == null)
+        {
+            return;
+        }
+        WebSession session = null;
+        System.out.println("MailTimerTask run");
 
-      GregorianCalendar vCalendar = new GregorianCalendar();
-      if (vCalendar.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY && vCalendar.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY)
-      {
-         try
-         {
-            session = new WebSession();
-            Integer vKey = new Integer(vCalendar.get(Calendar.HOUR_OF_DAY) * 60 + vCalendar.get(Calendar.MINUTE));
-
-            Collection<AccountEntityData> mailGroup = AccountCache.getInstance().getMailingGroup(vKey);
-            if (mailGroup != null)
+        GregorianCalendar vCalendar = new GregorianCalendar();
+        if (vCalendar.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY && vCalendar.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY)
+        {
+            try
             {
-               for (Iterator<AccountEntityData> j = mailGroup.iterator(); j.hasNext();)
-               {
-                  AccountEntityData vAccount = j.next();
-                  if (System.getenv("TBA_MAIL_ON") != null)
-                  {
-                     try
-                     {
-                        MailerSessionBean.sendMail(session, vAccount.getFwdNumber());
-                        System.out.println("Mail sent to " + vAccount.getFullName());
-                     }
-                     catch (Exception e)
-                     {
-                        System.out.println("Mail send failed to " + vAccount.getFullName());
-                        MailError.getInstance().setError("Mail send failed to " + vAccount.getFullName() + "\n" + e.getMessage());
-                        e.printStackTrace();
-                     }
-                  }
-                  else
-                  {
-                     System.out.println("Mail supposed to be send but disabled to " + vAccount.getFullName());
-                  }
-               }
+                session = new WebSession();
+                Integer vKey = new Integer(vCalendar.get(Calendar.HOUR_OF_DAY) * 60 + vCalendar.get(Calendar.MINUTE));
+
+                Collection<AccountEntityData> mailGroup = AccountCache.getInstance().getMailingGroup(vKey);
+                if (mailGroup != null)
+                {
+                    for (Iterator<AccountEntityData> j = mailGroup.iterator(); j.hasNext();)
+                    {
+                        AccountEntityData vAccount = j.next();
+                        if (System.getenv("TBA_MAIL_ON") != null)
+                        {
+                            try
+                            {
+                                MailerSessionBean.sendMail(session, vAccount.getFwdNumber());
+                                System.out.println("Mail sent to " + vAccount.getFullName());
+                            }
+                            catch (Exception e)
+                            {
+                                System.out.println("Mail send failed to " + vAccount.getFullName());
+                                MailError.getInstance().setError("Mail send failed to " + vAccount.getFullName() + "\n" + e.getMessage());
+                                e.printStackTrace();
+                            }
+                        }
+                        else
+                        {
+                            System.out.println("Mail supposed to be send but disabled to " + vAccount.getFullName());
+                        }
+                    }
+                }
             }
-         }
-         catch (Exception e)
-         {
-            System.out.println("MailTimerTask exception");
-            MailError.getInstance().setError("Mail send failed\n" + e.getMessage());
-            e.printStackTrace();
-         }
-         finally
-         {
-            if (session != null)
+            catch (Exception e)
             {
-               session.Close();
+                System.out.println("MailTimerTask exception");
+                MailError.getInstance().setError("Mail send failed\n" + e.getMessage());
+                e.printStackTrace();
             }
-         }
-      }
+            finally
+            {
+                if (session != null)
+                {
+                    session.Close();
+                }
+            }
+        }
 
-   }
+    }
 
-   static public String long2String(long time)
-   {
-      GregorianCalendar vCalendar = new GregorianCalendar();
-      vCalendar.setTimeInMillis(time);
-      return vCalendar.getTime().toString();
+    static public String long2String(long time)
+    {
+        GregorianCalendar vCalendar = new GregorianCalendar();
+        vCalendar.setTimeInMillis(time);
+        return vCalendar.getTime().toString();
 
-   }
+    }
 
 }
