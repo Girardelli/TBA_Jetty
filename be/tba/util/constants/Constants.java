@@ -325,6 +325,8 @@ public class Constants
 
     public static final String RECORD_CALLER_NAME = "_cna";
 
+    public static final String RECORD_TEMP_CALLER = "_tca";
+
     public static final String RECORD_SHORT_TEXT = "_stx";
 
     public static final String RECORD_LONG_TEXT = "_ltx";
