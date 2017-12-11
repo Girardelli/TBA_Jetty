@@ -111,9 +111,9 @@ HttpSession vHttpSession = request.getSession();
             vInOut = "\"/TheBusinessAssistant/images/outcall.gif\"";
       %>
 						<tr bgcolor="FFCC66" id=<%=vId%> class="bodytekst"
-							onmouseover="hooverOnRow('<%=vId%>')"
-							onmouseout="hooverOffRow('<%=vId%>')"
-							onclick="updateSaveId('<%=vId%>');">
+							onmouseover="hooverOnRow('<%=vId%>', '<%=vEntry.getId()%>')"
+							onmouseout="hooverOffRow('<%=vId%>', '<%=vEntry.getId()%>')"
+							onclick="updateSaveId('<%=vId%>', '<%=vEntry.getId()%>');">
 							<td width="20" bgcolor="FFFFFF"><img src=<%=vInOut%> height="13"
 								border="0"></td>
 							<td width="140" valign="top"><%=vAccountEntityData.getFullName()%></td>
@@ -302,25 +302,25 @@ function removeOpenCalls()
   window.close();
 }
 
-function hooverOnRow(id)
+function hooverOnRow(id, recordId)
 {
   entry = document.getElementById(id) ;
-  if (recordToSave != id)
+  if (recordToSave != recordId)
     entry.style.backgroundColor= "FFFF99";
 }
 
-function hooverOffRow(id)
+function hooverOffRow(id, recordId)
 {
   entry = document.getElementById(id) ;
-  if (recordToSave != id)
+  if (recordToSave != recordId)
     entry.style.backgroundColor= "FFCC66";
 }
 
-function updateSaveId(id)
+function updateSaveId(id, recordId)
 {
-  if (recordToSave == id)
+  if (recordToSave == recordId)
   {
-    entry = document.getElementById(recordToSave) ;
+    entry = document.getElementById(id) ;
     entry.style.backgroundColor= "FFCC66";
     recordToSave = null;
   }
@@ -328,12 +328,12 @@ function updateSaveId(id)
   {
     if (recordToSave != null)
     {
-      entry = document.getElementById(recordToSave) ;
+      entry = document.getElementById(id) ;
       entry.style.backgroundColor= "FFCC66";
     }
     entry = document.getElementById(id) ;
     entry.style.backgroundColor= "FF9966";
-    recordToSave = id;
+    recordToSave = recordId;
   }
 }
 
