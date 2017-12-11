@@ -229,15 +229,6 @@ HttpSession vHttpSession = request.getSession();
 						alt="binnenkomende fax voor u verwerkt" height="13" border="0"></td>
 				</tr>
                 <tr>
-                    <td width="50"></td>
-                    <td width="170" valign="top" class="adminsubsubtitle"><img
-                        src="/TheBusinessAssistant/images/blueSphere.gif" width="10"
-                        height="10">&nbsp;oproeper</td>
-                    <td width="530" valign="top"><input type=text size=30
-                        name=<%=Constants.RECORD_TEMP_CALLER%>
-                        value="<%=vNewRecord.getNumber()%>"></td>
-                </tr>
-				<tr>
 					<td width="50"></td>
 					<td width="170" valign="top" class="adminsubsubtitle"><img
 						src="/TheBusinessAssistant/images/blueSphere.gif" width="10"
