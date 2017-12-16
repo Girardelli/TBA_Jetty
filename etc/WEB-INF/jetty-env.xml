@@ -10,37 +10,5 @@ org.eclipse.jetty.servlet.WebApplicationContext object
 
 <Configure id='wac' class="org.eclipse.jetty.webapp.WebAppContext"> 
 
-<!--
-  <New id="MySqlDS" class="org.eclipse.jetty.plus.jndi.Resource">
-    <Arg><Ref refid="server"/></Arg>
-    <Arg>jdbc/MySqlDS</Arg>
-    <Arg>
-        <New class="com.mysql.jdbc.jdbc2.optional.MysqlDataSource">
-            <Set name="Url">jdbc:mysql://localhost:3306/tbadb</Set>
-            <Set name="User">root</Set>
-            <Set name="Password">gzb625$</Set>
-        </New>
-    </Arg>
-  </New> 
-  
-  
-  <New id="myMail" class="org.eclipse.jetty.plus.jndi.Resource">
-    <Arg><Ref refid="server"/></Arg>
-    <Arg>mail/Session</Arg>
-    <Arg>
-      <New class="org.eclipse.jetty.jndi.factories.MailSessionReference">
-        <Set name="user">a120569</Set>
-        <Set name="password">gzb625</Set>
-        <Set name="properties">
-          <New class="java.util.Properties">
-            <Put name="mail.smtp.host">mail-out.telenet.be</Put>
-            <Put name="mail.from">nancy.olyslaegers@thebusinessassistant.be</Put>
-            <Put name="mail.debug">false</Put>
-          </New>
-        </Set>
-      </New>
-    </Arg>
-  </New> 
-	-->
 	
 </Configure>

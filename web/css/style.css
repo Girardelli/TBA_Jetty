@@ -1388,11 +1388,6 @@ INDEX
   margin: 20px;
   padding: 10px;
 }
-.tba-training  table{
-  background-color: rgba(200, 153, 255, 0.05);
-  max-width: 400px;
-  width: 100%
-}
 .center-block {
   float: none !important;
   margin: auto !important;
