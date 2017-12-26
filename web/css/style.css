@@ -263,7 +263,7 @@ h2 {
   font-size: 35px;
   line-height: 41px;
   margin-bottom: 20px;
-  color: #000066;
+  color: #22205F;
   clear: both;
 }
 @media only screen and (max-width: 500px) {
@@ -275,7 +275,7 @@ h2 {
 h3 {
   font-family: 'Merriweather', serif;
   font-weight: 400;
-  color: #000066;
+  color: #22205F;
   font-size: 20px;
   line-height: 24px;
   margin-bottom: 15px;
@@ -291,7 +291,7 @@ p:last-child {
   margin-bottom: 0;
 }
 a {
-  color: #0099ff;
+  color: #488FCD;
   text-decoration: underline;
   -webkit-transition: all .3s ease;
   -moz-transition: all .3s ease;
@@ -451,8 +451,8 @@ FORM
   -moz-border-radius: 2px;
 }
 .checkbox:checked + label:after {
-  border: 1px solid #000066;
-  background-color: #000066;
+  border: 1px solid #22205F;
+  background-color: #22205F;
   border-radius: 2px;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
@@ -612,7 +612,7 @@ input[type="tel"]:focus,
 input[type="number"]:focus,
 select:focus,
 textarea:focus {
-  border: solid 1px #000066;
+  border: solid 1px #22205F;
 }
 input[type="submit"]:focus,
 .form-item button:focus {
@@ -676,7 +676,7 @@ button {
   font-family: "fontawesome";
   top: 0;
   right: 4px;
-  color: #0099ff;
+  color: #488FCD;
   font-size: 20px;
 }
 .dropdown-wrapper .select .dropdown-label,
@@ -797,7 +797,7 @@ button {
   font-family: "fontawesome";
   top: 12px;
   right: 16px;
-  color: #0099ff;
+  color: #488FCD;
   font-size: 20px;
 }
 .select-wrapper select {
@@ -811,7 +811,7 @@ BUTTON
 =====================================================*/
 .btn {
   text-decoration: none;
-  background-color: #ff9900;
+  background-color: #F89920;
   color: #fff;
   padding: 15px 30px !important;
   border: none;
@@ -912,7 +912,7 @@ BREADCRUMB
 .breadcrumb-wrapper .breadcrumb .breadcrumb-item i {
   font-size: 40%;
   vertical-align: middle;
-  color: #0099ff;
+  color: #488FCD;
 }
 .breadcrumb-wrapper .breadcrumb .breadcrumb-item.breadcrumb-back {
   margin-right: 20px;
@@ -927,7 +927,7 @@ COOKIE BANNER
   position: fixed;
   bottom: 20px;
   right: 20px;
-  background-color: #000066;
+  background-color: #22205F;
   color: #fff;
   border-radius: 5px;
   -webkit-border-radius: 5px;
@@ -1226,13 +1226,13 @@ Menu
   padding: 20px 0;
 }
 .menu ul li.active a {
-  color: #0099ff;
+  color: #488FCD;
 }
 .menu ul li a {
   display: block;
   padding: 30px 20px;
   text-decoration: none;
-  color: #000066;
+  color: #22205F;
   font-family: 'Merriweather', serif;
   font-weight: 400;
   font-size: 14px;
@@ -1283,7 +1283,7 @@ Menu
   font-family: "FontAwesome";
   content: '\f095';
   left: 0;
-  color: #0099ff;
+  color: #488FCD;
   font-size: 15px;
   margin-top: 3px;
 }
@@ -1328,7 +1328,7 @@ Menu
 .menu ul li.toggleParrent .toggleSubmenu:after {
   font-family: "FontAwesome";
   content: '\f107';
-  color: #0099ff;
+  color: #488FCD;
   right: 20px;
   position: absolute;
   margin-top: 3px;
@@ -1369,7 +1369,7 @@ Menu
   font-family: "FontAwesome";
   position: absolute;
   right: 10px;
-  color: #0099ff;
+  color: #488FCD;
   content: '\f105';
   margin-top: 3px;
 }
@@ -1578,7 +1578,7 @@ INDEX
   }
 }
 .banner .banner-afbeelding .banner-overlay {
-  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#0099ff+0,0099ff+100&0.7+0,0+100 */
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#488FCD+0,0099ff+100&0.7+0,0+100 */
   background: -moz-linear-gradient(left, rgba(0, 153, 255, 0.7) 0%, rgba(0, 153, 255, 0) 100%);
   /* FF3.6-15 */
   background: -webkit-linear-gradient(left, rgba(0, 153, 255, 0.7) 0%, rgba(0, 153, 255, 0) 100%);
@@ -1659,7 +1659,7 @@ INDEX
 }
 @media only screen and (max-width: 1050px) {
   .diensten-wrapper .dienst .link {
-    color: #0099ff;
+    color: #488FCD;
   }
 }
 .diensten-wrapper .dienst img {
@@ -1681,7 +1681,7 @@ INDEX
 }
 .diensten-wrapper .dienst:hover .link {
   /*visibility: visible;*/
-  color: #0099ff;
+  color: #488FCD;
 }
 .adapt {
   position: absolute;
@@ -1753,7 +1753,7 @@ INDEX
 }
 .content ul li:before {
   position: absolute;
-  color: #ff9900;
+  color: #F89920;
   font-family: "fontAwesome";
   content: '\f00c';
   left: 0;
@@ -1922,7 +1922,7 @@ HAMBURGER
   border-radius: 5px;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
-  background-color: #000066;
+  background-color: #22205F;
   -webkit-transition: all .3s ease;
   -moz-transition: all .3s ease;
   -ms-transition: all .3s ease;
@@ -2042,7 +2042,7 @@ MOBILE-MENU
   position: absolute;
   font-family: 'FontAwesome';
   content: '\f107';
-  color: #0099ff;
+  color: #488FCD;
   margin-left: 10px;
   margin-top: 3px;
 }

@@ -134,7 +134,7 @@ out.println("</tr>");
 <br>
 		<input type=hidden
 			name=<%=Constants.SRV_ACTION%> value="<%=Constants.SAVE_RECORD%>"> <input
-			type=submit name=action value=" Bewaar "> <input type=submit
+			type=submit name=action value=" Bewaar "> <input class="tbabutton" type=submit
 			value=" Terug " onclick="cancelUpdate();">
 		</form>
 

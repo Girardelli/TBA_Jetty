@@ -2,8 +2,8 @@
 
 <%@ include file="adminheader.jsp" %>
 
-	<%@ page
-		import="javax.ejb.*,
+<%@ page
+import="javax.ejb.*,
 java.util.*,
 javax.rmi.PortableRemoteObject,
 java.rmi.RemoteException,
@@ -22,8 +22,9 @@ be.tba.servlets.session.SessionManager,
 be.tba.util.session.AccountCache,
 be.tba.util.invoice.InvoiceHelper,
 be.tba.util.data.*,
-java.text.*;"%>
-	<%!
+java.text.*" %>
+
+<%!
 private StringBuilder allEntryIds;
 %>
 
@@ -78,26 +79,26 @@ out.println("<option value=\"" + Constants.ACCOUNT_FILTER_ALL + (vCustomerFilter
 		<br>
 		<table>
 			<tr>
-				<td width="80"><input type=submit name=action value=" Toevoegen "
+				<td width="80"><input class="tbabutton" type=submit name=action value=" Toevoegen "
 					onclick="addTask()"></td>
     <%
         if (vSession.getRole() == AccountRole.ADMIN)
         {
     %>
-				<td width="80"><input type=submit name=action value=" Verwijder "
+				<td width="80"><input class="tbabutton" type=submit name=action value=" Verwijder "
 					onclick="deleteTask()"></td>
     <%
         }
     %>
 				<td width="30"></td>
 				<td width="80">
-				    <input type=submit name=action value=" Vorige Taken " onclick="showPrevious()">
+				    <input class="tbabutton" type=submit name=action value=" Vorige Taken " onclick="showPrevious()">
 				</td>
 
 				<%
 if (!vSession.isCurrentMonth())
 {
-  out.println("<td width=\"80\"><input type=submit name=action value=\" Volgende Taken \"  onclick=\"showNext()\"></td>");
+  out.println("<td width=\"80\"><input class=\"tbabutton\" type=submit name=action value=\" Volgende Taken \"  onclick=\"showNext()\"></td>");
 }
 %>
 			</tr>
@@ -130,11 +131,11 @@ if (vTasks != null && vTasks.size() > 0)
 %> <br>
 		<table width="100%" border="0" cellspacing="2" cellpadding="2">
 			<tr>
-				<td width="55" valign="top" class="topMenu" bgcolor="FF9900">&nbsp;Datum</td>
-				<td width="250" valign="top" class="topMenu" bgcolor="FF9900">&nbsp;Omschrijving</td>
-				<td width="100" valign="top" class="topMenu" bgcolor="FF9900">&nbsp;Minuten</td>
-				<td width="100" valign="top" class="topMenu" bgcolor="FF9900">&nbsp;Kost</td>
-				<td width="60" valign="top" class="topMenu" bgcolor="FF9900">&nbsp;Info</td>
+				<td width="55" valign="top" class="topMenu" bgcolor="F89920">&nbsp;Datum</td>
+				<td width="250" valign="top" class="topMenu" bgcolor="F89920">&nbsp;Omschrijving</td>
+				<td width="100" valign="top" class="topMenu" bgcolor="F89920">&nbsp;Minuten</td>
+				<td width="100" valign="top" class="topMenu" bgcolor="F89920">&nbsp;Kost</td>
+				<td width="60" valign="top" class="topMenu" bgcolor="F89920">&nbsp;Info</td>
 			</tr>
 
 			<%

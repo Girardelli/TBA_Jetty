@@ -30,7 +30,7 @@ Last Checked In By: $Author: Yves Willems $
 		be.tba.servlets.session.SessionManager,
 		be.tba.util.session.AccountCache,
 		be.tba.util.data.*,
-		java.text.*;"%>
+		java.text.*"%>
 
 <%!private String vAccountKey;%>
 <%
@@ -71,11 +71,11 @@ Last Checked In By: $Author: Yves Willems $
 
  		AccountEntityData vAccountData = (AccountEntityData) AccountCache
  		        .getInstance().get(vSession.getFwdNumber());
- %> <input type=submit name=action value="Taken van vorige maand"
+ %> <input class="tbabutton" type=submit name=action value="Taken van vorige maand"
 				onclick="showPrevious()"> <%
  	if (!vSession.isCurrentMonth())
  		{
- 			out.println("<input type=submit name=action value=\"Taken van volgende maand\"  onclick=\"showNext()\">");
+ 			out.println("<input class=\"tbabutton\" type=submit name=action value=\"Taken van volgende maand\"  onclick=\"showNext()\">");
  		}
 
  		out.println("<br><br><table width=\"725\" border=\"0\" cellspacing=\"2\" cellpadding=\"2\">");
@@ -108,11 +108,11 @@ Last Checked In By: $Author: Yves Willems $
  %> <br>
 				<table width="100%" border="0" cellspacing="2" cellpadding="2">
 					<tr>
-						<td width="55" valign="top" class="topMenu" bgcolor="FF9900">&nbsp;Datum</td>
-						<td width="250" valign="top" class="topMenu" bgcolor="FF9900">&nbsp;Omschrijving</td>
-						<td width="100" valign="top" class="topMenu" bgcolor="FF9900">&nbsp;Minuten</td>
-						<td width="100" valign="top" class="topMenu" bgcolor="FF9900">&nbsp;Kost</td>
-						<td width="60" valign="top" class="topMenu" bgcolor="FF9900">&nbsp;Info</td>
+						<td width="55" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Datum</td>
+						<td width="250" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Omschrijving</td>
+						<td width="100" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Minuten</td>
+						<td width="100" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Kost</td>
+						<td width="60" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Info</td>
 					</tr>
 
 					<%

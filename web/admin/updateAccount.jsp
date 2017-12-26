@@ -1,9 +1,9 @@
 <html>
 
-<%@ include file="adminheader.jsp" %>
+<%@ include file="adminheader.jsp"%>
 
-	<%@ page
-		import="javax.ejb.*,
+<%@ page
+	import="javax.ejb.*,
 java.util.*,
 javax.rmi.PortableRemoteObject,
 java.rmi.RemoteException,
@@ -17,7 +17,7 @@ be.tba.util.invoice.*,
 be.tba.util.constants.*,
 be.tba.util.exceptions.*,
 be.tba.util.session.*"%>
-	<%!
+<%!
 private AccountEntityData vCustomer;
 
 private static final String kSelected = " selected";
@@ -26,7 +26,7 @@ private static final int kMaxMailMinutes = 56;
 
 
 %>
-	<%
+<%
 
 try {
 vSession.setCallingJsp(Constants.UPDATE_ACCOUNT_JSP);
@@ -107,34 +107,39 @@ double vFacLongFwd = vCustomer.getFacLongFwd();
 
 %>
 <body>
-<table width='100%' cellspacing='0' cellpadding='0' border='0'	bgcolor="FFFFFF">
+	<table width='100%' cellspacing='0' cellpadding='0' border='0'
+		bgcolor="FFFFFF">
 
-	<!--Update account jsp-->
-	<tr>
-		<td valign="top" width="60" bgcolor="FFFFFF"></td>
-		<td valign="top" bgcolor="FFFFFF"><br>
-		<br>
-		<span class="admintitle"> Instellingen voor <%=vFullName%>.</span> <br>
-		<span class="bodytekst"> <!-- action name must be a URI name as it is set in the <application>.xml servlet-mapping tag.-->
-		<form name="updateForm" method="POST"
-			action="/TheBusinessAssistant/AdminDispatch"><input type=submit
-			name=action value="Bewaar" onclick="Bewaar()"> <input type=submit
-			name=action value="De-registreren" onclick="Deregister()">&nbsp;&nbsp;
-		<input type=submit name=action value=" Terug "
-			onclick="cancelUpdate()">&nbsp;&nbsp; <input type=submit name=action
-			value=" Verstuur Mail " onclick="mailCustomer()"> <br>
-		<p class="adminsubtitle"><img src=".\images\blueSphere.gif" width="10"
-			height="10">&nbsp;Algemene informatie:</p>
-		<table width="700" border="0" cellspacing="2" cellpadding="2">
-			<tr>
-				<td width="200" valign="top" class="adminsubsubtitle">login naam</td>
-				<td width="500" valign="top" class="bodybold"><%=vCustomer.getUserId()%></td>
-			</tr>
-			<tr>
-				<td width="200" valign="top" class="adminsubsubtitle">rol</td>
-				<td width="500" valign="top"><select
-					name=<%=Constants.ACCOUNT_ROLE%>>
-					<%
+		<!--Update account jsp-->
+		<tr>
+			<td valign="top" width="60" bgcolor="FFFFFF"></td>
+			<td valign="top" bgcolor="FFFFFF"><br> <br> <span
+				class="admintitle"> Instellingen voor <%=vFullName%>.
+			</span> <br> <span class="bodytekst"> <!-- action name must be a URI name as it is set in the <application>.xml servlet-mapping tag.-->
+					<form name="updateForm" method="POST"
+						action="/TheBusinessAssistant/AdminDispatch">
+						<input class="tbabutton" type=submit name=action value="Bewaar"
+							onclick="Bewaar()"> <input class="tbabutton" type=submit
+							name=action value="De-registreren" onclick="Deregister()">&nbsp;&nbsp;
+						<input class="tbabutton" type=submit name=action value=" Terug "
+							onclick="cancelUpdate()">&nbsp;&nbsp; <input
+							class="tbabutton" type=submit name=action value=" Verstuur Mail "
+							onclick="mailCustomer()"> <br>
+						<p class="adminsubtitle">
+							<img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Algemene
+							informatie:
+						</p>
+						<table width="700" border="0" cellspacing="2" cellpadding="2">
+							<tr>
+								<td width="200" valign="top" class="adminsubsubtitle">login
+									naam</td>
+								<td width="500" valign="top" class="bodybold"><%=vCustomer.getUserId()%></td>
+							</tr>
+							<tr>
+								<td width="200" valign="top" class="adminsubsubtitle">rol</td>
+								<td width="500" valign="top"><select
+									name=<%=Constants.ACCOUNT_ROLE%>>
+										<%
 
 					out.println("<option value=\"" + vCustomer.getRole() + "\">" + AccountRole.fromShort(vCustomer.getRole()).getText());
 for (Iterator n = AccountRole.iterator(); n.hasNext();)
@@ -165,18 +170,20 @@ if (vCustomer.getRole().equals(AccountRole._vSubCustomer))
     out.println("</select>");
 }
 				%>
-				</td>
-			</tr>
-			<tr>
-				<td width="200" valign="top" class="adminsubsubtitle">volledige naam</td>
-				<td width="500" valign="top"><input type=text
-					name=<%=Constants.ACCOUNT_FULLNAME%> size=50 value="<%=vFullName%>"></td>
-			</tr>
-			<tr>
-				<td width="200" valign="top" class="adminsubsubtitle">afleidnummer</td>
-				<td width="500" valign="top" class="bodytekst">014/ <select
-					name=<%=Constants.ACCOUNT_FORWARD_NUMBER%>>
-					<%
+								</td>
+							</tr>
+							<tr>
+								<td width="200" valign="top" class="adminsubsubtitle">volledige
+									naam</td>
+								<td width="500" valign="top"><input type=text
+									name=<%=Constants.ACCOUNT_FULLNAME%> size=50
+									value="<%=vFullName%>"></td>
+							</tr>
+							<tr>
+								<td width="200" valign="top" class="adminsubsubtitle">afleidnummer</td>
+								<td width="500" valign="top" class="bodytekst">014/ <select
+									name=<%=Constants.ACCOUNT_FORWARD_NUMBER%>>
+										<%
 out.println("<option value=\"" + vCustomer.getFwdNumber() + "\">" + vCustomer.getFwdNumber());
 Collection vFreeNumbers = AccountCache.getInstance().getFreeNumbers();
 for (Iterator n = vFreeNumbers.iterator(); n.hasNext();)
@@ -187,116 +194,131 @@ for (Iterator n = vFreeNumbers.iterator(); n.hasNext();)
 }
 
 %>
-				</select></td>
-			</tr>
-			<tr>
-				<td width="200" valign="top" class="adminsubsubtitle">e-mail</td>
-				<td width="500" valign="top"><input type=text
-					name=<%=Constants.ACCOUNT_EMAIL%> size=50 value="<%=vEmail%>"></td>
-			</tr>
-            <tr>
-                <td width="200" valign="top" class="adminsubsubtitle">Invoice e-mail</td>
-                <td width="500" valign="top"><input type=text
-                    name=<%=Constants.ACCOUNT_INVOICE_EMAIL%> size=50 value="<%=vInvoiceEmail%>"></td>
-            </tr>
-			<tr>
-				<td width="200" valign="top" class="adminsubsubtitle">GSM nummer (SMS)</td>
-				<td width="500" valign="top"><input type=text
-					name=<%=Constants.ACCOUNT_GSM%> size=13 value="<%=vGsm%>"></td>
-			</tr>
-			<tr>
-				<td width="200" valign="top" class="adminsubsubtitle">super klant</td>
-				<td width="500" valign="top" class="bodytekst"><input type=checkbox
-					name=<%=Constants.ACCOUNT_HAS_SUB_CUSTOMERS%> value="<%=Constants.YES%>"
-					<%=(vCustomer.getHasSubCustomers()?kChecked:"")%>>
-				</td>
-			</tr>
-		</table>
-    <%
+								</select></td>
+							</tr>
+							<tr>
+								<td width="200" valign="top" class="adminsubsubtitle">e-mail</td>
+								<td width="500" valign="top"><input type=text
+									name=<%=Constants.ACCOUNT_EMAIL%> size=50 value="<%=vEmail%>"></td>
+							</tr>
+							<tr>
+								<td width="200" valign="top" class="adminsubsubtitle">Invoice
+									e-mail</td>
+								<td width="500" valign="top"><input type=text
+									name=<%=Constants.ACCOUNT_INVOICE_EMAIL%> size=50
+									value="<%=vInvoiceEmail%>"></td>
+							</tr>
+							<tr>
+								<td width="200" valign="top" class="adminsubsubtitle">GSM
+									nummer (SMS)</td>
+								<td width="500" valign="top"><input type=text
+									name=<%=Constants.ACCOUNT_GSM%> size=13 value="<%=vGsm%>"></td>
+							</tr>
+							<tr>
+								<td width="200" valign="top" class="adminsubsubtitle">super
+									klant</td>
+								<td width="500" valign="top" class="bodytekst"><input
+									type=checkbox name=<%=Constants.ACCOUNT_HAS_SUB_CUSTOMERS%>
+									value="<%=Constants.YES%>"
+									<%=(vCustomer.getHasSubCustomers()?kChecked:"")%>></td>
+							</tr>
+						</table>
+						<%
         if (vSession.getRole() == AccountRole.ADMIN)
         {
     %>
-		
-		<p class="adminsubtitle"><img src=".\images\blueSphere.gif" width="10"
-			height="10">&nbsp;Dagelijkse mails met de laatste oproepgegevens om:</p>
-		<table width="700" border="0" cellspacing="2" cellpadding="2">
-			<tr>
-				<td width="300" valign="top" class="adminsubsubtitle">mail 1</td>
-				<td width="40" valign="top" class="bodytekst"><input type=checkbox
-					name=<%=Constants.ACCOUNT_MAIL_ON1%> value="<%=Constants.YES%>"
-					<%=(vIsMailOn1?kChecked:"")%>></td>
-				<td width="360" valign="top" class="bodytekst"><select
-					name=<%=Constants.ACCOUNT_MAIL_UUR1%>>
-					<%
+
+						<p class="adminsubtitle">
+							<img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Dagelijkse
+							mails met de laatste oproepgegevens om:
+						</p>
+						<table width="700" border="0" cellspacing="2" cellpadding="2">
+							<tr>
+								<td width="300" valign="top" class="adminsubsubtitle">mail
+									1</td>
+								<td width="40" valign="top" class="bodytekst"><input
+									type=checkbox name=<%=Constants.ACCOUNT_MAIL_ON1%>
+									value="<%=Constants.YES%>" <%=(vIsMailOn1?kChecked:"")%>></td>
+								<td width="360" valign="top" class="bodytekst"><select
+									name=<%=Constants.ACCOUNT_MAIL_UUR1%>>
+										<%
 for (int i = 0; i <= Constants.MAX_MAIL_HOUR; ++i)
   out.println("<option value=\"" + i + "\" " + ((vMailHour1 == i) ? kSelected : "") + ">" + i);
 %>
-				</select> uur <select name=<%=Constants.ACCOUNT_MAIL_MINUTEN1%>>
-					<%
+								</select> uur <select name=<%=Constants.ACCOUNT_MAIL_MINUTEN1%>>
+										<%
 for (int i = 0; i < kMaxMailMinutes; i += 5)
   out.println("<option value=\"" + i + "\" " + ((vMailMinutes1 == i) ? kSelected : "") + ">" + ((i<10) ? "0" : "") + i);
 %>
-				</select> minuten</td>
-			</tr>
-			<tr>
-				<td width="300" valign="top" class="adminsubsubtitle">mail 2</td>
-				<td width="40" valign="top" class="bodytekst"><input type=checkbox
-					name=<%=Constants.ACCOUNT_MAIL_ON2%> value="<%=Constants.YES%>"
-					<%=(vIsMailOn2?kChecked:"")%>></td>
-				<td width="360" valign="top" class="bodytekst"><select
-					name=<%=Constants.ACCOUNT_MAIL_UUR2%>>
-					<%
+								</select> minuten</td>
+							</tr>
+							<tr>
+								<td width="300" valign="top" class="adminsubsubtitle">mail
+									2</td>
+								<td width="40" valign="top" class="bodytekst"><input
+									type=checkbox name=<%=Constants.ACCOUNT_MAIL_ON2%>
+									value="<%=Constants.YES%>" <%=(vIsMailOn2?kChecked:"")%>></td>
+								<td width="360" valign="top" class="bodytekst"><select
+									name=<%=Constants.ACCOUNT_MAIL_UUR2%>>
+										<%
 for (int i = 0; i <= Constants.MAX_MAIL_HOUR; ++i)
   out.println("<option value=\"" + i + "\" " + ((vMailHour2 == i) ? kSelected : "") + ">" + i);
 %>
-				</select> uur <select name=<%=Constants.ACCOUNT_MAIL_MINUTEN2%>>
-					<%
+								</select> uur <select name=<%=Constants.ACCOUNT_MAIL_MINUTEN2%>>
+										<%
 for (int i = 0; i < kMaxMailMinutes; i += 5)
   out.println("<option value=\"" + i + "\" " + ((vMailMinutes2 == i) ? kSelected : "") + ">" + ((i<10) ? "0" : "") + i);
 %>
-				</select> minuten</td>
-			</tr>
-			<tr>
-				<td width="300" valign="top" class="adminsubsubtitle">mail 3</td>
-				<td width="40" valign="top" class="bodytekst"><input type=checkbox
-					name=<%=Constants.ACCOUNT_MAIL_ON3%> value="<%=Constants.YES%>"
-					<%=(vIsMailOn3?kChecked:"")%>></td>
-				<td width="360" valign="top" class="bodytekst"><select
-					name=<%=Constants.ACCOUNT_MAIL_UUR3%>>
-					<%
+								</select> minuten</td>
+							</tr>
+							<tr>
+								<td width="300" valign="top" class="adminsubsubtitle">mail
+									3</td>
+								<td width="40" valign="top" class="bodytekst"><input
+									type=checkbox name=<%=Constants.ACCOUNT_MAIL_ON3%>
+									value="<%=Constants.YES%>" <%=(vIsMailOn3?kChecked:"")%>></td>
+								<td width="360" valign="top" class="bodytekst"><select
+									name=<%=Constants.ACCOUNT_MAIL_UUR3%>>
+										<%
 for (int i = 0; i <= Constants.MAX_MAIL_HOUR; ++i)
   out.println("<option value=\"" + i + "\" " + ((vMailHour3 == i) ? kSelected : "") + ">" + i);
 %>
-				</select> uur <select name=<%=Constants.ACCOUNT_MAIL_MINUTEN3%>>
-					<%
+								</select> uur <select name=<%=Constants.ACCOUNT_MAIL_MINUTEN3%>>
+										<%
 for (int i = 0; i < kMaxMailMinutes; i += 5)
   out.println("<option value=\"" + i + "\" " + ((vMailMinutes3 == i) ? kSelected : "") + ">" + ((i<10) ? "0" : "") + i);
 %>
-				</select> minuten</td>
-			</tr>
-			<br>
-			<tr>
-				<td width="300" valign="top" class="adminsubsubtitle">Zend geen lege mails</td>
-				<td width="40" valign="top" class="bodytekst">
-					<input type=checkbox name=<%=Constants.ACCOUNT_NO_EMPTY_MAILS%> value="<%=Constants.YES%>" <%=(vNoEmptyMails?kChecked:"")%>>
-				</td>
-			</tr>
-			<br>
-			<tr>
-				<td width="300" valign="top" class="adminsubsubtitle">Zend in text format</td>
-				<td width="40" valign="top" class="bodytekst">
-					<input type=checkbox name=<%=Constants.ACCOUNT_TEXT_MAIL%> value="<%=Constants.YES%>" <%=(vTextMail?kChecked:"")%>>
-				</td>
-			</tr>
-			<br>
-			<tr>
-				<td width="300" valign="top" class="adminsubsubtitle">3W settings</td>
-				<td width="40" valign="top" class="bodytekst">
-					<input type=checkbox name=<%=Constants.ACCOUNT_3W_CUSTOMER%> value="<%=Constants.YES%>"	<%=(vCustomer.getIs3W()?kChecked:"")%>>
-				</td>
-				<td width="100" valign="top" class="bodytekst"><select
-					name=<%=Constants.ACCOUNT_3W_COMPANY_ID%>>
-					<option value="<%=Constants.NONE%>">geen selectie
+								</select> minuten</td>
+							</tr>
+							<br>
+							<tr>
+								<td width="300" valign="top" class="adminsubsubtitle">Zend
+									geen lege mails</td>
+								<td width="40" valign="top" class="bodytekst"><input
+									type=checkbox name=<%=Constants.ACCOUNT_NO_EMPTY_MAILS%>
+									value="<%=Constants.YES%>" <%=(vNoEmptyMails?kChecked:"")%>>
+								</td>
+							</tr>
+							<br>
+							<tr>
+								<td width="300" valign="top" class="adminsubsubtitle">Zend
+									in text format</td>
+								<td width="40" valign="top" class="bodytekst"><input
+									type=checkbox name=<%=Constants.ACCOUNT_TEXT_MAIL%>
+									value="<%=Constants.YES%>" <%=(vTextMail?kChecked:"")%>>
+								</td>
+							</tr>
+							<br>
+							<tr>
+								<td width="300" valign="top" class="adminsubsubtitle">3W
+									settings</td>
+								<td width="40" valign="top" class="bodytekst"><input
+									type=checkbox name=<%=Constants.ACCOUNT_3W_CUSTOMER%>
+									value="<%=Constants.YES%>"
+									<%=(vCustomer.getIs3W()?kChecked:"")%>></td>
+								<td width="100" valign="top" class="bodytekst"><select
+									name=<%=Constants.ACCOUNT_3W_COMPANY_ID%>>
+										<option value="<%=Constants.NONE%>">geen selectie
 					<option value="3W" <%=(vW3_CompanyId.equals("3W")?kSelected:"")%>>3W
 					Associates
 					<option value="3WFINANCE"
@@ -554,21 +576,20 @@ for (int i = 0; i < kMaxMailMinutes; i += 5)
 			</tr>
 			<tr>
 				<td width="200" valign="top" class="adminsubsubtitle">BTW Number</td>
-				<td width="500" valign="top"><input type=text
-					name=<%=Constants.ACCOUNT_BTW_NUMBER%> size=50
-					value="<%=vBtwNumber%>"></td>
+				<td width="500" valign="top">
+                    <input type=text name=<%=Constants.ACCOUNT_BTW_NUMBER%> size=50	value="<%=vBtwNumber%>">
+                </td>
 			</tr>
 		</table>
 		<br>
 		<br>
-		<input type=reset value=" Blad Wissen "> <input
-			type=hidden name=<%=Constants.SRV_ACTION%>
-			value="<%=Constants.GOTO_SAVE_ACCOUNT%>"> <input type=hidden
-			name=<%=Constants.ACCOUNT_ID%> value="<%=vFwdNr%>"> <input
-			type=submit name=action value="Bewaar" onclick="Bewaar()"> <input
-			type=submit name=action value="De-registreren" onclick="Deregister()">&nbsp;&nbsp;
-		<input type=submit name=action value=" Terug "
-			onclick="cancelUpdate()"></form>
+		<input class="tbabutton" type=reset value=" Blad Wissen "> 
+        <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.GOTO_SAVE_ACCOUNT%>"> 
+        <input type=hidden name=<%=Constants.ACCOUNT_ID%> value="<%=vFwdNr%>"> 
+        <input class="tbabutton" type=submit name=action value="Bewaar" onclick="Bewaar()"> 
+        <input class="tbabutton" type=submit name=action value="De-registreren" onclick="Deregister()">&nbsp;&nbsp;
+		<input class="tbabutton" type=submit name=action value="Terug" onclick="cancelUpdate()">
+        </form>
 		</span></td>
 	</tr>
 	<%

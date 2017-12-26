@@ -42,19 +42,19 @@ try
 			
 		<table>
 			<tr>
-				<td width="80"><input type=submit name=action value=" Toevoegen "
+				<td width="80"><input class="tbabutton" type=submit name=action value=" Toevoegen "
 					onclick="addAccount()"></td>
-				<td width="80"><input type=submit name=action value=" Verwijder "
+				<td width="80"><input class="tbabutton" type=submit name=action value=" Verwijder "
 					onclick="deleteAccount()"></td>
 			</tr>
 		</table>
 		<br>
 		<table width="100%" border="0" cellspacing="2" cellpadding="2">
 			<tr>
-				<td width="60" valign="top" class="topMenu" bgcolor="FF9900">&nbsp;UserId</td>
-				<td width="80" valign="top" class="topMenu" bgcolor="FF9900">&nbsp;nummer</td>
-				<td width="190" valign="top" class="topMenu" bgcolor="FF9900">&nbsp;Naam</td>
-				<td width="200" valign="top" class="topMenu" bgcolor="FF9900">&nbsp;Laatste	login</td>
+				<td width="60" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;UserId</td>
+				<td width="80" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;nummer</td>
+				<td width="190" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Naam</td>
+				<td width="200" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Laatste	login</td>
 			</tr>
 			<%
   vSession.setCallingJsp(Constants.ADMIN_EMPLOYEE_JSP);

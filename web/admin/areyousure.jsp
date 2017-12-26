@@ -79,10 +79,8 @@ function refresh()
 	<tr>
 		<td>
 		<table width="100%" height="50" border="0" cellspacing="0"
-			cellpadding="0" bgcolor="000066">
-			<td height="50"><img
-				src="images\tba-lightblue-trans-500-50.gif"
-				height="50" border="0" alt=""></td>
+			cellpadding="0" bgcolor="#FFFFFF">
+			<td><img src="/TheBusinessAssistant/images/TBA-Logo.png" style="padding:10px;" height="70" alt=""></td>
 		</table>
 		</td>
 	</tr>
@@ -121,8 +119,8 @@ if (vErrorMessage == null)
 			<td valign="top" width="750" bgcolor="FFFFFF"><br>
 			<p><span class="bodysubtitle"> <%= vErrorMessage%></span></p>
 			<br>
-			<input type=submit name=action value="Ja, voer uit"
-				onclick="yesContinue()"> <input type=submit name=action
+			<input class="tbabutton" type=submit name=action value="Ja, voer uit"
+				onclick="yesContinue()"> <input class="tbabutton" type=submit name=action
 				value="Nee, ga terug" onclick="noGoBack()"></td>
 		</table>
 		</form>

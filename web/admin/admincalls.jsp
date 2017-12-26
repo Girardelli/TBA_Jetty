@@ -162,16 +162,17 @@ out.println("</td>");
 			</tr>
 		</table>
 		<br>
-		<input type=submit name=action value="Refresh" onclick="filterCalls()">
-		<input type=submit name=action value="Verwijderen" onclick="deleteCalls()"> 
-		<input type=submit name=action value="Toevoegen" onclick="addRecord()"> 
-		<input type=submit name=action value="Oproep" onclick="newCall('/TheBusinessAssistant/admin/newcall.jsp','New_Call_arrived','toolbar=yes,location=no,directories=no,status=no,member=no,scrollbars=yes,resizable=yes,copyhistory=no,width=900,height=650,screenX=0,screenY=0,top=0,left=0');">
-
-		<input type=submit name=action value="verzend mail"	onclick="testMail()"><br>
+        <input class="tbabutton" type=submit name=action value="Oproep" onclick="newCall('/TheBusinessAssistant/admin/newcall.jsp','New_Call_arrived','toolbar=yes,location=no,directories=no,status=no,member=no,scrollbars=yes,resizable=yes,copyhistory=no,width=900,height=650,screenX=0,screenY=0,top=0,left=0');">
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <input class="tbabutton" type=submit name=action value="Refresh" onclick="filterCalls()">
+		<input class="tbabutton" type=submit name=action value="Verwijderen" onclick="deleteCalls()"> 
+		<input class="tbabutton" type=submit name=action value="Toevoegen" onclick="addRecord()"> 
+		<input class="tbabutton" type=submit name=action value="verzend mail"	onclick="testMail()">
+<br>
 <%if (MailError.getInstance().getError() != null) 
 {
 %>      
-        <input type=submit name=action value="Mail Error" onclick="mailError()"><br>
+        <input class="tbabutton" type=submit name=action value="Mail Error" onclick="mailError()"><br>
 <% 
 }
 %>      
@@ -179,25 +180,25 @@ out.println("</td>");
 <%if (vCustomerFilter == null || vCustomerFilter.equals(Constants.ACCOUNT_FILTER_ALL)) 
 {
 %>		
-		<input type=submit name=action value="10 dagen vroeger" onclick="showPrevious10()"> 
-		<input type=submit name=action value="1 dag vroeger" onclick="showPrevious()"> 
+		<input class="tbabutton" type=submit name=action value="10 dagen vroeger" onclick="showPrevious10()"> 
+		<input class="tbabutton" type=submit name=action value="1 dag vroeger" onclick="showPrevious()"> 
 <%
 	if (vSession.getDaysBack() > 0)
 	{
-	  out.println("<input type=submit name=action value=\"1 dag later\"  onclick=\"showNext()\">");
+	  out.println("<input class=\"tbabutton\" type=submit name=action value=\"1 dag later\"  onclick=\"showNext()\">");
 	}
 	if (vSession.getDaysBack() >= 10)
 	{
-	  out.println("<input type=submit name=action value=\"10 dagen later\"  onclick=\"showNext10()\">");
+	  out.println("<input class=\"tbabutton\" type=submit name=action value=\"10 dagen later\"  onclick=\"showNext10()\">");
 	}
 }
 else
 {
 %>
-        <input type=submit name=action value="1 maand vroeger" onclick="showPrevious()"> 
+        <input class="tbabutton" type=submit name=action value="1 maand vroeger" onclick="showPrevious()"> 
 <%
 //	if (vSession.getMonthsBack() < 0)
-	  out.println("<input type=submit name=action value=\"1 maand later\"  onclick=\"showNext()\">");
+	  out.println("<input class=\"tbabutton\" type=submit name=action value=\"1 maand later\"  onclick=\"showNext()\">");
 }
 %>
 <%
@@ -221,15 +222,15 @@ else
   out.println("<table width=\"100%\" border=\"0\" cellspacing=\"2\" cellpadding=\"4\">");
   out.println("              <br><tr>");
   out.println("                <td width=\"20\" bgcolor=\"FFFFFF\"></td>");
-  out.println("                <td width=\"10\" valign=\"top\" class=\"topMenu\" bgcolor=\"FF9900\"></td>");
-  out.println("                <td width=\"140\" valign=\"top\" class=\"topMenu\" bgcolor=\"FF9900\">&nbsp;Klant</td>");
-  out.println("                <td width=\"55\"  valign=\"top\" class=\"topMenu\" bgcolor=\"FF9900\">&nbsp;Datum</td>");
-  out.println("                <td width=\"35\"  valign=\"top\" class=\"topMenu\" bgcolor=\"FF9900\">&nbsp;Uur</td>");
-  out.println("                <td width=\"85\"  valign=\"top\" class=\"topMenu\" bgcolor=\"FF9900\">&nbsp;Nummer</td>");
-  out.println("                <td width=\"140\" valign=\"top\" class=\"topMenu\" bgcolor=\"FF9900\">&nbsp;Naam</td>");
-  out.println("                <td width=\"280\" valign=\"top\" class=\"topMenu\" bgcolor=\"FF9900\">&nbsp;Omschrijving</td>");
-  out.println("                <td width=\"100\" valign=\"top\" class=\"topMenu\" bgcolor=\"FF9900\">&nbsp;Duur</td>");
-  out.println("                <td width=\"100\"  valign=\"top\" class=\"topMenu\" bgcolor=\"FF9900\">&nbsp;Infos</td>");
+  out.println("                <td width=\"10\" valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\"></td>");
+  out.println("                <td width=\"140\" valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Klant</td>");
+  out.println("                <td width=\"55\"  valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Datum</td>");
+  out.println("                <td width=\"35\"  valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Uur</td>");
+  out.println("                <td width=\"85\"  valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Nummer</td>");
+  out.println("                <td width=\"140\" valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Naam</td>");
+  out.println("                <td width=\"280\" valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Omschrijving</td>");
+  out.println("                <td width=\"100\" valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Duur</td>");
+  out.println("                <td width=\"100\"  valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Infos</td>");
   out.println("              </tr>");
 
   int vRowInd = 0;
@@ -338,9 +339,9 @@ allEntryIds.append("]");
 out.println("</table>");
 if (vRecords != null && vRecords.size() > 0)
 {
-  out.println("<br><br><input type=submit name=action value=\"Vorige Oproepen\"  onclick=\"showPrevious()\">");
+  out.println("<br><br><input class=\"tbabutton\" type=submit name=action value=\"Vorige Oproepen\"  onclick=\"showPrevious()\">");
   if (vSession.getDaysBack() > 0)
-    out.println("&nbsp;&nbsp;&nbsp;<input type=submit name=action value=\"Volgende Oproepen\"  onclick=\"showNext()\">");
+    out.println("&nbsp;&nbsp;&nbsp;<input class=\"tbabutton\" type=submit name=action value=\"Volgende Oproepen\"  onclick=\"showNext()\">");
 }
 }
 catch (Exception e)

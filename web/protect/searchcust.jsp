@@ -77,14 +77,12 @@ if (vCustomerFilter == null) vCustomerFilter = Constants.ACCOUNT_FILTER_ALL;
 			</tr>
 		</table>
 		<br>
-		<input type="submit" name="action" value="  Go  "
-			onclick="startSearch()"> <br>
+		<input class="tbabutton" type="submit" name="action" value="  Go  " onclick="startSearch()"> 
 		<br>
-		<input type="submit" name="action" value="Vorige Oproepen"
-			onclick="showPrevious()">&nbsp;&nbsp;&nbsp; <%
+		<input class="tbabutton" type="submit" name="action" value="Vorige Oproepen" onclick="showPrevious()">&nbsp;&nbsp;&nbsp; <%
 if (!vSession.isCurrentMonth())
 {
-  out.println("<input type=submit name=action value=\"Volgende Oproepen\"  onclick=\"showNext()\">");
+  out.println("<input class=\"tbabutton\" type=submit name=action value=\"Volgende Oproepen\"  onclick=\"showNext()\">");
 }
 %> <br>
 		<br>
@@ -124,13 +122,13 @@ if (vSession.getSearchString() != null && vSession.getSearchString().length() > 
       }
     out.println("              <br><tr>");
     out.println("                <td width=\"20\" bgcolor=\"FFFFFF\"></td>");
-    out.println("                <td width=\"10\" valign=\"top\" class=\"topMenu\" bgcolor=\"FF9900\"></td>");
-    out.println("                <td width=\"55\" valign=\"top\" class=\"topMenu\" bgcolor=\"FF9900\">&nbsp;Datum</td>");
-    out.println("                <td width=\"35\" valign=\"top\" class=\"topMenu\" bgcolor=\"FF9900\">&nbsp;Uur</td>");
-    out.println("                <td width=\"85\" valign=\"top\" class=\"topMenu\" bgcolor=\"FF9900\">&nbsp;Nummer</td>");
-    out.println("                <td width=\"140\" valign=\"top\" class=\"topMenu\" bgcolor=\"FF9900\">&nbsp;Naam</td>");
-    out.println("                <td width=\"280\" valign=\"top\" class=\"topMenu\" bgcolor=\"FF9900\">&nbsp;Omschrijving</td>");
-    out.println("                <td width=\"100\" valign=\"top\" class=\"topMenu\" bgcolor=\"FF9900\">&nbsp;Infos</td>");
+    out.println("                <td width=\"10\" valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\"></td>");
+    out.println("                <td width=\"55\" valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Datum</td>");
+    out.println("                <td width=\"35\" valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Uur</td>");
+    out.println("                <td width=\"85\" valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Nummer</td>");
+    out.println("                <td width=\"140\" valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Naam</td>");
+    out.println("                <td width=\"280\" valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Omschrijving</td>");
+    out.println("                <td width=\"100\" valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Infos</td>");
     out.println("              </tr>");
 
 

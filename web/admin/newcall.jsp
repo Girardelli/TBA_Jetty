@@ -81,10 +81,10 @@ HttpSession vHttpSession = request.getSession();
 					<table width="100%" border="0" cellspacing="2" cellpadding="4">
 						<tr>
 							<td width="20" bgcolor="FFFFFF"></td>
-							<td width="140" valign="top" class="topMenu" bgcolor="FF9900">&nbsp;Klant</td>
-							<td width="55" valign="top" class="topMenu" bgcolor="FF9900">&nbsp;Datum</td>
-							<td width="35" valign="top" class="topMenu" bgcolor="FF9900">&nbsp;Uur</td>
-							<td width="85" valign="top" class="topMenu" bgcolor="FF9900">&nbsp;Nummer</td>
+							<td width="140" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Klant</td>
+							<td width="55" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Datum</td>
+							<td width="35" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Uur</td>
+							<td width="85" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Nummer</td>
 						</tr>
 
 
@@ -153,18 +153,53 @@ HttpSession vHttpSession = request.getSession();
   if (vNewRecord == null)
   {
     vNewRecord = new CallRecordEntityData();
-    vNewRecord.setName("");
-    vNewRecord.setLongDescription("");
-    vNewRecord.setIsAgendaCall(false);
-    vNewRecord.setIsSmsCall(false);
-    vNewRecord.setIsForwardCall(false);
-    vNewRecord.setIsForwardCall(false);
-    vNewRecord.setIsFaxCall(false);
-    vNewRecord.setIs3W_call(false);
-    vNewRecord.setShortDescription("");
-    vIsVirgin = true;
   }
+   if (request.getParameter(Constants.RECORD_CALLER_NAME) != null)
+   {
+       vNewRecord.setName((String) request.getParameter(Constants.RECORD_CALLER_NAME));
+   }
+   else
+   {
+       vIsVirgin = true;
+       vNewRecord.setName("");
+   }
+   if (request.getParameter(Constants.RECORD_SHORT_TEXT) != null)
+   {
+       vNewRecord.setShortDescription((String) request.getParameter(Constants.RECORD_SHORT_TEXT));
+   }
+   else
+   {
+       vIsVirgin = true;
+       vNewRecord.setShortDescription("");
+   }
+   vNewRecord.setLongDescription(request.getParameter(Constants.RECORD_LONG_TEXT) != null ? (String) request.getParameter(Constants.RECORD_LONG_TEXT) : "");
+   vNewRecord.setIsSmsCall(request.getParameter(Constants.RECORD_SMS) != null ? request.getParameter(Constants.RECORD_SMS) != null : false);
+   vNewRecord.setIsAgendaCall(request.getParameter(Constants.RECORD_AGENDA) != null ? request.getParameter(Constants.RECORD_AGENDA) != null : false);
+   vNewRecord.setIsForwardCall(request.getParameter(Constants.RECORD_FORWARD) != null ? request.getParameter(Constants.RECORD_FORWARD) != null : false);
+   vNewRecord.setIsImportantCall(request.getParameter(Constants.RECORD_IMPORTANT) != null ? request.getParameter(Constants.RECORD_IMPORTANT) != null : false);
+   vNewRecord.setIsFaxCall(request.getParameter(Constants.RECORD_FAX) != null ? request.getParameter(Constants.RECORD_FAX) != null : false);
+   vNewRecord.setIs3W_call(false);
 %>
+<%
+if (vIsVirgin)
+{
+  out.println("<input class=\"tbabutton\" type=submit name=action value=\" Bewaar \">");
+  out.println("<input type=hidden name=" + Constants.SRV_ACTION + " value=\"" + Constants.GET_OPEN_CALLS + "\" >");
+
+}
+else
+{
+  out.println("<input class=\"tbabutton\" type=submit name=action value=\" Bewaar \"  onclick=\"saveCall();\">");
+  out.println("<input class=\"tbabutton\" type=submit name=action value=\" Kijk voor nieuwe oproepen \" onclick=\"refreshOpenCalls()\">");
+  out.println("<input type=hidden name=" + Constants.SRV_ACTION + " value=\"" + Constants.SAVE_NEW_CALL + "\" >");
+}
+%> 
+            <input type=hidden name=<%=Constants.NEW_RECORD_KEY%> value=<%=vKey%>>
+            <input type=hidden name=<%=Constants.RECORD_ID%> value=""> 
+            <input class="tbabutton" type=reset> 
+            <input class="tbabutton" type=submit value=" Terug " onclick="removeOpenCalls()">
+            <br>
+            <br>
 
 			<table width="100%" border="0" cellspacing="1" cellpadding="1">
 				<tr>
@@ -256,23 +291,7 @@ HttpSession vHttpSession = request.getSession();
 			</table>
 			<br>
 			<br>
-<%
-if (vIsVirgin)
-{
-  out.println("<input type=submit name=action value=\" Bewaar \">");
-  out.println("<input type=hidden name=" + Constants.SRV_ACTION + " value=\"" + Constants.GET_OPEN_CALLS + "\" >");
-
-}
-else
-{
-  out.println("<input type=submit name=action value=\" Bewaar \"  onclick=\"saveCall();\">");
-  out.println("<input type=submit name=action value=\" Kijk voor nieuwe oproepen \" onclick=\"refreshOpenCalls()\">");
-  out.println("<input type=hidden name=" + Constants.SRV_ACTION + " value=\"" + Constants.SAVE_NEW_CALL + "\" >");
-}
-%> <input type=hidden name=<%=Constants.NEW_RECORD_KEY%> value=<%=vKey%>>
-			<input type=hidden name=<%=Constants.RECORD_ID%> value=""> <input
-				type=reset> <input type=submit value=" Terug "
-				onclick="removeOpenCalls()"></form>
+			</form>
 			</span> <br>
 			</td>
 		</tr>

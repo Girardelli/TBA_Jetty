@@ -18,10 +18,7 @@
 	java.text.DecimalFormat,
 	be.tba.ejb.account.interfaces.AccountEntityData,
 	be.tba.ejb.invoice.session.InvoiceSqlAdapter,
-	be.tba.util.data.*;"
-	%>
-<%!
-%>
+	be.tba.util.data.*"	%>
 
 <%
          try
@@ -66,16 +63,16 @@
 			%> 
 			<br>
 			<br>
-			<input type=submit name=action value=" Betaaldvlag zetten " onclick="setPayed()">
+			<input class="tbabutton" type=submit name=action value=" Betaaldvlag zetten " onclick="setPayed()">
 			<br>
 			<br>
 			<br>
 			<table width="100%" border="0" cellspacing="2" cellpadding="2">
 				<tr>
-					<td width="90" valign="top" class="topMenu" bgcolor="FF9900">&nbsp;Nummer</td>
-					<td width="300" valign="top" class="topMenu" bgcolor="FF9900">&nbsp;Klant</td>
-					<td width="50" valign="top" class="topMenu" bgcolor="FF9900">&nbsp;Excl BTW</td>
-					<td width="50" valign="top" class="topMenu" bgcolor="FF9900">&nbsp;Incl BTW</td>
+					<td width="90" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Nummer</td>
+					<td width="300" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Klant</td>
+					<td width="50" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Excl BTW</td>
+					<td width="50" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Incl BTW</td>
 				</tr>
 	
 				<%

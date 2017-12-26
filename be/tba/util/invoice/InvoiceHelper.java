@@ -300,6 +300,10 @@ public class InvoiceHelper
             // System.out.println("subcust for " +
             // mAccountEntityData.getFwdNumber() + ": " +
             // mRecordsHashTable.size());
+            if (mRecords == null)
+            {
+                mRecords = new Vector<CallRecordEntityData>();
+            }
             for (Iterator<Collection<CallRecordEntityData>> i = mRecordsHashTable.values().iterator(); i.hasNext();)
             {
                 Collection<CallRecordEntityData> vSubCalls = i.next();
@@ -315,10 +319,6 @@ public class InvoiceHelper
                 // {
                 // mRecords.addAll(vSubCalls);
                 // }
-                if (mRecords == null)
-                {
-                    mRecords = new Vector<CallRecordEntityData>();
-                }
                 mRecords.addAll(vSubCalls);
             }
         }
@@ -416,17 +416,14 @@ public class InvoiceHelper
         if (mAccountEntityData.getHasSubCustomers())
         {
             mTasksHashTable = vTaskSession.getTasksFromTillTimestampHashtable(webSession, mAccountEntityData.getFwdNumber(), vStart, vEnd);
+            if (mTasks == null)
+            {
+                mTasks = new Vector<TaskEntityData>();
+            }
             for (Iterator<Collection<TaskEntityData>> i = mTasksHashTable.values().iterator(); i.hasNext();)
             {
                 Collection<TaskEntityData> vTasks = i.next();
-                if (mTasks == null)
-                {
-                    mTasks = vTasks;
-                }
-                else
-                {
-                    mTasks.addAll(vTasks);
-                }
+                mTasks.addAll(vTasks);
             }
         }
         else
@@ -535,7 +532,7 @@ public class InvoiceHelper
 
     // Copies src file to dst file.
     // If the dst file does not exist, it is created
-    public boolean generateInvoice()
+    public boolean generatePdfInvoice()
     {
         if (!mIsInitialized)
         {
@@ -570,6 +567,7 @@ public class InvoiceHelper
             // dir doesn't exist
             vPath.mkdirs();
         }
+        // method is necessary for calculating the individual costs of sub customers
         generateSubCustomerCostList();
         TbaPdfInvoice pdfInvoice = new TbaPdfInvoice(vTarget, vTemplate);
         pdfInvoice.setCallCounts(mCallCounts);
@@ -847,6 +845,14 @@ public class InvoiceHelper
     public Collection<SubcustomerCost> getSubcustomerCostList()
     {
         return mSubcustomerCostList;
+    }
+    
+    public void setFileName()
+    {
+        if (mInvoiceEntityData != null)
+        {
+            mInvoiceEntityData.setFileName(makeFileName(mInvoiceEntityData));
+        }
     }
 
     static public String getInvoiceNumber(int year, int month, int seqNr)

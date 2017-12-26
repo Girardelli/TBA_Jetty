@@ -53,12 +53,12 @@ InitialContext vContext = new InitialContext();
 		<table>
 			<tr>
 				<td width="30"></td>
-				<td width="80"><input type=submit name=action value=" Vorige maand "
+				<td width="80"><input class="tbabutton" type=submit name=action value=" Vorige maand "
 					onclick="showPrevious()"></td>
 				<%
 if (!vSession.isCurrentMonth())
 {
-  out.println("<td width=\"80\"><input type=submit name=action value=\" Volgende maand \"  onclick=\"showNext()\"></td>");
+  out.println("<td width=\"80\"><input class=\"tbabutton\" type=submit name=action value=\" Volgende maand \"  onclick=\"showNext()\"></td>");
 }
 %>
 			</tr>
@@ -67,10 +67,10 @@ if (!vSession.isCurrentMonth())
 		<br>
 		<table width="100%" border="0" cellspacing="2" cellpadding="2">
 			<tr>
-				<td width="300" valign="top" class="topMenu" bgcolor="FF9900">&nbsp;Uitvoerder</td>
-				<td width="100" valign="top" class="topMenu" bgcolor="FF9900">&nbsp;oproepen (Euro)</td>
-				<td width="100" valign="top" class="topMenu" bgcolor="FF9900">&nbsp;Taken (Euro)</td>
-				<td width="100" valign="top" class="topMenu" bgcolor="FF9900">&nbsp;Totaal (Euro)</td>
+				<td width="300" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Uitvoerder</td>
+				<td width="100" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;oproepen (Euro)</td>
+				<td width="100" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Taken (Euro)</td>
+				<td width="100" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Totaal (Euro)</td>
 			</tr>
 <%
 	

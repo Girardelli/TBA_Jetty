@@ -17,7 +17,7 @@
 	java.text.DecimalFormat,
 	be.tba.ejb.account.interfaces.AccountEntityData,
 	be.tba.ejb.invoice.session.InvoiceSqlAdapter,
-	be.tba.util.data.*;"%>
+	be.tba.util.data.*"%>
 <%!
 private StringBuilder allEntryIds;%>
 
@@ -87,21 +87,21 @@ private StringBuilder allEntryIds;%>
 				</tr>
 <!--  				
 				<tr>
-					<td width="80"><input type=submit name=action value=" Verwijderen " onclick="verwijderen()"></td>
-					<td width="80"><input type=submit name=action value=" Bevriezen " onclick="vriezen()"></td>
-					<td width="80"><input type=submit name=action value=" Betaaldvlag zetten " onclick="setPayed()"></td>
-					<td width="80"><input type=submit name=action value=" Betaaldvlag zetten " onclick="setPayed()"></td>
-					<td width="180"><input type=submit name=action value=" Genereer factuur docs "	onclick="generateAllInvoices()"></td>
+					<td width="80"><input class="tbabutton" type=submit name=action value=" Verwijderen " onclick="verwijderen()"></td>
+					<td width="80"><input class="tbabutton" type=submit name=action value=" Bevriezen " onclick="vriezen()"></td>
+					<td width="80"><input class="tbabutton" type=submit name=action value=" Betaaldvlag zetten " onclick="setPayed()"></td>
+					<td width="80"><input class="tbabutton" type=submit name=action value=" Betaaldvlag zetten " onclick="setPayed()"></td>
+					<td width="180"><input class="tbabutton" type=submit name=action value=" Genereer factuur docs "	onclick="generateAllInvoices()"></td>
 				</tr> -->
 			</table>
 			<br>
-			<input type=submit name=action value=" Factuur toevoegen " onclick="toevoegen()">
-			<input type=submit name=action value=" Verwijderen " onclick="verwijderen()">
-			<input type=submit name=action value=" Bevriezen en docs genereren " onclick="vriezen()">
-            <input type=submit name=action value=" Mailen " onclick="mailen()">
-			<input type=submit name=action value=" Betaaldvlag zetten " onclick="setPayed()">
+			<input class="tbabutton" type=submit name=action value=" Factuur toevoegen " onclick="toevoegen()">
+			<input class="tbabutton" type=submit name=action value=" Verwijderen " onclick="verwijderen()">
+			<input class="tbabutton" type=submit name=action value=" Bevriezen en docs genereren " onclick="vriezen()">
+            <input class="tbabutton" type=submit name=action value=" Mailen " onclick="mailen()">
+			<input class="tbabutton" type=submit name=action value=" Betaaldvlag zetten " onclick="setPayed()">
 			<br>
-			<input type=submit name=action value=" Genereer factuurlijst " onclick="generateAllInvoices()">
+			<input class="tbabutton" type=submit name=action value=" Genereer factuurlijst " onclick="generateAllInvoices()">
 			<br>
 			<%
 	
@@ -130,11 +130,11 @@ private StringBuilder allEntryIds;%>
 			%> <br>
 			<table border="0" cellspacing="2" cellpadding="2">
 				<tr>
-					<td width="20" valign="top" class="topMenu" bgcolor="FF9900">&nbsp;Betaald</td>
-					<td width="90" valign="top" class="topMenu" bgcolor="FF9900">&nbsp;Nummer</td>
-					<td width="350" valign="top" class="topMenu" bgcolor="FF9900">&nbsp;Klant</td>
-					<td width="50" valign="top" class="topMenu" bgcolor="FF9900">&nbsp;Excl BTW</td>
-					<td width="50" valign="top" class="topMenu" bgcolor="FF9900">&nbsp;Incl BTW</td>
+					<td width="20" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Betaald</td>
+					<td width="90" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Nummer</td>
+					<td width="350" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Klant</td>
+					<td width="50" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Excl BTW</td>
+					<td width="50" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Incl BTW</td>
 				</tr>
 	
 				<%

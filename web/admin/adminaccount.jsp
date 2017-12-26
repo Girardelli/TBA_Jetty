@@ -47,9 +47,9 @@ try
     %>
 		<table>
 			<tr>
-				<td width="80"><input type=submit name=action value=" Toevoegen "
+				<td width="80"><input class="tbabutton" type=submit name=action value=" Toevoegen "
 					onclick="addAccount()"></td>
-				<td width="80"><input type=submit name=action value=" Verwijder "
+				<td width="80"><input class="tbabutton" type=submit name=action value=" Verwijder "
 					onclick="deleteAccount()"></td>
 			</tr>
 		</table>
@@ -59,11 +59,11 @@ try
 		<table width="100%" border="0" cellspacing="2" cellpadding="2">
 			<tr>
 				<td width="25" bgcolor="FFFFFF"></td>
-				<td width="60" valign="top" class="topMenu" bgcolor="FF9900">&nbsp;Nummer</td>
-				<td width="70" valign="top" class="topMenu" bgcolor="FF9900">&nbsp;GSM</td>
-				<td width="190" valign="top" class="topMenu" bgcolor="FF9900">&nbsp;Naam</td>
-				<td width="300" valign="top" class="topMenu" bgcolor="FF9900">&nbsp;e-mail</td>
-				<td width="200" valign="top" class="topMenu" bgcolor="FF9900">&nbsp;Laatste	login</td>
+				<td width="60" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Nummer</td>
+				<td width="70" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;GSM</td>
+				<td width="190" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Naam</td>
+				<td width="300" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;e-mail</td>
+				<td width="200" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Laatste	login</td>
 			</tr>
 			<%
   vSession.setCallingJsp(Constants.ADMIN_ACCOUNT_JSP);
@@ -134,11 +134,11 @@ try
               <table width="100%" border="0" cellspacing="2" cellpadding="2">
               <tr>
                   <td width="25" bgcolor="FFFFFF"></td>
-                  <td width="60" valign="top" class="topMenu" bgcolor="FF9900">&nbsp;Nummer</td>
-                  <td width="70" valign="top" class="topMenu" bgcolor="FF9900">&nbsp;GSM</td>
-                  <td width="190" valign="top" class="topMenu" bgcolor="FF9900">&nbsp;Naam</td>
-                  <td width="300" valign="top" class="topMenu" bgcolor="FF9900">&nbsp;e-mail</td>
-                  <td width="200" valign="top" class="topMenu" bgcolor="FF9900">&nbsp;Laatste login</td>
+                  <td width="60" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Nummer</td>
+                  <td width="70" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;GSM</td>
+                  <td width="190" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Naam</td>
+                  <td width="300" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;e-mail</td>
+                  <td width="200" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Laatste login</td>
               </tr>
               <%
 		      for (Iterator vSubIter = subList.iterator(); vSubIter.hasNext();)

@@ -63,10 +63,10 @@ try
     out.println("            <table width=\"340\">");
     out.println("              <tr>");
     out.println("                <td width=\"20\" bgcolor=\"FFFFFF\"></td>");
-    out.println("                <td width=\"145\" valign=\"top\" class=\"topMenu\" bgcolor=\"FF9900\">&nbsp;Klant</td>");
-    out.println("                <td width=\"55\"  valign=\"top\" class=\"topMenu\" bgcolor=\"FF9900\">&nbsp;Datum</td>");
-    out.println("                <td width=\"35\"  valign=\"top\" class=\"topMenu\" bgcolor=\"FF9900\">&nbsp;Uur</td>");
-    out.println("                <td width=\"85\"  valign=\"top\" class=\"topMenu\" bgcolor=\"FF9900\">&nbsp;Nummer</td>");
+    out.println("                <td width=\"145\" valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Klant</td>");
+    out.println("                <td width=\"55\"  valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Datum</td>");
+    out.println("                <td width=\"35\"  valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Uur</td>");
+    out.println("                <td width=\"85\"  valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Nummer</td>");
     out.println("              </tr>");
 
     int vRowInd = 0;

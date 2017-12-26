@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -197,8 +198,13 @@ public class CallRecordFacade
             while (vStrTok.hasMoreTokens())
             {
                 int key = Integer.parseInt(vStrTok.nextToken());
-                vQuerySession.deleteRow(session.getConnection(), key);
-                printCallDelete(key);
+                CallRecordEntityData record = vQuerySession.getRow(session.getConnection(), key);
+                // only delete calls that have not yet been mailed
+                if (!record.getIsDocumented())
+                {
+                    vQuerySession.deleteRow(session.getConnection(), key);
+                    printCallDelete(key);
+                }
             }
         }
     }
@@ -270,7 +276,7 @@ public class CallRecordFacade
         }
     }
 
-    public static void saveNewCall(HttpServletRequest req, WebSession webSession)
+    public static boolean saveNewCall(HttpServletRequest req, WebSession webSession)
     {
         String vKey = (String) req.getParameter(Constants.RECORD_ID);
 
@@ -311,8 +317,15 @@ public class CallRecordFacade
                 System.out.println("saveNewCall: id = " + vNewRecord.getId());
 
                 vCallLogWriterSession.setCallData(webSession, vNewRecord);
+                
+                Collection <AccountEntityData> subcustomer = AccountCache.getInstance().getSubCustomersList(vLocalRecord.getFwdNr());
+                if (subcustomer != null && !subcustomer.isEmpty())
+                {
+                    return true;
+                }
             }
         }
+        return false;
     }
 
     public static void removeNewCall(HttpServletRequest req, WebSession webSession)

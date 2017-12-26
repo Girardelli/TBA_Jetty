@@ -126,9 +126,9 @@ for (Iterator n = AccountRole.iterator(); n.hasNext();)
 		</table>
 		<br>
 		<br>
-		<input type=submit name=action value=" Bewaar "> 
-		<input type=reset> 
-		<input type=submit value=" Terug " onclick="cancelUpdate();"> 
+		<input class="tbabutton" type=submit name=action value=" Bewaar "> 
+		<input class="tbabutton" type=reset> 
+		<input class="tbabutton" type=submit value=" Terug " onclick="cancelUpdate();"> 
 		<input type=hidden name=<%=Constants.SRV_ACTION%> value=<%=Constants.ACCOUNT_ADD%>>
 		</form>
 		</span>

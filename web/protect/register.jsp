@@ -10,6 +10,7 @@
 <meta name="Copyright"
 	content="Copyright © 2003 TheBusinessAssistant, All rights reserved.">
 <meta name="Distribution" content="Global">
+<link rel="shortcut icon" href="./images/favicon.png" type="image/x-icon" />
 <link rel="stylesheet" type="text/css"
 	href="TheBusinessAssistant.css" title="main">
 </head>
@@ -79,10 +80,8 @@ function refresh()
 	<tr>
 		<td>
 		<table width="100%" height="50" border="0" cellspacing="0"
-			cellpadding="0" bgcolor="000066">
-			<td height="50"><img
-				src="images\tba-lightblue-trans-500-50.gif"
-				height="50" border="0" alt=""></td>
+			cellpadding="0" bgcolor="#FFFFFF">
+			<td><img src="/TheBusinessAssistant/images/TBA-Logo.png" style="padding:10px;" height="70" alt=""></td>
 		</table>
 		</td>
 	</tr>
@@ -162,8 +161,8 @@ try
 			<br>
 			<br>
 			<input type=hidden name=<%=Constants.SRV_ACTION%>
-				value="<%=Constants.ACTION_REGISTER%>"> <input type=submit
-				name=action value="Registreer"> <input type=reset></form>
+				value="<%=Constants.ACTION_REGISTER%>"> <input class="tbabutton" type=submit
+				name=action value="Registreer"> <input class="tbabutton" type=reset></form>
 			</span> <br>
 			</p>
 			</td>

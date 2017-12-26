@@ -56,9 +56,9 @@ vSession.setCallingJsp(Constants.ADD_INVOICE_JSP);
 		<br>
 		<br>
 		<input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.INVOICE_ADD%>"> 
-		<input type=submit name=action value=" Bewaar "> 
-		<input type=reset> 
-		<input type=submit value=" Terug " onclick="cancelAdd();">
+		<input class="tbabutton" type=submit name=action value=" Bewaar "> 
+		<input class="tbabutton" type=reset> 
+		<input class="tbabutton" type=submit value=" Terug " onclick="cancelAdd();">
 		</form>
 		</span> <br>
 		</td>

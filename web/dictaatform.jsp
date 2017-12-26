@@ -20,7 +20,7 @@
     <td>
       <table width="760" height="30" border="0" cellspacing="0" cellpadding="0" bgcolor="FFFFFF">
         <td><img src=".\images\top_left_curve.gif" width="20" height="70" border="0" alt=""></td>
-        <td width="720" height="70" bgcolor="000066"><img src=".\images\tba-lightblue-trans-720-70.gif" width="720" height="70" border="0" alt="" usemap="#header"></td>
+        <td width="720" height="70" bgcolor="#22205F"><img src=".\images\tba-lightblue-trans-720-70.gif" width="720" height="70" border="0" alt="" usemap="#header"></td>
         <td><img src=".\images\top_right_curve.gif" width="20" height="70" border="0" alt=""></td>
       </table>
     </td>
@@ -38,7 +38,7 @@
     <td>
       <table border="0" cellpadding="0" cellspacing="0" width="760">
         <tr>
-          <td colspan="2" valign="middle" height="27" bgcolor="000066">
+          <td colspan="2" valign="middle" height="27" bgcolor="#22205F">
             <table border="0" cellspacing="0" cellpadding="0">
               <tr>
                 <td width="255"><img src=".\images\welkomEtc.gif"></td>
@@ -70,7 +70,7 @@
 
 <!--kollom links-->
 
-          <td valign="top" width="150" bgcolor="0099FF">
+          <td valign="top" width="150" bgcolor="#488FCD">
             <table width="150" border="0" cellspacing="0" cellpadding="0">
               <tr>
              <!--   <td class="leftMenu" valign="center" align="left" height="30">
@@ -281,9 +281,9 @@ if (vTechnology == null) vTechnology = "digital";
         <td width="540" valign="top"><textarea name=<%=Constants.FORM_TEXT%> rows=10 cols=70><%=vText%></textarea></td>
       </tr>
     </table>
-    <input type=reset value=" Blad Wissen ">
+    <input class="tbabutton" type=reset value=" Blad Wissen ">
     <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.ACTION_DICTAAT_FORM%>">
-    <input type=submit name=action value=" Verstuur ">
+    <input class="tbabutton" type=submit name=action value=" Verstuur ">
   </form>
   <br>
 </td>
@@ -309,7 +309,7 @@ if (vTechnology == null) vTechnology = "digital";
   <tr>
     <td>
       <table width="760" height="18" border="0" cellspacing="0" cellpadding="0" bgcolor="FFFFFF">
-        <td align="center" width="720" valign="top" bgcolor="0099FF">
+        <td align="center" width="720" valign="top" bgcolor="#488FCD">
           <a class="bottom" valign="center" href=".\index.html">&nbsp; Home</a>
           <img height="18" src=".\images\whiteVertical.gif">
           <a class="bottom" align="top" href=".\contact.html">&nbsp; Contact</a>
@@ -335,7 +335,7 @@ if (vTechnology == null) vTechnology = "digital";
     <td>
       <table width="760" height="30" border="0" cellspacing="0" cellpadding="0" bgcolor="FFFFFF">
         <td><img src=".\images\bottom_left_curve.gif" width="20" height="30" border="0" alt=""></td>
-        <td align="center" width="720" valign="top" bgcolor="000066">
+        <td align="center" width="720" valign="top" bgcolor="#22205F">
           <span class="bottom" > commentaar en foutmeldingen betreffende deze website, mail naar <a class="mailtowhite" href="mailto:webmaster@thebusinessassistant.be">webmaster@thebusinessassistant.be</a>.</span>
 
         </td>

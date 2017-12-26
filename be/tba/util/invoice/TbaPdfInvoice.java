@@ -132,7 +132,7 @@ public class TbaPdfInvoice
             {
                 mDocument.save(mFileName.getAbsolutePath());
                 mDocument.close();
-                System.err.println("doc printed at : " + mFileName);
+                System.out.println("doc printed at : " + mFileName);
             }
             catch (Exception ex)
             {

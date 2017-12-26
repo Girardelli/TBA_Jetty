@@ -145,9 +145,9 @@ mCustomerData = AccountCache.getInstance().get(mTaskData.getFwdNr());
 		<br>
 		<br>
 		<input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.SAVE_TASK%>"> 
-		<input type=submit name=action value=" Bewaar "> 
-		<input type=reset> 
-		<input type=submit value=" Terug " onclick="cancelUpdate();">
+		<input class="tbabutton" type=submit name=action value=" Bewaar "> 
+		<input class="tbabutton" type=reset> 
+		<input class="tbabutton" type=submit value=" Terug " onclick="cancelUpdate();">
 		</form>
 		</span> <br>
 		</td>

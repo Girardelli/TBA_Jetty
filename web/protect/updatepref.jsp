@@ -25,11 +25,8 @@ private static final String kSelected = "selected";
 private static final String kChecked = "checked";
 private static final int kMaxMailHour = 23;
 private static final int kMaxMailMinutes = 56;
-
-
 %>
-	<%
-
+<%
 try 
 {
 vCustomer = AccountCache.getInstance().get(vSession.getFwdNumber());
@@ -114,8 +111,7 @@ boolean vInvoicePerMail = vCustomer.getIsMailInvoice();
 					name=<%=Constants.ACCOUNT_GSM%> size=13 value="<%=vGsm%>"></td>
 			</tr>
 		</table>
-		<p>&nbsp;&nbsp;&nbsp;&nbsp;Stuur mij een mail met daarin de laatste
-		oproepgegevens om:</p>
+		<p>&nbsp;&nbsp;&nbsp;&nbsp;Stuur mij een mail met daarin de laatste	oproepgegevens om:</p>
 		<table width="700" border="0" cellspacing="4" cellpadding="4">
 			<tr>
 				<td width="200" valign="top" class="adminsubsubtitle"><img
@@ -228,10 +224,9 @@ if (vCustomer.getIs3W())
 %>
 		</table>
 		<br>
-		<input type=reset value=" Blad Wissen "> <input
-			type=hidden name=<%=Constants.SRV_ACTION%>
-			value="<%=Constants.SAVE_PREFS%>"> <input type=submit name=action
-			value="Bewaar" onclick="Bewaar()"></form>
+		<input class="tbabutton" type=reset value=" Blad Wissen "> 
+        <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.SAVE_PREFS%>"> 
+        <input class="tbabutton" type=submit name=action value="Bewaar" onclick="Bewaar()"></form>
 		</span></td>
 	</tr>
 	<%
@@ -242,7 +237,7 @@ e.printStackTrace();
 }
 
 %>
-	<script type="text/javascript">
+<script type="text/javascript">
 function Bewaar()
 {
   document.updateForm.<%=Constants.SRV_ACTION%>.value="<%=Constants.SAVE_PREFS%>";

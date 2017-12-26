@@ -152,7 +152,7 @@ public class InvoiceFacade
                     continue;
                 InvoiceHelper vHelper = new InvoiceHelper(session, vAccountData.getFwdNumber(), session.getMonthsBack(), session.getYear());
                 vHelper.storeOrUpdate(session);
-                vHelper.generateInvoice();
+                vHelper.generatePdfInvoice();
             }
         }
     }

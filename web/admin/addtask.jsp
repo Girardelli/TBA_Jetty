@@ -124,8 +124,8 @@ String vDate = new String(vDay + "/" + vMonth  + ((vYear < 10) ? "/0" : "/") + v
 		<br>
 		<br>
 		<input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.TASK_ADD%>"> 
-		<input type=submit name=action value=" Bewaar "> <input type=reset> 
-		<input type=submit value=" Terug " onclick="cancelAdd();">
+		<input class="tbabutton" type=submit name=action value=" Bewaar "> <input class="tbabutton" type=reset> 
+		<input class="tbabutton" type=submit value=" Terug " onclick="cancelAdd();">
 		</form>
 		</span> <br>
 		</td>

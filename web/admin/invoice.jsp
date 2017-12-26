@@ -152,7 +152,7 @@
 		    	%>
 		    	<p><span class=\"adminsubtitle\"><br>Betaald op: 
 		    	<input type=text size=20 name=<%=Constants.INVOICE_PAYDATE%> value="<%=vInvoiceHelper.getInvoiceData().PayDate%>">
-		    	<input type=submit name=action value=" Bewaar " onclick="savePayDate()" > 
+		    	<input class="tbabutton" type=submit name=action value=" Bewaar " onclick="savePayDate()" > 
 		    	</span></p>
                 <%
 		    }
@@ -185,7 +185,7 @@
 			%> <br><br>
 			         Klant Referencie (bv PO-nmmer, bestelnummer)<br>
                     <textarea name=<%=Constants.INVOICE_CUST_REF%> rows=2 cols=60><%=vInvoiceRef%></textarea>
-			        <input type=submit name=action value=" Bewaar " onclick="saveInvoice()">
+			        <input class="tbabutton" type=submit name=action value=" Bewaar " onclick="saveInvoice()">
 			<%
 			
 					}
@@ -500,9 +500,9 @@
 		<table width="100%" border="0" cellspacing="2" cellpadding="2">
 			<tr>
 				<td width="20" bgcolor="FFFFFF"></td>
-				<td width="40" valign="top" class="topMenu" bgcolor="FF9900">&nbsp;Datum</td>
-				<td width="295" valign="top" class="topMenu" bgcolor="FF9900">&nbsp;Omschrijving</td>
-				<td width="100" valign="top" class="topMenu" bgcolor="FF9900">&nbsp;Kost</td>
+				<td width="40" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Datum</td>
+				<td width="295" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Omschrijving</td>
+				<td width="100" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Kost</td>
 			</tr>
 			<%
 							for (Iterator i = vTasks.iterator(); i.hasNext();)
@@ -546,13 +546,13 @@
 		<table width="100%" border="0" cellspacing="2" cellpadding="2">
 			<tr>
 				<td width="20" bgcolor="FFFFFF"></td>
-				<td width="10" valign="top" class="topMenu" bgcolor="FF9900"></td>
-				<td width="55" valign="top" class="topMenu" bgcolor="FF9900">&nbsp;Datum</td>
-				<td width="35" valign="top" class="topMenu" bgcolor="FF9900">&nbsp;Uur</td>
-				<td width="85" valign="top" class="topMenu" bgcolor="FF9900">&nbsp;Nummer</td>
-				<td width="140" valign="top" class="topMenu" bgcolor="FF9900">&nbsp;Naam</td>
-				<td width="50" valign="top" class="topMenu" bgcolor="FF9900">&nbsp;Duur</td>
-				<td width="50" valign="top" class="topMenu" bgcolor="FF9900">&nbsp;Infos</td>
+				<td width="10" valign="top" class="topMenu" bgcolor="#F89920"></td>
+				<td width="55" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Datum</td>
+				<td width="35" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Uur</td>
+				<td width="85" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Nummer</td>
+				<td width="140" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Naam</td>
+				<td width="50" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Duur</td>
+				<td width="50" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Infos</td>
 			</tr>
 	
 			<%

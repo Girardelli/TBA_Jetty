@@ -303,7 +303,7 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
             }
             InvoiceHelper vHelper = new InvoiceHelper(vInvoiceData, webSession);
             vHelper.storeOrUpdate(webSession);
-            vHelper.generateInvoice();
+            vHelper.generatePdfInvoice();
             // replace windows style '\\' with unix style '/'. DB does not seem
             // to handle good the windows style
             String unixStyle = vInvoiceData.getFileName().replace('\\', '/');

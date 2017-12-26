@@ -230,10 +230,11 @@ catch (Exception ex)
 		</table>
 		<br>
 		<br>
-		<input type=hidden name=<%=Constants.SRV_ACTION%>
-			value="<%=Constants.SAVE_RECORD%>"> <input
-			type=submit name=action value=" Bewaar "> <input type=reset> <input
-			type=submit value=" Cancel " onclick="cancelUpdate();"></form>
+		<input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.SAVE_RECORD%>"> 
+		<input class="tbabutton" type=submit name=action value="Bewaar"> 
+		<input class="tbabutton" type=reset> 
+		<input class="tbabutton" type=submit value="Cancel" onclick="cancelUpdate();">
+		</form>
 		</span> <br>
 		</td>
 	</tr>

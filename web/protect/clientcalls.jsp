@@ -46,7 +46,7 @@ allEntryIds = new StringBuilder("[");
 		<!-- account list -->
 		<td valign="top" width="710" bgcolor="FFFFFF"><br>
         <p><span class="admintitle"> Huidig geregistreerde oproepen:
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type=submit name=action value="Herlaad" onclick="refresh()"> 
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="tbabutton" type=submit name=action value="Herlaad" onclick="refresh()"> 
         </span></p>
 <%
   InitialContext vContext = new InitialContext();
@@ -63,11 +63,11 @@ allEntryIds = new StringBuilder("[");
   
   AccountEntityData vAccount = AccountCache.getInstance().get(vSession.getFwdNumber());
 %>
-<input type=submit name=action value="Vorige Oproepen" onclick="showPrevious()"> 
+<input class="tbabutton" type=submit name=action value="Vorige Oproepen" onclick="showPrevious()"> 
 <%
 if (!vSession.isCurrentMonth())
 {
-out.println("<input type=submit name=action value=\"Volgende Oproepen\"  onclick=\"showNext()\">");
+out.println("<input class=\"tbabutton\" type=submit name=action value=\"Volgende Oproepen\"  onclick=\"showNext()\">");
 }
 
   
@@ -104,13 +104,13 @@ out.println("<input type=submit name=action value=\"Volgende Oproepen\"  onclick
     out.println("              <br><br>");
     out.println("              <tr>");
     out.println("                <td width=\"20\" bgcolor=\"FFFFFF\"></td>");
-    out.println("                <td width=\"10\"  valign=\"top\" class=\"topMenu\" bgcolor=\"FF9900\"></td>");
-    out.println("                <td width=\"55\"  valign=\"top\" class=\"topMenu\" bgcolor=\"FF9900\">&nbsp;Datum</td>");
-    out.println("                <td width=\"35\"  valign=\"top\" class=\"topMenu\" bgcolor=\"FF9900\">&nbsp;Uur</td>");
-    out.println("                <td width=\"85\"  valign=\"top\" class=\"topMenu\" bgcolor=\"FF9900\">&nbsp;Nummer</td>");
-    out.println("                <td width=\"140\" valign=\"top\" class=\"topMenu\" bgcolor=\"FF9900\">&nbsp;Naam</td>");
-    out.println("                <td width=\"280\" valign=\"top\" class=\"topMenu\" bgcolor=\"FF9900\">&nbsp;Omschrijving</td>");
-    out.println("                <td width=\"100\"  valign=\"top\" class=\"topMenu\" bgcolor=\"FF9900\">&nbsp;Info</td>");
+    out.println("                <td width=\"10\"  valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\"></td>");
+    out.println("                <td width=\"55\"  valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Datum</td>");
+    out.println("                <td width=\"35\"  valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Uur</td>");
+    out.println("                <td width=\"85\"  valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Nummer</td>");
+    out.println("                <td width=\"140\" valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Naam</td>");
+    out.println("                <td width=\"280\" valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Omschrijving</td>");
+    out.println("                <td width=\"100\"  valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Info</td>");
     out.println("              </tr>");
 
     int vRowInd = 0;

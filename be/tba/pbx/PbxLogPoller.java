@@ -7,7 +7,9 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import be.tba.servlets.session.WebSession;
 import be.tba.util.constants.Constants;
+import be.tba.util.invoice.InvoiceHelper;
 import be.tba.util.session.AccountCache;
 
 import java.sql.Connection;
@@ -56,6 +58,14 @@ public class PbxLogPoller
             CallLogDbWriter vLogWriter = getWriter();
             vLogWriter.start();
             sLogger.info("from PbxLogPoller: CallLogDbWriter started!");
+            
+            
+//            WebSession session  = new WebSession(Constants.MYSQL_URL);
+//            InvoiceHelper vHelper = new InvoiceHelper(null, "409003", 10, 2017);
+//            vHelper.storeOrUpdate(session);
+//            vHelper.setFileName();
+//            vHelper.generatePdfInvoice();           
+            
             for (;;)
                 Thread.sleep(10000);
 
@@ -93,6 +103,12 @@ public class PbxLogPoller
             // e.printStackTrace();
             sLogger.error("ClassNotFoundException when getting InitialContext", e);
         }
+//        catch (SQLException e)
+//        {
+            // TODO Auto-generated catch block
+            // e.printStackTrace();
+//            sLogger.error("SQLExeption when getting InitialContext", e);
+//        }
     }
 
     public void stop()

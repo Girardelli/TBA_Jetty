@@ -343,8 +343,22 @@ public class AdminDispatchServlet extends HttpServlet
                 // ==============================================================================================
                 else if (vAction.equals(Constants.SAVE_NEW_CALL))
                 {
-                    CallRecordFacade.saveNewCall(req, vSession);
-                    rd = sc.getRequestDispatcher(Constants.ADMIN_CALLS_JSP);
+                    String vKey = (String) req.getParameter(Constants.RECORD_ID);
+                    if (vKey == null || vKey.isEmpty())
+                    {
+                        rd = sc.getRequestDispatcher(Constants.NEW_CALL_JSP);
+                    }
+                    else
+                    {
+                        if (CallRecordFacade.saveNewCall(req, vSession))
+                        {
+                            rd = sc.getRequestDispatcher(Constants.UPDATE_RECORD_JSP);
+                        }
+                        else
+                        {
+                            rd = sc.getRequestDispatcher(Constants.ADMIN_CALLS_JSP);
+                        }
+                    }
                 }
 
                 // ==============================================================================================
@@ -612,7 +626,7 @@ public class AdminDispatchServlet extends HttpServlet
                     if (req.getParameter(Constants.INVOICE_MONTH) != null)
                         vSession.setMonthsBack(Integer.parseInt((String) req.getParameter(Constants.INVOICE_MONTH)));
 
-                    if (vSession.getInvoiceHelper().generateInvoice())
+                    if (vSession.getInvoiceHelper().generatePdfInvoice())
                     {
                         rd = sc.getRequestDispatcher(Constants.INVOICE_JSP);
                     }
