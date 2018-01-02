@@ -19,6 +19,7 @@ import be.tba.ejb.pbx.interfaces.CallRecordEntityData;
 import be.tba.ejb.pbx.session.CallRecordSqlAdapter;
 import be.tba.ejb.pbx.session.CallRecordSqlAdapter;
 import be.tba.servlets.session.WebSession;
+import be.tba.util.constants.AccountRole;
 import be.tba.util.constants.Constants;
 import be.tba.util.invoice.InvoiceHelper;
 import be.tba.util.session.AccountCache;
@@ -199,8 +200,8 @@ public class CallRecordFacade
             {
                 int key = Integer.parseInt(vStrTok.nextToken());
                 CallRecordEntityData record = vQuerySession.getRow(session.getConnection(), key);
-                // only delete calls that have not yet been mailed
-                if (!record.getIsDocumented())
+                // only delete calls that have not yet been documented
+                if (!record.getIsDocumented() || session.getRole() == AccountRole.ADMIN)
                 {
                     vQuerySession.deleteRow(session.getConnection(), key);
                     printCallDelete(key);
@@ -209,18 +210,9 @@ public class CallRecordFacade
         }
     }
 
-    public static void newCall(HttpServletRequest req, WebSession webSession)
+    // new call is created
+    public static void createNewUnmappedCall(HttpServletRequest req, WebSession webSession)
     {
-        HttpSession vHttpSession = req.getSession();
-
-        Map<Integer, CallRecordEntityData> vNewCalls = webSession.getNewCalls();
-        int i = 0;
-        Integer key;
-        do
-        {
-            key = new Integer(++i);
-        } while (vNewCalls.containsKey(key));
-
         CallRecordEntityData newRecord = new CallRecordEntityData();
         newRecord.setIsNotLogged(false);
         newRecord.setIsReleased(false);
@@ -233,51 +225,49 @@ public class CallRecordFacade
         newRecord.setShortDescription((String) req.getParameter(Constants.RECORD_SHORT_TEXT));
         newRecord.setLongDescription((String) req.getParameter(Constants.RECORD_LONG_TEXT));
 
-        vNewCalls.put(key, newRecord);
-
-        vHttpSession.setAttribute("key", key);
+        webSession.setNewUnmappedCall(newRecord);
     }
 
-    public static void updateNewCall(HttpServletRequest req, WebSession webSession)
+    // this function is to refresh the new call page with an updated list of incoming calls
+    // so that the user can select his call form this list.
+    // because this is a server loop call, possible changes to that new call data must be stored
+    // temporally in the NewUnmappedCalls Map in the WebSession so that the jsp can take that data
+    // and show it on the refreshed jsp page.
+    public static void updateNewUnmappedCall(HttpServletRequest req, WebSession webSession)
     {
-        HttpSession vHttpSession = req.getSession();
-
-        Map<Integer, CallRecordEntityData> vNewCalls = webSession.getNewCalls();
-        Integer vKey = null;
-        int i = 0;
-        for (; i < vNewCalls.size(); ++i)
+        CallRecordEntityData newRecord = webSession.getNewUnmappedCall();
+        if (newRecord == null)
         {
-            vKey = new Integer(i);
-            if (vNewCalls.containsKey(vKey))
-                break;
+            // strange situation
+            System.out.println("updateNewUnmappedCall called with a valid NewUnmappedCall");
+            // make a new one.
+            newRecord = new CallRecordEntityData();
+            webSession.setNewUnmappedCall(newRecord);
         }
+        System.out.println("updateNewUnmappedCall");
 
-        System.out.println("saveNewCall: local key = " + vKey);
-
-        if (i < vNewCalls.size())
+        newRecord.setIsNotLogged(false);
+        newRecord.setIsReleased(false);
+        newRecord.setIsAgendaCall(req.getParameter(Constants.RECORD_AGENDA) != null);
+        newRecord.setIsSmsCall(req.getParameter(Constants.RECORD_SMS) != null);
+        newRecord.setIsForwardCall(req.getParameter(Constants.RECORD_FORWARD) != null);
+        boolean prevIsImportant = newRecord.getIsImportantCall();
+        newRecord.setIsImportantCall(req.getParameter(Constants.RECORD_IMPORTANT) != null);
+        if (!prevIsImportant && newRecord.getIsImportantCall())
         {
-            CallRecordEntityData newRecord = (CallRecordEntityData) vNewCalls.get(vKey);
-            newRecord.setIsNotLogged(false);
-            newRecord.setIsReleased(false);
-            newRecord.setIsAgendaCall(req.getParameter(Constants.RECORD_AGENDA) != null);
-            newRecord.setIsSmsCall(req.getParameter(Constants.RECORD_SMS) != null);
-            newRecord.setIsForwardCall(req.getParameter(Constants.RECORD_FORWARD) != null);
-            boolean prevIsImportant = newRecord.getIsImportantCall();
-            newRecord.setIsImportantCall(req.getParameter(Constants.RECORD_IMPORTANT) != null);
-            if (!prevIsImportant && newRecord.getIsImportantCall())
-            {
-                MailNowTask.send(newRecord.getFwdNr());
-            }
-            newRecord.setIsFaxCall(req.getParameter(Constants.RECORD_FAX) != null);
-            newRecord.setName((String) req.getParameter(Constants.RECORD_CALLER_NAME));
-            newRecord.setShortDescription((String) req.getParameter(Constants.RECORD_SHORT_TEXT));
-            newRecord.setLongDescription((String) req.getParameter(Constants.RECORD_LONG_TEXT));
-            vHttpSession.setAttribute("key", vKey);
+            MailNowTask.send(newRecord.getFwdNr());
         }
+        newRecord.setIsFaxCall(req.getParameter(Constants.RECORD_FAX) != null);
+        newRecord.setName((String) req.getParameter(Constants.RECORD_CALLER_NAME));
+        newRecord.setShortDescription((String) req.getParameter(Constants.RECORD_SHORT_TEXT));
+        newRecord.setLongDescription((String) req.getParameter(Constants.RECORD_LONG_TEXT));
     }
 
     public static boolean saveNewCall(HttpServletRequest req, WebSession webSession)
     {
+        updateNewUnmappedCall(req, webSession);
+        
+        CallRecordEntityData vNewCall = webSession.getNewUnmappedCall();
         String vKey = (String) req.getParameter(Constants.RECORD_ID);
 
         System.out.println("saveNewCall: id = " + vKey);
@@ -287,54 +277,58 @@ public class CallRecordFacade
 
         if (vNewRecord != null)
         {
-            HttpSession vHttpSession = req.getSession();
-
-            Map<Integer, CallRecordEntityData> vNewCalls = webSession.getNewCalls();
-            Integer vLocalKey = (Integer) vHttpSession.getAttribute(new String("key"));
-
-            CallRecordEntityData vLocalRecord = (CallRecordEntityData) vNewCalls.remove(vLocalKey);
-            if (vLocalRecord != null)
+            vNewRecord.setName(vNewCall.getName());
+            vNewRecord.setShortDescription(vNewCall.getShortDescription());
+            vNewRecord.setLongDescription(vNewCall.getLongDescription());
+            vNewRecord.setIsSmsCall(vNewCall.getIsSmsCall());
+            vNewRecord.setIsAgendaCall(vNewCall.getIsAgendaCall());
+            if (!vNewRecord.getIsImportantCall() && vNewCall.getIsImportantCall())
             {
-                CallRecordSqlAdapter vCallLogWriterSession = new CallRecordSqlAdapter();
-
-                vNewRecord.setIsMailed(false);
-                vNewRecord.setName((String) req.getParameter(Constants.RECORD_CALLER_NAME));
-                vNewRecord.setShortDescription((String) req.getParameter(Constants.RECORD_SHORT_TEXT));
-                vNewRecord.setLongDescription((String) req.getParameter(Constants.RECORD_LONG_TEXT));
-                vNewRecord.setIsSmsCall(req.getParameter(Constants.RECORD_SMS) != null);
-                vNewRecord.setIsAgendaCall(req.getParameter(Constants.RECORD_AGENDA) != null);
-                vNewRecord.setIsForwardCall(req.getParameter(Constants.RECORD_FORWARD) != null);
-                boolean prevIsImportant = vNewRecord.getIsImportantCall();
-                vNewRecord.setIsImportantCall(req.getParameter(Constants.RECORD_IMPORTANT) != null);
-                if (!prevIsImportant && vNewRecord.getIsImportantCall())
-                {
-                    MailNowTask.send(vNewRecord.getFwdNr());
-                }
-                vNewRecord.setIsFaxCall(req.getParameter(Constants.RECORD_FAX) != null);
-                vNewRecord.setIsVirgin(false);
-                vNewRecord.setIsNotLogged(false);
-
-                System.out.println("saveNewCall: id = " + vNewRecord.getId());
-
-                vCallLogWriterSession.setCallData(webSession, vNewRecord);
+                MailNowTask.send(vNewRecord.getFwdNr());
+            }
+            vNewRecord.setIsForwardCall(vNewCall.getIsForwardCall());
+            vNewRecord.setIsFaxCall(vNewCall.getIsFaxCall());
+            vNewRecord.setIsVirgin(false);
+            vNewRecord.setIsNotLogged(false);
+            vQuerySession.setCallData(webSession, vNewRecord);
+            vNewCall.setFwdNr(vNewRecord.getFwdNr());
+            vNewCall.setId(vNewRecord.getId());
+            
+            Collection <AccountEntityData> subcustomers = AccountCache.getInstance().getSubCustomersList(vNewRecord.getFwdNr());
+            //System.out.println("saveNewCall: id = " + vNewRecord.getId());
+            if (subcustomers != null && !subcustomers.isEmpty())
+            {
+                System.out.println("there are subcustomers. Set the super customer=" + vNewRecord.getFwdNr());
+                // set the fwdNr of the super customer so that selectSubCustomer.jsp can prepare the sub customers list
+                //req.setAttribute(Constants.ACCOUNT_ID, vNewCall.getFwdNr());
+                webSession.setRecordId(vKey);
+                return true;
+            }
+            else
+            {
+                // no sub customers: this call can be saved and finished processing
                 
-                Collection <AccountEntityData> subcustomer = AccountCache.getInstance().getSubCustomersList(vLocalRecord.getFwdNr());
-                if (subcustomer != null && !subcustomer.isEmpty())
-                {
-                    return true;
-                }
+                webSession.setNewUnmappedCall(null);
+                webSession.setRecordId(null);
             }
         }
         return false;
     }
 
+    public static void saveNewSubCustomer(HttpServletRequest req, WebSession webSession, String vNewFwdNr)
+    {
+        CallRecordSqlAdapter vCallLogWriterSession = new CallRecordSqlAdapter();
+        vCallLogWriterSession.changeFwdNumber(webSession, webSession.getRecordId(), vNewFwdNr);
+        webSession.setNewUnmappedCall(null);
+        webSession.setRecordId(null);
+    }
+
+    // 'terug' button was called on the newCall page. User want to cancel this entry.
+    // look for a call with this key in the WebSession NewUnmappedCalls, and remove it.
     public static void removeNewCall(HttpServletRequest req, WebSession webSession)
     {
-        HttpSession vHttpSession = req.getSession();
-
-        Map<Integer, CallRecordEntityData> vNewCalls = webSession.getNewCalls();
-        Integer vKey = (Integer) vHttpSession.getAttribute(new String("key"));
-        vNewCalls.remove(vKey);
+        webSession.setNewUnmappedCall(null);
+        webSession.setRecordId(null);
     }
 
     private static void printCallDelete(int key)

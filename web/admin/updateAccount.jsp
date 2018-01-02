@@ -116,30 +116,25 @@ double vFacLongFwd = vCustomer.getFacLongFwd();
 			<td valign="top" bgcolor="FFFFFF"><br> <br> <span
 				class="admintitle"> Instellingen voor <%=vFullName%>.
 			</span> <br> <span class="bodytekst"> <!-- action name must be a URI name as it is set in the <application>.xml servlet-mapping tag.-->
-					<form name="updateForm" method="POST"
-						action="/TheBusinessAssistant/AdminDispatch">
-						<input class="tbabutton" type=submit name=action value="Bewaar"
-							onclick="Bewaar()"> <input class="tbabutton" type=submit
-							name=action value="De-registreren" onclick="Deregister()">&nbsp;&nbsp;
-						<input class="tbabutton" type=submit name=action value=" Terug "
-							onclick="cancelUpdate()">&nbsp;&nbsp; <input
-							class="tbabutton" type=submit name=action value=" Verstuur Mail "
-							onclick="mailCustomer()"> <br>
+					<form name="updateForm" method="POST" action="/TheBusinessAssistant/AdminDispatch">
+						<input class="tbabutton" type=submit name=action value="Bewaar"	onclick="Bewaar()"> 
+						<input class="tbabutton" type=submit name=action value="De-registreren" onclick="Deregister()">&nbsp;&nbsp;
+						<input class="tbabutton" type=submit name=action value=" Terug " onclick="cancelUpdate()">&nbsp;&nbsp; 
+						<input class="tbabutton" type=submit name=action value=" Verstuur Mail " onclick="mailCustomer()"> 
+						<br>
 						<p class="adminsubtitle">
-							<img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Algemene
-							informatie:
+							<img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Algemene informatie:
 						</p>
 						<table width="700" border="0" cellspacing="2" cellpadding="2">
 							<tr>
-								<td width="200" valign="top" class="adminsubsubtitle">login
-									naam</td>
+								<td width="200" valign="top" class="adminsubsubtitle">login	naam</td>
 								<td width="500" valign="top" class="bodybold"><%=vCustomer.getUserId()%></td>
 							</tr>
 							<tr>
 								<td width="200" valign="top" class="adminsubsubtitle">rol</td>
-								<td width="500" valign="top"><select
-									name=<%=Constants.ACCOUNT_ROLE%>>
-										<%
+								<td width="500" valign="top">
+								    <select	name=<%=Constants.ACCOUNT_ROLE%>>
+<%
 
 					out.println("<option value=\"" + vCustomer.getRole() + "\">" + AccountRole.fromShort(vCustomer.getRole()).getText());
 for (Iterator n = AccountRole.iterator(); n.hasNext();)
@@ -316,9 +311,9 @@ for (int i = 0; i < kMaxMailMinutes; i += 5)
 									type=checkbox name=<%=Constants.ACCOUNT_3W_CUSTOMER%>
 									value="<%=Constants.YES%>"
 									<%=(vCustomer.getIs3W()?kChecked:"")%>></td>
-								<td width="100" valign="top" class="bodytekst"><select
-									name=<%=Constants.ACCOUNT_3W_COMPANY_ID%>>
-										<option value="<%=Constants.NONE%>">geen selectie
+								<td width="100" valign="top" class="bodytekst">
+								<select name=<%=Constants.ACCOUNT_3W_COMPANY_ID%>>
+									<option value="<%=Constants.NONE%>">geen selectie
 					<option value="3W" <%=(vW3_CompanyId.equals("3W")?kSelected:"")%>>3W
 					Associates
 					<option value="3WFINANCE"

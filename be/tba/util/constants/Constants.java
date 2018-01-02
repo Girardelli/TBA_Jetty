@@ -73,6 +73,8 @@ public class Constants
 
     public static final String UPDATE_ACCOUNT_JSP = "/admin/updateAccount.jsp";
 
+    public static final String SELECT_SUBCUSTOMER_JSP = "/admin/selectSubCustomer.jsp";
+
     public static final String UPDATE_RECORD_JSP = "/admin/updateRecord.jsp";
 
     public static final String ADD_RECORD_JSP = "/admin/addrecord.jsp";
@@ -384,6 +386,10 @@ public class Constants
     public static final String NEXT_PAGE = "_npg";
 
     public static final String PREVIOUS_PAGE = "_ppg";
+    
+    public static final String ACCOUNT_FWDNR = "_afwd";
+
+    public static final String NEW_ACCOUNT_FWDNR = "_nafwd";
 
     public static final String TBA_HOME = "home";
 
@@ -483,6 +489,8 @@ public class Constants
     public static final String REFRESH_OPEN_CALLS = "REFRESH_OPEN_CALLS";
 
     public static final String SAVE_NEW_CALL = "SAVE_NEW_CALL";
+    
+    public static final String SAVE_NEW_SUBCUSTOMER = "SAVE_NEW_SUBCUSTOMER";
 
     public static final String REMOVE_OPEN_CALL = "REMOVE_OPEN_CALL";
 

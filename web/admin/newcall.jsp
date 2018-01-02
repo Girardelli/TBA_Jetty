@@ -45,26 +45,17 @@ be.tba.util.data.*"%>
 try
 {
 vSession.setCallingJsp(Constants.NEW_CALL_JSP);
-CallRecordEntityData vNewRecord = null;
 boolean vIsVirgin = false;
 boolean vNewCallsAvailable = false;
 
 HttpSession vHttpSession = request.getSession();
-  Integer vKey = (Integer) vHttpSession.getAttribute(new String("key"));
-  vNewRecord = null;
-  if (vKey != null)
-  {
-    Map vNewCalls = vSession.getNewCalls();
-	if (!vNewCalls.isEmpty())
-	{
-    vNewRecord = (CallRecordEntityData) vNewCalls.get(vKey);
-    if (vNewRecord != null)
+  
+    CallRecordEntityData vNewRecord = vSession.getNewUnmappedCall();
+	if (vNewRecord != null)
     {
       // provide the customer call selection stuff
-      InitialContext vContext = new InitialContext();
-
-      CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
-      Collection vRecords = vQuerySession.getVirgins(vSession);
+     CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
+      Collection<CallRecordEntityData> vRecords = vQuerySession.getVirgins(vSession);
 
       AccountEntityData vAccountEntityData;
 
@@ -90,7 +81,7 @@ HttpSession vHttpSession = request.getSession();
 
 						<%
 
-        for (Iterator i = vRecords.iterator(); i.hasNext();)
+        for (Iterator<CallRecordEntityData> i = vRecords.iterator(); i.hasNext();)
         {
           CallRecordEntityData vEntry = (CallRecordEntityData) i.next();
 
@@ -147,8 +138,6 @@ HttpSession vHttpSession = request.getSession();
 			</table>
 			<%
       }
-    }
-	}
   }
   if (vNewRecord == null)
   {
@@ -179,8 +168,7 @@ HttpSession vHttpSession = request.getSession();
    vNewRecord.setIsImportantCall(request.getParameter(Constants.RECORD_IMPORTANT) != null ? request.getParameter(Constants.RECORD_IMPORTANT) != null : false);
    vNewRecord.setIsFaxCall(request.getParameter(Constants.RECORD_FAX) != null ? request.getParameter(Constants.RECORD_FAX) != null : false);
    vNewRecord.setIs3W_call(false);
-%>
-<%
+
 if (vIsVirgin)
 {
   out.println("<input class=\"tbabutton\" type=submit name=action value=\" Bewaar \">");
@@ -194,7 +182,6 @@ else
   out.println("<input type=hidden name=" + Constants.SRV_ACTION + " value=\"" + Constants.SAVE_NEW_CALL + "\" >");
 }
 %> 
-            <input type=hidden name=<%=Constants.NEW_RECORD_KEY%> value=<%=vKey%>>
             <input type=hidden name=<%=Constants.RECORD_ID%> value=""> 
             <input class="tbabutton" type=reset> 
             <input class="tbabutton" type=submit value=" Terug " onclick="removeOpenCalls()">
@@ -204,15 +191,13 @@ else
 			<table width="100%" border="0" cellspacing="1" cellpadding="1">
 				<tr>
 					<td width="50"></td>
-					<td width="170" valign="top" class="adminsubsubtitle"><img
-						src="/TheBusinessAssistant/images/blueSphere.gif" width="10"
-						height="10">&nbsp;Belangrijke oproep</td>
-					<td width="530" valign="top" class="adminsubsubtitle"><input
-						type=checkbox name=<%=Constants.RECORD_IMPORTANT%>
-						value="<%=Constants.YES%>"
-						<%=(vNewRecord.getIsImportantCall() ? " checked" : "")%>>&nbsp;&nbsp;<img
-						src="/TheBusinessAssistant/images/important.gif"
-						alt="belangrijke oproep!" height="13" border="0"></td>
+					<td width="170" valign="top" class="adminsubsubtitle">
+					   <img src="/TheBusinessAssistant/images/blueSphere.gif" width="10" height="10">&nbsp;Belangrijke oproep
+					</td>
+					<td width="530" valign="top" class="adminsubsubtitle">
+					   <input type=checkbox name=<%=Constants.RECORD_IMPORTANT%> value="<%=Constants.YES%>" <%=(vNewRecord.getIsImportantCall() ? " checked" : "")%>>&nbsp;&nbsp;
+					   <img	src="/TheBusinessAssistant/images/important.gif" alt="belangrijke oproep!" height="13" border="0">
+					</td>
 				</tr>
 				<tr>
 					<td width="50"></td>

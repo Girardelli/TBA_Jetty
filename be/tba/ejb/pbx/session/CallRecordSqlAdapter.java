@@ -569,9 +569,9 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
     /**
      * @ejb:interface-method view-type="remote"
      */
-    public void changeFwdNumber(WebSession webSession, String oldNr, String newNr)
+    public void changeFwdNumber(WebSession webSession, String key, String newNr)
     {
-        executeSqlQuery(webSession.getConnection(), "UPDATE CallRecordEntity SET FwdNr='" + newNr + "' WHERE FwdNr='" + oldNr + "'");
+        executeSqlQuery(webSession.getConnection(), "UPDATE CallRecordEntity SET FwdNr='" + newNr + "' WHERE ID='" + key + "'");
     }
 
     /**

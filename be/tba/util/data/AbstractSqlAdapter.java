@@ -106,15 +106,15 @@ public abstract class AbstractSqlAdapter<T>
                 rs = stmt.executeQuery(queryStr);
                 Collection<T> col = translateRsToValueObjects(rs);
                 System.out.println(col.size() + " entries: SQL querry: " + queryStr);
-                // log.info(col.size() + " entries: SQL querry: " + queryStr);
-                sLogger.info("{} entries: SQL querry: {}", col.size(), queryStr);
+                
+                //sLogger.info("{} entries: SQL querry: {}", col.size(), queryStr);
                 return col;
             }
             else
             {
                 int cnt = stmt.executeUpdate(queryStr);
                 System.out.println(cnt + " entries: SQL querry: " + queryStr);
-                sLogger.info("{} entries: SQL querry: {}", cnt, queryStr);
+                //sLogger.info("{} entries: SQL querry: {}", cnt, queryStr);
                 return new Vector<T>(cnt);
             }
         }

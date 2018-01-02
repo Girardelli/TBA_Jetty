@@ -79,9 +79,12 @@ final public class WebSession implements Serializable
 
     private String mCurrentJsp;
 
-    private Map<Integer, CallRecordEntityData> mNewCalls = new HashMap<Integer, CallRecordEntityData>();
-
+    //private Map<Integer, CallRecordEntityData> mNewUnmappedCalls = new HashMap<Integer, CallRecordEntityData>();
+    private CallRecordEntityData mNewUnmappedCall;
+    
     private Connection mConnection;
+    
+    private String mRecordId = null;
 
     public WebSession() throws SQLException
     {
@@ -135,15 +138,31 @@ final public class WebSession implements Serializable
             }
         }
     }
+    
+    public String getRecordId()
+    {
+        return mRecordId;
+    }
+    
+    public void setRecordId(String id)
+    {
+        mRecordId = id;
+    }
 
+    
     public Connection getConnection()
     {
         return mConnection;
     }
 
-    public Map<Integer, CallRecordEntityData> getNewCalls()
+    public CallRecordEntityData getNewUnmappedCall()
     {
-        return mNewCalls;
+        return mNewUnmappedCall;
+    }
+    
+    public void setNewUnmappedCall(CallRecordEntityData newCall)
+    {
+        mNewUnmappedCall = newCall;
     }
 
     public void setRole(AccountRole role)

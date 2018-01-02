@@ -1,9 +1,6 @@
 package be.tba.servlets;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.StringTokenizer;
@@ -17,13 +14,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.sql.DataSource;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 
 import be.tba.ejb.account.interfaces.AccountEntityData;
 import be.tba.ejb.mail.session.MailerSessionBean;
@@ -39,9 +32,6 @@ import be.tba.util.exceptions.AccessDeniedException;
 import be.tba.util.exceptions.LostSessionException;
 import be.tba.util.exceptions.SystemErrorException;
 import be.tba.util.session.AccountCache;
-
-import be.tba.ejb.pbx.session.CallRecordSqlAdapter;
-import be.tba.ejb.pbx.interfaces.CallRecordEntityData;
 
 public class AdminDispatchServlet extends HttpServlet
 {
@@ -111,7 +101,6 @@ public class AdminDispatchServlet extends HttpServlet
                     String vCustomerFilter = (String) vSession.getCallFilter().getCustFilter();
                     if (vCustomerFilter != null && !vCustomerFilter.equals(Constants.ACCOUNT_FILTER_ALL))
                     {
-                        Connection con = null;
                         try
                         {
                             AccountEntityData vAccountData = AccountCache.getInstance().get(vCustomerFilter);
@@ -325,7 +314,7 @@ public class AdminDispatchServlet extends HttpServlet
                 // ==============================================================================================
                 else if (vAction.equals(Constants.GET_OPEN_CALLS))
                 {
-                    CallRecordFacade.newCall(req, vSession);
+                    CallRecordFacade.createNewUnmappedCall(req, vSession);
                     rd = sc.getRequestDispatcher(Constants.NEW_CALL_JSP);
                 }
 
@@ -334,7 +323,7 @@ public class AdminDispatchServlet extends HttpServlet
                 // ==============================================================================================
                 else if (vAction.equals(Constants.REFRESH_OPEN_CALLS))
                 {
-                    CallRecordFacade.updateNewCall(req, vSession);
+                    CallRecordFacade.updateNewUnmappedCall(req, vSession);
                     rd = sc.getRequestDispatcher(Constants.NEW_CALL_JSP);
                 }
 
@@ -352,7 +341,7 @@ public class AdminDispatchServlet extends HttpServlet
                     {
                         if (CallRecordFacade.saveNewCall(req, vSession))
                         {
-                            rd = sc.getRequestDispatcher(Constants.UPDATE_RECORD_JSP);
+                            rd = sc.getRequestDispatcher(Constants.SELECT_SUBCUSTOMER_JSP);
                         }
                         else
                         {
@@ -362,6 +351,36 @@ public class AdminDispatchServlet extends HttpServlet
                 }
 
                 // ==============================================================================================
+                // SAVE_NEW_SUBCUSTOMER
+                // ==============================================================================================
+                else if (vAction.equals(Constants.SAVE_NEW_SUBCUSTOMER))
+                {
+                    //String vKey = (String) req.getParameter(Constants.RECORD_ID);
+                    String vNewFwdNr = (String)  req.getParameter(Constants.NEW_ACCOUNT_FWDNR);
+                    String vOldFwdNr = (String)  req.getParameter(Constants.ACCOUNT_FWDNR);
+                    
+                    System.out.println("SAVE_NEW_SUBCUSTOMER " + vNewFwdNr + ", " + vOldFwdNr);
+                    if (vNewFwdNr == null)
+                    {
+                        rd = sc.getRequestDispatcher(Constants.NEW_CALL_JSP);
+                    }
+                    else
+                    {
+                        if (vOldFwdNr != null)
+                        {
+                            if (!vOldFwdNr.equals(vNewFwdNr))
+                            {
+                                CallRecordFacade.saveNewSubCustomer(req, vSession, vNewFwdNr);
+                            }
+                            rd = sc.getRequestDispatcher(Constants.ADMIN_CALLS_JSP);
+                        }
+                        else
+                        {
+                            rd = sc.getRequestDispatcher(Constants.NEW_CALL_JSP);
+                        }
+                    }
+                }
+                // ==============================================================================================
                 // REMOVE_OPEN_CALL
                 // ==============================================================================================
                 else if (vAction.equals(Constants.REMOVE_OPEN_CALL))
@@ -370,8 +389,7 @@ public class AdminDispatchServlet extends HttpServlet
                 }
 
                 // ==============================================================================================
-                // GOTO DELETE
-                // ACCOUNT
+                // GOTO DELETE ACCOUNT
                 // ==============================================================================================
                 else if (vAction.equals(Constants.GOTO_ACCOUNT_DELETE))
                 {
@@ -413,8 +431,7 @@ public class AdminDispatchServlet extends HttpServlet
                 }
 
                 // ==============================================================================================
-                // GOTO EMPLOYEE
-                // ACCOUNT
+                // GOTO EMPLOYEE ACCOUNT
                 // ==============================================================================================
                 else if (vAction.equals(Constants.GOTO_EMPLOYEE_ADMIN))
                 {
@@ -422,9 +439,7 @@ public class AdminDispatchServlet extends HttpServlet
                 }
 
                 // ==============================================================================================
-                // GOTO
-                // EMPLOYEE
-                // COST
+                // GOTO EMPLOYEE COST
                 // ==============================================================================================
                 else if (vAction.equals(Constants.GOTO_EMPLOYEE_COST))
                 {
@@ -432,8 +447,7 @@ public class AdminDispatchServlet extends HttpServlet
                 }
 
                 // ==============================================================================================
-                // DELETE
-                // ACCOUNT
+                // DELETE ACCOUNT
                 // ==============================================================================================
                 else if (vAction.equals(Constants.ACCOUNT_DELETE))
                 {
@@ -455,8 +469,7 @@ public class AdminDispatchServlet extends HttpServlet
                 }
 
                 // ==============================================================================================
-                // ADMIN
-                // ACCOUNT
+                // ADMIN ACCOUNT
                 // ==============================================================================================
                 else if (vAction.equals(Constants.GOTO_ACCOUNT_ADMIN))
                 {
@@ -464,8 +477,7 @@ public class AdminDispatchServlet extends HttpServlet
                 }
 
                 // ==============================================================================================
-                // GOTO
-                // SAVE_ACCOUNT
+                // GOTO_SAVE_ACCOUNT
                 // ==============================================================================================
                 else if (vAction.equals(Constants.GOTO_SAVE_ACCOUNT))
                 {
@@ -490,8 +502,7 @@ public class AdminDispatchServlet extends HttpServlet
                 }
 
                 // ==============================================================================================
-                // SAVE
-                // ACCOUNT
+                // SAVE ACCOUNT
                 // ==============================================================================================
                 else if (vAction.equals(Constants.SAVE_ACCOUNT))
                 {
@@ -502,8 +513,7 @@ public class AdminDispatchServlet extends HttpServlet
                 }
 
                 // ==============================================================================================
-                // DEREGISTRATE
-                // ACCOUNT
+                // DEREGISTRATE ACCOUNT
                 // ==============================================================================================
                 else if (vAction.equals(Constants.ACCOUNT_DEREG))
                 {
@@ -512,10 +522,7 @@ public class AdminDispatchServlet extends HttpServlet
                 }
 
                 // ==============================================================================================
-                // ADD
-                // ACCOUNT
-                // button
-                // pushed
+                // ADD ACCOUNT
                 // ==============================================================================================
                 else if (vAction.equals(Constants.GOTO_ACCOUNT_ADD))
                 {
@@ -524,8 +531,6 @@ public class AdminDispatchServlet extends HttpServlet
 
                 // ==============================================================================================
                 // GOTO_EMPLOYEE_ADD
-                // button
-                // pushed
                 // ==============================================================================================
                 else if (vAction.equals(Constants.GOTO_EMPLOYEE_ADD))
                 {
@@ -533,11 +538,7 @@ public class AdminDispatchServlet extends HttpServlet
                 }
 
                 // ==============================================================================================
-                // UPDATE
-                // ACCOUNT
-                // (account
-                // kollom
-                // selected)
+                // UPDATE ACCOUNT
                 // ==============================================================================================
                 else if (vAction.equals(Constants.ACCOUNT_UPDATE))
                 {
@@ -545,8 +546,7 @@ public class AdminDispatchServlet extends HttpServlet
                 }
 
                 // ==============================================================================================
-                // ADD
-                // ACCOUNT
+                // ADD ACCOUNT
                 // ==============================================================================================
                 else if (vAction.equals(Constants.ACCOUNT_ADD))
                 {
@@ -603,8 +603,7 @@ public class AdminDispatchServlet extends HttpServlet
                 }
 
                 // ==============================================================================================
-                // ADMIN
-                // INVOICES
+                // ADMIN INVOICES
                 // ==============================================================================================
                 else if (vAction.equals(Constants.GOTO_INVOICE_ADMIN))
                 {
@@ -616,8 +615,7 @@ public class AdminDispatchServlet extends HttpServlet
                 }
 
                 // ==============================================================================================
-                // GENERATE
-                // INVOICE
+                // GENERATE INVOICE
                 // ==============================================================================================
                 else if (vAction.equals(Constants.GENERATE_INVOICE))
                 {
@@ -639,9 +637,7 @@ public class AdminDispatchServlet extends HttpServlet
                 }
 
                 // ==============================================================================================
-                // GOTO
-                // OPEN
-                // INVOICE
+                // GOTO OPEN INVOICE
                 // ==============================================================================================
                 else if (vAction.equals(Constants.GOTO_OPEN_INVOICE))
                 {
@@ -649,9 +645,7 @@ public class AdminDispatchServlet extends HttpServlet
                 }
 
                 // ==============================================================================================
-                // GENERATE
-                // All
-                // INVOICES
+                // GENERATE All INVOICES
                 // ==============================================================================================
                 else if (vAction.equals(Constants.GENERATE_ALL_INVOICES))
                 {
@@ -660,8 +654,7 @@ public class AdminDispatchServlet extends HttpServlet
                 }
 
                 // ==============================================================================================
-                // FREEZE
-                // INVOICES
+                // FREEZE INVOICES
                 // ==============================================================================================
                 else if (vAction.equals(Constants.INVOICE_FREEZE))
                 {
@@ -670,8 +663,7 @@ public class AdminDispatchServlet extends HttpServlet
                 }
 
                 // ==============================================================================================
-                // MAIL
-                // INVOICES
+                // MAIL INVOICES
                 // ==============================================================================================
                 else if (vAction.equals(Constants.INVOICE_MAIL))
                 {
@@ -680,9 +672,7 @@ public class AdminDispatchServlet extends HttpServlet
                 }
 
                 // ==============================================================================================
-                // SET
-                // INVOICES
-                // PAYED
+                // SET INVOICES PAYED
                 // ==============================================================================================
                 else if (vAction.equals(Constants.INVOICE_SETPAYED))
                 {
@@ -691,8 +681,7 @@ public class AdminDispatchServlet extends HttpServlet
                 }
 
                 // ==============================================================================================
-                // DELETE
-                // INVOICES
+                // DELETE INVOICES
                 // ==============================================================================================
                 else if (vAction.equals(Constants.INVOICE_DELETE))
                 {
@@ -701,8 +690,7 @@ public class AdminDispatchServlet extends HttpServlet
                 }
 
                 // ==============================================================================================
-                // SAVE
-                // INVOICES
+                // SAVE INVOICES
                 // ==============================================================================================
                 else if (vAction.equals(Constants.SAVE_INVOICE))
                 {
@@ -711,9 +699,7 @@ public class AdminDispatchServlet extends HttpServlet
                 }
 
                 // ==============================================================================================
-                // SAVE
-                // INVOICE
-                // PAYDATE
+                // SAV INVOICE PAYDATE
                 // ==============================================================================================
                 else if (vAction.equals(Constants.SAVE_PAYDATE))
                 {
@@ -722,9 +708,7 @@ public class AdminDispatchServlet extends HttpServlet
                 }
 
                 // ==============================================================================================
-                // GOTO
-                // INVOICE
-                // ADD
+                // GOTO INVOICE ADD
                 // ==============================================================================================
                 else if (vAction.equals(Constants.GOTO_INVOICE_ADD))
                 {
@@ -734,8 +718,7 @@ public class AdminDispatchServlet extends HttpServlet
                 }
 
                 // ==============================================================================================
-                // INVOICES
-                // ADD
+                // INVOICES ADD
                 // ==============================================================================================
                 else if (vAction.equals(Constants.INVOICE_ADD))
                 {
@@ -780,8 +763,7 @@ public class AdminDispatchServlet extends HttpServlet
                 }
 
                 // ==============================================================================================
-                // DELETE
-                // TASK
+                // DELETE TASK
                 // ==============================================================================================
                 else if (vAction.equals(Constants.TASK_DELETE))
                 {
@@ -790,8 +772,7 @@ public class AdminDispatchServlet extends HttpServlet
                 }
 
                 // ==============================================================================================
-                // ADMIN
-                // TASK
+                // ADMIN TASK
                 // ==============================================================================================
                 else if (vAction.equals(Constants.GOTO_TASK_ADMIN))
                 {
@@ -801,8 +782,7 @@ public class AdminDispatchServlet extends HttpServlet
                 }
 
                 // ==============================================================================================
-                // MODIFY
-                // TASK
+                // MODIFY TASK
                 // ==============================================================================================
                 else if (vAction.equals(Constants.TASK_UPDATE))
                 {
@@ -811,8 +791,7 @@ public class AdminDispatchServlet extends HttpServlet
                 }
 
                 // ==============================================================================================
-                // SAVE
-                // TASK
+                // SAVE TASK
                 // ==============================================================================================
                 else if (vAction.equals(Constants.SAVE_TASK))
                 {
@@ -821,10 +800,7 @@ public class AdminDispatchServlet extends HttpServlet
                 }
 
                 // ==============================================================================================
-                // ADD
-                // TASK
-                // button
-                // pushed
+                // ADD TASK
                 // ==============================================================================================
                 else if (vAction.equals(Constants.GOTO_TASK_ADD))
                 {
@@ -832,8 +808,7 @@ public class AdminDispatchServlet extends HttpServlet
                 }
 
                 // ==============================================================================================
-                // ADD
-                // TASK
+                // ADD TASK
                 // ==============================================================================================
                 else if (vAction.equals(Constants.TASK_ADD))
                 {
@@ -880,8 +855,7 @@ public class AdminDispatchServlet extends HttpServlet
                 }
 
                 // ==============================================================================================
-                // ADMIN
-                // HOME
+                // ADMIN HOME
                 // ==============================================================================================
                 else if (vAction.equals(Constants.ADMIN_HOME))
                 {
@@ -889,10 +863,7 @@ public class AdminDispatchServlet extends HttpServlet
                 }
 
                 // ==============================================================================================
-                // LOG
-                // OUT
-                // button
-                // pushed
+                // LOG OUT
                 // ==============================================================================================
                 else if (vAction.equals(Constants.ADMIN_LOG_OFF))
                 {
