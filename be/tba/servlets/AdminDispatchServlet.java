@@ -398,6 +398,7 @@ public class AdminDispatchServlet extends HttpServlet
                 else if (vAction.equals(Constants.REMOVE_OPEN_CALL))
                 {
                     CallRecordFacade.removeNewCall(req, vSession);
+                    rd = sc.getRequestDispatcher(Constants.ADMIN_CALLS_JSP);
                 }
 
                 // ==============================================================================================

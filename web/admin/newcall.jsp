@@ -299,7 +299,6 @@ function refreshOpenCalls()
 function removeOpenCalls()
 {
   document.newcallform.<%=Constants.SRV_ACTION%>.value="<%=Constants.REMOVE_OPEN_CALL%>";
-  window.close();
 }
 
 function hooverOnRow(id, recordId)
@@ -339,7 +338,6 @@ function updateSaveId(id, recordId)
 
 function saveCall()
 {
-  //setTimeout("window.close()",2000);
   if (recordToSave != null)
   {
     document.newcallform.<%=Constants.RECORD_ID%>.value=recordToSave;
