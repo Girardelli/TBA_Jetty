@@ -124,7 +124,7 @@ public class CallRecordFacade
         Calendar vCalendar = Calendar.getInstance();
         newRecord.setIsNotLogged(false);
         newRecord.setIsReleased(false);
-        newRecord.setIsVirgin(false);
+        newRecord.setIsVirgin(true); //yves
 
         newRecord.setIsAgendaCall(req.getParameter(Constants.RECORD_AGENDA) != null);
         newRecord.setIsSmsCall(req.getParameter(Constants.RECORD_SMS) != null);
@@ -298,7 +298,7 @@ public class CallRecordFacade
             //System.out.println("saveNewCall: id = " + vNewRecord.getId());
             if (subcustomers != null && !subcustomers.isEmpty())
             {
-                System.out.println("there are subcustomers. Set the super customer=" + vNewRecord.getFwdNr());
+                System.out.println("there are subcustomers. Set the super customer=" + vNewRecord.getFwdNr() + ", record key=" + vKey);
                 // set the fwdNr of the super customer so that selectSubCustomer.jsp can prepare the sub customers list
                 //req.setAttribute(Constants.ACCOUNT_ID, vNewCall.getFwdNr());
                 webSession.setRecordId(vKey);

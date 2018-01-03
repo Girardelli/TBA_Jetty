@@ -98,9 +98,8 @@ if (vCustomerFilter == null) vCustomerFilter = Constants.ACCOUNT_FILTER_ALL;
 %>
 <body>
 <p><span class="admintitle"> Oproepenlijst: <%=vRecords.size()%> oproepen </span></p>
-<form name="calllistform" method="POST"
-	action="/TheBusinessAssistant/AdminDispatch"><input type=hidden
-	name=<%=Constants.RECORD_TO_DELETE%> value=""> 
+<form name="calllistform" method="POST"	action="/TheBusinessAssistant/AdminDispatch">
+	<input type=hidden name=<%=Constants.RECORD_TO_DELETE%> value=""> 
 	<input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.GOTO_RECORD_ADMIN%>"> 
 <table width='100%' cellspacing='0' cellpadding='0' border='0'
 	bgcolor="FFFFFF">
@@ -162,7 +161,7 @@ out.println("</td>");
 			</tr>
 		</table>
 		<br>
-        <input class="tbabutton" type=submit name=action value="Oproep" onclick="newCall('/TheBusinessAssistant/admin/newcall.jsp','New_Call_arrived','toolbar=yes,location=no,directories=no,status=no,member=no,scrollbars=yes,resizable=yes,copyhistory=no,width=900,height=650,screenX=0,screenY=0,top=0,left=0');">
+        <input class="tbabutton" type=submit name=action value="Oproep" onclick="newCall()">
         &nbsp;&nbsp;&nbsp;&nbsp;
         <input class="tbabutton" type=submit name=action value="Refresh" onclick="filterCalls()">
 		<input class="tbabutton" type=submit name=action value="Verwijderen" onclick="deleteCalls()"> 
@@ -499,13 +498,9 @@ function mailError()
 
 var newwindow = '';
 
-function newCall(url)
+function newCall()
 {
-  newwindow = window.open(url);
-
-  if (!newwindow.opener) newwindow.opener = self;
-  if (window.focus) {newwindow.focus()}
-  return false;
+	document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.NEW_CALL%>";
 }
 
 </script>

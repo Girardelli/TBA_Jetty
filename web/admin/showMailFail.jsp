@@ -9,6 +9,7 @@
 <meta name="Copyright"
 	content="Copyright © 2003 TheBusinessAssistant, All rights reserved.">
 <meta name="Distribution" content="Global">
+<link rel="shortcut icon" href="./images/favicon.png" type="image/x-icon" />
 <link rel="stylesheet" type="text/css"
 	href="/TheBusinessAssistant/TheBusinessAssistant.css" title="main">
 </head>

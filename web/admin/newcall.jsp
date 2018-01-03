@@ -36,11 +36,7 @@ be.tba.util.data.*"%>
 			<td valign="top" bgcolor="FFFFFF"><br>
 			<br>
 			<span class="bodytekst"> <!-- action name must be a URI name as it is set in the <application>.xml servlet-mapping tag.-->
-			<form name="newcallform" method="POST"
-				action="/TheBusinessAssistant/AdminDispatch" target=""setTimeout('window.close()',2000)>
-
-			<!--        <form name="newcallform" method="POST" action="/TheBusinessAssistant/AdminDispatch" target="callswindow" onSubmit="setTimeout('window.close()',1000)"> -->
-
+			<form name="newcallform" method="POST" action="/TheBusinessAssistant/AdminDispatch">
 			<%
 try
 {
@@ -348,9 +344,6 @@ function saveCall()
   {
     document.newcallform.<%=Constants.RECORD_ID%>.value=recordToSave;
     document.newcallform.<%=Constants.SRV_ACTION%>.value="<%=Constants.SAVE_NEW_CALL%>";
-    document.newcallform.submit();
-    document.newcallform.target="callswindow";
-    window.close();
   }
   return false;
 }

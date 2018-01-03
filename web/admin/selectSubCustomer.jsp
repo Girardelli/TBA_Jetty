@@ -24,7 +24,8 @@ be.tba.util.session.*"%>
 
 try 
 {
-	vSession.setCallingJsp(Constants.SELECT_SUBCUSTOMER_JSP);
+    System.out.println("enter SELECT_SUBCUSTOMER_JSP");
+    vSession.setCallingJsp(Constants.SELECT_SUBCUSTOMER_JSP);
 	
 	String vFwdNr = vSession.getNewUnmappedCall().getFwdNr();
 	
@@ -33,6 +34,7 @@ try
 	
 	AccountEntityData vCustomer = AccountCache.getInstance().get(vFwdNr);
 	String vFullName = vCustomer.getFullName();
+	System.out.println("building SELECT_SUBCUSTOMER_JSP");
 %>
 <body>
 	<table width='100%' cellspacing='0' cellpadding='0' border='0'
@@ -77,7 +79,7 @@ try
 						<br>
 				        <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.SAVE_NEW_SUBCUSTOMER%>"> 
 				        <input type=hidden name=<%=Constants.ACCOUNT_FWDNR%> value="<%=vFwdNr%>"> 
-				        <input class="tbabutton" type=submit name=action value="Bewaar" onclick="Bewaar()"> 
+				        <input class="tbabutton" type=submit name=action value="Bewaar"> <!-- onclick="Bewaar()"> -->  
         	        </form>
 		         </span>
 		     </td>
@@ -85,6 +87,7 @@ try
 </table>
 
 	<%
+	System.out.println("end SELECT_SUBCUSTOMER_JSP");
 }
 }
 catch (Exception e)
@@ -93,12 +96,6 @@ e.printStackTrace();
 }
 
 %>
-	<script type="text/javascript">
-function Bewaar()
-{
-  document.updateForm.<%=Constants.SRV_ACTION%>.value="<%=Constants.SAVE_NEW_SUBCUSTOMER%>";
-}
-
 
 </script>
 

@@ -487,6 +487,8 @@ public class Constants
     public static final String GET_OPEN_CALLS = "GET_OPEN_CALLS";
 
     public static final String REFRESH_OPEN_CALLS = "REFRESH_OPEN_CALLS";
+    
+    public static final String NEW_CALL = "NEW_CALL";
 
     public static final String SAVE_NEW_CALL = "SAVE_NEW_CALL";
     

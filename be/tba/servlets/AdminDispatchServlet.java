@@ -310,6 +310,15 @@ public class AdminDispatchServlet extends HttpServlet
                 }
 
                 // ==============================================================================================
+                // NEW_CALL
+                // ==============================================================================================
+                else if (vAction.equals(Constants.NEW_CALL))
+                {
+                    CallRecordFacade.updateNewUnmappedCall(req, vSession);
+                    rd = sc.getRequestDispatcher(Constants.NEW_CALL_JSP);
+                }
+
+                // ==============================================================================================
                 // GET_OPEN_CALLS
                 // ==============================================================================================
                 else if (vAction.equals(Constants.GET_OPEN_CALLS))
@@ -341,10 +350,13 @@ public class AdminDispatchServlet extends HttpServlet
                     {
                         if (CallRecordFacade.saveNewCall(req, vSession))
                         {
+                            //System.out.println("fire SELECT_SUBCUSTOMER_JSP");
                             rd = sc.getRequestDispatcher(Constants.SELECT_SUBCUSTOMER_JSP);
+                            //System.out.println("getRequestDispatcher done");
                         }
                         else
                         {
+                            //System.out.println("fire ADMIN_CALLS_JSP");
                             rd = sc.getRequestDispatcher(Constants.ADMIN_CALLS_JSP);
                         }
                     }
@@ -359,7 +371,7 @@ public class AdminDispatchServlet extends HttpServlet
                     String vNewFwdNr = (String)  req.getParameter(Constants.NEW_ACCOUNT_FWDNR);
                     String vOldFwdNr = (String)  req.getParameter(Constants.ACCOUNT_FWDNR);
                     
-                    System.out.println("SAVE_NEW_SUBCUSTOMER " + vNewFwdNr + ", " + vOldFwdNr);
+                    //System.out.println("SAVE_NEW_SUBCUSTOMER " + vNewFwdNr + ", " + vOldFwdNr);
                     if (vNewFwdNr == null)
                     {
                         rd = sc.getRequestDispatcher(Constants.NEW_CALL_JSP);
@@ -881,8 +893,9 @@ public class AdminDispatchServlet extends HttpServlet
                     throw new SystemErrorException("Onbekende actie (" + vAction + ")");
                 }
                 if (rd != null)
+                {
                     rd.forward(req, res);
-
+                }
             }
         }
         catch (AccessDeniedException e)
