@@ -27,6 +27,7 @@ public class TbaPdfInvoice
     private CallCounts mCallCounts = null;
     private Collection<TaskEntityData> mTaskList = null;
     private Collection<SubcustomerCost> mSubcustomers = null;
+     
 
     DecimalFormat mCostFormatter = new DecimalFormat("#0.00");
 
@@ -74,7 +75,7 @@ public class TbaPdfInvoice
      * @throws COSVisitorException
      *             If there is an error generating the data.
      */
-    public void doIt()
+    public void createInvoice()
     {
         if (mCustomerData == null || mInvoiceData == null || mCallCounts == null)
         {
@@ -86,7 +87,7 @@ public class TbaPdfInvoice
         {
             fillAddress();
             fillCustomerRef();
-            fillDescription();
+            fillDescription(false);
             fillSummaryTable();
             fillTaskList();
             fillSubcustomers();
@@ -97,6 +98,25 @@ public class TbaPdfInvoice
             e.printStackTrace();
         }
 
+    }
+
+    public void createCreditNote()
+    {
+        if (mCustomerData == null)
+        {
+            throw new IllegalArgumentException("data objects are not set.");
+        }
+        try
+        {
+            fillAddress();
+            fillCustomerRef();
+            fillDescription(true);
+        }
+        catch (Exception e)
+        {
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     public void setCustomerData(CustomerData customerData)
@@ -122,6 +142,16 @@ public class TbaPdfInvoice
     public void setSubCustomers(Collection<SubcustomerCost> subCustomerList)
     {
         mSubcustomers = subCustomerList;
+    }
+    
+    public void setCreditNoteData(double totalCost, double btw, String customerRef, String number)
+    {
+        mInvoiceData = new InvoiceData();
+        
+        mInvoiceData.TotalCost = totalCost;
+        mInvoiceData.Btw = btw;
+        mInvoiceData.CustomerRef = customerRef;
+        mInvoiceData.InvoiceNr = number;
     }
 
     public void closeAndSave()
@@ -174,11 +204,13 @@ public class TbaPdfInvoice
 
     private void fillCustomerRef() throws IOException
     {
-        if (mInvoiceData.CustomerRef != null && mInvoiceData.CustomerRef.length() > 0)
+        if (mInvoiceData != null && mInvoiceData.CustomerRef != null && mInvoiceData.CustomerRef.length() > 0)
         {
             int y = 590;
 
-            System.err.println("fillCustomerRef : " + mInvoiceData.CustomerRef);
+            //System.err.println("fillCustomerRef : " + mInvoiceData.CustomerRef);
+            writeText(mPage1, "Klantreferentie: ", PDType1Font.TIMES_BOLD, 11, 90, y);
+            y -= kSpacing;
             String lineArr[] = mInvoiceData.CustomerRef.split("\n");
             for (int i = 0; i < lineArr.length; ++i)
             {
@@ -189,17 +221,24 @@ public class TbaPdfInvoice
         }
         else
         {
-            System.err.println("No fillCustomerRef()");
+            //System.err.println("No fillCustomerRef()");
         }
     }
 
-    private void fillDescription() throws IOException
+    private void fillDescription(boolean isCreditNote) throws IOException
     {
         writeText(mPage1, mInvoiceData.InvoiceNr, PDType1Font.TIMES_ROMAN, 11, 185, 485);
         writeText(mPage1, mInvoiceData.Date, PDType1Font.TIMES_ROMAN, 11, 185, 485 - kSpacing);
 
-        writeText(mPage1, "Diensten die werden uitgevoerd tijdens de maand " + Constants.MONTHS[mInvoiceData.Month], PDType1Font.TIMES_ITALIC, 11, 100, 420);
-        writeText(mPage1, "(Detail van de kostenstaat vindt u in bijlage).", PDType1Font.TIMES_ITALIC, 11, 100, 420 - kSpacing);
+        if (isCreditNote)
+        {
+            writeText(mPage1, "Credit nota", PDType1Font.TIMES_ITALIC, 11, 100, 420);
+        }
+        else
+        {
+            writeText(mPage1, "Diensten die werden uitgevoerd tijdens de maand " + Constants.MONTHS[mInvoiceData.Month], PDType1Font.TIMES_ITALIC, 11, 100, 420);
+            writeText(mPage1, "(Detail van de kostenstaat vindt u in bijlage).", PDType1Font.TIMES_ITALIC, 11, 100, 420 - kSpacing);
+        }
         writeText(mPage1, mCostFormatter.format(mInvoiceData.TotalCost), PDType1Font.TIMES_BOLD, 11, 480, 420);
         writeText(mPage1, mCostFormatter.format(mInvoiceData.Btw), PDType1Font.TIMES_BOLD, 11, 480, 358);
         writeText(mPage1, mCostFormatter.format(mInvoiceData.Btw + mInvoiceData.TotalCost), PDType1Font.TIMES_BOLD, 11, 480, 328);
@@ -444,20 +483,23 @@ public class TbaPdfInvoice
             return;
         }
         text = text.replaceAll("\r", "");
-        text = text.replaceAll("\n", "");
-        PDPageContentStream contentStream = new PDPageContentStream(mDocument, page, true, false);
+        text = text.replaceAll("\n", " ");
+        //PDPageContentStream contentStream = new PDPageContentStream(mDocument, page, true, false);
+        PDPageContentStream contentStream = new PDPageContentStream(mDocument, page, PDPageContentStream.AppendMode.APPEND, false);
         contentStream.beginText();
         contentStream.setFont(font, fontSize);
         // contentStream.setNonStrokingColor(Color.blue);
-        contentStream.moveTextPositionByAmount(x, y);
-        contentStream.drawString(text);
+        //contentStream.moveTextPositionByAmount(x, y);
+        contentStream.newLineAtOffset(x, y);
+        //contentStream.drawString(text);
+        contentStream.showText(text);
         contentStream.endText();
         contentStream.close();
     }
 
     private void drawLine(PDPage page, float x1, float y1, float x2, float y2) throws IOException
     {
-        PDPageContentStream contentStream = new PDPageContentStream(mDocument, page, true, false);
+        PDPageContentStream contentStream = new PDPageContentStream(mDocument, page, PDPageContentStream.AppendMode.APPEND, false);
         contentStream.moveTo(x1, y1);
         contentStream.lineTo(x2, y2);
         contentStream.stroke();

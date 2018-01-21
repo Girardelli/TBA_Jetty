@@ -1,5 +1,6 @@
 package be.tba.servlets.helper;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Collection;
@@ -14,7 +15,9 @@ import be.tba.ejb.invoice.interfaces.InvoiceEntityData;
 import be.tba.ejb.invoice.session.InvoiceSqlAdapter;
 import be.tba.servlets.session.WebSession;
 import be.tba.util.constants.Constants;
+import be.tba.util.invoice.CustomerData;
 import be.tba.util.invoice.InvoiceHelper;
+import be.tba.util.invoice.TbaPdfInvoice;
 import be.tba.util.session.AccountCache;
 
 public class InvoiceFacade
@@ -37,7 +40,7 @@ public class InvoiceFacade
         String vInvoiceId = req.getParameter(Constants.INVOICE_TO_SAVE);
         InvoiceSqlAdapter vInvoiceSession = new InvoiceSqlAdapter();
 
-        InvoiceEntityData vInvoice = vInvoiceSession.getInvoice(session, vInvoiceId);
+        InvoiceEntityData vInvoice = vInvoiceSession.getInvoiceById(session, vInvoiceId);
         if (vInvoice != null)
         {
             vInvoice.setCustomerRef((String) req.getParameter(Constants.INVOICE_CUST_REF));
@@ -50,7 +53,7 @@ public class InvoiceFacade
         String vInvoiceId = req.getParameter(Constants.INVOICE_TO_SAVE);
         InvoiceSqlAdapter vInvoiceSession = new InvoiceSqlAdapter();
 
-        InvoiceEntityData vInvoice = vInvoiceSession.getInvoice(session, vInvoiceId);
+        InvoiceEntityData vInvoice = vInvoiceSession.getInvoiceById(session, vInvoiceId);
         if (vInvoice != null)
         {
             vInvoice.setPayDate((String) req.getParameter(Constants.INVOICE_PAYDATE));
@@ -113,7 +116,14 @@ public class InvoiceFacade
             InvoiceSqlAdapter vInvoiceSession = new InvoiceSqlAdapter();
             while (vStrTok.hasMoreTokens())
             {
-                vInvoiceSession.deleteRow(session.getConnection(), Integer.parseInt(vStrTok.nextToken()));
+                int key = Integer.parseInt(vStrTok.nextToken());
+                InvoiceEntityData data = vInvoiceSession.getRow(session.getConnection(), key);
+                if (data != null && data.getCreditId() > 0)
+                {
+                    //delete also the credit note
+                    vInvoiceSession.deleteRow(session.getConnection(), data.getCreditId());
+                }
+                vInvoiceSession.deleteRow(session.getConnection(), key);
             }
         }
     }
@@ -182,6 +192,59 @@ public class InvoiceFacade
         newInvoice.setFileName(InvoiceHelper.makeFileName(newInvoice));
 
         vInvoiceSession.addRow(session.getConnection(), newInvoice);
+    }
+
+
+    public static void generateCreditInvoice(HttpServletRequest req, WebSession session) 
+    {
+        int invoiceId = session.getInvoiceId();
+        if (invoiceId != -1)
+        {
+            InvoiceSqlAdapter vInvoiceSession = new InvoiceSqlAdapter();
+            InvoiceEntityData vInvoiceData = vInvoiceSession.getInvoiceById(session, Integer.toString(invoiceId));
+            
+            if (vInvoiceData != null)
+            {
+                InvoiceEntityData vCreditInvoiceData = new InvoiceEntityData(vInvoiceData);
+                vCreditInvoiceData.setId(0);
+                vCreditInvoiceData.setTotalCost(-vInvoiceData.getTotalCost());
+                vCreditInvoiceData.setFileName(InvoiceHelper.makeCreditInvoiceFileName(vInvoiceData));
+                vCreditInvoiceData.setIsInvoiceMailed(false);
+                vCreditInvoiceData.setIsPayed(true);
+                vCreditInvoiceData.setFrozenFlag(false);
+                vCreditInvoiceData.setCreditId(-1);
+                vCreditInvoiceData.setInvoiceNr("C" + vInvoiceData.getInvoiceNr());
+                vCreditInvoiceData.setCustomerRef(vInvoiceData.getCustomerRef());
+                vCreditInvoiceData.setMonth(vInvoiceData.getMonth());
+                vCreditInvoiceData.setStartTime(vInvoiceData.getStartTime());
+                vCreditInvoiceData.setStopTime(vInvoiceData.getStopTime());
+                vCreditInvoiceData.setYear(vInvoiceData.getYear());
+                vCreditInvoiceData.setYearSeqNr(vInvoiceData.getYearSeqNr());
+                vCreditInvoiceData.setPayDate("Credit nota");
+                // write them to the DB
+                int id = vInvoiceSession.addInvoice(session, vCreditInvoiceData);
+                vInvoiceData.setCreditId(id);
+                vInvoiceSession.updateRow(session.getConnection(), vInvoiceData);
+                
+                AccountEntityData account = AccountCache.getInstance().get(vInvoiceData.getAccountFwdNr());
+                CustomerData customerData = new CustomerData();
+                customerData.setAddress1(account.getStreet());
+                customerData.setAddress2(account.getCity());
+                customerData.setBtwNr(account.getBtwNumber());
+                customerData.setName(account.getCompanyName());
+                customerData.setTaskHourRate(account.getTaskHourRate());
+                customerData.setTAV(account.getAttToName());
+                
+                TbaPdfInvoice pdfCreditNote = new TbaPdfInvoice(new File(vCreditInvoiceData.getFileName()), new File(Constants.INVOICE_HEAD_TMPL));
+                pdfCreditNote.setCreditNoteData(vCreditInvoiceData.getTotalCost(), 
+                        account.getNoBtw() ? 0.0 : vCreditInvoiceData.getTotalCost() * 0.21,
+                        vCreditInvoiceData.getCustomerRef(),
+                        vCreditInvoiceData.getInvoiceNr());
+                pdfCreditNote.setCustomerData(customerData);
+                pdfCreditNote.createCreditNote();
+                pdfCreditNote.closeAndSave();
+            }
+        }
     }
 
 }

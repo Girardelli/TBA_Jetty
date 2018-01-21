@@ -107,7 +107,7 @@ private StringBuilder allEntryIds;%>
 	
 			                allEntryIds = new StringBuilder("[");
 	
-			                Collection vInvoices = null;
+			                Collection<InvoiceEntityData> vInvoices = null;
 			                InvoiceSqlAdapter vInvoiceSession = new InvoiceSqlAdapter();
 	
 			                vInvoices = vInvoiceSession.getInvoiceList(vSession, vMonth, vYear);
@@ -121,7 +121,7 @@ private StringBuilder allEntryIds;%>
 			                    DecimalFormat vCostFormatter = new DecimalFormat("#0.00");
 			                    double vTotalInvoice = 0.0;
 			                    
-			                    for (Iterator i = vInvoices.iterator(); i.hasNext();)
+			                    for (Iterator<InvoiceEntityData> i = vInvoices.iterator(); i.hasNext();)
 			                    {
 			                        InvoiceEntityData vEntry = ((InvoiceEntityData) i.next());
 			                        vTotalInvoice += vEntry.getTotalCost();
@@ -130,8 +130,8 @@ private StringBuilder allEntryIds;%>
 			%> <br>
 			<table border="0" cellspacing="2" cellpadding="2">
 				<tr>
-					<td width="20" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Betaald</td>
-					<td width="90" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Nummer</td>
+					<td width="150" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Betaald</td>
+					<td width="110" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Nummer</td>
 					<td width="350" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Klant</td>
 					<td width="50" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Excl BTW</td>
 					<td width="50" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Incl BTW</td>
@@ -140,10 +140,10 @@ private StringBuilder allEntryIds;%>
 				<%
 
          int vRowInd = 0;
-         for (Iterator i = vInvoices.iterator(); i.hasNext();)
+         for (Iterator<InvoiceEntityData> i = vInvoices.iterator(); i.hasNext();)
          {
              InvoiceEntityData vEntry = ((InvoiceEntityData) i.next());
-             if (vEntry.getTotalCost() > 0)
+             if (vEntry.getTotalCost() != 0)
              {
                  String vCollor = "FFCC66";
                  if (vEntry.getFrozenFlag())
@@ -181,7 +181,7 @@ private StringBuilder allEntryIds;%>
                  }
 				if (vEntry.getIsPayed())
 				{
-				    vEuroGif = "<img src=\"/TheBusinessAssistant/images/euro.gif\" height=\"16\" border=\"0\">";
+				    vEuroGif = "<img src=\"/TheBusinessAssistant/images/euro-16x16.png\" height=\"16\" border=\"0\">";
 				}
 				%>
 				<tr bgcolor=<%=vCollor%> id=<%=vId%> class="bodytekst"
@@ -189,9 +189,9 @@ private StringBuilder allEntryIds;%>
 					onmouseout="hooverOffRow('<%=vId%>','<%=vRowInd%>')"
 					onclick="updateDeleteFlag('<%=vId%>','<%=vEntry.getId()%>','<%=vRowInd%>')"
 					ondblclick="changeUrl('/TheBusinessAssistant/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_INVOICE%>&<%=Constants.ACCOUNT_FILTER_CUSTOMER%>=<%=vEntry.getAccountFwdNr()%>&<%=Constants.INVOICE_ID%>=<%=vEntry.getId()%>');">
-					<td width="30" valign="top"><%=vEuroGif%>&nbsp&nbsp<%=vEntry.getPayDate()%></td>
-					<td width="90" valign="top"><%=vStyleStart%><%=vEntry.getInvoiceNr()%><%=vStyleEnd%></td>
-					<td width="290" valign="top"><%=vStyleStart%><%=vCompanyName%><%=vStyleEnd%></td>
+					<td width="150" valign="top"><%=vEuroGif%>&nbsp&nbsp<%=vEntry.getPayDate()%></td>
+					<td width="110" valign="top"><%=vStyleStart%><%=vEntry.getInvoiceNr()%><%=vStyleEnd%></td>
+					<td width="350" valign="top"><%=vStyleStart%><%=vCompanyName%><%=vStyleEnd%></td>
 					<td width="50" valign="top"><%=vStyleStart%><%=vCostFormatter.format(vKost)%><%=vStyleEnd%></td>
 					<td width="50" valign="top"><%=vStyleStart%><%=((vAccount!= null && vAccount.getNoBtw()) ? "0.0" : vCostFormatter.format(vKost * 1.21))%><%=vStyleEnd%></td>
 				</tr>

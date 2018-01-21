@@ -719,7 +719,16 @@ public class AdminDispatchServlet extends HttpServlet
                     InvoiceFacade.savePayDate(req, vSession);
                     rd = sc.getRequestDispatcher(Constants.ADMIN_INVOICE_JSP);
                 }
-
+                
+                // ==============================================================================================
+                // GENERATE_CREDITNOTE
+                // ==============================================================================================
+                else if (vAction.equals(Constants.GENERATE_CREDITNOTE))
+                {
+                    InvoiceFacade.generateCreditInvoice(req, vSession);
+                    rd = sc.getRequestDispatcher(Constants.ADMIN_INVOICE_JSP);
+                }
+                
                 // ==============================================================================================
                 // GOTO INVOICE ADD
                 // ==============================================================================================

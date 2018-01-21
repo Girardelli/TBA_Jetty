@@ -67,18 +67,24 @@ final public class AccountCache
             Connection con = null;
             try
             {
-                ctx = new InitialContext();
-                DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/MySqlDS");
-                con = ds.getConnection();
+                //ctx = new InitialContext();
+                //DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/MySqlDS");
+                //con = ds.getConnection();
+                con = DriverManager.getConnection(Constants.MYSQL_URL);
                 mInstance = new AccountCache();
                 mInstance.update(con);
             }
-            catch (NamingException e)
+/*            catch (NamingException e)
             {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-            catch (SQLException e)
+*/            catch (SQLException e)
+            {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            catch (Exception e)
             {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

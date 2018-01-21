@@ -30,12 +30,16 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
     private boolean isInvoiceMailed;
     private java.lang.String customerRef;
     private java.lang.String payDate;
+    // -1 means regular invoice
+    // 0 means this is a credit invoice
+    // db id means it is a regular invoice with a credit invoice counterpart indicated by this id.
+    private int creditId = -1;
 
     public InvoiceEntityData()
     {
     }
 
-    public InvoiceEntityData(int id, java.lang.String fileName, java.lang.String accountFwdNr, double totalCost, int month, int year, int yearSeqNr, java.lang.String invoiceNr, boolean frozenFlag, boolean isPayed, long startTime, long stopTime, java.lang.String customerName, boolean isInvoiceMailed, java.lang.String customerRef, java.lang.String payDate)
+    public InvoiceEntityData(int id, java.lang.String fileName, java.lang.String accountFwdNr, double totalCost, int month, int year, int yearSeqNr, java.lang.String invoiceNr, boolean frozenFlag, boolean isPayed, long startTime, long stopTime, java.lang.String customerName, boolean isInvoiceMailed, java.lang.String customerRef, java.lang.String payDate, int creditId)
     {
         setId(id);
         setFileName(fileName);
@@ -53,6 +57,7 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
         setIsInvoiceMailed(isInvoiceMailed);
         setCustomerRef(customerRef);
         setPayDate(payDate);
+        setCreditId(creditId);
     }
 
     public InvoiceEntityData(InvoiceEntityData otherData)
@@ -73,7 +78,7 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
         setIsInvoiceMailed(otherData.getIsInvoiceMailed());
         setCustomerRef(otherData.getCustomerRef());
         setPayDate(otherData.getPayDate());
-
+        setCreditId(otherData.getCreditId());
     }
 
     public be.tba.ejb.invoice.interfaces.InvoiceEntityPK getPrimaryKey()
@@ -252,6 +257,16 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
         return (str.toString());
     }
 
+    public int getCreditId()
+    {
+        return this.creditId;
+    }
+
+    public void setCreditId(int creditId)
+    {
+        this.creditId = creditId;
+    }
+
     public boolean equals(Object pOther)
     {
         if (pOther instanceof InvoiceEntityData)
@@ -289,6 +304,7 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
                 lEquals = lEquals && this.invoiceNr.equals(lTest.invoiceNr);
             }
             lEquals = lEquals && this.frozenFlag == lTest.frozenFlag;
+            lEquals = lEquals && this.creditId == lTest.creditId;
             lEquals = lEquals && this.isPayed == lTest.isPayed;
             lEquals = lEquals && this.startTime == lTest.startTime;
             lEquals = lEquals && this.stopTime == lTest.stopTime;
@@ -364,7 +380,7 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
         result = 37 * result + ((this.customerRef != null) ? this.customerRef.hashCode() : 0);
 
         result = 37 * result + ((this.payDate != null) ? this.payDate.hashCode() : 0);
-
+        result = 37 * result + creditId;
         return result;
     }
 
@@ -372,7 +388,7 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
     {
         StringBuffer str = new StringBuffer();
 
-        str.append("fileName='" + ((this.fileName != null) ? this.fileName : "") + "',accountFwdNr='" + ((this.accountFwdNr != null) ? this.accountFwdNr : "") + "',totalCost=" + getTotalCost() + ",month=" + getMonth() + ",year=" + getYear() + ",yearSeqNr=" + getYearSeqNr() + ",invoiceNr='" + ((this.getInvoiceNr() != null) ? this.getInvoiceNr() : "") + "',frozenFlag=" + getFrozenFlag() + ",isPayed=" + getIsPayed() + ",startTime=" + getStartTime() + ",stopTime=" + getStopTime() + ",customerName='" + ((this.getCustomerName() != null) ? this.getCustomerName() : "") + "',isInvoiceMailed=" + getIsInvoiceMailed() + ",customerRef='" + ((this.getCustomerRef() != null) ? this.getCustomerRef() : "") + "',payDate='" + ((this.getPayDate() != null) ? this.getPayDate() : "") + "' ");
+        str.append("fileName='" + ((this.fileName != null) ? this.fileName : "") + "',accountFwdNr='" + ((this.accountFwdNr != null) ? this.accountFwdNr : "") + "',totalCost=" + getTotalCost() + ",month=" + getMonth() + ",year=" + getYear() + ",yearSeqNr=" + getYearSeqNr() + ",invoiceNr='" + ((this.getInvoiceNr() != null) ? this.getInvoiceNr() : "") + "',frozenFlag=" + getFrozenFlag() + ",isPayed=" + getIsPayed() + ",startTime=" + getStartTime() + ",stopTime=" + getStopTime() + ",customerName='" + ((this.getCustomerName() != null) ? this.getCustomerName() : "") + "',isInvoiceMailed=" + getIsInvoiceMailed() + ",customerRef='" + ((this.getCustomerRef() != null) ? this.getCustomerRef() : "") + "',payDate='" + ((this.getPayDate() != null) ? this.getPayDate() : "") + "',creditId=" + getCreditId());
         return (str.toString());
     }
 
@@ -382,7 +398,7 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
 
         // "(1, '409031', '04/10/05', 1128528272192, 1, 220, 0, 'Nabelactie voor
         // client'. ',0 ,0 ,0 ,0 ,'')
-        str.append("'0','" + ((this.fileName != null) ? this.fileName : "") + "','" + ((this.accountFwdNr != null) ? this.accountFwdNr : "") + "'," + getTotalCost() + "," + getMonth() + "," + getYear() + "," + getYearSeqNr() + ",'" + getInvoiceNr() + "'," + getFrozenFlag() + "," + getIsPayed() + "," + getStartTime() + "," + getStopTime() + ",'" + getCustomerName() + "'," + getIsInvoiceMailed() + ",'" + getCustomerRef() + "','" + getPayDate() + "'");
+        str.append("'0','" + ((this.fileName != null) ? this.fileName : "") + "','" + ((this.accountFwdNr != null) ? this.accountFwdNr : "") + "'," + getTotalCost() + "," + getMonth() + "," + getYear() + "," + getYearSeqNr() + ",'" + getInvoiceNr() + "'," + getFrozenFlag() + "," + getIsPayed() + "," + getStartTime() + "," + getStopTime() + ",'" + getCustomerName() + "'," + getIsInvoiceMailed() + ",'" + getCustomerRef() + "','" + getPayDate() + "','" + getCreditId() + "'");
         return (str.toString());
     }
 

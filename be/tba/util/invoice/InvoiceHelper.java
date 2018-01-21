@@ -575,7 +575,7 @@ public class InvoiceHelper
         pdfInvoice.setInvoiceData(mInvoiceData);
         pdfInvoice.setTaskData(mTasks);
         pdfInvoice.setSubCustomers(mSubcustomerCostList);
-        pdfInvoice.doIt();
+        pdfInvoice.createInvoice();
         pdfInvoice.closeAndSave();
         return true;
     }
@@ -872,6 +872,18 @@ public class InvoiceHelper
             return new String(Constants.INVOICE_DIR + invoiceData.getYear() + "\\" + Constants.MONTHS[invoiceData.getMonth()] + "\\Fac" + getInvoiceNumber(invoiceData.getYear(), invoiceData.getMonth(), invoiceData.getYearSeqNr()) + "-" + spaces2underscores(invoiceData.getCustomerName()) + ".pdf");
         return "";
     }
+
+    static public String makeCreditInvoiceFileName(InvoiceEntityData invoiceData)
+    {
+        if (invoiceData != null)
+        {
+            CharSequence target = invoiceData.getInvoiceNr();
+            CharSequence replacer = "C" + invoiceData.getInvoiceNr();
+            return invoiceData.getFileName().replace(target, replacer);
+        }
+        return "";
+    }
+
 
     public int setCounters(CallCounts callCounts, Collection<CallRecordEntityData> callList, AccountEntityData customerData)
     {

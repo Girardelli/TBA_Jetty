@@ -82,14 +82,14 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
     public int addInvoice(WebSession webSession, InvoiceEntityData data)
     {
         addRow(webSession.getConnection(), data);
-        Collection<InvoiceEntityData> invoices = executeSqlQuery(webSession.getConnection(), "SELECT * FROM InvoiceEntity WHERE AccountFwdNr='" + data.getAccountFwdNr() + "' AND StartTime=" + data.getStartTime() + " AND StopTime=" + data.getStopTime());
+        Collection<InvoiceEntityData> invoices = executeSqlQuery(webSession.getConnection(), "SELECT * FROM InvoiceEntity WHERE AccountFwdNr='" + data.getAccountFwdNr() + "' AND TotalCost=" + data.getTotalCost()  + " AND StartTime=" + data.getStartTime() + " AND StopTime=" + data.getStopTime());
         return ((InvoiceEntityData) invoices.toArray()[0]).getId();
     }
 
     /**
      * @ejb:interface-method view-type="remote"
      */
-    public InvoiceEntityData getInvoice(WebSession webSession, String key)
+    public InvoiceEntityData getInvoiceById(WebSession webSession, String key)
     {
         return getRow(webSession.getConnection(), Integer.parseInt(key));
     }
@@ -444,6 +444,7 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
             entry.setIsInvoiceMailed(rs.getBoolean(14));
             entry.setCustomerRef(null2EmpthyString(rs.getString(15)));
             entry.setPayDate(null2EmpthyString(rs.getString(16)));
+            entry.setCreditId(rs.getInt(17));
             vVector.add(entry);
             // System.out.println("InvoiceEntityData: " + entry.toNameValueString());
         }

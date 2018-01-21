@@ -457,6 +457,7 @@ public class Constants
     public static final String GENERATE_ALL_INVOICES = "GENERATE_ALL_INVOICES";
 
     public static final String GENERATE_ALL_INVOICEDOCS = "GENERATE_ALL_INVOICEDOCS";
+    public static final String GENERATE_CREDITNOTE = "GENERATE_CREDITNOTE";
 
     public static final String GOTO_RECORD_SEARCH = "GOTO_RECORD_SEARCH";
 

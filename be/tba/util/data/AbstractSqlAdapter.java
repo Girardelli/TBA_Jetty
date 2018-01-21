@@ -57,7 +57,7 @@ public abstract class AbstractSqlAdapter<T>
     {
         executeSqlQuery(con, "INSERT INTO " + mTableName + " VALUES (" + data.toValueString() + ")");
     }
-
+    
     public void deleteRow(Connection con, int key)
     {
         executeSqlQuery(con, "DELETE FROM " + mTableName + " WHERE Id=" + key);
@@ -70,7 +70,7 @@ public abstract class AbstractSqlAdapter<T>
             T row = getRow(con, data.getId());
             if (row != null)
             {
-                executeSqlQuery(con, "UPDATE " + mTableName + " SET " + data.toNameValueString() + "WHERE Id=" + data.getId());
+                executeSqlQuery(con, "UPDATE " + mTableName + " SET " + data.toNameValueString() + " WHERE Id=" + data.getId());
             }
             else
             {

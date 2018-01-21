@@ -50,10 +50,12 @@
 		String vInvoiceRef = "";
 		if (vInvoiceId != -1)
 		{
-	        InvoiceSqlAdapter vInvoiceSession = new InvoiceSqlAdapter();
-	        vInvoiceData = vInvoiceSession.getInvoice(vSession, Integer.toString(vInvoiceId));
+		    InvoiceSqlAdapter vInvoiceSession = new InvoiceSqlAdapter();
+	        vInvoiceData = vInvoiceSession.getInvoiceById(vSession, Integer.toString(vInvoiceId));
 	        if (vInvoiceData != null)
+	        {
 	            vInvoiceRef = vInvoiceData.getCustomerRef();
+	        }
 		}
 		if (vInvoiceRef == null) vInvoiceRef = "";
 
@@ -83,10 +85,10 @@
 					<%
 
 		out.println("<option value=\"" + Constants.ACCOUNT_FILTER_ALL + (vCustomerFilter.equals(Constants.ACCOUNT_FILTER_ALL) ? "\" selected>" : "\">") + "selecteer klant");
-		Collection list = AccountCache.getInstance().getInvoiceCustomerList();
+		Collection<AccountEntityData> list = AccountCache.getInstance().getInvoiceCustomerList();
 		synchronized(list) 
 		{
-		    for (Iterator vIter = list.iterator(); vIter.hasNext();)
+		    for (Iterator<AccountEntityData> vIter = list.iterator(); vIter.hasNext();)
 		    {
 		        AccountEntityData vData = (AccountEntityData) vIter.next();
 		        out.println("<option value=\"" + vData.getFwdNumber() + (vCustomerFilter.equals(vData.getFwdNumber()) ? "\" selected>" : "\">") + vData.getFullName());
@@ -129,21 +131,27 @@
 		</table>
 		<br>
 		<%
-		Collection vRecords = null;
+		Collection<CallRecordEntityData> vRecords = null;
 		InvoiceHelper vInvoiceHelper = null;
 		if (vSession.getMonthsBack() != CallFilter.kNoMonth && vCustomerFilter != null && !vCustomerFilter.equals(Constants.ACCOUNT_FILTER_ALL))
 		{
-			if (vInvoiceData != null)
+		    if (vInvoiceData != null)
 			{
-			    vInvoiceHelper = new InvoiceHelper(vInvoiceData, vSession);
+			    if (vInvoiceData.getCreditId() != -1)
+			    {
+			        vInvoiceHelper = new InvoiceHelper(vInvoiceData, vSession);
+			    }
 			}
 			else
 			{
 			    vInvoiceHelper = new InvoiceHelper(vSession, vCustomerFilter, vMonth, vYear);
 			}
-			vInvoiceHelper.storeOrUpdate(vSession);
-		    vSession.setInvoiceHelper(vInvoiceHelper);
-		    vRecords = vInvoiceHelper.getCallRecords();
+			if (vInvoiceHelper != null)
+			{
+	            vInvoiceHelper.storeOrUpdate(vSession);
+	            vSession.setInvoiceHelper(vInvoiceHelper);
+	            vRecords = vInvoiceHelper.getCallRecords();
+			}
 		
 		    AccountEntityData vAccountData = (AccountEntityData) AccountCache.getInstance().get(vCustomerFilter);
 		
@@ -153,13 +161,14 @@
 		    	<p><span class=\"adminsubtitle\"><br>Betaald op: 
 		    	<input type=text size=20 name=<%=Constants.INVOICE_PAYDATE%> value="<%=vInvoiceHelper.getInvoiceData().PayDate%>">
 		    	<input class="tbabutton" type=submit name=action value=" Bewaar " onclick="savePayDate()" > 
+		    	<input class="tbabutton" type=submit name=action value=" Maak Credit Nota " onclick="createCreditNote()" > 
 		    	</span></p>
                 <%
 		    }
 		    out.println("<p><span class=\"adminsubtitle\"><br>");
 		    out.println("Facturatiegegevens voor de maand " + vSession.getMonthsBackString() + ", " + vSession.getYear() + ":<br><br>");
 		    
-		    if (vInvoiceId == -1)
+		    if (vInvoiceId == -1 && vInvoiceHelper != null)
 		    {
 		    	vInvoiceId = vInvoiceHelper.getInvoiceId();
 		    }
@@ -169,9 +178,17 @@
 		    }
 		    else
 		    {
-			    if (vInvoiceHelper.getInvoiceData() == null)
+			    if (vInvoiceHelper == null || vInvoiceHelper.getInvoiceData() == null)
 			    {
-			        out.println("<br><br>Er zijn geen facturatiegegevens beschikbaar voor de geselecteerde periode.<br><br>");
+			        if (vInvoiceData.getCreditId() != -1)
+			        {
+			            out.println("<br><br>Er zijn geen facturatiegegevens beschikbaar voor de geselecteerde periode.<br><br>");
+			        }
+			        else
+			        {
+			            out.println("<br><br>Credit Nota");
+                        out.println("<br>factuur nummer: " + vInvoiceData.getInvoiceNr());
+			        }
 			    }
 			    else
 			    {
@@ -183,7 +200,7 @@
 				    else
 				    {
 			%> <br><br>
-			         Klant Referencie (bv PO-nmmer, bestelnummer)<br>
+			         Klant Referentie (bv PO-nmmer, bestelnummer)<br>
                     <textarea name=<%=Constants.INVOICE_CUST_REF%> rows=2 cols=60><%=vInvoiceRef%></textarea>
 			        <input class="tbabutton" type=submit name=action value=" Bewaar " onclick="saveInvoice()">
 			<%
@@ -612,12 +629,10 @@
 					                    vStyleEnd = "</b>";
 					                }
 				%>
-				<tr bgcolor="FFCC66" id=<%=vId%> class="bodytekst"
-					onmouseover="hooverOnRow('<%=vId%>','<%=vRowInd%>')"
+			<tr bgcolor="FFCC66" id=<%=vId%> class="bodytekst" onmouseover="hooverOnRow('<%=vId%>','<%=vRowInd%>')"
 					onmouseout="hooverOffRow('<%=vId%>','<%=vRowInd%>')"
 				ondblclick="changeUrl('/TheBusinessAssistant/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.RECORD_UPDATE%>&<%=Constants.RECORD_ID%>=<%=vEntry.getId()%>');">
-				<td width="20" bgcolor="FFFFFF"><img src=<%=vInOut%>
-					height="13" border="0"></td>
+				<td width="20" bgcolor="FFFFFF"><img src=<%=vInOut%> height="13" border="0"></td>
 				<td width="10" valign="top"><%=vImportant%></td>
 				<td width="55" valign="top"><%=vStyleStart%><%=vDate%><%=vStyleEnd%></td>
 				<td width="35" valign="top"><%=vStyleStart%><%=vTime%><%=vStyleEnd%></td>
@@ -692,6 +707,13 @@ function savePayDate()
 {
     document.invoiceform.<%=Constants.SRV_ACTION%>.value="<%=Constants.SAVE_PAYDATE%>";
 }
+
+function createCreditNote()
+{
+    document.invoiceform.<%=Constants.SRV_ACTION%>.value="<%=Constants.GENERATE_CREDITNOTE%>";
+}
+
+
 </script>
 
 </html>
