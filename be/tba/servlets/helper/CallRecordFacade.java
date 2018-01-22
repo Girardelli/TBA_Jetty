@@ -124,7 +124,7 @@ public class CallRecordFacade
         Calendar vCalendar = Calendar.getInstance();
         newRecord.setIsNotLogged(false);
         newRecord.setIsReleased(false);
-        newRecord.setIsVirgin(true); //yves
+        newRecord.setIsVirgin(false); //yves
 
         newRecord.setIsAgendaCall(req.getParameter(Constants.RECORD_AGENDA) != null);
         newRecord.setIsSmsCall(req.getParameter(Constants.RECORD_SMS) != null);
