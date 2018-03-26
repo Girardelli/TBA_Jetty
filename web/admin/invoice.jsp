@@ -137,7 +137,7 @@
 		{
 		    if (vInvoiceData != null)
 			{
-			    if (vInvoiceData.getCreditId() != -1)
+			    if (vInvoiceData.getCreditId() != 0)
 			    {
 			        vInvoiceHelper = new InvoiceHelper(vInvoiceData, vSession);
 			    }
@@ -180,7 +180,7 @@
 		    {
 			    if (vInvoiceHelper == null || vInvoiceHelper.getInvoiceData() == null)
 			    {
-			        if (vInvoiceData.getCreditId() != -1)
+			        if (vInvoiceData.getCreditId() != 0)
 			        {
 			            out.println("<br><br>Er zijn geen facturatiegegevens beschikbaar voor de geselecteerde periode.<br><br>");
 			        }
