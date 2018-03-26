@@ -37,6 +37,7 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
 
     public InvoiceEntityData()
     {
+        creditId = -1;
     }
 
     public InvoiceEntityData(int id, java.lang.String fileName, java.lang.String accountFwdNr, double totalCost, int month, int year, int yearSeqNr, java.lang.String invoiceNr, boolean frozenFlag, boolean isPayed, long startTime, long stopTime, java.lang.String customerName, boolean isInvoiceMailed, java.lang.String customerRef, java.lang.String payDate, int creditId)
@@ -398,7 +399,7 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
 
         // "(1, '409031', '04/10/05', 1128528272192, 1, 220, 0, 'Nabelactie voor
         // client'. ',0 ,0 ,0 ,0 ,'')
-        str.append("'0','" + ((this.fileName != null) ? this.fileName : "") + "','" + ((this.accountFwdNr != null) ? this.accountFwdNr : "") + "'," + getTotalCost() + "," + getMonth() + "," + getYear() + "," + getYearSeqNr() + ",'" + getInvoiceNr() + "'," + getFrozenFlag() + "," + getIsPayed() + "," + getStartTime() + "," + getStopTime() + ",'" + getCustomerName() + "'," + getIsInvoiceMailed() + ",'" + getCustomerRef() + "','" + getPayDate() + "','" + getCreditId() + "'");
+        str.append("'0','" + ((this.fileName != null) ? this.fileName : "") + "','" + ((this.accountFwdNr != null) ? this.accountFwdNr : "") + "'," + getTotalCost() + "," + getMonth() + "," + getYear() + "," + getYearSeqNr() + ",'" + getInvoiceNr() + "'," + getFrozenFlag() + "," + getIsPayed() + "," + getStartTime() + "," + getStopTime() + ",'" + getCustomerName() + "'," + getIsInvoiceMailed() + ",'" + getCustomerRef() + "','" + getPayDate() + "'," + getCreditId());
         return (str.toString());
     }
 

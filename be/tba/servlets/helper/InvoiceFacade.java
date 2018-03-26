@@ -212,7 +212,7 @@ public class InvoiceFacade
                 vCreditInvoiceData.setIsInvoiceMailed(false);
                 vCreditInvoiceData.setIsPayed(true);
                 vCreditInvoiceData.setFrozenFlag(false);
-                vCreditInvoiceData.setCreditId(-1);
+                vCreditInvoiceData.setCreditId(0);
                 vCreditInvoiceData.setInvoiceNr("C" + vInvoiceData.getInvoiceNr());
                 vCreditInvoiceData.setCustomerRef(vInvoiceData.getCustomerRef());
                 vCreditInvoiceData.setMonth(vInvoiceData.getMonth());
