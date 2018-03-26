@@ -297,7 +297,7 @@ public final class Forum700CallRecord implements Serializable
 
     private String fix24h_bugOn2016NewYear(String duration)
     {
-        if (duration.length() > 0 && duration.startsWith("24"))
+        if (duration.length() > 0 && (duration.startsWith("24") || duration.startsWith("23")))
         {
             // sLogger.info("replace 24 in {}", duration);
             return new String("00" + duration.substring(2));
