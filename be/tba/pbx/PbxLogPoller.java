@@ -1,20 +1,10 @@
 package be.tba.pbx;
 
-import java.sql.DriverManager;
-import java.util.Properties;
-
-import javax.naming.Context;
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-import be.tba.servlets.session.WebSession;
 import be.tba.util.constants.Constants;
-import be.tba.util.invoice.InvoiceHelper;
+import be.tba.util.excel.FintroXlsxReader;
 import be.tba.util.session.AccountCache;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,6 +43,9 @@ public class PbxLogPoller
             sLogger.info("");
             sLogger.info("########## new start ############");
 
+            FintroXlsxReader.readPayments("C:\\Users\\ywillems\\Downloads\\BE71143070729269-20180629.xlsx");
+            
+            
             Class.forName("com.mysql.jdbc.Driver").newInstance();
 
             CallLogDbWriter vLogWriter = getWriter();

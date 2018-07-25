@@ -282,7 +282,13 @@ public class Constants
     public static final String TASK_TIMESTAMP = "_ttmst";
 
     public static final String TASK_DESCRIPTION = "_tdscr";
+    public static final String TASK_FINTROID = "_tfinid";
+    public static final String TASK_EXEC_DATE = "_texecd";
+    public static final String TASK_VAL_DATE = "_tvald";
+    public static final String TASK_FROM_BANK_NR = "_tbnknr";
+    public static final String TASK_PAY_DETAILS = "_tdetail";
 
+    
     public static final String TASK_IS_FIXED_PRICE = "_tisfx";
 
     public static final String TASK_IS_RECURING = "_tirec";

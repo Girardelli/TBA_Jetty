@@ -128,6 +128,41 @@
 				</select>
 				</td>
 			</tr>
+            <tr>
+                <td width="150" valign="top" class="adminsubtitle">&nbsp;FintroID</td>
+                <td width="10" valign="top">:</td>
+                <td width="170" valign="top">
+                <textarea name=<%=Constants.TASK_FINTROID%> rows=10 cols=70><%=vInvoiceData.getFintroId()%></textarea>
+                </td>
+			</tr>
+            <tr>
+                <td width="150" valign="top" class="adminsubtitle">&nbsp;Uitvoer Datum</td>
+                <td width="10" valign="top">:</td>
+                <td width="170" valign="top">
+                <textarea name=<%=Constants.TASK_EXEC_DATE%> rows=10 cols=70><%=vInvoiceData.getExecutionDate()%></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td width="150" valign="top" class="adminsubtitle">&nbsp;Valuta Datum</td>
+                <td width="10" valign="top">:</td>
+                <td width="170" valign="top">
+                <textarea name=<%=Constants.TASK_VAL_DATE%> rows=10 cols=70><%=vInvoiceData.getValutaDate()%></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td width="150" valign="top" class="adminsubtitle">&nbsp;Van rekening nr.</td>
+                <td width="10" valign="top">:</td>
+                <td width="170" valign="top">
+                <textarea name=<%=Constants.TASK_FROM_BANK_NR%> rows=10 cols=70><%=vInvoiceData.getFromBankNr()%></textarea>
+                </td>
+            </tr>
+			<tr>
+			     <td width="150" valign="top" class="adminsubtitle">&nbsp;Betalingsbericht</td>
+			     <td width="10" valign="top">:</td>
+			     <td width="170" valign="top">
+			     <textarea name=<%=Constants.TASK_PAY_DETAILS%> rows=10 cols=70><%=vInvoiceData.getPaymentDetails()%></textarea>
+			     </td>
+			 </tr>
 		</table>
 		<br>
 		<%
@@ -158,8 +193,9 @@
 		    if (vInvoiceId > 0 && vInvoiceHelper != null && vInvoiceHelper.getInvoiceData() != null && vInvoiceHelper.isFrozen())
 		    {
 		    	%>
-		    	<p><span class=\"adminsubtitle\"><br>Betaald op: 
+		    	<p><span class=\"adminsubtitle\">Betaald op: 
 		    	<input type=text size=20 name=<%=Constants.INVOICE_PAYDATE%> value="<%=vInvoiceHelper.getInvoiceData().PayDate%>">
+		    	<br><br>
 		    	<input class="tbabutton" type=submit name=action value=" Bewaar " onclick="savePayDate()" > 
 		    	<input class="tbabutton" type=submit name=action value=" Maak Credit Nota " onclick="createCreditNote()" > 
 		    	</span></p>

@@ -445,6 +445,11 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
             entry.setCustomerRef(null2EmpthyString(rs.getString(15)));
             entry.setPayDate(null2EmpthyString(rs.getString(16)));
             entry.setCreditId(rs.getInt(17));
+            entry.setFintroId(null2EmpthyString(rs.getString(18)));
+            entry.setExecutionDate(null2EmpthyString(rs.getString(19)));
+            entry.setValutaDate(null2EmpthyString(rs.getString(20)));
+            entry.setFromBankNr(null2EmpthyString(rs.getString(21)));
+            entry.setPaymentDetails(null2EmpthyString(rs.getString(22)));
             vVector.add(entry);
             // System.out.println("InvoiceEntityData: " + entry.toNameValueString());
         }

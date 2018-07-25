@@ -3,11 +3,6 @@ package be.tba.util.data;
 import java.util.Collection;
 import java.util.Vector;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import be.tba.servlets.AdminDispatchServlet;
-
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
