@@ -30,6 +30,7 @@ public class Constants
     public static final String MYSQL_URL = "jdbc:mysql://localhost/tbadb?user=root&password=gzb625$";
     // public static final String INVOICE_HEAD_TMPL =
     // "C:\\jboss-4.0.2\\projects\\TBA\\templates\\invoice-head-template.htm";
+    public static final String TEMP_DIR = "c:\\temp";
     public static final String INVOICE_HEAD_TMPL = "C:\\jetty\\templates\\invoiceTemplate.pdf";
 
     public static final String INVOICE_DETAIL_TMPL = "C:\\jetty\\templates\\invoice-detail-template.htm";
@@ -319,6 +320,8 @@ public class Constants
     public static final String INVOICE_PAYDATE = "_ipd";
 
     public static final String NO_CUSTOMER = "_ncu";
+    
+    public static final String FINTRO_FILE = "_iff";
 
     // filter
     public static final String ACCOUNT_FILTER_CUSTOMER = "_fcus";
@@ -506,6 +509,8 @@ public class Constants
     public static final String GOTO_INVOICE_ADMIN = "GOTO_INVOICE_ADMIN";
 
     public static final String GOTO_OPEN_INVOICE = "GOTO_OPEN_INVOICE";
+    
+    public static final String PROCESS_FINTRO_XLSX = "PROCESS_FINTRO_XLSX";
 
     public static final String GOTO_INVOICE_ADD = "GOTO_INVOICE_ADD";
 

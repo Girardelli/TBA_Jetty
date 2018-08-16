@@ -39,8 +39,7 @@ mCustomerData = AccountCache.getInstance().get(mTaskData.getFwdNr());
 %>
 
 <body>
-<table width='100%' cellspacing='0' cellpadding='0' border='0'
-	bgcolor="FFFFFF">
+<table width='100%' cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
 
 	<!--Update task jsp-->
 
@@ -49,8 +48,7 @@ mCustomerData = AccountCache.getInstance().get(mTaskData.getFwdNr());
 		<td valign="top" bgcolor="FFFFFF"><br>
 		<br>
 		<span class="bodytekst"> <!-- action name must be a URI name as it is set in the <application>.xml servlet-mapping tag.-->
-		<form name="taskform" method="POST"
-			action="/TheBusinessAssistant/AdminDispatch">
+		<form name="taskform" method="POST" action="/TheBusinessAssistant/AdminDispatch">
 		<table width="100%" border="0" cellspacing="1" cellpadding="1">
 			<tr>
 				<td width="50"></td>
@@ -59,10 +57,10 @@ mCustomerData = AccountCache.getInstance().get(mTaskData.getFwdNr());
 				<td width="580" valign="top">
 <%                  
 	out.println("<select name=\"" + Constants.TASK_FORWARD_NUMBER + "\">");
-	Collection list = AccountCache.getInstance().getCustomerList();
+	Collection<AccountEntityData> list = AccountCache.getInstance().getCustomerList();
 	synchronized(list) 
 	{
-	   for (Iterator vIter = list.iterator(); vIter.hasNext();)
+	   for (Iterator<AccountEntityData> vIter = list.iterator(); vIter.hasNext();)
 	   {
 	       AccountEntityData vValue = (AccountEntityData) vIter.next();
 	       out.println("<option value=\"" + vValue.getFwdNumber() + (vValue.getFwdNumber().equals(mTaskData.getFwdNr()) ? "\" selected>" : "\">") + vValue.getFullName());
@@ -86,10 +84,10 @@ mCustomerData = AccountCache.getInstance().get(mTaskData.getFwdNr());
 				<td width="580" valign="top">
 <%                  
 	out.println("<select name=\"" + Constants.DONE_BY_EMPL + "\">");
-	Collection emplList = AccountCache.getInstance().getEmployeeList();
+	Collection<AccountEntityData> emplList = AccountCache.getInstance().getEmployeeList();
 	synchronized(list) 
 	{
-	   for (Iterator vIter = emplList.iterator(); vIter.hasNext();)
+	   for (Iterator<AccountEntityData> vIter = emplList.iterator(); vIter.hasNext();)
 	   {
 	       AccountEntityData vValue = (AccountEntityData) vIter.next();
 	       out.println("<option value=\"" + vValue.getFwdNumber() + (vValue.getFwdNumber().equals(mTaskData.getDoneBy()) ? "\" selected>" : "\">") + vValue.getFullName());

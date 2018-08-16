@@ -29,8 +29,46 @@
 <body>
 <p><span class="admintitle"> Factuurlijst bewerken<br>
 </span></p>
-<form name="openinvoicelistform" method="POST" action="/TheBusinessAssistant/AdminDispatch">
+
+<!-- 
+
+#file-input {
+  cursor: pointer;
+  outline: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  filter: alpha(opacity=0); /* IE < 9 */
+  opacity: 0;
+}
+.input-label {
+  cursor: pointer;
+  position: relative;
+  display: inline-block;
+}
+<label for="file-input" class="input-label">
+  Click Me 
+  <input type="file" id="file-input">
+</label>
+
+
+    <form name="loadfileform" method="POST" action="/TheBusinessAssistant/AdminDispatch" enctype="multipart/form-data">
+    <input class="tbabutton" type=file name=action value=" Fintro excel opladen " accept=".xlsx">
+    <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.GOTO_OPEN_INVOICE%>">
+    <input class="tbabutton" type=submit name=action value=" Laad de xlsx op " onclick="uploadFile()">
+    </form>
+    -->
+	<form name="loadfileform" method="POST" action="/TheBusinessAssistant/AdminDispatch" enctype="multipart/form-data">
 	<input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.GOTO_OPEN_INVOICE%>"> 
+	<input class="tbabutton" type=file name=<%=Constants.FINTRO_FILE%> value=" Fintro excel opladen " accept=".xlsx">
+	<input class="tbabutton" type=submit name=action value=" Laad de file op " onclick="uploadFile()">
+    </form>
+    <form name="openinvoicelistform" method="POST" action="/TheBusinessAssistant/AdminDispatch">
+    <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.GOTO_OPEN_INVOICE%>"> 
+    <input type=hidden name=<%=Constants.INVOICE_TO_SETPAYED%> value="">
 	<table width='100%' cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
 		<tr>
 			<!-- white space -->
@@ -63,7 +101,7 @@
 			%> 
 			<br>
 			<br>
-			<input class="tbabutton" type=submit name=action value=" Betaaldvlag zetten " onclick="setPayed()">
+			<input class="tbabutton" type=submit name=action value=" Betaaldvlag zetten " onclick="setPayed();">
 			<br>
 			<br>
 			<br>
@@ -156,8 +194,14 @@ function setPayed()
       shorterArr[j++] = invoicesToDelete[i];
   document.openinvoicelistform.<%=Constants.INVOICE_TO_SETPAYED%>.value=shorterArr.join();
   document.openinvoicelistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.INVOICE_SETPAYED%>";
+  
 }
 
+
+function uploadFile()
+{
+  document.loadfileform.<%=Constants.SRV_ACTION%>.value="<%=Constants.PROCESS_FINTRO_XLSX%>";
+}
 
 </script>
 

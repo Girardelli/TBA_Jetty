@@ -15,30 +15,30 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
     */
     private static final long serialVersionUID = 1L;
     private int id;
-    private java.lang.String fileName;
-    private java.lang.String accountFwdNr;
-    private double totalCost;
-    private int month;
-    private int year;
-    private int yearSeqNr;
-    private java.lang.String invoiceNr;
-    private boolean frozenFlag;
-    private boolean isPayed;
-    private long startTime;
-    private long stopTime;
-    private java.lang.String customerName;
-    private boolean isInvoiceMailed;
-    private java.lang.String customerRef;
-    private java.lang.String payDate;
+    private java.lang.String fileName = "";
+    private java.lang.String accountFwdNr = "";
+    private double totalCost = 0.0;
+    private int month = 0;
+    private int year = 0;
+    private int yearSeqNr = 0;
+    private java.lang.String invoiceNr = "";
+    private boolean frozenFlag = false;
+    private boolean isPayed = false;
+    private long startTime = 0;
+    private long stopTime = 0;
+    private java.lang.String customerName = "";
+    private boolean isInvoiceMailed = false;
+    private java.lang.String customerRef = "";
+    private java.lang.String payDate = "";
     // -1 means regular invoice
     // 0 means this is a credit invoice
     // db id means it is a regular invoice with a credit invoice counterpart indicated by this id.
     private int creditId = -1;
-    public String fintroId;
-    public String executionDate;
-    public String valutaDate;
-    public String fromBankNr;
-    public String paymentDetails;
+    public String fintroId = "";
+    public String executionDate = "";
+    public String valutaDate = "";
+    public String fromBankNr = "";
+    public String paymentDetails = "";
 
 
     public InvoiceEntityData()
@@ -478,7 +478,7 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
                 "',executionDate='" + ((this.getExecutionDate() != null) ? this.getExecutionDate() : "") +
                 "',valutaDate='" + ((this.getValutaDate() != null) ? this.getValutaDate() : "") +
                 "',fromBankNr='" + ((this.getFromBankNr() != null) ? this.getFromBankNr() : "") +
-                "',paymentDetails='" + ((this.getPaymentDetails() != null) ? this.getPaymentDetails() : ""));
+                "',paymentDetails='" + ((this.getPaymentDetails() != null) ? this.getPaymentDetails() : "") + "'");
                 return (str.toString());
     }
 
@@ -504,7 +504,7 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
                 "','" + getPayDate() + 
                 "'," + getCreditId() +
                 ",'" + getFintroId() + 
-                "'" + getExecutionDate() +
+                "','" + getExecutionDate() +
                 "','" + getValutaDate() +
                 "','" + getFromBankNr() +
                 "','" + getPaymentDetails() + 

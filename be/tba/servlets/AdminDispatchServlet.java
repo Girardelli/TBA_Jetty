@@ -1,6 +1,7 @@
 package be.tba.servlets;
 
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.StringTokenizer;
@@ -10,10 +11,13 @@ import java.util.Collection;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -33,6 +37,8 @@ import be.tba.util.exceptions.LostSessionException;
 import be.tba.util.exceptions.SystemErrorException;
 import be.tba.util.session.AccountCache;
 
+@WebServlet("/upload")
+@MultipartConfig
 public class AdminDispatchServlet extends HttpServlet
 {
     /**
@@ -658,6 +664,28 @@ public class AdminDispatchServlet extends HttpServlet
                 }
 
                 // ==============================================================================================
+                // PROCESS_FINTRO_XLSX
+                // ==============================================================================================
+                else if (vAction.equals(Constants.PROCESS_FINTRO_XLSX))
+                {
+                    Part filePart = req.getPart(Constants.FINTRO_FILE); 
+                    filePart.getSubmittedFileName()
+                    String fintroFile = Paths.get(filePart.getSubmittedFileName()).getFileName().toString(); // MSIE fix.
+
+                    
+                    if (fintroFile != null && fintroFile.length() > 0)
+                    {
+                        vSession.setFintroFile(fintroFile);
+                        System.out.println("admindispatch GOTO_OPEN_INVOICE: fintroFile = " + filePart.getSubmittedFileName());
+                    }
+                    else
+                    {
+                        vSession.setFintroFile(null);
+                    }
+                    rd = sc.getRequestDispatcher(Constants.OPEN_INVOICE_JSP);
+                }
+
+                // ==============================================================================================
                 // GENERATE All INVOICES
                 // ==============================================================================================
                 else if (vAction.equals(Constants.GENERATE_ALL_INVOICES))
@@ -690,7 +718,7 @@ public class AdminDispatchServlet extends HttpServlet
                 else if (vAction.equals(Constants.INVOICE_SETPAYED))
                 {
                     InvoiceFacade.setInvoicesPayed(req, vSession);
-                    rd = sc.getRequestDispatcher(vSession.getCallingJsp());
+                    rd = sc.getRequestDispatcher(Constants.OPEN_INVOICE_JSP);
                 }
 
                 // ==============================================================================================

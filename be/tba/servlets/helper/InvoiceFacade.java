@@ -5,10 +5,14 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import be.tba.ejb.account.interfaces.AccountEntityData;
 import be.tba.ejb.invoice.interfaces.InvoiceEntityData;
@@ -57,6 +61,13 @@ public class InvoiceFacade
         if (vInvoice != null)
         {
             vInvoice.setPayDate((String) req.getParameter(Constants.INVOICE_PAYDATE));
+            
+            vInvoice.setFintroId((String) req.getParameter(Constants.TASK_FINTROID));
+            vInvoice.setFromBankNr((String) req.getParameter(Constants.TASK_FROM_BANK_NR));
+            vInvoice.setExecutionDate((String) req.getParameter(Constants.TASK_EXEC_DATE));
+            vInvoice.setValutaDate((String) req.getParameter(Constants.TASK_VAL_DATE));
+            vInvoice.setPaymentDetails((String) req.getParameter(Constants.TASK_PAY_DETAILS));
+
             if (vInvoice.getPayDate() != null || vInvoice.getPayDate().length() > 0)
             {
                 vInvoice.setIsPayed(true);
@@ -133,6 +144,7 @@ public class InvoiceFacade
         String vLtd = (String) req.getParameter(Constants.INVOICE_TO_SETPAYED);
         if (vLtd != null && vLtd.length() > 0)
         {
+            System.out.println("setInvoicesPayed: # entries " + vLtd);
             StringTokenizer vStrTok = new StringTokenizer(vLtd, ",");
 
             Vector<Integer> vList = new Vector<Integer>();
@@ -221,9 +233,13 @@ public class InvoiceFacade
                 vCreditInvoiceData.setYear(vInvoiceData.getYear());
                 vCreditInvoiceData.setYearSeqNr(vInvoiceData.getYearSeqNr());
                 vCreditInvoiceData.setPayDate("Credit nota");
-                // write them to the DB
+                // write credit note to the DB
                 int id = vInvoiceSession.addInvoice(session, vCreditInvoiceData);
+                // link the original to the credit note
                 vInvoiceData.setCreditId(id);
+                // clear the content of this invoice by setting stop = start time.
+                // NO!, this messes up the InvoiceHelper logic. This is solved over there
+                //vInvoiceData.setStopTime(vInvoiceData.getStartTime());
                 vInvoiceSession.updateRow(session.getConnection(), vInvoiceData);
                 
                 AccountEntityData account = AccountCache.getInstance().get(vInvoiceData.getAccountFwdNr());
@@ -247,4 +263,31 @@ public class InvoiceFacade
         }
     }
 
+    public static void processFintroXlsx(HttpServletRequest req, WebSession session) 
+    {
+        File file ;
+        int maxFileSize = 1000 * 1024;
+        int maxMemSize = 1000 * 1024;
+        String filePath = "c:/apache-tomcat/webapps/data/"; // file name van 
+
+        String contentType = req.getContentType();
+        if ((contentType.indexOf("multipart/form-data") >= 0)) 
+        {
+
+           DiskFileItemFactory factory = new DiskFileItemFactory();
+           factory.setSizeThreshold(maxMemSize);
+           factory.setRepository(new File(Constants.TEMP_DIR));
+           ServletFileUpload upload = new ServletFileUpload(factory);
+           upload.setSizeMax( maxFileSize );
+           try{ 
+              List fileItems = upload.parseRequest(req);
+           }
+        catch(Exception ex) {
+            System.out.println(ex);
+         }
+                                 }
+                 
+                 
+           
+    }
 }

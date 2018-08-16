@@ -141,10 +141,10 @@ public class AccountFacade
         AccountEntityData vAccount = new AccountEntityData(AccountCache.getInstance().get(vFwdNr));
         vAccount.setFullName(req.getParameter(Constants.ACCOUNT_FULLNAME));
         vAccount.setFwdNumber(req.getParameter(Constants.ACCOUNT_FORWARD_NUMBER));
-        vAccount.setRole(req.getParameter(Constants.ACCOUNT_ROLE));
-        if (vAccount.getRole().equals(AccountRole._vSubCustomer) && req.getParameter(Constants.ACCOUNT_SUPER_CUSTOMER) != null)
+        if (req.getParameter(Constants.ACCOUNT_ROLE).equals(AccountRole.SUBCUSTOMER.getText()) && req.getParameter(Constants.ACCOUNT_SUPER_CUSTOMER) != null)
         {
             vAccount.setSuperCustomer(req.getParameter(Constants.ACCOUNT_SUPER_CUSTOMER));
+            vAccount.setRole(req.getParameter(Constants.ACCOUNT_ROLE));
         }
         else
         {

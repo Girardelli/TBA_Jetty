@@ -86,6 +86,8 @@ final public class WebSession implements Serializable
     
     private String mRecordId = null;
 
+    private String mFintroFile = null;
+
     public WebSession() throws SQLException
     {
         try
@@ -303,6 +305,16 @@ final public class WebSession implements Serializable
     public String getSearchString()
     {
         return mSearchString;
+    }
+
+    public void setFintroFile(String fintroFile)
+    {
+        mFintroFile = fintroFile;
+    }
+
+    public String getFintroFile()
+    {
+        return mFintroFile;
     }
 
     public void setDaysBack(int cnt)

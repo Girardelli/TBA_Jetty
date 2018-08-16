@@ -75,11 +75,11 @@
 
 		<!-- account list -->
 		<td valign="top" width="865" bgcolor="FFFFFF"><br>
-		<table width="330" border="0" cellspacing="0" cellpadding="0">
+		<table width='100%' border="0" cellspacing="0" cellpadding="0">
 			<tr>
-				<td width="150" valign="top" class="adminsubtitle">&nbsp;Klant</td>
+				<td width="250" valign="top" class="adminsubtitle">&nbsp;Klant</td>
 				<td width="10" valign="top">:</td>
-				<td width="170" valign="top">
+				<td width="270" valign="top">
 				<select
 					name="<%=Constants.ACCOUNT_FILTER_CUSTOMER%>" onchange="submit()">
 					<%
@@ -99,9 +99,9 @@
 				</td>
 			</tr>
 			<tr>
-				<td width="150" valign="top" class="adminsubtitle">&nbsp;Maand</td>
+				<td width="250" valign="top" class="adminsubtitle">&nbsp;Maand</td>
 				<td width="10" valign="top">:</td>
-				<td width="170" valign="top">
+				<td width="270" valign="top">
 				<select
 					name="<%=Constants.INVOICE_MONTH%>" onchange="submit()">
 					<%
@@ -113,9 +113,9 @@
 					%>
 				</select>
 				</td>
-				<td width="150" valign="top" class="adminsubtitle">&nbsp;Jaar</td>
+				<td width="250" valign="top" class="adminsubtitle">&nbsp;Jaar</td>
 				<td width="10" valign="top">:</td>
-				<td width="170" valign="top">
+				<td width="270" valign="top">
 				<select
 					name="<%=Constants.INVOICE_YEAR%>" onchange="submit()">
 					<%
@@ -129,38 +129,38 @@
 				</td>
 			</tr>
             <tr>
-                <td width="150" valign="top" class="adminsubtitle">&nbsp;FintroID</td>
+                <td width="250" valign="top" class="adminsubtitle">&nbsp;FintroID</td>
                 <td width="10" valign="top">:</td>
-                <td width="170" valign="top">
-                <textarea name=<%=Constants.TASK_FINTROID%> rows=10 cols=70><%=vInvoiceData.getFintroId()%></textarea>
+                <td width="270" valign="top">
+                <input type=text name=<%=Constants.TASK_FINTROID%> value="<%=(vInvoiceData != null ? vInvoiceData.getFintroId() : "")%>">
                 </td>
 			</tr>
             <tr>
-                <td width="150" valign="top" class="adminsubtitle">&nbsp;Uitvoer Datum</td>
+                <td width="250" valign="top" class="adminsubtitle">&nbsp;Uitvoer Datum</td>
                 <td width="10" valign="top">:</td>
-                <td width="170" valign="top">
-                <textarea name=<%=Constants.TASK_EXEC_DATE%> rows=10 cols=70><%=vInvoiceData.getExecutionDate()%></textarea>
+                <td width="270" valign="top">
+                <input type=text name=<%=Constants.TASK_EXEC_DATE%> value="<%=(vInvoiceData != null ? vInvoiceData.getExecutionDate() : "")%>">
                 </td>
             </tr>
             <tr>
-                <td width="150" valign="top" class="adminsubtitle">&nbsp;Valuta Datum</td>
+                <td width="250" valign="top" class="adminsubtitle">&nbsp;Valuta Datum</td>
                 <td width="10" valign="top">:</td>
-                <td width="170" valign="top">
-                <textarea name=<%=Constants.TASK_VAL_DATE%> rows=10 cols=70><%=vInvoiceData.getValutaDate()%></textarea>
+                <td width="270" valign="top">
+                <input type=text name=<%=Constants.TASK_VAL_DATE%> value="<%=(vInvoiceData != null ? vInvoiceData.getValutaDate() : "")%>">
                 </td>
             </tr>
             <tr>
-                <td width="150" valign="top" class="adminsubtitle">&nbsp;Van rekening nr.</td>
+                <td width="250" valign="top" class="adminsubtitle">&nbsp;Van rekening nr.</td>
                 <td width="10" valign="top">:</td>
-                <td width="170" valign="top">
-                <textarea name=<%=Constants.TASK_FROM_BANK_NR%> rows=10 cols=70><%=vInvoiceData.getFromBankNr()%></textarea>
+                <td width="270" valign="top">
+                <input type=text name=<%=Constants.TASK_FROM_BANK_NR%> value="<%=(vInvoiceData != null ? vInvoiceData.getFromBankNr() : "")%>">
                 </td>
             </tr>
 			<tr>
-			     <td width="150" valign="top" class="adminsubtitle">&nbsp;Betalingsbericht</td>
+			     <td width="250" valign="top" class="adminsubtitle">&nbsp;Betalingsbericht</td>
 			     <td width="10" valign="top">:</td>
-			     <td width="170" valign="top">
-			     <textarea name=<%=Constants.TASK_PAY_DETAILS%> rows=10 cols=70><%=vInvoiceData.getPaymentDetails()%></textarea>
+			     <td width="270" valign="top">
+                 <input type=text name=<%=Constants.TASK_PAY_DETAILS%> value="<%=(vInvoiceData != null ? vInvoiceData.getPaymentDetails() : "")%>">
 			     </td>
 			 </tr>
 		</table>
