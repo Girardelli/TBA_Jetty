@@ -57,14 +57,7 @@ public class CallRecordEntityPK extends java.lang.Object implements java.io.Seri
         be.tba.ejb.pbx.interfaces.CallRecordEntityPK pk = (be.tba.ejb.pbx.interfaces.CallRecordEntityPK) obj;
         boolean eq = true;
 
-        if (obj == null)
-        {
-            eq = false;
-        }
-        else
-        {
-            eq = eq && this.id == pk.id;
-        }
+        eq = eq && this.id == pk.id;
 
         return eq;
     }

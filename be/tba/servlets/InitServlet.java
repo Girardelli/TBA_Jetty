@@ -11,8 +11,8 @@ import javax.servlet.ServletResponse;
 import be.tba.util.session.AccountCache;
 import be.tba.util.timer.TimerManager;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
 
 public class InitServlet extends GenericServlet
 {
@@ -31,6 +31,7 @@ public class InitServlet extends GenericServlet
         {
             TimerManager vTimerManager = TimerManager.getInstance();
             AccountCache vAccountCache = AccountCache.getInstance();
+            System.out.println("AccountCache initialized");
             // The newInstance() call is a work around for some
             // broken Java implementations
 
@@ -41,6 +42,7 @@ public class InitServlet extends GenericServlet
             e.printStackTrace();
             throw new ServletException("AccountCache init failed: " + e.getMessage());
         }
+        System.out.println("Servlets initialized");
     }
 
     public void destroy()

@@ -18,6 +18,10 @@
 	java.text.DecimalFormat,
 	be.tba.ejb.account.interfaces.AccountEntityData,
 	be.tba.ejb.invoice.session.InvoiceSqlAdapter,
+	be.tba.util.file.FileUploader,
+	be.tba.util.excel.FintroXlsxReader,
+	java.io.File,
+	org.apache.commons.fileupload.FileItem,
 	be.tba.util.data.*"	%>
 
 <%
@@ -66,9 +70,6 @@
 	<input class="tbabutton" type=file name=<%=Constants.FINTRO_FILE%> value=" Fintro excel opladen " accept=".xlsx">
 	<input class="tbabutton" type=submit name=action value=" Laad de file op " onclick="uploadFile()">
     </form>
-    <form name="openinvoicelistform" method="POST" action="/TheBusinessAssistant/AdminDispatch">
-    <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.GOTO_OPEN_INVOICE%>"> 
-    <input type=hidden name=<%=Constants.INVOICE_TO_SETPAYED%> value="">
 	<table width='100%' cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
 		<tr>
 			<!-- white space -->
@@ -78,8 +79,43 @@
 			<td valign="top" width="865" bgcolor="FFFFFF">
 				<br>
 			<%
-	
-			                Collection vInvoices = null;
+			   	            // check whether a Fintro file was uploaded
+			   	            String fintroFileName = vSession.getFintroFile();
+			   	            if (fintroFileName != null)
+			   	            {
+			   	                DecimalFormat vCostFormatter = new DecimalFormat("#0.00");
+			   	                FintroXlsxReader fintroXlsxReader = new FintroXlsxReader(fintroFileName);
+			   	                vSession.setFintroFile(null);
+				   	            vSession.setFintroProcessLog(fintroXlsxReader.getOutputFileName());
+				   	         %> 
+				             <br>				   	            
+				   	         <form name="downloadfileform" method="POST" action="/TheBusinessAssistant/download" >
+						     <input class="tbabutton" type=submit name=action value=" download de procesresultaten hieronder afgedrukt ">
+						     <input type=hidden name=<%=Constants.FINTRO_PROCESS_FILE%> value="<%=fintroXlsxReader.getOutputFileName()%>"> 
+                             </form>
+				   	         <p><span class="adminsubtitle"> Resultaten van de Fintro upload:  
+                             </span></p>
+				   	         <p><span class="bodytekst" >
+				   	         <%=fintroXlsxReader.getHtmlProcessLog()%>
+				   	         </span></p>
+				   	         <%    
+			   	            }
+			   	            else if (vSession.getFintroProcessLog() != null && !vSession.getFintroProcessLog().isEmpty())
+			   	            {
+			   	                File outputFile = new File(vSession.getFintroProcessLog());
+			   	                outputFile.delete();
+			   	                vSession.setFintroProcessLog(null); 
+			   	            }
+			   	            else
+			   	            {
+			   	                vSession.setFintroProcessLog(null);
+			   	            }
+%>
+			   	      <form name="openinvoicelistform" method="POST" action="/TheBusinessAssistant/AdminDispatch">
+			   	      <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.GOTO_OPEN_INVOICE%>"> 
+			   	      <input type=hidden name=<%=Constants.INVOICE_TO_SETPAYED%> value="">
+<%
+			                Collection<InvoiceEntityData> vInvoices = null;
 			                InvoiceSqlAdapter vInvoiceSession = new InvoiceSqlAdapter();
 	
 			                vInvoices = vInvoiceSession.getOpenInvoiceList(vSession);

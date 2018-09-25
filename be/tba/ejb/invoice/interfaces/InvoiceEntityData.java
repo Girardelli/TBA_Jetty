@@ -3,6 +3,8 @@
  */
 package be.tba.ejb.invoice.interfaces;
 
+import be.tba.util.invoice.IBANCheckDigit;
+
 /**
  * Data object for InvoiceEntity.
  *
@@ -39,6 +41,7 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
     public String valutaDate = "";
     public String fromBankNr = "";
     public String paymentDetails = "";
+    public String structuredId = ""; //gestructureerde mededeling (Modulo 97 protected)
 
 
     public InvoiceEntityData()
@@ -46,7 +49,7 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
         creditId = -1;
     }
 
-    public InvoiceEntityData(int id, java.lang.String fileName, java.lang.String accountFwdNr, double totalCost, int month, int year, int yearSeqNr, java.lang.String invoiceNr, boolean frozenFlag, boolean isPayed, long startTime, long stopTime, java.lang.String customerName, boolean isInvoiceMailed, java.lang.String customerRef, java.lang.String payDate, int creditId, String fintroId, String executionDate, String valutaDate, String fromBankNr, String paymentDetails)
+    public InvoiceEntityData(int id, java.lang.String fileName, java.lang.String accountFwdNr, double totalCost, int month, int year, int yearSeqNr, java.lang.String invoiceNr, boolean frozenFlag, boolean isPayed, long startTime, long stopTime, java.lang.String customerName, boolean isInvoiceMailed, java.lang.String customerRef, java.lang.String payDate, int creditId, String fintroId, String executionDate, String valutaDate, String fromBankNr, String paymentDetails, String structuredId)
     {
         setId(id);
         setFileName(fileName);
@@ -70,7 +73,7 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
         setValutaDate(valutaDate);
         setFromBankNr(fromBankNr);
         setPaymentDetails(paymentDetails);
-
+        setStructuredId(structuredId);
     }
 
     public InvoiceEntityData(InvoiceEntityData otherData)
@@ -97,6 +100,7 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
         setValutaDate(otherData.getValutaDate());
         setFromBankNr(otherData.getFromBankNr());
         setPaymentDetails(otherData.getPaymentDetails());
+        setStructuredId(otherData.getStructuredId());
     }
 
     public be.tba.ejb.invoice.interfaces.InvoiceEntityPK getPrimaryKey()
@@ -183,6 +187,7 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
     public void setInvoiceNr(java.lang.String invoiceNr)
     {
         this.invoiceNr = invoiceNr;
+        this.structuredId = IBANCheckDigit.IBAN_CHECK_DIGIT.calculateOGM(invoiceNr);
     }
 
     public boolean getFrozenFlag()
@@ -336,6 +341,15 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
         this.paymentDetails = paymentDetails;
     }
 
+    public String getStructuredId()
+    {
+        return this.structuredId;
+    }
+   
+    public void setStructuredId(String structuredId)
+    {
+        this.structuredId = structuredId;
+    }
     
     public boolean equals(Object pOther)
     {
@@ -478,7 +492,8 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
                 "',executionDate='" + ((this.getExecutionDate() != null) ? this.getExecutionDate() : "") +
                 "',valutaDate='" + ((this.getValutaDate() != null) ? this.getValutaDate() : "") +
                 "',fromBankNr='" + ((this.getFromBankNr() != null) ? this.getFromBankNr() : "") +
-                "',paymentDetails='" + ((this.getPaymentDetails() != null) ? this.getPaymentDetails() : "") + "'");
+                "',paymentDetails='" + ((this.getPaymentDetails() != null) ? this.getPaymentDetails() : "") +
+                "',structuredId='" + ((this.getStructuredId() != null) ? this.getStructuredId() : "") + "'");
                 return (str.toString());
     }
 
@@ -508,6 +523,7 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
                 "','" + getValutaDate() +
                 "','" + getFromBankNr() +
                 "','" + getPaymentDetails() + 
+                "','" + getStructuredId() + 
                 "'");
         return (str.toString());
     }

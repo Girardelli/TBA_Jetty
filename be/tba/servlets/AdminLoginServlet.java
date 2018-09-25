@@ -16,7 +16,6 @@ import be.tba.servlets.session.SessionManager;
 import be.tba.servlets.session.WebSession;
 import be.tba.util.constants.AccountRole;
 import be.tba.util.constants.Constants;
-import be.tba.util.data.CallFilter;
 import be.tba.util.exceptions.AccessDeniedException;
 
 public class AdminLoginServlet extends HttpServlet
@@ -87,6 +86,7 @@ public class AdminLoginServlet extends HttpServlet
         }
         catch (Exception e)
         {
+            e.printStackTrace();
             System.out.println("AdminLoginServlet: Mallicious admin access attempt. userid:" + vUserId + ", password:" + vPassword);
             // print error page!!
             String vMsg = e.getMessage();

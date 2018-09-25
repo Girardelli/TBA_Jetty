@@ -286,6 +286,7 @@ public class AccountFacade
         vAccount.setStreet(req.getParameter(Constants.ACCOUNT_STREET));
         vAccount.setCity(req.getParameter(Constants.ACCOUNT_CITY));
         vAccount.setBtwNumber(req.getParameter(Constants.ACCOUNT_BTW_NUMBER));
+        vAccount.setAccountNr(req.getParameter(Constants.ACCOUNT_NR));
 
         vAccount.setNoInvoice(req.getParameter(Constants.ACCOUNT_NO_INVOICE) != null);
         vAccount.setNoBtw(req.getParameter(Constants.ACCOUNT_NO_BTW) != null);

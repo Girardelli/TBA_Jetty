@@ -16,13 +16,13 @@ import be.tba.util.exceptions.LostSessionException;
 
 final public class SessionManager
 {
-    private Map mMap;
+    private Map<String, WebSession> mMap;
 
     private Random mRand;
 
     private static SessionManager mInstance = null;
 
-    private static final int kKeyLim = 0xFFFFF;
+    private static final int kKeyLim = 0xFFFFFFF;
 
     public static SessionManager getInstance()
     {
@@ -55,13 +55,13 @@ final public class SessionManager
     {
         if (sessionId == null)
             throw new AccessDeniedException("Error: geen session id in de request.");
-        WebSession vState = (WebSession) mMap.get(sessionId);
+        WebSession vState = mMap.get(sessionId);
         if (vState == null)
             throw new AccessDeniedException("Aanmeld sessie is verlopen.");
         if (vState.isExpired(caller))
         {
             vState.Close();
-            mMap.remove(vState);
+            mMap.remove(sessionId);
             throw new LostSessionException();
         }
         return vState;
@@ -70,15 +70,15 @@ final public class SessionManager
     public void clean()
     {
         int cnt = 0;
-        Set vKeySet = mMap.keySet();
-        for (Iterator i = vKeySet.iterator(); i.hasNext();)
+        Set<String> vKeySet = mMap.keySet();
+        for (Iterator<String> i = vKeySet.iterator(); i.hasNext();)
         {
-            Object vKey = i.next();
-            WebSession vState = (WebSession) mMap.get(vKey);
+            String sessionId = i.next();
+            WebSession vState = mMap.get(sessionId);
             if (vState.isExpired("cleaner"))
             {
                 vState.Close();
-                mMap.remove(vKey);
+                mMap.remove(sessionId);
                 cnt++;
             }
         }
@@ -88,7 +88,7 @@ final public class SessionManager
 
     private SessionManager()
     {
-        mMap = Collections.synchronizedMap(new HashMap());
+        mMap = Collections.synchronizedMap(new HashMap<String, WebSession>());
         mRand = new Random();
     }
 

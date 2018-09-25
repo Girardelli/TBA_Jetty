@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.fileupload.FileItem;
@@ -11,14 +13,20 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
+import be.tba.util.constants.Constants;
 import be.tba.util.exceptions.SystemErrorException;
 
+@WebServlet("/upload")
+@MultipartConfig
 public class FileUploader
 {
-    private static final int MAX_MEMORY_SIZE = 1024 * 1024 * 2;
-    private static final int MAX_REQUEST_SIZE = 1024 * 1024;
+    private static final int MAX_MEMORY_SIZE = 1024 * 1024 * 200;
+    private static final int MAX_REQUEST_SIZE = 1024 * 1024 * 100;
+    
+    private String mUploadedFile;
+    private List<FileItem> mItems;
 
-    public static String upload(String uploadFolder, HttpServletRequest request) throws SystemErrorException
+    public FileUploader(HttpServletRequest request) throws SystemErrorException
     {
         // Create a factory for disk-based file items
         DiskFileItemFactory factory = new DiskFileItemFactory();
@@ -30,73 +38,121 @@ public class FileUploader
         // Sets the directory used to temporarily store files that are larger
         // than the configured size threshold. We use temporary directory for
         // java
-        factory.setRepository(new File(System.getProperty("java.io.tmpdir")));
-
+        factory.setRepository(new File("c:\\temp\\fileuploadtemp"));
+     
         // Create a new file upload handler
         ServletFileUpload upload = new ServletFileUpload(factory);
 
         // Set overall request size constraint
         upload.setSizeMax(MAX_REQUEST_SIZE);
-
+        
+/*        
+        Map<String, String[]> parmMap = request.getParameterMap();
+        Enumeration<String> attrNameEnum = request.getAttributeNames();
+        Enumeration<String> parmNameEnum = request.getParameterNames();
+        
+        System.out.println("Attributes:");
+        for (;attrNameEnum.hasMoreElements();)
+        {
+            String attr = attrNameEnum.nextElement();
+            System.out.println(attr + ": " + request.getAttribute(attr));
+        }
+        System.out.println("\nParameters:");    
+        for (;parmNameEnum.hasMoreElements();)
+        {
+            String parm = parmNameEnum.nextElement();
+            System.out.println(parm + ": " + request.getParameter(parm));
+        }
+*/        
         try
         {
-            File uploadedFile = null;
-            String filePath = null;
+            FileItem uploadedFileItem = null;
             // Parse the request
-            List<FileItem> items = upload.parseRequest(request);
-            if (items == null || items.size() == 0)
+            mItems = upload.parseRequest(request);
+            if (mItems == null)
             {
-                throw new SystemErrorException("File could not be uploaded. No file items found.");
+                throw new SystemErrorException("File upload parsing returned null.");
+            }
+            if (mItems.size() == 0)
+            {
+                throw new SystemErrorException("File upload parsing returned 0 file items");
             }
 
-            Iterator<FileItem> iter = items.iterator();
+            System.out.println("#fileitems returned: " + mItems.size());
+            Iterator<FileItem> iter = mItems.iterator();
             while (iter.hasNext())
             {
                 FileItem item = (FileItem) iter.next();
-                if (uploadedFile != null)
+                System.out.println("FileItem: " + item.getName());
+                if (uploadedFileItem != null)
                 {
-                    System.out.println("Only 1 file per upload supported. Deleting this one");
-
-                    item.delete();
                     continue;
                 }
                 if (!item.isFormField())
                 {
-                    String fileName = new File(item.getName()).getName();
-                    filePath = uploadFolder + File.separator + fileName;
-                    uploadedFile = new File(filePath);
+                    mUploadedFile = Constants.FILEUPLOAD_DIR + File.separator + item.getName();
+                    System.out.println("File name returned for fileupload: " + mUploadedFile);
+                    File uploadedFile = new File(mUploadedFile);
                     
                     // saves the file to upload directory
                     item.write(uploadedFile);
-                    System.out.println("File successful written to temp file: " + filePath);
-                }
-                else
-                {
-                    System.out.println("uploaded item is a FormField.");
-                    item.delete();
-                    
+                    uploadedFileItem = item;
+                    System.out.println("File successful written to temp file: " + mUploadedFile);
                 }
             }
-            return filePath;
-
         }
         catch (FileUploadException ex)
         {
+            ex.printStackTrace();
             throw new SystemErrorException(ex, "FileUploadException");
         }
+        catch (SystemErrorException ex)
+        {
+            throw ex;
+        }
+
         catch (Exception ex)
         {
+            ex.printStackTrace();
             throw new SystemErrorException(ex, "Exception");
         }
 
     }
 
-    public static void clearTempFiles(FileItem item)
+    public String getUploadedFileName()
     {
-        if (item != null)
-        {
-            item.delete();
-        }
+        return mUploadedFile;
     }
+    
+    public String getFormParameter(String name)
+    {
+        Iterator<FileItem> iter = mItems.iterator();
+        while (iter.hasNext())
+        {
+            FileItem item = (FileItem) iter.next();
+            if (item.isFormField() && item.getFieldName().equals(name))
+            {
+                return item.getString();
+            }
+        }
+        System.out.println("Parameter not found: " + name);
+        return null;
+    }
+    
+    
+    public void finalize()
+    {
+        if (mItems != null)
+        {
+            Iterator<FileItem> iter = mItems.iterator();
+            while (iter.hasNext())
+            {
+                FileItem item = (FileItem) iter.next();
+                System.out.println("Deleting FileItem: " + item.getFieldName());
+                item.delete();
+            }
+        }
+        mItems = null;
+   }
 
 }

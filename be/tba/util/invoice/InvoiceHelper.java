@@ -157,7 +157,7 @@ public class InvoiceHelper
             System.out.println("InvoiceHelper(InvoiceData=");
             if (invoiceData == null)
             {
-                throw(new Exception("InvoiceHelper called with invoiceData=null"));
+                throw (new Exception("InvoiceHelper called with invoiceData=null"));
             }
             mInvoiceEntityData = invoiceData;
             mAccountEntityData = AccountCache.getInstance().get(mInvoiceEntityData.getAccountFwdNr());
@@ -239,7 +239,7 @@ public class InvoiceHelper
             if (mInvoiceEntityData != null)
             {
                 // There is already an invoice for this period
-                if(mInvoiceEntityData.getCreditId() >= 0)
+                if (mInvoiceEntityData.getCreditId() >= 0)
                 {
                     // start counting again at the old start point.
                     vStart = mInvoiceEntityData.getStartTime();
@@ -248,7 +248,8 @@ public class InvoiceHelper
                 }
                 else if (mInvoiceEntityData.getFrozenFlag())
                 {
-                    // the last invoice for this month was frozen and had nothing to do with credit note's: make a new one
+                    // the last invoice for this month was frozen and had nothing to do with credit
+                    // note's: make a new one
                     // starting from the stopTime of this last one.
                     vStart = mInvoiceEntityData.getStopTime() + 1;
                     mInvoiceEntityData = null;
@@ -267,14 +268,14 @@ public class InvoiceHelper
             else
             {
                 System.out.println(mAccountEntityData.getFwdNumber() + " : no invoices yet for this number for this month. Make one.");
-                
+
                 // first invoice for this month: get all calls from the beginning of the month
             }
         }
         else
         {
             // There is already an invoice for this period
-            if(mInvoiceEntityData.getCreditId() >= 0)
+            if (mInvoiceEntityData.getCreditId() >= 0)
             {
                 vStart = mInvoiceEntityData.getStartTime();
                 vEnd = mInvoiceEntityData.getStopTime();
@@ -284,7 +285,7 @@ public class InvoiceHelper
             {
                 // the last invoice for this month was frozen: make a new one
                 // starting from the stopTime of this last one.
-                vStart = mInvoiceEntityData.getStartTime(); 
+                vStart = mInvoiceEntityData.getStartTime();
                 vEnd = mInvoiceEntityData.getStopTime();
                 System.out.println(mAccountEntityData.getFwdNumber() + " : frozen invoice data, not related to credit note, provided by caller: show the frozen data");
             }
@@ -854,7 +855,7 @@ public class InvoiceHelper
     {
         return mSubcustomerCostList;
     }
-    
+
     public void setFileName()
     {
         if (mInvoiceEntityData != null)
@@ -891,7 +892,6 @@ public class InvoiceHelper
         }
         return "";
     }
-
 
     public int setCounters(CallCounts callCounts, Collection<CallRecordEntityData> callList, AccountEntityData customerData)
     {

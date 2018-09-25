@@ -7,16 +7,11 @@ package be.tba.servlets.session;
 import java.io.Serializable;
 
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.sql.DataSource;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 
 import be.tba.ejb.account.interfaces.AccountEntityData;
 import be.tba.ejb.pbx.interfaces.CallRecordEntityData;
@@ -86,7 +81,9 @@ final public class WebSession implements Serializable
     
     private String mRecordId = null;
 
-    private String mFintroFile = null;
+    private String mFintroFileName = null;
+    
+    private String mFintroProcessLog = null;
 
     public WebSession() throws SQLException
     {
@@ -309,12 +306,12 @@ final public class WebSession implements Serializable
 
     public void setFintroFile(String fintroFile)
     {
-        mFintroFile = fintroFile;
+        mFintroFileName = fintroFile;
     }
 
     public String getFintroFile()
     {
-        return mFintroFile;
+        return mFintroFileName;
     }
 
     public void setDaysBack(int cnt)
@@ -415,6 +412,16 @@ final public class WebSession implements Serializable
         return mInvoiceHelper;
     }
 
+    public String getFintroProcessLog()
+    {
+        return mFintroProcessLog;
+    }
+    
+    public void setFintroProcessLog(String fileName)
+    {
+        mFintroProcessLog = fileName;
+    }
+    
     public void init(String userid, String sessionId)
     {
         mId = sessionId;

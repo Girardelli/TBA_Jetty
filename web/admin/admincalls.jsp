@@ -128,7 +128,6 @@ out.println("<td width=\"170\" valign=\"top\"><select name=\"" + Constants.ACCOU
 				}
 out.println("<option value=\"" + Constants.NUMBER_BLOCK[0][0] + (vCustomerFilter.equals(Constants.NUMBER_BLOCK[0][0]) ? "\" selected>" : "\">") + Constants.NUMBER_BLOCK[0][3]);
 out.println("<option value=\"" + Constants.NUMBER_BLOCK[1][0] + (vCustomerFilter.equals(Constants.NUMBER_BLOCK[1][0]) ? "\" selected>" : "\">") + Constants.NUMBER_BLOCK[1][3]);
-out.println("<option value=\"" + Constants.NUMBER_BLOCK[2][0] + (vCustomerFilter.equals(Constants.NUMBER_BLOCK[2][0]) ? "\" selected>" : "\">") + Constants.NUMBER_BLOCK[2][3]);
 out.println("<option value=\"" + Constants.ACCOUNT_FILTER_ALL + (vCustomerFilter.equals(Constants.ACCOUNT_FILTER_ALL) ? "\" selected>" : "\">") + "Alle klanten");
 out.println("</select></td>");
 %>

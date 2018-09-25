@@ -1,9 +1,11 @@
 package be.tba.servlets;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Calendar;
 import java.util.Iterator;
+import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.Collection;
@@ -19,6 +21,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -35,6 +39,7 @@ import be.tba.util.constants.Constants;
 import be.tba.util.exceptions.AccessDeniedException;
 import be.tba.util.exceptions.LostSessionException;
 import be.tba.util.exceptions.SystemErrorException;
+import be.tba.util.file.FileUploader;
 import be.tba.util.session.AccountCache;
 
 @WebServlet("/upload")
@@ -58,8 +63,22 @@ public class AdminDispatchServlet extends HttpServlet
             res.setContentType("text/html");
             res.setCharacterEncoding("UTF-8");
             req.setCharacterEncoding("UTF-8");
-            String vAction = (String) req.getParameter(Constants.SRV_ACTION);
-
+            
+            // parsing the multipart content must be done before any getXXX call on the request
+            // because such getXXX calls will implicitly call the parser which can only be called once.
+            String vAction = null;
+            String uploadedFile = null;
+            if (ServletFileUpload.isMultipartContent(req)) 
+            {
+                FileUploader fileUploader = new FileUploader(req);
+                uploadedFile = fileUploader.getUploadedFileName();
+                vAction = fileUploader.getFormParameter(Constants.SRV_ACTION);
+            }
+            else
+            {
+                vAction = (String) req.getParameter(Constants.SRV_ACTION);
+            }
+            
             HttpSession httpSession = req.getSession();
             WebSession vSession = (WebSession) httpSession.getAttribute(Constants.SESSION_OBJ);
 
@@ -668,20 +687,8 @@ public class AdminDispatchServlet extends HttpServlet
                 // ==============================================================================================
                 else if (vAction.equals(Constants.PROCESS_FINTRO_XLSX))
                 {
-                    Part filePart = req.getPart(Constants.FINTRO_FILE); 
-                    filePart.getSubmittedFileName()
-                    String fintroFile = Paths.get(filePart.getSubmittedFileName()).getFileName().toString(); // MSIE fix.
-
-                    
-                    if (fintroFile != null && fintroFile.length() > 0)
-                    {
-                        vSession.setFintroFile(fintroFile);
-                        System.out.println("admindispatch GOTO_OPEN_INVOICE: fintroFile = " + filePart.getSubmittedFileName());
-                    }
-                    else
-                    {
-                        vSession.setFintroFile(null);
-                    }
+                    vSession.setFintroFile(uploadedFile);        
+                    System.out.println("PROCESS_FINTRO_XLSX: file ready for parsing: " + vSession.getFintroFile());
                     rd = sc.getRequestDispatcher(Constants.OPEN_INVOICE_JSP);
                 }
 

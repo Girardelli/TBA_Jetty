@@ -145,7 +145,7 @@ public class AccountSqlAdapter extends AbstractSqlAdapter<AccountEntityData>
 
     public void addAccount(WebSession webSession, AccountEntityData data)
     {
-        for (int i = 0; i < 3; ++i)
+        for (int i = 0; i < 2; ++i)
         {
             if (data.getFwdNumber().equals(Constants.NUMBER_BLOCK[i][0]))
             {
@@ -175,7 +175,7 @@ public class AccountSqlAdapter extends AbstractSqlAdapter<AccountEntityData>
         Vector<String> vFreeNumbers = new Vector<String>();
         Collection<AccountEntityData> accounts = getAllRows(webSession.getConnection());
 
-        for (int i = 2; i < Constants.NUMBER_BLOCK.length; i++)
+        for (int i = 1; i < Constants.NUMBER_BLOCK.length; i++)
         {
             vFreeNumbers.add(Constants.NUMBER_BLOCK[i][0]);
         }
@@ -280,6 +280,7 @@ public class AccountSqlAdapter extends AbstractSqlAdapter<AccountEntityData>
             entry.setFacTblExtraCost_IV(rs.getDouble(68));
             entry.setIsMailInvoice(rs.getBoolean(69));
             entry.setInvoiceEmail(null2EmpthyString(rs.getString(70)));
+            entry.setAccountNr(null2EmpthyString(rs.getString(71)));
             vVector.add(entry);
             // System.out.println("read from DB:" + entry.toNameValueString());
         }

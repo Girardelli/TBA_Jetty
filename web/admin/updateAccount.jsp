@@ -100,6 +100,7 @@ String vAttToName = vCustomer.getAttToName();
 String vStreet = vCustomer.getStreet();
 String vCity = vCustomer.getCity();
 String vBtwNumber = vCustomer.getBtwNumber();
+String vAccountNr = vCustomer.getAccountNr();
 boolean vNoEmptyMails = vCustomer.getNoEmptyMails();
 boolean vTextMail = vCustomer.getTextMail();
 double vFacLong = vCustomer.getFacLong();
@@ -575,6 +576,12 @@ for (int i = 0; i < kMaxMailMinutes; i += 5)
                     <input type=text name=<%=Constants.ACCOUNT_BTW_NUMBER%> size=50	value="<%=vBtwNumber%>">
                 </td>
 			</tr>
+            <tr>
+                <td width="200" valign="top" class="adminsubsubtitle">Rekeningnummers (',' separated)</td>
+                <td width="500" valign="top">
+                    <input type=text name=<%=Constants.ACCOUNT_NR%> size=50 value="<%=vAccountNr%>">
+                </td>
+            </tr>
 		</table>
 		<br>
 		<br>

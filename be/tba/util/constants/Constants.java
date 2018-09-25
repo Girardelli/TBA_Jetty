@@ -39,6 +39,8 @@ public class Constants
 
     public static final String INVOICE_DIR = "C:\\TheBusinessAssistant\\TheBusinessAssistant\\facturen\\";
 
+    public static final String FILEUPLOAD_DIR = "C:\\jetty\\tempdir";
+
     public static final String ADMIN_LOGIN_HTML = "/TheBusinessAssistant/admin.html";
 
     public static final String BAD_LOGIN_HTML = "/badlogin.html";
@@ -254,6 +256,8 @@ public class Constants
 
     public static final String ACCOUNT_BTW_NUMBER = "_fbtw";
 
+    public static final String ACCOUNT_NR = "_fanr";
+
     public static final String ACCOUNT_NO_INVOICE = "_fniv";
 
     public static final String ACCOUNT_NO_BTW = "_fnbtw";
@@ -322,6 +326,7 @@ public class Constants
     public static final String NO_CUSTOMER = "_ncu";
     
     public static final String FINTRO_FILE = "_iff";
+    public static final String FINTRO_PROCESS_FILE = "_ipf";
 
     // filter
     public static final String ACCOUNT_FILTER_CUSTOMER = "_fcus";

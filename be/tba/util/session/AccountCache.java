@@ -14,12 +14,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
+import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.Vector;
-
-import javax.sql.DataSource;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 
 import be.tba.ejb.account.interfaces.AccountEntityData;
 import be.tba.ejb.account.session.AccountSqlAdapter;
@@ -32,13 +29,12 @@ final public class AccountCache
     private AccountSqlAdapter mAccountAdapter = new AccountSqlAdapter();
     private Map<String, AccountEntityData> mFwdKeyList;
     private Collection<AccountEntityData> mRawCollection;
-    private SortedMap<String, AccountEntityData> mNameSortedList; // without9000.
-                                                                  // 9001 and
-                                                                  // 9002
+    private SortedMap<String, AccountEntityData> mNameSortedList; // without9000, 9001
     private SortedMap<String, AccountEntityData> mNameSortedFullList;
     private Map<String, Collection<AccountEntityData>> mSubCustomersLists;
     private Map<String, AccountEntityData> mEmployeeLists;
     private Map<Integer, Collection<AccountEntityData>> mMailingGroups;
+    private Map<String, Collection<String>> mAccountNr2FwdNrsMap;
     private int mLastMailTime = 0;
 
     /*
@@ -63,7 +59,6 @@ final public class AccountCache
     {
         if (mInstance == null)
         {
-            InitialContext ctx;
             Connection con = null;
             try
             {
@@ -162,6 +157,7 @@ final public class AccountCache
         mSubCustomersLists = new HashMap<String, Collection<AccountEntityData>>();
         mEmployeeLists = new HashMap<String, AccountEntityData>();
         mMailingGroups = new HashMap<Integer, Collection<AccountEntityData>>();
+        mAccountNr2FwdNrsMap = new HashMap<String, Collection<String>>();
         mLastMailTime = 0;
 
     }
@@ -274,7 +270,33 @@ final public class AccountCache
                 // System.out.println("added employee " + vEntry.getFullName() + ", " +
                 // vEntry.getId() + ", " + vEntry.getUserId());
             }
+            
+            // fill in the AccountNrList
+            if (vEntry.getAccountNr() != null && !vEntry.getAccountNr().isEmpty())
+            {
+                String accountNrs = vEntry.getAccountNr();
+                StringTokenizer vTokenizer = new StringTokenizer(accountNrs, ",");
+                
+                while (vTokenizer.hasMoreTokens())
+                {
+                    String accountNr = vTokenizer.nextToken();
+                    if (mAccountNr2FwdNrsMap.containsKey(accountNr))
+                    {
+                        Collection<String> FwdNrs = mAccountNr2FwdNrsMap.get(accountNr);
+                        FwdNrs.add(vEntry.getFwdNumber());
+                    }
+                    else
+                    {
+                        Collection<String> FwdNrs = new Vector<String>();
+                        FwdNrs.add(vEntry.getFwdNumber());
+                        mAccountNr2FwdNrsMap.put(accountNr, FwdNrs);
+                    }
+                    
+                    //System.out.println("matching FWD (" + vEntry.getFwdNumber() + ") nr to account Number: " + accountNr);
+                }
+            }
         }
+        
         // set the HasSubCustomer flags
         Set<String> superCustomers = mSubCustomersLists.keySet();
         for (Iterator<String> i = superCustomers.iterator(); i.hasNext();)
@@ -286,7 +308,6 @@ final public class AccountCache
                 vSuperCust.setHasSubCustomers(true);
             }
         }
-
         // System.out.println("Before new mNameSortedList");
         // mNameSortedList = new TreeMap(new AccountNamesComparator());
 
@@ -298,7 +319,7 @@ final public class AccountCache
          * } }
          */
 
-        for (int i = 0; i < 3; ++i)
+        for (int i = 0; i < 2; ++i)
         {
             AccountEntityData vEntryCnst = new AccountEntityData();
             vEntryCnst.setFullName(Constants.NUMBER_BLOCK[i][3]);
@@ -313,6 +334,7 @@ final public class AccountCache
             mNameSortedFullList.put(Constants.NUMBER_BLOCK[i][3], vEntryCnst);
             mFwdKeyList.put(Constants.NUMBER_BLOCK[i][0], vEntryCnst);
         }
+        
     }
 
     public Collection<String> getFreeNumbers()
@@ -320,7 +342,7 @@ final public class AccountCache
         try
         {
             Vector<String> vFreeNumbers = new Vector<String>();
-            for (int i = 2; i < Constants.NUMBER_BLOCK.length; i++)
+            for (int i = 1; i < Constants.NUMBER_BLOCK.length; i++)
                 vFreeNumbers.add(Constants.NUMBER_BLOCK[i][0]);
             for (Iterator<AccountEntityData> i = mRawCollection.iterator(); i.hasNext();)
             {
@@ -411,6 +433,19 @@ final public class AccountCache
         mLastMailTime = aNewKey.intValue();
         return null;
     }
+    
+    public Collection<String> getFwdNumbersForAccountNr(String accountNr)
+    {
+        if (accountNr != null && !accountNr.isEmpty())
+        {
+            if (mAccountNr2FwdNrsMap.containsKey(accountNr))
+            {
+                return mAccountNr2FwdNrsMap.get(accountNr);
+            }
+        }
+        System.out.println("no fwd nrs for accountNr: " + accountNr);
+        return new Vector<String>();
+    }
 
     private void buildMailingGroups()
     {
@@ -452,37 +487,23 @@ final public class AccountCache
                 vMailGroup.add(vEntry);
             }
         }
-        System.out.println(mMailingGroups.size() + " mailing groups");
-        // Set vMailGroupKeys = mMailingGroups.keySet();
-        // for (Iterator i = vMailGroupKeys.iterator(); i.hasNext();)
-        // {
-        // Integer vKey = (Integer) i.next();
-        // if (mLastMailTime > vKey.intValue())
-        // {
-        // System.out.println("Remove " + vKey + " from mailinggroups");
-        // mMailingGroups.remove(vKey);
-        // if (mMailingGroups.size() == 0)
-        // {
-        // buildMailingGroups();
-        // break;
-        // }
-        // }
-        // }
-        // System.out.println(mMailingGroups.size() +
-        // " mailing groups after cleanup");
 
+/*      
+ * print the mailing groups
+ * 
+ *   
         Set<Integer> vMailGroupKeys = mMailingGroups.keySet();
         for (Iterator<Integer> i = vMailGroupKeys.iterator(); i.hasNext();)
         {
             Integer vKey = (Integer) i.next();
             Collection<AccountEntityData> vMailGroup = mMailingGroups.get(vKey);
-            // System.out.println("Mail group for key " + vKey + " has " + vMailGroup.size()
-            // + " entries:");
+            System.out.println("Mail group for key " + vKey + " has " + vMailGroup.size() + " entries:");
             for (Iterator<AccountEntityData> j = vMailGroup.iterator(); j.hasNext();)
             {
                 AccountEntityData vAccount = (AccountEntityData) j.next();
-                // System.out.println("\t" + vAccount.getFullName());
+                 System.out.println("\t" + vAccount.getFullName());
             }
         }
+*/
     }
 }

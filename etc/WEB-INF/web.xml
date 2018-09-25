@@ -41,6 +41,12 @@
     <servlet-class>be.tba.servlets.CustomerDispatchServlet</servlet-class>
   </servlet>
   
+  <servlet>
+     <servlet-name>FileDownloadServlet</servlet-name>
+     <servlet-class>be.tba.servlets.FileDownloadServlet</servlet-class>
+</servlet>
+
+  
   <!-- == Servlet mappings ================================================ -->
 
   <servlet-mapping>
@@ -66,6 +72,11 @@
   <servlet-mapping>
     <servlet-name>CustomerDispatchServlet</servlet-name>
     <url-pattern>/CustomerDispatch</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+     <servlet-name>FileDownloadServlet</servlet-name>
+     <url-pattern>/download</url-pattern>
   </servlet-mapping>
 
   <!-- ==================================================================== -->

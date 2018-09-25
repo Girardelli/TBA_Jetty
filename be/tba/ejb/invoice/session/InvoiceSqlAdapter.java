@@ -29,11 +29,14 @@ import be.tba.ejb.invoice.interfaces.InvoiceEntityData;
 import be.tba.servlets.session.WebSession;
 import be.tba.util.constants.Constants;
 import be.tba.util.data.AbstractSqlAdapter;
+import be.tba.util.data.FintroPayment;
+import be.tba.util.invoice.IBANCheckDigit;
 import be.tba.util.invoice.InvoiceHelper;
 import be.tba.util.session.AccountCache;
 import be.tba.util.timer.CallCalendar;
 
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.sql.ResultSet;
 
 /**
@@ -92,6 +95,61 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
     public InvoiceEntityData getInvoiceById(WebSession webSession, String key)
     {
         return getRow(webSession.getConnection(), Integer.parseInt(key));
+    }
+
+    /**
+     * @ejb:interface-method view-type="remote"
+     */
+    public Collection<InvoiceEntityData> getUnpayedInvoicesByValueAndFwdNrs(WebSession webSession, Collection<String> fwdNrs, double inclBtwCost)
+    {
+        if (fwdNrs != null && !fwdNrs.isEmpty())
+        {
+            
+            String fwdNrSqlsequence = "IN ('";
+            
+            for (Iterator<String> vFwdNrsIter = fwdNrs.iterator(); vFwdNrsIter.hasNext();)
+            {
+                fwdNrSqlsequence = fwdNrSqlsequence + vFwdNrsIter.next() + "'";
+                if (vFwdNrsIter.hasNext())
+                {
+                    fwdNrSqlsequence = fwdNrSqlsequence + ",'";
+                }
+            }
+            fwdNrSqlsequence = fwdNrSqlsequence + ")";
+            DecimalFormat vCostFormatter = new DecimalFormat("#0.000");
+            double rangeLow = Double.parseDouble(vCostFormatter.format(inclBtwCost /1.21 - 0.015));
+            double rangeHigh = Double.parseDouble(vCostFormatter.format(inclBtwCost /1.21 + 0.015));
+            return executeSqlQuery(webSession.getConnection(), "SELECT * FROM InvoiceEntity WHERE IsInvoiceMailed=TRUE AND CreditId=-1 AND TotalCost BETWEEN " + rangeLow + " AND " + rangeHigh + " AND AccountFwdNr " + fwdNrSqlsequence); 
+        }
+        else
+        {
+            System.out.println("getUnpayedInvoicesByValueAndFwdNrs: FwdNrs nulll or empty");
+        }
+        return new Vector<InvoiceEntityData>();
+    }
+
+    public Collection<InvoiceEntityData> getUnpayedInvoicesByFwdNrs(WebSession webSession, Collection<String> fwdNrs)
+    {
+        if (fwdNrs != null && !fwdNrs.isEmpty())
+        {
+            String fwdNrSqlsequence = "IN ('";
+            
+            for (Iterator<String> vFwdNrsIter = fwdNrs.iterator(); vFwdNrsIter.hasNext();)
+            {
+                fwdNrSqlsequence = fwdNrSqlsequence + vFwdNrsIter.next() + "'";
+                if (vFwdNrsIter.hasNext())
+                {
+                    fwdNrSqlsequence = fwdNrSqlsequence + ",'";
+                }
+            }
+            fwdNrSqlsequence = fwdNrSqlsequence + ")";
+            return executeSqlQuery(webSession.getConnection(), "SELECT * FROM InvoiceEntity WHERE IsInvoiceMailed=TRUE AND IsPayed=false AND CreditId=-1 AND AccountFwdNr " + fwdNrSqlsequence); 
+        }
+        else
+        {
+            System.out.println("getUnpayedInvoicesByFwdNr: FwdNrs nulll or empty");
+        }
+        return new Vector<InvoiceEntityData>();
     }
 
     /**
@@ -262,9 +320,6 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
         }
     }
 
-    /**
-     * @ejb:interface-method view-type="remote"
-     */
     public void setListPayed(WebSession webSession, Collection<Integer> freezeList)
     {
         for (Iterator<Integer> i = freezeList.iterator(); i.hasNext();)
@@ -277,6 +332,12 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
                 updateRow(webSession.getConnection(), vInvoiceData);
             }
         }
+    }
+
+    public void setPaymentInfo(WebSession webSession, int id, FintroPayment payment)
+    {
+        executeSqlQuery(webSession.getConnection(), "UPDATE InvoiceEntity SET IsPayed=true, FintroId='" + payment.id + "', ExecutionDate='" + payment.executionDate + "', ValutaDate='" + payment.valutaDate + "', FromBankNr='" + payment.accountNrCustomer +"', PaymentDetails='" + payment.details + "' WHERE id=" + id);
+
     }
 
     /**
@@ -450,6 +511,7 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
             entry.setValutaDate(null2EmpthyString(rs.getString(20)));
             entry.setFromBankNr(null2EmpthyString(rs.getString(21)));
             entry.setPaymentDetails(null2EmpthyString(rs.getString(22)));
+            entry.setStructuredId(null2EmpthyString(rs.getString(23)));
             vVector.add(entry);
             // System.out.println("InvoiceEntityData: " + entry.toNameValueString());
         }
@@ -463,7 +525,7 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
      */
     public String toString()
     {
-        return "InvoiceSessionBean [ " + " ]";
+        return "InvoiceSession [ " + " ]";
     }
 
 }

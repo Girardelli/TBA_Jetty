@@ -1,9 +1,12 @@
 package be.tba.pbx;
 
+import java.text.DecimalFormat;
+
 import javax.naming.NamingException;
 
 import be.tba.util.constants.Constants;
 import be.tba.util.excel.FintroXlsxReader;
+import be.tba.util.invoice.IBANCheckDigit;
 import be.tba.util.session.AccountCache;
 
 import org.slf4j.Logger;
@@ -43,8 +46,7 @@ public class PbxLogPoller
             sLogger.info("");
             sLogger.info("########## new start ############");
 
-            FintroXlsxReader.readPayments("C:\\Users\\ywillems\\Downloads\\BE71143070729269-20180629.xlsx");
-            
+            //FintroXlsxReader fintroXlsxReader = new FintroXlsxReader("C:\\Users\\ywillems\\Downloads\\BE71143070729269-20180629.xlsx");
             
             Class.forName("com.mysql.jdbc.Driver").newInstance();
 

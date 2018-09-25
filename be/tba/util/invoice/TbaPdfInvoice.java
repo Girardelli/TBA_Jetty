@@ -27,7 +27,6 @@ public class TbaPdfInvoice
     private CallCounts mCallCounts = null;
     private Collection<TaskEntityData> mTaskList = null;
     private Collection<SubcustomerCost> mSubcustomers = null;
-     
 
     DecimalFormat mCostFormatter = new DecimalFormat("#0.00");
 
@@ -143,11 +142,11 @@ public class TbaPdfInvoice
     {
         mSubcustomers = subCustomerList;
     }
-    
+
     public void setCreditNoteData(double totalCost, double btw, String customerRef, String number)
     {
         mInvoiceData = new InvoiceData();
-        
+
         mInvoiceData.TotalCost = totalCost;
         mInvoiceData.Btw = btw;
         mInvoiceData.CustomerRef = customerRef;
@@ -208,7 +207,7 @@ public class TbaPdfInvoice
         {
             int y = 590;
 
-            //System.err.println("fillCustomerRef : " + mInvoiceData.CustomerRef);
+            // System.err.println("fillCustomerRef : " + mInvoiceData.CustomerRef);
             writeText(mPage1, "Klantreferentie: ", PDType1Font.TIMES_BOLD, 11, 90, y);
             y -= kSpacing;
             String lineArr[] = mInvoiceData.CustomerRef.split("\n");
@@ -221,7 +220,7 @@ public class TbaPdfInvoice
         }
         else
         {
-            //System.err.println("No fillCustomerRef()");
+            // System.err.println("No fillCustomerRef()");
         }
     }
 
@@ -485,14 +484,15 @@ public class TbaPdfInvoice
         text = text.replaceAll("\t", " ");
         text = text.replaceAll("\r", "");
         text = text.replaceAll("\n", " ");
-        //PDPageContentStream contentStream = new PDPageContentStream(mDocument, page, true, false);
+        // PDPageContentStream contentStream = new PDPageContentStream(mDocument, page,
+        // true, false);
         PDPageContentStream contentStream = new PDPageContentStream(mDocument, page, PDPageContentStream.AppendMode.APPEND, false);
         contentStream.beginText();
         contentStream.setFont(font, fontSize);
         // contentStream.setNonStrokingColor(Color.blue);
-        //contentStream.moveTextPositionByAmount(x, y);
+        // contentStream.moveTextPositionByAmount(x, y);
         contentStream.newLineAtOffset(x, y);
-        //contentStream.drawString(text);
+        // contentStream.drawString(text);
         contentStream.showText(text);
         contentStream.endText();
         contentStream.close();
