@@ -28,6 +28,11 @@ public class SystemErrorException extends Exception
     // -------------------------------------------------------------------------
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = -1312843583278441113L;
+
+    /**
      * Constructor with a message of the exception
      * 
      * @param pMessage
@@ -37,6 +42,13 @@ public class SystemErrorException extends Exception
     {
         super(pMessage);
     }
+
+    public SystemErrorException(Exception ex, String pMessage)
+    {
+        super(pMessage);
+        super.addSuppressed(ex);
+    }
+
 
     // -------------------------------------------------------------------------
     // Methods
