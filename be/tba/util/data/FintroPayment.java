@@ -3,7 +3,7 @@ package be.tba.util.data;
 public class FintroPayment
 {
     public String id;
-    public String executionDate;
+    public String payDate;
     public String valutaDate;
     public double amount;
     public String accountNrCustomer;
@@ -11,6 +11,6 @@ public class FintroPayment
     
     public String toString()
     {
-        return id + ";" + executionDate + ";" + valutaDate + ";" + amount+ ";" + accountNrCustomer;
+        return id + ";" + payDate + ";" + valutaDate + ";" + amount+ ";" + accountNrCustomer;
     }
 }

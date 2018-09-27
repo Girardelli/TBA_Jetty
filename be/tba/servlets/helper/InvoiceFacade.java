@@ -5,14 +5,10 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import be.tba.ejb.account.interfaces.AccountEntityData;
 import be.tba.ejb.invoice.interfaces.InvoiceEntityData;
@@ -20,6 +16,7 @@ import be.tba.ejb.invoice.session.InvoiceSqlAdapter;
 import be.tba.servlets.session.WebSession;
 import be.tba.util.constants.Constants;
 import be.tba.util.invoice.CustomerData;
+import be.tba.util.invoice.IBANCheckDigit;
 import be.tba.util.invoice.InvoiceHelper;
 import be.tba.util.invoice.TbaPdfInvoice;
 import be.tba.util.session.AccountCache;
@@ -64,7 +61,6 @@ public class InvoiceFacade
             
             vInvoice.setFintroId((String) req.getParameter(Constants.TASK_FINTROID));
             vInvoice.setFromBankNr((String) req.getParameter(Constants.TASK_FROM_BANK_NR));
-            vInvoice.setExecutionDate((String) req.getParameter(Constants.TASK_EXEC_DATE));
             vInvoice.setValutaDate((String) req.getParameter(Constants.TASK_VAL_DATE));
             vInvoice.setPaymentDetails((String) req.getParameter(Constants.TASK_PAY_DETAILS));
 
@@ -201,6 +197,7 @@ public class InvoiceFacade
         int invoiceNr = vInvoiceSession.getNewInvoiceNumber(session, vYear);
         newInvoice.setYearSeqNr(invoiceNr);
         newInvoice.setInvoiceNr(InvoiceHelper.getInvoiceNumber(newInvoice.getYear(), newInvoice.getMonth(), invoiceNr));
+        newInvoice.setStructuredId(IBANCheckDigit.IBAN_CHECK_DIGIT.calculateOGM(newInvoice.getInvoiceNr()));
         newInvoice.setFileName(InvoiceHelper.makeFileName(newInvoice));
 
         vInvoiceSession.addRow(session.getConnection(), newInvoice);
@@ -226,6 +223,7 @@ public class InvoiceFacade
                 vCreditInvoiceData.setFrozenFlag(false);
                 vCreditInvoiceData.setCreditId(0);
                 vCreditInvoiceData.setInvoiceNr("C" + vInvoiceData.getInvoiceNr());
+                vCreditInvoiceData.setStructuredId(IBANCheckDigit.IBAN_CHECK_DIGIT.calculateOGM(vCreditInvoiceData.getInvoiceNr()));
                 vCreditInvoiceData.setCustomerRef(vInvoiceData.getCustomerRef());
                 vCreditInvoiceData.setMonth(vInvoiceData.getMonth());
                 vCreditInvoiceData.setStartTime(vInvoiceData.getStartTime());
@@ -255,39 +253,12 @@ public class InvoiceFacade
                 pdfCreditNote.setCreditNoteData(vCreditInvoiceData.getTotalCost(), 
                         account.getNoBtw() ? 0.0 : vCreditInvoiceData.getTotalCost() * 0.21,
                         vCreditInvoiceData.getCustomerRef(),
-                        vCreditInvoiceData.getInvoiceNr());
+                        vCreditInvoiceData.getInvoiceNr(),
+                        vCreditInvoiceData.getStructuredId());
                 pdfCreditNote.setCustomerData(customerData);
                 pdfCreditNote.createCreditNote();
                 pdfCreditNote.closeAndSave();
             }
         }
-    }
-
-    public static void processFintroXlsx(HttpServletRequest req, WebSession session) 
-    {
-        File file ;
-        int maxFileSize = 1000 * 1024;
-        int maxMemSize = 1000 * 1024;
-        String filePath = "c:/apache-tomcat/webapps/data/"; // file name van 
-
-        String contentType = req.getContentType();
-        if ((contentType.indexOf("multipart/form-data") >= 0)) 
-        {
-
-           DiskFileItemFactory factory = new DiskFileItemFactory();
-           factory.setSizeThreshold(maxMemSize);
-           factory.setRepository(new File(Constants.TEMP_DIR));
-           ServletFileUpload upload = new ServletFileUpload(factory);
-           upload.setSizeMax( maxFileSize );
-           try{ 
-              List fileItems = upload.parseRequest(req);
-           }
-        catch(Exception ex) {
-            System.out.println(ex);
-         }
-                                 }
-                 
-                 
-           
     }
 }

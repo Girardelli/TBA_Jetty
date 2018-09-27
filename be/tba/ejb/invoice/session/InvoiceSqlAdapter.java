@@ -152,6 +152,15 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
         return new Vector<InvoiceEntityData>();
     }
 
+    public Collection<InvoiceEntityData> getUnpayedInvoiceByStructuredId(WebSession webSession, String structuredId)
+    {
+        if (structuredId != null)
+        {
+            return executeSqlQuery(webSession.getConnection(), "SELECT * FROM InvoiceEntity WHERE IsInvoiceMailed=TRUE AND IsPayed=false AND CreditId=-1 AND StructuredId='" + structuredId + "'"); 
+        }
+        return new Vector<InvoiceEntityData>();
+    }
+
     /**
      * @ejb:interface-method view-type="remote"
      */
@@ -173,7 +182,7 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
      */
     public Collection<InvoiceEntityData> getOpenInvoiceList(WebSession webSession)
     {
-        return executeSqlQuery(webSession.getConnection(), "SELECT * FROM InvoiceEntity WHERE IsPayed=FALSE AND FrozenFlag=TRUE ORDER BY YearSeqNr DESC");
+        return executeSqlQuery(webSession.getConnection(), "SELECT * FROM InvoiceEntity WHERE IsPayed=FALSE AND FrozenFlag=TRUE ORDER BY InvoiceNr DESC");
     }
 
     /**
@@ -336,7 +345,7 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
 
     public void setPaymentInfo(WebSession webSession, int id, FintroPayment payment)
     {
-        executeSqlQuery(webSession.getConnection(), "UPDATE InvoiceEntity SET IsPayed=true, FintroId='" + payment.id + "', ExecutionDate='" + payment.executionDate + "', ValutaDate='" + payment.valutaDate + "', FromBankNr='" + payment.accountNrCustomer +"', PaymentDetails='" + payment.details + "' WHERE id=" + id);
+        executeSqlQuery(webSession.getConnection(), "UPDATE InvoiceEntity SET IsPayed=true, FintroId='" + payment.id + "', PayDate='" + payment.payDate + "', ValutaDate='" + payment.valutaDate + "', FromBankNr='" + payment.accountNrCustomer +"', PaymentDetails='" + payment.details + "' WHERE id=" + id);
 
     }
 
@@ -358,6 +367,7 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
                 vInvoiceData.setFrozenFlag(true);
                 vInvoiceData.setYearSeqNr(invoiceNr);
                 vInvoiceData.setInvoiceNr(InvoiceHelper.getInvoiceNumber(vInvoiceData.getYear(), vInvoiceData.getMonth(), invoiceNr));
+                vInvoiceData.setStructuredId(IBANCheckDigit.IBAN_CHECK_DIGIT.calculateOGM(vInvoiceData.getInvoiceNr()));
                 vInvoiceData.setFileName(InvoiceHelper.makeFileName(vInvoiceData));
                 vInvoiceData.setPayDate("");
                 System.out.println("freezeInvoice: new frozen number:" + invoiceNr);
@@ -368,7 +378,7 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
             // replace windows style '\\' with unix style '/'. DB does not seem
             // to handle good the windows style
             String unixStyle = vInvoiceData.getFileName().replace('\\', '/');
-            executeSqlQuery(webSession.getConnection(), "UPDATE InvoiceEntity SET FileName='" + escapeQuotes(unixStyle) + "', YearSeqNr=" + vInvoiceData.getYearSeqNr() + ",InvoiceNr='" + vInvoiceData.getInvoiceNr() + "',FrozenFlag=true WHERE id=" + key);
+            executeSqlQuery(webSession.getConnection(), "UPDATE InvoiceEntity SET FileName='" + escapeQuotes(unixStyle) + "', YearSeqNr=" + vInvoiceData.getYearSeqNr() + ",InvoiceNr='" + vInvoiceData.getInvoiceNr() + "',FrozenFlag=true, StructuredId='" + vInvoiceData.getStructuredId() + "' WHERE id=" + key);
 
             // vInvoice.setValueObject(vInvoiceData);
             return true;
@@ -507,11 +517,10 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
             entry.setPayDate(null2EmpthyString(rs.getString(16)));
             entry.setCreditId(rs.getInt(17));
             entry.setFintroId(null2EmpthyString(rs.getString(18)));
-            entry.setExecutionDate(null2EmpthyString(rs.getString(19)));
-            entry.setValutaDate(null2EmpthyString(rs.getString(20)));
-            entry.setFromBankNr(null2EmpthyString(rs.getString(21)));
-            entry.setPaymentDetails(null2EmpthyString(rs.getString(22)));
-            entry.setStructuredId(null2EmpthyString(rs.getString(23)));
+            entry.setValutaDate(null2EmpthyString(rs.getString(19)));
+            entry.setFromBankNr(null2EmpthyString(rs.getString(20)));
+            entry.setPaymentDetails(null2EmpthyString(rs.getString(21)));
+            entry.setStructuredId(null2EmpthyString(rs.getString(22)));
             vVector.add(entry);
             // System.out.println("InvoiceEntityData: " + entry.toNameValueString());
         }

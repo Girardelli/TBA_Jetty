@@ -19,6 +19,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import be.tba.ejb.account.interfaces.AccountEntityData;
 import be.tba.ejb.invoice.interfaces.InvoiceEntityData;
 import be.tba.ejb.invoice.session.InvoiceSqlAdapter;
 import be.tba.servlets.session.WebSession;
@@ -110,12 +111,14 @@ final public class FintroXlsxReader
                //Row row = sheet.getRow(i);
                FintroPayment entry = new FintroPayment();
                entry.id = row.getCell(ID).toString();
-               entry.executionDate= row.getCell(EXEC_DATE).toString();
+               entry.payDate= row.getCell(EXEC_DATE).toString();
                entry.valutaDate= row.getCell(VALUTA_DATE).toString();
                entry.amount= row.getCell(AMOUNT).getNumericCellValue();
                entry.accountNrCustomer= row.getCell(CUST_ACCOUNT).toString();
                entry.details= row.getCell(DETAILS).toString();
-               
+               // remove ' and " chars
+               entry.details = entry.details.replace('\'', ' ');
+               entry.details = entry.details.replace('\"', ' ');
                if (entry.amount > 0)
                {
                    Collection<FintroPayment> customerPaymentList = mPaymentsMap.get(entry.accountNrCustomer);
@@ -178,6 +181,26 @@ final public class FintroXlsxReader
             for (Iterator<FintroPayment> vPayIter = payments.iterator(); vPayIter.hasNext();)
             {
                 FintroPayment payment = vPayIter.next();
+                int i = payment.details.indexOf("+++");
+                if (i >= 0)
+                {
+                    // details hold a structured ID
+                    
+                    String structuredId = payment.details.substring(i, i + 20);
+                    Collection<InvoiceEntityData> vInvoices = mInvoiceSession.getUnpayedInvoiceByStructuredId(mWebSession, structuredId);
+                    if (vInvoices.size() == 1)
+                    {
+                        InvoiceEntityData invoice = (InvoiceEntityData) vInvoices.toArray()[0];
+                        AccountEntityData account = AccountCache.getInstance().get(invoice.getAccountFwdNr());
+                        double inclBtw = (account.getNoBtw() ? invoice.getTotalCost() : invoice.getTotalCost() * 1.21);
+                        if (accountNrCustomer.equals(payment.accountNrCustomer) &&
+                                inclBtw > payment.amount - 0.015 && inclBtw < payment.amount + 0.015  )
+                        {
+                            FillInvoiceWithPaymentInfo(invoice, payment);
+                            break;
+                        }
+                    }
+                }
                 
                 Collection<InvoiceEntityData> vInvoices = mInvoiceSession.getUnpayedInvoicesByValueAndFwdNrs(mWebSession, fwdNrs, payment.amount);
                 if (!vInvoices.isEmpty())
@@ -304,7 +327,7 @@ final public class FintroXlsxReader
        
     private void FillInvoiceWithPaymentInfo(InvoiceEntityData invoice, FintroPayment payment)
     {
-        //mInvoiceSession.setPaymentInfo(mWebSession, invoice.getId(), payment);
+        mInvoiceSession.setPaymentInfo(mWebSession, invoice.getId(), payment);
         if (invoice.getIsPayed())
         {
             mConfirmedPayedInvoices.add(invoice);

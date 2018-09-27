@@ -67,15 +67,17 @@
 </span></p>
 <form name="invoiceform" method="POST" action="/TheBusinessAssistant/AdminDispatch">
 <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.GOTO_INVOICE%>">
-<table width='100%' cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
+<table  width="100%" cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
 
 	<tr>
 		<!-- white space -->
 		<td valign="top" width="20" bgcolor="FFFFFF"></td>
 
 		<!-- account list -->
-		<td valign="top" width="865" bgcolor="FFFFFF"><br>
-		<table width='100%' border="0" cellspacing="0" cellpadding="0">
+		<td valign="top" bgcolor="FFFFFF">
+		
+		
+		<table  border="0" cellspacing="2" cellpadding="2">
 			<tr>
 				<td width="250" valign="top" class="adminsubtitle">&nbsp;Klant</td>
 				<td width="10" valign="top">:</td>
@@ -128,44 +130,97 @@
 				</select>
 				</td>
 			</tr>
-            <tr>
-                <td width="250" valign="top" class="adminsubtitle">&nbsp;FintroID</td>
-                <td width="10" valign="top">:</td>
-                <td width="270" valign="top">
-                <input type=text name=<%=Constants.TASK_FINTROID%> value="<%=(vInvoiceData != null ? vInvoiceData.getFintroId() : "")%>">
-                </td>
-			</tr>
-            <tr>
-                <td width="250" valign="top" class="adminsubtitle">&nbsp;Uitvoer Datum</td>
-                <td width="10" valign="top">:</td>
-                <td width="270" valign="top">
-                <input type=text name=<%=Constants.TASK_EXEC_DATE%> value="<%=(vInvoiceData != null ? vInvoiceData.getExecutionDate() : "")%>">
-                </td>
-            </tr>
-            <tr>
-                <td width="250" valign="top" class="adminsubtitle">&nbsp;Valuta Datum</td>
-                <td width="10" valign="top">:</td>
-                <td width="270" valign="top">
-                <input type=text name=<%=Constants.TASK_VAL_DATE%> value="<%=(vInvoiceData != null ? vInvoiceData.getValutaDate() : "")%>">
-                </td>
-            </tr>
-            <tr>
-                <td width="250" valign="top" class="adminsubtitle">&nbsp;Van rekening nr.</td>
-                <td width="10" valign="top">:</td>
-                <td width="270" valign="top">
-                <input type=text name=<%=Constants.TASK_FROM_BANK_NR%> value="<%=(vInvoiceData != null ? vInvoiceData.getFromBankNr() : "")%>">
-                </td>
-            </tr>
-			<tr>
-			     <td width="250" valign="top" class="adminsubtitle">&nbsp;Betalingsbericht</td>
-			     <td width="10" valign="top">:</td>
-			     <td width="270" valign="top">
-                 <input type=text name=<%=Constants.TASK_PAY_DETAILS%> value="<%=(vInvoiceData != null ? vInvoiceData.getPaymentDetails() : "")%>">
-			     </td>
-			 </tr>
 		</table>
-		<br>
-		<%
+			
+		<% 
+		if (vInvoiceData != null && vInvoiceData.getIsInvoiceMailed())
+		{
+		    %>
+        <table  border="0" cellspacing="2" cellpadding="2">
+            <tr>
+                <tr>
+                    <td width="250" valign="top" class="adminsubtitle">&nbsp;FintroID</td>
+                    <td width="10" valign="top">:</td>
+                    <td width="270" valign="top">
+                    <%
+                    if (vInvoiceData.getIsPayed())
+                    {
+                        out.println(vInvoiceData.getFintroId());
+                    }
+                    else
+                    {
+                        out.println("<input type=text name=\"" + Constants.TASK_FINTROID + "\" value=\"" + vInvoiceData.getFintroId() + "\">");
+                    }
+                    %>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="250" valign="top" class="adminsubtitle">&nbsp;Valuta Datum</td>
+                    <td width="10" valign="top">:</td>
+                    <td width="270" valign="top">
+                    <%
+                    if (vInvoiceData.getIsPayed())
+                    {
+                        out.println(vInvoiceData.getValutaDate());
+                    }
+                    else
+                    {
+                        out.println("<input type=text name=\"" + Constants.TASK_VAL_DATE + "\" value=\"" + vInvoiceData.getValutaDate() + "\">");
+                    }
+                    %>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="250" valign="top" class="adminsubtitle">&nbsp;Van rekening nr.</td>
+                    <td width="10" valign="top">:</td>
+                    <td width="270" valign="top">
+                    <%
+                    if (vInvoiceData.getIsPayed())
+                    {
+                        out.println(vInvoiceData.getFromBankNr());
+                    }
+                    else
+                    {
+                        out.println("<input type=text name=\"" + Constants.TASK_FROM_BANK_NR + "\" value=\"" + vInvoiceData.getFromBankNr() + "\">");
+                    }
+                    %>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="250" valign="top" class="adminsubtitle">&nbsp;Betalingsbericht</td>
+                    <td width="10" valign="top">:</td>
+                    <td width="520" valign="top">
+                    <%
+                    if (vInvoiceData.getIsPayed())
+                    {
+                        out.println(vInvoiceData.getPaymentDetails());
+                    }
+                    else
+                    {
+                        out.println("<input width=\"500\" type=text name=\"" + Constants.TASK_PAY_DETAILS + "\" value=\"" + vInvoiceData.getPaymentDetails() + "\">");
+                    }
+                    %>
+                     </td>
+                 </tr>
+                 <tr>
+                     <td width="250" valign="top" class="adminsubtitle">&nbsp;Betaald op</td>
+                     <td width="10" valign="top">:</td>
+                     <td width="270" valign="top">
+                    <%
+                    if (vInvoiceData.getIsPayed())
+                    {
+                        out.println(vInvoiceData.getPayDate());
+                    }
+                    else
+                    {
+                        out.println("<input type=text name=\"" + Constants.INVOICE_PAYDATE + "\" value=\"" + vInvoiceData.getPayDate() + "\">");
+                    }
+                    %>
+                     </td>
+                 </tr>
+            </table>
+		    <%
+		}
 		Collection<CallRecordEntityData> vRecords = null;
 		InvoiceHelper vInvoiceHelper = null;
 		if (vSession.getMonthsBack() != CallFilter.kNoMonth && vCustomerFilter != null && !vCustomerFilter.equals(Constants.ACCOUNT_FILTER_ALL))
@@ -192,14 +247,27 @@
 		
 		    if (vInvoiceId > 0 && vInvoiceHelper != null && vInvoiceHelper.getInvoiceData() != null && vInvoiceHelper.isFrozen())
 		    {
-		    	%>
-		    	<p><span class=\"adminsubtitle\">Betaald op: 
-		    	<input type=text size=20 name=<%=Constants.INVOICE_PAYDATE%> value="<%=vInvoiceHelper.getInvoiceData().PayDate%>">
-		    	<br><br>
-		    	<input class="tbabutton" type=submit name=action value=" Bewaar " onclick="savePayDate()" > 
-		    	<input class="tbabutton" type=submit name=action value=" Maak Credit Nota " onclick="createCreditNote()" > 
-		    	</span></p>
-                <%
+		        if (vInvoiceData == null)
+		        {
+		        %>
+		            <table border="0" cellspacing="2" cellpadding="2">
+		                <tr>
+		                    <td width="250" valign="top" class="adminsubtitle">&nbsp;Betaald op</td>
+		                    <td width="10" valign="top">:</td>
+		                    <td width="270" valign="top">
+		                    <input type=text name="<%=Constants.INVOICE_PAYDATE%>" value="<%=vInvoiceHelper.getInvoiceData().PayDate%>">
+		                    </td>
+		                </tr>
+		            </table>
+		        <%
+		        }
+	        %>
+	    	<p><span class=\"adminsubtitle\"> 
+            <br><br>
+	    	<input class="tbabutton" type=submit name=action value=" Bewaar " onclick="savePayDate()" > 
+	    	<input class="tbabutton" type=submit name=action value=" Maak Credit Nota " onclick="createCreditNote()" > 
+	    	</span></p>
+               <%
 		    }
 		    out.println("<p><span class=\"adminsubtitle\"><br>");
 		    out.println("Facturatiegegevens voor de maand " + vSession.getMonthsBackString() + ", " + vSession.getYear() + ":<br><br>");
@@ -413,6 +481,7 @@
 				<td width="1" bgcolor="#000000"></td>
 				<td width="100" valign="top" class="bodytekst">&nbsp;&nbsp;<%=vInvoiceHelper.getTaskCost()%></td>
 			</tr>
+		
 			<%
 	                  }
 	                  else if (vAccountData.getInvoiceType() == InvoiceHelper.kTelemarketingInvoice)
@@ -480,6 +549,7 @@
 				<td width="1" bgcolor="#000000"></td>
 				<td width="100" valign="top" class="bodytekst">&nbsp;&nbsp;<%=vInvoiceHelper.getLevel3Cost()%></td>
 			</tr>
+		
 <%
 				        }
 				        else if (vAccountData.getInvoiceType() == InvoiceHelper.kNoCallsAccount)
@@ -517,6 +587,7 @@
 				<td width="1" bgcolor="#000000"></td>
 				<td width="100" valign="top" class="bodytekst">&nbsp;&nbsp;<%=vInvoiceHelper.getTaskCost()%></td>
 			</tr>
+		
 			<%
 		}
 			%>

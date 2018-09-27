@@ -173,6 +173,7 @@ public class InvoiceHelper
                 mInvoiceData.Year = mInvoiceEntityData.getYear();
                 mInvoiceData.CostFormatter = new DecimalFormat("#0.00");
                 mInvoiceData.InvoiceNr = mInvoiceEntityData.getInvoiceNr();
+                mInvoiceData.StructuredId = mInvoiceEntityData.getStructuredId();
                 mInvoiceData.CustomerRef = mInvoiceEntityData.getCustomerRef();
                 mInvoiceData.PayDate = (mInvoiceEntityData.getPayDate() == null ? "" : mInvoiceEntityData.getPayDate());
             }

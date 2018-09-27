@@ -133,7 +133,14 @@ double vFacLongFwd = vCustomer.getFacLongFwd();
 							</tr>
 							<tr>
 								<td width="200" valign="top" class="adminsubsubtitle">rol</td>
-								<td width="500" valign="top">
+								<td width="500" valign="top" class="bodybold"><%=AccountRole.fromShort(vCustomer.getRole()).getText()%></td>
+							</tr>
+                            <tr>
+                                <td width="200" valign="top" class="adminsubsubtitle">supercustomer</td>
+                                <td width="500" valign="top" class="bodybold"> <%=(vCustomer.getSuperCustomer() != null ? vCustomer.getSuperCustomer() : "") %> </td>
+                            </tr>
+
+<!-- 
 								    <select	name=<%=Constants.ACCOUNT_ROLE%>>
 <%
 
@@ -167,7 +174,7 @@ if (vCustomer.getRole().equals(AccountRole._vSubCustomer))
 }
 				%>
 								</td>
-							</tr>
+							</tr> -->
 							<tr>
 								<td width="200" valign="top" class="adminsubsubtitle">volledige
 									naam</td>

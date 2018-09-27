@@ -37,7 +37,6 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
     // db id means it is a regular invoice with a credit invoice counterpart indicated by this id.
     private int creditId = -1;
     public String fintroId = "";
-    public String executionDate = "";
     public String valutaDate = "";
     public String fromBankNr = "";
     public String paymentDetails = "";
@@ -49,7 +48,7 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
         creditId = -1;
     }
 
-    public InvoiceEntityData(int id, java.lang.String fileName, java.lang.String accountFwdNr, double totalCost, int month, int year, int yearSeqNr, java.lang.String invoiceNr, boolean frozenFlag, boolean isPayed, long startTime, long stopTime, java.lang.String customerName, boolean isInvoiceMailed, java.lang.String customerRef, java.lang.String payDate, int creditId, String fintroId, String executionDate, String valutaDate, String fromBankNr, String paymentDetails, String structuredId)
+    public InvoiceEntityData(int id, java.lang.String fileName, java.lang.String accountFwdNr, double totalCost, int month, int year, int yearSeqNr, java.lang.String invoiceNr, boolean frozenFlag, boolean isPayed, long startTime, long stopTime, java.lang.String customerName, boolean isInvoiceMailed, java.lang.String customerRef, java.lang.String payDate, int creditId, String fintroId, String valutaDate, String fromBankNr, String paymentDetails, String structuredId)
     {
         setId(id);
         setFileName(fileName);
@@ -69,7 +68,6 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
         setPayDate(payDate);
         setCreditId(creditId);
         setFintroId(fintroId);
-        setExecutionDate(executionDate);
         setValutaDate(valutaDate);
         setFromBankNr(fromBankNr);
         setPaymentDetails(paymentDetails);
@@ -96,7 +94,6 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
         setPayDate(otherData.getPayDate());
         setCreditId(otherData.getCreditId());
         setFintroId(otherData.getFintroId());
-        setExecutionDate(otherData.getExecutionDate());
         setValutaDate(otherData.getValutaDate());
         setFromBankNr(otherData.getFromBankNr());
         setPaymentDetails(otherData.getPaymentDetails());
@@ -187,7 +184,6 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
     public void setInvoiceNr(java.lang.String invoiceNr)
     {
         this.invoiceNr = invoiceNr;
-        this.structuredId = IBANCheckDigit.IBAN_CHECK_DIGIT.calculateOGM(invoiceNr);
     }
 
     public boolean getFrozenFlag()
@@ -300,16 +296,6 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
     {
         this.fintroId = fintroId;
     }
-
-     public String getExecutionDate()
-    {
-        return this.executionDate;
-    }
-    
-     public void setExecutionDate(String executionDate)
-     {
-         this.executionDate = executionDate;
-     }
 
    public String getValutaDate()
     {
@@ -489,7 +475,6 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
                 "',payDate='" + ((this.getPayDate() != null) ? this.getPayDate() : "") + 
                 "',creditId=" + getCreditId() + 
                 ",fintroId='" + ((this.getFintroId() != null) ? this.getFintroId() : "") + 
-                "',executionDate='" + ((this.getExecutionDate() != null) ? this.getExecutionDate() : "") +
                 "',valutaDate='" + ((this.getValutaDate() != null) ? this.getValutaDate() : "") +
                 "',fromBankNr='" + ((this.getFromBankNr() != null) ? this.getFromBankNr() : "") +
                 "',paymentDetails='" + ((this.getPaymentDetails() != null) ? this.getPaymentDetails() : "") +
@@ -519,7 +504,6 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
                 "','" + getPayDate() + 
                 "'," + getCreditId() +
                 ",'" + getFintroId() + 
-                "','" + getExecutionDate() +
                 "','" + getValutaDate() +
                 "','" + getFromBankNr() +
                 "','" + getPaymentDetails() + 

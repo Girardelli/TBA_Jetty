@@ -143,7 +143,7 @@ public class TbaPdfInvoice
         mSubcustomers = subCustomerList;
     }
 
-    public void setCreditNoteData(double totalCost, double btw, String customerRef, String number)
+    public void setCreditNoteData(double totalCost, double btw, String customerRef, String number, String structuredId)
     {
         mInvoiceData = new InvoiceData();
 
@@ -151,6 +151,7 @@ public class TbaPdfInvoice
         mInvoiceData.Btw = btw;
         mInvoiceData.CustomerRef = customerRef;
         mInvoiceData.InvoiceNr = number;
+        mInvoiceData.StructuredId = structuredId;
     }
 
     public void closeAndSave()
@@ -226,6 +227,7 @@ public class TbaPdfInvoice
 
     private void fillDescription(boolean isCreditNote) throws IOException
     {
+        writeText(mPage1, mInvoiceData.StructuredId, PDType1Font.TIMES_ROMAN, 12, 205, 527);
         writeText(mPage1, mInvoiceData.InvoiceNr, PDType1Font.TIMES_ROMAN, 11, 185, 485);
         writeText(mPage1, mInvoiceData.Date, PDType1Font.TIMES_ROMAN, 11, 185, 485 - kSpacing);
 
@@ -248,7 +250,7 @@ public class TbaPdfInvoice
         final int kCollom1 = 255;
         final int kCollom2 = 305;
         final int kCollom3 = 515;
-        int y = 681;
+        int y = 689;  //681;
 
         writeText(mPage2, Integer.toString(mCallCounts.InCalls), PDType1Font.HELVETICA, 11, kCollom1, y);
         writeText(mPage2, "Tariefgroep " + mInvoiceData.TarifGroup, PDType1Font.HELVETICA, 11, kCollom2, y);
