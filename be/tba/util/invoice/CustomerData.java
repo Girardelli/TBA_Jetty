@@ -2,6 +2,7 @@ package be.tba.util.invoice;
 
 public class CustomerData
 {
+    private int mId = 0;
     private String mTAV = "";
     private String mName = "";
     private String mAddress1 = "";
@@ -14,7 +15,17 @@ public class CustomerData
 
     }
 
-    public String getTAV()
+    public int getId()
+    {
+        return mId;
+    }
+
+    public void setId(int id)
+    {
+        this.mId = id;
+    }
+
+   public String getTAV()
     {
         return mTAV;
     }

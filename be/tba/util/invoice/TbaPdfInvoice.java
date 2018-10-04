@@ -143,10 +143,11 @@ public class TbaPdfInvoice
         mSubcustomers = subCustomerList;
     }
 
-    public void setCreditNoteData(double totalCost, double btw, String customerRef, String number, String structuredId)
+    public void setCreditNoteData(int id, double totalCost, double btw, String customerRef, String number, String structuredId)
     {
         mInvoiceData = new InvoiceData();
 
+        mInvoiceData.Id = id;
         mInvoiceData.TotalCost = totalCost;
         mInvoiceData.Btw = btw;
         mInvoiceData.CustomerRef = customerRef;
@@ -228,8 +229,9 @@ public class TbaPdfInvoice
     private void fillDescription(boolean isCreditNote) throws IOException
     {
         writeText(mPage1, mInvoiceData.StructuredId, PDType1Font.TIMES_ROMAN, 12, 205, 527);
-        writeText(mPage1, mInvoiceData.InvoiceNr, PDType1Font.TIMES_ROMAN, 11, 185, 485);
-        writeText(mPage1, mInvoiceData.Date, PDType1Font.TIMES_ROMAN, 11, 185, 485 - kSpacing);
+        writeText(mPage1, String.format("%08d", mCustomerData.getId()), PDType1Font.TIMES_ROMAN, 11, 185, 497);
+        writeText(mPage1, mInvoiceData.InvoiceNr, PDType1Font.TIMES_ROMAN, 11, 185, 484);
+        writeText(mPage1, mInvoiceData.Date, PDType1Font.TIMES_ROMAN, 11, 185, 470);
 
         if (isCreditNote)
         {

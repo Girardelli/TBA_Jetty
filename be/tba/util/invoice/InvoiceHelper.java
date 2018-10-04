@@ -191,6 +191,7 @@ public class InvoiceHelper
         long vStart = vCalendar.getStartOfMonth(mInvoiceData.Month, mInvoiceData.Year);
         long vEnd = vCalendar.getEndOfMonth(mInvoiceData.Month, mInvoiceData.Year);
 
+        mCustomerData.setId(mAccountEntityData.getId());
         mCustomerData.setAddress1(mAccountEntityData.getStreet());
         mCustomerData.setAddress2(mAccountEntityData.getCity());
         mCustomerData.setBtwNr(mAccountEntityData.getBtwNumber());

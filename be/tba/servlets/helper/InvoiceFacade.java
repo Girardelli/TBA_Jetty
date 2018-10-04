@@ -242,6 +242,7 @@ public class InvoiceFacade
                 
                 AccountEntityData account = AccountCache.getInstance().get(vInvoiceData.getAccountFwdNr());
                 CustomerData customerData = new CustomerData();
+                customerData.setId(account.getId());
                 customerData.setAddress1(account.getStreet());
                 customerData.setAddress2(account.getCity());
                 customerData.setBtwNr(account.getBtwNumber());
@@ -250,7 +251,8 @@ public class InvoiceFacade
                 customerData.setTAV(account.getAttToName());
                 
                 TbaPdfInvoice pdfCreditNote = new TbaPdfInvoice(new File(vCreditInvoiceData.getFileName()), new File(Constants.INVOICE_HEAD_TMPL));
-                pdfCreditNote.setCreditNoteData(vCreditInvoiceData.getTotalCost(), 
+                pdfCreditNote.setCreditNoteData(vCreditInvoiceData.getId(),
+                        vCreditInvoiceData.getTotalCost(), 
                         account.getNoBtw() ? 0.0 : vCreditInvoiceData.getTotalCost() * 0.21,
                         vCreditInvoiceData.getCustomerRef(),
                         vCreditInvoiceData.getInvoiceNr(),
