@@ -3,8 +3,6 @@
  */
 package be.tba.ejb.invoice.interfaces;
 
-import be.tba.util.invoice.IBANCheckDigit;
-
 /**
  * Data object for InvoiceEntity.
  *

@@ -686,6 +686,15 @@ public class AdminDispatchServlet extends HttpServlet
                     System.out.println("PROCESS_FINTRO_XLSX: file ready for parsing: " + vSession.getFintroFile());
                     rd = sc.getRequestDispatcher(Constants.OPEN_INVOICE_JSP);
                 }
+                
+                // ==============================================================================================
+                // GENERATE_INVOICE_XML
+                // ==============================================================================================
+                else if (vAction.equals(Constants.GENERATE_INVOICE_XML))
+                {
+                    InvoiceFacade.generateInvoiceXml(req, vSession);
+                    rd = sc.getRequestDispatcher(Constants.ADMIN_INVOICE_JSP);
+                }
 
                 // ==============================================================================================
                 // GENERATE All INVOICES

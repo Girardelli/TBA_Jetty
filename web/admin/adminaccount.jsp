@@ -38,19 +38,23 @@ try
 	allEntryIds = new StringBuilder("[");
 %>
 		<p><span class="admintitle"> Geregistreerde klanten:</span></p>
-		<form name="adminaccform" method="GET" action="/TheBusinessAssistant/AdminDispatch">
-		<input type=hidden name=<%=Constants.ACCOUNT_TO_DELETE%> value=""> 
-		<input type=hidden name=<%=Constants.SRV_ACTION%> value="yves"> 
-    <%
+   <%
         if (vSession.getRole() == AccountRole.ADMIN)
         {
     %>
 		<table>
 			<tr>
-				<td width="80"><input class="tbabutton" type=submit name=action value=" Toevoegen "
-					onclick="addAccount()"></td>
-				<td width="80"><input class="tbabutton" type=submit name=action value=" Verwijder "
-					onclick="deleteAccount()"></td>
+	            <form name="downloadfileform" method="POST" action="/TheBusinessAssistant/download" >
+	            <input type=hidden name=<%=Constants.ACCOUNT_TO_DELETE%> value="">
+	            <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.DOWNLOAD_WK_KLANTEN_XML%>"> 
+	            <input class="tbabutton" type=submit name=action value=" Download export file " onclick="downloadExportFile()">
+	            </form>
+		        <form name="adminaccform" method="GET" action="/TheBusinessAssistant/AdminDispatch">
+		        <input type=hidden name=<%=Constants.ACCOUNT_TO_DELETE%> value=""> 
+		        <input type=hidden name=<%=Constants.SRV_ACTION%> value="yves"> 
+ 				<td width="80"><input class="tbabutton" type=submit name=action value=" Toevoegen "	onclick="addAccount()"></td>
+				<td width="80"><input class="tbabutton" type=submit name=action value=" Verwijder "	onclick="deleteAccount()"></td>
+                </form>
 			</tr>
 		</table>
     <%
@@ -88,10 +92,11 @@ try
           String vLastLogin = vEntry.getLastLogin();
           vLastLogin = (vLastLogin == null) ? "" : vLastLogin;
           String vRegImg;
-          if (vEntry.getIsRegistered())
-            vRegImg = "\"/TheBusinessAssistant/images/greenVink.gif\"";
-          else
+//          if (vEntry.getIsRegistered())
+          if (vEntry.getNoInvoice())
             vRegImg = "\"/TheBusinessAssistant/images/deleteCross.gif\"";
+          else
+            vRegImg = "\"/TheBusinessAssistant/images/greenVink.gif\"";
           String vId = "id" + vEntry.getId();;
           
       %>
@@ -100,8 +105,7 @@ try
       				onmouseout="hooverOffRow('<%=vId%>','<%=vRowInd%>','#FFCC66')"
       				onclick="updateDeleteFlag('<%=vId%>','<%=vEntry.getId()%>','<%=vRowInd%>')"
       				ondblclick="changeUrl('/TheBusinessAssistant/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACCOUNT_UPDATE%>&<%=Constants.ACCOUNT_ID%>=<%=vEntry.getFwdNumber()%>');">
-      				<td width="25" bgcolor="FFFFFF"><img src=<%=vRegImg%> width="16"
-      					height="16" border="0"></td>
+      				<td width="25" bgcolor="FFFFFF"><img src=<%=vRegImg%> width="16" height="16" border="0"></td>
       				<td width="60" valign="top" class="bodytekst">&nbsp;<%=vNumber%></td>
       				<td width="70" valign="top" class="bodytekst">&nbsp;<%=vGsm%></td>
       				<td width="190" valign="top" class="bodytekst">&nbsp;<%=vFullName%></td>
@@ -155,10 +159,14 @@ try
 		          String vLastLogin = vSubEntry.getLastLogin();
 		          vLastLogin = (vLastLogin == null) ? "" : vLastLogin;
 		          String vRegImg;
-		          if (vSubEntry.getIsRegistered())
-		            vRegImg = "\"/TheBusinessAssistant/images/greenVink.gif\"";
-		          else
-		            vRegImg = "\"/TheBusinessAssistant/images/deleteCross.gif\"";
+//			          if (vSubEntry.getIsRegistered())
+//			            vRegImg = "\"/TheBusinessAssistant/images/greenVink.gif\"";
+//			          else
+//			            vRegImg = "\"/TheBusinessAssistant/images/deleteCross.gif\"";
+                  if (!vSubEntry.getNoInvoice())
+                      vRegImg = "\"/TheBusinessAssistant/images/greenVink.gif\"";
+                    else
+                      vRegImg = "\"/TheBusinessAssistant/images/deleteCross.gif\"";
 		          String vId = "id" + vSubEntry.getId();
 		          
 		      %>
@@ -200,7 +208,6 @@ catch (Exception e)
     e.printStackTrace();
 }
 %>
-		</form>
 		</td>
 	</tr>
 
@@ -311,6 +318,16 @@ function changeUrl(newURL)
   location=newURL;
 }
 
+function downloadExportFile()
+{
+      var shorterArr = new Array();
+      var j = 0;
+      for (var i = 0; i < linesToDelete.length; i++)
+        if (linesToDelete[i] != null)
+          shorterArr[j++] = linesToDelete[i];
+      document.downloadfileform.<%=Constants.ACCOUNT_TO_DELETE%>.value=shorterArr.join();
+      document.downloadfileform.<%=Constants.SRV_ACTION%>.value="<%=Constants.DOWNLOAD_WK_KLANTEN_XML%>";
+}
 
 
 </script>

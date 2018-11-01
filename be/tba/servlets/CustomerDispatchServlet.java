@@ -16,7 +16,6 @@ import be.tba.ejb.account.interfaces.AccountEntityData;
 import be.tba.ejb.account.session.AccountSqlAdapter;
 import be.tba.ejb.pbx.interfaces.CallRecordEntityData;
 import be.tba.ejb.pbx.session.CallRecordSqlAdapter;
-import be.tba.ejb.pbx.session.CallRecordSqlAdapter;
 import be.tba.servlets.session.SessionManager;
 import be.tba.servlets.session.WebSession;
 import be.tba.util.constants.AccountRole;

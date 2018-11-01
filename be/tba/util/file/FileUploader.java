@@ -46,24 +46,6 @@ public class FileUploader
         // Set overall request size constraint
         upload.setSizeMax(MAX_REQUEST_SIZE);
         
-/*        
-        Map<String, String[]> parmMap = request.getParameterMap();
-        Enumeration<String> attrNameEnum = request.getAttributeNames();
-        Enumeration<String> parmNameEnum = request.getParameterNames();
-        
-        System.out.println("Attributes:");
-        for (;attrNameEnum.hasMoreElements();)
-        {
-            String attr = attrNameEnum.nextElement();
-            System.out.println(attr + ": " + request.getAttribute(attr));
-        }
-        System.out.println("\nParameters:");    
-        for (;parmNameEnum.hasMoreElements();)
-        {
-            String parm = parmNameEnum.nextElement();
-            System.out.println(parm + ": " + request.getParameter(parm));
-        }
-*/        
         try
         {
             FileItem uploadedFileItem = null;

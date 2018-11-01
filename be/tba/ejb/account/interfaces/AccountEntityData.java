@@ -17,6 +17,8 @@ public class AccountEntityData extends be.tba.util.data.AbstractData
     private static final long serialVersionUID = 1L;
 
     private int id;
+    private int wc_prime;
+    private String wc_alfa;
     private java.lang.String userId;
     private java.lang.String password;
     private java.lang.String fwdNumber;
@@ -87,14 +89,16 @@ public class AccountEntityData extends be.tba.util.data.AbstractData
     private boolean isMailInvoice;
     private java.lang.String invoiceEmail;
     private java.lang.String accountNr;
-    
+
     public AccountEntityData()
     {
     }
 
-    public AccountEntityData(int id, java.lang.String userId, java.lang.String password, java.lang.String fwdNumber, java.lang.String role, java.lang.String fullName, java.lang.String custFilter, java.lang.String stateFilter, java.lang.String dirFilter, java.lang.String lastLogin, long lastLoginTS, long previousLoginTS, boolean isRegistered, boolean isAutoRelease, boolean isXmlMail, boolean is3W, java.lang.String w3_PersonId, java.lang.String w3_CompanyId, java.lang.String email, java.lang.String gsm, short invoiceType, long lastInvoiceTime, long lastMailTime, short mailHour1, short mailMinutes1, short mailHour2, short mailMinutes2, short mailHour3, short mailMinutes3, int facStdInCall, int facStdOutCall, int facOutLevel1, int facOutLevel2, int facOutLevel3, boolean isPriceAgendaFixed, int facAgendaCall, int facFaxCall, short agendaPriceUnit, int facSms, int facCallForward, int taskHourRate, java.lang.String companyName, java.lang.String attToName, java.lang.String street, java.lang.String city, java.lang.String btwNumber, boolean noInvoice, boolean hasSubCustomers, java.lang.String superCustomer, boolean countAllLongCalls, boolean countLongFwdCalls, boolean noBtw, boolean noEmptyMails, boolean textMail, double facLong, double facLongFwd, int facTblMinCalls_I, double facTblStartCost_I, double facTblExtraCost_I, int facTblMinCalls_II, double facTblStartCost_II, double facTblExtraCost_II, int facTblMinCalls_III, double facTblStartCost_III, double facTblExtraCost_III, int facTblMinCalls_IV, double facTblStartCost_IV, double facTblExtraCost_IV, boolean isMailInvoice, java.lang.String invoiceEmail, java.lang.String accountNr)
+    public AccountEntityData(int id, int wc_prime, String wc_alfa, java.lang.String userId, java.lang.String password, java.lang.String fwdNumber, java.lang.String role, java.lang.String fullName, java.lang.String custFilter, java.lang.String stateFilter, java.lang.String dirFilter, java.lang.String lastLogin, long lastLoginTS, long previousLoginTS, boolean isRegistered, boolean isAutoRelease, boolean isXmlMail, boolean is3W, java.lang.String w3_PersonId, java.lang.String w3_CompanyId, java.lang.String email, java.lang.String gsm, short invoiceType, long lastInvoiceTime, long lastMailTime, short mailHour1, short mailMinutes1, short mailHour2, short mailMinutes2, short mailHour3, short mailMinutes3, int facStdInCall, int facStdOutCall, int facOutLevel1, int facOutLevel2, int facOutLevel3, boolean isPriceAgendaFixed, int facAgendaCall, int facFaxCall, short agendaPriceUnit, int facSms, int facCallForward, int taskHourRate, java.lang.String companyName, java.lang.String attToName, java.lang.String street, java.lang.String city, java.lang.String btwNumber, boolean noInvoice, boolean hasSubCustomers, java.lang.String superCustomer, boolean countAllLongCalls, boolean countLongFwdCalls, boolean noBtw, boolean noEmptyMails, boolean textMail, double facLong, double facLongFwd, int facTblMinCalls_I, double facTblStartCost_I, double facTblExtraCost_I, int facTblMinCalls_II, double facTblStartCost_II, double facTblExtraCost_II, int facTblMinCalls_III, double facTblStartCost_III, double facTblExtraCost_III, int facTblMinCalls_IV, double facTblStartCost_IV, double facTblExtraCost_IV, boolean isMailInvoice, java.lang.String invoiceEmail, java.lang.String accountNr)
     {
         setId(id);
+        setWcPrime(wc_prime);
+        setWcAlfa(wc_alfa);
         setUserId(userId);
         setPassword(password);
         setFwdNumber(fwdNumber);
@@ -170,6 +174,8 @@ public class AccountEntityData extends be.tba.util.data.AbstractData
     public AccountEntityData(AccountEntityData otherData)
     {
         setId(otherData.getId());
+        setWcPrime(otherData.getWcPrime());
+        setWcAlfa(otherData.getWcAlfa());
         setUserId(otherData.getUserId());
         setPassword(otherData.getPassword());
         setFwdNumber(otherData.getFwdNumber());
@@ -256,6 +262,26 @@ public class AccountEntityData extends be.tba.util.data.AbstractData
     public void setId(int id)
     {
         this.id = id;
+    }
+
+    public int getWcPrime()
+    {
+        return this.wc_prime;
+    }
+
+    public void setWcPrime(int wc_prime)
+    {
+        this.wc_prime = wc_prime;
+    }
+
+    public java.lang.String getWcAlfa()
+    {
+        return this.wc_alfa;
+    }
+
+    public void setWcAlfa(java.lang.String wc_alfa)
+    {
+        this.wc_alfa = wc_alfa;
     }
 
     public java.lang.String getUserId()
@@ -972,9 +998,153 @@ public class AccountEntityData extends be.tba.util.data.AbstractData
     {
         StringBuffer str = new StringBuffer();
 
-        str.append("UserId='" + ((this.userId != null) ? this.userId : "") + "',Password='" + ((this.password != null) ? this.password : "") + "',FwdNumber='" + ((this.fwdNumber != null) ? this.fwdNumber : "") + "',Role='" + ((this.role != null) ? this.role : "") + "',FullName='" + ((this.fullName != null) ? escapeQuotes(this.fullName) : "") + "',CustFilter='" + ((this.custFilter != null) ? this.custFilter : "") + "',StateFilter='" + ((this.stateFilter != null) ? this.stateFilter : "") + "',DirFilter='" + ((this.dirFilter != null) ? this.dirFilter : "") + "',LastLogin='" + ((this.lastLogin != null) ? this.lastLogin : "") + "',LastLoginTS=" + getLastLoginTS() + ",PrevLoginTS=" + getPreviousLoginTS() + ",IsRegistered=" + getIsRegistered() + ",IsAutoRelease=" + getIsAutoRelease() + ",IsXmlMail=" + getIsXmlMail() + ",Is3W=" + getIs3W() + ",W3_PersonId='" + ((this.w3_PersonId != null) ? this.w3_PersonId : "") + "',W3_CompanyId='" + ((this.w3_CompanyId != null) ? this.w3_CompanyId : "") + "',Email='" + ((this.email != null) ? this.email : "") + "',Gsm='" + ((this.gsm != null) ? escapeQuotes(this.gsm) : "") + "',InvoiceType=" + getInvoiceType() + ",LastInvoiceTime=" + getLastInvoiceTime() + ",LastMailTime=" + getLastMailTime() + ",MailHour1=" + getMailHour1() + ",MailMinutes1=" + getMailMinutes1() + ",MailHour2=" + getMailHour2() + ",MailMinutes2=" + getMailMinutes2() + ",MailHour3=" + getMailHour3() + ",MailMinutes3=" + getMailMinutes3() + ",FacStdInCall=" + getFacStdInCall() + ",FacOutLevel1=" + getFacOutLevel1() + ",FacOutLevel2=" + getFacOutLevel2() + ",FacOutLevel3=" + getFacOutLevel3() + ",IsPriceAgendaFixed=" + getIsPriceAgendaFixed() + ",FacAgendaCall=" + getFacAgendaCall() + ",AgendaPriceUnit=" + getAgendaPriceUnit() + ",FacSms=" + getFacSms() + ",FacCallForward=" + getFacCallForward() + ",FacStdOutCall=" + getFacStdOutCall() + ",TaskHourRate=" + getTaskHourRate() + ",CompanyName='" + ((this.companyName != null) ? escapeQuotes(this.companyName) : "")
-                + "',AttToName='" + ((this.attToName != null) ? escapeQuotes(this.attToName) : "") + "',Street='" + ((this.street != null) ? escapeQuotes(this.street) : "") + "',City='" + ((this.city != null) ? this.city : "") + "',BtwNumber='" + ((this.btwNumber != null) ? this.btwNumber : "") + "',NoInvoice=" + getNoInvoice() + ",FacFaxCall=" + getFacFaxCall() + ",HasSubCustomers=" + getHasSubCustomers() + ",SuperCustomer='" + ((this.superCustomer != null) ? this.superCustomer : "") + "',CountAllLongCalls=" + getCountAllLongCalls() + ",CountLongFwdCalls=" + getCountLongFwdCalls() + ",NoBtw=" + getNoBtw() + ",NoEmptyMails=" + getNoEmptyMails() + ",TextMail=" + getTextMail() + ",FacLong=" + getFacLong() + ",FacLongFwd=" + getFacLongFwd() + ",FacTblMinCalls_I=" + getFacTblMinCalls_I() + ",FacTblMinCalls_II=" + getFacTblMinCalls_II() + ",FacTblMinCalls_III=" + getFacTblMinCalls_III() + ",FacTblMinCalls_IV=" + getFacTblMinCalls_IV() + ",FacTblStartCost_I=" + getFacTblStartCost_I() + ",FacTblStartCost_II=" + getFacTblStartCost_II() + ",FacTblStartCost_III=" + getFacTblStartCost_III() + ",FacTblStartCost_IV=" + getFacTblStartCost_IV() + ",FacTblExtraCost_I=" + getFacTblExtraCost_I() + ",FacTblExtraCost_II=" + getFacTblExtraCost_II() + ",FacTblExtraCost_III=" + getFacTblExtraCost_III() + ",FacTblExtraCost_IV=" + getFacTblExtraCost_IV() + ",IsMailInvoice=" + getIsMailInvoice() + ",InvoiceEmail='" + ((this.invoiceEmail != null) ? this.invoiceEmail : "") + "',AccountNr='" + ((this.accountNr != null) ? escapeQuotes(this.accountNr) : "") + "' ");
+        str.append("WC_Prime=");
+        str.append(this.wc_prime);
+        str.append(",WC_Alfa='");
+        str.append(((this.wc_alfa != null) ? this.wc_alfa : ""));
+        str.append("',UserId='");
+        str.append(((this.userId != null) ? this.userId : ""));
+        str.append("',Password='");
+        str.append(((this.password != null) ? this.password : ""));
+        str.append("',FwdNumber='");
+        str.append(((this.fwdNumber != null) ? this.fwdNumber : ""));
+        str.append("',Role='");
+        str.append(((this.role != null) ? this.role : ""));
+        str.append("',FullName='");
+        str.append(((this.fullName != null) ? escapeQuotes(this.fullName) : ""));
+        str.append("',CustFilter='");
+        str.append(((this.custFilter != null) ? this.custFilter : ""));
+        str.append("',StateFilter='");
+        str.append(((this.stateFilter != null) ? this.stateFilter : ""));
+        str.append("',DirFilter='");
+        str.append(((this.dirFilter != null) ? this.dirFilter : ""));
+        str.append("',LastLogin='");
+        str.append(((this.lastLogin != null) ? this.lastLogin : ""));
+        str.append("',LastLoginTS=");
+        str.append(getLastLoginTS());
+        str.append(",PrevLoginTS=");
+        str.append(getPreviousLoginTS());
+        str.append(",IsRegistered=");
+        str.append(getIsRegistered());
+        str.append(",IsAutoRelease=");
+        str.append(getIsAutoRelease());
+        str.append(",IsXmlMail=");
+        str.append(getIsXmlMail());
+        str.append(",Is3W=");
+        str.append(getIs3W());
+        str.append(",W3_PersonId='");
+        str.append(((this.w3_PersonId != null) ? this.w3_PersonId : ""));
+        str.append("',W3_CompanyId='");
+        str.append(((this.w3_CompanyId != null) ? this.w3_CompanyId : ""));
+        str.append("',Email='");
+        str.append(((this.email != null) ? this.email : ""));
+        str.append("',Gsm='");
+        str.append(((this.gsm != null) ? escapeQuotes(this.gsm) : ""));
+        str.append("',InvoiceType=");
+        str.append(getInvoiceType());
+        str.append(",LastInvoiceTime=");
+        str.append(getLastInvoiceTime());
+        str.append(",LastMailTime=");
+        str.append(getLastMailTime());
+        str.append(",MailHour1=");
+        str.append(getMailHour1());
+        str.append(",MailMinutes1=");
+        str.append(getMailMinutes1());
+        str.append(",MailHour2=");
+        str.append(getMailHour2());
+        str.append(",MailMinutes2=");
+        str.append(getMailMinutes2());
+        str.append(",MailHour3=");
+        str.append(getMailHour3());
+        str.append(",MailMinutes3=");
+        str.append(getMailMinutes3());
+        str.append(",FacStdInCall=");
+        str.append(getFacStdInCall());
+        str.append(",FacOutLevel1=");
+        str.append(getFacOutLevel1());
+        str.append(",FacOutLevel2=");
+        str.append(getFacOutLevel2());
+        str.append(",FacOutLevel3=");
+        str.append(getFacOutLevel3());
+        str.append(",IsPriceAgendaFixed=");
+        str.append(getIsPriceAgendaFixed());
+        str.append(",FacAgendaCall=");
+        str.append(getFacAgendaCall());
+        str.append(",AgendaPriceUnit=");
+        str.append(getAgendaPriceUnit());
+        str.append(",FacSms=");
+        str.append(getFacSms());
+        str.append(",FacCallForward=");
+        str.append(getFacCallForward());
+        str.append(",FacStdOutCall=");
+        str.append(getFacStdOutCall());
+        str.append(",TaskHourRate=");
+        str.append(getTaskHourRate());
+        str.append(",CompanyName='");
+        str.append(((this.companyName != null) ? escapeQuotes(this.companyName) : ""));
+        str.append("',AttToName='");
+        str.append(((this.attToName != null) ? escapeQuotes(this.attToName) : ""));
+        str.append("',Street='");
+        str.append(((this.street != null) ? escapeQuotes(this.street) : ""));
+        str.append("',City='");
+        str.append(((this.city != null) ? this.city : ""));
+        str.append("',BtwNumber='");
+        str.append(((this.btwNumber != null) ? this.btwNumber : ""));
+        str.append("',NoInvoice=");
+        str.append(getNoInvoice());
+        str.append(",FacFaxCall=");
+        str.append(getFacFaxCall());
+        str.append(",HasSubCustomers=");
+        str.append(getHasSubCustomers());
+        str.append(",SuperCustomer='");
+        str.append(((this.superCustomer != null) ? this.superCustomer : ""));
+        str.append("',CountAllLongCalls=");
+        str.append(getCountAllLongCalls());
+        str.append(",CountLongFwdCalls=");
+        str.append(getCountLongFwdCalls());
+        str.append(",NoBtw=");
+        str.append(getNoBtw());
+        str.append(",NoEmptyMails=");
+        str.append(getNoEmptyMails());
+        str.append(",TextMail=");
+        str.append(getTextMail());
+        str.append(",FacLong=");
+        str.append(getFacLong());
+        str.append(",FacLongFwd=");
+        str.append(getFacLongFwd());
+        str.append(",FacTblMinCalls_I=");
+        str.append(getFacTblMinCalls_I());
+        str.append(",FacTblMinCalls_II=");
+        str.append(getFacTblMinCalls_II());
+        str.append(",FacTblMinCalls_III=");
+        str.append(getFacTblMinCalls_III());
+        str.append(",FacTblMinCalls_IV=");
+        str.append(getFacTblMinCalls_IV());
+        str.append(",FacTblStartCost_I=");
+        str.append(getFacTblStartCost_I());
+        str.append(",FacTblStartCost_II=");
+        str.append(getFacTblStartCost_II());
+        str.append(",FacTblStartCost_III=");
+        str.append(getFacTblStartCost_III());
+        str.append(",FacTblStartCost_IV=");
+        str.append(getFacTblStartCost_IV());
+        str.append(",FacTblExtraCost_I=");
+        str.append(getFacTblExtraCost_I());
+        str.append(",FacTblExtraCost_II=");
+        str.append(getFacTblExtraCost_II());
+        str.append(",FacTblExtraCost_III=");
+        str.append(getFacTblExtraCost_III());
+        str.append(",FacTblExtraCost_IV=");
+        str.append(getFacTblExtraCost_IV());
+        str.append(",IsMailInvoice=");
+        str.append(getIsMailInvoice());
+        str.append(",InvoiceEmail='");
+        str.append(((this.invoiceEmail != null) ? this.invoiceEmail : ""));
+        str.append("',AccountNr='");
+        str.append(((this.accountNr != null) ? escapeQuotes(this.accountNr) : ""));
+        str.append("' ");
         return (str.toString());
+
     }
 
     public String toValueString()
@@ -983,8 +1153,147 @@ public class AccountEntityData extends be.tba.util.data.AbstractData
 
         // "(1, '409031', '04/10/05', 1128528272192, 1, 220, 0, 'Nabelactie voor
         // client'. ',0 ,0 ,0 ,0 ,'')
-        str.append("'0','" + ((this.userId != null) ? this.userId : "") + "','" + ((this.password != null) ? this.password : "") + "','" + ((this.fwdNumber != null) ? this.fwdNumber : "") + "','" + ((this.role != null) ? this.role : "") + "','" + ((this.fullName != null) ? this.fullName : "") + "','" + ((this.custFilter != null) ? this.custFilter : "") + "','" + ((this.stateFilter != null) ? this.stateFilter : "") + "','" + ((this.dirFilter != null) ? this.dirFilter : "") + "','" + ((this.lastLogin != null) ? this.lastLogin : "") + "'," + getLastLoginTS() + "," + getPreviousLoginTS() + "," + getIsRegistered() + "," + getIsAutoRelease() + "," + getIsXmlMail() + "," + getIs3W() + ",'" + ((this.w3_PersonId != null) ? this.w3_PersonId : "") + "','" + ((this.w3_CompanyId != null) ? this.w3_CompanyId : "") + "','" + ((this.email != null) ? this.email : "") + "','" + ((this.gsm != null) ? this.gsm : "") + "'," + getInvoiceType() + "," + getLastInvoiceTime() + "," + getLastMailTime() + "," + getMailHour1() + "," + getMailMinutes1() + "," + getMailHour2() + "," + getMailMinutes2() + "," + getMailHour3() + "," + getMailMinutes3() + "," + getFacStdInCall() + "," + getFacOutLevel1() + "," + getFacOutLevel2() + "," + getFacOutLevel3() + "," + getIsPriceAgendaFixed() + "," + getFacAgendaCall() + "," + getAgendaPriceUnit() + "," + getFacSms() + "," + getFacCallForward() + "," + getFacStdOutCall() + "," + getTaskHourRate() + ",'" + ((this.companyName != null) ? this.companyName : "") + "','" + ((this.attToName != null) ? this.attToName : "") + "','" + ((this.street != null) ? this.street : "") + "','" + ((this.city != null) ? this.city : "") + "','" + ((this.btwNumber != null) ? this.btwNumber : "") + "'," + getNoInvoice() + "," + getFacFaxCall() + "," + getHasSubCustomers() + ",'" + ((this.superCustomer != null) ? this.superCustomer : "") + "'," + getCountAllLongCalls() + "," + getCountLongFwdCalls() + "," + getNoBtw() + "," + getNoEmptyMails() + "," + getTextMail() + ","
-                + getFacLong() + "," + getFacLongFwd() + "," + getFacTblMinCalls_I() + "," + getFacTblMinCalls_II() + "," + getFacTblMinCalls_III() + "," + getFacTblMinCalls_IV() + "," + getFacTblStartCost_I() + "," + getFacTblStartCost_II() + "," + getFacTblStartCost_III() + "," + getFacTblStartCost_IV() + "," + getFacTblExtraCost_I() + "," + getFacTblExtraCost_II() + "," + getFacTblExtraCost_III() + "," + getFacTblExtraCost_IV() + "," + getIsMailInvoice() + ",'" + ((this.invoiceEmail != null) ? this.invoiceEmail : "") + "','" + ((this.accountNr != null) ? escapeQuotes(this.accountNr) : "") + "'");
+        str.append("'0','");
+        str.append(((this.userId != null) ? this.userId : ""));
+        str.append("','");
+        str.append(((this.password != null) ? this.password : ""));
+        str.append("','");
+        str.append(((this.fwdNumber != null) ? this.fwdNumber : ""));
+        str.append("','");
+        str.append(((this.role != null) ? this.role : ""));
+        str.append("','");
+        str.append(((this.fullName != null) ? this.fullName : ""));
+        str.append("','");
+        str.append(((this.custFilter != null) ? this.custFilter : ""));
+        str.append("','");
+        str.append(((this.stateFilter != null) ? this.stateFilter : ""));
+        str.append("','");
+        str.append(((this.dirFilter != null) ? this.dirFilter : ""));
+        str.append("','");
+        str.append(((this.lastLogin != null) ? this.lastLogin : ""));
+        str.append("',");
+        str.append(getLastLoginTS());
+        str.append(",");
+        str.append(getPreviousLoginTS());
+        str.append(",");
+        str.append(getIsRegistered());
+        str.append(",");
+        str.append(getIsAutoRelease());
+        str.append(",");
+        str.append(getIsXmlMail());
+        str.append(",");
+        str.append(getIs3W());
+        str.append(",'");
+        str.append(((this.w3_PersonId != null) ? this.w3_PersonId : ""));
+        str.append("','");
+        str.append(((this.w3_CompanyId != null) ? this.w3_CompanyId : ""));
+        str.append("','");
+        str.append(((this.email != null) ? this.email : ""));
+        str.append("','");
+        str.append(((this.gsm != null) ? this.gsm : ""));
+        str.append("',");
+        str.append(getInvoiceType());
+        str.append(",");
+        str.append(getLastInvoiceTime());
+        str.append(",");
+        str.append(getLastMailTime());
+        str.append(",");
+        str.append(getMailHour1());
+        str.append(",");
+        str.append(getMailMinutes1());
+        str.append(",");
+        str.append(getMailHour2());
+        str.append(",");
+        str.append(getMailMinutes2());
+        str.append(",");
+        str.append(getMailHour3());
+        str.append(",");
+        str.append(getMailMinutes3());
+        str.append(",");
+        str.append(getFacStdInCall());
+        str.append(",");
+        str.append(getFacOutLevel1());
+        str.append(",");
+        str.append(getFacOutLevel2());
+        str.append(",");
+        str.append(getFacOutLevel3());
+        str.append(",");
+        str.append(getIsPriceAgendaFixed());
+        str.append(",");
+        str.append(getFacAgendaCall());
+        str.append(",");
+        str.append(getAgendaPriceUnit());
+        str.append(",");
+        str.append(getFacSms());
+        str.append(",");
+        str.append(getFacCallForward());
+        str.append(",");
+        str.append(getFacStdOutCall());
+        str.append(",");
+        str.append(getTaskHourRate());
+        str.append(",'");
+        str.append(((this.companyName != null) ? this.companyName : ""));
+        str.append("','");
+        str.append(((this.attToName != null) ? this.attToName : ""));
+        str.append("','");
+        str.append(((this.street != null) ? this.street : ""));
+        str.append("','");
+        str.append(((this.city != null) ? this.city : ""));
+        str.append("','");
+        str.append(((this.btwNumber != null) ? this.btwNumber : ""));
+        str.append("',");
+        str.append(getNoInvoice());
+        str.append(",");
+        str.append(getFacFaxCall());
+        str.append(",");
+        str.append(getHasSubCustomers());
+        str.append(",'");
+        str.append(((this.superCustomer != null) ? this.superCustomer : ""));
+        str.append("',");
+        str.append(getCountAllLongCalls());
+        str.append(",");
+        str.append(getCountLongFwdCalls());
+        str.append(",");
+        str.append(getNoBtw());
+        str.append(",");
+        str.append(getNoEmptyMails());
+        str.append(",");
+        str.append(getTextMail());
+        str.append(",");
+        str.append(getFacLong());
+        str.append(",");
+        str.append(getFacLongFwd());
+        str.append(",");
+        str.append(getFacTblMinCalls_I());
+        str.append(",");
+        str.append(getFacTblMinCalls_II());
+        str.append(",");
+        str.append(getFacTblMinCalls_III());
+        str.append(",");
+        str.append(getFacTblMinCalls_IV());
+        str.append(",");
+        str.append(getFacTblStartCost_I());
+        str.append(",");
+        str.append(getFacTblStartCost_II());
+        str.append(",");
+        str.append(getFacTblStartCost_III());
+        str.append(",");
+        str.append(getFacTblStartCost_IV());
+        str.append(",");
+        str.append(getFacTblExtraCost_I());
+        str.append(",");
+        str.append(getFacTblExtraCost_II());
+        str.append(",");
+        str.append(getFacTblExtraCost_III());
+        str.append(",");
+        str.append(getFacTblExtraCost_IV());
+        str.append(",");
+        str.append(getIsMailInvoice());
+        str.append(",'");
+        str.append(((this.invoiceEmail != null) ? this.invoiceEmail : ""));
+        str.append("','");
+        str.append(((this.accountNr != null) ? escapeQuotes(this.accountNr) : ""));
+        str.append("'");
         return (str.toString());
     }
 

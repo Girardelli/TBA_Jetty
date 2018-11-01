@@ -342,6 +342,19 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
             }
         }
     }
+    
+
+    public Collection<InvoiceEntityData>  getInvoiceListByIdList(WebSession webSession, Collection<Integer> freezeList)
+    {
+        StringBuffer strBuf = new StringBuffer();
+        for (Iterator<Integer> i = freezeList.iterator(); i.hasNext();)
+        {
+            int vKey = i.next().intValue();
+            strBuf.append(",");
+            strBuf.append(vKey);
+        }
+        return executeSqlQuery(webSession.getConnection(), "SELECT * FROM InvoiceEntity WHERE IsInvoiceMailed=TRUE AND Id IN (" + strBuf.toString().substring(1) + ")"); 
+    }
 
     public void setPaymentInfo(WebSession webSession, int id, FintroPayment payment)
     {

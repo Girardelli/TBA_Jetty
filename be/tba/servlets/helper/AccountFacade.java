@@ -1,7 +1,9 @@
 package be.tba.servlets.helper;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.StringTokenizer;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +16,7 @@ import be.tba.util.constants.AccountRole;
 import be.tba.util.constants.Constants;
 import be.tba.util.exceptions.remote.AccountNotFoundException;
 import be.tba.util.invoice.InvoiceHelper;
+import be.tba.util.invoice.WoltersKluwenImport;
 import be.tba.util.session.AccountCache;
 import be.tba.servlets.session.WebSession;
 
@@ -135,13 +138,34 @@ public class AccountFacade
         }
     }
 
+    public static File generateKlantenXml(HttpServletRequest req, WebSession session)
+    {
+        String vLtd = (String) req.getParameter(Constants.ACCOUNT_TO_DELETE);
+        if (vLtd != null && vLtd.length() > 0)
+        {
+            //System.out.println("setInvoicesPayed: # entries " + vLtd);
+            StringTokenizer vStrTok = new StringTokenizer(vLtd, ",");
+
+            Vector<Integer> vList = new Vector<Integer>();
+            while (vStrTok.hasMoreTokens())
+            {
+                vList.add(Integer.valueOf(vStrTok.nextToken()));
+            }
+            AccountSqlAdapter vAccountSession = new AccountSqlAdapter();
+            Collection<AccountEntityData> accountList = vAccountSession.getAccountListByIdList(session, (Collection<Integer>) vList);
+            return WoltersKluwenImport.generateKlantenXml(accountList);
+        }
+        System.out.println("generateKlantenXml: no invoices selected");
+        return null;
+    }
+
     public static AccountEntityData updateAccountData(HttpServletRequest req)
     {
         String vFwdNr = (String) req.getParameter(Constants.ACCOUNT_ID);
         AccountEntityData vAccount = new AccountEntityData(AccountCache.getInstance().get(vFwdNr));
         vAccount.setFullName(req.getParameter(Constants.ACCOUNT_FULLNAME));
         vAccount.setFwdNumber(req.getParameter(Constants.ACCOUNT_FORWARD_NUMBER));
-        if (req.getParameter(Constants.ACCOUNT_ROLE).equals(AccountRole.SUBCUSTOMER.getText()) && req.getParameter(Constants.ACCOUNT_SUPER_CUSTOMER) != null)
+        if (req.getParameter(Constants.ACCOUNT_ROLE) != null && req.getParameter(Constants.ACCOUNT_ROLE).equals(AccountRole.SUBCUSTOMER.getText()) && req.getParameter(Constants.ACCOUNT_SUPER_CUSTOMER) != null)
         {
             vAccount.setSuperCustomer(req.getParameter(Constants.ACCOUNT_SUPER_CUSTOMER));
             vAccount.setRole(req.getParameter(Constants.ACCOUNT_ROLE));

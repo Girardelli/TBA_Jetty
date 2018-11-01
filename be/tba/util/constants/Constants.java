@@ -40,6 +40,9 @@ public class Constants
     public static final String INVOICE_DIR = "C:\\TheBusinessAssistant\\TheBusinessAssistant\\facturen\\";
 
     public static final String FILEUPLOAD_DIR = "C:\\jetty\\tempdir";
+    
+    public static final String WC_KLANTEN_XML = "WoltersKluwerKlanten.xml";
+    public static final String WC_VERKOPEN_XML = "WoltersKluwerVerkopen.xml";
 
     public static final String ADMIN_LOGIN_HTML = "/TheBusinessAssistant/admin.html";
 
@@ -437,6 +440,7 @@ public class Constants
     public static final String ACCOUNT_DELETE = "ACCOUNT_DELETE";
 
     public static final String ACCOUNT_UPDATE = "ACCOUNT_UPDATE";
+    public static final String GENERATE_ACCOUNT_XML = "GENERATE_ACCOUNT_XML";
 
     public static final String ACCOUNT_ADD = "ACCOUNT_ADD";
 
@@ -472,6 +476,7 @@ public class Constants
 
     public static final String GENERATE_ALL_INVOICEDOCS = "GENERATE_ALL_INVOICEDOCS";
     public static final String GENERATE_CREDITNOTE = "GENERATE_CREDITNOTE";
+    public static final String GENERATE_INVOICE_XML = "GENERATE_INVOICE_XML";
 
     public static final String GOTO_RECORD_SEARCH = "GOTO_RECORD_SEARCH";
 
@@ -516,6 +521,9 @@ public class Constants
     public static final String GOTO_OPEN_INVOICE = "GOTO_OPEN_INVOICE";
     
     public static final String PROCESS_FINTRO_XLSX = "PROCESS_FINTRO_XLSX";
+    public static final String DOWNLOAD_FINTRO_PROCESS_TXT = "DOWNLOAD_FINTRO_PROCESS_TXT";
+    public static final String DOWNLOAD_WK_VERKOPEN_XML = "DOWNLOAD_WK_VERKOPEN_XML";
+    public static final String DOWNLOAD_WK_KLANTEN_XML = "DOWNLOAD_WK_KLANTEN_XML";
 
     public static final String GOTO_INVOICE_ADD = "GOTO_INVOICE_ADD";
 

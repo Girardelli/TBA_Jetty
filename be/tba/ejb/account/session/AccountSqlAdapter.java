@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.sql.ResultSet;
 
 import be.tba.ejb.account.interfaces.AccountEntityData;
+import be.tba.ejb.invoice.interfaces.InvoiceEntityData;
 import be.tba.servlets.session.WebSession;
 import be.tba.util.constants.Constants;
 import be.tba.util.data.AbstractSqlAdapter;
@@ -186,6 +187,20 @@ public class AccountSqlAdapter extends AbstractSqlAdapter<AccountEntityData>
         return vFreeNumbers;
     }
 
+    
+    public Collection<AccountEntityData>  getAccountListByIdList(WebSession webSession, Collection<Integer> list)
+    {
+        StringBuffer strBuf = new StringBuffer();
+        for (Iterator<Integer> i = list.iterator(); i.hasNext();)
+        {
+            int vKey = i.next().intValue();
+            strBuf.append(",");
+            strBuf.append(vKey);
+        }
+        return executeSqlQuery(webSession.getConnection(), "SELECT * FROM AccountEntity WHERE NoInvoice=FALSE AND Id IN (" + strBuf.toString().substring(1) + ")"); 
+    }
+    
+    
     public static Map<String, AccountEntityData> converToHashMap(Collection<AccountEntityData> rawList)
     {
         Map<String, AccountEntityData> vMap = new HashMap<String, AccountEntityData>();
@@ -209,78 +224,80 @@ public class AccountSqlAdapter extends AbstractSqlAdapter<AccountEntityData>
         Vector<AccountEntityData> vVector = new Vector<AccountEntityData>();
         while (rs.next())
         {
-            AccountEntityData entry = new AccountEntityData();
+             AccountEntityData entry = new AccountEntityData();
             entry.setId(rs.getInt(1));
-            entry.setUserId(null2EmpthyString(rs.getString(2)));
-            entry.setPassword(null2EmpthyString(rs.getString(3)));
-            entry.setFwdNumber(null2EmpthyString(rs.getString(4)));
-            entry.setRole(null2EmpthyString(rs.getString(5)));
-            entry.setFullName(null2EmpthyString(rs.getString(6)));
-            entry.setCustFilter(null2EmpthyString(rs.getString(7)));
-            entry.setStateFilter(null2EmpthyString(rs.getString(8)));
-            entry.setDirFilter(null2EmpthyString(rs.getString(9)));
-            entry.setLastLogin(null2EmpthyString(rs.getString(10)));
-            entry.setLastLoginTS(rs.getLong(11));
-            entry.setPreviousLoginTS(rs.getLong(12));
-            entry.setIsRegistered(rs.getBoolean(13));
-            entry.setIsAutoRelease(rs.getBoolean(14));
-            entry.setIsXmlMail(rs.getBoolean(15));
-            entry.setIs3W(rs.getBoolean(16));
-            entry.setW3_PersonId(null2EmpthyString(rs.getString(17)));
-            entry.setW3_CompanyId(null2EmpthyString(rs.getString(18)));
-            entry.setEmail(null2EmpthyString(rs.getString(19)));
-            entry.setGsm(null2EmpthyString(rs.getString(20)));
-            entry.setInvoiceType(rs.getShort(21));
-            entry.setLastInvoiceTime(rs.getLong(22));
-            entry.setLastMailTime(rs.getLong(23));
-            entry.setMailHour1(rs.getShort(24));
-            entry.setMailMinutes1(rs.getShort(25));
-            entry.setMailHour2(rs.getShort(26));
-            entry.setMailMinutes2(rs.getShort(27));
-            entry.setMailHour3(rs.getShort(28));
-            entry.setMailMinutes3(rs.getShort(29));
-            entry.setFacStdInCall(rs.getInt(30));
-            entry.setFacOutLevel1(rs.getInt(31));
-            entry.setFacOutLevel2(rs.getInt(32));
-            entry.setFacOutLevel3(rs.getInt(33));
-            entry.setIsPriceAgendaFixed(rs.getBoolean(34));
-            entry.setFacAgendaCall(rs.getInt(35));
-            entry.setAgendaPriceUnit(rs.getShort(36));
-            entry.setFacSms(rs.getInt(37));
-            entry.setFacCallForward(rs.getInt(38));
-            entry.setFacStdOutCall(rs.getInt(39));
-            entry.setTaskHourRate(rs.getInt(40));
-            entry.setCompanyName(null2EmpthyString(rs.getString(41)));
-            entry.setAttToName(null2EmpthyString(rs.getString(42)));
-            entry.setStreet(null2EmpthyString(rs.getString(43)));
-            entry.setCity(null2EmpthyString(rs.getString(44)));
-            entry.setBtwNumber(null2EmpthyString(rs.getString(45)));
-            entry.setNoInvoice(rs.getBoolean(46));
-            entry.setFacFaxCall(rs.getInt(47));
-            entry.setHasSubCustomers(rs.getBoolean(48));
-            entry.setSuperCustomer(null2EmpthyString(rs.getString(49)));
-            entry.setCountAllLongCalls(rs.getBoolean(50));
-            entry.setCountLongFwdCalls(rs.getBoolean(51));
-            entry.setNoBtw(rs.getBoolean(52));
-            entry.setNoEmptyMails(rs.getBoolean(53));
-            entry.setTextMail(rs.getBoolean(54));
-            entry.setFacLong(rs.getDouble(55));
-            entry.setFacLongFwd(rs.getDouble(56));
-            entry.setFacTblMinCalls_I(rs.getInt(57));
-            entry.setFacTblMinCalls_II(rs.getInt(58));
-            entry.setFacTblMinCalls_III(rs.getInt(59));
-            entry.setFacTblMinCalls_IV(rs.getInt(60));
-            entry.setFacTblStartCost_I(rs.getDouble(61));
-            entry.setFacTblStartCost_II(rs.getDouble(62));
-            entry.setFacTblStartCost_III(rs.getDouble(63));
-            entry.setFacTblStartCost_IV(rs.getDouble(64));
-            entry.setFacTblExtraCost_I(rs.getDouble(65));
-            entry.setFacTblExtraCost_II(rs.getDouble(66));
-            entry.setFacTblExtraCost_III(rs.getDouble(67));
-            entry.setFacTblExtraCost_IV(rs.getDouble(68));
-            entry.setIsMailInvoice(rs.getBoolean(69));
-            entry.setInvoiceEmail(null2EmpthyString(rs.getString(70)));
-            entry.setAccountNr(null2EmpthyString(rs.getString(71)));
+            entry.setWcPrime(rs.getInt(2));
+            entry.setWcAlfa(null2EmpthyString(rs.getString(3)));
+            entry.setUserId(null2EmpthyString(rs.getString(4)));
+            entry.setPassword(null2EmpthyString(rs.getString(5)));
+            entry.setFwdNumber(null2EmpthyString(rs.getString(6)));
+            entry.setRole(null2EmpthyString(rs.getString(7)));
+            entry.setFullName(null2EmpthyString(rs.getString(8)));
+            entry.setCustFilter(null2EmpthyString(rs.getString(9)));
+            entry.setStateFilter(null2EmpthyString(rs.getString(10)));
+            entry.setDirFilter(null2EmpthyString(rs.getString(11)));
+            entry.setLastLogin(null2EmpthyString(rs.getString(12)));
+            entry.setLastLoginTS(rs.getLong(13));
+            entry.setPreviousLoginTS(rs.getLong(14));
+            entry.setIsRegistered(rs.getBoolean(15));
+            entry.setIsAutoRelease(rs.getBoolean(16));
+            entry.setIsXmlMail(rs.getBoolean(17));
+            entry.setIs3W(rs.getBoolean(18));
+            entry.setW3_PersonId(null2EmpthyString(rs.getString(19)));
+            entry.setW3_CompanyId(null2EmpthyString(rs.getString(20)));
+            entry.setEmail(null2EmpthyString(rs.getString(21)));
+            entry.setGsm(null2EmpthyString(rs.getString(22)));
+            entry.setInvoiceType(rs.getShort(23));
+            entry.setLastInvoiceTime(rs.getLong(24));
+            entry.setLastMailTime(rs.getLong(25));
+            entry.setMailHour1(rs.getShort(26));
+            entry.setMailMinutes1(rs.getShort(27));
+            entry.setMailHour2(rs.getShort(28));
+            entry.setMailMinutes2(rs.getShort(29));
+            entry.setMailHour3(rs.getShort(30));
+            entry.setMailMinutes3(rs.getShort(31));
+            entry.setFacStdInCall(rs.getInt(32));
+            entry.setFacOutLevel1(rs.getInt(33));
+            entry.setFacOutLevel2(rs.getInt(34));
+            entry.setFacOutLevel3(rs.getInt(35));
+            entry.setIsPriceAgendaFixed(rs.getBoolean(36));
+            entry.setFacAgendaCall(rs.getInt(37));
+            entry.setAgendaPriceUnit(rs.getShort(38));
+            entry.setFacSms(rs.getInt(39));
+            entry.setFacCallForward(rs.getInt(40));
+            entry.setFacStdOutCall(rs.getInt(41));
+            entry.setTaskHourRate(rs.getInt(42));
+            entry.setCompanyName(null2EmpthyString(rs.getString(43)));
+            entry.setAttToName(null2EmpthyString(rs.getString(44)));
+            entry.setStreet(null2EmpthyString(rs.getString(45)));
+            entry.setCity(null2EmpthyString(rs.getString(46)));
+            entry.setBtwNumber(null2EmpthyString(rs.getString(47)));
+            entry.setNoInvoice(rs.getBoolean(48));
+            entry.setFacFaxCall(rs.getInt(49));
+            entry.setHasSubCustomers(rs.getBoolean(50));
+            entry.setSuperCustomer(null2EmpthyString(rs.getString(51)));
+            entry.setCountAllLongCalls(rs.getBoolean(52));
+            entry.setCountLongFwdCalls(rs.getBoolean(53));
+            entry.setNoBtw(rs.getBoolean(54));
+            entry.setNoEmptyMails(rs.getBoolean(55));
+            entry.setTextMail(rs.getBoolean(56));
+            entry.setFacLong(rs.getDouble(57));
+            entry.setFacLongFwd(rs.getDouble(58));
+            entry.setFacTblMinCalls_I(rs.getInt(59));
+            entry.setFacTblMinCalls_II(rs.getInt(60));
+            entry.setFacTblMinCalls_III(rs.getInt(61));
+            entry.setFacTblMinCalls_IV(rs.getInt(62));
+            entry.setFacTblStartCost_I(rs.getDouble(63));
+            entry.setFacTblStartCost_II(rs.getDouble(64));
+            entry.setFacTblStartCost_III(rs.getDouble(65));
+            entry.setFacTblStartCost_IV(rs.getDouble(66));
+            entry.setFacTblExtraCost_I(rs.getDouble(67));
+            entry.setFacTblExtraCost_II(rs.getDouble(68));
+            entry.setFacTblExtraCost_III(rs.getDouble(69));
+            entry.setFacTblExtraCost_IV(rs.getDouble(70));
+            entry.setIsMailInvoice(rs.getBoolean(71));
+            entry.setInvoiceEmail(null2EmpthyString(rs.getString(72)));
+            entry.setAccountNr(null2EmpthyString(rs.getString(73)));
             vVector.add(entry);
             // System.out.println("read from DB:" + entry.toNameValueString());
         }

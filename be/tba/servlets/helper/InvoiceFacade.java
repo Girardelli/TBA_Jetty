@@ -19,6 +19,7 @@ import be.tba.util.invoice.CustomerData;
 import be.tba.util.invoice.IBANCheckDigit;
 import be.tba.util.invoice.InvoiceHelper;
 import be.tba.util.invoice.TbaPdfInvoice;
+import be.tba.util.invoice.WoltersKluwenImport;
 import be.tba.util.session.AccountCache;
 
 public class InvoiceFacade
@@ -152,7 +153,28 @@ public class InvoiceFacade
             vInvoiceSession.setListPayed(session, (Collection<Integer>) vList);
         }
     }
+    
+    public static File generateInvoiceXml(HttpServletRequest req, WebSession session)
+    {
+        String vLtd = (String) req.getParameter(Constants.INVOICE_TO_SETPAYED);
+        if (vLtd != null && vLtd.length() > 0)
+        {
+            //System.out.println("setInvoicesPayed: # entries " + vLtd);
+            StringTokenizer vStrTok = new StringTokenizer(vLtd, ",");
 
+            Vector<Integer> vList = new Vector<Integer>();
+            while (vStrTok.hasMoreTokens())
+            {
+                vList.add(Integer.valueOf(vStrTok.nextToken()));
+            }
+            InvoiceSqlAdapter vInvoiceSession = new InvoiceSqlAdapter();
+            Collection<InvoiceEntityData> invoiceList = vInvoiceSession.getInvoiceListByIdList(session, (Collection<Integer>) vList);
+            return WoltersKluwenImport.generateVerkopenXml(invoiceList);
+        }
+        System.out.println("generateInvoiceXml: no invoices selected");
+        return null;
+    }
+    
     public static void generateInvoices(HttpServletRequest req, WebSession session) throws IOException
     {
         if (req.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER) != null)

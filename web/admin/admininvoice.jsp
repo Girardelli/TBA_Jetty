@@ -85,14 +85,6 @@ private StringBuilder allEntryIds;%>
 						<br>
 					</td>
 				</tr>
-<!--  				
-				<tr>
-					<td width="80"><input class="tbabutton" type=submit name=action value=" Verwijderen " onclick="verwijderen()"></td>
-					<td width="80"><input class="tbabutton" type=submit name=action value=" Bevriezen " onclick="vriezen()"></td>
-					<td width="80"><input class="tbabutton" type=submit name=action value=" Betaaldvlag zetten " onclick="setPayed()"></td>
-					<td width="80"><input class="tbabutton" type=submit name=action value=" Betaaldvlag zetten " onclick="setPayed()"></td>
-					<td width="180"><input class="tbabutton" type=submit name=action value=" Genereer factuur docs "	onclick="generateAllInvoices()"></td>
-				</tr> -->
 			</table>
 			<br>
 			<input class="tbabutton" type=submit name=action value=" Factuur toevoegen " onclick="toevoegen()">
@@ -102,6 +94,14 @@ private StringBuilder allEntryIds;%>
 			<input class="tbabutton" type=submit name=action value=" Betaaldvlag zetten " onclick="setPayed()">
 			<br>
 			<input class="tbabutton" type=submit name=action value=" Genereer factuurlijst " onclick="generateAllInvoices()">
+            
+            </form>
+			<form name="downloadfileform" method="POST" action="/TheBusinessAssistant/download" >
+		    <input type=hidden name=<%=Constants.INVOICE_TO_SETPAYED%> value="">
+		    <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.DOWNLOAD_WK_VERKOPEN_XML%>"> 
+			<input class="tbabutton" type=submit name=action value=" Download export file " onclick="downloadExportFile()">
+			</form>
+            
 			<br>
 			<%
 	
@@ -232,12 +232,12 @@ catch (Exception e)
 </html>
 
 <script type="text/javascript">
-var invoicesToDelete = new Array();
+var invoiceArray = new Array();
 
 function hooverOnRow(id, rowInd, colour)
 {
   var entry = document.getElementById(id) ;
-  if (invoicesToDelete[rowInd] == null)
+  if (invoiceArray[rowInd] == null)
     entry.style.backgroundColor= colour;
   else
     entry.style.backgroundColor= "FF9966";
@@ -246,7 +246,7 @@ function hooverOnRow(id, rowInd, colour)
 function hooverOffRow(id, rowInd, colour)
 {
   var entry = document.getElementById(id) ;
-  if (invoicesToDelete[rowInd] == null)
+  if (invoiceArray[rowInd] == null)
     entry.style.backgroundColor= colour;
   else
     entry.style.backgroundColor= "FF9966";
@@ -261,9 +261,9 @@ function verwijderen()
 {
   var shorterArr = new Array();
   var j = 0;
-  for (var i = 0; i < invoicesToDelete.length; i++)
-    if (invoicesToDelete[i] != null)
-      shorterArr[j++] = invoicesToDelete[i];
+  for (var i = 0; i < invoiceArray.length; i++)
+    if (invoiceArray[i] != null)
+      shorterArr[j++] = invoiceArray[i];
   document.invoicelistform.<%=Constants.INVOICE_TO_DELETE%>.value=shorterArr.join();
   document.invoicelistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.INVOICE_DELETE%>";
 }
@@ -272,9 +272,9 @@ function vriezen()
 {
   var shorterArr = new Array();
   var j = 0;
-  for (var i = 0; i < invoicesToDelete.length; i++)
-    if (invoicesToDelete[i] != null)
-      shorterArr[j++] = invoicesToDelete[i];
+  for (var i = 0; i < invoiceArray.length; i++)
+    if (invoiceArray[i] != null)
+      shorterArr[j++] = invoiceArray[i];
   document.invoicelistform.<%=Constants.INVOICE_TO_FREEZE%>.value=shorterArr.join();
   document.invoicelistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.INVOICE_FREEZE%>";
 }
@@ -283,9 +283,9 @@ function mailen()
 {
   var shorterArr = new Array();
   var j = 0;
-  for (var i = 0; i < invoicesToDelete.length; i++)
-    if (invoicesToDelete[i] != null)
-      shorterArr[j++] = invoicesToDelete[i];
+  for (var i = 0; i < invoiceArray.length; i++)
+    if (invoiceArray[i] != null)
+      shorterArr[j++] = invoiceArray[i];
   document.invoicelistform.<%=Constants.INVOICE_TO_FREEZE%>.value=shorterArr.join();
   document.invoicelistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.INVOICE_MAIL%>";
 }
@@ -294,9 +294,9 @@ function setPayed()
 {
   var shorterArr = new Array();
   var j = 0;
-  for (var i = 0; i < invoicesToDelete.length; i++)
-    if (invoicesToDelete[i] != null)
-      shorterArr[j++] = invoicesToDelete[i];
+  for (var i = 0; i < invoiceArray.length; i++)
+    if (invoiceArray[i] != null)
+      shorterArr[j++] = invoiceArray[i];
   document.invoicelistform.<%=Constants.INVOICE_TO_SETPAYED%>.value=shorterArr.join();
   document.invoicelistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.INVOICE_SETPAYED%>";
 }
@@ -304,14 +304,14 @@ function setPayed()
 function updateDeleteFlag(rowid, id, rowInd)
 {
   var entry = document.getElementById(rowid) ;
-  if (invoicesToDelete[rowInd] == null)
+  if (invoiceArray[rowInd] == null)
   {
-    invoicesToDelete[rowInd] = id;
+    invoiceArray[rowInd] = id;
     entry.style.backgroundColor= "FF9966";
   }
   else
   {
-    invoicesToDelete[rowInd] = null;
+    invoiceArray[rowInd] = null;
     entry.style.backgroundColor= "FFFF99";
   }
 }
@@ -321,10 +321,21 @@ function generateAllInvoices()
   document.invoicelistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.GENERATE_ALL_INVOICES%>";
 }
 
+function downloadExportFile()
+{
+	  var shorterArr = new Array();
+	  var j = 0;
+	  for (var i = 0; i < invoiceArray.length; i++)
+	    if (invoiceArray[i] != null)
+	      shorterArr[j++] = invoiceArray[i];
+	  document.downloadfileform.<%=Constants.INVOICE_TO_SETPAYED%>.value=shorterArr.join();
+	  document.downloadfileform.<%=Constants.SRV_ACTION%>.value="<%=Constants.DOWNLOAD_WK_VERKOPEN_XML%>";
+}
+
 function openInvoice(id, rowInd)
 {
   var entry = document.getElementById(id);
-  invoicesToDelete[rowInd] = null;
+  invoiceArray[rowInd] = null;
   entry.style.backgroundColor = "FFFF99";
   document.invoicelistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.GOTO_INVOICE%>";
 }
@@ -334,7 +345,7 @@ function selectAll()
   var allArr = <%=allEntryIds.toString()%>;
   for (var i = 0; i < allArr.length; i++)
   {
-    invoicesToDelete[i] = allArr[i].substring(2);
+    invoiceArray[i] = allArr[i].substring(2);
     var entry = document.getElementById(allArr[i]) ;
     entry.style.backgroundColor= "FF9966";
   }
@@ -345,7 +356,7 @@ function deselectAll()
   var allArr = <%=allEntryIds.toString()%>;
   for (var i = 0; i < allArr.length; i++)
   {
-    invoicesToDelete[i] = null;
+    invoiceArray[i] = null;
     var entry = document.getElementById(allArr[i]) ;
     entry.style.backgroundColor= "FFCC66";
   }
@@ -356,15 +367,15 @@ function reverseSelection()
   var allArr = <%=allEntryIds.toString()%>;
   for (var i = 0; i < allArr.length; i++)
   {
-    if (invoicesToDelete[i] == null)
+    if (invoiceArray[i] == null)
     {
-      invoicesToDelete[i] = allArr[i].substring(2);
+      invoiceArray[i] = allArr[i].substring(2);
       var entry = document.getElementById(allArr[i]) ;
       entry.style.backgroundColor= "FF9966";
     }
     else
     {
-      invoicesToDelete[i] = null;
+      invoiceArray[i] = null;
       var entry = document.getElementById(allArr[i]) ;
       entry.style.backgroundColor= "FFCC66";
     }

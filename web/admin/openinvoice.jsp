@@ -90,7 +90,7 @@
 				   	         %> 
 				             <br>				   	            
 				   	         <form name="downloadfileform" method="POST" action="/TheBusinessAssistant/download" >
-						     <input class="tbabutton" type=submit name=action value=" download de procesresultaten hieronder afgedrukt ">
+						     <input class="tbabutton" type=submit name=action value=" download de procesresultaten hieronder afgedrukt " onclick="downloadProcFile()">
 						     <input type=hidden name=<%=Constants.FINTRO_PROCESS_FILE%> value="<%=fintroXlsxReader.getOutputFileName()%>"> 
                              </form>
 				   	         <p><span class="adminsubtitle"> Resultaten van de Fintro upload:  
@@ -128,9 +128,9 @@
 			                {
 			                    DecimalFormat vCostFormatter = new DecimalFormat("#0.00");
 			                    double vTotalInvoice = 0.0;
-			                    for (Iterator i = vInvoices.iterator(); i.hasNext();)
+			                    for (Iterator<InvoiceEntityData> i = vInvoices.iterator(); i.hasNext();)
 			                    {
-			                        InvoiceEntityData vEntry = ((InvoiceEntityData) i.next());
+			                        InvoiceEntityData vEntry = i.next();
 			                        vTotalInvoice += vEntry.getTotalCost();
 			                    }
 			                    out.println("<p><span class=\"adminsubtitle\"> Totaal openstaande facturen : " + vCostFormatter.format(vTotalInvoice) + " (Excl BTW)</span></p>");
@@ -152,9 +152,9 @@
 				<%
 	
 				                    int vRowInd = 0;
-				                    for (Iterator i = vInvoices.iterator(); i.hasNext();)
+				                    for (Iterator<InvoiceEntityData> i = vInvoices.iterator(); i.hasNext();)
 				                    {
-				                        InvoiceEntityData vEntry = ((InvoiceEntityData) i.next());
+				                        InvoiceEntityData vEntry = i.next();
 				                        if (vEntry.getTotalCost() > 0)
 				                        {
 				                            String vCollor = "CCDD00";
@@ -233,10 +233,14 @@ function setPayed()
   
 }
 
-
 function uploadFile()
 {
   document.loadfileform.<%=Constants.SRV_ACTION%>.value="<%=Constants.PROCESS_FINTRO_XLSX%>";
+}
+
+function downloadProcFile()
+{
+  document.downloadfileform.<%=Constants.SRV_ACTION%>.value="<%=Constants.DOWNLOAD_FINTRO_PROCESS_TXT%>";
 }
 
 </script>
