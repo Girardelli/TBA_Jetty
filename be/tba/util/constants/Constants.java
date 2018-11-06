@@ -717,8 +717,6 @@ public class Constants
     public static final double CENT_PER_LONG_CALL_SECOND = 0.01; // 1,4 cent
     public static final String CENT_PER_LONG_CALL_SECOND_STR = "0.01"; // 0,5
                                                                        // cent
-    public static final int CENT_PER_HOUR_WORK = 2750; // 27,5 euro
-
     public static final int kOutCost = 100; // euro cent
     public static final int kSmsCost = 100; // euro cent
     public static final int kForwardCost = 100; // euro cent

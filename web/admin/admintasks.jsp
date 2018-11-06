@@ -63,12 +63,12 @@ if (vCustomerFilter == null) vCustomerFilter = Constants.ACCOUNT_FILTER_ALL;
 					name="<%=Constants.ACCOUNT_FILTER_CUSTOMER%>" onchange="submit()">
 					<%
 out.println("<option value=\"" + Constants.ACCOUNT_FILTER_ALL + (vCustomerFilter.equals(Constants.ACCOUNT_FILTER_ALL) ? "\" selected>" : "\">") + "selecteer klant");
-					Collection list = AccountCache.getInstance().getCustomerList();
+					Collection<AccountEntityData> list = AccountCache.getInstance().getCustomerList();
 					synchronized(list) 
 					{
-					    for (Iterator vIter = list.iterator(); vIter.hasNext();)
+					    for (Iterator<AccountEntityData> vIter = list.iterator(); vIter.hasNext();)
 					    {
-					        AccountEntityData vData = (AccountEntityData) vIter.next();
+					        AccountEntityData vData = vIter.next();
 					        out.println("<option value=\"" + vData.getFwdNumber() + (vCustomerFilter.equals(vData.getFwdNumber()) ? "\" selected>" : "\">") + vData.getFullName());
 					    }
 					}
@@ -112,7 +112,7 @@ allEntryIds = new StringBuilder("[");
 Collection vTasks = null;
 TaskSqlAdapter vTaskSession = new TaskSqlAdapter();
 
-vTasks = vTaskSession.getTasksForMonth(vSession, vCustomerFilter, vSession.getMonthsBack(), vSession.getYear());
+vTasks = vTaskSession.getTasksForMonthforFwdNr(vSession, vCustomerFilter, vSession.getMonthsBack(), vSession.getYear());
 
 AccountEntityData vAccountData = (AccountEntityData) AccountCache.getInstance().get(vCustomerFilter);
 

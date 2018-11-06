@@ -448,6 +448,27 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
     /**
      * @ejb:interface-method view-type="remote"
      */
+    public Collection<CallRecordEntityData> getIncomingCallsForMonth(WebSession webSession, int month, int year)
+    {
+        try
+        {
+            CallCalendar vCalendar = new CallCalendar();
+            long vStartTime = vCalendar.getStartOfMonth(month, year);
+            long vEndTime = vCalendar.getEndOfMonth(month, year);
+
+            Collection<CallRecordEntityData> vCollection = executeSqlQuery(webSession.getConnection(), "SELECT * FROM CallRecordEntity WHERE TimeStamp>" + vStartTime + " AND TimeStamp<=" + vEndTime + " AND IsMailed=TRUE AND isIncomingCall=TRUE");
+            return vCollection;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return new Vector<CallRecordEntityData>();
+    }
+
+    /**
+     * @ejb:interface-method view-type="remote"
+     */
     public Collection<CallRecordEntityData> getDoneByCalls(WebSession webSession, String empl, int month, int year)
     {
         try

@@ -63,14 +63,12 @@ Last Checked In By: $Author: Yves Willems $
  			throw new AccessDeniedException(
  			        "Account nummer not set in session.");
 
- 		Collection vTasks = null;
+ 		Collection<TaskEntityData> vTasks = null;
  		TaskSqlAdapter vTaskSession = new TaskSqlAdapter();
 
- 		vTasks = vTaskSession.getTasksForMonth(vSession, vSession.getFwdNumber(),
- 		        vSession.getMonthsBack(), vSession.getYear());
+ 		vTasks = vTaskSession.getTasksForMonthforFwdNr(vSession, vSession.getFwdNumber(), vSession.getMonthsBack(), vSession.getYear());
 
- 		AccountEntityData vAccountData = (AccountEntityData) AccountCache
- 		        .getInstance().get(vSession.getFwdNumber());
+ 		AccountEntityData vAccountData = (AccountEntityData) AccountCache.getInstance().get(vSession.getFwdNumber());
  %> <input class="tbabutton" type=submit name=action value="Taken van vorige maand"
 				onclick="showPrevious()"> <%
  	if (!vSession.isCurrentMonth())
@@ -118,9 +116,9 @@ Last Checked In By: $Author: Yves Willems $
 					<%
 						DecimalFormat vCostFormatter = new DecimalFormat(
 									        "#0.00");
-									for (Iterator i = vTasks.iterator(); i.hasNext();)
+									for (Iterator<TaskEntityData> i = vTasks.iterator(); i.hasNext();)
 									{
-										TaskEntityData vEntry = ((TaskEntityData) i.next());
+										TaskEntityData vEntry = i.next();
 
 										String vId = "id" + vEntry.getId();
 										String vKost;

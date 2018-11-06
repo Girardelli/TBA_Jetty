@@ -220,6 +220,7 @@ public class CallRecordFacade
         newRecord.setName((String) req.getParameter(Constants.RECORD_CALLER_NAME));
         newRecord.setShortDescription((String) req.getParameter(Constants.RECORD_SHORT_TEXT));
         newRecord.setLongDescription((String) req.getParameter(Constants.RECORD_LONG_TEXT));
+        newRecord.setDoneBy(webSession.getUserId());
 
         webSession.setNewUnmappedCall(newRecord);
     }
@@ -257,6 +258,7 @@ public class CallRecordFacade
         newRecord.setName((String) req.getParameter(Constants.RECORD_CALLER_NAME));
         newRecord.setShortDescription((String) req.getParameter(Constants.RECORD_SHORT_TEXT));
         newRecord.setLongDescription((String) req.getParameter(Constants.RECORD_LONG_TEXT));
+        newRecord.setDoneBy(webSession.getUserId());
     }
 
     public static boolean saveNewCall(HttpServletRequest req, WebSession webSession)
@@ -286,6 +288,7 @@ public class CallRecordFacade
             vNewRecord.setIsFaxCall(vNewCall.getIsFaxCall());
             vNewRecord.setIsVirgin(false);
             vNewRecord.setIsNotLogged(false);
+            vNewRecord.setDoneBy(webSession.getUserId());
             vQuerySession.setCallData(webSession, vNewRecord);
             vNewCall.setFwdNr(vNewRecord.getFwdNr());
             vNewCall.setId(vNewRecord.getId());

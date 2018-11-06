@@ -13,6 +13,7 @@ javax.rmi.PortableRemoteObject,
 javax.ejb.*,
 be.tba.ejb.account.interfaces.*,
 be.tba.ejb.pbx.interfaces.*,
+be.tba.ejb.invoice.interfaces.*,
 be.tba.ejb.task.interfaces.*,
 be.tba.util.constants.EjbJndiNames,
 be.tba.util.constants.Constants,
@@ -22,15 +23,23 @@ be.tba.util.session.AccountCache,
 be.tba.util.invoice.InvoiceHelper,
 be.tba.util.data.*,
 be.tba.ejb.pbx.session.CallRecordSqlAdapter,
+be.tba.ejb.invoice.session.InvoiceSqlAdapter,
 be.tba.ejb.task.session.TaskSqlAdapter,
 java.text.*"%>
 
 	<%
 
-try {
-vSession.setCallingJsp(Constants.ADMIN_EMPLOYEE_COST_JSP);
-
-InitialContext vContext = new InitialContext();
+try 
+{
+	class GeneratedCost
+	{
+	    protected int calls;
+	    protected double taskCost;
+	}
+	Map<String, GeneratedCost> performanceMap = new HashMap<String, GeneratedCost>();
+    vSession.setCallingJsp(Constants.ADMIN_EMPLOYEE_COST_JSP);
+	
+	InitialContext vContext = new InitialContext();
 
 %>
 <body>
@@ -56,14 +65,78 @@ InitialContext vContext = new InitialContext();
 				<td width="80"><input class="tbabutton" type=submit name=action value=" Vorige maand "
 					onclick="showPrevious()"></td>
 				<%
-if (!vSession.isCurrentMonth())
-{
-  out.println("<td width=\"80\"><input class=\"tbabutton\" type=submit name=action value=\" Volgende maand \"  onclick=\"showNext()\"></td>");
-}
+	if (!vSession.isCurrentMonth())
+	{
+	  out.println("<td width=\"80\"><input class=\"tbabutton\" type=submit name=action value=\" Volgende maand \"  onclick=\"showNext()\"></td>");
+	}
+	DecimalFormat mCostFormatter = new DecimalFormat("#0.00");		    
+	TaskSqlAdapter vTaskSession = new TaskSqlAdapter();
+	InvoiceSqlAdapter vInvoiceSession = new InvoiceSqlAdapter();
+	CallRecordSqlAdapter  vQuerySession = new CallRecordSqlAdapter();
+
+	Collection<InvoiceEntityData> vInvoices = vInvoiceSession.getInvoiceList(vSession, vSession.getMonthsBack(), vSession.getYear());
+	double totalCallCost = 0;
+	double totalTasks = 0;
+	for (Iterator<InvoiceEntityData> vIter = vInvoices.iterator(); vIter.hasNext();)
+	{
+	    InvoiceEntityData entry = vIter.next();
+	    totalCallCost += entry.getTotalCost();
+	}
+	Collection<TaskEntityData> tasks = vTaskSession.getTasksForMonth(vSession, vSession.getMonthsBack(), vSession.getYear());
+	for (Iterator<TaskEntityData> i = tasks.iterator(); i.hasNext();)
+	{
+	  TaskEntityData vEntry = i.next();
+	  double taskCost = 0;
+	  if (vEntry.getIsFixedPrice())
+	  {
+	      taskCost = vEntry.getFixedPrice();
+	  }
+	  else
+	  {
+	      taskCost = (vEntry.getTimeSpend() / 60) * (AccountCache.getInstance().get(vEntry.getFwdNr()).getTaskHourRate() / 100);
+	  }
+	  totalTasks += taskCost;
+	  if (performanceMap.containsKey(vEntry.getDoneBy()))
+	  {
+	      performanceMap.get(vEntry.getDoneBy()).taskCost += taskCost;
+	  }
+	  else
+	  {
+	      GeneratedCost genCost = new GeneratedCost();
+	      genCost.calls = 0;
+	      genCost.taskCost = taskCost;
+	      performanceMap.put(vEntry.getDoneBy(), genCost); 
+	      System.out.println("add entry from tasks for "+ vEntry.getDoneBy());
+	  }
+	}
+	totalCallCost -= totalTasks;
+	Collection<CallRecordEntityData> records = vQuerySession.getIncomingCallsForMonth(vSession, vSession.getMonthsBack(), vSession.getYear());
+	int totalNrCalls = records.size() == 0 ? 1 : records.size();
+    for (Iterator<CallRecordEntityData> i = records.iterator(); i.hasNext();)
+    {
+        CallRecordEntityData vEntry = i.next();
+        if (performanceMap.containsKey(vEntry.getDoneBy()))
+        {
+            performanceMap.get(vEntry.getDoneBy()).calls++;
+        }
+        else
+        {
+            GeneratedCost genCost = new GeneratedCost();
+            genCost.calls = 1;
+            genCost.taskCost = 0;
+            performanceMap.put(vEntry.getDoneBy(), genCost); 
+            System.out.println("add entry from records for "+ vEntry.getDoneBy());
+        }
+    }
+	
+	System.out.println("totalCallCost=" + totalCallCost + " , totalNrCalls=" + totalNrCalls + " , totalTasks=" + totalTasks);
+    
 %>
 			</tr>
 		</table>
 		<br>
+        <p><span class="admintitle"> Gemiddelde opbrengst per oproep deze maand: <%=mCostFormatter.format(totalCallCost/totalNrCalls)%><br>
+        </span></p>		
 		<br>
 		<table width="100%" border="0" cellspacing="2" cellpadding="2">
 			<tr>
@@ -73,50 +146,25 @@ if (!vSession.isCurrentMonth())
 				<td width="100" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Totaal (Euro)</td>
 			</tr>
 <%
-	
-TaskSqlAdapter vTaskSession = new TaskSqlAdapter();
 
-CallRecordSqlAdapter  vQuerySession = new CallRecordSqlAdapter();
-
-Collection emplList = AccountCache.getInstance().getEmployeeList();
-synchronized(emplList) 
-{
-    for (Iterator vIter = emplList.iterator(); vIter.hasNext();)
+    for (Iterator<String> vIter = performanceMap.keySet().iterator(); vIter.hasNext();)
     {
-        AccountEntityData vEmployee = (AccountEntityData) vIter.next();
+        String vEmployee = vIter.next();
         double vTaskCost = 0;
         double vCallCost = 0;
         
-        Collection vTasks = vTaskSession.getDoneByTasks(vSession, vEmployee.getUserId(), vSession.getMonthsBack(), vSession.getYear());
-        for (Iterator i = vTasks.iterator(); i.hasNext();)
-        {
-          TaskEntityData vEntry = ((TaskEntityData) i.next());
-          if (vEntry.getIsFixedPrice())
-          {
-              vTaskCost += vEntry.getFixedPrice();
-          }
-          else
-          {
-              vTaskCost += ((double) vEntry.getTimeSpend() / 60.00) * ((double) Constants.CENT_PER_HOUR_WORK / 100.00);
-          }
-        }
-        Collection vRecords = vQuerySession.getDoneByCalls(vSession, vEmployee.getUserId(), vSession.getMonthsBack(), vSession.getYear());
-
-        for (Iterator i = vRecords.iterator(); i.hasNext();)
-        {
-            CallRecordEntityData vEntry = (CallRecordEntityData) i.next();
-            
-        }
+        GeneratedCost genCost = performanceMap.get(vEmployee);
+        
+        double callCostContribution = genCost.calls * totalCallCost/totalNrCalls;
         %>
 		<tr bgcolor="FFCC66" class="bodytekst">
-			<td width="300" valign="top"><%=vEmployee.getFullName()%></td>
-			<td width="100" valign="top"><%=vRecords.size()%></td>
-			<td width="100" valign="top"><%=vTaskCost%></td>
-			<td width="100" valign="top"><%=vTaskCost + vRecords.size()%></td>
+			<td width="300" valign="top"><%=vEmployee%></td>
+			<td width="100" valign="top"><%=mCostFormatter.format(callCostContribution)%></td>
+			<td width="100" valign="top"><%=mCostFormatter.format(genCost.taskCost)%></td>
+			<td width="100" valign="top"><%=mCostFormatter.format(genCost.taskCost + callCostContribution)%></td>
 		</tr>
 		<%
-    }
-}
+	}
 
 }
 catch (Exception e)

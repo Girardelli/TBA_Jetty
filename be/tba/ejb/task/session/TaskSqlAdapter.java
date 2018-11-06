@@ -45,7 +45,7 @@ public class TaskSqlAdapter extends AbstractSqlAdapter<TaskEntityData>
         return executeSqlQuery(webSession.getConnection(), "SELECT * FROM TaskEntity WHERE FwdNr='" + fwdNr + "' AND IsRecuring=FALSE ORDER BY TimeStamp DESC");
     }
 
-    public Collection<TaskEntityData> getTasksForMonth(WebSession webSession, String fwdNr, int month, int year)
+    public Collection<TaskEntityData> getTasksForMonthforFwdNr(WebSession webSession, String fwdNr, int month, int year)
     {
         try
         {
@@ -53,7 +53,24 @@ public class TaskSqlAdapter extends AbstractSqlAdapter<TaskEntityData>
             long vStart = vCalendar.getStartOfMonth(month, year);
             long vEnd = vCalendar.getEndOfMonth(month, year);
 
-            return queryAllTasks(webSession, fwdNr, vStart, vEnd);
+            return queryAllTasksForFwdNr(webSession, fwdNr, vStart, vEnd);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return new Vector<TaskEntityData>();
+    }
+
+    public Collection<TaskEntityData> getTasksForMonth(WebSession webSession, int month, int year)
+    {
+        try
+        {
+            CallCalendar vCalendar = new CallCalendar();
+            long vStart = vCalendar.getStartOfMonth(month, year);
+            long vEnd = vCalendar.getEndOfMonth(month, year);
+
+            return queryAllTasks(webSession, vStart, vEnd);
         }
         catch (Exception e)
         {
@@ -109,7 +126,7 @@ public class TaskSqlAdapter extends AbstractSqlAdapter<TaskEntityData>
             Hashtable<String, Collection<TaskEntityData>> vTaskList = new Hashtable<String, Collection<TaskEntityData>>();
             collectInvoiceTasksHashTable(webSession, AccountCache.getInstance().get(fwdNr), vTaskList, start, stop);
 
-            System.out.println("getTasksFromTillTimestamp for " + fwdNr + ": " + vTaskList.size() + " entries.");
+            //System.out.println("getTasksFromTillTimestamp for " + fwdNr + ": " + vTaskList.size() + " entries.");
             return vTaskList;
         }
         catch (Exception e)
@@ -149,7 +166,7 @@ public class TaskSqlAdapter extends AbstractSqlAdapter<TaskEntityData>
 
     private void collectInvoiceTasks(WebSession webSession, AccountEntityData customer, Collection<TaskEntityData> taskList, long start, long stop)
     {
-        Collection<TaskEntityData> vCollection =  queryAllTasks(webSession, customer.getFwdNumber(), start, stop);
+        Collection<TaskEntityData> vCollection =  queryAllTasksForFwdNr(webSession, customer.getFwdNumber(), start, stop);
         
         if (vCollection != null)
         {
@@ -158,14 +175,14 @@ public class TaskSqlAdapter extends AbstractSqlAdapter<TaskEntityData>
         if (customer.getHasSubCustomers())
         {
             Collection<AccountEntityData> vSubCustomerList = AccountCache.getInstance().getSubCustomersList(customer.getFwdNumber());
-            System.out.println(customer.getFullName() + "has " + vSubCustomerList.size() + " sub customers");
+            //System.out.println(customer.getFullName() + "has " + vSubCustomerList.size() + " sub customers");
             for (Iterator<AccountEntityData> i = vSubCustomerList.iterator(); i.hasNext();)
             {
                 AccountEntityData vEntry = i.next();
 
                 if (vEntry.getNoInvoice())
                 {
-                    Collection<TaskEntityData> vSubCollection =  queryAllTasks(webSession, vEntry.getFwdNumber(), start, stop);
+                    Collection<TaskEntityData> vSubCollection =  queryAllTasksForFwdNr(webSession, vEntry.getFwdNumber(), start, stop);
                     
                     if (vSubCollection != null)
                     {
@@ -178,7 +195,7 @@ public class TaskSqlAdapter extends AbstractSqlAdapter<TaskEntityData>
 
     private void collectInvoiceTasksHashTable(WebSession webSession, AccountEntityData customer, Hashtable<String, Collection<TaskEntityData>> taskList, long start, long stop)
     {
-        Collection<TaskEntityData> vCollection = queryAllTasks(webSession, customer.getFwdNumber(), start, stop);
+        Collection<TaskEntityData> vCollection = queryAllTasksForFwdNr(webSession, customer.getFwdNumber(), start, stop);
         if (vCollection != null)
         {
             taskList.put(customer.getFwdNumber(), vCollection);
@@ -186,14 +203,14 @@ public class TaskSqlAdapter extends AbstractSqlAdapter<TaskEntityData>
         if (customer.getHasSubCustomers())
         {
             Collection<AccountEntityData> vSubCustomerList = AccountCache.getInstance().getSubCustomersList(customer.getFwdNumber());
-            System.out.println(customer.getFullName() + "has " + vSubCustomerList.size() + " sub customers");
+            //System.out.println(customer.getFullName() + "has " + vSubCustomerList.size() + " sub customers");
             for (Iterator<AccountEntityData> i = vSubCustomerList.iterator(); i.hasNext();)
             {
                 AccountEntityData vEntry = i.next();
 
                 if (vEntry.getNoInvoice())
                 {
-                    vCollection = queryAllTasks(webSession, vEntry.getFwdNumber(), start, stop);
+                    vCollection = queryAllTasksForFwdNr(webSession, vEntry.getFwdNumber(), start, stop);
                     if (vCollection != null)
                     {
                         taskList.put(vEntry.getFwdNumber(), vCollection);
@@ -203,10 +220,25 @@ public class TaskSqlAdapter extends AbstractSqlAdapter<TaskEntityData>
         }
     }
 
-    private Collection<TaskEntityData> queryAllTasks(WebSession webSession, String fwdNr, long start, long stop)
+    private Collection<TaskEntityData> queryAllTasksForFwdNr(WebSession webSession, String fwdNr, long start, long stop)
     {
         Collection<TaskEntityData> vCollection = executeSqlQuery(webSession.getConnection(), "SELECT * FROM TaskEntity WHERE FwdNr='" + fwdNr + "' AND TimeStamp>" + start + " AND TimeStamp<=" + stop + " AND IsRecuring=FALSE ORDER BY TimeStamp DESC");
         Collection<TaskEntityData> vRecuringCollection = executeSqlQuery(webSession.getConnection(), "SELECT * FROM TaskEntity WHERE FwdNr='" + fwdNr + "' AND StartTime<" + stop + " AND StartTime>" + stop + " AND IsRecuring=TRUE ORDER BY TimeStamp DESC");
+        if (vCollection != null)
+        {
+            vCollection.addAll(vRecuringCollection);
+        }
+        else
+        {
+            vCollection = vRecuringCollection;
+        }
+        return vCollection;
+    }
+    
+    private Collection<TaskEntityData> queryAllTasks(WebSession webSession, long start, long stop)
+    {
+        Collection<TaskEntityData> vCollection = executeSqlQuery(webSession.getConnection(), "SELECT * FROM TaskEntity WHERE TimeStamp>" + start + " AND TimeStamp<=" + stop + " AND IsRecuring=FALSE ORDER BY TimeStamp DESC");
+        Collection<TaskEntityData> vRecuringCollection = executeSqlQuery(webSession.getConnection(), "SELECT * FROM TaskEntity WHERE StartTime<" + stop + " AND StartTime>" + stop + " AND IsRecuring=TRUE ORDER BY TimeStamp DESC");
         if (vCollection != null)
         {
             vCollection.addAll(vRecuringCollection);
