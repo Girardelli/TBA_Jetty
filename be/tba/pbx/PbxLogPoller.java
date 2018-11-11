@@ -1,12 +1,8 @@
 package be.tba.pbx;
 
-import java.text.DecimalFormat;
-
 import javax.naming.NamingException;
 
 import be.tba.util.constants.Constants;
-import be.tba.util.excel.FintroXlsxReader;
-import be.tba.util.invoice.IBANCheckDigit;
 import be.tba.util.session.AccountCache;
 
 import org.slf4j.Logger;
@@ -47,25 +43,8 @@ public class PbxLogPoller
             sLogger.info("########## new start ############");
 
             //FintroXlsxReader fintroXlsxReader = new FintroXlsxReader("C:\\Users\\ywillems\\Downloads\\BE71143070729269-20180629.xlsx");
-            
-            String[] elements = { 
-                    "N-1809nr487",
-                    "N-1809nr488",
-                    "N-1809nr489",
-                    "N-1809nr490",
-                    "N-1809nr491",
-                    "N-1809nr492",
-                    "N-1809nr493",
-                    "N-1809nr494"};   
-            for (String s: elements) 
-            {           
-                    //Do your stuff here
-                System.out.println(s + " gives " + IBANCheckDigit.IBAN_CHECK_DIGIT.calculateOGM(s)); 
-            }
-            
-            
+                        
             Class.forName("com.mysql.jdbc.Driver").newInstance();
-
             CallLogDbWriter vLogWriter = getWriter();
             vLogWriter.start();
             sLogger.info("from PbxLogPoller: CallLogDbWriter started!");

@@ -89,12 +89,13 @@ public class AccountEntityData extends be.tba.util.data.AbstractData
     private boolean isMailInvoice;
     private java.lang.String invoiceEmail;
     private java.lang.String accountNr;
+    private String countryCode;
 
     public AccountEntityData()
     {
     }
 
-    public AccountEntityData(int id, int wc_prime, String wc_alfa, java.lang.String userId, java.lang.String password, java.lang.String fwdNumber, java.lang.String role, java.lang.String fullName, java.lang.String custFilter, java.lang.String stateFilter, java.lang.String dirFilter, java.lang.String lastLogin, long lastLoginTS, long previousLoginTS, boolean isRegistered, boolean isAutoRelease, boolean isXmlMail, boolean is3W, java.lang.String w3_PersonId, java.lang.String w3_CompanyId, java.lang.String email, java.lang.String gsm, short invoiceType, long lastInvoiceTime, long lastMailTime, short mailHour1, short mailMinutes1, short mailHour2, short mailMinutes2, short mailHour3, short mailMinutes3, int facStdInCall, int facStdOutCall, int facOutLevel1, int facOutLevel2, int facOutLevel3, boolean isPriceAgendaFixed, int facAgendaCall, int facFaxCall, short agendaPriceUnit, int facSms, int facCallForward, int taskHourRate, java.lang.String companyName, java.lang.String attToName, java.lang.String street, java.lang.String city, java.lang.String btwNumber, boolean noInvoice, boolean hasSubCustomers, java.lang.String superCustomer, boolean countAllLongCalls, boolean countLongFwdCalls, boolean noBtw, boolean noEmptyMails, boolean textMail, double facLong, double facLongFwd, int facTblMinCalls_I, double facTblStartCost_I, double facTblExtraCost_I, int facTblMinCalls_II, double facTblStartCost_II, double facTblExtraCost_II, int facTblMinCalls_III, double facTblStartCost_III, double facTblExtraCost_III, int facTblMinCalls_IV, double facTblStartCost_IV, double facTblExtraCost_IV, boolean isMailInvoice, java.lang.String invoiceEmail, java.lang.String accountNr)
+    public AccountEntityData(int id, int wc_prime, String wc_alfa, java.lang.String userId, java.lang.String password, java.lang.String fwdNumber, java.lang.String role, java.lang.String fullName, java.lang.String custFilter, java.lang.String stateFilter, java.lang.String dirFilter, java.lang.String lastLogin, long lastLoginTS, long previousLoginTS, boolean isRegistered, boolean isAutoRelease, boolean isXmlMail, boolean is3W, java.lang.String w3_PersonId, java.lang.String w3_CompanyId, java.lang.String email, java.lang.String gsm, short invoiceType, long lastInvoiceTime, long lastMailTime, short mailHour1, short mailMinutes1, short mailHour2, short mailMinutes2, short mailHour3, short mailMinutes3, int facStdInCall, int facStdOutCall, int facOutLevel1, int facOutLevel2, int facOutLevel3, boolean isPriceAgendaFixed, int facAgendaCall, int facFaxCall, short agendaPriceUnit, int facSms, int facCallForward, int taskHourRate, java.lang.String companyName, java.lang.String attToName, java.lang.String street, java.lang.String city, java.lang.String btwNumber, boolean noInvoice, boolean hasSubCustomers, java.lang.String superCustomer, boolean countAllLongCalls, boolean countLongFwdCalls, boolean noBtw, boolean noEmptyMails, boolean textMail, double facLong, double facLongFwd, int facTblMinCalls_I, double facTblStartCost_I, double facTblExtraCost_I, int facTblMinCalls_II, double facTblStartCost_II, double facTblExtraCost_II, int facTblMinCalls_III, double facTblStartCost_III, double facTblExtraCost_III, int facTblMinCalls_IV, double facTblStartCost_IV, double facTblExtraCost_IV, boolean isMailInvoice, java.lang.String invoiceEmail, java.lang.String accountNr, String countryCode)
     {
         setId(id);
         setWcPrime(wc_prime);
@@ -169,6 +170,7 @@ public class AccountEntityData extends be.tba.util.data.AbstractData
         setIsMailInvoice(isMailInvoice);
         setInvoiceEmail(invoiceEmail);
         setAccountNr(accountNr);
+        setCountryCode(countryCode);
     }
 
     public AccountEntityData(AccountEntityData otherData)
@@ -246,6 +248,8 @@ public class AccountEntityData extends be.tba.util.data.AbstractData
         setFacTblExtraCost_IV(otherData.getFacTblExtraCost_IV());
         setIsMailInvoice(otherData.getIsMailInvoice());
         setAccountNr(otherData.getAccountNr());
+        setCountryCode(otherData.getCountryCode());
+        
 
     }
 
@@ -984,6 +988,16 @@ public class AccountEntityData extends be.tba.util.data.AbstractData
         this.isMailInvoice = isMailInvoice;
     }
 
+    public java.lang.String getCountryCode()
+    {
+        return this.countryCode;
+    }
+
+    public void setCountryCode(java.lang.String countryCode)
+    {
+        this.countryCode = countryCode;
+    }
+    
     public String toString()
     {
         StringBuffer str = new StringBuffer("{");
@@ -1142,6 +1156,8 @@ public class AccountEntityData extends be.tba.util.data.AbstractData
         str.append(((this.invoiceEmail != null) ? this.invoiceEmail : ""));
         str.append("',AccountNr='");
         str.append(((this.accountNr != null) ? escapeQuotes(this.accountNr) : ""));
+        str.append("',CountryCode='");
+        str.append(((this.countryCode != null) ? escapeQuotes(this.countryCode) : "BE"));
         str.append("' ");
         return (str.toString());
 
@@ -1293,6 +1309,8 @@ public class AccountEntityData extends be.tba.util.data.AbstractData
         str.append(((this.invoiceEmail != null) ? this.invoiceEmail : ""));
         str.append("','");
         str.append(((this.accountNr != null) ? escapeQuotes(this.accountNr) : ""));
+        str.append("','");
+        str.append(((this.countryCode != null) ? escapeQuotes(this.countryCode) : "BE"));
         str.append("'");
         return (str.toString());
     }

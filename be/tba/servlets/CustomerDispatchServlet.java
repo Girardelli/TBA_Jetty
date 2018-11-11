@@ -167,6 +167,7 @@ public class CustomerDispatchServlet extends HttpServlet
                     vAccount.setEmail(req.getParameter(Constants.ACCOUNT_EMAIL));
                     vAccount.setInvoiceEmail(req.getParameter(Constants.ACCOUNT_INVOICE_EMAIL));
                     vAccount.setGsm(req.getParameter(Constants.ACCOUNT_GSM));
+                    vAccount.setCountryCode(req.getParameter(Constants.ACCOUNT_COUNTRY_CODE));
                     vAccount.setIsAutoRelease(req.getParameter(Constants.ACCOUNT_AUTO_RELEASE) != null);
 
                     if (vSession.getIs3W())

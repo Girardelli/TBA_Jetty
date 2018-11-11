@@ -298,6 +298,7 @@ public class AccountSqlAdapter extends AbstractSqlAdapter<AccountEntityData>
             entry.setIsMailInvoice(rs.getBoolean(71));
             entry.setInvoiceEmail(null2EmpthyString(rs.getString(72)));
             entry.setAccountNr(null2EmpthyString(rs.getString(73)));
+            entry.setCountryCode(null2EmpthyString(rs.getString(74)));
             vVector.add(entry);
             // System.out.println("read from DB:" + entry.toNameValueString());
         }

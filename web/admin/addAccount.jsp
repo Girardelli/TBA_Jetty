@@ -33,9 +33,9 @@
 				<td width="580" valign="top"><select
 					name=<%=Constants.ACCOUNT_ROLE%>>
 					<%
-			            for (Iterator n = AccountRole.iterator(); n.hasNext();)
+			            for (Iterator<AccountRole> n = AccountRole.iterator(); n.hasNext();)
 			            {
-			                AccountRole vRole = (AccountRole) n.next();
+			                AccountRole vRole = n.next();
 			                if (vRole != AccountRole.ADMIN && vRole != AccountRole.EMPLOYEE)
 			                {
 			                    if (vRole == AccountRole.CUSTOMER)
@@ -65,10 +65,9 @@
 				<td width="580" valign="top" class="bodytekst">014/<select
 					name=<%=Constants.ACCOUNT_FORWARD_NUMBER%>>
 					<%
-					            for (Iterator n = AccountCache.getInstance().getFreeNumbers().iterator(); n.hasNext();)
+					            for (Iterator<String> n = AccountCache.getInstance().getFreeNumbers().iterator(); n.hasNext();)
 					            {
-					                //  String vNumber = new String((String) n.next());
-					                String vNumber = (String) n.next();
+					                String vNumber = n.next();
 					                out.println("<option value=\"" + vNumber + "\">" + vNumber);
 					            }
 					%>
@@ -82,12 +81,12 @@
 <%                  
 out.println("<select name=\"" + Constants.ACCOUNT_SUPER_CUSTOMER + "\">");
 out.println("<option value=\"NO_VALUE\" selected> heeft geen super klant");
-Collection list = AccountCache.getInstance().getSuperCustomersList();
+Collection<String> list = AccountCache.getInstance().getSuperCustomersList();
 synchronized(list) 
 {
-    for (Iterator vIter = list.iterator(); vIter.hasNext();)
+    for (Iterator<String> vIter = list.iterator(); vIter.hasNext();)
     {
-        String vValue = (String) vIter.next();
+        String vValue = vIter.next();
         AccountEntityData accountData = AccountCache.getInstance().get(vValue);
         System.out.println("addAccount: accountdata for vValue=" + vValue + " is " + (accountData == null ? "null" : accountData.getFullName()));
         out.println("<option value=\"" + accountData.getFwdNumber() + "\">" + accountData.getFullName());

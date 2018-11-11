@@ -280,7 +280,9 @@ public class Constants
     public static final String ACCOUNT_TEXT_MAIL = "_atm";
 
     public static final String ACCOUNT_IS_MAIL_INVOICE = "_ami";
-
+    
+    public static final String ACCOUNT_COUNTRY_CODE = "_acc";
+    
     public static final String TASK_ID = "_tid";
 
     public static final String TASK_FORWARD_NUMBER = "_tfwnr";
@@ -617,6 +619,11 @@ public class Constants
 
     public static final String FORM_LANGUAGE = "_fla";
 
+    public static final String[][] COUNTRY_CODES = {
+            { "BE", "NL", "FR", "DE", "LU" },
+            { "Belgie", "Nederland", "Frankrijk", "Duitsland", "Luxenburg" }
+    };
+    
     // Forward number block (must be replaced by a XML file)
     // forward number assigned to customer, internal number, nacht number
 

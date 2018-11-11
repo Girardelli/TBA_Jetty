@@ -101,6 +101,7 @@ String vStreet = vCustomer.getStreet();
 String vCity = vCustomer.getCity();
 String vBtwNumber = vCustomer.getBtwNumber();
 String vAccountNr = vCustomer.getAccountNr();
+String vCountryCode = vCustomer.getCountryCode();
 boolean vNoEmptyMails = vCustomer.getNoEmptyMails();
 boolean vTextMail = vCustomer.getTextMail();
 double vFacLong = vCustomer.getFacLong();
@@ -184,6 +185,10 @@ if (vCustomer.getRole().equals(AccountRole._vSubCustomer))
 							</tr>
 							<tr>
 								<td width="200" valign="top" class="adminsubsubtitle">afleidnummer</td>
+                        <%
+        if (vSession.getRole() == AccountRole.ADMIN)
+        {
+    %>
 								<td width="500" valign="top" class="bodytekst">014/ <select
 									name=<%=Constants.ACCOUNT_FORWARD_NUMBER%>>
 										<%
@@ -198,11 +203,17 @@ for (Iterator n = vFreeNumbers.iterator(); n.hasNext();)
 
 %>
 								</select></td>
+                                                    <%
+        }
+        else
+        {
+            out.println("<td width=\"500\" valign=\"top\">(014)" + vCustomer.getFwdNumber() + "></td>"); 
+        }
+    %>
 							</tr>
 							<tr>
 								<td width="200" valign="top" class="adminsubsubtitle">e-mail</td>
-								<td width="500" valign="top"><input type=text
-									name=<%=Constants.ACCOUNT_EMAIL%> size=50 value="<%=vEmail%>"></td>
+								<td width="500" valign="top"><input type=text name=<%=Constants.ACCOUNT_EMAIL%> size=50 value="<%=vEmail%>"></td>
 							</tr>
 							<tr>
 								<td width="200" valign="top" class="adminsubsubtitle">Invoice
@@ -212,19 +223,36 @@ for (Iterator n = vFreeNumbers.iterator(); n.hasNext();)
 									value="<%=vInvoiceEmail%>"></td>
 							</tr>
 							<tr>
-								<td width="200" valign="top" class="adminsubsubtitle">GSM
-									nummer (SMS)</td>
+								<td width="200" valign="top" class="adminsubsubtitle">GSM nummer (SMS)</td>
 								<td width="500" valign="top"><input type=text
 									name=<%=Constants.ACCOUNT_GSM%> size=13 value="<%=vGsm%>"></td>
 							</tr>
+                            <tr>
+                                <td width="200" valign="top" class="adminsubsubtitle">Land code</td>
+                                <td width="500" valign="top">
+                                <select name=<%=Constants.ACCOUNT_COUNTRY_CODE%>>
+<%
+for (int i = 0; i < Constants.COUNTRY_CODES[0].length; i++)
+{
+    out.println("<option value=\"" + Constants.COUNTRY_CODES[0][i] + "\"" + (vCustomer.getCountryCode().equals(Constants.COUNTRY_CODES[0][i])?kSelected:"")  + ">" + Constants.COUNTRY_CODES[1][i]);
+}
+%>
+                                </select></td>                                    
+                            </tr>
+                        <%
+        if (vSession.getRole() == AccountRole.ADMIN)
+        {
+    %>
 							<tr>
-								<td width="200" valign="top" class="adminsubsubtitle">super
-									klant</td>
+								<td width="200" valign="top" class="adminsubsubtitle">super	klant</td>
 								<td width="500" valign="top" class="bodytekst"><input
 									type=checkbox name=<%=Constants.ACCOUNT_HAS_SUB_CUSTOMERS%>
 									value="<%=Constants.YES%>"
 									<%=(vCustomer.getHasSubCustomers()?kChecked:"")%>></td>
 							</tr>
+                        <%
+        }
+    %>
 						</table>
 						<%
         if (vSession.getRole() == AccountRole.ADMIN)

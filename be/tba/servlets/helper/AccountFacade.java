@@ -165,18 +165,20 @@ public class AccountFacade
         AccountEntityData vAccount = new AccountEntityData(AccountCache.getInstance().get(vFwdNr));
         vAccount.setFullName(req.getParameter(Constants.ACCOUNT_FULLNAME));
         vAccount.setFwdNumber(req.getParameter(Constants.ACCOUNT_FORWARD_NUMBER));
-        if (req.getParameter(Constants.ACCOUNT_ROLE) != null && req.getParameter(Constants.ACCOUNT_ROLE).equals(AccountRole.SUBCUSTOMER.getText()) && req.getParameter(Constants.ACCOUNT_SUPER_CUSTOMER) != null)
-        {
-            vAccount.setSuperCustomer(req.getParameter(Constants.ACCOUNT_SUPER_CUSTOMER));
-            vAccount.setRole(req.getParameter(Constants.ACCOUNT_ROLE));
-        }
-        else
-        {
-            vAccount.setSuperCustomer("");
-        }
+// these fields do not come back from the page because they cannot be altered anymore
+//        if (req.getParameter(Constants.ACCOUNT_ROLE) != null && req.getParameter(Constants.ACCOUNT_ROLE).equals(AccountRole.SUBCUSTOMER.getText()) && req.getParameter(Constants.ACCOUNT_SUPER_CUSTOMER) != null)
+//        {
+//            vAccount.setSuperCustomer(req.getParameter(Constants.ACCOUNT_SUPER_CUSTOMER));
+//            vAccount.setRole(req.getParameter(Constants.ACCOUNT_ROLE));
+//        }
+//        else
+//        {
+//            vAccount.setSuperCustomer("");
+//        }
         vAccount.setEmail(req.getParameter(Constants.ACCOUNT_EMAIL));
         vAccount.setInvoiceEmail(req.getParameter(Constants.ACCOUNT_INVOICE_EMAIL));
         vAccount.setGsm(req.getParameter(Constants.ACCOUNT_GSM));
+        vAccount.setCountryCode(req.getParameter(Constants.ACCOUNT_COUNTRY_CODE));
         vAccount.setHasSubCustomers(req.getParameter(Constants.ACCOUNT_HAS_SUB_CUSTOMERS) != null);
         vAccount.setIsAutoRelease(req.getParameter(Constants.ACCOUNT_AUTO_RELEASE) != null);
         vAccount.setTaskHourRate(Integer.parseInt((String) req.getParameter(Constants.ACCOUNT_TASK_HOUR_RATE)));

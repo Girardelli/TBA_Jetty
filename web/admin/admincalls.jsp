@@ -53,7 +53,7 @@ if (vCallDirectionFilter != null)
 else
   vCallDirectionFilter = Constants.ACCOUNT_FILTER_ALL;
 
-Collection vRecords = null;
+Collection<CallRecordEntityData> vRecords = null;
 if (vCallDirectionFilterOn)
 {
   if (vCallDirectionFilter.equals(Constants.ACCOUNT_FILTER_IN))
@@ -117,12 +117,12 @@ if (vCustomerFilter == null) vCustomerFilter = Constants.ACCOUNT_FILTER_ALL;
 				<%
 out.println("<td width=\"170\" valign=\"top\"><select name=\"" + Constants.ACCOUNT_FILTER_CUSTOMER + "\" onchange=\"submit()\">");
 
-				Collection list = AccountCache.getInstance().getCustomerList();
+				Collection<AccountEntityData> list = AccountCache.getInstance().getCustomerList();
 				synchronized(list) 
 				{
-				    for (Iterator vIter = list.iterator(); vIter.hasNext();)
+				    for (Iterator<AccountEntityData> vIter = list.iterator(); vIter.hasNext();)
 				    {
-				        AccountEntityData vData = (AccountEntityData) vIter.next();
+				        AccountEntityData vData = vIter.next();
 				        out.println("<option value=\"" + vData.getFwdNumber() + (vCustomerFilter.equals(vData.getFwdNumber()) ? "\" selected>" : "\">") + vData.getFullName());
 				    }
 				}
@@ -234,16 +234,20 @@ else
   int vRowInd = 0;
   AccountEntityData vAccountEntityData;
 
-  for (Iterator i = vRecords.iterator(); i.hasNext();)
+  for (Iterator<CallRecordEntityData> i = vRecords.iterator(); i.hasNext();)
   {
-      CallRecordEntityData vEntry = (CallRecordEntityData) i.next();
+      CallRecordEntityData vEntry = i.next();
 
       String vId = "id" + vEntry.getId();
+      String customerName;
       vAccountEntityData = AccountCache.getInstance().get(vEntry.getFwdNr());
       if (vAccountEntityData == null)
       {
-        throw new InvalidValueException("Oproepen database refereert naar een klantnummer 014/" + vEntry.getFwdNr() +
-                                        " die niet gekend is. Maak een klant aan met deze klantnummer om deze oproepen zichtbaar te maken.", null);
+          customerName = "Oude klant(" + vEntry.getFwdNr() + ")";
+      }
+      else
+      {
+          customerName = vAccountEntityData.getFullName();
       }
       String vDate = vEntry.getDate();
       String vTime = vEntry.getTime();
@@ -311,7 +315,7 @@ else
 		<td width="20" bgcolor="FFFFFF"><img src=<%=vInOut%> height="13"
 			border="0"></td>
 		<td width="10" valign="top"><%=vImportant%></td>
-		<td width="140" valign="top"><%=vStyleStart%><%=vAccountEntityData.getFullName()%><%=vStyleEnd%></td>
+		<td width="140" valign="top"><%=vStyleStart%><%=customerName%><%=vStyleEnd%></td>
 		<td width="55" valign="top"><%=vStyleStart%><%=vDate%><%=vStyleEnd%></td>
 		<td width="35" valign="top"><%=vStyleStart%><%=vTime%><%=vStyleEnd%></td>
 		<td width="85" valign="top"><%=vStyleStart%><%=vNumber%><%=vStyleEnd%></td>
