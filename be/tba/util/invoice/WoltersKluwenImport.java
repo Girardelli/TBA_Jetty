@@ -3,10 +3,12 @@ package be.tba.util.invoice;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.security.Timestamp;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 
@@ -50,7 +52,7 @@ public class WoltersKluwenImport
     
     static public File generateVerkopenXml(Collection<InvoiceEntityData> invoiceList)
     {
-        DecimalFormat costFormatter = new DecimalFormat("#0,00");
+        DecimalFormat costFormatter = new DecimalFormat("#0.00");
         String dateStr = new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime());
 
         File xml = new File(Constants.FILEUPLOAD_DIR + File.separator + Calendar.getInstance().getTimeInMillis() + Constants.WC_VERKOPEN_XML);
@@ -64,14 +66,22 @@ public class WoltersKluwenImport
             int yearInd = vEntry.getInvoiceNr().indexOf('-') + 1;
             String year = "20" + vEntry.getInvoiceNr().substring(yearInd, yearInd + 2);
             int debCreIndex = vEntry.getCreditId() == 0 ? 1 : 0;
-            
+
             xmlBuf.append("<Sale>\r\n");
             xmlBuf.append("<Customer_Prime>");
-            xmlBuf.append(AccountCache.getInstance().get(vEntry.getAccountFwdNr()).getWcPrime());
+            if (AccountCache.getInstance().get(vEntry.getAccountFwdNr()) != null)
+            {
+                xmlBuf.append(AccountCache.getInstance().get(vEntry.getAccountFwdNr()).getWcPrime());
+            }
+            else
+            {
+                xmlBuf.append("0");
+            }
+            
             xmlBuf.append("</Customer_Prime>\r\n<CurrencyCode>EUR</CurrencyCode>\r\n<DocType>30</DocType>\r\n<DocNumber>");
             xmlBuf.append(vEntry.getId());
             xmlBuf.append("</DocNumber>\r\n<Amount>");
-            xmlBuf.append(costFormatter.format(vEntry.getTotalCost()));
+            xmlBuf.append(formatValue(vEntry.getTotalCost(), costFormatter));
             xmlBuf.append("</Amount>\r\n<YourRef>");
             xmlBuf.append(vEntry.getInvoiceNr());
             xmlBuf.append("</YourRef>\r\n<Year_Alfa>");
@@ -81,7 +91,7 @@ public class WoltersKluwenImport
             xmlBuf.append("</VATMonth>\r\n<AccountingPeriod>");
             xmlBuf.append(kKwartalen[vEntry.getMonth()]);
             xmlBuf.append("</AccountingPeriod>\r\n<VATAmount>");
-            xmlBuf.append(costFormatter.format(vat));
+            xmlBuf.append(formatValue(vat, costFormatter));
             xmlBuf.append("</VATAmount>\r\n<DocDate>");
             xmlBuf.append(dateStr);
             xmlBuf.append("</DocDate>\r\n<DueDate>");
@@ -89,16 +99,16 @@ public class WoltersKluwenImport
             xmlBuf.append("</DueDate>\r\n<DocState>0</DocState>\r\n<Rate>1</Rate>\r\n<DelivDate>");
             xmlBuf.append(dateStr);
             xmlBuf.append("</DelivDate>\r\n<Status>0</Status>\r\n<Details>\r\n");
-            xmlBuf.append("<Detail><Account>400000</Account><Amount>");
-            xmlBuf.append(costFormatter.format(inclVat));
-            xmlBuf.append("</Amount><DebCre>" + kCreditNoteSpecials[debCreIndex].debCre + "</DebCre><Ventil>0</Ventil><Unit1>0</Unit1><Unit2>0</Unit2></Detail>");
-            xmlBuf.append("<Detail><Account>700000</Account><Amount>");
-            xmlBuf.append(costFormatter.format(vEntry.getTotalCost()));
-            xmlBuf.append("</Amount><DebCre>" + kCreditNoteSpecials[debCreIndex].debCreRev + "</DebCre><Ventil>4</Ventil><Unit1>0</Unit1><Unit2>0</Unit2><VAT1>" + kCreditNoteSpecials[debCreIndex].vat1Inv + "</VAT1></Detail>");
-            xmlBuf.append("<Detail><Account>451000</Account><Amount>");
-            xmlBuf.append(costFormatter.format(vat));
-            xmlBuf.append("</Amount><DebCre>" + kCreditNoteSpecials[debCreIndex].debCreRev + "</DebCre><Ventil>11</Ventil><Unit1>0</Unit1><Unit2>0</Unit2><VAT1>" + kCreditNoteSpecials[debCreIndex].vat1Btw +"</VAT1></Detail>");
-            xmlBuf.append("\r\n</Details>\r\n</Sale>");
+            xmlBuf.append("<Detail><Account>400000</Account>\r\n<Amount>");
+            xmlBuf.append(formatValue(inclVat, costFormatter));
+            xmlBuf.append("</Amount>\r\n<DebCre>" + kCreditNoteSpecials[debCreIndex].debCre + "</DebCre>\r\n<Ventil>0</Ventil>\r\n<Unit1>0</Unit1>\r\n<Unit2>0</Unit2>\r\n</Detail>\r\n");
+            xmlBuf.append("<Detail>\r\n<Account>700000</Account>\r\n<Amount>");
+            xmlBuf.append(formatValue(vEntry.getTotalCost(), costFormatter));
+            xmlBuf.append("</Amount>\r\n<DebCre>" + kCreditNoteSpecials[debCreIndex].debCreRev + "</DebCre>\r\n<Ventil>4</Ventil>\r\n<Unit1>0</Unit1>\r\n<Unit2>0</Unit2>\r\n<VAT1>" + kCreditNoteSpecials[debCreIndex].vat1Inv + "</VAT1>\r\n</Detail>\r\n");
+            xmlBuf.append("<Detail>\r\n<Account>451000</Account>\r\n<Amount>");
+            xmlBuf.append(formatValue(vat, costFormatter));
+            xmlBuf.append("</Amount>\r\n<DebCre>" + kCreditNoteSpecials[debCreIndex].debCreRev + "</DebCre>\r\n<Ventil>11</Ventil>\r\n<Unit1>0</Unit1>\r\n<Unit2>0</Unit2>\r\n<VAT1>" + kCreditNoteSpecials[debCreIndex].vat1Btw +"</VAT1>\r\n</Detail>");
+            xmlBuf.append("\r\n</Details>\r\n</Sale>\r\n");
         }
         xmlBuf.append("</Sales>\r\n</ImportExpMPlus>");
         
@@ -187,7 +197,9 @@ public class WoltersKluwenImport
         {
             xml.createNewFile();
             FileOutputStream fileStream = new FileOutputStream(xml, true);
-            fileStream.write(xmlBuf.toString().getBytes());
+            String out = xmlBuf.toString();
+            out = out.replace('&', ' ');
+            fileStream.write(out.getBytes());
             fileStream.close();
         }
         catch (IOException e)
@@ -199,7 +211,7 @@ public class WoltersKluwenImport
         
     }
     
-    private String bankNrFormatter(String rawStr, String country)
+    static private String bankNrFormatter(String rawStr, String country)
     {
         // belgium: 001-0871882-25
         
@@ -272,5 +284,11 @@ public class WoltersKluwenImport
             return rawStr;
         }
         return formattedStr.toString();
+    }
+    
+    static private String formatValue(double value, DecimalFormat formatter)
+    {
+        String valueStr = formatter.format(value);
+        return valueStr.replace('.', ',');        
     }
 }
