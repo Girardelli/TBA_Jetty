@@ -1169,7 +1169,11 @@ public class AccountEntityData extends be.tba.util.data.AbstractData
 
         // "(1, '409031', '04/10/05', 1128528272192, 1, 220, 0, 'Nabelactie voor
         // client'. ',0 ,0 ,0 ,0 ,'')
-        str.append("'0','");
+        str.append("'0',");
+        str.append(this.wc_prime);
+        str.append(",'");
+        str.append(((this.wc_alfa != null) ? this.wc_alfa : ""));
+        str.append("','");
         str.append(((this.userId != null) ? this.userId : ""));
         str.append("','");
         str.append(((this.password != null) ? this.password : ""));
