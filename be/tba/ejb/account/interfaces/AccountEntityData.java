@@ -1566,7 +1566,16 @@ public class AccountEntityData extends be.tba.util.data.AbstractData implements 
 	@Override
 	public int compareTo(AccountEntityData o) 
 	{
-		return this.fullName.compareTo(o.fullName);
+		// this functions defines the sorting of the Sorted Sets in the AccountCache class.
+		// first it checks on the fullName. If that one results in a 0 (there is already an entry with that name)
+		// then a compare is done on FwdNumber, which is always unique but not a good field to sort on.
+		
+		int result = this.fullName.compareTo(o.fullName);
+		if (result == 0)
+		{
+			result = this.fwdNumber.compareTo(o.fwdNumber);
+		}
+		return result;		
 	}
 
 }
