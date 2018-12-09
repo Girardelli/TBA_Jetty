@@ -78,10 +78,10 @@ public class WoltersKluwenImport
                 xmlBuf.append("0");
             }
             
-            xmlBuf.append("</Customer_Prime>\r\n<CurrencyCode>EUR</CurrencyCode>\r\n<DocType>30</DocType>\r\n<DocNumber>");
+            xmlBuf.append("</Customer_Prime>\r\n<Journal_Prime>1</Journal_Prime>\r\n<CurrencyCode>EUR</CurrencyCode>\r\n<DocType>30</DocType>\r\n<DocNumber>");
             xmlBuf.append(vEntry.getId());
             xmlBuf.append("</DocNumber>\r\n<Amount>");
-            xmlBuf.append(formatValue(vEntry.getTotalCost(), costFormatter));
+            xmlBuf.append(formatValue(inclVat, costFormatter));
             xmlBuf.append("</Amount>\r\n<YourRef>");
             xmlBuf.append(vEntry.getInvoiceNr());
             xmlBuf.append("</YourRef>\r\n<Year_Alfa>");

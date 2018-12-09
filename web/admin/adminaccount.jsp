@@ -72,12 +72,12 @@ try
 			<%
   vSession.setCallingJsp(Constants.ADMIN_ACCOUNT_JSP);
   int vRowInd = 0;
-  Collection list = AccountCache.getInstance().getCustomerList();
+  Collection<AccountEntityData> list = AccountCache.getInstance().getCustomerList();
   synchronized(list) 
   {
-      for (Iterator vIter = list.iterator(); vIter.hasNext();)
+      for (Iterator<AccountEntityData> vIter = list.iterator(); vIter.hasNext();)
       {
-          AccountEntityData vEntry = (AccountEntityData) vIter.next();
+          AccountEntityData vEntry = vIter.next();
           
           if (AccountRole.fromShort(vEntry.getRole()) == AccountRole.SUBCUSTOMER)
         	  continue;
@@ -126,12 +126,12 @@ try
   <%
   synchronized(list) 
   {
-      for (Iterator vIter = list.iterator(); vIter.hasNext();)
+      for (Iterator<AccountEntityData> vIter = list.iterator(); vIter.hasNext();)
       {
-          AccountEntityData vEntry = (AccountEntityData) vIter.next();
+          AccountEntityData vEntry = vIter.next();
           if (vEntry.getHasSubCustomers())
           {
-       		  Collection subList = AccountCache.getInstance().getSubCustomersList(vEntry.getFwdNumber());
+       		  Collection<AccountEntityData> subList = AccountCache.getInstance().getSubCustomersList(vEntry.getFwdNumber());
         	  System.out.print("sublist for " + vEntry.getFwdNumber() + " has " + subList.size() + " members");  
               %>
               <p><span class="admintitle"> <%=vEntry.getFullName()%></span></p>
@@ -145,9 +145,9 @@ try
                   <td width="200" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Laatste login</td>
               </tr>
               <%
-		      for (Iterator vSubIter = subList.iterator(); vSubIter.hasNext();)
+		      for (Iterator<AccountEntityData> vSubIter = subList.iterator(); vSubIter.hasNext();)
 		      {
-		          AccountEntityData vSubEntry = (AccountEntityData) vSubIter.next();
+		          AccountEntityData vSubEntry = vSubIter.next();
 		          String vGsm = vEntry.getGsm();
 		          vGsm = (vGsm == null) ? "" : vGsm;
 		          String vNumber = vSubEntry.getFwdNumber();

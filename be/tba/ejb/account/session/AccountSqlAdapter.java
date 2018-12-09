@@ -10,7 +10,6 @@ import java.sql.SQLException;
 import java.sql.ResultSet;
 
 import be.tba.ejb.account.interfaces.AccountEntityData;
-import be.tba.ejb.invoice.interfaces.InvoiceEntityData;
 import be.tba.servlets.session.WebSession;
 import be.tba.util.constants.Constants;
 import be.tba.util.data.AbstractSqlAdapter;

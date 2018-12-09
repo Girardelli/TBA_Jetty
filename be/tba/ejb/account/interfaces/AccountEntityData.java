@@ -8,7 +8,7 @@ package be.tba.ejb.account.interfaces;
  *
  * @xdoclet-generated at 1-01-15
  */
-public class AccountEntityData extends be.tba.util.data.AbstractData
+public class AccountEntityData extends be.tba.util.data.AbstractData implements Comparable<AccountEntityData>
 // implements java.io.Serializable
 {
     /**
@@ -1323,10 +1323,12 @@ public class AccountEntityData extends be.tba.util.data.AbstractData
     {
         if (pOther instanceof AccountEntityData)
         {
-            AccountEntityData lTest = (AccountEntityData) pOther;
-            boolean lEquals = true;
+        	AccountEntityData lTest = (AccountEntityData) pOther;
+        	/*
+        	boolean lEquals = true;
 
             lEquals = lEquals && this.id == lTest.id;
+             
             if (this.userId == null)
             {
                 lEquals = lEquals && (lTest.userId == null);
@@ -1538,6 +1540,8 @@ public class AccountEntityData extends be.tba.util.data.AbstractData
             lEquals = lEquals && this.isMailInvoice == lTest.isMailInvoice;
 
             return lEquals;
+*/
+            return this.id == lTest.id;
         }
         else
         {
@@ -1556,170 +1560,13 @@ public class AccountEntityData extends be.tba.util.data.AbstractData
         result = 37 * result + ((this.password != null) ? this.password.hashCode() : 0);
 
         result = 37 * result + ((this.fwdNumber != null) ? this.fwdNumber.hashCode() : 0);
-
-        result = 37 * result + ((this.role != null) ? this.role.hashCode() : 0);
-
-        result = 37 * result + ((this.fullName != null) ? this.fullName.hashCode() : 0);
-
-        result = 37 * result + ((this.custFilter != null) ? this.custFilter.hashCode() : 0);
-
-        result = 37 * result + ((this.stateFilter != null) ? this.stateFilter.hashCode() : 0);
-
-        result = 37 * result + ((this.dirFilter != null) ? this.dirFilter.hashCode() : 0);
-
-        result = 37 * result + ((this.lastLogin != null) ? this.lastLogin.hashCode() : 0);
-
-        result = 37 * result + (int) (lastLoginTS ^ (lastLoginTS >>> 32));
-
-        result = 37 * result + (int) (previousLoginTS ^ (previousLoginTS >>> 32));
-
-        result = 37 * result + (isRegistered ? 0 : 1);
-
-        result = 37 * result + (isAutoRelease ? 0 : 1);
-
-        result = 37 * result + (isXmlMail ? 0 : 1);
-
-        result = 37 * result + (is3W ? 0 : 1);
-
-        result = 37 * result + ((this.w3_PersonId != null) ? this.w3_PersonId.hashCode() : 0);
-
-        result = 37 * result + ((this.w3_CompanyId != null) ? this.w3_CompanyId.hashCode() : 0);
-
-        result = 37 * result + ((this.email != null) ? this.email.hashCode() : 0);
-
-        result = 37 * result + ((this.invoiceEmail != null) ? this.invoiceEmail.hashCode() : 0);
-
-        result = 37 * result + ((this.gsm != null) ? this.gsm.hashCode() : 0);
-
-        result = 37 * result + (int) invoiceType;
-
-        result = 37 * result + (int) (lastInvoiceTime ^ (lastInvoiceTime >>> 32));
-
-        result = 37 * result + (int) (lastMailTime ^ (lastMailTime >>> 32));
-
-        result = 37 * result + (int) mailHour1;
-
-        result = 37 * result + (int) mailMinutes1;
-
-        result = 37 * result + (int) mailHour2;
-
-        result = 37 * result + (int) mailMinutes2;
-
-        result = 37 * result + (int) mailHour3;
-
-        result = 37 * result + (int) mailMinutes3;
-
-        result = 37 * result + (int) facStdInCall;
-
-        result = 37 * result + (int) facStdOutCall;
-
-        result = 37 * result + (int) facOutLevel1;
-
-        result = 37 * result + (int) facOutLevel2;
-
-        result = 37 * result + (int) facOutLevel3;
-
-        result = 37 * result + (isPriceAgendaFixed ? 0 : 1);
-
-        result = 37 * result + (int) facAgendaCall;
-
-        result = 37 * result + (int) facFaxCall;
-
-        result = 37 * result + (int) agendaPriceUnit;
-
-        result = 37 * result + (int) facSms;
-
-        result = 37 * result + (int) facCallForward;
-
-        result = 37 * result + (int) taskHourRate;
-
-        result = 37 * result + ((this.companyName != null) ? this.companyName.hashCode() : 0);
-
-        result = 37 * result + ((this.attToName != null) ? this.attToName.hashCode() : 0);
-
-        result = 37 * result + ((this.street != null) ? this.street.hashCode() : 0);
-
-        result = 37 * result + ((this.city != null) ? this.city.hashCode() : 0);
-
-        result = 37 * result + ((this.btwNumber != null) ? this.btwNumber.hashCode() : 0);
-
-        result = 37 * result + (noInvoice ? 0 : 1);
-
-        result = 37 * result + (hasSubCustomers ? 0 : 1);
-
-        result = 37 * result + ((this.superCustomer != null) ? this.superCustomer.hashCode() : 0);
-
-        result = 37 * result + (countAllLongCalls ? 0 : 1);
-
-        result = 37 * result + (countLongFwdCalls ? 0 : 1);
-
-        result = 37 * result + (noBtw ? 0 : 1);
-
-        result = 37 * result + (noEmptyMails ? 0 : 1);
-
-        result = 37 * result + (textMail ? 0 : 1);
-
-        {
-            long l = Double.doubleToLongBits(facLong);
-            result = 37 * result + (int) (l ^ (l >>> 32));
-        }
-
-        {
-            long l = Double.doubleToLongBits(facLongFwd);
-            result = 37 * result + (int) (l ^ (l >>> 32));
-        }
-
-        result = 37 * result + (int) facTblMinCalls_I;
-
-        {
-            long l = Double.doubleToLongBits(facTblStartCost_I);
-            result = 37 * result + (int) (l ^ (l >>> 32));
-        }
-
-        {
-            long l = Double.doubleToLongBits(facTblExtraCost_I);
-            result = 37 * result + (int) (l ^ (l >>> 32));
-        }
-
-        result = 37 * result + (int) facTblMinCalls_II;
-
-        {
-            long l = Double.doubleToLongBits(facTblStartCost_II);
-            result = 37 * result + (int) (l ^ (l >>> 32));
-        }
-
-        {
-            long l = Double.doubleToLongBits(facTblExtraCost_II);
-            result = 37 * result + (int) (l ^ (l >>> 32));
-        }
-
-        result = 37 * result + (int) facTblMinCalls_III;
-
-        {
-            long l = Double.doubleToLongBits(facTblStartCost_III);
-            result = 37 * result + (int) (l ^ (l >>> 32));
-        }
-
-        {
-            long l = Double.doubleToLongBits(facTblExtraCost_III);
-            result = 37 * result + (int) (l ^ (l >>> 32));
-        }
-
-        result = 37 * result + (int) facTblMinCalls_IV;
-
-        {
-            long l = Double.doubleToLongBits(facTblStartCost_IV);
-            result = 37 * result + (int) (l ^ (l >>> 32));
-        }
-
-        {
-            long l = Double.doubleToLongBits(facTblExtraCost_IV);
-            result = 37 * result + (int) (l ^ (l >>> 32));
-        }
-
-        result = 37 * result + (isMailInvoice ? 0 : 1);
-
         return result;
     }
+
+	@Override
+	public int compareTo(AccountEntityData o) 
+	{
+		return this.fullName.compareTo(o.fullName);
+	}
 
 }

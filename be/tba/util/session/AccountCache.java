@@ -13,9 +13,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.SortedMap;
+import java.util.SortedSet;
 import java.util.StringTokenizer;
-import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.Vector;
 
 import be.tba.ejb.account.interfaces.AccountEntityData;
@@ -29,8 +29,9 @@ final public class AccountCache
     private AccountSqlAdapter mAccountAdapter = new AccountSqlAdapter();
     private Map<String, AccountEntityData> mFwdKeyList;
     private Collection<AccountEntityData> mRawCollection;
-    private SortedMap<String, AccountEntityData> mNameSortedList; // without9000, 9001
-    private SortedMap<String, AccountEntityData> mNameSortedFullList;
+    //private SortedMap<String, AccountEntityData> mNameSortedList; // without9000, 9001
+    private SortedSet<AccountEntityData> mNameSortedList; // without9000, 9001
+    private SortedSet<AccountEntityData> mNameSortedFullList;
     private Map<String, Collection<AccountEntityData>> mSubCustomersLists;
     private Map<String, AccountEntityData> mEmployeeLists;
     private Map<Integer, Collection<AccountEntityData>> mMailingGroups;
@@ -151,8 +152,8 @@ final public class AccountCache
 
     private AccountCache()
     {
-        mNameSortedList = Collections.synchronizedSortedMap(new TreeMap<String, AccountEntityData>());
-        mNameSortedFullList = Collections.synchronizedSortedMap(new TreeMap<String, AccountEntityData>());
+        mNameSortedList = Collections.synchronizedSortedSet(new TreeSet<AccountEntityData>());
+        mNameSortedFullList = Collections.synchronizedSortedSet(new TreeSet<AccountEntityData>());
         mFwdKeyList = new HashMap<String, AccountEntityData>();
         mSubCustomersLists = new HashMap<String, Collection<AccountEntityData>>();
         mEmployeeLists = new HashMap<String, AccountEntityData>();
@@ -191,7 +192,7 @@ final public class AccountCache
 
     public Collection<AccountEntityData> getCustomerList()
     {
-        return mNameSortedList.values();
+        return mNameSortedList;
     }
 
     public Collection<AccountEntityData> getInvoiceCustomerList()
@@ -210,7 +211,7 @@ final public class AccountCache
 
     public Collection<AccountEntityData> getAccountListWithoutTbaNrs()
     {
-        return mNameSortedList.values();
+        return mNameSortedList;
     }
 
     private void converToHashMap(Collection<AccountEntityData> rawList)
@@ -222,16 +223,20 @@ final public class AccountCache
         mEmployeeLists.clear();
         Vector<String> vSuperCustomers = new Vector<String>();
         AccountEntityData vEntry = null;
+        int y =0;
 
         for (Iterator<AccountEntityData> i = rawList.iterator(); i.hasNext();)
         {
             vEntry = i.next();
+            //System.out.println("check " + y++ + ": " +  vEntry.getFwdNumber());
+            
             if (vEntry.getRole().equals(AccountRole._vCustomer) || vEntry.getRole().equals(AccountRole._vSubCustomer))
             {
                 // vMap.put(vEntry.getFwdNumber(), vEntry);
-                mNameSortedList.put(vEntry.getFullName(), vEntry);
+            	boolean out = mNameSortedList.add(vEntry);
+            	System.out.println("add to mNameSortedList: " +  vEntry.getFwdNumber() + (out ? " Pass" :  " Failed"));
                 mFwdKeyList.put(vEntry.getFwdNumber(), vEntry);
-                mNameSortedFullList.put(vEntry.getFullName(), vEntry);
+                mNameSortedFullList.add(vEntry);
                 if (vEntry.getHasSubCustomers())
                 {
                     Collection<AccountEntityData> vSubCustomerList = mSubCustomersLists.get(vEntry.getFwdNumber());
@@ -265,11 +270,12 @@ final public class AccountCache
             else if (vEntry.getRole().equals(AccountRole._vAdminstrator) || vEntry.getRole().equals(AccountRole._vEmployee))
             {
                 // add to mEmployeeLists
-                mEmployeeLists.put(vEntry.getFullName(), vEntry);
+                mEmployeeLists.put(vEntry.getFwdNumber(), vEntry);
                 mFwdKeyList.put(vEntry.getFwdNumber(), vEntry);
                 // System.out.println("added employee " + vEntry.getFullName() + ", " +
                 // vEntry.getId() + ", " + vEntry.getUserId());
             }
+                 
             
             // fill in the AccountNrList
             if (vEntry.getAccountNr() != null && !vEntry.getAccountNr().isEmpty())
@@ -331,10 +337,9 @@ final public class AccountCache
             vEntryCnst.setMailHour2((short) 0);
             vEntryCnst.setMailMinutes3((short) 0);
             vEntryCnst.setMailHour3((short) 0);
-            mNameSortedFullList.put(Constants.NUMBER_BLOCK[i][3], vEntryCnst);
+            mNameSortedFullList.add(vEntryCnst);
             mFwdKeyList.put(Constants.NUMBER_BLOCK[i][0], vEntryCnst);
         }
-        
     }
 
     public Collection<String> getFreeNumbers()
@@ -377,7 +382,7 @@ final public class AccountCache
     /**
      * @ejb:interface-method view-type="remote"
      */
-    public Vector<MailTriggerData> getAccountTriggers()
+    public Collection<MailTriggerData> getAccountTriggers()
     {
         try
         {
