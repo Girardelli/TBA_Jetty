@@ -234,7 +234,7 @@ final public class AccountCache
             {
                 // vMap.put(vEntry.getFwdNumber(), vEntry);
             	boolean out = mNameSortedList.add(vEntry);
-            	System.out.println("add to mNameSortedList: " +  vEntry.getFwdNumber() + (out ? " Pass" :  " Failed"));
+            	//System.out.println("add to mNameSortedList: " +  vEntry.getFwdNumber() + (out ? " Pass" :  " Failed"));
                 mFwdKeyList.put(vEntry.getFwdNumber(), vEntry);
                 mNameSortedFullList.add(vEntry);
                 if (vEntry.getHasSubCustomers())

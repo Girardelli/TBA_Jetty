@@ -91,7 +91,8 @@
 				             <br>				   	            
 				   	         <form name="downloadfileform" method="POST" action="/TheBusinessAssistant/download" >
 						     <input class="tbabutton" type=submit name=action value=" download de procesresultaten hieronder afgedrukt " onclick="downloadProcFile()">
-						     <input type=hidden name=<%=Constants.FINTRO_PROCESS_FILE%> value="<%=fintroXlsxReader.getOutputFileName()%>"> 
+						     <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.DOWNLOAD_FINTRO_PROCESS_TXT%>"> 
+							 <input type=hidden name=<%=Constants.FINTRO_PROCESS_FILE%> value="<%=fintroXlsxReader.getOutputFileName()%>"> 
                              </form>
 				   	         <p><span class="adminsubtitle"> Resultaten van de Fintro upload:  
                              </span></p>

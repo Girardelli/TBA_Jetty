@@ -240,6 +240,26 @@ final public class FintroXlsxReader
                                     break;
                                 }
                             }
+                            if (!match)
+                            {
+                            	// try it with the numbers of the structured message only
+                                // +++090/9337/55493+++ --> //        090933755493
+                            	String packedId;
+                            	String structMsg = invoice.getStructuredId();
+                            	if (structMsg.length() == 20)
+                            	{
+                                	packedId = structMsg.substring(3, 6);
+                                	packedId = packedId + structMsg.substring(7, 11);
+                                	packedId = packedId + structMsg.substring(12, 17);
+                                	if (invoice.getPaymentDetails().indexOf(packedId) != -1)
+                                	{
+                                		//sLogger.info("matching invoice found on packed structured ID " + invoice.getAccountFwdNr() + ", " + payment.details);
+                                        match = true;
+                                        FillInvoiceWithPaymentInfo(invoice, payment);
+                                        break;
+                                	}
+                            	}
+                            }
                         }
                         if (!match)
                         {
