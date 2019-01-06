@@ -109,8 +109,8 @@ if (vCustomerFilter == null) vCustomerFilter = Constants.ACCOUNT_FILTER_ALL;
 		<td valign="top" width="20" bgcolor="FFFFFF"></td>
 
 		<!-- account list -->
-		<td valign="top" width="865" bgcolor="FFFFFF"><br>
-		<table width="330" border="0" cellspacing="0" cellpadding="0">
+		<td valign="top" bgcolor="FFFFFF"><br>
+		<table border="0" cellspacing="0" cellpadding="0">
 			<tr>
 				<td width="150" valign="top" class="adminsubtitle">&nbsp;Klant</td>
 				<td width="10" valign="top">:</td>
@@ -217,17 +217,17 @@ else
       else
     	    out.println("<br><br><span class=\"adminsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Oproepen van " + vSession.getMonthsBack() + " maanden terug.</span><br>");
   }
-  out.println("<table width=\"100%\" border=\"0\" cellspacing=\"2\" cellpadding=\"4\">");
+  out.println("<table border=\"0\" cellspacing=\"2\" cellpadding=\"4\">");
   out.println("              <br><tr>");
   out.println("                <td width=\"20\" bgcolor=\"FFFFFF\"></td>");
   out.println("                <td width=\"10\" valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\"></td>");
-  out.println("                <td width=\"230\" valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Klant</td>");
+  out.println("                <td width=\"200\" valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Klant</td>");
   out.println("                <td width=\"55\"  valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Datum</td>");
   out.println("                <td width=\"35\"  valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Uur</td>");
   out.println("                <td width=\"85\"  valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Nummer</td>");
   out.println("                <td width=\"230\" valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Naam</td>");
-  out.println("                <td width=\"400\" valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Omschrijving</td>");
-  out.println("                <td width=\"100\" valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Duur</td>");
+  out.println("                <td width=\"500\" valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Omschrijving</td>");
+  out.println("                <td width=\"70\" valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Duur</td>");
   out.println("                <td width=\"100\"  valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Infos</td>");
   out.println("              </tr>");
 
@@ -314,13 +314,13 @@ else
 		ondblclick="changeUrl('/TheBusinessAssistant/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.RECORD_UPDATE%>&<%=Constants.RECORD_ID%>=<%=vEntry.getId()%>');">
 		<td width="20" bgcolor="FFFFFF"><img src=<%=vInOut%> height="13" border="0"></td>
 		<td width="10" valign="top"><%=vImportant%></td>
-		<td width="230" valign="top"><%=vStyleStart%><%=customerName%><%=vStyleEnd%></td>
+		<td width="200" valign="top"><%=vStyleStart%><%=customerName%><%=vStyleEnd%></td>
 		<td width="55" valign="top"><%=vStyleStart%><%=vDate%><%=vStyleEnd%></td>
 		<td width="35" valign="top"><%=vStyleStart%><%=vTime%><%=vStyleEnd%></td>
 		<td width="85" valign="top"><%=vStyleStart%><%=vNumber%><%=vStyleEnd%></td>
 		<td width="230" valign="top"><%=vStyleStart%><%=vName%><%=vStyleEnd%></td>
-		<td width="400" valign="top"><%=vStyleStart%><%=vShortDesc%><%=vStyleEnd%></td>
-		<td width="100" valign="top"><%=vStyleStart%><%=vEntry.getCost()%><%=vStyleEnd%></td>
+		<td width="500" valign="top"><%=vStyleStart%><%=vShortDesc%><%=vStyleEnd%></td>
+		<td width="70" valign="top"><%=vStyleStart%><%=vEntry.getCost()%><%=vStyleEnd%></td>
 		<td width="100" valign="top"><%=vInfoGifs%></td>
 	</tr>
 	<%
