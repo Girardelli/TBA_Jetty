@@ -39,7 +39,7 @@ mCustomerData = AccountCache.getInstance().get(mTaskData.getFwdNr());
 %>
 
 <body>
-<table width='100%' cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
+<table  cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
 
 	<!--Update task jsp-->
 

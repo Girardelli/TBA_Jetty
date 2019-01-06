@@ -101,7 +101,7 @@ if (vCustomerFilter == null) vCustomerFilter = Constants.ACCOUNT_FILTER_ALL;
 <form name="calllistform" method="POST"	action="/TheBusinessAssistant/AdminDispatch">
 	<input type=hidden name=<%=Constants.RECORD_TO_DELETE%> value=""> 
 	<input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.GOTO_RECORD_ADMIN%>"> 
-<table width='100%' cellspacing='0' cellpadding='0' border='0'
+<table  cellspacing='0' cellpadding='0' border='0'
 	bgcolor="FFFFFF">
 
 	<tr>
@@ -221,12 +221,12 @@ else
   out.println("              <br><tr>");
   out.println("                <td width=\"20\" bgcolor=\"FFFFFF\"></td>");
   out.println("                <td width=\"10\" valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\"></td>");
-  out.println("                <td width=\"140\" valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Klant</td>");
+  out.println("                <td width=\"230\" valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Klant</td>");
   out.println("                <td width=\"55\"  valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Datum</td>");
   out.println("                <td width=\"35\"  valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Uur</td>");
   out.println("                <td width=\"85\"  valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Nummer</td>");
-  out.println("                <td width=\"140\" valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Naam</td>");
-  out.println("                <td width=\"280\" valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Omschrijving</td>");
+  out.println("                <td width=\"230\" valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Naam</td>");
+  out.println("                <td width=\"400\" valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Omschrijving</td>");
   out.println("                <td width=\"100\" valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Duur</td>");
   out.println("                <td width=\"100\"  valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Infos</td>");
   out.println("              </tr>");
@@ -312,15 +312,14 @@ else
 		onmouseout="hooverOffRow('<%=vId%>','<%=vRowInd%>')"
 		onclick="updateDeleteFlag('<%=vId%>','<%=vEntry.getId()%>','<%=vRowInd%>')"
 		ondblclick="changeUrl('/TheBusinessAssistant/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.RECORD_UPDATE%>&<%=Constants.RECORD_ID%>=<%=vEntry.getId()%>');">
-		<td width="20" bgcolor="FFFFFF"><img src=<%=vInOut%> height="13"
-			border="0"></td>
+		<td width="20" bgcolor="FFFFFF"><img src=<%=vInOut%> height="13" border="0"></td>
 		<td width="10" valign="top"><%=vImportant%></td>
-		<td width="140" valign="top"><%=vStyleStart%><%=customerName%><%=vStyleEnd%></td>
+		<td width="230" valign="top"><%=vStyleStart%><%=customerName%><%=vStyleEnd%></td>
 		<td width="55" valign="top"><%=vStyleStart%><%=vDate%><%=vStyleEnd%></td>
 		<td width="35" valign="top"><%=vStyleStart%><%=vTime%><%=vStyleEnd%></td>
 		<td width="85" valign="top"><%=vStyleStart%><%=vNumber%><%=vStyleEnd%></td>
-		<td width="140" valign="top"><%=vStyleStart%><%=vName%><%=vStyleEnd%></td>
-		<td width="280" valign="top"><%=vStyleStart%><%=vShortDesc%><%=vStyleEnd%></td>
+		<td width="230" valign="top"><%=vStyleStart%><%=vName%><%=vStyleEnd%></td>
+		<td width="400" valign="top"><%=vStyleStart%><%=vShortDesc%><%=vStyleEnd%></td>
 		<td width="100" valign="top"><%=vStyleStart%><%=vEntry.getCost()%><%=vStyleEnd%></td>
 		<td width="100" valign="top"><%=vInfoGifs%></td>
 	</tr>

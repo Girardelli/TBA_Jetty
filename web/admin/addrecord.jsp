@@ -20,7 +20,7 @@ be.tba.util.data.*,
 be.tba.util.invoice.*"%>
 
 <body>
-<table width='100%' cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
+<table  cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
 
 	<!--Add Record jsp-->
 	<tr>

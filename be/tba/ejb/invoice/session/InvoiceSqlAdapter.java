@@ -100,7 +100,7 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
     /**
      * @ejb:interface-method view-type="remote"
      */
-    public Collection<InvoiceEntityData> getUnpayedInvoicesByValueAndFwdNrs(WebSession webSession, Collection<String> fwdNrs, double inclBtwCost)
+    public Collection<InvoiceEntityData> getInvoicesByValueAndFwdNrs(WebSession webSession, Collection<String> fwdNrs, double inclBtwCost)
     {
         if (fwdNrs != null && !fwdNrs.isEmpty())
         {
@@ -123,7 +123,7 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
         }
         else
         {
-            System.out.println("getUnpayedInvoicesByValueAndFwdNrs: FwdNrs nulll or empty");
+            System.out.println("getInvoicesByValueAndFwdNrs: FwdNrs null or empty");
         }
         return new Vector<InvoiceEntityData>();
     }
@@ -334,12 +334,7 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
         for (Iterator<Integer> i = freezeList.iterator(); i.hasNext();)
         {
             int vKey = i.next().intValue();
-            InvoiceEntityData vInvoiceData = getRow(webSession.getConnection(), vKey);
-            if (vInvoiceData != null)
-            {
-                vInvoiceData.setIsPayed(true);
-                updateRow(webSession.getConnection(), vInvoiceData);
-            }
+            executeSqlQuery(webSession.getConnection(), "UPDATE InvoiceEntity SET IsPayed=true WHERE id=" + vKey);
         }
     }
     
@@ -390,8 +385,9 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
             vHelper.generatePdfInvoice();
             // replace windows style '\\' with unix style '/'. DB does not seem
             // to handle good the windows style
-            String unixStyle = vInvoiceData.getFileName().replace('\\', '/');
-            executeSqlQuery(webSession.getConnection(), "UPDATE InvoiceEntity SET FileName='" + escapeQuotes(unixStyle) + "', YearSeqNr=" + vInvoiceData.getYearSeqNr() + ",InvoiceNr='" + vInvoiceData.getInvoiceNr() + "',FrozenFlag=true, StructuredId='" + vInvoiceData.getStructuredId() + "' WHERE id=" + key);
+            vInvoiceData.setFileName(escapeQuotes(vInvoiceData.getFileName().replace('\\', '/')));
+            updateRow(webSession.getConnection(), vInvoiceData);
+            //executeSqlQuery(webSession.getConnection(), "UPDATE InvoiceEntity SET FileName='" + escapeQuotes(unixStyle) + "', YearSeqNr=" + vInvoiceData.getYearSeqNr() + ",InvoiceNr='" + vInvoiceData.getInvoiceNr() + "',FrozenFlag=true, StructuredId='" + vInvoiceData.getStructuredId() + "' WHERE id=" + key);
 
             // vInvoice.setValueObject(vInvoiceData);
             return true;

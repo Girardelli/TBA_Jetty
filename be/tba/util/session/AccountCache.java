@@ -417,7 +417,6 @@ final public class AccountCache
 
     public Collection<AccountEntityData> getMailingGroup(Integer aNewKey)
     {
-        System.out.println("getMailingGroup: last mail time=" + mLastMailTime + ", new mail time=" + aNewKey + ". group list size = " + mMailingGroups.size());
         if (mLastMailTime == 0)
         {
             mLastMailTime = aNewKey.intValue();
@@ -434,21 +433,19 @@ final public class AccountCache
                 return mailGroup;
             }
         }
-        System.out.println("getMailingGroup: no mail group <= " + mLastMailTime + " and > " + aNewKey);
         mLastMailTime = aNewKey.intValue();
         return null;
     }
     
     public Collection<String> getFwdNumbersForAccountNr(String accountNr)
     {
-        if (accountNr != null && !accountNr.isEmpty())
+    	if (accountNr != null && !accountNr.isEmpty())
         {
             if (mAccountNr2FwdNrsMap.containsKey(accountNr))
             {
                 return mAccountNr2FwdNrsMap.get(accountNr);
             }
         }
-        System.out.println("no fwd nrs for accountNr: " + accountNr);
         return new Vector<String>();
     }
 

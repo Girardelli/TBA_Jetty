@@ -44,8 +44,7 @@ SessionManager.getInstance().getSession(vSession.getSessionId(), "clientcalls.js
 %>
 
 
-<table width='100%' cellspacing='0' cellpadding='0' border='0'
-	bgcolor="#FFFFFF">
+<table width='100%' cellspacing='0' cellpadding='0' border='0' bgcolor="#FFFFFF">
 	<tr>
 		<td valign='top' align='left' width='500' height='50'
 			bgcolor="#FFFFFF"><img

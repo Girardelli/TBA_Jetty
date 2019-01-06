@@ -70,7 +70,7 @@
 	<input class="tbabutton" type=file name=<%=Constants.FINTRO_FILE%> value=" Fintro excel opladen " accept=".xlsx">
 	<input class="tbabutton" type=submit name=action value=" Laad de file op " onclick="uploadFile()">
     </form>
-	<table width='100%' cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
+	<table cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
 		<tr>
 			<!-- white space -->
 			<td valign="top" width="20" bgcolor="FFFFFF"></td>
@@ -142,7 +142,7 @@
 			<br>
 			<br>
 			<br>
-			<table width="100%" border="0" cellspacing="2" cellpadding="2">
+			<table border="0" cellspacing="2" cellpadding="2">
 				<tr>
 					<td width="90" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Nummer</td>
 					<td width="300" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Klant</td>

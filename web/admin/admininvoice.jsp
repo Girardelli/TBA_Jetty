@@ -44,7 +44,7 @@ private StringBuilder allEntryIds;%>
 	<input type=hidden name=<%=Constants.INVOICE_ID%> value="">
 	<input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.GOTO_INVOICE_ADMIN%>"> 
 	<input type=hidden name=<%=Constants.ACCOUNT_FILTER_CUSTOMER%> value="">
-	<table width='100%' cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
+	<table  cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
 		<tr>
 			<!-- white space -->
 			<td valign="top" width="20" bgcolor="FFFFFF"></td>
@@ -132,9 +132,9 @@ private StringBuilder allEntryIds;%>
 				<tr>
 					<td width="150" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Betaald</td>
 					<td width="110" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Nummer</td>
-					<td width="350" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Klant</td>
-					<td width="50" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Excl BTW</td>
-					<td width="50" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Incl BTW</td>
+					<td width="400" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Klant</td>
+					<td width="60" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Excl BTW</td>
+					<td width="60" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Incl BTW</td>
 				</tr>
 	
 				<%
@@ -191,9 +191,9 @@ private StringBuilder allEntryIds;%>
 					ondblclick="changeUrl('/TheBusinessAssistant/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_INVOICE%>&<%=Constants.ACCOUNT_FILTER_CUSTOMER%>=<%=vEntry.getAccountFwdNr()%>&<%=Constants.INVOICE_ID%>=<%=vEntry.getId()%>');">
 					<td width="150" valign="top"><%=vEuroGif%>&nbsp&nbsp<%=vEntry.getPayDate()%></td>
 					<td width="110" valign="top"><%=vStyleStart%><%=vEntry.getInvoiceNr()%><%=vStyleEnd%></td>
-					<td width="350" valign="top"><%=vStyleStart%><%=vCompanyName%><%=vStyleEnd%></td>
-					<td width="50" valign="top"><%=vStyleStart%><%=vCostFormatter.format(vKost)%><%=vStyleEnd%></td>
-					<td width="50" valign="top"><%=vStyleStart%><%=((vAccount!= null && vAccount.getNoBtw()) ? "0.0" : vCostFormatter.format(vKost * 1.21))%><%=vStyleEnd%></td>
+					<td width="400" valign="top"><%=vStyleStart%><%=vCompanyName%><%=vStyleEnd%></td>
+					<td width="60" valign="top"><%=vStyleStart%><%=vCostFormatter.format(vKost)%><%=vStyleEnd%></td>
+					<td width="60" valign="top"><%=vStyleStart%><%=((vAccount!= null && vAccount.getNoBtw()) ? "0.0" : vCostFormatter.format(vKost * 1.21))%><%=vStyleEnd%></td>
 				</tr>
 				<%
 			    vRowInd++;

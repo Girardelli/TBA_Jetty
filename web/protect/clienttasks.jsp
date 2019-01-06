@@ -42,14 +42,14 @@ Last Checked In By: $Author: Yves Willems $
 	action="/TheBusinessAssistant/CustomerDispatch">
 	<input type=hidden name=<%=Constants.SRV_ACTION%>
 		value="<%=Constants.ACTION_SHOW_TASKS%>">
-	<table width='100%' cellspacing='0' cellpadding='0' border='0'
+	<table  cellspacing='0' cellpadding='0' border='0'
 		bgcolor="FFFFFF">
 		<tr>
 			<!-- white space -->
 			<td valign="top" width="20" bgcolor="FFFFFF"></td>
 
 			<!-- account list -->
-			<td valign="top" width="710" bgcolor="FFFFFF"><br>
+			<td valign="top" bgcolor="FFFFFF"><br>
 			<p>
 			    <span class="admintitle"> Uitgevoerde taken:</span>
 			</p>			
@@ -76,7 +76,7 @@ Last Checked In By: $Author: Yves Willems $
  			out.println("<input class=\"tbabutton\" type=submit name=action value=\"Taken van volgende maand\"  onclick=\"showNext()\">");
  		}
 
- 		out.println("<br><br><table width=\"725\" border=\"0\" cellspacing=\"2\" cellpadding=\"2\">");
+ 		out.println("<br><br><table border=\"0\" cellspacing=\"2\" cellpadding=\"2\">");
  		if (vTasks == null || vTasks.size() == 0)
  		{
  			out.println("<span class=\"adminsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Er zijn geen taken uitgevoerd tijdens de maand "
@@ -104,13 +104,13 @@ Last Checked In By: $Author: Yves Willems $
  					        + " taken uitgevoerd deze maand.</span><br>");
  				}
  %> <br>
-				<table width="100%" border="0" cellspacing="2" cellpadding="2">
+				<table border="0" cellspacing="2" cellpadding="2">
 					<tr>
-						<td width="55" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Datum</td>
-						<td width="250" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Omschrijving</td>
+						<td width="65" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Datum</td>
+						<td width="500" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Omschrijving</td>
 						<td width="100" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Minuten</td>
 						<td width="100" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Kost</td>
-						<td width="60" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Info</td>
+						<td width="80" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Info</td>
 					</tr>
 
 					<%
@@ -161,11 +161,11 @@ Last Checked In By: $Author: Yves Willems $
 										        + vEntry.getDescription());
 					%>
 					<tr bgcolor="FFCC66" id=<%=vId%> class="bodytekst">
-						<td width="55" valign="top"><%=vEntry.getDate()%></td>
-						<td width="250" valign="top"><%=vEntry.getDescription()%></td>
+						<td width="65" valign="top"><%=vEntry.getDate()%></td>
+						<td width="500" valign="top"><%=vEntry.getDescription()%></td>
 						<td width="100" valign="top"><%=vTimeSpend%></td>
 						<td width="150" valign="top"><%=vKost%></td>
-						<td width="60" valign="top"><%=vInfoGifs%></td>
+						<td width="80" valign="top"><%=vInfoGifs%></td>
 					</tr>
 					<%
 						}

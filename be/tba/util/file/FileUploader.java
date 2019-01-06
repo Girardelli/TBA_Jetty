@@ -65,21 +65,24 @@ public class FileUploader
             while (iter.hasNext())
             {
                 FileItem item = (FileItem) iter.next();
-                System.out.println("FileItem: " + item.getName());
+                //System.out.println("FileItem: " + item.getName());
+                //System.out.println("fieldname: " + item.getFieldName());
+                
                 if (uploadedFileItem != null)
                 {
                     continue;
                 }
                 if (!item.isFormField())
                 {
-                    mUploadedFile = Constants.FILEUPLOAD_DIR + File.separator + item.getName();
-                    System.out.println("File name returned for fileupload: " + mUploadedFile);
+                    String fileName = item.getName().substring(item.getName().lastIndexOf('\\') + 1);
+                    mUploadedFile = Constants.FILEUPLOAD_DIR + File.separator + fileName;
+                    //System.out.println("File name returned for fileupload: " + mUploadedFile);
                     File uploadedFile = new File(mUploadedFile);
                     
                     // saves the file to upload directory
                     item.write(uploadedFile);
                     uploadedFileItem = item;
-                    System.out.println("File successful written to temp file: " + mUploadedFile);
+                    //System.out.println("File successful written to temp file: " + mUploadedFile);
                 }
             }
         }

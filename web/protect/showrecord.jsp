@@ -59,7 +59,7 @@ private String mCustomerName;
 <form name="calllistform" method="GET"
 	action="/TheBusinessAssistant/CustomerDispatch">
 
-<table width='100%' cellspacing='0' cellpadding='0' border='0'
+<table  cellspacing='0' cellpadding='0' border='0'
 	bgcolor="FFFFFF">
 	<tr>
 		<td valign="top" width="30" bgcolor="FFFFFF"></td>

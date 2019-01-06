@@ -43,7 +43,7 @@ try
 
 %>
 <body>
-<table width='100%' cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
+<table  cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
 	<tr>
 		<!-- white space -->
 		<td valign="top" width="20" bgcolor="FFFFFF"></td>

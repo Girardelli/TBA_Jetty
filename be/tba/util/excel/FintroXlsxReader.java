@@ -115,7 +115,7 @@ final public class FintroXlsxReader
                entry.valutaDate= row.getCell(VALUTA_DATE).toString();
                entry.amount= row.getCell(AMOUNT).getNumericCellValue();
                entry.accountNrCustomer= row.getCell(CUST_ACCOUNT).toString();
-               entry.details= row.getCell(DETAILS).toString();
+               entry.details= (row.getCell(DETAILS) == null ? "" : row.getCell(DETAILS).toString());
                // remove ' and " chars
                entry.details = entry.details.replace('\'', ' ');
                entry.details = entry.details.replace('\"', ' ');
@@ -128,11 +128,11 @@ final public class FintroXlsxReader
                        mPaymentsMap.put(entry.accountNrCustomer, customerPaymentList);
                    }
                    customerPaymentList.add(entry);
-                   sLogger.info("entry added: size=" + mPaymentsMap.size() + " ##" + entry.toString());
+                   System.out.println("entry added: size=" + mPaymentsMap.size() + " ##" + entry.toString());
                }
                else
                {
-                   sLogger.info("outgoing payment!! " + entry.toString());
+            	   System.out.println("outgoing payment!! " + entry.toString());
                }
                        
             }
@@ -168,30 +168,35 @@ final public class FintroXlsxReader
     {
         for (Iterator<String> vIter = mPaymentsMap.keySet().iterator(); vIter.hasNext();)
         {
-            String accountNrCustomer = vIter.next();
+            // for all bank account numbers in the payment list
+        	String accountNrCustomer = vIter.next();
             Collection<FintroPayment> payments = mPaymentsMap.get(accountNrCustomer);
             Collection<String> fwdNrs = AccountCache.getInstance().getFwdNumbersForAccountNr(accountNrCustomer);
             if (fwdNrs.isEmpty())
             {
-                // just store the first payment of this payment list made via the unknown accountNr. 
-                mUnknownAccountNrs.add((FintroPayment) payments.toArray()[0]);
+                // no TBA customer found with this bank account number
+            	// just store the first payment of this payment list made via the unknown accountNr. 
+            	System.out.println("no customer found for bank account " + accountNrCustomer);
+            	mUnknownAccountNrs.add((FintroPayment) payments.toArray()[0]);
                 continue;
             }
             
             for (Iterator<FintroPayment> vPayIter = payments.iterator(); vPayIter.hasNext();)
             {
-                FintroPayment payment = vPayIter.next();
+                // for all payments done via the bank account number
+            	FintroPayment payment = vPayIter.next();
                 int i = payment.details.indexOf("+++");
                 if (i >= 0)
                 {
                     // details hold a structured ID
-                    
+                	System.out.println("structid");
                     String structuredId = payment.details.substring(i, i + 20);
                     Collection<InvoiceEntityData> vInvoices = mInvoiceSession.getUnpayedInvoiceByStructuredId(mWebSession, structuredId);
                     if (vInvoices.size() == 1)
                     {
-                        InvoiceEntityData invoice = (InvoiceEntityData) vInvoices.toArray()[0];
-                        AccountEntityData account = AccountCache.getInstance().get(invoice.getAccountFwdNr());
+                    	System.out.println("structid found in db");
+                    	InvoiceEntityData invoice = (InvoiceEntityData) vInvoices.toArray()[0];
+                    	AccountEntityData account = AccountCache.getInstance().get(invoice.getAccountFwdNr());
                         double inclBtw = (account.getNoBtw() ? invoice.getTotalCost() : invoice.getTotalCost() * 1.21);
                         if (accountNrCustomer.equals(payment.accountNrCustomer) &&
                                 inclBtw > payment.amount - 0.015 && inclBtw < payment.amount + 0.015  )
@@ -199,10 +204,24 @@ final public class FintroXlsxReader
                             FillInvoiceWithPaymentInfo(invoice, payment);
                             break;
                         }
+                        else
+                        {
+                        	System.out.println("no payment match:\r\n" + accountNrCustomer +"==" + payment.accountNrCustomer);
+                        	System.out.println("no payment match: " + (payment.amount - 0.015) + "<" + inclBtw + "<" + (payment.amount + 0.015));
+                        }
+                    }
+                    else
+                    {
+                    	System.out.println("structid not found in db");
                     }
                 }
+                else
+                {
+                	System.out.println("NO structid");
+                    
+                }
                 
-                Collection<InvoiceEntityData> vInvoices = mInvoiceSession.getUnpayedInvoicesByValueAndFwdNrs(mWebSession, fwdNrs, payment.amount);
+                Collection<InvoiceEntityData> vInvoices = mInvoiceSession.getInvoicesByValueAndFwdNrs(mWebSession, fwdNrs, payment.amount);
                 if (!vInvoices.isEmpty())
                 {
                     if (vInvoices.size() == 1)
@@ -227,7 +246,7 @@ final public class FintroXlsxReader
                             }
                             if (invoice.getInvoiceNr().length() < 9)
                             {
-                                sLogger.info("Invoice number to short: " + invoice.getInvoiceNr());
+                            	System.out.println("Invoice number to short: " + invoice.getInvoiceNr());
                                 mNotMatchingPayments.add(payment);
                             }
                             else
@@ -271,7 +290,7 @@ final public class FintroXlsxReader
                             }
                             else
                             {
-                                sLogger.info("could not select from multiple invoice matches." + " Payment=" + payment.id + " [" + payment.amount/1.21 + "], " + " account=" + payment.accountNrCustomer + ", " + payment.details);
+                            	System.out.println("could not select from multiple invoice matches." + " Payment=" + payment.id + " [" + payment.amount/1.21 + "], " + " account=" + payment.accountNrCustomer + ", " + payment.details);
                                 mNotMatchingPayments.add(payment);
                             }
                         }
@@ -297,12 +316,12 @@ final public class FintroXlsxReader
                     }
                     if (isInvoiceNrFound)
                     {
-                        sLogger.info("Wrong payment."  + " Payment=" + payment.id + " [" + payment.amount/1.21 + "], " + " account=" + payment.accountNrCustomer + ", "+ payment.details);
+                    	System.out.println("Wrong payment."  + " Payment=" + payment.id + " [" + payment.amount/1.21 + "], " + " account=" + payment.accountNrCustomer + ", "+ payment.details);
                         mWrongValuePayments.add(new InvoicePaymentStr(openInvoice, payment));
                     }
                     else
                     {
-                        sLogger.info("no matching invoice found."  + " Payment=" + payment.id + " [" + payment.amount/1.21 + "], " + " account=" + payment.accountNrCustomer + ", "+ payment.details);
+                    	System.out.println("no matching invoice found."  + " Payment=" + payment.id + " [" + payment.amount/1.21 + "], " + " account=" + payment.accountNrCustomer + ", "+ payment.details);
                         mNotMatchingPayments.add(payment);
                     }
                 }
@@ -406,13 +425,13 @@ final public class FintroXlsxReader
         StringBuilder htmlProcessLogStrBuf = new StringBuilder();
         htmlProcessLogStrBuf.append("<b>Nog niet gekende rekeningnummers (of geen klant/factuur betaling):</b><br>");
         htmlProcessLogStrBuf.append(unknownAccountNrs);
-        htmlProcessLogStrBuf.append("<b>Foutieve betalingen:</b><br>");
+        htmlProcessLogStrBuf.append("<br><b>Foutieve betalingen:</b><br>");
         htmlProcessLogStrBuf.append(wrongValuePayments);
         htmlProcessLogStrBuf.append("<br><b>Niet erkende betalingen:</b><br>");
         htmlProcessLogStrBuf.append(notMatchingPayments);
         htmlProcessLogStrBuf.append("<br><b>Bevestigde betalingen (waren al als 'betaald' gezet):</b><br>");
         htmlProcessLogStrBuf.append(confirmedPayments);
-        htmlProcessLogStrBuf.append("<br><br><b>Nieuwe betalingen:</b><br>");
+        htmlProcessLogStrBuf.append("<br><b>Nieuwe betalingen:</b><br>");
         htmlProcessLogStrBuf.append(newPayedInvoices);
         htmlProcessLogStrBuf.append("<br><br>");
         mHtmlProcessLog = htmlProcessLogStrBuf.toString();

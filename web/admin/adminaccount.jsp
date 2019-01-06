@@ -25,7 +25,7 @@ private StringBuilder allEntryIds;
 
 %>
 <body>
-<table width='100%' cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
+<table  cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
 	<tr>
 		<!-- white space -->
 		<td valign="top" width="20" bgcolor="FFFFFF"></td>
@@ -63,11 +63,11 @@ try
 		<table width="100%" border="0" cellspacing="2" cellpadding="2">
 			<tr>
 				<td width="25" bgcolor="FFFFFF"></td>
-				<td width="60" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Nummer</td>
-				<td width="70" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;GSM</td>
-				<td width="190" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Naam</td>
+				<td width="80" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Nummer</td>
+				<td width="110" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;GSM</td>
+				<td width="230" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Naam</td>
 				<td width="300" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;e-mail</td>
-				<td width="200" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Laatste	login</td>
+				<td width="250" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Laatste	login</td>
 			</tr>
 			<%
   vSession.setCallingJsp(Constants.ADMIN_ACCOUNT_JSP);
@@ -106,11 +106,11 @@ try
       				onclick="updateDeleteFlag('<%=vId%>','<%=vEntry.getId()%>','<%=vRowInd%>')"
       				ondblclick="changeUrl('/TheBusinessAssistant/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACCOUNT_UPDATE%>&<%=Constants.ACCOUNT_ID%>=<%=vEntry.getFwdNumber()%>');">
       				<td width="25" bgcolor="FFFFFF"><img src=<%=vRegImg%> width="16" height="16" border="0"></td>
-      				<td width="60" valign="top" class="bodytekst">&nbsp;<%=vNumber%></td>
-      				<td width="70" valign="top" class="bodytekst">&nbsp;<%=vGsm%></td>
-      				<td width="190" valign="top" class="bodytekst">&nbsp;<%=vFullName%></td>
+      				<td width="80" valign="top" class="bodytekst">&nbsp;<%=vNumber%></td>
+      				<td width="110" valign="top" class="bodytekst">&nbsp;<%=vGsm%></td>
+      				<td width="230" valign="top" class="bodytekst">&nbsp;<%=vFullName%></td>
       				<td width="300" valign="top" class="bodytekst">&nbsp;<%=vEmail%></td>
-      				<td width="200" valign="top" class="bodytekst">&nbsp;<%=vLastLogin%></td>
+      				<td width="250" valign="top" class="bodytekst">&nbsp;<%=vLastLogin%></td>
       			</tr>
       			<%
           vRowInd++;

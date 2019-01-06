@@ -25,7 +25,7 @@ vSession.setCallingJsp(Constants.ADD_INVOICE_JSP);
 <body>
 <p><span class="admintitle"> Factuur toevoegen voor een niet klant<br>
 </span></p>
-<table width='100%' cellspacing='0' cellpadding='0' border='0'
+<table  cellspacing='0' cellpadding='0' border='0'
 	bgcolor="FFFFFF">
 	<!--Add Task jsp-->
 	<tr>

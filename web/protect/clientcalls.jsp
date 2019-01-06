@@ -37,14 +37,13 @@ allEntryIds = new StringBuilder("[");
 	action="/TheBusinessAssistant/CustomerDispatch"><input type=hidden
 	name=<%=Constants.RECORD_TO_DELETE%> value=""> <input type=hidden
 	name=<%=Constants.SRV_ACTION%> value="<%=Constants.ACTION_SHOW_CALLS%>"> 
-<table width='100%' cellspacing='0' cellpadding='0' border='0'
-	bgcolor="FFFFFF">
+<table cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
 	<tr>
 		<!-- white space -->
 		<td valign="top" width="20" bgcolor="FFFFFF"></td>
 
 		<!-- account list -->
-		<td valign="top" width="710" bgcolor="FFFFFF"><br>
+		<td valign="top" bgcolor="FFFFFF"><br>
         <p><span class="admintitle"> Huidig geregistreerde oproepen:
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="tbabutton" type=submit name=action value="Herlaad" onclick="refresh()"> 
         </span></p>
@@ -59,7 +58,7 @@ allEntryIds = new StringBuilder("[");
 
   CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
 
-  Collection vRecords = vQuerySession.getDocumentedForMonth(vSession, vSession.getFwdNumber(), vSession.getMonthsBack(), vSession.getYear());
+  Collection<CallRecordEntityData> vRecords = vQuerySession.getDocumentedForMonth(vSession, vSession.getFwdNumber(), vSession.getMonthsBack(), vSession.getYear());
   
   AccountEntityData vAccount = AccountCache.getInstance().get(vSession.getFwdNumber());
 %>
@@ -71,7 +70,7 @@ out.println("<input class=\"tbabutton\" type=submit name=action value=\"Volgende
 }
 
   
-  out.println("<br><br><table width=\"725\" border=\"0\" cellspacing=\"2\" cellpadding=\"2\">");
+  out.println("<br><br><table border=\"0\" cellspacing=\"2\" cellpadding=\"2\">");
   if (vRecords == null || vRecords.size() == 0)
   {
     out.println("<span class=\"adminsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Er zijn geen nieuwe oproepgegevens beschikbaar voor de maand " + vSession.getMonthsBackString() + ".</span>");
@@ -85,9 +84,9 @@ out.println("<input class=\"tbabutton\" type=submit name=action value=\"Volgende
       out.println("<span class=\"bodytekst\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Er zijn </span><span class=\"bodyredbold\">" + vRecords.size() + "</span><span class=\"bodytekst\"> oproepen beschikbaar voor de maand " + vSession.getMonthsBackString() + ".</span>");
     int vNewCnt = 0;
     long vLastLogin = vAccount.getPreviousLoginTS();
-    for (Iterator i = vRecords.iterator(); i.hasNext();)
+    for (Iterator<CallRecordEntityData> i = vRecords.iterator(); i.hasNext();)
     {
-      CallRecordEntityData vEntry = (CallRecordEntityData) i.next();
+      CallRecordEntityData vEntry = i.next();
       if (vEntry.getTimeStamp() > vLastLogin)
         ++vNewCnt;
     }  
@@ -103,20 +102,20 @@ out.println("<input class=\"tbabutton\" type=submit name=action value=\"Volgende
     
     out.println("              <br><br>");
     out.println("              <tr>");
-    out.println("                <td width=\"20\" bgcolor=\"FFFFFF\"></td>");
-    out.println("                <td width=\"10\"  valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\"></td>");
-    out.println("                <td width=\"55\"  valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Datum</td>");
-    out.println("                <td width=\"35\"  valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Uur</td>");
-    out.println("                <td width=\"85\"  valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Nummer</td>");
-    out.println("                <td width=\"140\" valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Naam</td>");
-    out.println("                <td width=\"280\" valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Omschrijving</td>");
-    out.println("                <td width=\"100\"  valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Info</td>");
+    out.println("                <td width=\"30\" bgcolor=\"FFFFFF\"></td>");
+    out.println("                <td width=\"20\"  valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\"></td>");
+    out.println("                <td width=\"65\"  valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Datum</td>");
+    out.println("                <td width=\"45\"  valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Uur</td>");
+    out.println("                <td width=\"80\"  valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Nummer</td>");
+    out.println("                <td width=\"200\" valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Naam</td>");
+    out.println("                <td width=\"500\" valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Omschrijving</td>");
+    out.println("                <td width=\"80\"  valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Info</td>");
     out.println("              </tr>");
 
     int vRowInd = 0;
-    for (Iterator i = vRecords.iterator(); i.hasNext();)
+    for (Iterator<CallRecordEntityData> i = vRecords.iterator(); i.hasNext();)
     {
-      CallRecordEntityData vEntry = (CallRecordEntityData) i.next();
+      CallRecordEntityData vEntry = i.next();
       String vId = "id" + vEntry.getId();
       String vDate = vEntry.getDate();
       String vTime = vEntry.getTime();
@@ -161,15 +160,14 @@ out.println("<input class=\"tbabutton\" type=submit name=action value=\"Volgende
 %>
 	<tr bgcolor="FFCC66" id=<%=vId%> class="bodytekst"
 		ondblclick="changeUrl('/TheBusinessAssistant/CustomerDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.RECORD_UPDATE%>&<%=Constants.RECORD_ID%>=<%=vEntry.getId()%>');">
-		<td width="20" bgcolor="FFFFFF"><img src=<%=vInOut%> height="13"
-			border="0"></td>
-		<td width="10" valign="top"><%=vImportant%></td>
-		<td width="55" valign="top"><%=vDate%></td>
-		<td width="35" valign="top"><%=vTime%></td>
-		<td width="85" valign="top"><%=vNumber%></td>
-		<td width="140" valign="top"><%=vName%></td>
-		<td width="280" valign="top"><%=vShortDesc%></td>
-		<td width="100" valign="top"><%=vInfoGifs%></td>
+		<td width="30" bgcolor="FFFFFF"><img src=<%=vInOut%> height="13" border="0"></td>
+		<td width="20" valign="top"><%=vImportant%></td>
+		<td width="65" valign="top"><%=vDate%></td>
+		<td width="45" valign="top"><%=vTime%></td>
+		<td width="80" valign="top"><%=vNumber%></td>
+		<td width="200" valign="top"><%=vName%></td>
+		<td width="500" valign="top"><%=vShortDesc%></td>
+		<td width="80" valign="top"><%=vInfoGifs%></td>
 	</tr>
 	<%
       vRowInd++;

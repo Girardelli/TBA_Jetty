@@ -18,7 +18,7 @@ be.tba.util.constants.AccountRole,
 be.tba.util.session.AccountCache"%>
 
 <body>
-<table width='100%' cellspacing='0' cellpadding='0' border='0'
+<table  cellspacing='0' cellpadding='0' border='0'
 	bgcolor="FFFFFF">
 	<!--Update account jsp-->
 	<tr>

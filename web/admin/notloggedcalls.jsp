@@ -33,7 +33,7 @@ private StringBuilder allEntryIds;
 		action="/TheBusinessAssistant/AdminDispatch"><input type=hidden
 		name=<%=Constants.RECORD_TO_DELETE%> value=""> <input type=hidden
 		name=<%=Constants.SRV_ACTION%> value=""> <br>
-	<table width='100%' cellspacing='0' cellpadding='0' border='0'
+	<table  cellspacing='0' cellpadding='0' border='0'
 		bgcolor="FFFFFF">
 	<tr>
 		<!-- white space -->
