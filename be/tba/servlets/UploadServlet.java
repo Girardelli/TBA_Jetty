@@ -24,7 +24,9 @@ public class UploadServlet extends HttpServlet {
 	 *      response)
 	 * 
 	 */
+	/*
 	@Override
+	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
@@ -94,15 +96,17 @@ public class UploadServlet extends HttpServlet {
 			PrintWriter writer = response.getWriter();
 			writer.write("call POST with multipart form data");
 		}
-	}
+	} */
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 * 
 	 */
+	/*
 	@SuppressWarnings("unchecked")
 	@Override
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
@@ -170,4 +174,6 @@ public class UploadServlet extends HttpServlet {
 		}
 		return suffix;
 	}
+	*/
 }
+
