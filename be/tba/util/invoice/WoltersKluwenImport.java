@@ -3,12 +3,10 @@ package be.tba.util.invoice;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.security.Timestamp;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 
@@ -16,6 +14,7 @@ import be.tba.ejb.account.interfaces.AccountEntityData;
 import be.tba.ejb.invoice.interfaces.InvoiceEntityData;
 import be.tba.util.constants.Constants;
 import be.tba.util.session.AccountCache;
+import be.tba.util.timer.CallCalendar;
 
 public class WoltersKluwenImport
 {
@@ -53,7 +52,7 @@ public class WoltersKluwenImport
     static public File generateVerkopenXml(Collection<InvoiceEntityData> invoiceList)
     {
         DecimalFormat costFormatter = new DecimalFormat("#0.00");
-        String dateStr = new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime());
+        CallCalendar calendar = new CallCalendar();
 
         File xml = new File(Constants.FILEUPLOAD_DIR + File.separator + Calendar.getInstance().getTimeInMillis() + Constants.WC_VERKOPEN_XML);
         StringBuffer xmlBuf = new StringBuffer("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");        
@@ -66,6 +65,9 @@ public class WoltersKluwenImport
             int yearInd = vEntry.getInvoiceNr().indexOf('-') + 1;
             String year = "20" + vEntry.getInvoiceNr().substring(yearInd, yearInd + 2);
             int debCreIndex = vEntry.getCreditId() == 0 ? 1 : 0;
+            
+            calendar.getWrappedCalendar().setTimeInMillis(vEntry.getStopTime());
+            String dateStr = new SimpleDateFormat("dd/MM/yyyy").format(calendar.getWrappedCalendar().getTime());
 
             xmlBuf.append("<Sale>\r\n");
             xmlBuf.append("<Customer_Prime>");
