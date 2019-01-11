@@ -28,6 +28,7 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
     private long stopTime = 0;
     private java.lang.String customerName = "";
     private boolean isInvoiceMailed = false;
+    private java.lang.String invoiceDate = "";
     private java.lang.String customerRef = "";
     private java.lang.String payDate = "";
     // -1 means regular invoice
@@ -46,7 +47,7 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
         creditId = -1;
     }
 
-    public InvoiceEntityData(int id, java.lang.String fileName, java.lang.String accountFwdNr, double totalCost, int month, int year, int yearSeqNr, java.lang.String invoiceNr, boolean frozenFlag, boolean isPayed, long startTime, long stopTime, java.lang.String customerName, boolean isInvoiceMailed, java.lang.String customerRef, java.lang.String payDate, int creditId, String fintroId, String valutaDate, String fromBankNr, String paymentDetails, String structuredId)
+    public InvoiceEntityData(int id, java.lang.String fileName, java.lang.String accountFwdNr, double totalCost, int month, int year, int yearSeqNr, java.lang.String invoiceNr, boolean frozenFlag, boolean isPayed, long startTime, long stopTime, java.lang.String customerName, boolean isInvoiceMailed, String invoiceDate, java.lang.String customerRef, java.lang.String payDate, int creditId, String fintroId, String valutaDate, String fromBankNr, String paymentDetails, String structuredId)
     {
         setId(id);
         setFileName(fileName);
@@ -62,6 +63,7 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
         setStopTime(stopTime);
         setCustomerName(customerName);
         setIsInvoiceMailed(isInvoiceMailed);
+        setInvoiceDate(invoiceDate);
         setCustomerRef(customerRef);
         setPayDate(payDate);
         setCreditId(creditId);
@@ -88,6 +90,7 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
         setStopTime(otherData.getStopTime());
         setCustomerName(otherData.getCustomerName());
         setIsInvoiceMailed(otherData.getIsInvoiceMailed());
+        setInvoiceDate(otherData.getInvoiceDate());
         setCustomerRef(otherData.getCustomerRef());
         setPayDate(otherData.getPayDate());
         setCreditId(otherData.getCreditId());
@@ -242,6 +245,16 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
     public void setIsInvoiceMailed(boolean isInvoiceMailed)
     {
         this.isInvoiceMailed = isInvoiceMailed;
+    }
+
+    public java.lang.String getInvoiceDate()
+    {
+        return this.invoiceDate;
+    }
+
+    public void setInvoiceDate(java.lang.String invoiceDate)
+    {
+        this.invoiceDate = invoiceDate;
     }
 
     public java.lang.String getCustomerRef()
@@ -469,7 +482,8 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
                 ",stopTime=" + getStopTime() + 
                 ",customerName='" + ((this.getCustomerName() != null) ? this.getCustomerName() : "") + 
                 "',isInvoiceMailed=" + getIsInvoiceMailed() + 
-                ",customerRef='" + ((this.getCustomerRef() != null) ? this.getCustomerRef() : "") + 
+                ",invoiceDate='" + ((this.getInvoiceDate() != null) ? this.getInvoiceDate() : "") + 
+                "',customerRef='" + ((this.getCustomerRef() != null) ? this.getCustomerRef() : "") + 
                 "',payDate='" + ((this.getPayDate() != null) ? this.getPayDate() : "") + 
                 "',creditId=" + getCreditId() + 
                 ",fintroId='" + ((this.getFintroId() != null) ? this.getFintroId() : "") + 
@@ -498,7 +512,8 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
                 "," + getStopTime() + 
                 ",'" + getCustomerName() + 
                 "'," + getIsInvoiceMailed() + 
-                ",'" + getCustomerRef() + 
+                ",'" + getInvoiceDate() + 
+                "','" + getCustomerRef() + 
                 "','" + getPayDate() + 
                 "'," + getCreditId() +
                 ",'" + getFintroId() + 

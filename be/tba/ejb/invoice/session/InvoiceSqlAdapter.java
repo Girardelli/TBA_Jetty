@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
@@ -33,7 +34,6 @@ import be.tba.util.data.FintroPayment;
 import be.tba.util.invoice.IBANCheckDigit;
 import be.tba.util.invoice.InvoiceHelper;
 import be.tba.util.session.AccountCache;
-import be.tba.util.timer.CallCalendar;
 
 import java.sql.SQLException;
 import java.text.DecimalFormat;
@@ -363,17 +363,18 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
     public boolean freezeInvoice(WebSession webSession, int key, int invoiceNr)
     {
         InvoiceEntityData vInvoiceData = getRow(webSession.getConnection(), key);
-        if (vInvoiceData != null)
+        if (vInvoiceData != null && vInvoiceData.getFrozenFlag() == false)
         {
             System.out.println("freezeInvoice: current year seq nr:" + vInvoiceData.getYearSeqNr());
             if (vInvoiceData.getYearSeqNr() < 1)
             {
-                CallCalendar vCalendar = new CallCalendar();
-                long now = vCalendar.getCurrentTimestamp();
+                Calendar vCalendar = Calendar.getInstance();
+                long now = vCalendar.getTimeInMillis();
                 if (now < vInvoiceData.getStopTime())
                     vInvoiceData.setStopTime(now);
                 vInvoiceData.setFrozenFlag(true);
                 vInvoiceData.setYearSeqNr(invoiceNr);
+                vInvoiceData.setInvoiceDate(String.format("%d/%d/%d", vCalendar.get(Calendar.DAY_OF_MONTH), vCalendar.get(Calendar.MONTH) + 1, vCalendar.get(Calendar.YEAR)));
                 vInvoiceData.setInvoiceNr(InvoiceHelper.getInvoiceNumber(vInvoiceData.getYear(), vInvoiceData.getMonth(), invoiceNr));
                 vInvoiceData.setStructuredId(IBANCheckDigit.IBAN_CHECK_DIGIT.calculateOGM(vInvoiceData.getInvoiceNr()));
                 vInvoiceData.setFileName(InvoiceHelper.makeFileName(vInvoiceData));
@@ -522,14 +523,15 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
             entry.setStopTime(rs.getLong(12));
             entry.setCustomerName(null2EmpthyString(rs.getString(13)));
             entry.setIsInvoiceMailed(rs.getBoolean(14));
-            entry.setCustomerRef(null2EmpthyString(rs.getString(15)));
-            entry.setPayDate(null2EmpthyString(rs.getString(16)));
-            entry.setCreditId(rs.getInt(17));
-            entry.setFintroId(null2EmpthyString(rs.getString(18)));
-            entry.setValutaDate(null2EmpthyString(rs.getString(19)));
-            entry.setFromBankNr(null2EmpthyString(rs.getString(20)));
-            entry.setPaymentDetails(null2EmpthyString(rs.getString(21)));
-            entry.setStructuredId(null2EmpthyString(rs.getString(22)));
+            entry.setInvoiceDate(null2EmpthyString(rs.getString(15)));
+            entry.setCustomerRef(null2EmpthyString(rs.getString(16)));
+            entry.setPayDate(null2EmpthyString(rs.getString(17)));
+            entry.setCreditId(rs.getInt(18));
+            entry.setFintroId(null2EmpthyString(rs.getString(19)));
+            entry.setValutaDate(null2EmpthyString(rs.getString(20)));
+            entry.setFromBankNr(null2EmpthyString(rs.getString(21)));
+            entry.setPaymentDetails(null2EmpthyString(rs.getString(22)));
+            entry.setStructuredId(null2EmpthyString(rs.getString(23)));
             vVector.add(entry);
             // System.out.println("InvoiceEntityData: " + entry.toNameValueString());
         }
