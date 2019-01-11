@@ -65,9 +65,7 @@ public class WoltersKluwenImport
             int yearInd = vEntry.getInvoiceNr().indexOf('-') + 1;
             String year = "20" + vEntry.getInvoiceNr().substring(yearInd, yearInd + 2);
             int debCreIndex = vEntry.getCreditId() == 0 ? 1 : 0;
-            
-            calendar.getWrappedCalendar().setTimeInMillis(vEntry.getStopTime());
-            String dateStr = new SimpleDateFormat("dd/MM/yyyy").format(calendar.getWrappedCalendar().getTime());
+            String dateStr = vEntry.getInvoiceDate();
 
             xmlBuf.append("<Sale>\r\n");
             xmlBuf.append("<Customer_Prime>");
