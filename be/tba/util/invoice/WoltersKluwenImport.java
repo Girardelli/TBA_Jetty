@@ -4,17 +4,17 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.StringTokenizer;
 
 import be.tba.ejb.account.interfaces.AccountEntityData;
 import be.tba.ejb.invoice.interfaces.InvoiceEntityData;
 import be.tba.util.constants.Constants;
 import be.tba.util.session.AccountCache;
-import be.tba.util.timer.CallCalendar;
 
 public class WoltersKluwenImport
 {
@@ -51,17 +51,23 @@ public class WoltersKluwenImport
     
     static public File generateVerkopenXml(Collection<InvoiceEntityData> invoiceList)
     {
-        DecimalFormat costFormatter = new DecimalFormat("#0.00");
-        CallCalendar calendar = new CallCalendar();
-
+        //force the use of the ',' decimal separator by using explicit Belgium localization
+    	DecimalFormat costFormatter = new DecimalFormat("#0.00", DecimalFormatSymbols.getInstance(new Locale("nl", "BE")));
+        
         File xml = new File(Constants.FILEUPLOAD_DIR + File.separator + Calendar.getInstance().getTimeInMillis() + Constants.WC_VERKOPEN_XML);
         StringBuffer xmlBuf = new StringBuffer("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");        
         xmlBuf.append("\r\n<ImportExpMPlus xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n<Sales>\r\n");
         for (Iterator<InvoiceEntityData> i = invoiceList.iterator(); i.hasNext();)
         {
             InvoiceEntityData vEntry = i.next();
-            double vat = vEntry.getTotalCost()*0.21;
-            double inclVat = vEntry.getTotalCost() + vat;
+            String exclStr = costFormatter.format(vEntry.getTotalCost());
+            String vatStr = costFormatter.format(vEntry.getTotalCost()*0.21);
+            String inclStr = costFormatter.format(new Double(exclStr.replace(',', '.')) + new Double(vatStr.replace(',', '.')));
+            
+//            String exclStr = formatValue(vEntry.getTotalCost(), costFormatter);
+//            String vatStr = formatValue(vEntry.getTotalCost()*0.21, costFormatter);
+//            String inclStr = formatValue(new Double(costFormatter.format(exclStr)) + new Double(costFormatter.format(vatStr)), costFormatter);
+            
             int yearInd = vEntry.getInvoiceNr().indexOf('-') + 1;
             String year = "20" + vEntry.getInvoiceNr().substring(yearInd, yearInd + 2);
             int debCreIndex = vEntry.getCreditId() == 0 ? 1 : 0;
@@ -81,7 +87,7 @@ public class WoltersKluwenImport
             xmlBuf.append("</Customer_Prime>\r\n<Journal_Prime>1</Journal_Prime>\r\n<CurrencyCode>EUR</CurrencyCode>\r\n<DocType>30</DocType>\r\n<DocNumber>");
             xmlBuf.append(vEntry.getId());
             xmlBuf.append("</DocNumber>\r\n<Amount>");
-            xmlBuf.append(formatValue(inclVat, costFormatter));
+            xmlBuf.append(inclStr);
             xmlBuf.append("</Amount>\r\n<YourRef>");
             xmlBuf.append(vEntry.getInvoiceNr());
             xmlBuf.append("</YourRef>\r\n<Year_Alfa>");
@@ -91,7 +97,7 @@ public class WoltersKluwenImport
             xmlBuf.append("</VATMonth>\r\n<AccountingPeriod>");
             xmlBuf.append(kKwartalen[vEntry.getMonth()]);
             xmlBuf.append("</AccountingPeriod>\r\n<VATAmount>");
-            xmlBuf.append(formatValue(vat, costFormatter));
+            xmlBuf.append(vatStr);
             xmlBuf.append("</VATAmount>\r\n<DocDate>");
             xmlBuf.append(dateStr);
             xmlBuf.append("</DocDate>\r\n<DueDate>");
@@ -100,13 +106,13 @@ public class WoltersKluwenImport
             xmlBuf.append(dateStr);
             xmlBuf.append("</DelivDate>\r\n<Status>0</Status>\r\n<Details>\r\n");
             xmlBuf.append("<Detail><Account>400000</Account>\r\n<Amount>");
-            xmlBuf.append(formatValue(inclVat, costFormatter));
+            xmlBuf.append(inclStr);
             xmlBuf.append("</Amount>\r\n<DebCre>" + kCreditNoteSpecials[debCreIndex].debCre + "</DebCre>\r\n<Ventil>0</Ventil>\r\n<Unit1>0</Unit1>\r\n<Unit2>0</Unit2>\r\n</Detail>\r\n");
             xmlBuf.append("<Detail>\r\n<Account>700000</Account>\r\n<Amount>");
-            xmlBuf.append(formatValue(vEntry.getTotalCost(), costFormatter));
+            xmlBuf.append(exclStr);
             xmlBuf.append("</Amount>\r\n<DebCre>" + kCreditNoteSpecials[debCreIndex].debCreRev + "</DebCre>\r\n<Ventil>4</Ventil>\r\n<Unit1>0</Unit1>\r\n<Unit2>0</Unit2>\r\n<VAT1>" + kCreditNoteSpecials[debCreIndex].vat1Inv + "</VAT1>\r\n</Detail>\r\n");
             xmlBuf.append("<Detail>\r\n<Account>451000</Account>\r\n<Amount>");
-            xmlBuf.append(formatValue(vat, costFormatter));
+            xmlBuf.append(vatStr);
             xmlBuf.append("</Amount>\r\n<DebCre>" + kCreditNoteSpecials[debCreIndex].debCreRev + "</DebCre>\r\n<Ventil>11</Ventil>\r\n<Unit1>0</Unit1>\r\n<Unit2>0</Unit2>\r\n<VAT1>" + kCreditNoteSpecials[debCreIndex].vat1Btw +"</VAT1>\r\n</Detail>");
             xmlBuf.append("\r\n</Details>\r\n</Sale>\r\n");
         }
