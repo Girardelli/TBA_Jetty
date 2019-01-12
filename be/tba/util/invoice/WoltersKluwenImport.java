@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Iterator;
@@ -15,6 +16,7 @@ import be.tba.ejb.account.interfaces.AccountEntityData;
 import be.tba.ejb.invoice.interfaces.InvoiceEntityData;
 import be.tba.util.constants.Constants;
 import be.tba.util.session.AccountCache;
+import be.tba.util.timer.CallCalendar;
 
 public class WoltersKluwenImport
 {
@@ -53,7 +55,8 @@ public class WoltersKluwenImport
     {
         //force the use of the ',' decimal separator by using explicit Belgium localization
     	DecimalFormat costFormatter = new DecimalFormat("#0.00", DecimalFormatSymbols.getInstance(new Locale("nl", "BE")));
-        
+    	CallCalendar calendar = new CallCalendar();
+    	
         File xml = new File(Constants.FILEUPLOAD_DIR + File.separator + Calendar.getInstance().getTimeInMillis() + Constants.WC_VERKOPEN_XML);
         StringBuffer xmlBuf = new StringBuffer("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");        
         xmlBuf.append("\r\n<ImportExpMPlus xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n<Sales>\r\n");
@@ -71,7 +74,10 @@ public class WoltersKluwenImport
             int yearInd = vEntry.getInvoiceNr().indexOf('-') + 1;
             String year = "20" + vEntry.getInvoiceNr().substring(yearInd, yearInd + 2);
             int debCreIndex = vEntry.getCreditId() == 0 ? 1 : 0;
-            String dateStr = vEntry.getInvoiceDate();
+            
+            calendar.getWrappedCalendar().setTimeInMillis(vEntry.getStopTime());
+            String dateStr = new SimpleDateFormat("dd/MM/yyyy").format(calendar.getWrappedCalendar().getTime());
+            //String dateStr = vEntry.getInvoiceDate();
 
             xmlBuf.append("<Sale>\r\n");
             xmlBuf.append("<Customer_Prime>");
