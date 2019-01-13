@@ -188,28 +188,30 @@ public class MailerSessionBean
     static private StringBuffer buildMailBody(AccountEntityData account, Collection<CallRecordEntityData> records, AtomicBoolean isImportant) throws RemoteException
     {
         StringBuffer vBody = new StringBuffer("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">");
-        vBody.append("<HTML><HEAD><TITLE>TheBusinessAssistant administrator pages</TITLE>");
+        vBody.append("<HTML><HEAD>"); //<TITLE>TheBusinessAssistant administrator pages</TITLE>");
         vBody.append("<META http-equiv=Content-Type content=\"text/html; charset=iso-8859-1\"><BASE ");
         vBody.append("href=" + Constants.TBA_URL_BASE + "index.html>");
-        vBody.append("<META ");
-        vBody.append("content=\"virtueel secretariaat telefoondiensten antwoorddiensten kantoor automatisering tekstverwerking administratie afsprakendienst dactylo\" ");
-        vBody.append("name=Keywords>");
+        //vBody.append("<META ");
+        //vBody.append("content=\"virtueel secretariaat telefoondiensten antwoorddiensten kantoor automatisering tekstverwerking administratie afsprakendienst dactylo\" ");
+        //vBody.append("name=Keywords>");
         vBody.append("<META content=\"Uw virtueel secretariaat.\" name=Description>");
-        vBody.append("<META content=yves.willems@theBusinessAssistunt.be name=Owner>");
-        vBody.append("<META http-equiv=Content-Language content=NL><!-- <meta HTTP-EQUIV=\"Refresh\" content=\"30\">-->");
-        vBody.append("<META content=\"Copyright © 2003 TheBusinessAssistant, All rights reserved.\" name=Copyright>");
+        //vBody.append("<META content=yves.willems@theBusinessAssistunt.be name=Owner>");
+        vBody.append("<META http-equiv=Content-Language content=NL>");
+        //vBody.append("<META content=\"Copyright © 2003 TheBusinessAssistant, All rights reserved.\" name=Copyright>");
         vBody.append("<META content=Global name=Distribution><LINK title=main href=\"TheBusinessAssistant.css\" type=text/css rel=stylesheet>");
-        vBody.append("<META content=\"MSHTML 6.00.2800.1106\" name=GENERATOR></HEAD>");
-        vBody.append("<BODY>");
-        vBody.append("<DIV>&nbsp;</DIV>");
-        vBody.append("<DIV>&nbsp;</DIV>");
-        vBody.append("<HR>");
-
+        //vBody.append("<META content=\"MSHTML 6.00.2800.1106\" name=GENERATOR>");
+        vBody.append("</HEAD><BODY>");
         vBody.append("<TABLE cellSpacing=0 cellPadding=0 bgColor=#ffffff border=0><!--header 1-->");
-        vBody.append("  <TBODY>");
+        vBody.append("<TBODY>");
         vBody.append("<span class=\"bodytekst\">");
         vBody.append("Geachte,<br><br>");
-        vBody.append("Gelieve hieronder uw oproepen te willen vinden die wij genoteerd hebben sinds de vorige mail.<br>");
+        vBody.append("Gelieve hieronder uw oproepen te willen vinden die wij genoteerd hebben");
+        if (account.getSuperCustomer() != null && !account.getSuperCustomer().isEmpty())
+        {
+        	vBody.append(" voor <b><i>" + account.getFullName() + "</i></b>");
+        }
+        vBody.append(" sinds de vorige mail.<br>");
+        
         vBody.append("Voor vragen kan u zich richten tot Nancy.<br>");
 
         long vCurrentTime = Calendar.getInstance().getTimeInMillis();
@@ -232,12 +234,16 @@ public class MailerSessionBean
             // int vNewCnt = 0;
 
             vBody.append("</span><br><br>");
-            vBody.append("<table width=\"740\" border=\"0\" cellspacing=\"2\" cellpadding=\"2\">");
+            vBody.append("<table border=\"0\" cellspacing=\"2\" cellpadding=\"2\">");
             vBody.append("<tr>");
             vBody.append("<td width=20 bgcolor=FFFFFF></td>");
             vBody.append("<td width=10  class=\"topMenu\" bgcolor=FF9900>&nbsp;</td>");
             vBody.append("<td width=55  class=\"topMenu\" bgcolor=FF9900>&nbsp;Datum</td>");
             vBody.append("<td width=35  class=\"topMenu\" bgcolor=FF9900>&nbsp;Uur</td>");
+            if (account.getHasSubCustomers())
+            {
+            	vBody.append("<td width=150 class=\"topMenu\" bgcolor=FF9900>&nbsp;Voor</td>");
+            }
             vBody.append("<td width=85  class=\"topMenu\" bgcolor=FF9900>&nbsp;Nummer</td>");
             vBody.append("<td width=140 class=\"topMenu\" bgcolor=FF9900>&nbsp;Naam</td>");
             vBody.append("<td width=280 class=\"topMenu\" bgcolor=FF9900>&nbsp;Omschrijving</td>");
@@ -280,6 +286,11 @@ public class MailerSessionBean
                 }
                 vBody.append("<td width=55  valign=top>" + vDate + "</td>");
                 vBody.append("<td width=35  valign=top>" + vTime + "</td>");
+                if (account.getHasSubCustomers())
+                {
+                	AccountEntityData subCustomer = AccountCache.getInstance().get(vEntry.getFwdNr());
+                	vBody.append("<td width=150 valign=top>" + subCustomer.getFullName() + "</td>");
+                }
                 vBody.append("<td width=85  valign=top>" + vNumber + "</td>");
                 vBody.append("<td width=140 valign=top>" + vName + "</td>");
                 vBody.append("<td width=280 valign=top>" + vShortDesc + "</td>");
@@ -315,7 +326,7 @@ public class MailerSessionBean
         vBody.append("<span class=\"bodytekst\"><br><br>");
         vBody.append("Dit is een automatisch gegenereerde mail.<br>");
         vBody.append("U kan het tijdstip van deze mail zelf instellen als u zich aanmeldt op onze webpagina (<a href=\"http://www.theBusinessAssistant.be\">www.theBusinessAssistant.be</a>).<br>");
-        vBody.append("Eventuele extra informatie aangegeven met het <img src=\"" + Constants.TBA_URL_BASE + "images/info.gif\" alt=\"Extra info\" height=\"16\" border=\"0\"> icoontje, kan daar ook geraadpleegd worden.<br>");
+        vBody.append("Eventuele extra informatie aangegeven met het <img src=\"" + Constants.TBA_URL_BASE + "images/info.gif\" alt=\"Extra info\" height=\"16\" border=\"0\"> &nbsp;icoontje, kan daar ook geraadpleegd worden.<br>");
         vBody.append("<br><br>Vriendelijke groeten<br>");
         vBody.append("<br><br>Het TBA team<br>");
         vBody.append("</TBODY></TABLE></BODY></HTML>");

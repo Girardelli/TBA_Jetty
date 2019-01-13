@@ -25,7 +25,7 @@ public class Constants
     public static final String EJB_ACC_ROLE_ADMIN = "admin";
 
     // HTML page names
-    public static final String TBA_URL_BASE = "http://lille.thebusinessAssistant.be:8080/TheBusinessAssistant/";
+    public static final String TBA_URL_BASE = "https://thebusinessAssistant.be/TheBusinessAssistant/";
 
     public static final String MYSQL_URL = "jdbc:mysql://localhost/tbadb?user=root&password=gzb625$";
     // public static final String INVOICE_HEAD_TMPL =
