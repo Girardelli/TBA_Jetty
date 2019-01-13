@@ -160,9 +160,7 @@ String vTime = new String(vHour + ":" + ((vMinutes < 10) ? "0" : "") + vMinutes)
 				<td width="50"></td>
 				<td width="120" valign="top" class="adminsubsubtitle">Naam</td>
 				<td width="580" valign="top"><input type=text size=30
-					name=<%=Constants.RECORD_CALLER_NAME%> value="">
-				&nbsp;&nbsp;&nbsp;&nbsp; <input type=text size=20
-					name=<%=Constants.RECORD_3W_CUSTOMER_ID%> value=""></td>
+					name=<%=Constants.RECORD_CALLER_NAME%> value=""></td>
 			</tr>
 			<tr>
 				<td width="50"></td>

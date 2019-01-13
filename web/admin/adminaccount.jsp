@@ -31,7 +31,7 @@ private StringBuilder allEntryIds;
 		<td valign="top" width="20" bgcolor="FFFFFF"></td>
 
 		<!-- account list -->
-		<td valign="top" width="750" bgcolor="FFFFFF"><br>
+		<td valign="top" width="1300" bgcolor="FFFFFF"><br>
 		<%
 try
 {
@@ -60,14 +60,20 @@ try
     <%
         }
     %>
-		<table width="100%" border="0" cellspacing="2" cellpadding="2">
+		<table border="0" cellspacing="2" cellpadding="4">
+				<col width="25">
+				<col width="90">
+				<col width="100">
+				<col width="300">
+				<col width="350">
+				<col width="120">
 			<tr>
-				<td width="25" bgcolor="FFFFFF"></td>
-				<td width="80" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Nummer</td>
-				<td width="110" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;GSM</td>
-				<td width="230" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Naam</td>
-				<td width="300" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;e-mail</td>
-				<td width="250" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Laatste	login</td>
+				<td bgcolor="FFFFFF"></td>
+				<td valign="top" class="topMenu" bgcolor="#F89920">Nummer</td>
+				<td valign="top" class="topMenu" bgcolor="#F89920">GSM</td>
+				<td valign="top" class="topMenu" bgcolor="#F89920">Naam</td>
+				<td valign="top" class="topMenu" bgcolor="#F89920">e-mail</td>
+				<td valign="top" class="topMenu" bgcolor="#F89920">Laatste login</td>
 			</tr>
 			<%
   vSession.setCallingJsp(Constants.ADMIN_ACCOUNT_JSP);
@@ -105,12 +111,12 @@ try
       				onmouseout="hooverOffRow('<%=vId%>','<%=vRowInd%>','#FFCC66')"
       				onclick="updateDeleteFlag('<%=vId%>','<%=vEntry.getId()%>','<%=vRowInd%>')"
       				ondblclick="changeUrl('/TheBusinessAssistant/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACCOUNT_UPDATE%>&<%=Constants.ACCOUNT_ID%>=<%=vEntry.getFwdNumber()%>');">
-      				<td width="25" bgcolor="FFFFFF"><img src=<%=vRegImg%> width="16" height="16" border="0"></td>
-      				<td width="80" valign="top" class="bodytekst">&nbsp;<%=vNumber%></td>
-      				<td width="110" valign="top" class="bodytekst">&nbsp;<%=vGsm%></td>
-      				<td width="230" valign="top" class="bodytekst">&nbsp;<%=vFullName%></td>
-      				<td width="300" valign="top" class="bodytekst">&nbsp;<%=vEmail%></td>
-      				<td width="250" valign="top" class="bodytekst">&nbsp;<%=vLastLogin%></td>
+      				<td bgcolor="FFFFFF"><img src=<%=vRegImg%> width="16" height="16" border="0"></td>
+      				<td valign="top" class="bodytekst"><%=vNumber%></td>
+      				<td valign="top" class="bodytekst"><%=vGsm%></td>
+      				<td valign="top" class="bodytekst"><%=vFullName%></td>
+      				<td valign="top" class="bodytekst"><%=vEmail%></td>
+      				<td valign="top" class="bodytekst"><%=vLastLogin%></td>
       			</tr>
       			<%
           vRowInd++;
@@ -135,14 +141,20 @@ try
         	  System.out.print("sublist for " + vEntry.getFwdNumber() + " has " + subList.size() + " members");  
               %>
               <p><span class="admintitle"> <%=vEntry.getFullName()%></span></p>
-              <table width="100%" border="0" cellspacing="2" cellpadding="2">
+              <table border="0" cellspacing="2" cellpadding="4">
+				<col width="25">
+				<col width="90">
+				<col width="100">
+				<col width="300">
+				<col width="350">
+				<col width="120">
               <tr>
-                  <td width="25" bgcolor="FFFFFF"></td>
-                  <td width="60" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Nummer</td>
-                  <td width="70" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;GSM</td>
-                  <td width="190" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Naam</td>
-                  <td width="300" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;e-mail</td>
-                  <td width="200" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Laatste login</td>
+                  <td bgcolor="FFFFFF"></td>
+                  <td valign="top" class="topMenu" bgcolor="#F89920">Nummer</td>
+                  <td valign="top" class="topMenu" bgcolor="#F89920">GSM</td>
+                  <td valign="top" class="topMenu" bgcolor="#F89920">Naam</td>
+                  <td valign="top" class="topMenu" bgcolor="#F89920">e-mail</td>
+                  <td valign="top" class="topMenu" bgcolor="#F89920">Laatste login</td>
               </tr>
               <%
 		      for (Iterator<AccountEntityData> vSubIter = subList.iterator(); vSubIter.hasNext();)
@@ -175,13 +187,13 @@ try
 		                    onmouseout="hooverOffRow('<%=vId%>','<%=vRowInd%>','#FFCC66')"
 		                    onclick="updateDeleteFlag('<%=vId%>','<%=vSubEntry.getId()%>','<%=vRowInd%>')"
 		                    ondblclick="changeUrl('/TheBusinessAssistant/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACCOUNT_UPDATE%>&<%=Constants.ACCOUNT_ID%>=<%=vNumber%>');">
-		                    <td width="25" bgcolor="FFFFFF"><img src=<%=vRegImg%> width="16"
+		                    <td bgcolor="FFFFFF"><img src=<%=vRegImg%> width="16"
 		                        height="16" border="0"></td>
-		                    <td width="60" valign="top" class="bodytekst">&nbsp;<%=vNumber%></td>
-		                    <td width="70" valign="top" class="bodytekst">&nbsp;<%=vGsm%></td>
-		                    <td width="190" valign="top" class="bodytekst">&nbsp;<%=vFullName%></td>
-		                    <td width="300" valign="top" class="bodytekst">&nbsp;<%=vEmail%></td>
-		                    <td width="200" valign="top" class="bodytekst">&nbsp;<%=vLastLogin%></td>
+		                    <td valign="top" class="bodytekst"><%=vNumber%></td>
+		                    <td valign="top" class="bodytekst"><%=vGsm%></td>
+		                    <td valign="top" class="bodytekst"><%=vFullName%></td>
+		                    <td valign="top" class="bodytekst"><%=vEmail%></td>
+		                    <td valign="top" class="bodytekst"><%=vLastLogin%></td>
 		                </tr>
 		                <%
 		          vRowInd++;

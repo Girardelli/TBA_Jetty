@@ -130,7 +130,7 @@ double vFacLongFwd = vCustomer.getFacLongFwd();
 						<table width="700" border="0" cellspacing="2" cellpadding="2">
 							<tr>
 								<td width="200" valign="top" class="adminsubsubtitle">login	naam</td>
-								<td width="500" valign="top" class="bodybold"><%=vCustomer.getUserId()%></td>
+								<td width="500" valign="top" class="bodybold"><%=(vCustomer.getUserId() == null ? "" : vCustomer.getUserId())%></td>
 							</tr>
 							<tr>
 								<td width="200" valign="top" class="adminsubsubtitle">rol</td>
