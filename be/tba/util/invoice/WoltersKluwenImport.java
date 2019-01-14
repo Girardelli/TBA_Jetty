@@ -26,13 +26,15 @@ public class WoltersKluwenImport
         protected String debCreRev;
         protected String vat1Inv;
         protected String vat1Btw;
+        protected String docType;
         
-        private CreditNoteSpecials(String debCre, String debCreRev, String vat1Inv, String vat1Btw)
+        private CreditNoteSpecials(String debCre, String debCreRev, String vat1Inv, String vat1Btw, String docType)
         {
             this.debCre = debCre;
             this.debCreRev = debCreRev;
             this.vat1Inv = vat1Inv;
             this.vat1Btw = vat1Btw;
+            this.docType = docType;
         }
     }
     
@@ -41,9 +43,9 @@ public class WoltersKluwenImport
     private static final CreditNoteSpecials[] kCreditNoteSpecials = 
         {
                 // regular invoice
-                new CreditNoteSpecials( "1", "-1", "03", "54" ),
+                new CreditNoteSpecials( "1", "-1", "03", "54", "10" ),
                 //Credit note
-                new CreditNoteSpecials( "-1", "1", "49", "64" )
+                new CreditNoteSpecials( "-1", "1", "49", "64", "30" )
         };
     
     private WoltersKluwenImport()
@@ -77,7 +79,7 @@ public class WoltersKluwenImport
             
             calendar.getWrappedCalendar().setTimeInMillis(vEntry.getStopTime());
             String dateStr = new SimpleDateFormat("dd/MM/yyyy").format(calendar.getWrappedCalendar().getTime());
-            //String dateStr = vEntry.getInvoiceDate();
+//            String dateStr = vEntry.getInvoiceDate();
 
             xmlBuf.append("<Sale>\r\n");
             xmlBuf.append("<Customer_Prime>");
@@ -90,7 +92,9 @@ public class WoltersKluwenImport
                 xmlBuf.append("0");
             }
             
-            xmlBuf.append("</Customer_Prime>\r\n<Journal_Prime>1</Journal_Prime>\r\n<CurrencyCode>EUR</CurrencyCode>\r\n<DocType>30</DocType>\r\n<DocNumber>");
+            xmlBuf.append("</Customer_Prime>\r\n<Journal_Prime>1</Journal_Prime>\r\n<CurrencyCode>EUR</CurrencyCode>\r\n<DocType>");
+            xmlBuf.append(kCreditNoteSpecials[debCreIndex].docType);
+            xmlBuf.append("</DocType>\r\n<DocNumber>");
             xmlBuf.append(vEntry.getId());
             xmlBuf.append("</DocNumber>\r\n<Amount>");
             xmlBuf.append(inclStr);
