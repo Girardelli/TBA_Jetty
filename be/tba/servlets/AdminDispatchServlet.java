@@ -960,7 +960,8 @@ public class AdminDispatchServlet extends HttpServlet
         }
         catch (SystemErrorException e)
         {
-            e.printStackTrace();
+        	System.out.println("SystemErrorException caught");
+        	e.printStackTrace();
             rd = sc.getRequestDispatcher(Constants.ADMIN_FAIL_JSP);
             req.setAttribute(Constants.ERROR_TXT, e.getMessage());
             rd.forward(req, res);

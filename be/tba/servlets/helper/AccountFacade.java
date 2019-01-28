@@ -14,6 +14,7 @@ import be.tba.ejb.mail.session.MailerSessionBean;
 import be.tba.ejb.pbx.session.CallRecordSqlAdapter;
 import be.tba.util.constants.AccountRole;
 import be.tba.util.constants.Constants;
+import be.tba.util.exceptions.SystemErrorException;
 import be.tba.util.exceptions.remote.AccountNotFoundException;
 import be.tba.util.invoice.InvoiceHelper;
 import be.tba.util.invoice.WoltersKluwenImport;
@@ -63,14 +64,18 @@ public class AccountFacade
         AccountCache.getInstance().update(session.getConnection());
     }
 
-    public static Vector<String> addAccount(WebSession session, HttpServletRequest req)
+    public static Vector<String> addAccount(WebSession session, HttpServletRequest req) throws SystemErrorException
     {
         System.out.println("addAccount");
+        String roleStr = req.getParameter(Constants.ACCOUNT_ROLE);
+        String superCustomer = req.getParameter(Constants.ACCOUNT_SUPER_CUSTOMER);
+        AccountRole role = AccountRole.fromShort(roleStr);
+        
         AccountEntityData newAccount = new AccountEntityData();
         SetDefaultCallPrices(newAccount);
         newAccount.setFullName(req.getParameter(Constants.ACCOUNT_FULLNAME));
-        newAccount.setRole(req.getParameter(Constants.ACCOUNT_ROLE));
-        AccountRole role = AccountRole.fromShort(newAccount.getRole());
+        newAccount.setRole(roleStr);
+        
         if (role == AccountRole.ADMIN || role == AccountRole.EMPLOYEE)
         {
             Vector<String> vErrorList = ValidateEmployeeFields(req);
@@ -90,9 +95,14 @@ public class AccountFacade
         }
         else if (role == AccountRole.SUBCUSTOMER)
         {
-            newAccount.setUserId("");
+            if (superCustomer == null || superCustomer.isEmpty() || superCustomer.equals("NO_VALUE")) 
+            {
+            	System.out.println("SystemErrorException()");
+            	throw new SystemErrorException("je bent vergeten een superklant te selecteren");
+            }
+        	newAccount.setUserId("");
             newAccount.setPassword("");
-            newAccount.setSuperCustomer(req.getParameter(Constants.ACCOUNT_SUPER_CUSTOMER));
+            newAccount.setSuperCustomer(superCustomer);
             newAccount.setFwdNumber(req.getParameter(Constants.ACCOUNT_FORWARD_NUMBER));
         }
         else
