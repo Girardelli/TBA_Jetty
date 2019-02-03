@@ -139,12 +139,12 @@ double vFacLongFwd = vCustomer.getFacLongFwd();
                             <tr>
                                 <td width="200" valign="top" class="adminsubsubtitle">supercustomer</td>
                                 <td width="500" valign="top" class="bodybold"> <%=(vCustomer.getSuperCustomer() != null ? vCustomer.getSuperCustomer() : "") %> </td>
-                            </tr>
+<!--                             </tr>
 
-<!-- 
+
 								    <select	name=<%=Constants.ACCOUNT_ROLE%>>
 <%
-
+/*
 					out.println("<option value=\"" + vCustomer.getRole() + "\">" + AccountRole.fromShort(vCustomer.getRole()).getText());
 for (Iterator n = AccountRole.iterator(); n.hasNext();)
 {
@@ -173,15 +173,13 @@ if (vCustomer.getRole().equals(AccountRole._vSubCustomer))
 	}
     out.println("</select>");
 }
+*/
 				%>
 								</td>
 							</tr> -->
 							<tr>
-								<td width="200" valign="top" class="adminsubsubtitle">volledige
-									naam</td>
-								<td width="500" valign="top"><input type=text
-									name=<%=Constants.ACCOUNT_FULLNAME%> size=50
-									value="<%=vFullName%>"></td>
+								<td width="200" valign="top" class="adminsubsubtitle">volledige	naam</td>
+								<td width="500" valign="top"><input type=text name=<%=Constants.ACCOUNT_FULLNAME%> size=50 value="<%=vFullName%>"></td>
 							</tr>
 							<tr>
 								<td width="200" valign="top" class="adminsubsubtitle">afleidnummer</td>
@@ -193,10 +191,10 @@ if (vCustomer.getRole().equals(AccountRole._vSubCustomer))
 									name=<%=Constants.ACCOUNT_FORWARD_NUMBER%>>
 										<%
 out.println("<option value=\"" + vCustomer.getFwdNumber() + "\">" + vCustomer.getFwdNumber());
-Collection vFreeNumbers = AccountCache.getInstance().getFreeNumbers();
-for (Iterator n = vFreeNumbers.iterator(); n.hasNext();)
+Collection<String> vFreeNumbers = AccountCache.getInstance().getFreeNumbers();
+for (Iterator<String> n = vFreeNumbers.iterator(); n.hasNext();)
 {
-  String vNumber = (String) n.next();
+  String vNumber = n.next();
   if (!(vNumber.equals(vCustomer.getFwdNumber())))
     out.println("<option value=\"" + vNumber + "\">" + vNumber);
 }

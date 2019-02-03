@@ -186,7 +186,11 @@ public class InvoiceHelper
 
     public void storeOrUpdate(WebSession webSession)
     {
-        mIsInitialized = true;
+        if (mNoValidCustomer) 
+        {
+        	return;
+        }
+    	mIsInitialized = true;
         CallCalendar vCalendar = new CallCalendar();
         long vStart = vCalendar.getStartOfMonth(mInvoiceData.Month, mInvoiceData.Year);
         long vEnd = vCalendar.getEndOfMonth(mInvoiceData.Month, mInvoiceData.Year);
@@ -552,7 +556,7 @@ public class InvoiceHelper
         }
         // if (mAccountEntityData.getNoInvoice() || mNoValidCustomer ||
         // !mInvoiceEntityData.getFrozenFlag())
-        if (mAccountEntityData.getNoInvoice() || mNoValidCustomer)
+        if (mNoValidCustomer ||  mAccountEntityData.getNoInvoice())
         {
             System.out.println("No invoice doc generated for " + mAccountEntityData.getFullName() + ": getNoInvoice()=" + mAccountEntityData.getNoInvoice() + ", getFrozenFlag()=" + mInvoiceEntityData.getFrozenFlag());
             return true;

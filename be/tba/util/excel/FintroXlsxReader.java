@@ -91,9 +91,10 @@ final public class FintroXlsxReader
             
             // Decide which rows to process
             int rowStart = 1;
-            int rowEnd = Math.min(1500, sheet.getLastRowNum());
-            sLogger.info("last collumn: "+ sheet.getLastRowNum());
+            int rowEnd = Math.min(1500, sheet.getLastRowNum()) + 1;
+            sLogger.info("last collumn: "+ rowEnd);
             int i;
+            int cnt = 0;
             for (i = rowStart; i < rowEnd; i++) 
             {
                Row row = sheet.getRow(i);
@@ -128,13 +129,9 @@ final public class FintroXlsxReader
                        mPaymentsMap.put(entry.accountNrCustomer, customerPaymentList);
                    }
                    customerPaymentList.add(entry);
-                   System.out.println("entry added: size=" + mPaymentsMap.size() + " ##" + entry.toString());
+                   ++cnt;
+                   System.out.println("entry added: size=" + cnt + " ##" + entry.toString());
                }
-               else
-               {
-            	   System.out.println("outgoing payment!! " + entry.toString());
-               }
-                       
             }
             sLogger.info("--------------------------------------------------------");
             processPaymentsMap();
@@ -170,31 +167,70 @@ final public class FintroXlsxReader
         {
             // for all bank account numbers in the payment list
         	String accountNrCustomer = vIter.next();
-            Collection<FintroPayment> payments = mPaymentsMap.get(accountNrCustomer);
+            Collection<FintroPayment> paymentsDoneByAccount = mPaymentsMap.get(accountNrCustomer);
             Collection<String> fwdNrs = AccountCache.getInstance().getFwdNumbersForAccountNr(accountNrCustomer);
             if (fwdNrs.isEmpty())
             {
-                // no TBA customer found with this bank account number
+            	System.out.println("-----------------------------");
+            	// no TBA customer found with this bank account number
             	// just store the first payment of this payment list made via the unknown accountNr. 
-            	System.out.println("no customer found for bank account " + accountNrCustomer);
-            	mUnknownAccountNrs.add((FintroPayment) payments.toArray()[0]);
-                continue;
+            	System.out.println("no customer found for bank account " + accountNrCustomer + ". " + paymentsDoneByAccount.size() + " payments not processed");
+            	mUnknownAccountNrs.add((FintroPayment) paymentsDoneByAccount.toArray()[0]);
+            	continue;
             }
             
-            for (Iterator<FintroPayment> vPayIter = payments.iterator(); vPayIter.hasNext();)
+            for (Iterator<FintroPayment> vPayIter = paymentsDoneByAccount.iterator(); vPayIter.hasNext();)
             {
-                // for all payments done via the bank account number
+            	System.out.println("-----------------------------");
+            	// for all payments done via the bank account number accountNrCustomer
             	FintroPayment payment = vPayIter.next();
-                int i = payment.details.indexOf("+++");
-                if (i >= 0)
+            	String structuredId = "";
+            	//System.out.println(payment.details);
+            	// check for a structured message like: 'MEDEDELING : 181200070764'
+            	int y = payment.details.indexOf("MEDEDELING : ");
+            	if (y >= 0 && payment.details.length() > y + 13 + 12)
+            	{
+            		y += 13;
+            		String flatId = payment.details.substring(y, y + 12);
+            		//System.out.println("Flat Structured ID found: " + flatId);
+            		if (flatId.length() == 12)
+            		{
+            			byte[] numberArr = flatId.getBytes();
+            			int x = 0;
+            			while (x < 12 && numberArr[x] >= '0' && numberArr[x] <= '9')
+            			{
+            				++x;
+            			}
+            			if (x == 12)
+            			{
+            				structuredId = "+++" + flatId.substring(0, 3) + "/" + flatId.substring(3, 7) + "/" + flatId.substring(7)  + "+++";
+            			}
+            			else
+            			{
+            				//System.out.println("x = " + x);
+            			}
+            		}
+            	}
+            	if (structuredId.isEmpty())
+            	{
+            		// check for a structured message like: +++090/9337/55493+++
+            		int i = payment.details.indexOf("+++");
+                    if (i >= 0)
+                    {
+                        // details hold a structured ID
+                        structuredId = payment.details.substring(i, i + 20);
+                    }
+            	}
+            	// ------------------------------------------
+            	// here we start finding a match with invoices
+            	boolean isMatchFound = false;
+                if (!structuredId.isEmpty())
                 {
-                    // details hold a structured ID
-                	System.out.println("structid");
-                    String structuredId = payment.details.substring(i, i + 20);
-                    Collection<InvoiceEntityData> vInvoices = mInvoiceSession.getUnpayedInvoiceByStructuredId(mWebSession, structuredId);
+                	System.out.println("Structured ID found: " + structuredId);
+                	Collection<InvoiceEntityData> vInvoices = mInvoiceSession.getInvoiceByStructuredId(mWebSession, structuredId);
                     if (vInvoices.size() == 1)
                     {
-                    	System.out.println("structid found in db");
+                    	//System.out.println("structid found in db");
                     	InvoiceEntityData invoice = (InvoiceEntityData) vInvoices.toArray()[0];
                     	AccountEntityData account = AccountCache.getInstance().get(invoice.getAccountFwdNr());
                         double inclBtw = (account.getNoBtw() ? invoice.getTotalCost() : invoice.getTotalCost() * 1.21);
@@ -202,25 +238,27 @@ final public class FintroXlsxReader
                                 inclBtw > payment.amount - 0.015 && inclBtw < payment.amount + 0.015  )
                         {
                             FillInvoiceWithPaymentInfo(invoice, payment);
-                            break;
                         }
                         else
                         {
-                        	System.out.println("no payment match:\r\n" + accountNrCustomer +"==" + payment.accountNrCustomer);
-                        	System.out.println("no payment match: " + (payment.amount - 0.015) + "<" + inclBtw + "<" + (payment.amount + 0.015));
+                        	mWrongValuePayments.add(new InvoicePaymentStr(invoice, payment));
                         }
+                        isMatchFound = true;
+                        // continue with the next payment
+                        continue;
                     }
                     else
                     {
-                    	System.out.println("structid not found in db");
+                    	System.out.println("ERROR: structid not found in db");
                     }
                 }
                 else
                 {
-                	System.out.println("NO structid");
+                	//System.out.println("NO structid");
                     
                 }
                 
+                // structured ID didn't work
                 Collection<InvoiceEntityData> vInvoices = mInvoiceSession.getInvoicesByValueAndFwdNrs(mWebSession, fwdNrs, payment.amount);
                 if (!vInvoices.isEmpty())
                 {
@@ -229,71 +267,66 @@ final public class FintroXlsxReader
                         InvoiceEntityData invoice = (InvoiceEntityData) vInvoices.toArray()[0];
                         //sLogger.info("1 matching invoice found." + " Payment=" + payment.id + " [" + payment.amount + "], " + invoice.getAccountFwdNr() + ", " + payment.details);
                         FillInvoiceWithPaymentInfo(invoice, payment);
+                        isMatchFound = true;
                     }
                     else
                     {
                         // multiple invoices to this customer FWD number match the payment. Try searching for the factuur nummer
-                        boolean match = false;
-                        int notPayedCnt = 0;
-                        InvoiceEntityData notPayedInvoice = null;
-                        for (Iterator<InvoiceEntityData> invoiceIter = vInvoices.iterator(); invoiceIter.hasNext();)
+                        boolean isPaid = false;
+                        // loop twice over the invoice list with the matching value:
+                        //  1ste time only check the not payed invoices
+                        //  2nd time the payed ones
+                        for (int r = 0; r < 1 && !isMatchFound; ++r)
                         {
-                            InvoiceEntityData invoice = invoiceIter.next();
-                            if (!invoice.getIsPayed())
+                        	InvoiceEntityData oldestMatchingInvoice = null;
+                        	for (Iterator<InvoiceEntityData> invoiceIter = vInvoices.iterator(); invoiceIter.hasNext();)
                             {
-                               ++notPayedCnt;
-                               notPayedInvoice = invoice;
-                            }
-                            if (invoice.getInvoiceNr().length() < 9)
-                            {
-                            	System.out.println("Invoice number to short: " + invoice.getInvoiceNr());
-                                mNotMatchingPayments.add(payment);
-                            }
-                            else
-                            {
+                                InvoiceEntityData invoice = invoiceIter.next();
+                            	if (invoice.getIsPayed() == isPaid)
+                            	{
+                            		continue;
+                            	}
                                 if (isInvoiceNrFoundInDetail(invoice.getInvoiceNr(), payment.details)) 
                                 {
                                     //sLogger.info("matching invoice found on factuur nummer in details." + " Payment=" + payment.id + " [" + payment.amount + "], " + ", " + invoice.getAccountFwdNr() + ", " + payment.details);
-                                    match = true;
                                     FillInvoiceWithPaymentInfo(invoice, payment);
+                                    isMatchFound = true;
                                     break;
                                 }
+                                if (oldestMatchingInvoice == null || invoice.getStopTime() < oldestMatchingInvoice.getStopTime())
+                                {
+                                	oldestMatchingInvoice = invoice;
+                                }
                             }
-                            if (!match)
+                            if (!isMatchFound)
                             {
-                            	// try it with the numbers of the structured message only
-                                // +++090/9337/55493+++ --> //        090933755493
-                            	String packedId;
-                            	String structMsg = invoice.getStructuredId();
-                            	if (structMsg.length() == 20)
-                            	{
-                                	packedId = structMsg.substring(3, 6);
-                                	packedId = packedId + structMsg.substring(7, 11);
-                                	packedId = packedId + structMsg.substring(12, 17);
-                                	if (invoice.getPaymentDetails().indexOf(packedId) != -1)
+                                if (!isPaid)
+                                { 
+                                	if  (oldestMatchingInvoice != null)
+	                                {
+	                                	// we found at least 1 matching not payed invoice: take the oldest
+	                                	FillInvoiceWithPaymentInfo(oldestMatchingInvoice, payment);
+	                                	isMatchFound = true;
+	                                }
+                                }
+                                else
+                                {
+                                	// multiple 	
+                                	if  (oldestMatchingInvoice != null)
                                 	{
-                                		//sLogger.info("matching invoice found on packed structured ID " + invoice.getAccountFwdNr() + ", " + payment.details);
-                                        match = true;
-                                        FillInvoiceWithPaymentInfo(invoice, payment);
-                                        break;
+                                		System.out.println("Confirmed " + oldestMatchingInvoice.getInvoiceNr() + " with \"" + payment.details + "\"");
+                                    	mConfirmedPayedInvoices.add(oldestMatchingInvoice);
+                                		isMatchFound = true;
                                 	}
-                            	}
+                                }
                             }
+                        	// do it again but this time loop over the already paid invoices
+                        	isPaid = true;
                         }
-                        if (!match)
-                        {
-                            // no match
-                            if (notPayedCnt == 1) 
-                            {
-                                // But from the multi's only 1 was not yet payed --> conclude that this payment is for the invoice
-                                FillInvoiceWithPaymentInfo(notPayedInvoice, payment);
-                            }
-                            else
-                            {
-                            	System.out.println("could not select from multiple invoice matches." + " Payment=" + payment.id + " [" + payment.amount/1.21 + "], " + " account=" + payment.accountNrCustomer + ", " + payment.details);
-                                mNotMatchingPayments.add(payment);
-                            }
-                        }
+                    }
+                    if (!isMatchFound)
+                    {
+                    	mNotMatchingPayments.add(payment);
                     }
                 }
                 else
@@ -316,12 +349,12 @@ final public class FintroXlsxReader
                     }
                     if (isInvoiceNrFound)
                     {
-                    	System.out.println("Wrong payment."  + " Payment=" + payment.id + " [" + payment.amount/1.21 + "], " + " account=" + payment.accountNrCustomer + ", "+ payment.details);
+                    	//System.out.println("Wrong payment."  + " Payment=" + payment.id + " [" + payment.amount/1.21 + "], " + " account=" + payment.accountNrCustomer + ", "+ payment.details);
                         mWrongValuePayments.add(new InvoicePaymentStr(openInvoice, payment));
                     }
                     else
                     {
-                    	System.out.println("no matching invoice found."  + " Payment=" + payment.id + " [" + payment.amount/1.21 + "], " + " account=" + payment.accountNrCustomer + ", "+ payment.details);
+                    	//System.out.println("no matching invoice found."  + " Payment=" + payment.id + " [" + payment.amount/1.21 + "], " + " account=" + payment.accountNrCustomer + ", "+ payment.details);
                         mNotMatchingPayments.add(payment);
                     }
                 }
@@ -369,11 +402,13 @@ final public class FintroXlsxReader
         mInvoiceSession.setPaymentInfo(mWebSession, invoice.getId(), payment);
         if (invoice.getIsPayed())
         {
-            mConfirmedPayedInvoices.add(invoice);
+        	//System.out.println("Confirmed " + invoice.getInvoiceNr() + " with \"" + payment.details + "\"");
+        	mConfirmedPayedInvoices.add(invoice);
         }
         else
         {
-            mNewPayedInvoices.add(invoice);
+        	//System.out.println("Mapped    " + invoice.getInvoiceNr() + " with \"" + payment.details + "\"");
+        	mNewPayedInvoices.add(invoice);
         }
     }
     
@@ -457,7 +492,11 @@ final public class FintroXlsxReader
     
     private boolean isInvoiceNrFoundInDetail(String invoiceNr, String detail)
     {
-     // subtract the 2 number parts from e.g. 'N-1801nr57'
+    	if (invoiceNr.length() < 9)
+    	{
+    		return false;
+    	}
+    	// subtract the 2 number parts from e.g. 'N-1801nr57'
         String month = invoiceNr.substring(2, 6);
         String seqnr = invoiceNr.substring(8, invoiceNr.length());
         

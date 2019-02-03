@@ -152,11 +152,11 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
         return new Vector<InvoiceEntityData>();
     }
 
-    public Collection<InvoiceEntityData> getUnpayedInvoiceByStructuredId(WebSession webSession, String structuredId)
+    public Collection<InvoiceEntityData> getInvoiceByStructuredId(WebSession webSession, String structuredId)
     {
         if (structuredId != null)
         {
-            return executeSqlQuery(webSession.getConnection(), "SELECT * FROM InvoiceEntity WHERE IsInvoiceMailed=TRUE AND IsPayed=false AND CreditId=-1 AND StructuredId='" + structuredId + "'"); 
+            return executeSqlQuery(webSession.getConnection(), "SELECT * FROM InvoiceEntity WHERE IsInvoiceMailed=TRUE AND CreditId=-1 AND StructuredId='" + structuredId + "'"); 
         }
         return new Vector<InvoiceEntityData>();
     }
