@@ -108,6 +108,7 @@ public class CallRecordFacade
                 vCallData.setIs3W_call(false);
             vCallData.setIsVirgin(false);
             vCallData.setIsNotLogged(false);
+            vCallData.setIsChanged(false);
             vCallData.setDoneBy(session.getUserId());
             vCallLogWriterSession.setCallData(session, vCallData);
             printCallInsert(session, vCallData);
@@ -121,6 +122,7 @@ public class CallRecordFacade
         newRecord.setIsNotLogged(false);
         newRecord.setIsReleased(false);
         newRecord.setIsVirgin(false);
+        newRecord.setIsChanged(false);
 
         newRecord.setIsAgendaCall(req.getParameter(Constants.RECORD_AGENDA) != null);
         newRecord.setIsSmsCall(req.getParameter(Constants.RECORD_SMS) != null);
@@ -212,6 +214,7 @@ public class CallRecordFacade
         CallRecordEntityData newRecord = new CallRecordEntityData();
         newRecord.setIsNotLogged(false);
         newRecord.setIsReleased(false);
+        newRecord.setIsChanged(false);
         newRecord.setIsAgendaCall(req.getParameter(Constants.RECORD_AGENDA) != null);
         newRecord.setIsSmsCall(req.getParameter(Constants.RECORD_SMS) != null);
         newRecord.setIsForwardCall(req.getParameter(Constants.RECORD_FORWARD) != null);
@@ -245,6 +248,7 @@ public class CallRecordFacade
 
         newRecord.setIsNotLogged(false);
         newRecord.setIsReleased(false);
+        newRecord.setIsChanged(false);
         newRecord.setIsAgendaCall(req.getParameter(Constants.RECORD_AGENDA) != null);
         newRecord.setIsSmsCall(req.getParameter(Constants.RECORD_SMS) != null);
         newRecord.setIsForwardCall(req.getParameter(Constants.RECORD_FORWARD) != null);
@@ -288,6 +292,7 @@ public class CallRecordFacade
             vNewRecord.setIsFaxCall(vNewCall.getIsFaxCall());
             vNewRecord.setIsVirgin(false);
             vNewRecord.setIsNotLogged(false);
+            vNewRecord.setIsChanged(false);
             vNewRecord.setDoneBy(webSession.getUserId());
             vQuerySession.setCallData(webSession, vNewRecord);
             vNewCall.setFwdNr(vNewRecord.getFwdNr());

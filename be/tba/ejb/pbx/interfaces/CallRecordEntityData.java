@@ -40,6 +40,7 @@ public class CallRecordEntityData extends AbstractData
     private java.lang.String longDescription;
     private boolean isVirgin;
     private boolean isFaxCall;
+    private boolean isChanged;
     private java.lang.String doneBy;
 
     public CallRecordEntityData()
@@ -341,6 +342,16 @@ public class CallRecordEntityData extends AbstractData
         this.isVirgin = isVirgin;
     }
 
+    public boolean getIsChanged()
+    {
+        return this.isChanged;
+    }
+
+    public void setIsChanged(boolean changed)
+    {
+        this.isChanged = changed;
+    }
+
     public boolean getIsFaxCall()
     {
         return this.isFaxCall;
@@ -374,7 +385,7 @@ public class CallRecordEntityData extends AbstractData
     public String toNameValueString()
     {
         StringBuffer str = new StringBuffer();
-        str.append("FwdNr='" + ((this.getFwdNr() != null) ? this.getFwdNr() : "") + "',Date='" + ((this.getDate() != null) ? this.getDate() : "") + "',Time='" + ((this.getTime() != null) ? this.getTime() : "") + "',Number='" + ((this.getNumber() != null) ? escapeQuotes(this.getNumber()) : "") + "',Name='" + ((this.getName() != null) ? escapeQuotes(this.getName()) : "") + "',Cost='" + ((this.getCost() != null) ? this.getCost() : "") + "',TimeStamp=" + getTimeStamp() + ",IsIncomingCall=" + getIsIncomingCall() + ",IsDocumented=" + getIsDocumented() + ",IsReleased=" + getIsReleased() + ",IsNotLogged=" + getIsNotLogged() + ",IsAgendaCall=" + getIsAgendaCall() + ",IsSmsCall=" + getIsSmsCall() + ",IsForwardCall=" + getIsForwardCall() + ",IsImportantCall=" + getIsImportantCall() + ",Is3W_call=" + getIs3W_call() + ",IsMailed=" + getIsMailed() + ",InvoiceLevel=" + getInvoiceLevel() + ",W3_CustomerId='" + getW3_CustomerId() + "',ShortDescription='" + ((this.getShortDescription() != null) ? escapeQuotes(this.getShortDescription()) : "") + "',LongDescription='" + ((this.getLongDescription() != null) ? escapeQuotes(this.getLongDescription()) : "") + "',IsVirgin=" + getIsVirgin() + ",IsFaxCall=" + getIsFaxCall() + ",DoneBy='" + ((this.getDoneBy() != null) ? this.getDoneBy() : "") + "' ");
+        str.append("FwdNr='" + ((this.getFwdNr() != null) ? this.getFwdNr() : "") + "',Date='" + ((this.getDate() != null) ? this.getDate() : "") + "',Time='" + ((this.getTime() != null) ? this.getTime() : "") + "',Number='" + ((this.getNumber() != null) ? escapeQuotes(this.getNumber()) : "") + "',Name='" + ((this.getName() != null) ? escapeQuotes(this.getName()) : "") + "',Cost='" + ((this.getCost() != null) ? this.getCost() : "") + "',TimeStamp=" + getTimeStamp() + ",IsIncomingCall=" + getIsIncomingCall() + ",IsDocumented=" + getIsDocumented() + ",IsReleased=" + getIsReleased() + ",IsNotLogged=" + getIsNotLogged() + ",IsAgendaCall=" + getIsAgendaCall() + ",IsSmsCall=" + getIsSmsCall() + ",IsForwardCall=" + getIsForwardCall() + ",IsImportantCall=" + getIsImportantCall() + ",Is3W_call=" + getIs3W_call() + ",IsMailed=" + getIsMailed() + ",InvoiceLevel=" + getInvoiceLevel() + ",W3_CustomerId='" + getW3_CustomerId() + "',ShortDescription='" + ((this.getShortDescription() != null) ? escapeQuotes(this.getShortDescription()) : "") + "',LongDescription='" + ((this.getLongDescription() != null) ? escapeQuotes(this.getLongDescription()) : "") + "',IsVirgin=" + getIsVirgin() + ",IsFaxCall=" + getIsFaxCall() + ",IsChanged=" + getIsChanged() + ",DoneBy='" + ((this.getDoneBy() != null) ? this.getDoneBy() : "") + "' ");
 
         return (str.toString());
     }
@@ -382,7 +393,7 @@ public class CallRecordEntityData extends AbstractData
     public String toValueString()
     {
         StringBuffer str = new StringBuffer();
-        str.append("'0','" + getFwdNr() + "','" + getDate() + "','" + getTime() + "','" + escapeQuotes(getNumber()) + "','" + escapeQuotes(getName()) + "','" + getCost() + "'," + getTimeStamp() + "," + getIsIncomingCall() + "," + getIsDocumented() + "," + getIsReleased() + "," + getIsNotLogged() + "," + getIsAgendaCall() + "," + getIsSmsCall() + "," + getIsForwardCall() + "," + getIsImportantCall() + "," + getIs3W_call() + "," + getIsMailed() + "," + getInvoiceLevel() + ",'" + getW3_CustomerId() + "','" + escapeQuotes(getShortDescription()) + "','" + escapeQuotes(getLongDescription()) + "'," + getIsVirgin() + "," + getIsFaxCall() + ",'" + getDoneBy() + "'");
+        str.append("'0','" + getFwdNr() + "','" + getDate() + "','" + getTime() + "','" + escapeQuotes(getNumber()) + "','" + escapeQuotes(getName()) + "','" + getCost() + "'," + getTimeStamp() + "," + getIsIncomingCall() + "," + getIsDocumented() + "," + getIsReleased() + "," + getIsNotLogged() + "," + getIsAgendaCall() + "," + getIsSmsCall() + "," + getIsForwardCall() + "," + getIsImportantCall() + "," + getIs3W_call() + "," + getIsMailed() + "," + getInvoiceLevel() + ",'" + getW3_CustomerId() + "','" + escapeQuotes(getShortDescription()) + "','" + escapeQuotes(getLongDescription()) + "'," + getIsVirgin() + "," + getIsFaxCall() + "," + getIsChanged() + ",'" + getDoneBy() + "'");
         return (str.toString());
     }
 

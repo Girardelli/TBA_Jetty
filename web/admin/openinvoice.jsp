@@ -167,8 +167,9 @@
 				                            {
 				%>
 				<tr bgcolor=<%=vCollor%> id=<%=vId%> class="bodytekst"
-					onclick="updateDeleteFlag('<%=vId%>','<%=vEntry.getId()%>','<%=vRowInd%>')">
-					<td width="90" valign="top"><%=vEntry.getInvoiceNr()%></td>
+					onclick="updateDeleteFlag('<%=vId%>','<%=vEntry.getId()%>','<%=vRowInd%>')"
+					ondblclick="changeUrl('/TheBusinessAssistant/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_INVOICE%>&<%=Constants.ACCOUNT_FILTER_CUSTOMER%>=<%=vEntry.getAccountFwdNr()%>&<%=Constants.INVOICE_ID%>=<%=vEntry.getId()%>');">
+                    <td width="90" valign="top"><%=vEntry.getInvoiceNr()%></td>
 					<td width="300" valign="top"><%=vAccount.getFullName()%></td>
 					<td width="50" valign="top"><%=vCostFormatter.format(vKost)%></td>
 					<td width="50" valign="top"><%=vCostFormatter.format(vKost * 1.21)%></td>
@@ -243,6 +244,12 @@ function downloadProcFile()
 {
   document.downloadfileform.<%=Constants.SRV_ACTION%>.value="<%=Constants.DOWNLOAD_FINTRO_PROCESS_TXT%>";
 }
+
+function changeUrl(newURL) 
+{
+  location=newURL;
+}
+
 
 </script>
 

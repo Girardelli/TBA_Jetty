@@ -249,6 +249,7 @@ public class CustomerDispatchServlet extends HttpServlet
 
                                 vText = vText.concat("<br><span class=\"bodygreenbold\"> " + req.getParameter(Constants.RECORD_SHORT_TEXT) + "</span><br>");
                                 vCallData.setShortDescription(vText);
+                                vCallData.setIsChanged(true);
                                 vCallLogWriterSession.setCallData(vSession, vCallData);
                             }
                         }

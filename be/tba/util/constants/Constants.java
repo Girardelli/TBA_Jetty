@@ -696,6 +696,7 @@ public class Constants
 
     // calllogger file paths
     public static final String CALLLOG_PATH = "C:\\jetty\\projects\\TBA\\calllogs";
+    public static final String INTERTELL_CALLLOG_PATH = "C:\\jetty\\projects\\TBA\\Intertel";
 
     public static final String RECORDS_OF_TODAY_PATH = "C:\\jetty\\projects\\TBA\\calllogs\\";
 

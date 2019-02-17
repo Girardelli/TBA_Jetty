@@ -819,6 +819,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
             newRecord.setIsNotLogged(false);
             newRecord.setIsDocumented(false);
             newRecord.setIsReleased(false);
+            newRecord.setIsChanged(false);
 
             if (record.isIncomingCall())
             {
@@ -1054,8 +1055,8 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
         {
             record.setIsDocumented(false);
         }
-        System.out.println("setIsDocumentedFlag = " + record.getIsDocumented());
-        System.out.println("record: " + record.toNameValueString());
+        //System.out.println("setIsDocumentedFlag = " + record.getIsDocumented());
+        //System.out.println("record: " + record.toNameValueString());
     }
 
     /**
@@ -1099,7 +1100,8 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
             entry.setLongDescription(null2EmpthyString(rs.getString(22)));
             entry.setIsVirgin(rs.getBoolean(23));
             entry.setIsFaxCall(rs.getBoolean(24));
-            entry.setDoneBy(null2EmpthyString(rs.getString(25)));
+            entry.setIsChanged(rs.getBoolean(25));
+            entry.setDoneBy(null2EmpthyString(rs.getString(26)));
             vVector.add(entry);
         }
         return vVector;

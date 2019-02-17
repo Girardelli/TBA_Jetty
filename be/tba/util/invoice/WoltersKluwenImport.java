@@ -59,19 +59,23 @@ public class WoltersKluwenImport
     	DecimalFormat costFormatter = new DecimalFormat("#0.00", DecimalFormatSymbols.getInstance(new Locale("nl", "BE")));
     	CallCalendar calendar = new CallCalendar();
     	
+    	
         File xml = new File(Constants.FILEUPLOAD_DIR + File.separator + Calendar.getInstance().getTimeInMillis() + Constants.WC_VERKOPEN_XML);
         StringBuffer xmlBuf = new StringBuffer("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");        
         xmlBuf.append("\r\n<ImportExpMPlus xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n<Sales>\r\n");
         for (Iterator<InvoiceEntityData> i = invoiceList.iterator(); i.hasNext();)
         {
             InvoiceEntityData vEntry = i.next();
-            String exclStr = costFormatter.format(vEntry.getTotalCost());
-            String vatStr = costFormatter.format(vEntry.getTotalCost()*0.21);
-            String inclStr = costFormatter.format(new Double(exclStr.replace(',', '.')) + new Double(vatStr.replace(',', '.')));
+            AccountEntityData account = AccountCache.getInstance().get(vEntry.getAccountFwdNr()); 
             
-//            String exclStr = formatValue(vEntry.getTotalCost(), costFormatter);
-//            String vatStr = formatValue(vEntry.getTotalCost()*0.21, costFormatter);
-//            String inclStr = formatValue(new Double(costFormatter.format(exclStr)) + new Double(costFormatter.format(vatStr)), costFormatter);
+            String exclStr = costFormatter.format(vEntry.getTotalCost());
+            String vatStr =  costFormatter.format(vEntry.getTotalCost()*0.21);
+            String inclStr = costFormatter.format(new Double(exclStr.replace(',', '.')) + new Double(vatStr.replace(',', '.')));
+            if (account != null && account.getNoBtw())
+            {
+            	vatStr = "0.00";
+            	inclStr = new String(exclStr);
+            }
             
             int yearInd = vEntry.getInvoiceNr().indexOf('-') + 1;
             String year = "20" + vEntry.getInvoiceNr().substring(yearInd, yearInd + 2);
@@ -83,9 +87,9 @@ public class WoltersKluwenImport
 
             xmlBuf.append("<Sale>\r\n");
             xmlBuf.append("<Customer_Prime>");
-            if (AccountCache.getInstance().get(vEntry.getAccountFwdNr()) != null)
+            if (account != null)
             {
-                xmlBuf.append(AccountCache.getInstance().get(vEntry.getAccountFwdNr()).getWcPrime());
+                xmlBuf.append(account.getWcPrime());
             }
             else
             {
