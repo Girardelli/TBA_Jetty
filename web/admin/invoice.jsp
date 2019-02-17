@@ -133,7 +133,7 @@
 		</table>
 			
 		<% 
-		if (vInvoiceData != null && vInvoiceData.getIsInvoiceMailed())
+		if (vInvoiceData != null )
 		{
 		    %>
         <table  border="0" cellspacing="2" cellpadding="2">

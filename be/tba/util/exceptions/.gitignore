@@ -1,0 +1,5 @@
+/AccessDeniedException.class
+/InvalidValueException.class
+/LostSessionException.class
+/ServiceUnavailableException.class
+/SystemErrorException.class

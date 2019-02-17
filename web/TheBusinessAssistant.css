@@ -113,3 +113,33 @@ visibility:hidden;
 	background: #9fc5e6;
 	color: black;
 }
+
+
+.tbaChat{
+    border-radius: 5px;
+    width: 300px;
+    background: #488FCD;
+    border: none;
+    color: white;
+    padding: 5px;
+    text-align: left;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 5px 2px;
+    cursor: pointer;
+}
+.tbaChat:hover {
+    background: #9fc5e6;
+    color: black;
+}
+
+.tdborder {
+border-radius: 10px;
+border-style: solid; 
+border-color: #488FCD;
+background-color:rgba(248, 153, 32, 0.2);
+padding: 10px;
+vertical-align: top;
+}
+

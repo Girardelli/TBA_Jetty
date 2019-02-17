@@ -101,16 +101,19 @@ if (vCustomerFilter == null) vCustomerFilter = Constants.ACCOUNT_FILTER_ALL;
 <form name="calllistform" method="POST"	action="/TheBusinessAssistant/AdminDispatch">
 	<input type=hidden name=<%=Constants.RECORD_TO_DELETE%> value=""> 
 	<input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.GOTO_RECORD_ADMIN%>"> 
-<table  cellspacing='0' cellpadding='0' border='0'
-	bgcolor="FFFFFF">
-
+<table  cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
 	<tr>
 		<!-- white space -->
 		<td valign="top" width="20" bgcolor="FFFFFF"></td>
 
 		<!-- account list -->
-		<td valign="top" bgcolor="FFFFFF"><br>
-		<table border="0" cellspacing="0" cellpadding="0">
+		<td valign="top" bgcolor="FFFFFF">
+			
+	
+	<table  cellspacing='20' cellpadding='0' border='0' bgcolor="FFFFFF">
+	<tr>
+	<td class="tdborder">
+		  <table border="0" cellspacing="5" cellpadding="0">
 			<tr>
 				<td width="150" valign="top" class="adminsubtitle">&nbsp;Klant</td>
 				<td width="10" valign="top">:</td>
@@ -158,16 +161,18 @@ out.println("  </select>");
 out.println("</td>");
 %>
 			</tr>
-		</table>
-		<br>
-        <input class="tbabutton" type=submit name=action value="Oproep" onclick="newCall()">
-        &nbsp;&nbsp;&nbsp;&nbsp;
-        <input class="tbabutton" type=submit name=action value="Refresh" onclick="filterCalls()">
-		<input class="tbabutton" type=submit name=action value="Verwijderen" onclick="deleteCalls()"> 
-		<input class="tbabutton" type=submit name=action value="Toevoegen" onclick="addRecord()"> 
-		<input class="tbabutton" type=submit name=action value="verzend mail"	onclick="testMail()">
-<br>
-<%if (MailError.getInstance().getError() != null) 
+			</table>
+			<table border="0" cellspacing="5" cellpadding="0">
+            <tr>
+			<td>
+		        <input class="tbabutton" type=submit name=action value="Oproep" onclick="newCall()">
+		        &nbsp;&nbsp;&nbsp;&nbsp;
+		        <input class="tbabutton" type=submit name=action value="Refresh" onclick="filterCalls()">
+				<input class="tbabutton" type=submit name=action value="Verwijderen" onclick="deleteCalls()"> 
+				<input class="tbabutton" type=submit name=action value="Toevoegen" onclick="addRecord()"> 
+				<input class="tbabutton" type=submit name=action value="verzend mail"	onclick="testMail()">
+<%
+if (MailError.getInstance().getError() != null) 
 {
 %>      
         <input class="tbabutton" type=submit name=action value="Mail Error" onclick="mailError()"><br>
@@ -192,13 +197,47 @@ out.println("</td>");
 }
 else
 {
-%>
-        <input class="tbabutton" type=submit name=action value="1 maand vroeger" onclick="showPrevious()"> 
-<%
-//	if (vSession.getMonthsBack() < 0)
+      out.println("<input class=\"tbabutton\" type=submit name=action value=\"1 maand vroeger\" onclick=\"showPrevious()\">"); 
 	  out.println("<input class=\"tbabutton\" type=submit name=action value=\"1 maand later\"  onclick=\"showNext()\">");
 }
 %>
+	
+            </td>
+            </tr>
+        </table>
+	</td>
+	
+	
+	
+	<td width="10">
+    </td>
+    <td>
+      <table>
+        <tr>
+          <td class="tdborder"><span class="admintitle">Mijn chats</span>
+            <br><br>
+            <button class="tbaChat" id="myBtn1">dit is een heel lange klant naam van iemand iuit Hwerentals</button><br>
+            <button class="tbaChat" id="myBtn2">klant 2</button><br>
+            <button class="tbaChat" id="myBtn3">klant 2</button><br>
+          </td>
+          <td width="10">
+          </td>
+          <td class="tdborder"><span class="admintitle">Andere chats</span>
+            <br><br>
+            <button class="tbaChat" id="myBtn4">klant 2</button><br>
+            <button class="tbaChat" id="myBtn5">klant 2</button><br>
+            <button class="tbaChat" id="myBtn6">klant 3</button><br>
+            <button class="tbaChat" id="myBtn6">klant 3</button><br>
+            <button class="tbaChat" id="myBtn6">klant 3</button><br>
+            <button class="tbaChat" id="myBtn6">klant 3</button>
+          </td>
+        </tr>
+      </table>
+	</td>
+	</tr>
+	</table>
+	
+			
 <%
 
 if (vRecords == null || vRecords.size() == 0)
