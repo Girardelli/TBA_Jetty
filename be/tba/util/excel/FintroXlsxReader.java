@@ -276,13 +276,13 @@ final public class FintroXlsxReader
                         // loop twice over the invoice list with the matching value:
                         //  1ste time only check the not payed invoices
                         //  2nd time the payed ones
-                        for (int r = 0; r < 1 && !isMatchFound; ++r)
+                        for (int r = 0; r < 2 && !isMatchFound; ++r)
                         {
                         	InvoiceEntityData oldestMatchingInvoice = null;
                         	for (Iterator<InvoiceEntityData> invoiceIter = vInvoices.iterator(); invoiceIter.hasNext();)
                             {
                                 InvoiceEntityData invoice = invoiceIter.next();
-                            	if (invoice.getIsPayed() == isPaid)
+                            	if (invoice.getIsPayed() != isPaid)
                             	{
                             		continue;
                             	}
@@ -321,6 +321,7 @@ final public class FintroXlsxReader
                                 }
                             }
                         	// do it again but this time loop over the already paid invoices
+                            //System.out.println("do it again and try to find it in the paid invoices");
                         	isPaid = true;
                         }
                     }
@@ -492,6 +493,7 @@ final public class FintroXlsxReader
     
     private boolean isInvoiceNrFoundInDetail(String invoiceNr, String detail)
     {
+    	//System.out.println("isInvoiceNrFoundInDetail(invoiceNr=" + invoiceNr + ", detail=" + detail + ")");
     	if (invoiceNr.length() < 9)
     	{
     		return false;
@@ -499,7 +501,8 @@ final public class FintroXlsxReader
     	// subtract the 2 number parts from e.g. 'N-1801nr57'
         String month = invoiceNr.substring(2, 6);
         String seqnr = invoiceNr.substring(8, invoiceNr.length());
-        
+        //System.out.println("month=" + month + ", seqnr=" + seqnr );
+    	
         return (detail.indexOf(month) != -1 && detail.indexOf(seqnr) != -1);
     }
 }
