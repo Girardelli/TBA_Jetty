@@ -132,10 +132,9 @@ out.println("</tr>");
 <br>
 <br>
 <br>
-		<input type=hidden
-			name=<%=Constants.SRV_ACTION%> value="<%=Constants.SAVE_RECORD%>"> <input
-			type=submit name=action value=" Bewaar "> <input class="tbabutton" type=submit
-			value=" Terug " onclick="cancelUpdate();">
+		<input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.SAVE_RECORD%>"> 
+		<input class="tbabutton" type=submit name=action value=" Bewaar "> 
+		<input class="tbabutton" type=submit value=" Terug " onclick="cancelUpdate();">
 		</form>
 
 <script type="text/javascript">

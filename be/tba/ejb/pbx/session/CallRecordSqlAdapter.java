@@ -76,8 +76,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
                 // Long vTimeStamp = new Long(vEntry.getTimeStamp());
                 vVector.add(vEntry);
             }
-            // System.out.println( "getAllForDummy: " + vCollection.size() + "
-            // entries." );
+            // System.out.println( "getAllForDummy: " + vCollection.size() + entries." );
             return vVector;
         }
         catch (Exception e)
@@ -506,6 +505,22 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
             {
                 return executeSqlQuery(webSession.getConnection(), "SELECT * FROM CallRecordEntity WHERE IsDocumented=TRUE AND IsMailed=FALSE AND FwdNr='" + fwdNr + "' ORDER BY TimeStamp DESC");
             }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return new Vector<CallRecordEntityData>();
+    }
+
+    /**
+     * @ejb:interface-method view-type="remote"
+     */
+    public Collection<CallRecordEntityData> getChatRecords(WebSession webSession)
+    {
+        try
+        {
+            return executeSqlQuery(webSession.getConnection(), "SELECT * FROM CallRecordEntity WHERE IsDocumented=TRUE AND IsChanged=TRUE ORDER BY TimeStamp DESC");
         }
         catch (Exception e)
         {
@@ -1045,6 +1060,31 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
         setUnRelease(webSession, Integer.parseInt(key));
     }
 
+    public void setShortText(WebSession webSession, int key, String text, boolean isKlant)
+    {
+    	CallRecordEntityData data = getRow(webSession.getConnection(), key);
+        if (data != null)
+        {
+            String strippedText = text;
+            while (strippedText.lastIndexOf("\r\n") >= strippedText.length())
+            {
+            	strippedText = strippedText.substring(0, strippedText.length());
+            }
+        	if (isKlant) 
+        	{
+        		data.setShortDescription(data.getShortDescription() + "<br>&nbsp;&nbsp;<span class=\"bodygreenbold\">" + text + "</span>");
+                data.setIsChanged(true);
+        	}
+        	else
+        	{
+        		data.setShortDescription(data.getShortDescription() + "<br>" + webSession.getUserId() + ": " + text);
+        		data.setIsChanged(false);
+            }
+        	updateRow(webSession.getConnection(), data);
+        }
+    }
+
+    
     static public void setIsDocumentedFlag(CallRecordEntityData record)
     {
         if (record.getNumber().length() != 0 && record.getName().length() != 0 && ((String) record.getShortDescription()).length() != 0 && (!record.getIs3W_call() || (record.getW3_CustomerId() != null && record.getW3_CustomerId().length() != 0)))
@@ -1059,6 +1099,10 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
         //System.out.println("record: " + record.toNameValueString());
     }
 
+    
+    
+    
+    
     /**
      * Describes the instance and its content for debugging purpose
      *

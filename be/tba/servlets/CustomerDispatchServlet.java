@@ -246,11 +246,7 @@ public class CustomerDispatchServlet extends HttpServlet
                             if (vText.length() > 0)
                             {
                                 CallRecordSqlAdapter vCallLogWriterSession = new CallRecordSqlAdapter();
-
-                                vText = vText.concat("<br><span class=\"bodygreenbold\"> " + req.getParameter(Constants.RECORD_SHORT_TEXT) + "</span><br>");
-                                vCallData.setShortDescription(vText);
-                                vCallData.setIsChanged(true);
-                                vCallLogWriterSession.setCallData(vSession, vCallData);
+                                vCallLogWriterSession.setShortText(vSession, vCallData.getId(), req.getParameter(Constants.RECORD_SHORT_TEXT), true);
                             }
                         }
                     }

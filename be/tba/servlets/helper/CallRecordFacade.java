@@ -32,6 +32,17 @@ public class CallRecordFacade
         CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
         session.setCurrentRecord(vQuerySession.getRecord(session, vKey));
     }
+    
+    public static void updateShortText(HttpServletRequest req, WebSession session)
+    {
+        String vKey = (String) req.getParameter(Constants.RECORD_ID);
+        String shortText = (String) req.getParameter(Constants.RECORD_SHORT_TEXT);
+
+        CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
+        vQuerySession.setShortText(session, Integer.parseInt(vKey), shortText, false);
+    }
+    
+    
 
     public static void saveRecord(HttpServletRequest req, WebSession session)
     {

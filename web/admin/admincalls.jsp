@@ -26,6 +26,7 @@ private StringBuilder allEntryIds;
 %>
 
 <%
+StringBuffer modalScriptStrBuffer = new StringBuffer("\r\n//#######  My Modal scripts ######\r\n\r\n");
 try
 {
 vSession.setCallingJsp(Constants.ADMIN_CALLS_JSP);
@@ -99,7 +100,9 @@ if (vCustomerFilter == null) vCustomerFilter = Constants.ACCOUNT_FILTER_ALL;
 <body>
 <p><span class="admintitle"> Oproepenlijst: <%=vRecords.size()%> oproepen </span></p>
 <form name="calllistform" method="POST"	action="/TheBusinessAssistant/AdminDispatch">
-	<input type=hidden name=<%=Constants.RECORD_TO_DELETE%> value=""> 
+	<input type=hidden name=<%=Constants.RECORD_ID%> value=""> 
+    <input type=hidden name=<%=Constants.RECORD_SHORT_TEXT%> value="yves"> 
+    <input type=hidden name=<%=Constants.RECORD_TO_DELETE%> value=""> 
 	<input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.GOTO_RECORD_ADMIN%>"> 
 <table  cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
 	<tr>
@@ -206,30 +209,120 @@ else
             </tr>
         </table>
 	</td>
-	
-	
-	
 	<td width="10">
     </td>
-    <td>
+<%
+Collection<CallRecordEntityData> chatRecords = vQuerySession.getChatRecords(vSession);
+
+%>    
+    <td class="tdborder">
       <table>
         <tr>
-          <td class="tdborder"><span class="admintitle">Mijn chats</span>
+          <td class="tdborder" width="300px"><span class="admintitle">Mijn chats</span>
             <br><br>
-            <button class="tbaChat" id="myBtn1">dit is een heel lange klant naam van iemand iuit Hwerentals</button><br>
-            <button class="tbaChat" id="myBtn2">klant 2</button><br>
-            <button class="tbaChat" id="myBtn3">klant 2</button><br>
+<%
+int cnt = 0; 
+StringBuffer modalStrBuffer = new StringBuffer("<!-- \r\n#######  My Modals ######-->\r\n\r\n");
+
+if (!chatRecords.isEmpty())
+{
+    for (Iterator<CallRecordEntityData> i = chatRecords.iterator(); i.hasNext();)
+	 {
+	     CallRecordEntityData vEntry = i.next();
+	     System.out.println(vEntry.getDate() + ", " + vEntry.getTime());
+         
+	     if (vEntry.getDoneBy().equalsIgnoreCase(vSession.getUserId()))
+	     {
+	    	 System.out.println(vEntry.getDoneBy() + " == " + vSession.getUserId());
+	    	 ++cnt;
+	    	 String modalBtnId = "modalBtn" + cnt;
+             String modalId = "modal" + cnt;
+             String spanId = "spanModal" + cnt;
+             String spanVar = "spanVar" + cnt;
+             String modalText = "modalText" + cnt;
+             out.println("<span class=\"tbaChat\" id=\"" + modalBtnId + "\" onclick=\"openModal('" + modalId + "');\"  >" + vEntry.getDate() + ", " + vEntry.getTime() + "&nbsp;&nbsp;" + AccountCache.getInstance().get(vEntry.getFwdNr()).getFullName() + "</span><br>");
+             // fill the modal
+	    	 modalStrBuffer.append("<div id=\"" + modalId + "\" class=\"tbaModal\">\r\n");
+             modalStrBuffer.append("<div class=\"modal-content\">\r\n");
+	         modalStrBuffer.append("<span id=\"" + spanId + "\" class=\"close\">&times;</span>\r\n");
+	         modalStrBuffer.append("<p>" + vEntry.getDate() + ", " + vEntry.getTime() + "&nbsp;&nbsp;<b>\r\n");
+             modalStrBuffer.append(AccountCache.getInstance().get(vEntry.getFwdNr()).getFullName() + "</b></p>\r\n");
+             modalStrBuffer.append("<div class=\"old-modal-content\">" + vEntry.getShortDescription() + "<br><br>\r\n");
+             modalStrBuffer.append("<textarea class=\"tbatextarea\" id=\"" + modalText + "\"></textarea></div>\r\n");
+	    	 modalStrBuffer.append("<p align=\"right\">\r\n");
+	    	 //modalStrBuffer.append("<button class=\"tbabutton\" id=\"myBewaar\">Cancel</button>\r\n");
+	    	 //modalStrBuffer.append("<button class=\"tbabutton\" id=\"myCancel\">Bewaar</button>\r\n");
+	    	 modalStrBuffer.append("<input class=\"tbabutton\" type=submit name=action value=\"Bewaar\" onclick=\"updateModalText('" + vEntry.getId() + "', '" + modalText + "')\">");
+	    	 modalStrBuffer.append("</p></div></div>\r\n\r\n");
+	    	 
+	    	// fill the script
+	    	 modalScriptStrBuffer.append("var " + spanVar + "= document.getElementById(\"" + spanId + "\");\r\n");
+             modalScriptStrBuffer.append(spanVar + ".onclick = function() {modal.style.display = \"none\"; }\r\n\r\n");
+	     }
+         else
+         {
+             System.out.println(vEntry.getDate() + ", ##" + vEntry.getDoneBy() + "## != ##" + vSession.getUserId() + "##");
+             
+         }
+
+	 }
+	if (cnt == 0)
+	{
+		out.println("<p>Geen Chats</p>");
+	}
+	
+}
+
+%>            
           </td>
           <td width="10">
           </td>
-          <td class="tdborder"><span class="admintitle">Andere chats</span>
+          <td class="tdborder" width="300px"><span class="admintitle">Andere chats</span>
             <br><br>
-            <button class="tbaChat" id="myBtn4">klant 2</button><br>
-            <button class="tbaChat" id="myBtn5">klant 2</button><br>
-            <button class="tbaChat" id="myBtn6">klant 3</button><br>
-            <button class="tbaChat" id="myBtn6">klant 3</button><br>
-            <button class="tbaChat" id="myBtn6">klant 3</button><br>
-            <button class="tbaChat" id="myBtn6">klant 3</button>
+<%
+cnt = 0;
+if (!chatRecords.isEmpty())
+{
+    for (Iterator<CallRecordEntityData> i = chatRecords.iterator(); i.hasNext();)
+     {
+         CallRecordEntityData vEntry = i.next();
+         if (!vEntry.getDoneBy().equalsIgnoreCase(vSession.getUserId()))
+         {
+        	 System.out.println(vEntry.getDoneBy() + " == " + vSession.getUserId());
+             ++cnt;
+             String modalBtnId = "modalBtn_" + cnt;
+             String modalId = "modal_" + cnt;
+             String spanId = "spanModal_" + cnt;
+             String spanVar = "spanVar_" + cnt;
+             String modalText = "modalText_" + cnt;
+             out.println("<span class=\"tbaChat\" id=\"" + modalBtnId + "\" onclick=\"openModal('" + modalId + "');\"  >" + vEntry.getDate() + ", " + vEntry.getTime() + "&nbsp;&nbsp;" + AccountCache.getInstance().get(vEntry.getFwdNr()).getFullName() + "</span><br>");
+             // fill the modal
+             modalStrBuffer.append("<div id=\"" + modalId + "\" class=\"tbaModal\">\r\n");
+             modalStrBuffer.append("<div class=\"modal-content\">\r\n");
+             modalStrBuffer.append("<span id=\"" + spanId + "\" class=\"close\">&times;</span>\r\n");
+             modalStrBuffer.append("<p>" + vEntry.getDate() + ", " + vEntry.getTime() + "&nbsp;&nbsp;<b>\r\n");
+             modalStrBuffer.append(AccountCache.getInstance().get(vEntry.getFwdNr()).getFullName() + "</b></p>\r\n");
+             modalStrBuffer.append("<div class=\"old-modal-content\">" + vEntry.getShortDescription() + "<br><br>\r\n");
+             modalStrBuffer.append("<textarea  class=\"tbatextarea\" id=\"" + modalText + "\"></textarea></div>\r\n");
+             modalStrBuffer.append("<p align=\"right\">\r\n");
+             modalStrBuffer.append("<input class=\"tbabutton\" type=submit name=action value=\"Bewaar\" onclick=\"updateModalText('" + vEntry.getId() + "', '" + modalText + "')\">");
+             modalStrBuffer.append("</p></div></div>\r\n");
+             // fill the script
+             modalScriptStrBuffer.append("var " + spanVar + "= document.getElementById(\"" + spanId + "\");\r\n");
+             modalScriptStrBuffer.append(spanVar + ".onclick = function() {modal.style.display = \"none\"; }\r\n\r\n");
+         }
+         else
+         {
+        	 System.out.println(vEntry.getDate() + ", ##" + vEntry.getDoneBy() + "## != ##" + vSession.getUserId() + "##");
+             
+         }
+     }
+    if (cnt == 0)
+    {
+        out.println("<p>Geen Chats</p>");
+    }
+}
+%>            
           </td>
         </tr>
       </table>
@@ -383,14 +476,19 @@ if (vRecords != null && vRecords.size() > 0)
   if (vSession.getDaysBack() > 0)
     out.println("&nbsp;&nbsp;&nbsp;<input class=\"tbabutton\" type=submit name=action value=\"Volgende Oproepen\"  onclick=\"showNext()\">");
 }
+out.println(modalStrBuffer.toString());
+
+
 }
 catch (Exception e)
 {
     e.printStackTrace();
 }
+
 %>
 
 <script type="text/javascript">
+
 var linesToDelete = new Array();
 
 window.name="callswindow"; 
@@ -544,6 +642,38 @@ function newCall()
 	document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.NEW_CALL%>";
 }
 
+function updateModalText(id, modalText)
+{
+	document.calllistform.<%=Constants.RECORD_ID%>.value=id;
+	document.calllistform.<%=Constants.RECORD_SHORT_TEXT%>.value=document.getElementById(modalText).value;
+	document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.UPDATE_SHORT_TEXT%>";
+	//alert(document.calllistform.<%=Constants.RECORD_SHORT_TEXT%>.value);
+}
+
+//Get the modal
+var modal;
+
+function openModal(modalId)
+{
+    modal = document.getElementById(modalId);
+    modal.style.display = "block";
+}
+
+//When the user clicks the button, open the modal 
+//btn.onclick = function() {
+//modal.style.display = "block";
+//}
+
+//When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+if (event.target == modal) {
+modal.style.display = "none";
+}
+}
+
+<%
+out.println(modalScriptStrBuffer.toString());
+%>
 </script>
 
 </body>

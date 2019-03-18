@@ -319,7 +319,14 @@ public class CallRecordEntityData extends AbstractData
 
     public void setShortDescription(java.lang.String shortDescription)
     {
-        this.shortDescription = shortDescription;
+//        if (!shortDescription.endsWith("\r\n\r\n"))
+//        {
+//        	this.shortDescription = shortDescription + "\r\n\r\n";
+//        }
+//        else
+//        {
+        	this.shortDescription = shortDescription;
+//        }
     }
 
     public java.lang.String getLongDescription()

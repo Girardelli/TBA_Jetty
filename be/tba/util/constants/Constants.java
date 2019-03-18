@@ -428,6 +428,7 @@ public class Constants
     public static final String RECORD_SHOW_PREV_10 = "RECORD_SHOW_PREV_10";
 
     public static final String RECORD_SHOW_NEXT_10 = "RECORD_SHOW_NEXT_10";
+    public static final String UPDATE_SHORT_TEXT = "UPDATE_SHORT_TEXT";
 
     public static final String SEARCH_SHOW_PREV = "SEARCH_SHOW_PREV";
 

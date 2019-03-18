@@ -133,7 +133,7 @@
 		</table>
 			
 		<% 
-		if (vInvoiceData != null )
+		if (vInvoiceData != null)
 		{
 		    %>
         <table  border="0" cellspacing="2" cellpadding="2">

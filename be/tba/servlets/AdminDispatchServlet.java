@@ -273,6 +273,16 @@ public class AdminDispatchServlet extends HttpServlet
                     rd = sc.getRequestDispatcher(Constants.ADMIN_CALLS_JSP);
                 }
 
+
+                // ==============================================================================================
+                // UPDATE_SHORT_TEXT
+                // ==============================================================================================
+                else if (vAction.equals(Constants.UPDATE_SHORT_TEXT))
+                {
+                	CallRecordFacade.updateShortText(req, vSession);
+                    rd = sc.getRequestDispatcher(Constants.ADMIN_CALLS_JSP);
+                }
+                
                 // ==============================================================================================
                 // MODIFY RECORD
                 // ==============================================================================================
