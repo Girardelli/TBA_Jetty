@@ -14,10 +14,6 @@
   <servlet>
     <servlet-name>LoginServlet</servlet-name>
     <servlet-class>be.tba.servlets.LoginServlet</servlet-class>
-    <!-- <init-param>
-    <param-name>reporthome</param-name>
-    <param-value>/JREntServer</param-value>
-    </init-param> -->
   </servlet>
 
   <servlet>
