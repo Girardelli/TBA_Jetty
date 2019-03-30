@@ -229,11 +229,10 @@ if (!chatRecords.isEmpty())
     for (Iterator<CallRecordEntityData> i = chatRecords.iterator(); i.hasNext();)
 	 {
 	     CallRecordEntityData vEntry = i.next();
-	     System.out.println(vEntry.getDate() + ", " + vEntry.getTime());
-         
+	     
 	     if (vEntry.getDoneBy().equalsIgnoreCase(vSession.getUserId()))
 	     {
-	    	 System.out.println(vEntry.getDoneBy() + " == " + vSession.getUserId());
+	    	 //System.out.println(vEntry.getDoneBy() + " == " + vSession.getUserId());
 	    	 ++cnt;
 	    	 String modalBtnId = "modalBtn" + cnt;
              String modalId = "modal" + cnt;
@@ -259,12 +258,6 @@ if (!chatRecords.isEmpty())
 	    	 modalScriptStrBuffer.append("var " + spanVar + "= document.getElementById(\"" + spanId + "\");\r\n");
              modalScriptStrBuffer.append(spanVar + ".onclick = function() {modal.style.display = \"none\"; }\r\n\r\n");
 	     }
-         else
-         {
-             System.out.println(vEntry.getDate() + ", ##" + vEntry.getDoneBy() + "## != ##" + vSession.getUserId() + "##");
-             
-         }
-
 	 }
 	if (cnt == 0)
 	{
@@ -288,7 +281,7 @@ if (!chatRecords.isEmpty())
          CallRecordEntityData vEntry = i.next();
          if (!vEntry.getDoneBy().equalsIgnoreCase(vSession.getUserId()))
          {
-        	 System.out.println(vEntry.getDoneBy() + " == " + vSession.getUserId());
+        	 //System.out.println(vEntry.getDoneBy() + " == " + vSession.getUserId());
              ++cnt;
              String modalBtnId = "modalBtn_" + cnt;
              String modalId = "modal_" + cnt;
@@ -310,11 +303,6 @@ if (!chatRecords.isEmpty())
              // fill the script
              modalScriptStrBuffer.append("var " + spanVar + "= document.getElementById(\"" + spanId + "\");\r\n");
              modalScriptStrBuffer.append(spanVar + ".onclick = function() {modal.style.display = \"none\"; }\r\n\r\n");
-         }
-         else
-         {
-        	 System.out.println(vEntry.getDate() + ", ##" + vEntry.getDoneBy() + "## != ##" + vSession.getUserId() + "##");
-             
          }
      }
     if (cnt == 0)

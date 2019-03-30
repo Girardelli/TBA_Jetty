@@ -153,6 +153,13 @@ public class TaskSqlAdapter extends AbstractSqlAdapter<TaskEntityData>
         }
         return null;
     }
+    
+    public void removeTasks(WebSession webSession, int accountID)
+    {
+        executeSqlQuery(webSession.getConnection(), "DELETE FROM TaskEntity WHERE FwdNr='" + accountID + "'");
+    }
+
+
 
     /**
      * Describes the instance and its content for debugging purpose

@@ -459,7 +459,7 @@ public class AdminDispatchServlet extends HttpServlet
                         if (role == AccountRole.ADMIN || role == AccountRole.EMPLOYEE)
                         {
                             System.out.println("goto account delete: setCurrentAccountId=" + vLtd + ", account fwdnr=" + vFwdNr);
-                            AccountFacade.deleteAccount(vSession, vLtd);
+                            AccountFacade.deleteAccount(vSession, Integer.parseInt(vLtd));
                             rd = sc.getRequestDispatcher(Constants.ADMIN_EMPLOYEE_JSP);
                         }
                         else
@@ -500,7 +500,7 @@ public class AdminDispatchServlet extends HttpServlet
                     System.out.println("account delete: key=" + vSession.getCurrentAccountId() + ", fwd nr=" + accountFwdNr);
 
                     AccountRole role = AccountRole.fromShort(accountData.getRole());
-                    AccountFacade.deleteAccount(vSession, vSession.getCurrentAccountId());
+                    AccountFacade.deleteAccount(vSession, Integer.parseInt(vSession.getCurrentAccountId()));
                     if (role == AccountRole.ADMIN || role == AccountRole.EMPLOYEE)
                     {
                         rd = sc.getRequestDispatcher(Constants.ADMIN_EMPLOYEE_JSP);

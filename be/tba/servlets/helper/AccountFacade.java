@@ -12,6 +12,7 @@ import be.tba.ejb.account.interfaces.AccountEntityData;
 import be.tba.ejb.account.session.AccountSqlAdapter;
 import be.tba.ejb.mail.session.MailerSessionBean;
 import be.tba.ejb.pbx.session.CallRecordSqlAdapter;
+import be.tba.ejb.task.session.TaskSqlAdapter;
 import be.tba.util.constants.AccountRole;
 import be.tba.util.constants.Constants;
 import be.tba.util.exceptions.SystemErrorException;
@@ -23,29 +24,9 @@ import be.tba.servlets.session.WebSession;
 
 public class AccountFacade
 {
-    public static void deleteAccount(WebSession session, String accountNr)
+    public static void deleteAccount(WebSession session, int accountID)
     {
-        String accountFwdNr = AccountCache.getInstance().idToFwdNr(Integer.parseInt(accountNr));
-        AccountEntityData vRemovedAccount = AccountCache.getInstance().get(accountFwdNr);
-
-        AccountSqlAdapter vAccountSession = new AccountSqlAdapter();
-        vAccountSession.deleteRow(session.getConnection(), Integer.parseInt(accountNr));
-        if (vRemovedAccount != null)
-        {
-            if (vRemovedAccount.getHasSubCustomers())
-            {
-                Collection<AccountEntityData> list = AccountCache.getInstance().getSubCustomersList(accountFwdNr);
-                for (Iterator<AccountEntityData> vIter = list.iterator(); vIter.hasNext();)
-                {
-                    AccountEntityData vValue = vIter.next();
-                    vAccountSession.deleteRow(session.getConnection(), vValue.getId());
-                    System.out.println("deleteAccount: also deleted subcustomer " + vValue.getFullName());
-                }
-            }
-        }
-
-        CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
-        vQuerySession.removeAccountCalls(session, accountNr);
+    	RecursiveDelete(session, accountID);
         AccountCache.getInstance().update(session.getConnection());
     }
 
@@ -333,6 +314,34 @@ public class AccountFacade
         return vAccount;
     }
 
+    private static void RecursiveDelete(WebSession session, int accountID)
+    {
+        String accountFwdNr = AccountCache.getInstance().idToFwdNr(accountID);
+        AccountEntityData vRemovedAccount = AccountCache.getInstance().get(accountFwdNr);
+
+        if (vRemovedAccount != null)
+        {
+            if (vRemovedAccount.getHasSubCustomers())
+            {
+                Collection<AccountEntityData> list = AccountCache.getInstance().getSubCustomersList(accountFwdNr);
+                for (Iterator<AccountEntityData> vIter = list.iterator(); vIter.hasNext();)
+                {
+                    AccountEntityData vValue = vIter.next();
+                    RecursiveDelete(session, vValue.getId());
+                    System.out.println("deleteAccount: also deleted subcustomer " + vValue.getFullName());
+                }
+            }
+        }
+        AccountSqlAdapter vAccountSession = new AccountSqlAdapter();
+        vAccountSession.deleteRow(session.getConnection(), accountID);
+        
+        CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
+        vQuerySession.removeAccountCalls(session, accountID);
+        TaskSqlAdapter taskAdapter = new TaskSqlAdapter();
+        taskAdapter.removeTasks(session, accountID);
+    }
+
+    
     private static Vector<String> ValidateEmployeeFields(HttpServletRequest req)
     {
         Vector<String> vFormFaults = new Vector<String>();

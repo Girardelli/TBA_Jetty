@@ -613,10 +613,10 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
     /**
      * @ejb:interface-method view-type="remote"
      */
-    public void removeAccountCalls(WebSession webSession, String accountNr)
+    public void removeAccountCalls(WebSession webSession, int accountID)
     {
-        System.out.println("removeAccountCalls for " + accountNr);
-        executeSqlQuery(webSession.getConnection(), "DELETE FROM CallRecordEntity WHERE FwdNr='" + accountNr + "'");
+        System.out.println("removeAccountCalls for " + accountID);
+        executeSqlQuery(webSession.getConnection(), "DELETE FROM CallRecordEntity WHERE FwdNr='" + accountID + "'");
     }
 
     private void collectInvoiceCalls(WebSession webSession, AccountEntityData customer, Collection<CallRecordEntityData> callList, long start, long stop)
