@@ -2,7 +2,7 @@
 <%@ include file="adminheader.jsp" %>
 
 <head>
-<meta HTTP-EQUIV="Refresh" content="<%=Constants.REFRESH%>;URL=\TheBusinessAssistant\admin\admincalls.jsp">
+<meta HTTP-EQUIV="Refresh" content="<%=Constants.REFRESH%>;URL=\tba\admin\admincalls.jsp">
 <title>TheBusinessAssistant administrator pages</title>
 </head>
 
@@ -36,7 +36,7 @@ be.tba.util.data.*"%>
 			<td valign="top" bgcolor="FFFFFF"><br>
 			<br>
 			<span class="bodytekst"> <!-- action name must be a URI name as it is set in the <application>.xml servlet-mapping tag.-->
-			<form name="newcallform" method="POST" action="/TheBusinessAssistant/AdminDispatch">
+			<form name="newcallform" method="POST" action="/tba/AdminDispatch">
 			<%
 try
 {
@@ -93,9 +93,9 @@ HttpSession vHttpSession = request.getSession();
           String vNumber = vEntry.getNumber();
           String vInOut;
           if (vEntry.getIsIncomingCall())
-            vInOut = "\"/TheBusinessAssistant/images/incall.gif\"";
+            vInOut = "\"/tba/images/incall.gif\"";
           else
-            vInOut = "\"/TheBusinessAssistant/images/outcall.gif\"";
+            vInOut = "\"/tba/images/outcall.gif\"";
       %>
 						<tr bgcolor="FFCC66" id=<%=vId%> class="bodytekst"
 							onmouseover="hooverOnRow('<%=vId%>', '<%=vEntry.getId()%>')"
@@ -188,66 +188,66 @@ else
 				<tr>
 					<td width="50"></td>
 					<td width="170" valign="top" class="adminsubsubtitle">
-					   <img src="/TheBusinessAssistant/images/blueSphere.gif" width="10" height="10">&nbsp;Belangrijke oproep
+					   <img src="/tba/images/blueSphere.gif" width="10" height="10">&nbsp;Belangrijke oproep
 					</td>
 					<td width="530" valign="top" class="adminsubsubtitle">
 					   <input type=checkbox name=<%=Constants.RECORD_IMPORTANT%> value="<%=Constants.YES%>" <%=(vNewRecord.getIsImportantCall() ? " checked" : "")%>>&nbsp;&nbsp;
-					   <img	src="/TheBusinessAssistant/images/important.gif" alt="belangrijke oproep!" height="13" border="0">
+					   <img	src="/tba/images/important.gif" alt="belangrijke oproep!" height="13" border="0">
 					</td>
 				</tr>
 				<tr>
 					<td width="50"></td>
 					<td width="170" valign="top" class="adminsubsubtitle"><img
-						src="/TheBusinessAssistant/images/blueSphere.gif" width="10"
+						src="/tba/images/blueSphere.gif" width="10"
 						height="10">&nbsp;SMS verstuurd</td>
 					<td width="530" valign="top" class="adminsubsubtitle"><input
 						type=checkbox name=<%=Constants.RECORD_SMS%>
 						value="<%=Constants.YES%>"
 						<%=(vNewRecord.getIsSmsCall() ? "checked=\"checked\"" : "")%>>&nbsp;&nbsp;<img
-						src="/TheBusinessAssistant/images/sms.gif"
+						src="/tba/images/sms.gif"
 						alt="wij hebben een SMS bericht gestuurd betreffende deze oproep"
 						height="13" border="0"></td>
 				</tr>
 				<tr>
 					<td width="50"></td>
 					<td width="170" valign="top" class="adminsubsubtitle"><img
-						src="/TheBusinessAssistant/images/blueSphere.gif" width="10"
+						src="/tba/images/blueSphere.gif" width="10"
 						height="10">&nbsp;Afspraak toegevoegd</td>
 					<td width="530" valign="top" class="adminsubsubtitle"><input
 						type=checkbox name=<%=Constants.RECORD_AGENDA%>
 						value="<%=Constants.YES%>"
 						<%=(vNewRecord.getIsAgendaCall() ? "checked=\"checked\"" : "")%>>&nbsp;&nbsp;<img
-						src="/TheBusinessAssistant/images/agenda.gif"
+						src="/tba/images/agenda.gif"
 						alt="afspraak toegevoegd in uw agenda" height="13" border="0"></td>
 				</tr>
 				<tr>
 					<td width="50"></td>
 					<td width="170" valign="top" class="adminsubsubtitle"><img
-						src="/TheBusinessAssistant/images/blueSphere.gif" width="10"
+						src="/tba/images/blueSphere.gif" width="10"
 						height="10">&nbsp;Oproep doorgeschakeld</td>
 					<td width="530" valign="top" class="adminsubsubtitle"><input
 						type=checkbox name=<%=Constants.RECORD_FORWARD%>
 						value="<%=Constants.YES%>"
 						<%=(vNewRecord.getIsForwardCall() ? "checked=\"checked\"" : "")%>>&nbsp;&nbsp;<img
-						src="/TheBusinessAssistant/images/telefoon.gif"
+						src="/tba/images/telefoon.gif"
 						alt="oproep doorgeschakeld naar u" height="13" border="0"></td>
 				</tr>
 				<tr>
 					<td width="50"></td>
 					<td width="170" valign="top" class="adminsubsubtitle"><img
-						src="/TheBusinessAssistant/images/blueSphere.gif" width="10"
+						src="/tba/images/blueSphere.gif" width="10"
 						height="10">&nbsp;Fax</td>
 					<td width="530" valign="top" class="adminsubsubtitle"><input
 						type=checkbox name=<%=Constants.RECORD_FAX%>
 						value="<%=Constants.YES%>"
 						<%=(vNewRecord.getIsFaxCall() ? "checked=\"checked\"" : "")%>>&nbsp;&nbsp;<img
-						src="/TheBusinessAssistant/images/fax.gif"
+						src="/tba/images/fax.gif"
 						alt="binnenkomende fax voor u verwerkt" height="13" border="0"></td>
 				</tr>
                 <tr>
 					<td width="50"></td>
 					<td width="170" valign="top" class="adminsubsubtitle"><img
-						src="/TheBusinessAssistant/images/blueSphere.gif" width="10"
+						src="/tba/images/blueSphere.gif" width="10"
 						height="10">&nbsp;Naam</td>
 					<td width="530" valign="top"><input type=text size=30
 						name=<%=Constants.RECORD_CALLER_NAME%>
@@ -256,7 +256,7 @@ else
 				<tr>
 					<td width="50"></td>
 					<td width="170" valign="top" class="adminsubsubtitle"><img
-						src="/TheBusinessAssistant/images/blueSphere.gif" width="10"
+						src="/tba/images/blueSphere.gif" width="10"
 						height="10">&nbsp;Omschrijving</td>
 					<td width="530" valign="top"><textarea
 						name=<%=Constants.RECORD_SHORT_TEXT%> rows=10 cols=70><%=(String) vNewRecord.getShortDescription()%></textarea></td>
@@ -264,7 +264,7 @@ else
 				<tr>
 					<td width="50"></td>
 					<td width="170" valign="top" class="adminsubsubtitle"><img
-						src="/TheBusinessAssistant/images/blueSphere.gif" width="10"
+						src="/tba/images/blueSphere.gif" width="10"
 						height="10">&nbsp;Extra Informatie</td>
 					<td width="530" valign="top"><textarea
 						name=<%=Constants.RECORD_LONG_TEXT%> rows=10 cols=70><%=(String) vNewRecord.getLongDescription()%></textarea></td>

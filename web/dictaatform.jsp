@@ -137,8 +137,8 @@
             </table>
             <map name="login">
                <!--href=".\login.html"-->
-<!--              <area shape="rect" alt="Login" coords="15,13,81,33" href="#" onclick="window.open('\\TheBusinessAssistant\\login.html','','resizable, width=800, height=600');return false;"> -->
-              <area shape="rect" alt="Login" coords="15,13,81,33" href="#" onclick="window.open('/TheBusinessAssistant/login.html','TheBusinessAssistant_Admin','toolbar=no,location=no,directories=no,status=no,member=no,scrollbars=yes,resizable=yes,copyhistory=no,width=800,height=500,screenX=0,screenY=0,top=0,left=0');">
+<!--              <area shape="rect" alt="Login" coords="15,13,81,33" href="#" onclick="window.open('\\tba\\login.html','','resizable, width=800, height=600');return false;"> -->
+              <area shape="rect" alt="Login" coords="15,13,81,33" href="#" onclick="window.open('/tba/login.html','TheBusinessAssistant_Admin','toolbar=no,location=no,directories=no,status=no,member=no,scrollbars=yes,resizable=yes,copyhistory=no,width=800,height=500,screenX=0,screenY=0,top=0,left=0');">
               <area shape="rect" alt="Login help" coords="16,34,46,49" href=".\loginhelp.html">
             </map>
           </td>
@@ -206,12 +206,12 @@ if (vTechnology == null) vTechnology = "digital";
           out.println("<br><span class=\"bodyredbold\">");
           for (Iterator i = vErrorList.iterator(); i.hasNext();)
           {
-            out.println("<img src=\"/TheBusinessAssistant/images/blueVink.gif\" border=\"0\">" + (String) i.next() + "<br>");
+            out.println("<img src=\"/tba/images/blueVink.gif\" border=\"0\">" + (String) i.next() + "<br>");
           }
           out.println("</span>");
         }
   %>
-  <form name="dictaatForm" method="POST" action="/TheBusinessAssistant/Login">
+  <form name="dictaatForm" method="POST" action="/tba/Login">
     <p class="adminsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Uw contact gegevens:</p>
     <table width="570" border="0" cellspacing="2" cellpadding="2">
       <tr>

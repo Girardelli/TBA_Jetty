@@ -24,7 +24,7 @@
 		<br>
 		<span class="admintitle"> Voeg een nieuwe klant toe.</span> <br>
 		<span class="bodytekst"> <!-- action name must be a URI name as it is set in the <application>.xml servlet-mapping tag.-->
-		<form name="addaccountform" method="POST" action="/TheBusinessAssistant/AdminDispatch">
+		<form name="addaccountform" method="POST" action="/tba/AdminDispatch">
 		<table width="700" border="0" cellspacing="2" cellpadding="2">
 			<tr>
 				<td width="50"></td>

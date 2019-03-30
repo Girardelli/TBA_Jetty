@@ -48,7 +48,7 @@ try
 				<span class="admintitle"> Selecteer sub-klant voor de oproep voor <%=vFullName%>.</span>
 				<br> 
 				<span class="bodytekst"> <!-- action name must be a URI name as it is set in the <application>.xml servlet-mapping tag.-->
-					<form name="updateForm" method="POST" action="/TheBusinessAssistant/AdminDispatch">
+					<form name="updateForm" method="POST" action="/tba/AdminDispatch">
 						<br>
 						<table width="700" border="0" cellspacing="2" cellpadding="2">
 							<tr>

@@ -37,7 +37,7 @@ if (vErrorList != null && vErrorList.size() > 0)
   out.println("<br><span class=\"bodyredbold\">");
   for (Iterator i = vErrorList.iterator(); i.hasNext();)
   {
-    out.println("<img src=\"/TheBusinessAssistant/images/blueVink.gif\" border=\"0\">" + (String) i.next() + "<br>");
+    out.println("<img src=\"/tba/images/blueVink.gif\" border=\"0\">" + (String) i.next() + "<br>");
   }
   out.println("</span>");
 }
@@ -45,7 +45,7 @@ if (vErrorList != null && vErrorList.size() > 0)
 		<br>
 		<span class="admintitle"> Voeg een nieuwe werknemer toe.</span> <br>
 		<span class="bodytekst"> <!-- action name must be a URI name as it is set in the <application>.xml servlet-mapping tag.-->
-		<form method="GET" action="/TheBusinessAssistant/AdminDispatch">
+		<form method="GET" action="/tba/AdminDispatch">
 		<table width="700" border="0" cellspacing="2" cellpadding="2">
 			<tr>
 				<td width="50"></td>

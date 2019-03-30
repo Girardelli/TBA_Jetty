@@ -52,7 +52,7 @@ if (vCustomerFilter == null) vCustomerFilter = Constants.ACCOUNT_FILTER_ALL;
 		<br>
 		</span></p>
 		<form name="taskform" method="POST"
-			action="/TheBusinessAssistant/AdminDispatch"><input type=hidden
+			action="/tba/AdminDispatch"><input type=hidden
 			name=<%=Constants.TASK_TO_DELETE%> value=""> <input type=hidden
 			name=<%=Constants.SRV_ACTION%> value="<%=Constants.GOTO_TASK_ADMIN%>">
 		<table width="330" border="0" cellspacing="0" cellpadding="0">
@@ -169,7 +169,7 @@ if (vTasks != null && vTasks.size() > 0)
     String vInfoGifs = "";
     if (vEntry.getIsRecuring())
     {
-      vInfoGifs = vInfoGifs.concat("<img src=\"/TheBusinessAssistant/images/recurintask.gif\" height=\"13\" border=\"0\">&nbsp;");
+      vInfoGifs = vInfoGifs.concat("<img src=\"/tba/images/recurintask.gif\" height=\"13\" border=\"0\">&nbsp;");
     }
     
 	System.out.println("task: " + vEntry.getDescription());
@@ -180,7 +180,7 @@ if (vTasks != null && vTasks.size() > 0)
 				onmouseover="hooverOnRow('<%=vId%>','<%=vRowInd%>')"
 				onmouseout="hooverOffRow('<%=vId%>','<%=vRowInd%>')"
 				onclick="updateDeleteFlag('<%=vId%>','<%=vEntry.getId()%>','<%=vRowInd%>')"
-				ondblclick="changeUrl('/TheBusinessAssistant/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.TASK_UPDATE%>&<%=Constants.TASK_ID%>=<%=vEntry.getId()%>');">
+				ondblclick="changeUrl('/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.TASK_UPDATE%>&<%=Constants.TASK_ID%>=<%=vEntry.getId()%>');">
 				<td width="55" valign="top"><%=vEntry.getDate()%></td>
 				<td width="250" valign="top"><%=vEntry.getDescription()%></td>
 				<td width="100" valign="top"><%=vTimeSpend%></td>

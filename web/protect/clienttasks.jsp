@@ -39,7 +39,7 @@ Last Checked In By: $Author: Yves Willems $
 %>
 
 <form name="tasklistform" method="GET"
-	action="/TheBusinessAssistant/CustomerDispatch">
+	action="/tba/CustomerDispatch">
 	<input type=hidden name=<%=Constants.SRV_ACTION%>
 		value="<%=Constants.ACTION_SHOW_TASKS%>">
 	<table  cellspacing='0' cellpadding='0' border='0'
@@ -154,7 +154,7 @@ Last Checked In By: $Author: Yves Willems $
 										if (vEntry.getIsRecuring())
 										{
 											vInfoGifs = vInfoGifs
-											        .concat("<img src=\"/TheBusinessAssistant/images/recurintask.gif\" height=\"13\" border=\"0\">&nbsp;");
+											        .concat("<img src=\"/tba/images/recurintask.gif\" height=\"13\" border=\"0\">&nbsp;");
 										}
 
 										System.out.println("task: "

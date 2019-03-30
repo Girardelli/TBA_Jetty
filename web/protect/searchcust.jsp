@@ -65,7 +65,7 @@ if (vCustomerFilter == null) vCustomerFilter = Constants.ACCOUNT_FILTER_ALL;
 		<!-- account list -->
 		<td valign="top" width="710" bgcolor="FFFFFF"><br>
 		<p><span class="admintitle"> Oproepen zoeken</span></p>
-		<form name="searchform" method="POST" action="/TheBusinessAssistant/CustomerDispatch">
+		<form name="searchform" method="POST" action="/tba/CustomerDispatch">
 			<input type="hidden" name="<%=Constants.SRV_ACTION%>" value="<%=Constants.ACTION_SEARCH_CALLS%>"> 
 		<table width="710" border="0" cellspacing="0" cellpadding="0">
 			<tr>
@@ -151,42 +151,42 @@ if (vSession.getSearchString() != null && vSession.getSearchString().length() > 
       vLongDesc = vLongDesc == null ? "" : vLongDesc;
       String vInOut;
       if (vEntry.getIsIncomingCall())
-        vInOut = "/TheBusinessAssistant/images/incall.gif";
+        vInOut = "/tba/images/incall.gif";
       else
-        vInOut = "/TheBusinessAssistant/images/outcall.gif";
+        vInOut = "/tba/images/outcall.gif";
       String vInfoGifs = "";
       if (vLongDesc.length() > 0)
       {
-        vInfoGifs = vInfoGifs.concat("<img src=\"/TheBusinessAssistant/images/info.gif\" alt=\"dubbel klik om de info te bekijken\" height=\"16\" border=\"0\">&nbsp;");
+        vInfoGifs = vInfoGifs.concat("<img src=\"/tba/images/info.gif\" alt=\"dubbel klik om de info te bekijken\" height=\"16\" border=\"0\">&nbsp;");
       }
       if (vEntry.getIsAgendaCall())
       {
-        vInfoGifs = vInfoGifs.concat("<img src=\"/TheBusinessAssistant/images/agenda.gif\" height=\"13\" border=\"0\">&nbsp;");
+        vInfoGifs = vInfoGifs.concat("<img src=\"/tba/images/agenda.gif\" height=\"13\" border=\"0\">&nbsp;");
       }
       if (vEntry.getIsSmsCall())
       {
-        vInfoGifs = vInfoGifs.concat("<img src=\"/TheBusinessAssistant/images/sms.gif\"  height=\"13\" border=\"0\">&nbsp");
+        vInfoGifs = vInfoGifs.concat("<img src=\"/tba/images/sms.gif\"  height=\"13\" border=\"0\">&nbsp");
       }
       if (vEntry.getIsForwardCall())
       {
-        vInfoGifs = vInfoGifs.concat("<img src=\"/TheBusinessAssistant/images/telefoon.gif\"  height=\"13\" border=\"0\">&nbsp;");
+        vInfoGifs = vInfoGifs.concat("<img src=\"/tba/images/telefoon.gif\"  height=\"13\" border=\"0\">&nbsp;");
       }
       if (vEntry.getIsFaxCall())
       {
-        vInfoGifs = vInfoGifs.concat("<img src=\"/TheBusinessAssistant/images/fax.gif\"  height=\"13\" border=\"0\">&nbsp;");
+        vInfoGifs = vInfoGifs.concat("<img src=\"/tba/images/fax.gif\"  height=\"13\" border=\"0\">&nbsp;");
       }
       if (vEntry.getIs3W_call())
       {
-        vInfoGifs = vInfoGifs.concat("<img src=\"/TheBusinessAssistant/images/3w.gif\"  height=\"13\" border=\"0\">&nbsp;");
+        vInfoGifs = vInfoGifs.concat("<img src=\"/tba/images/3w.gif\"  height=\"13\" border=\"0\">&nbsp;");
       }
       String vImportant = "";
       if (vEntry.getIsImportantCall())
       {
-        vImportant = vImportant.concat("<img src=\"/TheBusinessAssistant/images/important.gif\"  height=\"13\" border=\"0\">&nbsp;");
+        vImportant = vImportant.concat("<img src=\"/tba/images/important.gif\"  height=\"13\" border=\"0\">&nbsp;");
       }
   %>
 			<tr bgcolor="FFCC66" id="<%=vId%>" class="bodytekst"
-				ondblclick="changeUrl('/TheBusinessAssistant/CustomerDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.RECORD_UPDATE%>&amp;<%=Constants.RECORD_ID%>=<%=vEntry.getId()%>');">
+				ondblclick="changeUrl('/tba/CustomerDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.RECORD_UPDATE%>&amp;<%=Constants.RECORD_ID%>=<%=vEntry.getId()%>');">
 				<td width="20" bgcolor="FFFFFF"><img src="<%=vInOut%>"
 					height="13" border="0" alt=""></td>
 				<td width="10" valign="top"><%=vImportant%></td>

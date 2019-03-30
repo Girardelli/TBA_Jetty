@@ -36,19 +36,19 @@ private String mCustomerName;
   String vInfoGifs = "";
   if (mRecordData.getIsAgendaCall())
   {
-    vInfoGifs = vInfoGifs.concat("<img src=\"/TheBusinessAssistant/images/agenda.gif\" alt=\"afspraak toegevoegd in uw agenda\" height=\"13\" border=\"0\">&nbsp;&nbsp;");
+    vInfoGifs = vInfoGifs.concat("<img src=\"/tba/images/agenda.gif\" alt=\"afspraak toegevoegd in uw agenda\" height=\"13\" border=\"0\">&nbsp;&nbsp;");
   }
   if (mRecordData.getIsSmsCall())
   {
-    vInfoGifs = vInfoGifs.concat("<img src=\"/TheBusinessAssistant/images/sms.gif\" alt=\"wij hebben een SMS bericht verstuurd ivm deze oproep\" height=\"13\" border=\"0\">&nbsp;&nbsp;");
+    vInfoGifs = vInfoGifs.concat("<img src=\"/tba/images/sms.gif\" alt=\"wij hebben een SMS bericht verstuurd ivm deze oproep\" height=\"13\" border=\"0\">&nbsp;&nbsp;");
   }
   if (mRecordData.getIsForwardCall())
   {
-    vInfoGifs = vInfoGifs.concat("<img src=\"/TheBusinessAssistant/images/telefoon.gif\" alt=\"oproep doorgeschakeld naar u\" height=\"13\" border=\"0\">&nbsp;&nbsp;");
+    vInfoGifs = vInfoGifs.concat("<img src=\"/tba/images/telefoon.gif\" alt=\"oproep doorgeschakeld naar u\" height=\"13\" border=\"0\">&nbsp;&nbsp;");
   }
   if (mRecordData.getIsFaxCall())
   {
-    vInfoGifs = vInfoGifs.concat("<img src=\"/TheBusinessAssistant/images/fax.gif\" alt=\"binnenkomende fax voor u verwerkt\" height=\"13\" border=\"0\">&nbsp;&nbsp;");
+    vInfoGifs = vInfoGifs.concat("<img src=\"/tba/images/fax.gif\" alt=\"binnenkomende fax voor u verwerkt\" height=\"13\" border=\"0\">&nbsp;&nbsp;");
   }
     
 %>
@@ -57,7 +57,7 @@ private String mCustomerName;
 <br>
 <!-- action name must be a URI name as it is set in the <application>.xml servlet-mapping tag.-->
 <form name="calllistform" method="GET"
-	action="/TheBusinessAssistant/CustomerDispatch">
+	action="/tba/CustomerDispatch">
 
 <table  cellspacing='0' cellpadding='0' border='0'
 	bgcolor="FFFFFF">
@@ -70,7 +70,7 @@ if (vInfoGifs.length() > 0)
 {
 out.println("<tr>");
 out.println("  <td width=\"50\"></td>");
-out.println("  <td width=\"120\" valign=\"top\" class=\"adminsubsubtitle\"><img src=\"/TheBusinessAssistant/images/blueSphere.gif\" width=\"10\" height=\"10\">&nbsp;Extra's</td>");
+out.println("  <td width=\"120\" valign=\"top\" class=\"adminsubsubtitle\"><img src=\"/tba/images/blueSphere.gif\" width=\"10\" height=\"10\">&nbsp;Extra's</td>");
 out.println("  <td width=\"580\" valign=\"top\" class=\"bodytekst\">" + vInfoGifs + "</td>");
 out.println("</tr>");
 }                  
@@ -78,42 +78,42 @@ out.println("</tr>");
 			<tr>
 				<td width="30"></td>
 				<td width="170" valign="top" class="adminsubsubtitle"><img
-					src="/TheBusinessAssistant/images/blueSphere.gif" width="10"
+					src="/tba/images/blueSphere.gif" width="10"
 					height="10">&nbsp;Datum</td>
 				<td width="550" valign="top" class="bodytekst"><%=mRecordData.getDate()%></td>
 			</tr>
 			<tr>
 				<td width="30"></td>
 				<td width="170" valign="top" class="adminsubsubtitle"><img
-					src="/TheBusinessAssistant/images/blueSphere.gif" width="10"
+					src="/tba/images/blueSphere.gif" width="10"
 					height="10">&nbsp;Uur</td>
 				<td width="550" valign="top" class="bodytekst"><%=mRecordData.getTime()%></td>
 			</tr>
 			<tr>
 				<td width="30"></td>
 				<td width="170" valign="top" class="adminsubsubtitle"><img
-					src="/TheBusinessAssistant/images/blueSphere.gif" width="10"
+					src="/tba/images/blueSphere.gif" width="10"
 					height="10">&nbsp;<%=vDirStr%>nummer</td>
 				<td width="550" valign="top" class="bodytekst"><%=mRecordData.getNumber()%></td>
 			</tr>
 			<tr>
 				<td width="30"></td>
 				<td width="170" valign="top" class="adminsubsubtitle"><img
-					src="/TheBusinessAssistant/images/blueSphere.gif" width="10"
+					src="/tba/images/blueSphere.gif" width="10"
 					height="10">&nbsp;Naam</td>
 				<td width="550" valign="top" class="bodytekst"><%=mRecordData.getName()%></td>
 			</tr>
 			<tr>
 				<td width="30"></td>
 				<td width="170" valign="top" class="adminsubsubtitle"><img
-					src="/TheBusinessAssistant/images/blueSphere.gif" width="10"
+					src="/tba/images/blueSphere.gif" width="10"
 					height="10">&nbsp;Omschrijving</td>
 				<td width="550" valign="top" class="bodytekst"><%=(String) mRecordData.getShortDescription()%></td>
 			</tr>
 			<tr>
 				<td width="30"></td>
 				<td width="170" valign="top" class="adminsubsubtitle"><img
-					src="/TheBusinessAssistant/images/blueSphere.gif" width="10"
+					src="/tba/images/blueSphere.gif" width="10"
 					height="10">&nbsp;Opvolging</td>
 				<td width="550" valign="top"><textarea
 					name=<%=Constants.RECORD_SHORT_TEXT%> rows=10 cols=70></textarea></td>
@@ -121,7 +121,7 @@ out.println("</tr>");
 			<tr>
 				<td width="30"></td>
 				<td width="170" valign="top" class="adminsubsubtitle"><img
-					src="/TheBusinessAssistant/images/blueSphere.gif" width="10"
+					src="/tba/images/blueSphere.gif" width="10"
 					height="10">&nbsp;Bijkomende Informatie</td>
 				<td width="550" valign="top" class="bodytekst"><%=(String) mRecordData.getLongDescription()%></td>
 			</tr>

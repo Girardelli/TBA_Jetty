@@ -29,7 +29,7 @@ be.tba.util.invoice.*"%>
 		<br>
 		<span class="bodytekst"> <!-- action name must be a URI name as it is set in the <application>.xml servlet-mapping tag.-->
 		<form name="calllistform" method="POST"
-			action="/TheBusinessAssistant/AdminDispatch">
+			action="/tba/AdminDispatch">
 		<table width="100%" border="0" cellspacing="1" cellpadding="1">
 			<tr>
 				<td width="50"></td>
@@ -49,7 +49,7 @@ be.tba.util.invoice.*"%>
 				<td width="580" valign="top" class="adminsubsubtitle"><input
 					type=checkbox name=<%=Constants.RECORD_IMPORTANT%>
 					value="<%=Constants.YES%>">&nbsp;&nbsp;<img
-					src="/TheBusinessAssistant/images/important.gif"
+					src="/tba/images/important.gif"
 					alt="belangrijke oproep!" height="13" border="0"></td>
 			</tr>
 			<tr>
@@ -59,7 +59,7 @@ be.tba.util.invoice.*"%>
 				<td width="580" valign="top" class="adminsubsubtitle"><input
 					type=checkbox name=<%=Constants.RECORD_SMS%>
 					value="<%=Constants.YES%>">&nbsp;&nbsp;<img
-					src="/TheBusinessAssistant/images/sms.gif"
+					src="/tba/images/sms.gif"
 					alt="wij hebben een SMS bericht verstuurd ivm deze oproep"
 					height="13" border="0"></td>
 			</tr>
@@ -70,7 +70,7 @@ be.tba.util.invoice.*"%>
 				<td width="580" valign="top" class="adminsubsubtitle"><input
 					type=checkbox name=<%=Constants.RECORD_AGENDA%>
 					value="<%=Constants.YES%>">&nbsp;&nbsp;<img
-					src="/TheBusinessAssistant/images/agenda.gif"
+					src="/tba/images/agenda.gif"
 					alt="afspraak toegevoegd in uw agenda" height="13" border="0"></td>
 			</tr>
 			<tr>
@@ -80,7 +80,7 @@ be.tba.util.invoice.*"%>
 				<td width="580" valign="top" class="adminsubsubtitle"><input
 					type=checkbox name=<%=Constants.RECORD_FORWARD%>
 					value="<%=Constants.YES%>">&nbsp;&nbsp;<img
-					src="/TheBusinessAssistant/images/telefoon.gif"
+					src="/tba/images/telefoon.gif"
 					alt="oproep doorgeschakeld naar u" height="13" border="0"></td>
 			</tr>
 			<tr>
@@ -90,7 +90,7 @@ be.tba.util.invoice.*"%>
 				<td width="580" valign="top" class="adminsubsubtitle"><input
 					type=checkbox name=<%=Constants.RECORD_FAX%>
 					value="<%=Constants.YES%>">&nbsp;&nbsp;<img
-					src="/TheBusinessAssistant/images/fax.gif"
+					src="/tba/images/fax.gif"
 					alt="fax" height="13" border="0"></td>
 			</tr>
 			<tr>

@@ -37,7 +37,7 @@ private StringBuilder allEntryIds;%>
 <body>
 <p><span class="admintitle"> Factuurlijst bewerken<br>
 </span></p>
-<form name="invoicelistform" method="POST" action="/TheBusinessAssistant/AdminDispatch">
+<form name="invoicelistform" method="POST" action="/tba/AdminDispatch">
 	<input type=hidden name=<%=Constants.INVOICE_TO_FREEZE%> value=""> 
 	<input type=hidden name=<%=Constants.INVOICE_TO_SETPAYED%> value=""> 
 	<input type=hidden name=<%=Constants.INVOICE_TO_DELETE%> value="">
@@ -96,7 +96,7 @@ private StringBuilder allEntryIds;%>
 			<input class="tbabutton" type=submit name=action value=" Genereer factuurlijst " onclick="generateAllInvoices()">
             
             </form>
-			<form name="downloadfileform" method="POST" action="/TheBusinessAssistant/download" >
+			<form name="downloadfileform" method="POST" action="/tba/download" >
 		    <input type=hidden name=<%=Constants.INVOICE_TO_SETPAYED%> value="">
 		    <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.DOWNLOAD_WK_VERKOPEN_XML%>"> 
 			<input class="tbabutton" type=submit name=action value=" Download export file " onclick="downloadExportFile()">
@@ -181,14 +181,14 @@ private StringBuilder allEntryIds;%>
                  }
 				if (vEntry.getIsPayed())
 				{
-				    vEuroGif = "<img src=\"/TheBusinessAssistant/images/euro-16x16.png\" height=\"16\" border=\"0\">";
+				    vEuroGif = "<img src=\"/tba/images/euro-16x16.png\" height=\"16\" border=\"0\">";
 				}
 				%>
 				<tr bgcolor=<%=vCollor%> id=<%=vId%> class="bodytekst"
 					onmouseover="hooverOnRow('<%=vId%>','<%=vRowInd%>')"
 					onmouseout="hooverOffRow('<%=vId%>','<%=vRowInd%>')"
 					onclick="updateDeleteFlag('<%=vId%>','<%=vEntry.getId()%>','<%=vRowInd%>')"
-					ondblclick="changeUrl('/TheBusinessAssistant/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_INVOICE%>&<%=Constants.ACCOUNT_FILTER_CUSTOMER%>=<%=vEntry.getAccountFwdNr()%>&<%=Constants.INVOICE_ID%>=<%=vEntry.getId()%>');">
+					ondblclick="changeUrl('/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_INVOICE%>&<%=Constants.ACCOUNT_FILTER_CUSTOMER%>=<%=vEntry.getAccountFwdNr()%>&<%=Constants.INVOICE_ID%>=<%=vEntry.getId()%>');">
 					<td width="150" valign="top"><%=vEuroGif%>&nbsp&nbsp<%=vEntry.getPayDate()%></td>
 					<td width="110" valign="top"><%=vStyleStart%><%=vEntry.getInvoiceNr()%><%=vStyleEnd%></td>
 					<td width="400" valign="top"><%=vStyleStart%><%=vCompanyName%><%=vStyleEnd%></td>

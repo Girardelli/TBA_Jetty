@@ -18,18 +18,18 @@
 				<td width="40"></td>
 				<td valign="top" class="bodytext"><a
 					href="http://jakarta.apache.org"><img
-					src="/TheBusinessAssistant/images/jakarta-logo.gif"
+					src="/tba/images/jakarta-logo.gif"
 					alt="The Apache Software Foundation"></a><br>
 				<br>
 				<a href="http://jakarta.apache.org/tomcat/index.html"><img
-					src="/TheBusinessAssistant/images/tomcat.gif" alt="Tomcat"></a><br>
+					src="/tba/images/tomcat.gif" alt="Tomcat"></a><br>
 				<br>
 				<a href="http://www.mysql.com/"><img
-					src="/TheBusinessAssistant/images/powered-by-mysql.png"
+					src="/tba/images/powered-by-mysql.png"
 					alt="MYSQL database"></a><br>
 				<br>
 				<a href="http://www.jboss.org"><img
-					src="/TheBusinessAssistant/images/jboss.jpg"
+					src="/tba/images/jboss.jpg"
 					alt="JBoss application server"></a><br>
 				<br>
 				</td>

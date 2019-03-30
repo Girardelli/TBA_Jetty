@@ -81,7 +81,7 @@ function refresh()
 		<td>
 		<table width="100%" height="50" border="0" cellspacing="0"
 			cellpadding="0" bgcolor="#FFFFFF">
-			<td><img src="/TheBusinessAssistant/images/TBA-Logo.png" style="padding:10px;" height="70" alt=""></td>
+			<td><img src="/tba/images/TBA-Logo.png" style="padding:10px;" height="70" alt=""></td>
 		</table>
 		</td>
 	</tr>
@@ -109,7 +109,7 @@ if (vErrorMessage == null)
 	<tr valign="top">
 		<td>
 		<form name="announcement" method="POST"
-			action="/TheBusinessAssistant/AdminDispatch"><input type=hidden
+			action="/tba/AdminDispatch"><input type=hidden
 			name=<%=Constants.SRV_ACTION%> value="<%=vNextAction%>"> 
 		<table border="0" cellspacing="0" cellpadding="0">
 			<!-- white space -->

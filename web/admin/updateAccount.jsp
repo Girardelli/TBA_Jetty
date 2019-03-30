@@ -118,7 +118,7 @@ double vFacLongFwd = vCustomer.getFacLongFwd();
 			<td valign="top" bgcolor="FFFFFF"><br> <br> <span
 				class="admintitle"> Instellingen voor <%=vFullName%>.
 			</span> <br> <span class="bodytekst"> <!-- action name must be a URI name as it is set in the <application>.xml servlet-mapping tag.-->
-					<form name="updateForm" method="POST" action="/TheBusinessAssistant/AdminDispatch">
+					<form name="updateForm" method="POST" action="/tba/AdminDispatch">
 						<input class="tbabutton" type=submit name=action value="Bewaar"	onclick="Bewaar()"> 
 						<input class="tbabutton" type=submit name=action value="De-registreren" onclick="Deregister()">&nbsp;&nbsp;
 						<input class="tbabutton" type=submit name=action value=" Terug " onclick="cancelUpdate()">&nbsp;&nbsp; 

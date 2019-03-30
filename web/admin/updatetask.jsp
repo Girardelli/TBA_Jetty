@@ -48,7 +48,7 @@ mCustomerData = AccountCache.getInstance().get(mTaskData.getFwdNr());
 		<td valign="top" bgcolor="FFFFFF"><br>
 		<br>
 		<span class="bodytekst"> <!-- action name must be a URI name as it is set in the <application>.xml servlet-mapping tag.-->
-		<form name="taskform" method="POST" action="/TheBusinessAssistant/AdminDispatch">
+		<form name="taskform" method="POST" action="/tba/AdminDispatch">
 		<table width="100%" border="0" cellspacing="1" cellpadding="1">
 			<tr>
 				<td width="50"></td>

@@ -25,7 +25,7 @@ public class Constants
     public static final String EJB_ACC_ROLE_ADMIN = "admin";
 
     // HTML page names
-    public static final String TBA_URL_BASE = "https://thebusinessAssistant.be/TheBusinessAssistant/";
+    public static final String TBA_URL_BASE = "https://thebusinessAssistant.be/tba/";
 
     public static final String MYSQL_URL = "jdbc:mysql://localhost/tbadb?user=root&password=gzb625$";
     // public static final String INVOICE_HEAD_TMPL =
@@ -44,11 +44,11 @@ public class Constants
     public static final String WC_KLANTEN_XML = "WoltersKluwerKlanten.xml";
     public static final String WC_VERKOPEN_XML = "WoltersKluwerVerkopen.xml";
 
-    public static final String ADMIN_LOGIN_HTML = "/TheBusinessAssistant/admin.html";
+    public static final String ADMIN_LOGIN_HTML = "/tba/admin.html";
 
     public static final String BAD_LOGIN_HTML = "/badlogin.html";
 
-    public static final String LOGIN_HTML = "/TheBusinessAssistant/login.html";
+    public static final String LOGIN_HTML = "/tba/login.html";
 
     public static final String SERVLET_LOGIN_HTML = "/login.html";
 
@@ -62,7 +62,6 @@ public class Constants
     public static final String PROTECT_FAIL_JSP = "/protect/protectfail.jsp";
 
     // public static final String BAD_ADMIN_HTML =
-    // "\\TheBusinessAssistant\\badadmin.html";
     public static final String ADD_ACCOUNT_JSP = "/admin/addAccount.jsp";
 
     public static final String ADD_EMPLOYEE_JSP = "/admin/addEmployee.jsp";

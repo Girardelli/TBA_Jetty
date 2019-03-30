@@ -11,7 +11,7 @@
 <meta name="Distribution" content="Global">
 <link rel="shortcut icon" href="./images/favicon.png" type="image/x-icon" />
 <link rel="stylesheet" type="text/css"
-	href="/TheBusinessAssistant/TheBusinessAssistant.css" title="main">
+	href="/tba/TheBusinessAssistant.css" title="main">
 </head>
 
 <body>
@@ -24,7 +24,7 @@
 		<td>
 		<table width="100%" height="50" border="0" cellspacing="0"
 			cellpadding="0" bgcolor="#FFFFFF">
-			<td><img src="/TheBusinessAssistant/images/TBA-Logo.png" style="padding:10px;" height="70" alt=""></td>
+			<td><img src="/tba/images/TBA-Logo.png" style="padding:10px;" height="70" alt=""></td>
 		</table>
 		</td>
 	</tr>

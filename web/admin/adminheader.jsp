@@ -10,7 +10,7 @@
 <meta name="Distribution" content="Global">
 <link rel="shortcut icon" href="./images/favicon.png" type="image/x-icon" />
 <link rel="stylesheet" type="text/css"
-	href="/TheBusinessAssistant/TheBusinessAssistant.css" title="main">
+	href="/tba/TheBusinessAssistant.css" title="main">
 </head>
 
 
@@ -63,7 +63,7 @@ private String vSessionId;
 	bgcolor="#FFFFFF">
 	<tr>
 		<td valign='top' align='left' width='500' height='50' bgcolor="#FFFFFF">
-		  <img src="/TheBusinessAssistant/images/TBA-Logo.png" style="padding: 10px;" height="70" alt="">
+		  <img src="/tba/images/TBA-Logo.png" style="padding: 10px;" height="70" alt="">
 		</td>
 	</tr>
 	<tr>
@@ -74,7 +74,7 @@ private String vSessionId;
 			<table class="topmenu" cellspacing='0' cellpadding='0' border='0'>
 				<tr bgcolor="#22205F" height="40">
 					<td bgcolor="#F89920"><a class='afmeldMenu'
-						href="/TheBusinessAssistant/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ADMIN_LOG_OFF%>">&nbsp;&nbsp;&nbsp;Afmelden&nbsp;&nbsp;&nbsp;</a>
+						href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ADMIN_LOG_OFF%>">&nbsp;&nbsp;&nbsp;Afmelden&nbsp;&nbsp;&nbsp;</a>
 					</td>
 					<td onmouseover="showmenu('rubrieken')"
 						onmouseout="hidemenu('rubrieken')">
@@ -82,15 +82,15 @@ private String vSessionId;
 						<table class="menu" id="rubrieken" width="150">
 							<tr>
 								<td class="menu"><a class='norm'
-									href="/TheBusinessAssistant/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_ACCOUNT_ADMIN%>"><nobr>Klanten</nobr></a>
+									href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_ACCOUNT_ADMIN%>"><nobr>Klanten</nobr></a>
 									<br> <a class='norm'
-									href="/TheBusinessAssistant/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_RECORD_ADMIN%>"><nobr>Oproepen</nobr></a>
+									href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_RECORD_ADMIN%>"><nobr>Oproepen</nobr></a>
 									<br> <a class='norm'
-									href="/TheBusinessAssistant/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_NOTLOGGED_CALLS%>"><nobr>Gemiste
+									href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_NOTLOGGED_CALLS%>"><nobr>Gemiste
 											Oproepen</nobr></a> <br> <a class='norm'
-									href="/TheBusinessAssistant/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_RECORD_SEARCH%>"><nobr>Zoeken</nobr></a>
+									href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_RECORD_SEARCH%>"><nobr>Zoeken</nobr></a>
 									<br> <a class='norm'
-									href="/TheBusinessAssistant/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_TASK_ADMIN%>"><nobr>Taken</nobr></a>
+									href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_TASK_ADMIN%>"><nobr>Taken</nobr></a>
 								</td>
 							</tr>
 						</table>
@@ -121,15 +121,15 @@ private String vSessionId;
 						<table class="menu" id="tba_admin" width="150">
 							<tr>
 								<td class="menu"><a class='norm'
-									href="/TheBusinessAssistant/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_INVOICE%>">Maak
+									href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_INVOICE%>">Maak
 										Factuur</a> <br> <a class='norm'
-									href="/TheBusinessAssistant/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_INVOICE_ADMIN%>">Factuur
+									href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_INVOICE_ADMIN%>">Factuur
 										lijst</a> <br> <a class='norm'
-									href="/TheBusinessAssistant/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_OPEN_INVOICE%>">Open
+									href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_OPEN_INVOICE%>">Open
 										facturen</a> <br> <a class='norm'
-									href="/TheBusinessAssistant/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_EMPLOYEE_ADMIN%>">Werknemers</a>
+									href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_EMPLOYEE_ADMIN%>">Werknemers</a>
 									<br> <a class='norm'
-									href="/TheBusinessAssistant/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_EMPLOYEE_COST%>">Prestaties</a>
+									href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_EMPLOYEE_COST%>">Prestaties</a>
 								</td>
 							</tr>
 						</table>

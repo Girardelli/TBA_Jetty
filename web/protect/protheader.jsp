@@ -8,7 +8,7 @@
 <meta name="Copyright" content="Copyright © 2003 TheBusinessAssistant, All rights reserved.">
 <meta name="Distribution" content="Global">
 <link rel="shortcut icon" href="./images/favicon.png" type="image/x-icon" />
-<link rel="stylesheet" type="text/css" href="/TheBusinessAssistant/TheBusinessAssistant.css" title="main">
+<link rel="stylesheet" type="text/css" href="/tba/TheBusinessAssistant.css" title="main">
 </head>
 
 
@@ -48,7 +48,7 @@ SessionManager.getInstance().getSession(vSession.getSessionId(), "clientcalls.js
 	<tr>
 		<td valign='top' align='left' width='500' height='50'
 			bgcolor="#FFFFFF"><img
-			src="/TheBusinessAssistant/images/TBA-Logo.png"
+			src="/tba/images/TBA-Logo.png"
 			style="padding: 10px;" height="70" alt=""></td>
 	</tr>
 	<tr>
@@ -59,7 +59,7 @@ SessionManager.getInstance().getSession(vSession.getSessionId(), "clientcalls.js
 			<table class="topmenu" cellspacing='0' cellpadding='0' border='0'>
                 <tr bgcolor="#22205F" height="40">
                     <td bgcolor="#F89920"><a class='afmeldMenu'
-                        href="/TheBusinessAssistant/CustomerDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACTION_LOGOFF%>">&nbsp;&nbsp;&nbsp;Afmelden&nbsp;&nbsp;&nbsp;</a>
+                        href="/tba/CustomerDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACTION_LOGOFF%>">&nbsp;&nbsp;&nbsp;Afmelden&nbsp;&nbsp;&nbsp;</a>
                     </td>
 					<td onmouseover="showmenu('rubrieken')"
 						onmouseout="hidemenu('rubrieken')">
@@ -67,11 +67,11 @@ SessionManager.getInstance().getSession(vSession.getSessionId(), "clientcalls.js
 						<table class="menu" id="rubrieken" width="150">
 							<tr>
 								<td class="menu"><a class='norm'
-									href="/TheBusinessAssistant/CustomerDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACTION_SHOW_CALLS%>">Oproepen
+									href="/tba/CustomerDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACTION_SHOW_CALLS%>">Oproepen
 										bekijken</a><br> <a class='norm'
-									href="/TheBusinessAssistant/CustomerDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACTION_GOTO_SEARCH_PAGE%>">Oproepen
+									href="/tba/CustomerDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACTION_GOTO_SEARCH_PAGE%>">Oproepen
 										zoeken</a><br> <a class='norm'
-									href="/TheBusinessAssistant/CustomerDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACTION_SHOW_TASKS%>">Taken
+									href="/tba/CustomerDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACTION_SHOW_TASKS%>">Taken
 										bekijken</a><br></td>
 							</tr>
 						</table>
@@ -82,7 +82,7 @@ SessionManager.getInstance().getSession(vSession.getSessionId(), "clientcalls.js
 						<table class="menu" id="persoonlijk" width="150">
 							<tr>
 								<td class="menu"><a class='norm'
-									href="/TheBusinessAssistant/CustomerDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.UPDATE_PREFS%>">Instellingen</a><br>
+									href="/tba/CustomerDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.UPDATE_PREFS%>">Instellingen</a><br>
 								</td>
 							</tr>
 						</table>
@@ -92,7 +92,7 @@ SessionManager.getInstance().getSession(vSession.getSessionId(), "clientcalls.js
 						<table class="menu" id="help" width="150">
 							<tr>
 								<td class="menu"><a class='norm'
-									href="/TheBusinessAssistant/protect/helpprot.jsp">Toelichtingen</a><br>
+									href="/tba/protect/helpprot.jsp">Toelichtingen</a><br>
 								</td>
 							</tr>
 						</table>

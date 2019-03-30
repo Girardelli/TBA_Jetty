@@ -33,7 +33,7 @@
 					<tr>
 						<td width="25"></td>
 						<td valign="top" class="adminsubsubtitle"><img
-							src="/TheBusinessAssistant/images/incall.gif" height="13">
+							src="/tba/images/incall.gif" height="13">
 						</td>
 						<td valign="top" class="bodytext">wordt gebruikt om een
 							binnenkomende oproep aan te geven.</td>
@@ -41,7 +41,7 @@
 					<tr>
 						<td width="25"></td>
 						<td valign="top" class="adminsubsubtitle"><img
-							src="/TheBusinessAssistant/images/outcall.gif" height="13">
+							src="/tba/images/outcall.gif" height="13">
 						</td>
 						<td valign="top" class="bodytext">wordt gebruikt om een
 							uitgaande oproep aan te geven.</td>
@@ -49,7 +49,7 @@
 					<tr>
 						<td width="25"></td>
 						<td valign="top" class="adminsubsubtitle"><img
-							src="/TheBusinessAssistant/images/info.gif" height="16">
+							src="/tba/images/info.gif" height="16">
 						</td>
 						<td valign="top" class="bodytext">tekstinformatie voor een
 							oproep kan uit 2 delen bestaan: een korte omschrijving welke
@@ -62,7 +62,7 @@
 					<tr>
 						<td width="25"></td>
 						<td valign="top" class="adminsubsubtitle"><img
-							src="/TheBusinessAssistant/images/agenda.gif" height="13">
+							src="/tba/images/agenda.gif" height="13">
 						</td>
 						<td valign="top" class="bodytext">geeft aan dat een oproep
 							resulteerde in een nieuwe afspraak in uw agenda of een wijziging
@@ -71,7 +71,7 @@
 					<tr>
 						<td width="25"></td>
 						<td valign="top" class="adminsubsubtitle"><img
-							src="/TheBusinessAssistant/images/telefoon.gif" height="13">
+							src="/tba/images/telefoon.gif" height="13">
 						</td>
 						<td valign="top" class="bodytext">voor dringende oproepen
 							proberen wij u telefonisch te bereiken voor informatie of om de
@@ -80,7 +80,7 @@
 					<tr>
 						<td width="25"></td>
 						<td valign="top" class="adminsubsubtitle"><img
-							src="/TheBusinessAssistant/images/sms.gif" height="13">
+							src="/tba/images/sms.gif" height="13">
 						</td>
 						<td valign="top" class="bodytext">indien u niet bereikbaar
 							bent voor een dringende oproep, sturen wij u een SMS bericht naar
@@ -89,7 +89,7 @@
 					<tr>
 						<td width="25"></td>
 						<td valign="top" class="adminsubsubtitle"><img
-							src="/TheBusinessAssistant/images/important.gif" height="13">
+							src="/tba/images/important.gif" height="13">
 						</td>
 						<td valign="top" class="bodytext">met dit symbool proberen we
 							uw aandacht te vestigen naar een oproep die dringende actie

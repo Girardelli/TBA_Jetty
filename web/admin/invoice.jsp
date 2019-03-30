@@ -65,7 +65,7 @@
 <br>
 <br>
 </span></p>
-<form name="invoiceform" method="POST" action="/TheBusinessAssistant/AdminDispatch">
+<form name="invoiceform" method="POST" action="/tba/AdminDispatch">
 <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.GOTO_INVOICE%>">
 <table  width="100%" cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
 
@@ -696,34 +696,34 @@
 								    String vStyleEnd = "";
 								    String vInOut;
 								    if (vEntry.getIsIncomingCall())
-								        vInOut = "\"/TheBusinessAssistant/images/incall.gif\"";
+								        vInOut = "\"/tba/images/incall.gif\"";
 								    else
-								        vInOut = "\"/TheBusinessAssistant/images/outcall.gif\"";
+								        vInOut = "\"/tba/images/outcall.gif\"";
 								    String vInfoGifs = "";
 								    if (vEntry.getIsAgendaCall())
 								    {
-								        vInfoGifs = vInfoGifs.concat("<img src=\"/TheBusinessAssistant/images/agenda.gif\" height=\"13\" border=\"0\">&nbsp;");
+								        vInfoGifs = vInfoGifs.concat("<img src=\"/tba/images/agenda.gif\" height=\"13\" border=\"0\">&nbsp;");
 								    }
 								    if (vEntry.getIsSmsCall())
 								    {
-								        vInfoGifs = vInfoGifs.concat("<img src=\"/TheBusinessAssistant/images/sms.gif\"  height=\"13\" border=\"0\">&nbsp;");
+								        vInfoGifs = vInfoGifs.concat("<img src=\"/tba/images/sms.gif\"  height=\"13\" border=\"0\">&nbsp;");
 								    }
 								    if (vEntry.getIsForwardCall())
 								    {
-								        vInfoGifs = vInfoGifs.concat("<img src=\"/TheBusinessAssistant/images/telefoon.gif\"  height=\"13\" border=\"0\">&nbsp;");
+								        vInfoGifs = vInfoGifs.concat("<img src=\"/tba/images/telefoon.gif\"  height=\"13\" border=\"0\">&nbsp;");
 								    }
 								    if (vEntry.getIsFaxCall())
 								    {
-								        vInfoGifs = vInfoGifs.concat("<img src=\"/TheBusinessAssistant/images/fax.gif\"  height=\"13\" border=\"0\">&nbsp;");
+								        vInfoGifs = vInfoGifs.concat("<img src=\"/tba/images/fax.gif\"  height=\"13\" border=\"0\">&nbsp;");
 								    }
 								    if (vEntry.getIs3W_call())
 								    {
-								        vInfoGifs = vInfoGifs.concat("<img src=\"/TheBusinessAssistant/images/3w.gif\"  height=\"13\" border=\"0\">&nbsp;");
+								        vInfoGifs = vInfoGifs.concat("<img src=\"/tba/images/3w.gif\"  height=\"13\" border=\"0\">&nbsp;");
 									}
 							      	String vImportant = "";
 							        if (vEntry.getIsImportantCall())
 						         	{
-						             	vImportant = vImportant.concat("<img src=\"/TheBusinessAssistant/images/important.gif\"  height=\"13\" border=\"0\">&nbsp;");
+						             	vImportant = vImportant.concat("<img src=\"/tba/images/important.gif\"  height=\"13\" border=\"0\">&nbsp;");
 						            }
 						            long seconds = InvoiceHelper.duration2Seconds(vDuration);
 						            if (seconds > Constants.NORMAL_CALL_LENGTH)
@@ -738,7 +738,7 @@
 				%>
 			<tr bgcolor="FFCC66" id=<%=vId%> class="bodytekst" onmouseover="hooverOnRow('<%=vId%>','<%=vRowInd%>')"
 					onmouseout="hooverOffRow('<%=vId%>','<%=vRowInd%>')"
-				ondblclick="changeUrl('/TheBusinessAssistant/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.RECORD_UPDATE%>&<%=Constants.RECORD_ID%>=<%=vEntry.getId()%>');">
+				ondblclick="changeUrl('/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.RECORD_UPDATE%>&<%=Constants.RECORD_ID%>=<%=vEntry.getId()%>');">
 				<td width="20" bgcolor="FFFFFF"><img src=<%=vInOut%> height="13" border="0"></td>
 				<td width="10" valign="top"><%=vImportant%></td>
 				<td width="55" valign="top"><%=vStyleStart%><%=vDate%><%=vStyleEnd%></td>

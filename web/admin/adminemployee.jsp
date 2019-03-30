@@ -36,7 +36,7 @@ try
 %>
 		<p><span class="admintitle"> Werknemers en Kaders</span></p>
 		<form name="adminaccform" method="GET"
-			action="/TheBusinessAssistant/AdminDispatch"><input type=hidden
+			action="/tba/AdminDispatch"><input type=hidden
 			name=<%=Constants.ACCOUNT_TO_DELETE%> value=""> <input type=hidden
 			name=<%=Constants.SRV_ACTION%> value=""> 
 			

@@ -82,7 +82,7 @@
 
   <servlet-mapping>
      <servlet-name>IntertelServlet</servlet-name>
-     <url-pattern>/Intertel</url-pattern>
+     <url-pattern>/intertel</url-pattern>
   </servlet-mapping>
 
   <!-- ==================================================================== -->

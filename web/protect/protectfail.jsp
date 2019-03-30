@@ -25,7 +25,7 @@
 		<td>
 		<table width="100%" height="50" border="0" cellspacing="0"
 			cellpadding="0" bgcolor="#FFFFFF">
-			<td><img src="/TheBusinessAssistant/images/TBA-Logo.png" style="padding:10px;" height="70" alt=""></td>
+			<td><img src="/tba/images/TBA-Logo.png" style="padding:10px;" height="70" alt=""></td>
 		</table>
 		</td>
 	</tr>

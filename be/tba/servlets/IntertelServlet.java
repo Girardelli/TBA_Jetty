@@ -27,9 +27,9 @@ public class IntertelServlet extends HttpServlet
 	
     /**
      * 
-     * C:\java\curl\curl-7.64.0-win64-mingw\bin\curl -d "param1=value1&param2=value2" -X  POST http://localhost:8080/TheBusinessAssistant/Intertel
+     * C:\java\curl\curl-7.64.0-win64-mingw\bin\curl -d "param1=value1&param2=value2" -X  POST http://localhost:8080/tba/intertel
      *
-     * C:\java\curl\curl-7.64.0-win64-mingw\bin\curl -d "param1=value1&param2=value2" -X  POST https://thebusinessassistant.be/TheBusinessAssistant/intertel
+     * C:\java\curl\curl-7.64.0-win64-mingw\bin\curl -d "param1=value1&param2=value2" -X  POST https://thebusinessassistant.be/tba/intertel
      * 
      */
 	public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException

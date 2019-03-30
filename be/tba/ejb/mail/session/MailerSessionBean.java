@@ -315,11 +315,11 @@ public class MailerSessionBean
          * vBody.append("<img src=\
          * "./images/info.gif\" alt=\"Extra info\" width=\"15\" height=\"15\" border=\"0\">"
          * ); vBody.append("<img src=\
-         * "/TheBusinessAssistant/images/agenda.gif\" height=\"13\" border=\"0\">&nbsp;"
+         * "/tba/images/agenda.gif\" height=\"13\" border=\"0\">&nbsp;"
          * ); vBody.append("<img src=\
-         * "/TheBusinessAssistant/images/sms.gif\" height=\"13\" border=\"0\">&nbsp" );
+         * "/tba/images/sms.gif\" height=\"13\" border=\"0\">&nbsp" );
          * vBody.append("<img src=\
-         * "/TheBusinessAssistant/images/telefoon.gif\" height=\"13\" border=\"0\">&nbsp;"
+         * "/tba/images/telefoon.gif\" height=\"13\" border=\"0\">&nbsp;"
          * );
          */
 

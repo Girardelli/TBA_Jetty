@@ -55,7 +55,7 @@ try
 		<br>
 		</span></p>
 		<form name="taskform" method="POST"
-			action="/TheBusinessAssistant/AdminDispatch"><input type=hidden
+			action="/tba/AdminDispatch"><input type=hidden
 			name=<%=Constants.TASK_TO_DELETE%> value=""> <input type=hidden
 			name=<%=Constants.SRV_ACTION%> value="<%=Constants.GOTO_TASK_ADMIN%>">
 		<br>

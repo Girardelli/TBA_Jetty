@@ -4,7 +4,7 @@
 
 
 <head>
-<meta HTTP-EQUIV="Refresh"	content="<%=Constants.REFRESH%>;URL=\TheBusinessAssistant\admin\adminaccount.jsp>">
+<meta HTTP-EQUIV="Refresh"	content="<%=Constants.REFRESH%>;URL=\tba\admin\adminaccount.jsp>">
 </head>
 
 	<%@ page
@@ -44,12 +44,12 @@ try
     %>
 		<table>
 			<tr>
-	            <form name="downloadfileform" method="POST" action="/TheBusinessAssistant/download" >
+	            <form name="downloadfileform" method="POST" action="/tba/download" >
 	            <input type=hidden name=<%=Constants.ACCOUNT_TO_DELETE%> value="">
 	            <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.DOWNLOAD_WK_KLANTEN_XML%>"> 
 	            <input class="tbabutton" type=submit name=action value=" Download export file " onclick="downloadExportFile()">
 	            </form>
-		        <form name="adminaccform" method="GET" action="/TheBusinessAssistant/AdminDispatch">
+		        <form name="adminaccform" method="GET" action="/tba/AdminDispatch">
 		        <input type=hidden name=<%=Constants.ACCOUNT_TO_DELETE%> value=""> 
 		        <input type=hidden name=<%=Constants.SRV_ACTION%> value="yves"> 
  				<td width="80"><input class="tbabutton" type=submit name=action value=" Toevoegen "	onclick="addAccount()"></td>
@@ -100,9 +100,9 @@ try
           String vRegImg;
 //          if (vEntry.getIsRegistered())
           if (vEntry.getNoInvoice())
-            vRegImg = "\"/TheBusinessAssistant/images/deleteCross.gif\"";
+            vRegImg = "\"/tba/images/deleteCross.gif\"";
           else
-            vRegImg = "\"/TheBusinessAssistant/images/greenVink.gif\"";
+            vRegImg = "\"/tba/images/greenVink.gif\"";
           String vId = "id" + vEntry.getId();;
           
       %>
@@ -110,7 +110,7 @@ try
       				onmouseover="hooverOnRow('<%=vId%>','<%=vRowInd%>','#FFFF99')"
       				onmouseout="hooverOffRow('<%=vId%>','<%=vRowInd%>','#FFCC66')"
       				onclick="updateDeleteFlag('<%=vId%>','<%=vEntry.getId()%>','<%=vRowInd%>')"
-      				ondblclick="changeUrl('/TheBusinessAssistant/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACCOUNT_UPDATE%>&<%=Constants.ACCOUNT_ID%>=<%=vEntry.getFwdNumber()%>');">
+      				ondblclick="changeUrl('/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACCOUNT_UPDATE%>&<%=Constants.ACCOUNT_ID%>=<%=vEntry.getFwdNumber()%>');">
       				<td bgcolor="FFFFFF"><img src=<%=vRegImg%> width="16" height="16" border="0"></td>
       				<td valign="top" class="bodytekst"><%=vNumber%></td>
       				<td valign="top" class="bodytekst"><%=vGsm%></td>
@@ -172,13 +172,13 @@ try
 		          vLastLogin = (vLastLogin == null) ? "" : vLastLogin;
 		          String vRegImg;
 //			          if (vSubEntry.getIsRegistered())
-//			            vRegImg = "\"/TheBusinessAssistant/images/greenVink.gif\"";
+//			            vRegImg = "\"/tba/images/greenVink.gif\"";
 //			          else
-//			            vRegImg = "\"/TheBusinessAssistant/images/deleteCross.gif\"";
+//			            vRegImg = "\"/tba/images/deleteCross.gif\"";
                   if (!vSubEntry.getNoInvoice())
-                      vRegImg = "\"/TheBusinessAssistant/images/greenVink.gif\"";
+                      vRegImg = "\"/tba/images/greenVink.gif\"";
                     else
-                      vRegImg = "\"/TheBusinessAssistant/images/deleteCross.gif\"";
+                      vRegImg = "\"/tba/images/deleteCross.gif\"";
 		          String vId = "id" + vSubEntry.getId();
 		          
 		      %>
@@ -186,7 +186,7 @@ try
 		                    onmouseover="hooverOnRow('<%=vId%>','<%=vRowInd%>','#FFFF99')"
 		                    onmouseout="hooverOffRow('<%=vId%>','<%=vRowInd%>','#FFCC66')"
 		                    onclick="updateDeleteFlag('<%=vId%>','<%=vSubEntry.getId()%>','<%=vRowInd%>')"
-		                    ondblclick="changeUrl('/TheBusinessAssistant/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACCOUNT_UPDATE%>&<%=Constants.ACCOUNT_ID%>=<%=vNumber%>');">
+		                    ondblclick="changeUrl('/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACCOUNT_UPDATE%>&<%=Constants.ACCOUNT_ID%>=<%=vNumber%>');">
 		                    <td bgcolor="FFFFFF"><img src=<%=vRegImg%> width="16"
 		                        height="16" border="0"></td>
 		                    <td valign="top" class="bodytekst"><%=vNumber%></td>

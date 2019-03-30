@@ -4,7 +4,7 @@
 
 <head>
 <meta HTTP-EQUIV="Refresh"
-	content="<%=Constants.REFRESH%>;URL=\TheBusinessAssistant\admin\admincalls.jsp">
+	content="<%=Constants.REFRESH%>;URL=\tba\admin\admincalls.jsp">
 </head>
 <%@ page
 	import="java.util.*,
@@ -59,13 +59,13 @@
 </label>
 
 
-    <form name="loadfileform" method="POST" action="/TheBusinessAssistant/AdminDispatch" enctype="multipart/form-data">
+    <form name="loadfileform" method="POST" action="/tba/AdminDispatch" enctype="multipart/form-data">
     <input class="tbabutton" type=file name=action value=" Fintro excel opladen " accept=".xlsx">
     <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.GOTO_OPEN_INVOICE%>">
     <input class="tbabutton" type=submit name=action value=" Laad de xlsx op " onclick="uploadFile()">
     </form>
     -->
-	<form name="loadfileform" method="POST" action="/TheBusinessAssistant/AdminDispatch" enctype="multipart/form-data">
+	<form name="loadfileform" method="POST" action="/tba/AdminDispatch" enctype="multipart/form-data">
 	<input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.GOTO_OPEN_INVOICE%>"> 
 	<input class="tbabutton" type=file name=<%=Constants.FINTRO_FILE%> value=" Fintro excel opladen " accept=".xlsx">
 	<input class="tbabutton" type=submit name=action value=" Laad de file op " onclick="uploadFile()">
@@ -89,7 +89,7 @@
 				   	            vSession.setFintroProcessLog(fintroXlsxReader.getOutputFileName());
 				   	         %> 
 				             <br>				   	            
-				   	         <form name="downloadfileform" method="POST" action="/TheBusinessAssistant/download" >
+				   	         <form name="downloadfileform" method="POST" action="/tba/download" >
 						     <input class="tbabutton" type=submit name=action value=" download de procesresultaten hieronder afgedrukt " onclick="downloadProcFile()">
 						     <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.DOWNLOAD_FINTRO_PROCESS_TXT%>"> 
 							 <input type=hidden name=<%=Constants.FINTRO_PROCESS_FILE%> value="<%=fintroXlsxReader.getOutputFileName()%>"> 
@@ -112,7 +112,7 @@
 			   	                vSession.setFintroProcessLog(null);
 			   	            }
 %>
-			   	      <form name="openinvoicelistform" method="POST" action="/TheBusinessAssistant/AdminDispatch">
+			   	      <form name="openinvoicelistform" method="POST" action="/tba/AdminDispatch">
 			   	      <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.GOTO_OPEN_INVOICE%>"> 
 			   	      <input type=hidden name=<%=Constants.INVOICE_TO_SETPAYED%> value="">
 <%
@@ -168,7 +168,7 @@
 				%>
 				<tr bgcolor=<%=vCollor%> id=<%=vId%> class="bodytekst"
 					onclick="updateDeleteFlag('<%=vId%>','<%=vEntry.getId()%>','<%=vRowInd%>')"
-					ondblclick="changeUrl('/TheBusinessAssistant/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_INVOICE%>&<%=Constants.ACCOUNT_FILTER_CUSTOMER%>=<%=vEntry.getAccountFwdNr()%>&<%=Constants.INVOICE_ID%>=<%=vEntry.getId()%>');">
+					ondblclick="changeUrl('/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_INVOICE%>&<%=Constants.ACCOUNT_FILTER_CUSTOMER%>=<%=vEntry.getAccountFwdNr()%>&<%=Constants.INVOICE_ID%>=<%=vEntry.getId()%>');">
                     <td width="90" valign="top"><%=vEntry.getInvoiceNr()%></td>
 					<td width="300" valign="top"><%=vAccount.getFullName()%></td>
 					<td width="50" valign="top"><%=vCostFormatter.format(vKost)%></td>

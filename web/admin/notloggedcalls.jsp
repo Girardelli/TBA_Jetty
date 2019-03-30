@@ -5,7 +5,7 @@
 
 <head>
 <meta HTTP-EQUIV="Refresh"
-	content="<%=Constants.REFRESH%>;URL=\TheBusinessAssistant\admin\notloggedcalls.jsp">
+	content="<%=Constants.REFRESH%>;URL=\tba\admin\notloggedcalls.jsp">
 </head>
 
 	<%@ page
@@ -30,7 +30,7 @@ private StringBuilder allEntryIds;
 %>
 <body>
 	<form name="calllistform" method="GET"
-		action="/TheBusinessAssistant/AdminDispatch"><input type=hidden
+		action="/tba/AdminDispatch"><input type=hidden
 		name=<%=Constants.RECORD_TO_DELETE%> value=""> <input type=hidden
 		name=<%=Constants.SRV_ACTION%> value=""> <br>
 	<table  cellspacing='0' cellpadding='0' border='0'
@@ -80,9 +80,9 @@ try
       String vNumber = vEntry.getNumber();
       String vInOut;
       if (vEntry.getIsIncomingCall())
-        vInOut = "\"/TheBusinessAssistant/images/incall.gif\"";
+        vInOut = "\"/tba/images/incall.gif\"";
       else
-        vInOut = "\"/TheBusinessAssistant/images/outcall.gif\"";
+        vInOut = "\"/tba/images/outcall.gif\"";
 %>
 	<tr bgcolor="FFCC66" id=<%=vId%> class="bodytekst"
 		onmouseover="hooverOnRow('<%=vId%>','<%=vRowInd%>','#FFFF99')"

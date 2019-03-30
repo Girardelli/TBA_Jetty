@@ -87,25 +87,25 @@ boolean vInvoicePerMail = vCustomer.getIsMailInvoice();
 		<span class="admintitle">Stel uw voorkeuren in.</span> <br>
 		<span class="bodytekst"> <!-- action name must be a URI name as it is set in the <application>.xml servlet-mapping tag.-->
 		<form name="updateForm" method="POST"
-			action="/TheBusinessAssistant/CustomerDispatch">
+			action="/tba/CustomerDispatch">
 		<table width="700" border="0" cellspacing="4" cellpadding="4">
 			<tr>
 				<td width="200" valign="top" class="adminsubsubtitle"><img
-					src="/TheBusinessAssistant/images/blueSphere.gif" width="10"
+					src="/tba/images/blueSphere.gif" width="10"
 					height="10">&nbsp;e-mail</td>
 				<td width="500" valign="top"><input type=text
 					name=<%=Constants.ACCOUNT_EMAIL%> size=50 value="<%=vEmail%>"></td>
 			</tr>
             <tr>
                 <td width="200" valign="top" class="adminsubsubtitle"><img
-                    src="/TheBusinessAssistant/images/blueSphere.gif" width="10"
+                    src="/tba/images/blueSphere.gif" width="10"
                     height="10">&nbsp;Invoice e-mail</td>
                 <td width="500" valign="top"><input type=text
                     name=<%=Constants.ACCOUNT_INVOICE_EMAIL%> size=50 value="<%=vInvoiceEmail%>"></td>
             </tr>
 			<tr>
 				<td width="200" valign="top" class="adminsubsubtitle"><img
-					src="/TheBusinessAssistant/images/blueSphere.gif" width="10"
+					src="/tba/images/blueSphere.gif" width="10"
 					height="10">&nbsp;GSM nummer (SMS)</td>
 				<td width="500" valign="top"><input type=text
 					name=<%=Constants.ACCOUNT_GSM%> size=13 value="<%=vGsm%>"></td>
@@ -115,7 +115,7 @@ boolean vInvoicePerMail = vCustomer.getIsMailInvoice();
 		<table width="700" border="0" cellspacing="4" cellpadding="4">
 			<tr>
 				<td width="200" valign="top" class="adminsubsubtitle"><img
-					src="/TheBusinessAssistant/images/blueSphere.gif" width="10"
+					src="/tba/images/blueSphere.gif" width="10"
 					height="10">&nbsp;mail 1</td>
 				<td width="40" valign="top" class="bodytekst"><input type=checkbox
 					name=<%=Constants.ACCOUNT_MAIL_ON1%> value="<%=Constants.YES%>"
@@ -135,7 +135,7 @@ for (int i = 0; i < kMaxMailMinutes; i += 5)
 			</tr>
 			<tr>
 				<td width="200" valign="top" class="adminsubsubtitle"><img
-					src="/TheBusinessAssistant/images/blueSphere.gif" width="10"
+					src="/tba/images/blueSphere.gif" width="10"
 					height="10">&nbsp;mail 2</td>
 				<td width="40" valign="top" class="bodytekst"><input type=checkbox
 					name=<%=Constants.ACCOUNT_MAIL_ON2%> value="<%=Constants.YES%>"
@@ -155,7 +155,7 @@ for (int i = 0; i < kMaxMailMinutes; i += 5)
 			</tr>
 			<tr>
 				<td width="200" valign="top" class="adminsubsubtitle"><img
-					src="/TheBusinessAssistant/images/blueSphere.gif" width="10"
+					src="/tba/images/blueSphere.gif" width="10"
 					height="10">&nbsp;mail 3</td>
 				<td width="40" valign="top" class="bodytekst"><input type=checkbox
 					name=<%=Constants.ACCOUNT_MAIL_ON3%> value="<%=Constants.YES%>"
@@ -201,7 +201,7 @@ if (vCustomer.getIs3W())
 
 			<tr>
 				<td width="200" valign="top" class="adminsubsubtitle"><img
-					src="/TheBusinessAssistant/images/blueSphere.gif" width="10"
+					src="/tba/images/blueSphere.gif" width="10"
 					height="10">&nbsp;3W settings</td>
 				<td width="150" valign="top" class="bodytekst"><select
 					name=<%=Constants.ACCOUNT_3W_COMPANY_ID%>>

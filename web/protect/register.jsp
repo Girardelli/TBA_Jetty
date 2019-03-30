@@ -81,7 +81,7 @@ function refresh()
 		<td>
 		<table width="100%" height="50" border="0" cellspacing="0"
 			cellpadding="0" bgcolor="#FFFFFF">
-			<td><img src="/TheBusinessAssistant/images/TBA-Logo.png" style="padding:10px;" height="70" alt=""></td>
+			<td><img src="/tba/images/TBA-Logo.png" style="padding:10px;" height="70" alt=""></td>
 		</table>
 		</td>
 	</tr>
@@ -114,7 +114,7 @@ try
         out.println("<br><span class=\"bodyredbold\">");
         for (Iterator i = vErrorList.iterator(); i.hasNext();)
         {
-          out.println("<img src=\"/TheBusinessAssistant/images/blueVink.gif\" border=\"0\">" + (String) i.next() + "<br>");
+          out.println("<img src=\"/tba/images/blueVink.gif\" border=\"0\">" + (String) i.next() + "<br>");
         }
         out.println("</span>");
       }
@@ -125,7 +125,7 @@ try
 %> <br>
 			<p><span class="bodytekst"> <!-- action name must be a URI name as it is set in the <application>.xml servlet-mapping tag.-->
 			<form name="loginform" method="GET"
-				action="/TheBusinessAssistant/Login"><br>
+				action="/tba/Login"><br>
 			Vul hier uw registratiecode in die je van ons bekomen hebt.<br>
 			<table width="520" border="0" cellspacing="2" cellpadding="2">
 				<tr>

@@ -55,7 +55,7 @@ else
 		<span class="admintitle"> Voeg extra informatie toe aan oproep voor <%=mCustomerData.getFullName()%>.</span>
 		<br>
 		<span class="bodytekst">
-		<form name="calllistform" method="POST"	action="/TheBusinessAssistant/AdminDispatch">
+		<form name="calllistform" method="POST"	action="/tba/AdminDispatch">
 		<table width="100%" border="0" cellspacing="1" cellpadding="1">
 <% 
 if (mCustomerData.getHasSubCustomers())
@@ -94,7 +94,7 @@ if (mCustomerData.getHasSubCustomers())
 					type=checkbox name=<%=Constants.RECORD_IMPORTANT%>
 					value="<%=Constants.YES%>"
 					<%=(mRecordData.getIsImportantCall() ? " checked" : "")%>>&nbsp;&nbsp;<img
-					src="/TheBusinessAssistant/images/important.gif"
+					src="/tba/images/important.gif"
 					alt="belangrijke oproep!" height="13" border="0"></td>
 			</tr>
 			<tr>
@@ -105,7 +105,7 @@ if (mCustomerData.getHasSubCustomers())
 					type=checkbox name=<%=Constants.RECORD_SMS%>
 					value="<%=Constants.YES%>"
 					<%=(mRecordData.getIsSmsCall() ? "checked=\"checked\"" : "")%>>&nbsp;&nbsp;<img
-					src="/TheBusinessAssistant/images/sms.gif"
+					src="/tba/images/sms.gif"
 					alt="wij hebben een SMS bericht gestuurd betreffende deze oproep"
 					height="13" border="0"></td>
 			</tr>
@@ -117,7 +117,7 @@ if (mCustomerData.getHasSubCustomers())
 					type=checkbox name=<%=Constants.RECORD_AGENDA%>
 					value="<%=Constants.YES%>"
 					<%=(mRecordData.getIsAgendaCall() ? "checked=\"checked\"" : "")%>>&nbsp;&nbsp;<img
-					src="/TheBusinessAssistant/images/agenda.gif"
+					src="/tba/images/agenda.gif"
 					alt="afspraak toegevoegd in uw agenda" height="13" border="0"></td>
 			</tr>
 			<tr>
@@ -128,7 +128,7 @@ if (mCustomerData.getHasSubCustomers())
 					type=checkbox name=<%=Constants.RECORD_FORWARD%>
 					value="<%=Constants.YES%>"
 					<%=(mRecordData.getIsForwardCall() ? "checked=\"checked\"" : "")%>>&nbsp;&nbsp;<img
-					src="/TheBusinessAssistant/images/telefoon.gif"
+					src="/tba/images/telefoon.gif"
 					alt="oproep doorgeschakeld naar u" height="13" border="0"></td>
 			</tr>
 			<tr>
@@ -139,7 +139,7 @@ if (mCustomerData.getHasSubCustomers())
 					type=checkbox name=<%=Constants.RECORD_FAX%>
 					value="<%=Constants.YES%>"
 					<%=(mRecordData.getIsFaxCall() ? "checked=\"checked\"" : "")%>>&nbsp;&nbsp;<img
-					src="/TheBusinessAssistant/images/fax.gif"
+					src="/tba/images/fax.gif"
 					alt="binnenkomende fax voor u verwerkt" height="13" border="0"></td>
 			</tr>
 			<%
