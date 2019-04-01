@@ -101,7 +101,7 @@ if (vCustomerFilter == null) vCustomerFilter = Constants.ACCOUNT_FILTER_ALL;
 <p><span class="admintitle"> Oproepenlijst: <%=vRecords.size()%> oproepen </span></p>
 <form name="calllistform" method="POST"	action="/tba/AdminDispatch">
 	<input type=hidden name=<%=Constants.RECORD_ID%> value=""> 
-    <input type=hidden name=<%=Constants.RECORD_SHORT_TEXT%> value="yves"> 
+    <input type=hidden name=<%=Constants.RECORD_SHORT_TEXT%> value=""> 
     <input type=hidden name=<%=Constants.RECORD_TO_DELETE%> value=""> 
 	<input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.GOTO_RECORD_ADMIN%>"> 
 <table  cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
