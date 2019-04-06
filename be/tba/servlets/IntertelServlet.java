@@ -111,7 +111,7 @@ public class IntertelServlet extends HttpServlet
     		if (!isIncoming && data != null )
     		{
     			// call is transfered
-    			IntertelCallData transferData = new IntertelCallData(isIncoming, calledNr, "014409000", intertelCallId, timestamp, true, phase);
+    			IntertelCallData transferData = new IntertelCallData(isIncoming, "014409000", calledNr, intertelCallId, timestamp, true, phase);
     			data.setTransferData(transferData);
     			transferData.setTransferData(data);
     			transferData.setCurrentPhase(phase);
