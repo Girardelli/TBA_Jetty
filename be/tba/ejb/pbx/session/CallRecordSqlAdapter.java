@@ -1093,7 +1093,14 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
     	}
     	else
     	{
-    		newRecord.setFwdNr(data.calledNr);
+        	if (data.isIncoming)
+        	{
+        		newRecord.setFwdNr(data.calledNr); 
+        	}
+        	else
+        	{
+        		newRecord.setFwdNr(data.callingNr);
+        	}
     	}
     	newRecord.setNumber(data.callingNr);
     	newRecord.setTsStart(data.tsStart);
@@ -1102,7 +1109,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
     	newRecord.setDate(String.format("%02d/%02d/%02d", vToday.get(Calendar.DAY_OF_MONTH), vToday.get(Calendar.MONTH) + 1, vToday.get(Calendar.YEAR) - 2000));
     	newRecord.setTime(String.format("%02d:%02d", vToday.get(Calendar.HOUR_OF_DAY), vToday.get(Calendar.MINUTE)));
     	AccountEntityData vData = AccountCache.getInstance().get(newRecord.getFwdNr());
-    	int dbId = 0;
+  	   	int dbId = 0;
 
         if (vData != null)
         {
@@ -1134,7 +1141,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
     		executeSqlQuery(webSession.getConnection(), "UPDATE CallRecordEntity SET IsForwardCall=true WHERE ID='" + data.transferData.dbRecordId + "'");
     		transferText = "', ShortDescription='Doorgeschakelde oproep van " + data.transferData.callingNr + " naar " + data.callingNr;
     	}
-    	executeSqlQuery(webSession.getConnection(), "UPDATE CallRecordEntity SET TsEnd='" + data.tsEnd + transferText + "' WHERE ID='" + data.dbRecordId + "'");
+    	executeSqlQuery(webSession.getConnection(), "UPDATE CallRecordEntity SET TsEnd='" + data.tsEnd + transferText + "', Cost='" + data.getCostStr() + "' WHERE ID='" + data.dbRecordId + "'");
     }
     
     static public void setIsDocumentedFlag(CallRecordEntityData record)
