@@ -1090,19 +1090,22 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
     	if (data.isTransferCall)
     	{
     		newRecord.setFwdNr(data.transferData.calledNr);
+    		newRecord.setNumber(data.calledNr);
     	}
     	else
     	{
         	if (data.isIncoming)
         	{
         		newRecord.setFwdNr(data.calledNr); 
+        		newRecord.setNumber(data.callingNr);
         	}
         	else
         	{
         		newRecord.setFwdNr(data.callingNr);
+        		newRecord.setNumber(data.calledNr);
         	}
     	}
-    	newRecord.setNumber(data.callingNr);
+    	
     	newRecord.setTsStart(data.tsStart);
     	newRecord.setIsIncomingCall(data.isIncoming);
     	Calendar vToday = Calendar.getInstance();
