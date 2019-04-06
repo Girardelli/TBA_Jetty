@@ -1142,7 +1142,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
     	if (data.isTransferCall)
     	{
     		executeSqlQuery(webSession.getConnection(), "UPDATE CallRecordEntity SET IsForwardCall=true WHERE ID='" + data.transferData.dbRecordId + "'");
-    		transferText = "', ShortDescription='Doorgeschakelde oproep van " + data.transferData.callingNr + " naar " + data.callingNr;
+    		transferText = "', ShortDescription='Doorgeschakelde oproep van " + data.transferData.callingNr + " naar " + data.calledNr;
     	}
     	executeSqlQuery(webSession.getConnection(), "UPDATE CallRecordEntity SET TsEnd='" + data.tsEnd + transferText + "', Cost='" + data.getCostStr() + "' WHERE ID='" + data.dbRecordId + "'");
     }

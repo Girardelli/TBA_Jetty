@@ -40,7 +40,12 @@ public class IntertelCallManager
 	
 	public synchronized void removeCall(int id)
 	{
-		mCallMap.remove(new Integer(id));
+		Integer key = new Integer(id);
+		IntertelCallData data = mCallMap.get(key);
+		if (data.tsEnd > 0 && (data.transferData == null || data.transferData.tsEnd > 0))
+		{
+			mCallMap.remove(key);
+		}
 	}
 	
 	public synchronized Collection<IntertelCallData> getCallList()
