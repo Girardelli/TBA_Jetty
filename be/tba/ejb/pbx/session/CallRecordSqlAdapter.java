@@ -13,6 +13,7 @@ import be.tba.pbx.Forum700CallRecord;
 import be.tba.servlets.session.WebSession;
 import be.tba.util.constants.Constants;
 import be.tba.util.data.AbstractSqlAdapter;
+import be.tba.util.data.IntertelCallData;
 import be.tba.util.data.ReleaseCallData;
 import be.tba.util.session.AccountCache;
 import be.tba.util.timer.CallCalendar;
@@ -597,7 +598,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
     {
         return executeSqlQuery(webSession.getConnection(), "SELECT * FROM CallRecordEntity WHERE IsNotLogged=TRUE ORDER BY TimeStamp DESC");
     }
-
+    
     static final long PERIOD = Constants.DAYS * 20;
 
     static final long LOOPS = 365 / 20;
@@ -917,7 +918,6 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
                 newRecord.setFwdNr(Constants.NUMBER_BLOCK[0][0]);
                 // return;
             }
-            newRecord.setIsVirgin(true);
             newRecord.setDate(record.mDate);
             newRecord.setTime(record.mTime);
             newRecord.setNumber(record.mExtCorrNumber);
@@ -960,7 +960,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
             sLogger.error("", e);
         }
     }
-
+    
     /**
      * @ejb:interface-method view-type="remote"
      */
@@ -1084,6 +1084,62 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
         }
     }
 
+    public int addIntertelCall(WebSession webSession, IntertelCallData data)
+    {
+    	CallRecordEntityData newRecord = new CallRecordEntityData();
+    	if (data.isTransferCall)
+    	{
+    		newRecord.setFwdNr(data.transferData.calledNr);
+    	}
+    	else
+    	{
+    		newRecord.setFwdNr(data.calledNr);
+    	}
+    	newRecord.setNumber(data.callingNr);
+    	newRecord.setTsStart(data.tsStart);
+    	newRecord.setIsIncomingCall(data.isIncoming);
+    	Calendar vToday = Calendar.getInstance();
+    	newRecord.setDate(new String(vToday.get(Calendar.DAY_OF_MONTH) + " " + Constants.MONTHS[vToday.get(Calendar.MONTH)] + " " + vToday.get(Calendar.YEAR)));
+    	newRecord.setTime(new String(vToday.get(Calendar.HOUR_OF_DAY) + ":" + vToday.get(Calendar.MINUTE)));
+    	AccountEntityData vData = AccountCache.getInstance().get(newRecord.getFwdNr());
+    	int dbId = 0;
+
+        if (vData != null)
+        {
+            if (AccountCache.getInstance().isMailEnabled(vData))
+                newRecord.setIsMailed(false);
+            else
+                newRecord.setIsMailed(true);
+            addRow(webSession.getConnection(), newRecord);
+            Collection<CallRecordEntityData> records = executeSqlQuery(webSession.getConnection(), "SELECT * FROM CallRecordEntity WHERE IntertelCallId='" + data.intertelCallId + "' AND TsStart='" + data.tsStart + "' ORDER BY TimeStamp DESC");
+        	if (records != null && records.size() == 1)
+    		{
+        		dbId = records.iterator().next().getId();
+    		}
+            System.out.println("addCallRecord: id = " + newRecord.getId() + ", fwdnr=" + newRecord.getFwdNr() + ", isMailed=" + newRecord.getIsMailed());
+            sLogger.info("addCallRecord: id={}, fwdnr={}, isMailed={}", newRecord.getId(), newRecord.getFwdNr(), newRecord.getIsMailed());
+        }
+        else
+        {
+        	System.out.println("unknown customer number: " + data.calledNr);
+        }
+        return dbId;
+    }
+
+    public void setTsAnswer(WebSession webSession, IntertelCallData data)
+    {
+    	executeSqlQuery(webSession.getConnection(), "UPDATE CallRecordEntity SET TsAnswer='" + data.tsAnswer + "' WHERE ID='" + data.dbRecordId + "'");
+    }
+    
+    public void setTsEnd(WebSession webSession, IntertelCallData data)
+    {
+    	String transferText = "";
+    	if (data.isTransferCall)
+    	{
+    		transferText = "' AND ShortDescription='Doorgeschakelde oproep van " + data.transferData.callingNr + " naar " + data.calledNr;
+    	}
+    	executeSqlQuery(webSession.getConnection(), "UPDATE CallRecordEntity SET TsEnd='" + data.tsEnd + transferText + "' WHERE ID='" + data.dbRecordId + "'");
+    }
     
     static public void setIsDocumentedFlag(CallRecordEntityData record)
     {
@@ -1146,6 +1202,9 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
             entry.setIsFaxCall(rs.getBoolean(24));
             entry.setIsChanged(rs.getBoolean(25));
             entry.setDoneBy(null2EmpthyString(rs.getString(26)));
+            entry.setTsStart(rs.getLong(27));
+            entry.setTsAnswer(rs.getLong(28));
+            entry.setTsEnd(rs.getLong(29));
             vVector.add(entry);
         }
         return vVector;

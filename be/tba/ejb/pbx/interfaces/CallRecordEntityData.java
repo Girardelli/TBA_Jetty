@@ -4,6 +4,7 @@
 package be.tba.ejb.pbx.interfaces;
 
 import be.tba.util.data.AbstractData;
+import be.tba.util.invoice.InvoiceHelper;
 
 /**
  * Data object for CallRecordEntity.
@@ -17,11 +18,15 @@ public class CallRecordEntityData extends AbstractData
     */
     private static final long serialVersionUID = 1L;
     private int id;
+    // customer number
     private java.lang.String fwdNr;
     private java.lang.String date;
     private java.lang.String time;
+    // calling party
     private java.lang.String number;
+    //caller name
     private java.lang.String name;
+    // duration of call
     private java.lang.String cost;
     private long timeStamp;
     private boolean isIncomingCall;
@@ -42,12 +47,43 @@ public class CallRecordEntityData extends AbstractData
     private boolean isFaxCall;
     private boolean isChanged;
     private java.lang.String doneBy;
+    
+    private long tsStart;
+    private long tsAnswer;
+    private long tsEnd;
+     
 
     public CallRecordEntityData()
     {
+    	id = 0;
+        fwdNr = "";
+        date = "";
+        time = "";
+        number = "";
+        name = "";
+        cost = "";
+        timeStamp = 0;
+        isIncomingCall = false;
+        isDocumented = false;
+        isReleased = false;
+        isNotLogged = false;
+        isAgendaCall = false;
+        isSmsCall = false;
+        isForwardCall = false;
+        isImportantCall = false;
+        is3W_call = false;
+        isMailed = false;
+        invoiceLevel = InvoiceHelper.kLevel1;
+        w3_CustomerId = "";
+        shortDescription = "";
+        longDescription = "";
+        isVirgin = true;
+        isFaxCall = false;
+        isChanged = false;
+        doneBy = "";
     }
 
-    public CallRecordEntityData(int id, java.lang.String fwdNr, java.lang.String date, java.lang.String time, java.lang.String number, java.lang.String name, java.lang.String cost, long timeStamp, boolean isIncomingCall, boolean isDocumented, boolean isReleased, boolean isNotLogged, boolean isAgendaCall, boolean isSmsCall, boolean isForwardCall, boolean isImportantCall, boolean is3W_call, boolean isMailed, short invoiceLevel, java.lang.String w3_CustomerId, java.lang.String shortDescription, java.lang.String longDescription, boolean isVirgin, boolean isFaxCall, java.lang.String doneBy)
+    public CallRecordEntityData(int id, java.lang.String fwdNr, java.lang.String date, java.lang.String time, java.lang.String number, java.lang.String name, java.lang.String cost, long timeStamp, boolean isIncomingCall, boolean isDocumented, boolean isReleased, boolean isNotLogged, boolean isAgendaCall, boolean isSmsCall, boolean isForwardCall, boolean isImportantCall, boolean is3W_call, boolean isMailed, short invoiceLevel, java.lang.String w3_CustomerId, java.lang.String shortDescription, java.lang.String longDescription, boolean isVirgin, boolean isFaxCall, java.lang.String doneBy, int intertelId, long tsStart, long tsAnswer, long tsTransfer, long tsTransferAnswer, long tsEnd, String transferNr)
     {
         setId(id);
         setFwdNr(fwdNr);
@@ -74,6 +110,9 @@ public class CallRecordEntityData extends AbstractData
         setIsVirgin(isVirgin);
         setIsFaxCall(isFaxCall);
         setDoneBy(doneBy);
+        setTsStart(tsStart);
+        setTsAnswer(tsAnswer);
+        setTsEnd(tsEnd);
     }
 
     public CallRecordEntityData(CallRecordEntityData otherData)
@@ -103,7 +142,9 @@ public class CallRecordEntityData extends AbstractData
         setIsVirgin(otherData.getIsVirgin());
         setIsFaxCall(otherData.getIsFaxCall());
         setDoneBy(otherData.getDoneBy());
-
+        setTsStart(otherData.getTsStart());
+        setTsAnswer(otherData.getTsAnswer());
+        setTsEnd(otherData.getTsEnd());
     }
 
     public be.tba.ejb.pbx.interfaces.CallRecordEntityPK getPrimaryKey()
@@ -378,6 +419,36 @@ public class CallRecordEntityData extends AbstractData
     {
         this.doneBy = doneBy;
     }
+    
+    public long getTsStart()
+    {
+        return this.tsStart;
+    }
+
+    public void setTsStart(long tsStart)
+    {
+        this.tsStart = tsStart;
+    }
+
+    public long getTsAnswer()
+    {
+        return this.tsAnswer;
+    }
+
+    public void setTsAnswer(long tsAnswer)
+    {
+        this.tsAnswer = tsAnswer;
+    }
+
+    public long getTsEnd()
+    {
+        return this.tsEnd;
+    }
+
+    public void setTsEnd(long tsEnd)
+    {
+        this.tsEnd = tsEnd;
+    }    
 
     public String toString()
     {
@@ -392,7 +463,34 @@ public class CallRecordEntityData extends AbstractData
     public String toNameValueString()
     {
         StringBuffer str = new StringBuffer();
-        str.append("FwdNr='" + ((this.getFwdNr() != null) ? this.getFwdNr() : "") + "',Date='" + ((this.getDate() != null) ? this.getDate() : "") + "',Time='" + ((this.getTime() != null) ? this.getTime() : "") + "',Number='" + ((this.getNumber() != null) ? escapeQuotes(this.getNumber()) : "") + "',Name='" + ((this.getName() != null) ? escapeQuotes(this.getName()) : "") + "',Cost='" + ((this.getCost() != null) ? this.getCost() : "") + "',TimeStamp=" + getTimeStamp() + ",IsIncomingCall=" + getIsIncomingCall() + ",IsDocumented=" + getIsDocumented() + ",IsReleased=" + getIsReleased() + ",IsNotLogged=" + getIsNotLogged() + ",IsAgendaCall=" + getIsAgendaCall() + ",IsSmsCall=" + getIsSmsCall() + ",IsForwardCall=" + getIsForwardCall() + ",IsImportantCall=" + getIsImportantCall() + ",Is3W_call=" + getIs3W_call() + ",IsMailed=" + getIsMailed() + ",InvoiceLevel=" + getInvoiceLevel() + ",W3_CustomerId='" + getW3_CustomerId() + "',ShortDescription='" + ((this.getShortDescription() != null) ? escapeQuotes(this.getShortDescription()) : "") + "',LongDescription='" + ((this.getLongDescription() != null) ? escapeQuotes(this.getLongDescription()) : "") + "',IsVirgin=" + getIsVirgin() + ",IsFaxCall=" + getIsFaxCall() + ",IsChanged=" + getIsChanged() + ",DoneBy='" + ((this.getDoneBy() != null) ? this.getDoneBy() : "") + "' ");
+        str.append("FwdNr='" + ((this.getFwdNr() != null) ? this.getFwdNr() : "")); 
+        str.append("',Date='" + ((this.getDate() != null) ? this.getDate() : "")); 
+        str.append("',Time='" + ((this.getTime() != null) ? this.getTime() : "") );
+        str.append("',Number='" + ((this.getNumber() != null) ? escapeQuotes(this.getNumber()) : "")); 
+        str.append("',Name='" + ((this.getName() != null) ? escapeQuotes(this.getName()) : "")); 
+        str.append("',Cost='" + ((this.getCost() != null) ? this.getCost() : "") );
+        str.append("',TimeStamp=" + getTimeStamp() );
+        str.append(",IsIncomingCall=" + getIsIncomingCall() );
+        str.append(",IsDocumented=" + getIsDocumented());
+        str.append(",IsReleased=" + getIsReleased()); 
+        str.append(",IsNotLogged=" + getIsNotLogged()); 
+        str.append(",IsAgendaCall=" + getIsAgendaCall()); 
+        str.append(",IsSmsCall=" + getIsSmsCall()); 
+        str.append(",IsForwardCall=" + getIsForwardCall()); 
+        str.append(",IsImportantCall=" + getIsImportantCall()); 
+        str.append(",Is3W_call=" + getIs3W_call()); 
+        str.append(",IsMailed=" + getIsMailed()); 
+        str.append(",InvoiceLevel=" + getInvoiceLevel()); 
+        str.append(",W3_CustomerId='" + getW3_CustomerId()); 
+        str.append("',ShortDescription='" + ((this.getShortDescription() != null) ? escapeQuotes(this.getShortDescription()) : "")); 
+        str.append("',LongDescription='" + ((this.getLongDescription() != null) ? escapeQuotes(this.getLongDescription()) : "")); 
+        str.append("',IsVirgin=" + getIsVirgin()); 
+        str.append(",IsFaxCall=" + getIsFaxCall()); 
+        str.append(",IsChanged=" + getIsChanged()); 
+        str.append(",DoneBy='" + ((this.getDoneBy() != null) ? this.getDoneBy() : "")); 
+        str.append("',TsStart=" + getTsStart()); 
+        str.append(",TsAnswer=" + getTsAnswer()); 
+        str.append(",TsEnd=" + getTsEnd()); 
 
         return (str.toString());
     }
@@ -400,7 +498,34 @@ public class CallRecordEntityData extends AbstractData
     public String toValueString()
     {
         StringBuffer str = new StringBuffer();
-        str.append("'0','" + getFwdNr() + "','" + getDate() + "','" + getTime() + "','" + escapeQuotes(getNumber()) + "','" + escapeQuotes(getName()) + "','" + getCost() + "'," + getTimeStamp() + "," + getIsIncomingCall() + "," + getIsDocumented() + "," + getIsReleased() + "," + getIsNotLogged() + "," + getIsAgendaCall() + "," + getIsSmsCall() + "," + getIsForwardCall() + "," + getIsImportantCall() + "," + getIs3W_call() + "," + getIsMailed() + "," + getInvoiceLevel() + ",'" + getW3_CustomerId() + "','" + escapeQuotes(getShortDescription()) + "','" + escapeQuotes(getLongDescription()) + "'," + getIsVirgin() + "," + getIsFaxCall() + "," + getIsChanged() + ",'" + getDoneBy() + "'");
+        str.append("'0','" + ((this.getFwdNr() != null) ? this.getFwdNr() : "")); 
+        str.append("','" + ((this.getDate() != null) ? this.getDate() : "")); 
+        str.append("','" + ((this.getTime() != null) ? this.getTime() : "") );
+        str.append("','" + ((this.getNumber() != null) ? escapeQuotes(this.getNumber()) : "")); 
+        str.append("','" + ((this.getName() != null) ? escapeQuotes(this.getName()) : "")); 
+        str.append("','" + ((this.getCost() != null) ? this.getCost() : "") );
+        str.append("'," + getTimeStamp() );
+        str.append("," + getIsIncomingCall() );
+        str.append("," + getIsDocumented());
+        str.append("," + getIsReleased()); 
+        str.append("," + getIsNotLogged()); 
+        str.append("," + getIsAgendaCall()); 
+        str.append("," + getIsSmsCall()); 
+        str.append("," + getIsForwardCall()); 
+        str.append("," + getIsImportantCall()); 
+        str.append("," + getIs3W_call()); 
+        str.append("," + getIsMailed()); 
+        str.append("," + getInvoiceLevel()); 
+        str.append(",'" + getW3_CustomerId()); 
+        str.append("','" + ((this.getShortDescription() != null) ? escapeQuotes(this.getShortDescription()) : "")); 
+        str.append("','" + ((this.getLongDescription() != null) ? escapeQuotes(this.getLongDescription()) : "")); 
+        str.append("'," + getIsVirgin()); 
+        str.append("," + getIsFaxCall()); 
+        str.append("," + getIsChanged()); 
+        str.append(",'" + ((this.getDoneBy() != null) ? this.getDoneBy() : "")); 
+        str.append("'," + getTsStart()); 
+        str.append("," + getTsAnswer()); 
+        str.append("," + getTsEnd()); 
         return (str.toString());
     }
 
@@ -472,14 +597,6 @@ public class CallRecordEntityData extends AbstractData
             lEquals = lEquals && this.is3W_call == lTest.is3W_call;
             lEquals = lEquals && this.isMailed == lTest.isMailed;
             lEquals = lEquals && this.invoiceLevel == lTest.invoiceLevel;
-            if (this.w3_CustomerId == null)
-            {
-                lEquals = lEquals && (lTest.w3_CustomerId == null);
-            }
-            else
-            {
-                lEquals = lEquals && this.w3_CustomerId.equals(lTest.w3_CustomerId);
-            }
             if (this.shortDescription == null)
             {
                 lEquals = lEquals && (lTest.shortDescription == null);
@@ -487,14 +604,6 @@ public class CallRecordEntityData extends AbstractData
             else
             {
                 lEquals = lEquals && this.shortDescription.equals(lTest.shortDescription);
-            }
-            if (this.longDescription == null)
-            {
-                lEquals = lEquals && (lTest.longDescription == null);
-            }
-            else
-            {
-                lEquals = lEquals && this.longDescription.equals(lTest.longDescription);
             }
             lEquals = lEquals && this.isVirgin == lTest.isVirgin;
             lEquals = lEquals && this.isFaxCall == lTest.isFaxCall;

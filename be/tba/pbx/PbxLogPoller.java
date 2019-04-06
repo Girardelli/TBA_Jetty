@@ -6,6 +6,7 @@ import javax.naming.NamingException;
 
 import be.tba.ejb.account.interfaces.AccountEntityData;
 import be.tba.util.constants.Constants;
+import be.tba.util.data.IntertelCallData;
 import be.tba.util.session.AccountCache;
 
 import org.slf4j.Logger;
@@ -51,7 +52,6 @@ public class PbxLogPoller
             CallLogDbWriter vLogWriter = getWriter();
             vLogWriter.start();
             sLogger.info("from PbxLogPoller: CallLogDbWriter started!");
-
 //            WebSession session  = new WebSession(Constants.MYSQL_URL);
 //            InvoiceHelper vHelper = new InvoiceHelper(null, "409003", 10, 2017);
 //            vHelper.storeOrUpdate(session);

@@ -244,6 +244,7 @@ if (!chatRecords.isEmpty())
 	    	 modalStrBuffer.append("<div id=\"" + modalId + "\" class=\"tbaModal\">\r\n");
              modalStrBuffer.append("<div class=\"modal-content\">\r\n");
 	         modalStrBuffer.append("<span id=\"" + spanId + "\" class=\"close\">&times;</span>\r\n");
+	         modalStrBuffer.append("<p><b>Nummer:</b>&nbsp;" + vEntry.getNumber() + "\r\n");
 	         modalStrBuffer.append("<p>" + vEntry.getDate() + ", " + vEntry.getTime() + "&nbsp;&nbsp;<b>\r\n");
              modalStrBuffer.append(AccountCache.getInstance().get(vEntry.getFwdNr()).getFullName() + "</b></p>\r\n");
              modalStrBuffer.append("<div class=\"old-modal-content\">" + vEntry.getShortDescription() + "<br><br>\r\n");
@@ -293,6 +294,7 @@ if (!chatRecords.isEmpty())
              modalStrBuffer.append("<div id=\"" + modalId + "\" class=\"tbaModal\">\r\n");
              modalStrBuffer.append("<div class=\"modal-content\">\r\n");
              modalStrBuffer.append("<span id=\"" + spanId + "\" class=\"close\">&times;</span>\r\n");
+             modalStrBuffer.append("<p><b>Nummer:</b>&nbsp;" + vEntry.getNumber() + "\r\n");
              modalStrBuffer.append("<p>" + vEntry.getDate() + ", " + vEntry.getTime() + "&nbsp;&nbsp;<b>\r\n");
              modalStrBuffer.append(AccountCache.getInstance().get(vEntry.getFwdNr()).getFullName() + "</b></p>\r\n");
              modalStrBuffer.append("<div class=\"old-modal-content\">" + vEntry.getShortDescription() + "<br><br>\r\n");
