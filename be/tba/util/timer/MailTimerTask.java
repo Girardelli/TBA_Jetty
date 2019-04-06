@@ -37,7 +37,7 @@ final public class MailTimerTask extends TimerTask
             return;
         }
         WebSession session = null;
-        System.out.println("MailTimerTask run");
+        //System.out.println("MailTimerTask run");
 
         GregorianCalendar vCalendar = new GregorianCalendar();
         if (vCalendar.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY && vCalendar.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY)
