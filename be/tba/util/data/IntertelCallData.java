@@ -17,7 +17,7 @@ public class IntertelCallData
 	public IntertelCallData(boolean isIncoming, String calledNr, String CallingNr, int kNumber, long tsStart, boolean isTransferCall, String phase)
 	{
 		this.calledNr = calledNr;
-		this.callingNr = CallingNr;
+		this.callingNr = isIncoming ? CallingNr : "409000";
 		this.phase = phase;
 		this.isIncoming = isIncoming;
 		this.tsStart = tsStart;

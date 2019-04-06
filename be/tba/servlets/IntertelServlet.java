@@ -59,8 +59,9 @@ public class IntertelServlet extends HttpServlet
      */
 	public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
     {
-    	sLogger.info("Intertel servlet doPost");
-    	System.out.println("Intertel servlet doPost");
+		String phase = req.getParameter("origin");
+		sLogger.info("Intertel servlet doPost");
+    	System.out.println("Intertel servlet doPost: " + phase);
     	IntertelCallData data;
     	
     	if (mSession.getConnection() == null)
@@ -81,7 +82,7 @@ public class IntertelServlet extends HttpServlet
     	String callingNr =  req.getParameter("phone_number_from");
     	String intertelCallStr =  req.getParameter("knummer");
     	String inOut = req.getParameter("inout");
-    	String phase = req.getParameter("origin");
+    	
     	if (calledNr == null || callingNr == null || intertelCallStr == null || phase == null || inOut == null)
     	{
     		sLogger.info("Intertel servlet: calledNr:" + calledNr + " callingNr:" + callingNr + " intertelCallStr:" + intertelCallStr + " phase:" + phase + " inOut:" + inOut);
@@ -111,7 +112,7 @@ public class IntertelServlet extends HttpServlet
     		if (!isIncoming && data != null )
     		{
     			// call is transfered
-    			IntertelCallData transferData = new IntertelCallData(isIncoming, "014409000", calledNr, intertelCallId, timestamp, true, phase);
+    			IntertelCallData transferData = new IntertelCallData(isIncoming, calledNr, callingNr, intertelCallId, timestamp, true, phase);
     			data.setTransferData(transferData);
     			transferData.setTransferData(data);
     			transferData.setCurrentPhase(phase);
