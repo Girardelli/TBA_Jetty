@@ -10,12 +10,22 @@ import be.tba.util.data.IntertelCallData;
 
 public class IntertelCallManager 
 {
+	private static IntertelCallManager mInstance;
+	
 	private Map<Integer, IntertelCallData> mCallMap;
 	
-	
-	public IntertelCallManager()
+	private IntertelCallManager()
 	{
 		mCallMap = new HashMap<Integer, IntertelCallData>();
+	}
+
+	public static IntertelCallManager getInstance()
+	{
+		if (mInstance == null)
+		{
+			mInstance = new IntertelCallManager();
+		}
+		return mInstance;
 	}
 	
 	public synchronized void newCall(IntertelCallData data)

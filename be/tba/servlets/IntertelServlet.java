@@ -35,6 +35,7 @@ public class IntertelServlet extends HttpServlet
 		{
 			mCallRecordSqlAdapter = new CallRecordSqlAdapter();
 			mSession = new WebSession(Constants.MYSQL_URL);
+			mIntertelCallManager = IntertelCallManager.getInstance();
 		} 
 		catch (SQLException e) 
 		{
