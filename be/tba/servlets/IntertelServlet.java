@@ -104,7 +104,6 @@ public class IntertelServlet extends HttpServlet
 			return;
 		}
 		data = mIntertelCallManager.get(intertelCallId);
-		data.setCurrentPhase(phase);
 		switch (phase)
     	{
     	case "start":
@@ -115,9 +114,10 @@ public class IntertelServlet extends HttpServlet
     			IntertelCallData transferData = new IntertelCallData(isIncoming, calledNr, "014409000", intertelCallId, timestamp, true, phase);
     			data.setTransferData(transferData);
     			transferData.setTransferData(data);
+    			transferData.setCurrentPhase(phase);
     			transferData.setDbRecordId(mCallRecordSqlAdapter.addIntertelCall(session, transferData));
     		}
-    		else
+    		else if (data == null)
     		{
         		data = new IntertelCallData(isIncoming, calledNr, callingNr, intertelCallId, timestamp, false, phase);
         		mIntertelCallManager.newCall(data);
@@ -126,32 +126,45 @@ public class IntertelServlet extends HttpServlet
     		break;
     		
     	case "answer":
-    		if (!isIncoming && data.transferData != null )
-			{
-    			// calling party connects to transfer called party
-    			data.transferData.setTsEnd(timestamp); 
-    			mCallRecordSqlAdapter.setTsEnd(session, data.transferData);
-			}
-    		else
+    		if (data != null)
     		{
-        		data.setTsAnswer(timestamp);
-        		mCallRecordSqlAdapter.setTsAnswer(session, data);
-         	}
+        		if (!isIncoming && data.transferData != null )
+    			{
+        			// calling party connects to transfer called party
+        			data.transferData.setTsEnd(timestamp);
+        			data.transferData.setCurrentPhase(phase);
+        			mCallRecordSqlAdapter.setTsEnd(session, data.transferData);
+    			}
+        		else
+        		{
+            		data.setTsAnswer(timestamp);
+            		data.setCurrentPhase(phase);
+            		mCallRecordSqlAdapter.setTsAnswer(session, data);
+             	}
+    		}
     		break;
     		
     	case "transfer":
-    		if (!isIncoming && data.transferData != null )
-			{
-    			// transfer called party answers
-    			data.transferData.setTsAnswer(timestamp); 
-    			mCallRecordSqlAdapter.setTsAnswer(session, data.transferData);
-			}
+    		if (data != null)
+    		{
+        		if (!isIncoming && data.transferData != null )
+    			{
+        			// transfer called party answers
+        			data.transferData.setTsAnswer(timestamp); 
+        			data.transferData.setCurrentPhase(phase);
+        			mCallRecordSqlAdapter.setTsAnswer(session, data.transferData);
+    			}
+    		}
     		break;
     		
     	case "end":
-    		data.setTsEnd(timestamp);
-    		mCallRecordSqlAdapter.setTsEnd(session, data);
-    		mIntertelCallManager.removeCall(intertelCallId);
+    		if (data != null) 
+    		{
+        		data.setTsEnd(timestamp);
+        		mCallRecordSqlAdapter.setTsEnd(session, data);
+        		mIntertelCallManager.removeCall(intertelCallId);
+    			data.setCurrentPhase(phase);
+    		}
     		break;
     		
     	case "summary":
