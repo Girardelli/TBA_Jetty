@@ -98,7 +98,7 @@ public abstract class AbstractSqlAdapter<T>
             stmt = con.createStatement();
             if (queryStr.startsWith("INSERT"))
             {
-                int cnt = stmt.executeUpdate(queryStr);
+                int cnt = stmt.executeUpdate(queryStr, Statement.RETURN_GENERATED_KEYS);
                 rs = stmt.getGeneratedKeys();
                 if(cnt == 1 && rs.next())
                 {
