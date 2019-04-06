@@ -48,9 +48,9 @@ public abstract class AbstractSqlAdapter<T>
         return null;
     }
 
-    public void addRow(Connection con, AbstractData data)
+    public int addRow(Connection con, AbstractData data)
     {
-        executeSqlQuery(con, "INSERT INTO " + mTableName + " VALUES (" + data.toValueString() + ")");
+    	return executeInsertSql(con, "INSERT INTO " + mTableName + " VALUES (" + data.toValueString() + ")");
     }
     
     public void deleteRow(Connection con, int key)
@@ -89,6 +89,79 @@ public abstract class AbstractSqlAdapter<T>
         return str;
     }
 
+    protected int executeInsertSql(Connection con, String queryStr)
+    {
+    	Statement stmt = null;
+    	ResultSet rs = null;
+        try
+        {
+            stmt = con.createStatement();
+            if (queryStr.startsWith("INSERT"))
+            {
+                rs = stmt.executeQuery(queryStr);
+                rs = stmt.getGeneratedKeys();
+                if(rs.next())
+                {
+    				return rs.getInt(1);
+    			}
+                //sLogger.info("{} entries: SQL querry: {}", col.size(), queryStr);
+            }
+            else
+            {
+                System.out.println("Error: expected INSERT statement: " + queryStr);
+                //sLogger.info("{} entries: SQL querry: {}", cnt, queryStr);
+            }
+            return 0;
+        }
+        catch (SQLException ex)
+        {
+            // handle any errors
+            System.out.println("FAILED SQL statement: " + queryStr);
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendorError: " + ex.getErrorCode());
+
+            sLogger.error("FAILED SQL statement: {}", queryStr);
+            sLogger.error("", ex);
+        }
+        finally
+        {
+            // it is a good idea to release
+            // resources in a finally{} block
+            // in reverse-order of their creation
+            // if they are no-longer needed
+
+            if (rs != null)
+            {
+                try
+                {
+                    rs.close();
+                }
+                catch (SQLException sqlEx)
+                {
+                } // ignore
+
+                rs = null;
+            }
+
+            if (stmt != null)
+            {
+                try
+                {
+                    stmt.close();
+                }
+                catch (SQLException sqlEx)
+                {
+                } // ignore
+
+                stmt = null;
+            }
+        }
+        return 0;
+    	
+    	
+    }
+    
     protected Collection<T> executeSqlQuery(Connection con, String queryStr)
     {
         Statement stmt = null;
@@ -100,7 +173,7 @@ public abstract class AbstractSqlAdapter<T>
             {
                 rs = stmt.executeQuery(queryStr);
                 Collection<T> col = translateRsToValueObjects(rs);
-                System.out.println(col.size() + " entries: SQL querry: " + queryStr);
+                System.out.println(col.size() + " entries: SQL query: " + queryStr);
                 
                 //sLogger.info("{} entries: SQL querry: {}", col.size(), queryStr);
                 return col;
@@ -108,7 +181,7 @@ public abstract class AbstractSqlAdapter<T>
             else
             {
                 int cnt = stmt.executeUpdate(queryStr);
-                System.out.println(cnt + " entries: SQL querry: " + queryStr);
+                System.out.println(cnt + " entries: SQL query: " + queryStr);
                 //sLogger.info("{} entries: SQL querry: {}", cnt, queryStr);
                 return new Vector<T>(cnt);
             }

@@ -1099,7 +1099,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
     	newRecord.setTsStart(data.tsStart);
     	newRecord.setIsIncomingCall(data.isIncoming);
     	Calendar vToday = Calendar.getInstance();
-    	newRecord.setDate(String.format("%02d/%02d/%02d", vToday.get(Calendar.DAY_OF_MONTH), vToday.get(Calendar.MONTH) + 1, vToday.get(Calendar.YEAR)));
+    	newRecord.setDate(String.format("%02d/%02d/%02d", vToday.get(Calendar.DAY_OF_MONTH), vToday.get(Calendar.MONTH) + 1, vToday.get(Calendar.YEAR) - 2000));
     	newRecord.setTime(String.format("%02d:%02d", vToday.get(Calendar.HOUR_OF_DAY), vToday.get(Calendar.MINUTE)));
     	AccountEntityData vData = AccountCache.getInstance().get(newRecord.getFwdNr());
     	int dbId = 0;
@@ -1110,14 +1110,9 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
                 newRecord.setIsMailed(false);
             else
                 newRecord.setIsMailed(true);
-            addRow(webSession.getConnection(), newRecord);
-            Collection<CallRecordEntityData> records = executeSqlQuery(webSession.getConnection(), "SELECT * FROM CallRecordEntity WHERE IntertelCallId='" + data.intertelCallId + "' AND TsStart='" + data.tsStart + "' ORDER BY TimeStamp DESC");
-        	if (records != null && records.size() == 1)
-    		{
-        		dbId = records.iterator().next().getId();
-    		}
-            System.out.println("addCallRecord: id = " + newRecord.getId() + ", fwdnr=" + newRecord.getFwdNr() + ", isMailed=" + newRecord.getIsMailed());
-            sLogger.info("addCallRecord: id={}, fwdnr={}, isMailed={}", newRecord.getId(), newRecord.getFwdNr(), newRecord.getIsMailed());
+            dbId = addRow(webSession.getConnection(), newRecord);
+            System.out.println("addCallRecord: id = " + dbId + ", fwdnr=" + newRecord.getFwdNr() + ", isMailed=" + newRecord.getIsMailed());
+            sLogger.info("addCallRecord: id={}, fwdnr={}, isMailed={}", dbId, newRecord.getFwdNr(), newRecord.getIsMailed());
         }
         else
         {
