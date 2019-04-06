@@ -1099,8 +1099,8 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
     	newRecord.setTsStart(data.tsStart);
     	newRecord.setIsIncomingCall(data.isIncoming);
     	Calendar vToday = Calendar.getInstance();
-    	newRecord.setDate(new String(vToday.get(Calendar.DAY_OF_MONTH) + " " + Constants.MONTHS[vToday.get(Calendar.MONTH)] + " " + vToday.get(Calendar.YEAR)));
-    	newRecord.setTime(new String(vToday.get(Calendar.HOUR_OF_DAY) + ":" + vToday.get(Calendar.MINUTE)));
+    	newRecord.setDate(String.format("%02d/%02d/%02d", vToday.get(Calendar.DAY_OF_MONTH), vToday.get(Calendar.MONTH) + 1, vToday.get(Calendar.YEAR)));
+    	newRecord.setTime(String.format("%02d:%02d", vToday.get(Calendar.HOUR_OF_DAY), vToday.get(Calendar.MINUTE)));
     	AccountEntityData vData = AccountCache.getInstance().get(newRecord.getFwdNr());
     	int dbId = 0;
 
@@ -1136,6 +1136,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
     	String transferText = "";
     	if (data.isTransferCall)
     	{
+    		executeSqlQuery(webSession.getConnection(), "UPDATE CallRecordEntity SET IsForwardCall=true WHERE ID='" + data.transferData.dbRecordId + "'");
     		transferText = "' AND ShortDescription='Doorgeschakelde oproep van " + data.transferData.callingNr + " naar " + data.calledNr;
     	}
     	executeSqlQuery(webSession.getConnection(), "UPDATE CallRecordEntity SET TsEnd='" + data.tsEnd + transferText + "' WHERE ID='" + data.dbRecordId + "'");
