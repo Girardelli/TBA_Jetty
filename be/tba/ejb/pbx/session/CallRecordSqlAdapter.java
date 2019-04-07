@@ -1149,7 +1149,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
     public void setTransfer(WebSession webSession, IntertelCallData transferedInData, IntertelCallData transferOutData)
     {
 		executeSqlQuery(webSession.getConnection(), "UPDATE CallRecordEntity SET IsForwardCall=true WHERE ID='" + transferedInData.dbRecordId + "'");
-		executeSqlQuery(webSession.getConnection(), "UPDATE CallRecordEntity SET ', ShortDescription='Doorgeschakelde oproep van " + transferedInData.callingNr + " naar " + transferOutData.calledNr + "' WHERE ID='" + transferOutData.dbRecordId + "'");
+		executeSqlQuery(webSession.getConnection(), "UPDATE CallRecordEntity SET ShortDescription='Doorgeschakelde oproep van " + transferedInData.callingNr + " naar " + transferOutData.calledNr + "' WHERE ID='" + transferOutData.dbRecordId + "'");
     }
     
     static public void setIsDocumentedFlag(CallRecordEntityData record)
