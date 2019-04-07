@@ -43,10 +43,14 @@ public class IntertelCallManager
 		// callId is of the incomming call that is transfered. We are looking for a call that has NOT  this ID
 		// CallingNr: tba number
 		// calledNr: number to who the call is transfered
-        for (Iterator<String> i = mCallMap.keySet().iterator(); i.hasNext();)
+		
+		for (Iterator<String> i = mCallMap.keySet().iterator(); i.hasNext();)
         {
         	String key = i.next();
         	IntertelCallData data = mCallMap.get(key);
+        	
+        	System.out.println("getransferCall: " + transferCalledNr + "==" + data.calledNr + " && " + transferCallingNr + "==" + data.callingNr + " && " + transferedCallId + " != " +  data.intertelCallId);
+        	
         	if (transferCalledNr.equals(data.calledNr) && transferCallingNr.equals(data.callingNr) && !transferedCallId.equals(data.intertelCallId))
         	{
         		return data;
