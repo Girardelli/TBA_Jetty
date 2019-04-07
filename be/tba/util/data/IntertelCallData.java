@@ -2,6 +2,8 @@ package be.tba.util.data;
 
 public class IntertelCallData 
 {
+	public static String kTbaNr = "409000";
+	
 	public String calledNr;
 	public String callingNr;
 	public String phase;
@@ -18,7 +20,7 @@ public class IntertelCallData
 	public IntertelCallData(boolean isIncoming, String calledNr, String CallingNr, String callId, long tsStart, String phase)
 	{
 		this.calledNr = calledNr;
-		this.callingNr = isIncoming ? CallingNr : "409000";
+		this.callingNr = isIncoming ? CallingNr : kTbaNr;
 		this.phase = phase;
 		this.isIncoming = isIncoming;
 		this.tsStart = tsStart;
