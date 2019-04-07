@@ -10,6 +10,7 @@ import java.util.Vector;
 import be.tba.ejb.account.interfaces.AccountEntityData;
 import be.tba.ejb.pbx.interfaces.CallRecordEntityData;
 import be.tba.pbx.Forum700CallRecord;
+import be.tba.servlets.helper.IntertelCallManager;
 import be.tba.servlets.session.WebSession;
 import be.tba.util.constants.Constants;
 import be.tba.util.data.AbstractSqlAdapter;
@@ -1087,23 +1088,15 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
     public int addIntertelCall(WebSession webSession, IntertelCallData data)
     {
     	CallRecordEntityData newRecord = new CallRecordEntityData();
-    	if (data.isTransferCall)
+    	if (data.isIncoming)
     	{
-    		newRecord.setFwdNr(data.transferData.calledNr);
-    		newRecord.setNumber(data.calledNr);
+    		newRecord.setFwdNr(data.calledNr); 
+    		newRecord.setNumber(data.callingNr);
     	}
     	else
     	{
-        	if (data.isIncoming)
-        	{
-        		newRecord.setFwdNr(data.calledNr); 
-        		newRecord.setNumber(data.callingNr);
-        	}
-        	else
-        	{
-        		newRecord.setFwdNr(data.callingNr);
-        		newRecord.setNumber(data.calledNr);
-        	}
+    		newRecord.setFwdNr(data.callingNr);
+    		newRecord.setNumber(data.calledNr);
     	}
     	
     	newRecord.setTsStart(data.tsStart);
@@ -1138,13 +1131,13 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
     
     public void setTsEnd(WebSession webSession, IntertelCallData data)
     {
-    	String transferText = "";
-    	if (data.isTransferCall)
-    	{
-    		executeSqlQuery(webSession.getConnection(), "UPDATE CallRecordEntity SET IsForwardCall=true WHERE ID='" + data.transferData.dbRecordId + "'");
-    		transferText = "', ShortDescription='Doorgeschakelde oproep van " + data.transferData.callingNr + " naar " + data.calledNr;
-    	}
-    	executeSqlQuery(webSession.getConnection(), "UPDATE CallRecordEntity SET TsEnd='" + data.tsEnd + transferText + "', Cost='" + data.getCostStr() + "' WHERE ID='" + data.dbRecordId + "'");
+    	executeSqlQuery(webSession.getConnection(), "UPDATE CallRecordEntity SET TsEnd='" + data.tsEnd + "', Cost='" + data.getCostStr() + "' WHERE ID='" + data.dbRecordId + "'");
+    }
+
+    public void setTransfer(WebSession webSession, IntertelCallData transferedInData, IntertelCallData transferOutData)
+    {
+		executeSqlQuery(webSession.getConnection(), "UPDATE CallRecordEntity SET IsForwardCall=true WHERE ID='" + transferedInData.dbRecordId + "'");
+		executeSqlQuery(webSession.getConnection(), "UPDATE CallRecordEntity SET ', ShortDescription='Doorgeschakelde oproep van " + transferedInData.callingNr + " naar " + transferOutData.calledNr + "' WHERE ID='" + transferOutData.dbRecordId + "'");
     }
     
     static public void setIsDocumentedFlag(CallRecordEntityData record)

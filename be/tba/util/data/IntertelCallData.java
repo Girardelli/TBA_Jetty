@@ -8,21 +8,21 @@ public class IntertelCallData
 	public boolean isIncoming;
 	public long tsStart;
 	public long tsAnswer;
+	public long tsTransfer;
 	public long tsEnd;
-	public int intertelCallId;
-	public IntertelCallData transferData;
+	public String intertelCallId;
+	//public IntertelCallData transferData;
 	public int dbRecordId;
-	public boolean isTransferCall;
+	public boolean isTransferOutCall;
 	
-	public IntertelCallData(boolean isIncoming, String calledNr, String CallingNr, int kNumber, long tsStart, boolean isTransferCall, String phase)
+	public IntertelCallData(boolean isIncoming, String calledNr, String CallingNr, String callId, long tsStart, String phase)
 	{
 		this.calledNr = calledNr;
 		this.callingNr = isIncoming ? CallingNr : "409000";
 		this.phase = phase;
 		this.isIncoming = isIncoming;
 		this.tsStart = tsStart;
-		this.intertelCallId = kNumber;
-		this.isTransferCall = isTransferCall;
+		this.intertelCallId = callId;
 	}
 	
 	public void setDbRecordId(int id)
@@ -40,20 +40,30 @@ public class IntertelCallData
 		this.tsAnswer = tsAnswer;
 	}
 	
+	public void setTsTransfer(long tsTransfer)
+	{
+		this.tsTransfer = tsTransfer;
+	}
+	
+	public void setIsTransfer()
+	{
+		this.isTransferOutCall = true;
+	}
+	
 	public void setTsEnd(long tsEnd)
 	{
 		this.tsEnd = tsEnd;
 	}
 	
-	public void setTransferData(IntertelCallData data)
-	{
-		this.transferData = data;
-	}
-	
-	public IntertelCallData getTransferData()
-	{
-		return transferData;
-	}
+//	public void setTransferData(IntertelCallData data)
+//	{
+//		this.transferData = data;
+//	}
+//	
+//	public IntertelCallData getTransferData()
+//	{
+//		return transferData;
+//	}
 	
 	public int getCallDuration()
 	{
@@ -67,6 +77,12 @@ public class IntertelCallData
 	public String getCostStr()
 	{
 		return secondsToString(getCallDuration());
+	}
+	
+	public boolean equalFromToButCallIdDifferent(IntertelCallData data)
+	{
+		// to find transfered call
+		return (calledNr.equals(data.calledNr) && callingNr.equals(data.callingNr) && !intertelCallId.equals(data.intertelCallId));
 	}
 	
 	private String secondsToString(int seconds)

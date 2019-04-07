@@ -12,11 +12,11 @@ public class IntertelCallManager
 {
 	private static IntertelCallManager mInstance;
 	
-	private Map<Integer, IntertelCallData> mCallMap;
+	private Map<String, IntertelCallData> mCallMap;
 	
 	private IntertelCallManager()
 	{
-		mCallMap = new HashMap<Integer, IntertelCallData>();
+		mCallMap = new HashMap<String, IntertelCallData>();
 	}
 
 	public static IntertelCallManager getInstance()
@@ -33,18 +33,34 @@ public class IntertelCallManager
 		mCallMap.put(data.intertelCallId, data);
 	}
 	
-	public synchronized IntertelCallData get(int id)
+	public synchronized IntertelCallData get(String callId)
 	{
-		return mCallMap.get(new Integer(id));
+		return mCallMap.get(new String(callId));
 	}
 	
-	public synchronized void removeCall(int id)
+	public synchronized IntertelCallData getransferCall(String transferedCallId, String transferCalledNr, String transferCallingNr)
 	{
-		Integer key = new Integer(id);
-		IntertelCallData data = mCallMap.get(key);
-		if (data.tsEnd > 0 && (data.transferData == null || data.transferData.tsEnd > 0))
+		// callId is of the incomming call that is transfered. We are looking for a call that has NOT  this ID
+		// CallingNr: tba number
+		// calledNr: number to who the call is transfered
+        for (Iterator<String> i = mCallMap.keySet().iterator(); i.hasNext();)
+        {
+        	String key = i.next();
+        	IntertelCallData data = mCallMap.get(key);
+        	if (transferCalledNr.equals(data.calledNr) && transferCallingNr.equals(data.callingNr) && !transferedCallId.equals(data.intertelCallId))
+        	{
+        		return data;
+        	}
+        }
+        return null;
+	}
+	
+	public synchronized void removeCall(String callId)
+	{
+		IntertelCallData data = mCallMap.get(callId);
+		if (data.tsEnd > 0)
 		{
-			mCallMap.remove(key);
+			mCallMap.remove(callId);
 		}
 	}
 	
@@ -59,9 +75,9 @@ public class IntertelCallManager
 	{
 		long tsNow = System.currentTimeMillis() / 1000l;
 		
-        for (Iterator<Integer> i = mCallMap.keySet().iterator(); i.hasNext();)
+        for (Iterator<String> i = mCallMap.keySet().iterator(); i.hasNext();)
         {
-        	Integer key = i.next();
+        	String key = i.next();
         	IntertelCallData data = mCallMap.get(key);
         	if (data.tsStart < (tsNow - 7200)) // 2 hours
         	{

@@ -80,17 +80,16 @@ public class IntertelServlet extends HttpServlet
     	
     	String calledNr =  req.getParameter("phone_number_to");
     	String callingNr =  req.getParameter("phone_number_from");
-    	String intertelCallStr =  req.getParameter("knummer");
+    	String intertelCallId =  req.getParameter("call_id");
     	String inOut = req.getParameter("inout");
     	
-    	if (calledNr == null || callingNr == null || intertelCallStr == null || phase == null || inOut == null)
+    	if (calledNr == null || callingNr == null || intertelCallId == null || phase == null || inOut == null)
     	{
-    		sLogger.info("Intertel servlet: calledNr:" + calledNr + " callingNr:" + callingNr + " intertelCallStr:" + intertelCallStr + " phase:" + phase + " inOut:" + inOut);
+    		sLogger.info("Intertel servlet: calledNr:" + calledNr + " callingNr:" + callingNr + " intertelCallId:" + intertelCallId + " phase:" + phase + " inOut:" + inOut);
     		return;
     	}
     	boolean isIncoming =  (inOut.equals("IN"));
     	long timestamp = Long.parseLong(req.getParameter("timestamp"));
-    	int intertelCallId = Integer.parseInt(intertelCallStr);
     	
     	WebSession session;
 		try 
@@ -109,52 +108,29 @@ public class IntertelServlet extends HttpServlet
     	{
     	case "start":
             // Check the record and add it if it is a valid one.
-    		if (!isIncoming && data != null )
-    		{
-    			// call is transfered
-    			IntertelCallData transferData = new IntertelCallData(isIncoming, calledNr, callingNr, intertelCallId, timestamp, true, phase);
-    			data.setTransferData(transferData);
-    			transferData.setTransferData(data);
-    			transferData.setCurrentPhase(phase);
-    			transferData.setDbRecordId(mCallRecordSqlAdapter.addIntertelCall(session, transferData));
-    		}
-    		else if (data == null)
-    		{
-        		data = new IntertelCallData(isIncoming, calledNr, callingNr, intertelCallId, timestamp, false, phase);
-        		mIntertelCallManager.newCall(data);
-        		data.setDbRecordId(mCallRecordSqlAdapter.addIntertelCall(session, data));
-    		}
+    		data = new IntertelCallData(isIncoming, calledNr, callingNr, intertelCallId, timestamp, phase);
+    		mIntertelCallManager.newCall(data);
+    		data.setDbRecordId(mCallRecordSqlAdapter.addIntertelCall(session, data));
     		break;
     		
     	case "answer":
     		if (data != null)
     		{
-        		if (!isIncoming && data.transferData != null )
-    			{
-        			// calling party connects to transfer called party
-        			data.transferData.setTsEnd(timestamp);
-        			data.transferData.setCurrentPhase(phase);
-        			mCallRecordSqlAdapter.setTsEnd(session, data.transferData);
-    			}
-        		else
-        		{
-            		data.setTsAnswer(timestamp);
-            		data.setCurrentPhase(phase);
-            		mCallRecordSqlAdapter.setTsAnswer(session, data);
-             	}
+        		data.setTsAnswer(timestamp);
+        		data.setCurrentPhase(phase);
+        		mCallRecordSqlAdapter.setTsAnswer(session, data);
     		}
     		break;
     		
     	case "transfer":
     		if (data != null)
     		{
-        		if (!isIncoming && data.transferData != null )
-    			{
-        			// transfer called party answers
-        			data.transferData.setTsAnswer(timestamp); 
-        			data.transferData.setCurrentPhase(phase);
-        			mCallRecordSqlAdapter.setTsAnswer(session, data.transferData);
-    			}
+    			// transfer called party answers
+    			IntertelCallData transferOutCall = mIntertelCallManager.getransferCall(intertelCallId, calledNr, callingNr);
+    			transferOutCall.setIsTransfer();
+    			data.setTsTransfer(timestamp); 
+    			data.setCurrentPhase(phase);
+    			mCallRecordSqlAdapter.setTransfer(session, data, transferOutCall);
     		}
     		break;
     		
