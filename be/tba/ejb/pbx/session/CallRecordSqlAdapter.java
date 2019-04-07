@@ -1131,7 +1131,19 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
     
     public void setTsEnd(WebSession webSession, IntertelCallData data)
     {
-    	executeSqlQuery(webSession.getConnection(), "UPDATE CallRecordEntity SET TsEnd='" + data.tsEnd + "', Cost='" + data.getCostStr() + "' WHERE ID='" + data.dbRecordId + "'");
+    	String text = "";
+    	if (data.tsAnswer == 0)
+    	{
+    		if (data.isIncoming)
+    		{
+    			text = "ShortDescription='Niet opgenomen', ";
+    		}
+    		else
+    		{
+    			text = "ShortDescription='Niet opgenomen', ";
+    		}
+    	}
+    	executeSqlQuery(webSession.getConnection(), "UPDATE CallRecordEntity SET " + text +  "TsEnd='" + data.tsEnd + "', Cost='" + data.getCostStr() + "' WHERE ID='" + data.dbRecordId + "'");
     }
 
     public void setTransfer(WebSession webSession, IntertelCallData transferedInData, IntertelCallData transferOutData)
