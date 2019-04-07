@@ -59,6 +59,7 @@ public class IntertelServlet extends HttpServlet
      */
 	public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
     {
+		writeToFile(req);
 		String phase = req.getParameter("origin");
 		sLogger.info("Intertel servlet doPost");
     	System.out.println("Intertel servlet doPost: " + phase);
@@ -126,7 +127,7 @@ public class IntertelServlet extends HttpServlet
     		if (data != null)
     		{
     			// transfer called party answers
-    			IntertelCallData transferOutCall = mIntertelCallManager.getransferCall(intertelCallId, calledNr, callingNr);
+    			IntertelCallData transferOutCall = mIntertelCallManager.getransferCall(intertelCallId, data.calledNr, data.callingNr);
     			transferOutCall.setIsTransfer();
     			data.setTsTransfer(timestamp); 
     			data.setCurrentPhase(phase);
@@ -151,7 +152,7 @@ public class IntertelServlet extends HttpServlet
     		sLogger.info("Intertel servlet doPost: unknown 'origin'=" + phase);
         	        	
     	}
-    	writeToFile(req);
+    	
     }
 
 
