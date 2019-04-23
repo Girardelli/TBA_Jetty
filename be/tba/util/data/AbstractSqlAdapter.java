@@ -99,6 +99,7 @@ public abstract class AbstractSqlAdapter<T>
             if (queryStr.startsWith("INSERT"))
             {
                 int cnt = stmt.executeUpdate(queryStr, Statement.RETURN_GENERATED_KEYS);
+                System.out.println(cnt + " new entry: SQL query: " + queryStr);
                 rs = stmt.getGeneratedKeys();
                 if(cnt == 1 && rs.next())
                 {

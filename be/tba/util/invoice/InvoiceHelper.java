@@ -283,24 +283,24 @@ public class InvoiceHelper
             // There is already an invoice for this period
             if (mInvoiceEntityData.getCreditId() >= 0)
             {
+                System.out.println(mAccountEntityData.getFwdNumber() + ": credit note or original invoice was provided: show the frozen data.\r\nnew Start: " + vStart + " ==> " + mInvoiceEntityData.getStartTime() + "\r\nnew Stop:  " + vEnd + " ==> " + mInvoiceEntityData.getStopTime());
                 vStart = mInvoiceEntityData.getStartTime();
                 vEnd = mInvoiceEntityData.getStopTime();
-                System.out.println(mAccountEntityData.getFwdNumber() + ": credit note or original invoice was provided: show the frozen data");
             }
             else if (mInvoiceEntityData.getFrozenFlag())
             {
                 // the last invoice for this month was frozen: make a new one
                 // starting from the stopTime of this last one.
+                System.out.println(mAccountEntityData.getFwdNumber() + " : frozen invoice data, not related to credit note, provided by caller: show the frozen data.\r\nnew Start: " + vStart + " ==> " + mInvoiceEntityData.getStartTime() + "\r\nnew Stop:  " + vEnd + " ==> " + mInvoiceEntityData.getStopTime());
                 vStart = mInvoiceEntityData.getStartTime();
                 vEnd = mInvoiceEntityData.getStopTime();
-                System.out.println(mAccountEntityData.getFwdNumber() + " : frozen invoice data, not related to credit note, provided by caller: show the frozen data");
             }
             else
             {
                 // the last invoice is not frozen: update this invoice with the
                 // figures till now.
+                System.out.println(mAccountEntityData.getFwdNumber() + " : NOT frozen invoice data provided by caller: update this one.\r\nnew Start: " + vStart + " ==> " + mInvoiceEntityData.getStartTime());
                 vStart = mInvoiceEntityData.getStartTime();
-                System.out.println(mAccountEntityData.getFwdNumber() + " : NOT frozen invoice data provided by caller: update this one");
             }
         }
         // System.out.println("Calls from " + vStart + ", " + vEnd);
@@ -448,8 +448,9 @@ public class InvoiceHelper
         {
             mTasks = vTaskSession.getTasksFromTillTimestamp(webSession, mAccountEntityData.getFwdNumber(), vStart, vEnd);
         }
-
         mInvoiceData.NrOfTasks = mTasks.size();
+        System.out.println(mInvoiceData.NrOfTasks + " Tasks found!!!");
+        
         for (Iterator<TaskEntityData> i = mTasks.iterator(); i.hasNext();)
         {
             TaskEntityData vEntry = i.next();

@@ -372,7 +372,7 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
                 long now = vCalendar.getTimeInMillis();
                 if (now < vInvoiceData.getStopTime())
                     vInvoiceData.setStopTime(now);
-                vInvoiceData.setFrozenFlag(true);
+                vInvoiceData.setFrozenFlag(false);
                 vInvoiceData.setYearSeqNr(invoiceNr);
                 vInvoiceData.setInvoiceDate(String.format("%d/%d/%d", vCalendar.get(Calendar.DAY_OF_MONTH), vCalendar.get(Calendar.MONTH) + 1, vCalendar.get(Calendar.YEAR)));
                 vInvoiceData.setInvoiceNr(InvoiceHelper.getInvoiceNumber(vInvoiceData.getYear(), vInvoiceData.getMonth(), invoiceNr));
@@ -387,10 +387,8 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
             // replace windows style '\\' with unix style '/'. DB does not seem
             // to handle good the windows style
             vInvoiceData.setFileName(escapeQuotes(vInvoiceData.getFileName().replace('\\', '/')));
+            vInvoiceData.setFrozenFlag(true);
             updateRow(webSession.getConnection(), vInvoiceData);
-            //executeSqlQuery(webSession.getConnection(), "UPDATE InvoiceEntity SET FileName='" + escapeQuotes(unixStyle) + "', YearSeqNr=" + vInvoiceData.getYearSeqNr() + ",InvoiceNr='" + vInvoiceData.getInvoiceNr() + "',FrozenFlag=true, StructuredId='" + vInvoiceData.getStructuredId() + "' WHERE id=" + key);
-
-            // vInvoice.setValueObject(vInvoiceData);
             return true;
         }
         return false;
