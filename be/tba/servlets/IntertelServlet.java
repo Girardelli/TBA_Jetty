@@ -187,7 +187,7 @@ public class IntertelServlet extends HttpServlet
         if (!file.exists())
         {
             file.createNewFile();
-        	strBuf.append(String.format("datum          uur      van          --> naar         duur   (info)\r\n"));
+        	strBuf.append("datum    uur    van         --> naar         duur   (info)\r\n");
         }
         FileOutputStream fileStream = new FileOutputStream(file, true);
         
