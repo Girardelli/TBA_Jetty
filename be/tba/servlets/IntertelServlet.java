@@ -192,7 +192,7 @@ public class IntertelServlet extends HttpServlet
         FileOutputStream fileStream = new FileOutputStream(file, true);
         
         Calendar vToday = Calendar.getInstance();
-        strBuf.append(String.format("%02d/%02d/%02d %02d:%02d %012s --> %012s %s %s\r\n", vToday.get(Calendar.DAY_OF_MONTH), vToday.get(Calendar.MONTH) + 1, vToday.get(Calendar.YEAR) - 2000, vToday.get(Calendar.HOUR_OF_DAY), vToday.get(Calendar.MINUTE), data.callingNr, data.calledNr, (data.tsAnswer != 0) ? data.tsEnd-data.tsAnswer : "gemist", data.isTransferOutCall ? "(doorgeschakeld)" : ""));
+        strBuf.append(String.format("%02d/%02d/%02d %02d:%02d %012s --> %012s %s %s\r\n", vToday.get(Calendar.DAY_OF_MONTH), vToday.get(Calendar.MONTH) + 1, vToday.get(Calendar.YEAR) - 2000, vToday.get(Calendar.HOUR_OF_DAY), vToday.get(Calendar.MINUTE), data.callingNr, data.calledNr, (data.tsAnswer != 0) ? Long.toString(data.tsEnd-data.tsAnswer) : "gemist", data.isTransferOutCall ? "(doorgeschakeld)" : ""));
         fileStream.write(strBuf.toString().getBytes());
         fileStream.close();
     }    
