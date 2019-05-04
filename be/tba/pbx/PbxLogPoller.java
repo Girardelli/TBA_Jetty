@@ -1,12 +1,13 @@
 package be.tba.pbx;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.Calendar;
 import java.util.Collection;
 
 import javax.naming.NamingException;
 
 import be.tba.ejb.account.interfaces.AccountEntityData;
 import be.tba.util.constants.Constants;
-import be.tba.util.data.IntertelCallData;
 import be.tba.util.session.AccountCache;
 
 import org.slf4j.Logger;
@@ -48,7 +49,7 @@ public class PbxLogPoller
 
             //FintroXlsxReader fintroXlsxReader = new FintroXlsxReader("C:\\Users\\ywillems\\Downloads\\BE71143070729269-20180629.xlsx");
                         
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            //Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
             CallLogDbWriter vLogWriter = getWriter();
             vLogWriter.start();
             sLogger.info("from PbxLogPoller: CallLogDbWriter started!");
@@ -56,7 +57,7 @@ public class PbxLogPoller
 //            InvoiceHelper vHelper = new InvoiceHelper(null, "409003", 10, 2017);
 //            vHelper.storeOrUpdate(session);
 //            vHelper.setFileName();
-//            vHelper.generatePdfInvoice();           
+//            vHelper.generatePdfInvoice();    
             
             for (;;)
                 Thread.sleep(10000);
@@ -77,7 +78,7 @@ public class PbxLogPoller
             // e.printStackTrace();
             sLogger.error("NamingException when getting InitialContext", e);
         }
-        catch (InstantiationException e)
+/*        catch (InstantiationException e)
         {
             // TODO Auto-generated catch block
             // e.printStackTrace();
@@ -101,6 +102,19 @@ public class PbxLogPoller
             // e.printStackTrace();
 //            sLogger.error("SQLExeption when getting InitialContext", e);
 //        }
+        catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
     }
 
     public void stop()
