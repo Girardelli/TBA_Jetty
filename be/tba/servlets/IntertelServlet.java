@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Calendar;
 import java.util.Enumeration;
 
 import javax.servlet.ServletException;
@@ -59,7 +60,7 @@ public class IntertelServlet extends HttpServlet
      */
 	public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
     {
-		writeToFile(req);
+		writeParmsToFile(req);
 		String phase = req.getParameter("origin");
 		sLogger.info("Intertel servlet doPost");
     	System.out.println("Intertel servlet doPost: " + phase);
@@ -142,6 +143,7 @@ public class IntertelServlet extends HttpServlet
         		mCallRecordSqlAdapter.setTsEnd(session, data);
         		mIntertelCallManager.removeCall(intertelCallId);
     			data.setCurrentPhase(phase);
+    			writeToFile(data);
     		}
     		break;
     		
@@ -156,9 +158,9 @@ public class IntertelServlet extends HttpServlet
     }
 
 
-    private void writeToFile(HttpServletRequest req) throws IOException
+    private void writeParmsToFile(HttpServletRequest req) throws IOException
     {
-        File file = new File(Constants.INTERTELL_CALLLOG_PATH, "calls.txt");
+        File file = new File(Constants.INTERTELL_CALLLOG_PATH, "parms.txt");
         if (!file.exists())
         {
             file.createNewFile();
@@ -178,5 +180,21 @@ public class IntertelServlet extends HttpServlet
         fileStream.close();
     }    
     
+    private void writeToFile(IntertelCallData data) throws IOException
+    {
+        File file = new File(Constants.INTERTELL_CALLLOG_PATH, "calls.txt");
+        StringBuffer strBuf = new StringBuffer();
+        if (!file.exists())
+        {
+            file.createNewFile();
+        	strBuf.append(String.format("datum          uur      van          --> naar         duur   (info)\r\n"));
+        }
+        FileOutputStream fileStream = new FileOutputStream(file, true);
+        
+        Calendar vToday = Calendar.getInstance();
+        strBuf.append(String.format("%02d/%02d/%02d %02d:%02d %012s --> %012s %s %s\r\n", vToday.get(Calendar.DAY_OF_MONTH), vToday.get(Calendar.MONTH) + 1, vToday.get(Calendar.YEAR) - 2000, vToday.get(Calendar.HOUR_OF_DAY), vToday.get(Calendar.MINUTE), data.callingNr, data.calledNr, (data.tsAnswer != 0) ? data.tsEnd-data.tsAnswer : "gemist", data.isTransferOutCall ? "(doorgeschakeld)" : ""));
+        fileStream.write(strBuf.toString().getBytes());
+        fileStream.close();
+    }    
     
 }
