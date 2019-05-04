@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Locale;
+import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -17,7 +18,6 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.naming.InitialContext;
-import javax.rmi.PortableRemoteObject;
 
 import be.tba.ejb.account.interfaces.AccountEntityData;
 import be.tba.ejb.pbx.interfaces.CallRecordEntityData;
@@ -78,9 +78,10 @@ public class MailerSessionBean
             System.out.println("sendMail start:");
             InitialContext vContext = new InitialContext();
             Session vSession = null;
-
             // mail/Session name is configured in web.xml in the jetty war
-            vSession = (Session) PortableRemoteObject.narrow(vContext.lookup("java:comp/env/mail/Session"), Session.class);
+            //vSession = (Session) PortableRemoteObject.narrow(vContext.lookup("java:comp/env/mail/Session"), Session.class);
+
+            vSession = (Session) vContext.lookup("java:comp/env/mail/Session");
 
             vCustomer = AccountCache.getInstance().get(fwdNr);
 

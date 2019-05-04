@@ -23,7 +23,6 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.naming.InitialContext;
-import javax.rmi.PortableRemoteObject;
 
 import be.tba.ejb.account.interfaces.AccountEntityData;
 import be.tba.ejb.invoice.interfaces.InvoiceEntityData;
@@ -403,6 +402,7 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
         }
 
         AccountEntityData vCustomer = null;
+        Address[] vTo = new InternetAddress[1];
         try
         {
             vCustomer = AccountCache.getInstance().get(invoiceData.getAccountFwdNr());
@@ -422,7 +422,7 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
             vBody = vBody.replace("#jaar#", Integer.toString(invoiceData.getYear()));
 
             Date date = new Date();
-            Address[] vTo;
+            
 
             if (System.getenv("TBA_MAIL_ON") != null)
             {
@@ -453,7 +453,11 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
             InitialContext vContext = new InitialContext();
             Session vSession = null;
 
-            vSession = (Session) PortableRemoteObject.narrow(vContext.lookup("java:comp/env/mail/Session"), Session.class);
+            //vSession = (Session) PortableRemoteObject.narrow(vContext.lookup("java:comp/env/mail/Session"), Session.class);
+            vSession = (Session) vContext.lookup("java:comp/env/mail/Session");
+            
+            System.out.println("mail session=" + vSession);
+            
             MimeMessage m = new MimeMessage(vSession);
             m.setFrom();
 
@@ -487,14 +491,14 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
             m.setContent(multipart);
             Transport.send(m);
 
-            System.out.println("Invoice mailed to " + vCustomer.getFullName() + " (" + vCustomer.getEmail() + ")");
+            System.out.println("Invoice mailed to " + vCustomer.getFullName() + " (" + vTo[0] + ")");
             return true;
         }
         catch (Exception e)
         {
             if (vCustomer != null)
             {
-                System.out.println("Invoice mail can not be send to " + vCustomer.getFullName() + " (" + vCustomer.getEmail() + ")");
+                System.out.println("Invoice mail can not be send to " + vCustomer.getFullName() + " (" + vTo[0] + ")");
             }
             e.printStackTrace();
         }

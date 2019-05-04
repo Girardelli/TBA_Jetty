@@ -12,7 +12,6 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.naming.InitialContext;
-import javax.rmi.PortableRemoteObject;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -342,7 +341,9 @@ public class LoginServlet extends HttpServlet
                 vTo[0] = new InternetAddress(Constants.NANCY_EMAIL);
 
                 InitialContext vContext = new InitialContext();
-                Session vMailSession = (Session) PortableRemoteObject.narrow(vContext.lookup("java:comp/env/mail/Session"), Session.class);
+                //Session vMailSession = (Session) PortableRemoteObject.narrow(vContext.lookup("java:comp/env/mail/Session"), Session.class);
+                Session vMailSession = (Session) vContext.lookup("java:comp/env/mail/Session");
+                
                 MimeMessage m = new MimeMessage(vMailSession);
                 m.setFrom();
 

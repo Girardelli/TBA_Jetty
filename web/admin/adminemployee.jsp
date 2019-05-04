@@ -8,11 +8,11 @@
 
 	<%@ page
 		import="javax.ejb.*,
-java.rmi.RemoteException,
+
 javax.naming.Context,
 java.util.Iterator,
 javax.naming.InitialContext,
-javax.rmi.PortableRemoteObject,
+
 be.tba.ejb.account.interfaces.*,
 be.tba.util.constants.*,
 be.tba.util.session.*"%>

@@ -6,11 +6,11 @@
 contentType="text/html;charset=UTF-8" language="java"
 		import="javax.ejb.*,
 java.util.*,
-javax.rmi.PortableRemoteObject,
-java.rmi.RemoteException,
+
+
 javax.naming.Context,
 javax.naming.InitialContext,
-javax.rmi.PortableRemoteObject,
+
 javax.ejb.*,
 be.tba.ejb.account.interfaces.*,
 be.tba.ejb.pbx.interfaces.*,
