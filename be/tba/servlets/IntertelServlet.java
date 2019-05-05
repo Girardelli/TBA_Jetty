@@ -147,8 +147,7 @@ public class IntertelServlet extends HttpServlet
     		data.isSummaryDone = true;
     		if (!data.isIncoming)
 			{	
-    			data.callingNr = req.getParameter("viaDID");
-    			data.callingNr = data.callingNr.substring(data.callingNr.length() - 8, data.callingNr.length());
+    			data.setCallingNr(req.getParameter("viaDID"));
         		mCallRecordSqlAdapter.setCallingNr(session, data);
 			}
     		break;

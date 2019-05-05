@@ -24,7 +24,7 @@ public class IntertelCallData
 	public IntertelCallData(boolean isIncoming, String calledNr, String CallingNr, String callId, long tsStart, String phase)
 	{
 		// incoming calls: only keep the last 6 numbers to match it with the customer FwdNr (Constants)
-		this.calledNr = isIncoming ? calledNr.substring(calledNr.length() - 8, calledNr.length()) : calledNr;
+		this.calledNr = isIncoming ? last6Numbers(calledNr) : calledNr;
 		// outgoing calls: save the standard TBA number. The summary event shall update this to the actual number (e.g. when outgoing code is used)
 		this.callingNr = isIncoming ? CallingNr : kTbaNr;
 		this.phase = phase;
@@ -65,6 +65,13 @@ public class IntertelCallData
 		this.tsEnd = tsEnd;
 	}
 	
+	public void setCallingNr(String nr)
+	{
+		if (nr == null)
+			nr = "";
+		this.callingNr = last6Numbers(nr);
+	}
+	
 //	public void setTransferData(IntertelCallData data)
 //	{
 //		this.transferData = data;
@@ -97,11 +104,15 @@ public class IntertelCallData
 	
 	private String secondsToString(int seconds)
 	{
-		if (seconds >= 3600)
-		{
-			return String.format("%02d:%02d:%02d", seconds / 3600, seconds % 3600 / 60, seconds % 60);
-		}
-		return String.format("%02d:%02d", seconds / 60, seconds % 60);
+		return String.format("%d:%02d:%02d", seconds / 3600, seconds % 3600 / 60, seconds % 60);
 	}
 	
+	private String last6Numbers(String nr)
+	{
+		if (nr.length() > 6)
+		{
+			nr = nr.substring(nr.length() - 6, nr.length());
+		}
+		return nr;
+	}
 }
