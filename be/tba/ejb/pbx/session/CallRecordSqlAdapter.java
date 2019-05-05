@@ -10,7 +10,6 @@ import java.util.Vector;
 import be.tba.ejb.account.interfaces.AccountEntityData;
 import be.tba.ejb.pbx.interfaces.CallRecordEntityData;
 import be.tba.pbx.Forum700CallRecord;
-import be.tba.servlets.helper.IntertelCallManager;
 import be.tba.servlets.session.WebSession;
 import be.tba.util.constants.Constants;
 import be.tba.util.data.AbstractSqlAdapter;
@@ -1150,6 +1149,11 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
     {
 		executeSqlQuery(webSession.getConnection(), "UPDATE CallRecordEntity SET IsForwardCall=true WHERE ID='" + transferedInData.dbRecordId + "'");
 		executeSqlQuery(webSession.getConnection(), "UPDATE CallRecordEntity SET ShortDescription='Doorgeschakelde oproep van " + transferedInData.callingNr + " naar " + transferOutData.calledNr + "' WHERE ID='" + transferOutData.dbRecordId + "'");
+    }
+    
+    public void setCallingNr(WebSession webSession, IntertelCallData data)
+    {
+    	executeSqlQuery(webSession.getConnection(), "UPDATE CallRecordEntity SET FwdNr='" + data.callingNr + "' WHERE ID='" + data.dbRecordId + "'");
     }
     
     static public void setIsDocumentedFlag(CallRecordEntityData record)

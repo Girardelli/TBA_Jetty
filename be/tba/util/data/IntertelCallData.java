@@ -1,8 +1,10 @@
 package be.tba.util.data;
 
+import be.tba.util.constants.Constants;
+
 public class IntertelCallData 
 {
-	public static String kTbaNr = "409000";
+	public static String kTbaNr = Constants.NUMBER_BLOCK[0][0];
 	
 	public String calledNr;
 	public String callingNr;
@@ -16,15 +18,21 @@ public class IntertelCallData
 	//public IntertelCallData transferData;
 	public int dbRecordId;
 	public boolean isTransferOutCall;
+	public boolean isEndDone;
+	public boolean isSummaryDone;
 	
 	public IntertelCallData(boolean isIncoming, String calledNr, String CallingNr, String callId, long tsStart, String phase)
 	{
-		this.calledNr = calledNr;
+		// incoming calls: only keep the last 6 numbers to match it with the customer FwdNr (Constants)
+		this.calledNr = isIncoming ? calledNr.substring(calledNr.length() - 8, calledNr.length()) : calledNr;
+		// outgoing calls: save the standard TBA number. The summary event shall update this to the actual number (e.g. when outgoing code is used)
 		this.callingNr = isIncoming ? CallingNr : kTbaNr;
 		this.phase = phase;
 		this.isIncoming = isIncoming;
 		this.tsStart = tsStart;
 		this.intertelCallId = callId;
+		this.isEndDone = false;
+		this.isSummaryDone = false;
 	}
 	
 	public void setDbRecordId(int id)

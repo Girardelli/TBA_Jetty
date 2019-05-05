@@ -12,9 +12,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import be.tba.ejb.pbx.session.CallRecordSqlAdapter;
 import be.tba.servlets.helper.IntertelCallManager;
 import be.tba.servlets.session.WebSession;
@@ -24,7 +21,7 @@ import be.tba.util.data.IntertelCallData;
 
 public class IntertelServlet extends HttpServlet
 {
-	final static Logger sLogger = LoggerFactory.getLogger(IntertelServlet.class);
+	//final static Logger sLogger = LoggerFactory.getLogger(IntertelServlet.class);
 	
 	private WebSession mSession;
 	private IntertelCallManager mIntertelCallManager;
@@ -41,7 +38,7 @@ public class IntertelServlet extends HttpServlet
 		catch (SQLException e) 
 		{
 			// TODO Auto-generated catch block
-			sLogger.error(e.getMessage());
+			System.out.println(e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -62,7 +59,7 @@ public class IntertelServlet extends HttpServlet
     {
 		writeParmsToFile(req);
 		String phase = req.getParameter("origin");
-		sLogger.info("Intertel servlet doPost");
+		//sLogger.info("Intertel servlet doPost");
     	System.out.println("Intertel servlet doPost: " + phase);
     	IntertelCallData data;
     	
@@ -74,7 +71,7 @@ public class IntertelServlet extends HttpServlet
 			} 
     		catch (Exception e) 
     		{
-    			sLogger.error("no connection available and could not be recovered");
+    			System.out.println("no connection available and could not be recovered");
     			e.printStackTrace();
     			return;
     		}
@@ -87,7 +84,7 @@ public class IntertelServlet extends HttpServlet
     	
     	if (calledNr == null || callingNr == null || intertelCallId == null || phase == null || inOut == null)
     	{
-    		sLogger.info("Intertel servlet: calledNr:" + calledNr + " callingNr:" + callingNr + " intertelCallId:" + intertelCallId + " phase:" + phase + " inOut:" + inOut);
+    		System.out.println("Intertel servlet: calledNr:" + calledNr + " callingNr:" + callingNr + " intertelCallId:" + intertelCallId + " phase:" + phase + " inOut:" + inOut);
     		return;
     	}
     	boolean isIncoming =  (inOut.equals("IN"));
@@ -101,7 +98,7 @@ public class IntertelServlet extends HttpServlet
 		catch (SQLException e) 
 		{
 			// TODO Auto-generated catch block
-			sLogger.error(e.getMessage());
+			System.out.println(e.getMessage());
 			e.printStackTrace();
 			return;
 		}
@@ -141,20 +138,30 @@ public class IntertelServlet extends HttpServlet
     		{
         		data.setTsEnd(timestamp);
         		mCallRecordSqlAdapter.setTsEnd(session, data);
-        		mIntertelCallManager.removeCall(intertelCallId);
-    			data.setCurrentPhase(phase);
-    			writeToFile(data);
+        		data.setCurrentPhase(phase);
+    			data.isEndDone = true;
     		}
     		break;
     		
     	case "summary":
+    		data.isSummaryDone = true;
+    		if (!data.isIncoming)
+			{	
+    			data.callingNr = req.getParameter("viaDID");
+    			data.callingNr = data.callingNr.substring(data.callingNr.length() - 8, data.callingNr.length());
+        		mCallRecordSqlAdapter.setCallingNr(session, data);
+			}
     		break;
 
     	default:
-    		sLogger.info("Intertel servlet doPost: unknown 'origin'=" + phase);
+    		System.out.println("Intertel servlet doPost: unknown 'origin'=" + phase);
         	        	
     	}
-    	
+		if (data.isEndDone && data.isSummaryDone)
+		{
+    		mIntertelCallManager.removeCall(intertelCallId);
+			writeToFile(data);
+		}
     }
 
 
@@ -187,7 +194,7 @@ public class IntertelServlet extends HttpServlet
         if (!file.exists())
         {
             file.createNewFile();
-        	strBuf.append("datum    uur    van         --> naar         duur   (info)\r\n");
+        	strBuf.append("datum    uur            van -->         naar duur   (info)\r\n");
         }
         FileOutputStream fileStream = new FileOutputStream(file, true);
         
