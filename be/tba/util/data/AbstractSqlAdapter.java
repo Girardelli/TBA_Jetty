@@ -174,7 +174,7 @@ public abstract class AbstractSqlAdapter<T>
             {
                 rs = stmt.executeQuery(queryStr);
                 Collection<T> col = translateRsToValueObjects(rs);
-                System.out.println(col.size() + " entries: SQL query: " + queryStr);
+                //System.out.println(col.size() + " entries: SQL query: " + queryStr);
                 
                 //sLogger.info("{} entries: SQL querry: {}", col.size(), queryStr);
                 return col;

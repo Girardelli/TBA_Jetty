@@ -250,12 +250,12 @@ public class CallRecordFacade
         if (newRecord == null)
         {
             // strange situation
-            System.out.println("updateNewUnmappedCall called with a valid NewUnmappedCall");
+            //System.out.println("updateNewUnmappedCall called with a valid NewUnmappedCall");
             // make a new one.
             newRecord = new CallRecordEntityData();
             webSession.setNewUnmappedCall(newRecord);
         }
-        System.out.println("updateNewUnmappedCall");
+        //System.out.println("updateNewUnmappedCall");
 
         newRecord.setIsNotLogged(false);
         newRecord.setIsReleased(false);
@@ -283,7 +283,7 @@ public class CallRecordFacade
         CallRecordEntityData vNewCall = webSession.getNewUnmappedCall();
         String vKey = (String) req.getParameter(Constants.RECORD_ID);
 
-        System.out.println("saveNewCall: id = " + vKey);
+        //System.out.println("saveNewCall: id = " + vKey);
 
         CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
         CallRecordEntityData vNewRecord = vQuerySession.getRecord(webSession, vKey);
@@ -313,7 +313,7 @@ public class CallRecordFacade
             //System.out.println("saveNewCall: id = " + vNewRecord.getId());
             if (subcustomers != null && !subcustomers.isEmpty())
             {
-                System.out.println("there are subcustomers. Set the super customer=" + vNewRecord.getFwdNr() + ", record key=" + vKey);
+                //System.out.println("there are subcustomers. Set the super customer=" + vNewRecord.getFwdNr() + ", record key=" + vKey);
                 // set the fwdNr of the super customer so that selectSubCustomer.jsp can prepare the sub customers list
                 //req.setAttribute(Constants.ACCOUNT_ID, vNewCall.getFwdNr());
                 webSession.setRecordId(vKey);

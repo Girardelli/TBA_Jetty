@@ -58,7 +58,7 @@ public class LoginServlet extends HttpServlet
             if (vAction == null)
                 vAction = (String) req.getAttribute(Constants.SRV_ACTION);
 
-            System.out.println("LoginServlet: action=" + vAction);
+            //System.out.println("LoginServlet: action=" + vAction);
 
             sc = getServletContext();
             rd = sc.getRequestDispatcher(Constants.REGISTER_JSP);
@@ -81,7 +81,7 @@ public class LoginServlet extends HttpServlet
                 {
                     vAccount = new AccountEntityData();
                     vAccount.setRole(AccountRole.ADMIN.getShort());
-                    System.out.println("LoginServlet: Master logged in");
+                   // System.out.println("LoginServlet: Master logged in");
                 }
                 else
                 {

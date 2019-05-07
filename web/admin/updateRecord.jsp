@@ -30,7 +30,26 @@ vSession.setCallingJsp(Constants.UPDATE_RECORD_JSP);
 mRecordData = vSession.getCurrentRecord();
 if (mRecordData == null)
 {
-  out.println("no call record set in session context when entering updaterecord.jsp");
+  %>
+<body>
+<table  cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
+
+    <!--Update Record jsp-->
+    <tr>
+        <td valign="top" width="30" bgcolor="FFFFFF"></td>
+        <td valign="top" bgcolor="FFFFFF"><br>
+        <br>
+        <span class="admintitle"> Deze oproep is niet meer gekend in de database.</span>
+        <br>
+        <form name="calllistform" method="POST" action="/tba/AdminDispatch">
+        <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.GOTO_RECORD_ADMIN%>"> 
+        <input class="tbabutton" type=submit value="Cancel" onclick="cancelUpdate();">
+        </form>
+        </td>
+    </tr>
+</table>
+</body>  
+  <%
   return;
 }
 

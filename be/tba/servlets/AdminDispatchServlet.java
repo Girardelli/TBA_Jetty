@@ -53,7 +53,7 @@ public class AdminDispatchServlet extends HttpServlet
         ServletContext sc = null;
         try
         {
-            log.info("doGet()");
+            //log.info("doGet()");
             sc = getServletContext();
             res.setContentType("text/html");
             res.setCharacterEncoding("UTF-8");

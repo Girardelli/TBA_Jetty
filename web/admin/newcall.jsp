@@ -53,8 +53,6 @@ HttpSession vHttpSession = request.getSession();
      CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
       Collection<CallRecordEntityData> vRecords = vQuerySession.getVirgins(vSession);
 
-      AccountEntityData vAccountEntityData;
-
       if (vRecords.size() > 0)
       {
         vNewCallsAvailable = true;
@@ -81,11 +79,17 @@ HttpSession vHttpSession = request.getSession();
         {
           CallRecordEntityData vEntry = (CallRecordEntityData) i.next();
 
-          vAccountEntityData = AccountCache.getInstance().get(vEntry.getFwdNr());
+          AccountEntityData vAccountEntityData = AccountCache.getInstance().get(vEntry.getFwdNr());
+          String name;
           if (vAccountEntityData == null)
           {
-            throw new InvalidValueException("Oproepen database refereert naar een klantnummer 014/" + vEntry.getFwdNr() +
-                                            " die niet gekend is. Maak een klant aan met deze klantnummer om deze oproepen zichtbaar te maken.", null);
+            name = vEntry.getFwdNr() + "  is onbekend!";
+        	  System.out.println("Oproepen database refereert naar een klantnummer " + vEntry.getFwdNr() +
+                                            " die niet gekend is. Maak een klant aan met deze klantnummer om deze oproepen zichtbaar te maken.");
+          }
+          else
+          {
+        	  name = vAccountEntityData.getFullName();
           }
           String vId = "id" + vEntry.getId();
           String vDate = vEntry.getDate();
@@ -103,7 +107,7 @@ HttpSession vHttpSession = request.getSession();
 							onclick="updateSaveId('<%=vId%>', '<%=vEntry.getId()%>');">
 							<td width="20" bgcolor="FFFFFF"><img src=<%=vInOut%> height="13"
 								border="0"></td>
-							<td width="140" valign="top"><%=vAccountEntityData.getFullName()%></td>
+							<td width="140" valign="top"><%=name%></td>
 							<td width="55" valign="top"><%=vDate%></td>
 							<td width="35" valign="top"><%=vTime%></td>
 							<td width="85" valign="top"><%=vNumber%></td>

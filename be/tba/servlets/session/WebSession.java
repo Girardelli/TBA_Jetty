@@ -95,7 +95,7 @@ final public class WebSession implements Serializable
             //DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/MySqlDS");
             //mConnection = ds.getConnection();
             mConnection = DriverManager.getConnection(Constants.MYSQL_URL);
-            System.out.println("WebSession created");
+            //System.out.println("WebSession created");
 
             // mConnection = DriverManager.getConnection("jdbc:mysql://localhost/tbadb");
         }
@@ -115,7 +115,7 @@ final public class WebSession implements Serializable
     {
         // try
         // {
-        System.out.println("Create WebSession with DataSource");
+        //System.out.println("Create WebSession with DataSource");
         init();
         // mConnection = ds.getConnection();
         mConnection = DriverManager.getConnection(mysqlURL);
@@ -226,7 +226,7 @@ final public class WebSession implements Serializable
 
     public void setCurrentRecord(CallRecordEntityData rec)
     {
-        mCurrentRecord = (CallRecordEntityData) rec.clone();
+        mCurrentRecord = (rec == null ? null : (CallRecordEntityData) rec.clone());
     }
 
     public CallRecordEntityData getCurrentRecord()
@@ -236,7 +236,7 @@ final public class WebSession implements Serializable
 
     public void setCurrentTask(TaskEntityData rec)
     {
-        mCurrentTask = (TaskEntityData) rec.clone();
+        mCurrentTask = (rec == null ? null : (TaskEntityData) rec.clone());
     }
 
     public TaskEntityData getCurrentTask()
@@ -266,7 +266,7 @@ final public class WebSession implements Serializable
 
     public void setNewAccount(AccountEntityData data)
     {
-        mNewAccount = (AccountEntityData) data.clone();
+        mNewAccount = (data == null ? null : (AccountEntityData) data.clone());
     }
 
     public AccountEntityData getNewAccount()

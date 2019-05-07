@@ -51,7 +51,7 @@ public class AdminLoginServlet extends HttpServlet
                 vSession = new WebSession();
                 AccountSqlAdapter vAccountSession = new AccountSqlAdapter();
                 vAccount = vAccountSession.logIn(vSession, vUserId, vPassword);
-                System.out.println("LoginServlet: " + vAccount.getFullName() + " logged in.");
+                //System.out.println("LoginServlet: " + vAccount.getFullName() + " logged in.");
             }
 
             if (vAccount.getRole().equals(AccountRole.ADMIN.getShort()) || vAccount.getRole().equals(AccountRole.EMPLOYEE.getShort()))
@@ -73,7 +73,7 @@ public class AdminLoginServlet extends HttpServlet
                 ServletContext sc = getServletContext();
                 RequestDispatcher rd = sc.getRequestDispatcher(Constants.ADMIN_CALLS_JSP);
                 rd.forward(req, res);
-                System.out.println("LoginServlet: " + vAccount.getUserId() + " got session id " + vSession.getSessionId());
+                //System.out.println("LoginServlet: " + vAccount.getUserId() + " got session id " + vSession.getSessionId());
             }
             else
             {
