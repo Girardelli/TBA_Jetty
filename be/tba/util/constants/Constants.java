@@ -14,225 +14,119 @@ public class Constants
 {
     // Administrator-test account strings.
     public static final String MASTER_LOGIN_NAME = "esosrv";
-
     public static final String MASTER_LOGIN_PASWORD = "";
-
     public static final String NANCY_EMAIL = "nancy.olyslaegers@theBusinessAssistant.be";
 
     // Account Role strings.
     public static final String EJB_ACC_ROLE_CUSTOMER = "klant";
-
     public static final String EJB_ACC_ROLE_ADMIN = "admin";
 
     // HTML page names
     public static final String TBA_URL_BASE = "https://thebusinessAssistant.be/tba/";
-
     public static final String MYSQL_URL = "jdbc:mysql://localhost/tbadb?user=root&password=gzb625$";
     // public static final String INVOICE_HEAD_TMPL =
     // "C:\\jboss-4.0.2\\projects\\TBA\\templates\\invoice-head-template.htm";
     public static final String TEMP_DIR = "c:\\temp";
     public static final String INVOICE_HEAD_TMPL = "C:\\jetty\\templates\\invoiceTemplate.pdf";
-
     public static final String INVOICE_DETAIL_TMPL = "C:\\jetty\\templates\\invoice-detail-template.htm";
-
     public static final String INVOICE_FOOTER_TMPL = "C:\\jetty\\templates\\invoice-footer-template.htm";
-
     public static final String INVOICE_DIR = "C:\\TheBusinessAssistant\\TheBusinessAssistant\\facturen\\";
-
     public static final String FILEUPLOAD_DIR = "C:\\jetty\\tempdir";
-    
     public static final String WC_KLANTEN_XML = "WoltersKluwerKlanten.xml";
     public static final String WC_VERKOPEN_XML = "WoltersKluwerVerkopen.xml";
-
     public static final String ADMIN_LOGIN_HTML = "/tba/admin.html";
-
     public static final String BAD_LOGIN_HTML = "/badlogin.html";
-
     public static final String LOGIN_HTML = "/tba/login.html";
-
     public static final String SERVLET_LOGIN_HTML = "/login.html";
-
     public static final String HOME_HTML = "/index.html";
-
     public static final String FORM_SUBMIT_SUCCESS = "/formok.html";
 
     // JSP page names
     public static final String ADMIN_FAIL_JSP = "/admin/adminfail.jsp";
-
     public static final String PROTECT_FAIL_JSP = "/protect/protectfail.jsp";
-
-    // public static final String BAD_ADMIN_HTML =
     public static final String ADD_ACCOUNT_JSP = "/admin/addAccount.jsp";
-
     public static final String ADD_EMPLOYEE_JSP = "/admin/addEmployee.jsp";
-
     public static final String ADMIN_EMPLOYEE_COST_JSP = "/admin/employeecost.jsp";
-
     public static final String ADMIN_ACCOUNT_JSP = "/admin/adminaccount.jsp";
-
     public static final String ADMIN_EMPLOYEE_JSP = "/admin/adminemployee.jsp";
-
     public static final String ADMIN_LOGIN = "/admin.html";
-
     public static final String SHOW_ERROR_JSP = "/admin/showMailFail.jsp";
-
     public static final String UPDATE_ACCOUNT_JSP = "/admin/updateAccount.jsp";
-
     public static final String SELECT_SUBCUSTOMER_JSP = "/admin/selectSubCustomer.jsp";
-
     public static final String UPDATE_RECORD_JSP = "/admin/updateRecord.jsp";
-
     public static final String ADD_RECORD_JSP = "/admin/addrecord.jsp";
-
     public static final String ADMIN_CALLS_JSP = "/admin/admincalls.jsp";
-
     public static final String INVOICE_JSP = "/admin/invoice.jsp";
-
     public static final String ADMIN_SEARCH_JSP = "/admin/search.jsp";
-
     public static final String ADMIN_NOTLOGGEDCALLS_JSP = "/admin/notloggedcalls.jsp";
-
     public static final String ADMIN_TASK_JSP = "/admin/admintasks.jsp";
-
     public static final String ADD_TASK_JSP = "/admin/addtask.jsp";
-
     public static final String ADD_INVOICE_JSP = "/admin/addinvoice.jsp";
-
     public static final String UPDATE_TASK_JSP = "/admin/updatetask.jsp";
-
     public static final String ANNOUNCEMENT_JSP = "/admin/announcement.jsp";
-
     public static final String ARE_YOU_SURE_JSP = "/admin/areyousure.jsp";
-
     public static final String NEW_CALL_JSP = "/admin/newcall.jsp";
-
     public static final String ADMIN_INVOICE_JSP = "/admin/admininvoice.jsp";
-
     public static final String OPEN_INVOICE_JSP = "/admin/openinvoice.jsp";
-
     public static final String LOGIN_HOME_JSP = "/protect/prothome.jsp";
-
     public static final String REGISTER_JSP = "/protect/register.jsp";
-
     public static final String LOGIN_ERROR_JSP = "/loginerror.jsp";
-
     public static final String CLIENT_CALLS_JSP = "/protect/clientcalls.jsp";
-
     public static final String CLIENT_SHOW_REC_JSP = "/protect/showrecord.jsp";
-
     public static final String CLIENT_PREF_JSP = "/protect/updatepref.jsp";
-
     public static final String CLIENT_SEARCH_JSP = "/protect/searchcust.jsp";
-
     public static final String CLIENT_SHOW_TASKS_JSP = "/protect/clienttasks.jsp";
-
     public static final String DICTAAT_FORM_JSP = "/dictaatform.jsp";
+    public static final String CANVAS_JSP = "/admin/canvas.jsp";
 
     // session attribute constants
     // error responses
     public static final String NO_ERROR = "OK";
-
     public static final String ADD_ACCOUNT_FAILED = "NOK";
-
     public static final String NO_VALUE = "NOVALUE";
-
     public static final String ACCOUNT_EXISTS = "Account already exists";
 
     // attribute names
     public static final String SRV_ACTION = "_act";
-
     public static final String ACCOUNT_SELECT = "_sel";
-
     public static final String ACCOUNT_PASSWORD = "_pwd";
-
     public static final String ACCOUNT_PASSWORD2 = "_pwd2";
-
     public static final String ACCOUNT_FULLNAME = "_fn";
-
     public static final String ACCOUNT_FORWARD_NUMBER = "_fwnr";
-
     public static final String ACCOUNT_USERID = "_uid";
-
     public static final String ACCOUNT_ROLE = "_role";
-
     public static final String ACCOUNT_REGCODE = "_rgcd";
-
     public static final String ACCOUNT_ID = "_aid";
-
     public static final String ACCOUNT_EMAIL = "_aem";
-
     public static final String ACCOUNT_INVOICE_EMAIL = "_aiem";
-
     public static final String ACCOUNT_GSM = "_agsm";
-
     public static final String ACCOUNT_AUTO_RELEASE = "_aare";
-
     public static final String ACCOUNT_MAIL_ON1 = "_amon1";
-
     public static final String ACCOUNT_MAIL_UUR1 = "_auu1";
-
     public static final String ACCOUNT_MAIL_MINUTEN1 = "_ami1";
-
     public static final String ACCOUNT_MAIL_ON2 = "_amon2";
-
     public static final String ACCOUNT_MAIL_UUR2 = "_auu2";
-
     public static final String ACCOUNT_MAIL_MINUTEN2 = "_ami2";
-
     public static final String ACCOUNT_MAIL_ON3 = "_amon3";
-
     public static final String ACCOUNT_MAIL_UUR3 = "_auu3";
-
     public static final String ACCOUNT_MAIL_MINUTEN3 = "_ami3";
-
     public static final String ACCOUNT_INVOICE_TYPE = "_aind";
-
     public static final String ACCOUNT_3W_CUSTOMER = "_3W";
-
     public static final String ACCOUNT_3W_PERSON_ID = "_3Wpid";
-
     public static final String ACCOUNT_3W_COMPANY_ID = "_3Wcid";
-
     public static final String ACCOUNT_FAC_STD_IN_CALL = "_fcsic";
-
     public static final String ACCOUNT_FAC_STD_OUT_CALL = "_fcsoc";
-
     public static final String ACCOUNT_FAC_FAX_CALL = "_fcfax";
-
     public static final String ACCOUNT_FAC_OUT_LEVEL1 = "_fcl1";
-
     public static final String ACCOUNT_FAC_OUT_LEVEL2 = "_fcl2";
-
     public static final String ACCOUNT_FAC_OUT_LEVEL3 = "_fcl3";
-
-    public static final String ACCOUNT_FAC_AGENDA_FIXED = "_fcafx"; // fixed fee
-    // on all
-    // calls
-    // (yes or
-    // no)
-
-    public static final String ACCOUNT_FAC_AGENDA_CALL = "_fcpac"; // price of
-    // a agenda
-    // call (can
-    // also be
-    // the price
-    // for fixed
-    // fee)
-
-    public static final String ACCOUNT_FAC_AGENDA_UNIT = "_fcaun"; // unit of
-    // the
-    // agenda
-    // price (%
-    // or euro)
-
+    public static final String ACCOUNT_FAC_AGENDA_FIXED = "_fcafx"; // fixed fee on all calls (yes or no)
+    public static final String ACCOUNT_FAC_AGENDA_CALL = "_fcpac"; // price of a agenda call (can also be the price for fixed fee)
+    public static final String ACCOUNT_FAC_AGENDA_UNIT = "_fcaun"; // unit of the agenda price (% or euro)
     public static final String ACCOUNT_FAC_LONG = "_flng";
-
     public static final String ACCOUNT_FAC_LONG_FWD = "_flngf";
-
     public static final String ACCOUNT_FAC_SMS = "_fcsms";
-
     public static final String ACCOUNT_FAC_CALL_FORWARD = "_fccfw";
-
     public static final String ACCOUNT_FAC_TBL_MIN_CALL_I = "_fcmcI";
     public static final String ACCOUNT_FAC_TBL_START_COST_I = "_fcscI";
     public static final String ACCOUNT_FAC_TBL_EXTRA_COST_I = "_fcecI";
@@ -245,150 +139,83 @@ public class Constants
     public static final String ACCOUNT_FAC_TBL_MIN_CALL_IV = "_fcmcIV";
     public static final String ACCOUNT_FAC_TBL_START_COST_IV = "_fcscIV";
     public static final String ACCOUNT_FAC_TBL_EXTRA_COST_IV = "_fcecIV";
-
     public static final String ACCOUNT_TASK_HOUR_RATE = "_fthr";
-
     public static final String ACCOUNT_COMPANY_NAME = "_fcyn";
-
     public static final String ACCOUNT_ATT_TO_NAME = "_fatn";
-
     public static final String ACCOUNT_STREET = "_fstr";
-
     public static final String ACCOUNT_CITY = "_fcty";
-
     public static final String ACCOUNT_BTW_NUMBER = "_fbtw";
-
     public static final String ACCOUNT_NR = "_fanr";
-
     public static final String ACCOUNT_NO_INVOICE = "_fniv";
-
     public static final String ACCOUNT_NO_BTW = "_fnbtw";
-
     public static final String ACCOUNT_COUNT_ALL_LONG_CALLS = "_fnlc";
-
     public static final String ACCOUNT_COUNT_LONG_FWD_CALLS = "_fnfc";
-
     public static final String ACCOUNT_SUPER_CUSTOMER = "_fscu";
-
     public static final String ACCOUNT_SUB_CUSTOMER = "_fsuc";
-
     public static final String ACCOUNT_HAS_SUB_CUSTOMERS = "_fhsc";
-
     public static final String ACCOUNT_NO_EMPTY_MAILS = "_nem";
-
     public static final String ACCOUNT_TEXT_MAIL = "_atm";
-
     public static final String ACCOUNT_IS_MAIL_INVOICE = "_ami";
-    
     public static final String ACCOUNT_COUNTRY_CODE = "_acc";
-    
     public static final String TASK_ID = "_tid";
-
     public static final String TASK_FORWARD_NUMBER = "_tfwnr";
-
     public static final String TASK_DATE = "_tdate";
-
     public static final String TASK_TIMESTAMP = "_ttmst";
-
     public static final String TASK_DESCRIPTION = "_tdscr";
     public static final String TASK_FINTROID = "_tfinid";
     public static final String TASK_EXEC_DATE = "_texecd";
     public static final String TASK_VAL_DATE = "_tvald";
     public static final String TASK_FROM_BANK_NR = "_tbnknr";
     public static final String TASK_PAY_DETAILS = "_tdetail";
-
-    
     public static final String TASK_IS_FIXED_PRICE = "_tisfx";
-
     public static final String TASK_IS_RECURING = "_tirec";
-
     public static final String TASK_FIXED_PRICE = "_tfxpr";
-
     public static final String TASK_TIME_SPEND = "_ttmsp";
-
     public static final String TASK_IS_PAYED = "_tispa";
-
     public static final String ERROR_VECTOR = "errv";
-
     public static final String INVOICE_AMONTH = "_iam";
-
     public static final String INVOICE_CUSTOMER = "_icu";
-
     public static final String DONE_BY_EMPL = "_dbe";
 
     // invoice
     public static final String INVOICE_MONTH = "_imo";
-
     public static final String INVOICE_YEAR = "_iye";
-
     public static final String INVOICE_ID = "_iid";
-
     public static final String INVOICE_CUST_REF = "_icid";
-
     public static final String INVOICE_PAYDATE = "_ipd";
-
     public static final String NO_CUSTOMER = "_ncu";
-    
     public static final String FINTRO_FILE = "_iff";
     public static final String FINTRO_PROCESS_FILE = "_ipf";
 
     // filter
     public static final String ACCOUNT_FILTER_CUSTOMER = "_fcus";
-
     public static final String ACCOUNT_FILTER_CALL_STATE = "_fcst";
-
     public static final String ACCOUNT_FILTER_CALL_DIR = "_fdir";
-
     public static final String RECORD_ID = "_rid";
-
     public static final String RECORD_NUMBER = "_rnb";
-
     public static final String RECORD_CALLER_NAME = "_cna";
-
     public static final String RECORD_TEMP_CALLER = "_tca";
-
     public static final String RECORD_SHORT_TEXT = "_stx";
-
     public static final String RECORD_LONG_TEXT = "_ltx";
-
     public static final String RECORD_3W_CUSTOMER_ID = "_3Wrid";
-
     public static final String RECORD_3W_CALL = "_3Wrcl";
-
     public static final String RECORD_TIME = "_rti";
-
     public static final String RECORD_DATE = "_rdt";
-
     public static final String RECORD_DIR = "_rdi";
-
     public static final String RECORD_DIR_IN = "_rdin";
-
     public static final String RECORD_DIR_OUT = "_rdout";
-
     public static final String RECORD_SMS = "_rsms";
-
     public static final String RECORD_FORWARD = "_rfwd";
-
     public static final String RECORD_IMPORTANT = "_rimp";
-
     public static final String RECORD_AGENDA = "_ragnd";
-
     public static final String RECORD_FAX = "_rfax";
-
     public static final String RECORD_INVOICE_LEVEL = "_ril";
-
     public static final String RECORD_SEARCH_STR = "_rss";
-
     public static final String RECORD_TO_DELETE = "_rtd";
-
     public static final String RECORD_UPDATED = "_rud";
-
     public static final String ACCOUNT_TO_DELETE = "_atd";
-
     public static final String TASK_TO_DELETE = "_ttd";
-
     public static final String NEW_RECORD_KEY = "_nrk";
-
     public static final String INVOICE_TO_FREEZE = "_itf";
     public static final String INVOICE_TO_SAVE = "_its";
     public static final String INVOICE_TO_DELETE = "_itd";
@@ -396,227 +223,133 @@ public class Constants
 
     // attribute names
     public static final String SESSION_OBJ = "_sobj";
-
     public static final String SESSION_ID = "_sid";
-
     public static final String ERROR_TXT = "_errt";
-
     public static final String NEXT_PAGE = "_npg";
-
     public static final String PREVIOUS_PAGE = "_ppg";
-    
     public static final String ACCOUNT_FWDNR = "_afwd";
-
     public static final String NEW_ACCOUNT_FWDNR = "_nafwd";
-
     public static final String TBA_HOME = "home";
 
     // AdminDispatchServlet actions
+    public static final String GOTO_CANVAS = "GOTO_CANVAS";
     public static final String GOTO_RECORD_ADMIN = "GOTO_RECORD_ADMIN";
-
     public static final String RECORD_DELETE = "RECORD_DELETE";
-
     public static final String RECORD_UPDATE = "RECORD_UPDATE";
-
     public static final String GOTO_ADD_RECORD = "GOTO_ADD_RECORD";
-
     public static final String RECORD_SHOW_PREV = "RECORD_SHOW_PREV";
-
     public static final String RECORD_SHOW_NEXT = "RECORD_SHOW_NEXT";
-
     public static final String RECORD_SHOW_PREV_10 = "RECORD_SHOW_PREV_10";
-
     public static final String RECORD_SHOW_NEXT_10 = "RECORD_SHOW_NEXT_10";
     public static final String UPDATE_SHORT_TEXT = "UPDATE_SHORT_TEXT";
-
     public static final String SEARCH_SHOW_PREV = "SEARCH_SHOW_PREV";
-
     public static final String SEARCH_SHOW_NEXT = "SEARCH_SHOW_NEXT";
-
     public static final String SAVE_RECORD = "SAVE_RECORD";
-
     public static final String GOTO_ACCOUNT_ADD = "GOTO_ACCOUNT_ADD";
-
     public static final String GOTO_EMPLOYEE_ADD = "GOTO_EMPLOYEE_ADD";
-
     public static final String ACCOUNT_DELETE = "ACCOUNT_DELETE";
-
     public static final String ACCOUNT_UPDATE = "ACCOUNT_UPDATE";
     public static final String GENERATE_ACCOUNT_XML = "GENERATE_ACCOUNT_XML";
-
     public static final String ACCOUNT_ADD = "ACCOUNT_ADD";
-
     public static final String GOTO_ACCOUNT_ADMIN = "GOTO_ACCOUNT_ADMIN";
-
     public static final String GOTO_ACCOUNT_DELETE = "GOTO_ACCOUNT_DELETE";
-
     public static final String GOTO_SAVE_ACCOUNT = "GOTO_SAVE_ACCOUNT";
-
     public static final String SAVE_ACCOUNT = "SAVE_ACCOUNT";
-
     public static final String ADMIN_HOME = "ADMIN_HOME";
-
     public static final String ADMIN_LOG_OFF = "ADMIN_LOG_OFF";
-
     public static final String ACCOUNT_DEREG = "ACCOUNT_DEREG";
-
     public static final String SAVE_MAN_RECORD = "SAVE_MAN_RECORD";
-
     public static final String UPDATE_PREFS = "UPDATE_PREFS";
-
     public static final String SAVE_PREFS = "SAVE_PREFS";
-
     public static final String GOTO_INVOICE = "GOTO_INVOICE";
-
     public static final String GENERATE_INVOICE = "GENERATE_INVOICE";
-
     public static final String SAVE_INVOICE = "SAVE_INVOICE";
-
     public static final String SAVE_PAYDATE = "SAVE_PAYDATE";
-
     public static final String GENERATE_ALL_INVOICES = "GENERATE_ALL_INVOICES";
-
     public static final String GENERATE_ALL_INVOICEDOCS = "GENERATE_ALL_INVOICEDOCS";
     public static final String GENERATE_CREDITNOTE = "GENERATE_CREDITNOTE";
     public static final String GENERATE_INVOICE_XML = "GENERATE_INVOICE_XML";
-
     public static final String GOTO_RECORD_SEARCH = "GOTO_RECORD_SEARCH";
-
     public static final String TASK_DELETE = "TASK_DELETE";
-
     public static final String TASK_UPDATE = "TASK_UPDATE";
-
     public static final String TASK_ADD = "TASK_ADD";
-
     public static final String TASK_SHOW_PREV = "TASK_SHOW_PREV";
-
     public static final String TASK_SHOW_NEXT = "TASK_SHOW_NEXT";
-
     public static final String EMPLCOST_SHOW_PREV = "EMPLCOST_SHOW_PREV";
-
     public static final String EMPLCOST_SHOW_NEXT = "EMPLCOST_SHOW_NEXT";
-
     public static final String GOTO_TASK_ADMIN = "GOTO_TASK_ADMIN";
-
     public static final String GOTO_TASK_ADD = "GOTO_TASK_ADD";
-
     public static final String GOTO_NOTLOGGED_CALLS = "GOTO_NOTLOGGED_CALLS";
-
     public static final String SAVE_TASK = "SAVE_TASK";
-
     public static final String MAIL_CUSTOMER = "MAIL_CUSTOMER";
-
     public static final String GET_OPEN_CALLS = "GET_OPEN_CALLS";
-
     public static final String REFRESH_OPEN_CALLS = "REFRESH_OPEN_CALLS";
-    
     public static final String NEW_CALL = "NEW_CALL";
-
     public static final String SAVE_NEW_CALL = "SAVE_NEW_CALL";
-    
     public static final String SAVE_NEW_SUBCUSTOMER = "SAVE_NEW_SUBCUSTOMER";
-
     public static final String REMOVE_OPEN_CALL = "REMOVE_OPEN_CALL";
-
     public static final String GOTO_INVOICE_ADMIN = "GOTO_INVOICE_ADMIN";
-
     public static final String GOTO_OPEN_INVOICE = "GOTO_OPEN_INVOICE";
-    
     public static final String PROCESS_FINTRO_XLSX = "PROCESS_FINTRO_XLSX";
     public static final String DOWNLOAD_FINTRO_PROCESS_TXT = "DOWNLOAD_FINTRO_PROCESS_TXT";
     public static final String DOWNLOAD_WK_VERKOPEN_XML = "DOWNLOAD_WK_VERKOPEN_XML";
     public static final String DOWNLOAD_WK_KLANTEN_XML = "DOWNLOAD_WK_KLANTEN_XML";
-
     public static final String GOTO_INVOICE_ADD = "GOTO_INVOICE_ADD";
-
     public static final String INVOICE_ADD = "INVOICE_ADD";
-
     public static final String GOTO_EMPLOYEE_ADMIN = "GOTO_EMPLOYEE_ADMIN";
-
     public static final String GOTO_EMPLOYEE_COST = "GOTO_EMPLOYEE_COST";
-
     public static final String INVOICE_FREEZE = "INVOICE_FREEZE";
     public static final String INVOICE_MAIL = "INVOICE_MAIL";
     public static final String INVOICE_DELETE = "INVOICE_DELETE";
     public static final String INVOICE_SETPAYED = "INVOICE_SETPAYED";
-
     public static final String INVOICE_DETAIL = "INVOICE_DETAIL";
-
     public static final String MAIL_IT = "MAIL_IT";
-
     public static final String SHOW_MAIL_ERROR = "SHOW_MAIL_ERROR";
 
     // LoginServlet actions
     public static final String ACTION_LOGIN = "ACTION_LOGIN";
-
     public static final String ACTION_REGISTER = "ACTION_REGISTER";
-
     public static final String ACTION_FIRST_REGISTER = "ACTION_FIRST_REGISTER";
-
     public static final String ACTION_DICTAAT_FORM = "ACTION_DICTAAT_FORM";
-
     public static final String ACTION_TELEMARKETING_FORM = "ACTION_TELEMARKETING_FORM";
 
     // CustomerDispatchServlet
     public static final String ACTION_LOGOFF = "ACTION_LOGOFF";
-
     public static final String ACTION_SHOW_CALLS = "ACTION_SHOW_CALLS";
-
     public static final String ACTION_REFRESH_CALLS = "ACTION_REFRESH_CALLS";
-
     public static final String ACTION_GOTO_SEARCH_PAGE = "ACTION_GOTO_SEARCH_PAGE";
-
     public static final String ACTION_SEARCH_CALLS = "ACTION_SEARCH_CALLS";
-
     public static final String ACTION_SHOW_TASKS = "ACTION_SHOW_TASKS";
 
     // attribute values
     public static final String ACCOUNT_FILTER_ALL = "_all";
-
     public static final String ACCOUNT_FILTER_UNFINISHED = "_unf";
-
     public static final String ACCOUNT_FILTER_FINISHED = "_fin";
-
     public static final String ACCOUNT_FILTER_IN = "_f_in";
-
     public static final String ACCOUNT_FILTER_OUT = "_f_out";
-
     public static final String YES = "_y";
-
     public static final String NO = "_n";
-
     public static final String NONE = "_none";
-
     public static final String AGENDA_NO = "_pna";
     public static final String AGENDA_STANDARD = "_pst";
     public static final String AGENDA_PERC_PER_CALL = "_ppc";
     public static final String AGENDA_PERC_ALL_CALL = "_pac";
     public static final String AGENDA_EURO_PER_CALL = "_epc";
     public static final String AGENDA_EURO_ALL_CALL = "_eac";
-
     public static final String RECORD_LEVEL1 = "_rl1";
     public static final String RECORD_LEVEL2 = "_rl2";
     public static final String RECORD_LEVEL3 = "_rl3";
 
     // jsp-perms attribute
     public static final String FORM_NAME = "_fnm";
-
     public static final String FORM_COMPANY = "_fcmp";
-
     public static final String FORM_EMAIL = "_fem";
-
     public static final String FORM_TEL = "_ftel";
-
     public static final String FORM_FAX = "_ffax";
-
     public static final String FORM_TEXT = "_ftxt";
-
     public static final String FORM_DICTAAT_TECH = "_fdt";
-
     public static final String FORM_DIC_BRAND = "_fbr";
-
     public static final String FORM_DURATION = "_fdu";
-
     public static final String FORM_LANGUAGE = "_fla";
 
     public static final String[][] COUNTRY_CODES = {
@@ -688,56 +421,36 @@ public class Constants
      */
 
     public static final String[] MONTHS = { "januari", "februari", "maart", "april", "mei", "juni", "juli", "augustus", "september", "oktober", "november", "december" };
-
     public static final int RECORD_PAGE_LEN = 30;
-
     // CallLogger attributes
     public static final String CALLLOG_SCOPE = "day";
-
     public static final String CALLLOG_DIR = "upd";
 
     // calllogger file paths
     public static final String CALLLOG_PATH = "C:\\jetty\\projects\\TBA\\calllogs";
     public static final String INTERTELL_CALLLOG_PATH = "C:\\jetty\\projects\\TBA\\Intertel";
-
     public static final String RECORDS_OF_TODAY_PATH = "C:\\jetty\\projects\\TBA\\calllogs\\";
-
     public static final long SECONDS = 1000;
-
     public static final long MINUTES = SECONDS * 60;
-
     public static final long HOURS = MINUTES * 60;
-
     public static final long DAYS = HOURS * 24;
-
     public static final long RECORD_DELETE_EXPIRE = DAYS * 365; // 90 days
-
     public static final long RECORD_NOTLOGGED_EXPIRE = DAYS * 10; // 10 days
-
     public static final long RECORD_AUTO_RELEASE_EXPIRE = DAYS * 3; // 10 days
-
-    public static final long CUSTOMER_SESSION_TIMEOUT = MINUTES * 120; // 5
-    // minuten
-
-    public static final long ADMIN_SESSION_TIMEOUT = MINUTES * 60; // 50
-    // minuten
-
+    public static final long CUSTOMER_SESSION_TIMEOUT = MINUTES * 120; // 5 minuten
+    public static final long ADMIN_SESSION_TIMEOUT = MINUTES * 60; // 50 minuten
     public static final long NORMAL_CALL_LENGTH = 90; // 90 seconds
-
     public static final double CENT_PER_LONG_CALL_SECOND = 0.01; // 1,4 cent
-    public static final String CENT_PER_LONG_CALL_SECOND_STR = "0.01"; // 0,5
-                                                                       // cent
+    public static final String CENT_PER_LONG_CALL_SECOND_STR = "0.01"; // 0,5 cent
     public static final int kOutCost = 100; // euro cent
     public static final int kSmsCost = 100; // euro cent
     public static final int kForwardCost = 100; // euro cent
     public static final int kFaxCost = 100; // euro cent
     public static final int kStandardAgendaCost = 45; // euro
-
     public static final boolean kCountAllLongCalls = false;
     public static final boolean kCountLongFwdCalls = false;
     public static final double kFacLong = 0.014;
     public static final double kFacLongFwd = 0.014;
-
     public static final int kFacTblMinCalls_I = 75;
     public static final double kFacTblStartCost_I = 110.0;
     public static final double kFacTblExtraCost_I = 1.00;
@@ -751,13 +464,9 @@ public class Constants
     public static final int kFacTblMinCalls_IV = 12;
     public static final double kFacTblStartCost_IV = 60.0;
     public static final double kFacTblExtraCost_IV = 1.45;
-
     public static final long REFRESH_LONG = 3000; // 300 seconds
-
     public static final String REFRESH = "3000"; // 300 seconds
-
     public static final short MAX_MAIL_HOUR = 23;
-
     public static final String INVOICE_TYPE_STD = "_itst";
     public static final String INVOICE_TYPE_CUSTOM = "_itcu";
     public static final String INVOICE_TYPE_TELEMARK = "_itte";

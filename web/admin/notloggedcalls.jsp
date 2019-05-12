@@ -172,7 +172,7 @@ function deleteCalls()
 function filterCalls()
 {
   document.calllistform.<%=Constants.RECORD_TO_DELETE%>.value="";
-  document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.GOTO_RECORD_ADMIN%>";
+  document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.GOTO_CANVAS%>";
 }
 
 function openRecord(id, rowInd, customer)

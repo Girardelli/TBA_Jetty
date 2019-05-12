@@ -198,7 +198,7 @@ catch (Exception e)
 
 function cancelUpdate()
 {
-  document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.GOTO_RECORD_ADMIN%>";
+  document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.GOTO_CANVAS%>";
 }
 </script>
 

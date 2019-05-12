@@ -71,7 +71,7 @@ public class AdminLoginServlet extends HttpServlet
                 // req.setAttribute(Constants.SESSION_ID, vKey);
                 // req.setAttribute(Constants.SESSION_OBJ, vSession);
                 ServletContext sc = getServletContext();
-                RequestDispatcher rd = sc.getRequestDispatcher(Constants.ADMIN_CALLS_JSP);
+                RequestDispatcher rd = sc.getRequestDispatcher(Constants.CANVAS_JSP);
                 rd.forward(req, res);
                 //System.out.println("LoginServlet: " + vAccount.getUserId() + " got session id " + vSession.getSessionId());
             }

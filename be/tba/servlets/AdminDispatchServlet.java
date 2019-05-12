@@ -88,6 +88,7 @@ public class AdminDispatchServlet extends HttpServlet
                 if (vSession.getRole() != AccountRole.ADMIN && vSession.getRole() != AccountRole.EMPLOYEE)
                     throw new AccessDeniedException("access denied for " + vSession.getUserId());
 
+                rd = sc.getRequestDispatcher(vSession.getCallingJsp());
                 if (vAction == null)
                 {
                     throw new SystemErrorException("Interne fout. geen actie.");
@@ -204,7 +205,7 @@ public class AdminDispatchServlet extends HttpServlet
                      * ); } } }
                      */
                     // do nothing
-                    rd = sc.getRequestDispatcher(Constants.ADMIN_CALLS_JSP);
+                    //rd = sc.getRequestDispatcher(Constants.CANVAS_JSP);
                 }
                 // ==============================================================================================
                 // SHOW_MAIL_ERROR button pushed
@@ -227,7 +228,7 @@ public class AdminDispatchServlet extends HttpServlet
                 else if (vAction.equals(Constants.RECORD_SHOW_NEXT_10))
                 {
                     vSession.setDaysBack(vSession.getDaysBack() - 10);
-                    rd = sc.getRequestDispatcher(Constants.ADMIN_CALLS_JSP);
+                    //rd = sc.getRequestDispatcher(Constants.CANVAS_JSP);
                 }
 
                 // ==============================================================================================
@@ -244,7 +245,7 @@ public class AdminDispatchServlet extends HttpServlet
                     {
                         vSession.setDaysBack(vSession.getDaysBack() - 1);
                     }
-                    rd = sc.getRequestDispatcher(Constants.ADMIN_CALLS_JSP);
+                    //rd = sc.getRequestDispatcher(Constants.CANVAS_JSP);
                 }
 
                 // ==============================================================================================
@@ -261,7 +262,7 @@ public class AdminDispatchServlet extends HttpServlet
                     {
                         vSession.setDaysBack(vSession.getDaysBack() + 1);
                     }
-                    rd = sc.getRequestDispatcher(Constants.ADMIN_CALLS_JSP);
+                    //rd = sc.getRequestDispatcher(Constants.CANVAS_JSP);
                 }
 
                 // ==============================================================================================
@@ -270,7 +271,7 @@ public class AdminDispatchServlet extends HttpServlet
                 else if (vAction.equals(Constants.RECORD_SHOW_PREV_10))
                 {
                     vSession.setDaysBack(vSession.getDaysBack() + 10);
-                    rd = sc.getRequestDispatcher(Constants.ADMIN_CALLS_JSP);
+                    //rd = sc.getRequestDispatcher(Constants.CANVAS_JSP);
                 }
 
 
@@ -280,7 +281,7 @@ public class AdminDispatchServlet extends HttpServlet
                 else if (vAction.equals(Constants.UPDATE_SHORT_TEXT))
                 {
                 	CallRecordFacade.updateShortText(req, vSession);
-                    rd = sc.getRequestDispatcher(Constants.ADMIN_CALLS_JSP);
+                    //rd = sc.getRequestDispatcher(Constants.CANVAS_JSP);
                 }
                 
                 // ==============================================================================================
@@ -298,7 +299,7 @@ public class AdminDispatchServlet extends HttpServlet
                 else if (vAction.equals(Constants.SAVE_RECORD))
                 {
                     CallRecordFacade.saveRecord(req, vSession);
-                    rd = sc.getRequestDispatcher(Constants.ADMIN_CALLS_JSP);
+                    rd = sc.getRequestDispatcher(Constants.CANVAS_JSP);
                 }
 
                 // ==============================================================================================
@@ -316,7 +317,7 @@ public class AdminDispatchServlet extends HttpServlet
                 else if (vAction.equals(Constants.SAVE_MAN_RECORD))
                 {
                     CallRecordFacade.saveManualRecord(req, vSession);
-                    rd = sc.getRequestDispatcher(Constants.ADMIN_CALLS_JSP);
+                    rd = sc.getRequestDispatcher(Constants.CANVAS_JSP);
                 }
 
                 // ==============================================================================================
@@ -325,7 +326,16 @@ public class AdminDispatchServlet extends HttpServlet
                 else if (vAction.equals(Constants.RECORD_DELETE))
                 {
                     CallRecordFacade.deleteRecords(req, vSession);
-                    rd = sc.getRequestDispatcher(Constants.ADMIN_CALLS_JSP);
+                    rd = sc.getRequestDispatcher(Constants.CANVAS_JSP);
+                }
+                
+                
+                // ==============================================================================================
+                // GOTO_CANVAS
+                // ==============================================================================================
+                else if (vAction.equals(Constants.GOTO_CANVAS))
+                {
+                    rd = sc.getRequestDispatcher(Constants.CANVAS_JSP);
                 }
 
                 // ==============================================================================================
@@ -386,8 +396,8 @@ public class AdminDispatchServlet extends HttpServlet
                         }
                         else
                         {
-                            //System.out.println("fire ADMIN_CALLS_JSP");
-                            rd = sc.getRequestDispatcher(Constants.ADMIN_CALLS_JSP);
+                            //System.out.println("fire CANVAS_JSP");
+                            rd = sc.getRequestDispatcher(Constants.CANVAS_JSP);
                         }
                     }
                 }
@@ -414,7 +424,7 @@ public class AdminDispatchServlet extends HttpServlet
                             {
                                 CallRecordFacade.saveNewSubCustomer(req, vSession, vNewFwdNr);
                             }
-                            rd = sc.getRequestDispatcher(Constants.ADMIN_CALLS_JSP);
+                            rd = sc.getRequestDispatcher(Constants.CANVAS_JSP);
                         }
                         else
                         {
@@ -428,7 +438,7 @@ public class AdminDispatchServlet extends HttpServlet
                 else if (vAction.equals(Constants.REMOVE_OPEN_CALL))
                 {
                     CallRecordFacade.removeNewCall(req, vSession);
-                    rd = sc.getRequestDispatcher(Constants.ADMIN_CALLS_JSP);
+                    rd = sc.getRequestDispatcher(Constants.CANVAS_JSP);
                 }
 
                 // ==============================================================================================
@@ -930,7 +940,7 @@ public class AdminDispatchServlet extends HttpServlet
                 // ==============================================================================================
                 else if (vAction.equals(Constants.ADMIN_HOME))
                 {
-                    rd = sc.getRequestDispatcher(Constants.ADMIN_CALLS_JSP);
+                    rd = sc.getRequestDispatcher(Constants.CANVAS_JSP);
                 }
 
                 // ==============================================================================================
