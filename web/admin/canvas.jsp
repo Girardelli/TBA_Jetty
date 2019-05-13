@@ -37,7 +37,7 @@ Collection<CallRecordEntityData> vRecords = vRecords = vQuerySession.getUnDocume
 
 %>
 <body>
-<p><span class="admintitle"> Oproepenlijst: <%=vRecords.size()%> oproepen </span></p>
+<p><span class="admintitle"> Nieuwe oproepen</span></p>
 <form name="calllistform" method="POST"	action="/tba/AdminDispatch">
 	<input type=hidden name=<%=Constants.RECORD_ID%> value=""> 
     <input type=hidden name=<%=Constants.RECORD_SHORT_TEXT%> value=""> 
@@ -63,17 +63,14 @@ Collection<CallRecordEntityData> vRecords = vRecords = vQuerySession.getUnDocume
 		        <input class="tbabutton" type=submit name=action value="Refresh" onclick="filterCalls()">
 				<input class="tbabutton" type=submit name=action value="Verwijderen" onclick="deleteCalls()"> 
 				<input class="tbabutton" type=submit name=action value="Toevoegen" onclick="addRecord()"> 
-				<input class="tbabutton" type=submit name=action value="verzend mail"	onclick="testMail()">
-<%
-if (MailError.getInstance().getError() != null) 
-{
-%>      
-        <input class="tbabutton" type=submit name=action value="Mail Error" onclick="mailError()"><br>
-<% 
-}
-%>      
             </td>
             </tr>
+            <tr>
+            <td>
+                <input class="tbabutton" type=submit name=action value="Naar oproepenlijst" onclick="toCallList()">
+            </td>
+            </tr>
+            
         </table>
 	</td>
 	<td width="10">
@@ -445,6 +442,12 @@ function mailError()
 {
   document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.SHOW_MAIL_ERROR%>";
 }
+
+function toCallList()
+{
+  document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.GOTO_RECORD_ADMIN%>";
+}
+
 
 var newwindow = '';
 

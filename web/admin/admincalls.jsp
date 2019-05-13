@@ -171,6 +171,7 @@ out.println("</td>");
 				<input class="tbabutton" type=submit name=action value="Verwijderen" onclick="deleteCalls()"> 
 				<input class="tbabutton" type=submit name=action value="Toevoegen" onclick="addRecord()"> 
 				<input class="tbabutton" type=submit name=action value="verzend mail"	onclick="testMail()">
+                <input class="tbabutton" type=submit name=action value="naar nieuwe oproepen"   onclick="toNewCalls()">
 <%
 if (MailError.getInstance().getError() != null) 
 {
@@ -518,6 +519,12 @@ var newwindow = '';
 function newCall()
 {
 	document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.NEW_CALL%>";
+}
+
+function toNewCalls()
+{
+    document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.GOTO_CANVAS%>";
+	
 }
 </script>
 
