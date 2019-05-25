@@ -33,8 +33,8 @@ vSession.setCallingJsp(Constants.CANVAS_JSP);
 allEntryIds = new StringBuilder("[");
 
 CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
-Collection<CallRecordEntityData> vRecords = vRecords = vQuerySession.getUnDocumented(vSession, null);
-
+//Collection<CallRecordEntityData> vRecords = vRecords = vQuerySession.getUnDocumented(vSession, null);
+Collection<CallRecordEntityData> vRecords = vQuerySession.getxDaysBack(vSession, 0, null);
 %>
 <body>
 <p><span class="admintitle"> Nieuwe oproepen</span></p>
