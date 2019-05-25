@@ -1098,6 +1098,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
     		newRecord.setNumber(data.calledNr);
     	}
     	
+    	newRecord.setTimeStamp(data.tsStart);
     	newRecord.setTsStart(data.tsStart);
     	newRecord.setIsIncomingCall(data.isIncoming);
     	Calendar vToday = Calendar.getInstance();
