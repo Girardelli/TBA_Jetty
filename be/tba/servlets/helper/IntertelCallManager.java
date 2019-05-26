@@ -35,7 +35,21 @@ public class IntertelCallManager
 	
 	public synchronized IntertelCallData get(String callId)
 	{
-		return mCallMap.get(new String(callId));
+		return mCallMap.get(callId);
+	}
+	
+	public synchronized IntertelCallData getByDbId(int id)
+	{
+		Collection<IntertelCallData> calls = mCallMap.values();
+		for (Iterator<IntertelCallData> itr = calls.iterator(); itr.hasNext();)
+		{
+			IntertelCallData call = itr.next();
+			if (call.dbRecordId == id)
+			{
+				return call;
+			}
+		}
+		return null;
 	}
 	
 	public synchronized IntertelCallData getransferCall(String transferedCallId, String transferCalledNr, String transferCallingNr)

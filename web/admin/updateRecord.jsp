@@ -11,6 +11,7 @@ javax.naming.Context,
 javax.naming.InitialContext,
 
 javax.ejb.*,
+be.tba.servlets.helper.IntertelCallManager,
 be.tba.ejb.pbx.interfaces.*,
 be.tba.ejb.account.interfaces.*,
 be.tba.ejb.account.session.*,
@@ -53,6 +54,7 @@ if (mRecordData == null)
   return;
 }
 
+IntertelCallData intertelCall = IntertelCallManager.getInstance().getByDbId(mRecordData.getId());
 mCustomerData = AccountCache.getInstance().get(mRecordData.getFwdNr());
 
 String vDirStr = mRecordData.getIsIncomingCall() ? "Van Nummer" : "Naar Nummer";
@@ -89,12 +91,12 @@ if (mCustomerData.getHasSubCustomers())
 	out.println("<select name=\"" + Constants.ACCOUNT_SUB_CUSTOMER + "\">");
     out.println("<option value=\"" + mCustomerData.getFwdNumber() +  "\" selected>" + mCustomerData.getFullName());
 
-    Collection list = AccountCache.getInstance().getSubCustomersList(mCustomerData.getFwdNumber());
+    Collection<AccountEntityData> list = AccountCache.getInstance().getSubCustomersList(mCustomerData.getFwdNumber());
     synchronized(list) 
     {
-        for (Iterator vIter = list.iterator(); vIter.hasNext();)
+        for (Iterator<AccountEntityData> vIter = list.iterator(); vIter.hasNext();)
         {
-			AccountEntityData vValue = (AccountEntityData) vIter.next();
+			AccountEntityData vValue = vIter.next();
 			out.println("<option value=\"" + vValue.getFwdNumber() +  "\">" + vValue.getFullName());
         }
     }
@@ -187,12 +189,18 @@ if (mCustomerData.getInvoiceType() == InvoiceHelper.kTelemarketingInvoice)
 					src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Uur</td>
 				<td width="530" valign="top" class="bodytekst"><%=mRecordData.getTime()%></td>
 			</tr>
+<%
+if (intertelCall == null)
+{
+%>
 			<tr>
 				<td width="50"></td>
-				<td width="170" valign="top" class="adminsubsubtitle"><img
-					src=".\images\blueSphere.gif" width="10" height="10">&nbsp;<%=vDirStr%></td>
+				<td width="170" valign="top" class="adminsubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;<%=vDirStr%></td>
 				<td width="530" valign="top"><%=vNumberHtml%></td>
 			</tr>
+<%
+}
+%>
 			<tr>
 				<td width="50"></td>
 				<td width="170" valign="top" class="adminsubsubtitle"><img
@@ -222,30 +230,32 @@ if (mCustomerData.getIs3W())
 				<td width="530" valign="top"><textarea
 					name=<%=Constants.RECORD_LONG_TEXT%> rows=10 cols=70><%=(String) mRecordData.getLongDescription()%></textarea></td>
 			</tr>
+<%
+if (intertelCall == null)
+{
+%>
 			<tr>
 				<td width="50"></td>
 				<td width="170" valign="top" class="adminsubsubtitle"><img
 					src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Andere klant</td>
 				<td width="530" valign="top"><%
 out.println("<select name=\"" + Constants.ACCOUNT_FORWARD_NUMBER + "\">");
-				Collection list = AccountCache.getInstance().getCustomerList();
+				Collection<AccountEntityData> list = AccountCache.getInstance().getCustomerList();
 				synchronized(list) 
 				{
-				    for (Iterator vIter = list.iterator(); vIter.hasNext();)
+				    for (Iterator<AccountEntityData> vIter = list.iterator(); vIter.hasNext();)
 				    {
-				        AccountEntityData vValue = (AccountEntityData) vIter.next();
+				        AccountEntityData vValue = vIter.next();
 				        out.println("<option value=\"" + vValue.getFwdNumber() + (mRecordData.getFwdNr().equals(vValue.getFwdNumber()) ? "\" selected>" : "\">") + vValue.getFullName());
 				    }
 				}
 out.println("</select>");
-
-}
-catch (Exception ex)
-{
-  ex.printStackTrace();
-}
-%></td>
+%>
+                </td>
 			</tr>
+<%
+}
+%>
 		</table>
 		<br>
 		<br>
@@ -257,9 +267,15 @@ catch (Exception ex)
 		</span> <br>
 		</td>
 	</tr>
+<%
+}
+catch (Exception ex)
+{
+  ex.printStackTrace();
+}
+%>
 
-
-	<script type="text/javascript">
+<script type="text/javascript">
 
 function cancelUpdate()
 {
