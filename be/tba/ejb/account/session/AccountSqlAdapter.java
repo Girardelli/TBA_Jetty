@@ -59,7 +59,7 @@ public class AccountSqlAdapter extends AbstractSqlAdapter<AccountEntityData>
 
     public AccountEntityData logIn(WebSession webSession, String userid, String password) throws AccountNotFoundException
     {
-        Collection<AccountEntityData> collection = executeSqlQuery(webSession.getConnection(), "SELECT * FROM AccountEntity WHERE Userid='" + userid + "' AND Password='" + password + "'");
+        Collection<AccountEntityData> collection = executeSqlQuery(webSession, "SELECT * FROM AccountEntity WHERE Userid='" + userid + "' AND Password='" + password + "'");
         if (collection.size() == 1)
         {
             AccountEntityData account = collection.iterator().next();
@@ -69,7 +69,7 @@ public class AccountSqlAdapter extends AbstractSqlAdapter<AccountEntityData>
             account.setPreviousLoginTS(account.getLastLoginTS());
             account.setLastLoginTS(vCalendar.getTimeInMillis());
             account.setLastLogin(vLoginTime);
-            executeSqlQuery(webSession.getConnection(), "UPDATE AccountEntity SET LastLogin='" + vLoginTime + "' WHERE Id='" + account.getId() + "'");
+            executeSqlQuery(webSession, "UPDATE AccountEntity SET LastLogin='" + vLoginTime + "' WHERE Id='" + account.getId() + "'");
             System.out.println("Login: userid=" + userid + " (" + account.getFullName() + ")");
             return account;
         }
@@ -79,7 +79,7 @@ public class AccountSqlAdapter extends AbstractSqlAdapter<AccountEntityData>
 
     public AccountEntityData getAccountByFwdNr(WebSession webSession, String fwdNr) throws AccountNotFoundException
     {
-        Collection<AccountEntityData> collection = executeSqlQuery(webSession.getConnection(), "SELECT * FROM AccountEntity WHERE FwdNumber='" + fwdNr + "'");
+        Collection<AccountEntityData> collection = executeSqlQuery(webSession, "SELECT * FROM AccountEntity WHERE FwdNumber='" + fwdNr + "'");
         if (collection.size() == 1)
         {
             return collection.iterator().next();
@@ -90,13 +90,13 @@ public class AccountSqlAdapter extends AbstractSqlAdapter<AccountEntityData>
 
     public void deregister(WebSession webSession, int pkey) throws AccountNotFoundException
     {
-        AccountEntityData account = getRow(webSession.getConnection(), pkey);
+        AccountEntityData account = getRow(webSession, pkey);
         if (account != null)
         {
             account.setUserId("");
             account.setPassword("");
             account.setIsRegistered(false);
-            updateRow(webSession.getConnection(), account);
+            updateRow(webSession, account);
             return;
         }
         throw new AccountNotFoundException("Geen gebruiker gevonden voor key=" + pkey);
@@ -104,7 +104,7 @@ public class AccountSqlAdapter extends AbstractSqlAdapter<AccountEntityData>
 
     public AccountEntityData getUnregistered(WebSession webSession, String regCode) throws AccountNotFoundException
     {
-        Collection<AccountEntityData> collection = executeSqlQuery(webSession.getConnection(), "SELECT * FROM AccountEntity WHERE FwdNumber='" + regCode + "'");
+        Collection<AccountEntityData> collection = executeSqlQuery(webSession, "SELECT * FROM AccountEntity WHERE FwdNumber='" + regCode + "'");
         if (collection.size() == 1)
         {
             return collection.iterator().next();
@@ -120,7 +120,7 @@ public class AccountSqlAdapter extends AbstractSqlAdapter<AccountEntityData>
             AccountEntityData account = getUnregistered(webSession, data.getCode());
             if (account != null)
             {
-                Collection<AccountEntityData> collection = executeSqlQuery(webSession.getConnection(), "SELECT * FROM AccountEntity WHERE Userid='" + data.getUserId() + "'");
+                Collection<AccountEntityData> collection = executeSqlQuery(webSession, "SELECT * FROM AccountEntity WHERE Userid='" + data.getUserId() + "'");
                 if (collection != null && collection.size() > 0)
                 {
                     return "Uw login naam wordt al door iemand anders gebruikt. Kies een andere en registreer opnieuw.";
@@ -132,7 +132,7 @@ public class AccountSqlAdapter extends AbstractSqlAdapter<AccountEntityData>
                 if (data.getEmail() != null && data.getEmail().length() > 0)
                     account.setEmail(data.getEmail());
                 account.setIsRegistered(true);
-                updateRow(webSession.getConnection(), account);
+                updateRow(webSession, account);
                 return null;
             }
         }
@@ -152,28 +152,28 @@ public class AccountSqlAdapter extends AbstractSqlAdapter<AccountEntityData>
                 return;
             }
         }
-        addRow(webSession.getConnection(), data);
+        addRow(webSession, data);
     }
 
     public void removeAccount(WebSession webSession, String key)
     {
-        deleteRow(webSession.getConnection(), Integer.parseInt(key));
+        deleteRow(webSession, Integer.parseInt(key));
     }
 
     public void setAccount(WebSession webSession, AccountEntityData data)
     {
-        updateRow(webSession.getConnection(), data);
+        updateRow(webSession, data);
     }
 
     public void setFilter(WebSession webSession, CallFilter filter, int pkey)
     {
-        executeSqlQuery(webSession.getConnection(), "UPDATE AccountEntity SET CustFilter='" + ((filter.getCustFilter() != null) ? filter.getCustFilter() : "") + "',StateFilter='" + ((filter.getStateFilter() != null) ? filter.getStateFilter() : "") + "',DirFilter='" + ((filter.getDirFilter() != null) ? filter.getDirFilter() : "' WHERE Id=" + pkey));
+        executeSqlQuery(webSession, "UPDATE AccountEntity SET CustFilter='" + ((filter.getCustFilter() != null) ? filter.getCustFilter() : "") + "',StateFilter='" + ((filter.getStateFilter() != null) ? filter.getStateFilter() : "") + "',DirFilter='" + ((filter.getDirFilter() != null) ? filter.getDirFilter() : "' WHERE Id=" + pkey));
     }
 
     public Collection<String> getFreeNumbers(WebSession webSession)
     {
         Vector<String> vFreeNumbers = new Vector<String>();
-        Collection<AccountEntityData> accounts = getAllRows(webSession.getConnection());
+        Collection<AccountEntityData> accounts = getAllRows(webSession);
 
         for (int i = 1; i < Constants.NUMBER_BLOCK.length; i++)
         {
@@ -196,7 +196,7 @@ public class AccountSqlAdapter extends AbstractSqlAdapter<AccountEntityData>
             strBuf.append(",");
             strBuf.append(vKey);
         }
-        return executeSqlQuery(webSession.getConnection(), "SELECT * FROM AccountEntity WHERE NoInvoice=FALSE AND Id IN (" + strBuf.toString().substring(1) + ")"); 
+        return executeSqlQuery(webSession, "SELECT * FROM AccountEntity WHERE NoInvoice=FALSE AND Id IN (" + strBuf.toString().substring(1) + ")"); 
     }
     
     

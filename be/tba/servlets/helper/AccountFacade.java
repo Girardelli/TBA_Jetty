@@ -27,14 +27,14 @@ public class AccountFacade
     public static void deleteAccount(WebSession session, int accountID)
     {
     	RecursiveDelete(session, accountID);
-        AccountCache.getInstance().update(session.getConnection());
+        AccountCache.getInstance().update(session);
     }
 
     public static void saveAccount(WebSession session, AccountEntityData newData)
     {
         AccountSqlAdapter vAccountSession = new AccountSqlAdapter();
-        vAccountSession.updateRow(session.getConnection(), newData);
-        AccountCache.getInstance().update(session.getConnection());
+        vAccountSession.updateRow(session, newData);
+        AccountCache.getInstance().update(session);
     }
 
     public static void deregisterAccount(WebSession session, HttpServletRequest req) throws AccountNotFoundException
@@ -42,7 +42,7 @@ public class AccountFacade
         String vFwdNr = (String) req.getParameter(Constants.ACCOUNT_ID);
         AccountSqlAdapter vAccountSession = new AccountSqlAdapter();
         vAccountSession.deregister(session, AccountCache.getInstance().get(vFwdNr).getId());
-        AccountCache.getInstance().update(session.getConnection());
+        AccountCache.getInstance().update(session);
     }
 
     public static Vector<String> addAccount(WebSession session, HttpServletRequest req) throws SystemErrorException
@@ -105,8 +105,8 @@ public class AccountFacade
             newAccount.setIsXmlMail(true);
         }
         AccountSqlAdapter vAccountSession = new AccountSqlAdapter();
-        vAccountSession.addRow(session.getConnection(), newAccount);
-        AccountCache.getInstance().update(session.getConnection());
+        vAccountSession.addRow(session, newAccount);
+        AccountCache.getInstance().update(session);
         return null;
     }
 
@@ -333,7 +333,7 @@ public class AccountFacade
             }
         }
         AccountSqlAdapter vAccountSession = new AccountSqlAdapter();
-        vAccountSession.deleteRow(session.getConnection(), accountID);
+        vAccountSession.deleteRow(session, accountID);
         
         CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
         vQuerySession.removeAccountCalls(session, accountID);

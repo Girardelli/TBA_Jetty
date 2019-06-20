@@ -93,7 +93,7 @@ public class TaskFacade
                 vTask.setStopTime(Long.MAX_VALUE);
             }
         }
-        vTaskSession.updateRow(session.getConnection(), vTask);
+        vTaskSession.updateRow(session, vTask);
         if (req.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER) != null)
             session.getCallFilter().setCustFilter((String) req.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER));
     }
@@ -143,7 +143,7 @@ public class TaskFacade
             newTask.setStopTime(0);
         }
         TaskSqlAdapter vTaskSession = new TaskSqlAdapter();
-        vTaskSession.addRow(session.getConnection(), newTask);
+        vTaskSession.addRow(session, newTask);
     }
 
     private static long dateStr2Timestamp(String date)

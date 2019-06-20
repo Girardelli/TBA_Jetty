@@ -5,7 +5,6 @@
 package be.tba.util.session;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Collections;
@@ -20,6 +19,7 @@ import java.util.Vector;
 
 import be.tba.ejb.account.interfaces.AccountEntityData;
 import be.tba.ejb.account.session.AccountSqlAdapter;
+import be.tba.servlets.session.WebSession;
 import be.tba.util.constants.AccountRole;
 import be.tba.util.constants.Constants;
 import be.tba.util.data.MailTriggerData;
@@ -60,92 +60,8 @@ final public class AccountCache
     {
         if (mInstance == null)
         {
-            Connection con = null;
-            try
-            {
-                //ctx = new InitialContext();
-                //DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/MySqlDS");
-                //con = ds.getConnection();
-                con = DriverManager.getConnection(Constants.MYSQL_URL);
-                mInstance = new AccountCache();
-                mInstance.update(con);
-            }
-/*            catch (NamingException e)
-            {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-*/            catch (SQLException e)
-            {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-            catch (Exception e)
-            {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-            finally
-            {
-                if (con != null)
-                {
-                    try
-                    {
-                        con.close();
-                    }
-                    catch (SQLException ex)
-                    {
-                        // TODO Auto-generated catch block
-                        System.out.println("FAILED update AccountCash");
-                        System.out.println("SQLException: " + ex.getMessage());
-                        System.out.println("SQLState: " + ex.getSQLState());
-                        System.out.println("VendorError: " + ex.getErrorCode());
-                        ex.printStackTrace();
-                    }
-                }
-
-            }
-        }
-        return mInstance;
-    }
-
-    public static AccountCache getInstance(String mysqlURL)
-    {
-        if (mInstance == null)
-        {
-            Connection con = null;
-            try
-            {
-                con = DriverManager.getConnection(mysqlURL);
-                mInstance = new AccountCache();
-                mInstance.update(con);
-            }
-            catch (SQLException ex)
-            {
-                // TODO Auto-generated catch block
-                System.out.println("FAILED update AccountCash");
-                System.out.println("SQLException: " + ex.getMessage());
-                System.out.println("SQLState: " + ex.getSQLState());
-                System.out.println("VendorError: " + ex.getErrorCode());
-                ex.printStackTrace();
-            }
-            finally
-            {
-                if (con != null)
-                {
-                    try
-                    {
-                        con.close();
-                    }
-                    catch (SQLException e)
-                    {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                }
-
-            }
-
+            mInstance = new AccountCache();
+            mInstance.update();
         }
         return mInstance;
     }
@@ -162,10 +78,51 @@ final public class AccountCache
         mLastMailTime = 0;
 
     }
-
-    public void update(Connection con)
+    
+    public void update(WebSession session)
     {
-        mRawCollection = Collections.synchronizedCollection(mAccountAdapter.getAllRows(con));
+    	mRawCollection = Collections.synchronizedCollection(mAccountAdapter.getAllRows(session));
+    }
+
+    public void update()
+    {
+        WebSession session = null;
+		try 
+		{
+			session = new WebSession();
+			update(session);
+	    	
+		} 
+        catch (SQLException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        catch (Exception e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        finally
+        {
+            if (session != null && session.getConnection() != null)
+            {
+                try
+                {
+                	session.getConnection().close();
+                }
+                catch (SQLException ex)
+                {
+                    // TODO Auto-generated catch block
+                    System.out.println("FAILED update AccountCash");
+                    System.out.println("SQLException: " + ex.getMessage());
+                    System.out.println("SQLState: " + ex.getSQLState());
+                    System.out.println("VendorError: " + ex.getErrorCode());
+                    ex.printStackTrace();
+                }
+            }
+
+        }
         converToHashMap(mRawCollection);
         buildMailingGroups();
     }

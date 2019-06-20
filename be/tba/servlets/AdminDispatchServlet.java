@@ -51,6 +51,7 @@ public class AdminDispatchServlet extends HttpServlet
     {
         RequestDispatcher rd = null;
         ServletContext sc = null;
+        WebSession vSession = null;
         try
         {
             //log.info("doGet()");
@@ -75,10 +76,11 @@ public class AdminDispatchServlet extends HttpServlet
             }
             
             HttpSession httpSession = req.getSession();
-            WebSession vSession = (WebSession) httpSession.getAttribute(Constants.SESSION_OBJ);
+            vSession = (WebSession) httpSession.getAttribute(Constants.SESSION_OBJ);
 
             if (vSession == null)
                 throw new AccessDeniedException("U bent niet aangemeld.");
+            vSession.resetSqlTimer();
             SessionManager.getInstance().getSession(vSession.getSessionId(), "AdminDispatchServlet(" + vAction + ")");
 
             System.out.println("\nAdminDispatchServlet (http session: " + vSession + "): userid:" + vSession.getUserId() + ", websessionid:" + vSession.getSessionId() + " action=" + vAction);
@@ -991,6 +993,9 @@ public class AdminDispatchServlet extends HttpServlet
             System.out.println("URI:" + req.getRequestURI() + "?" + req.getQueryString());
             e.printStackTrace();
         }
+        if (vSession != null)
+        	System.out.println("httprequest done: SQL timer=" + vSession.getSqlTimer());
+        
     }
 
     public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException

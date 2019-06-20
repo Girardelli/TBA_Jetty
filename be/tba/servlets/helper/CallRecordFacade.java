@@ -192,7 +192,7 @@ public class CallRecordFacade
         // Check the record and add it if it is a valid one.
         System.out.println("saveManualRecord: id=" + newRecord.getId() + ", cust=" + newRecord.getFwdNr() + ", number=" + newRecord.getNumber());
         CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
-        vQuerySession.addRow(session.getConnection(), newRecord);
+        vQuerySession.addRow(session, newRecord);
         printCallInsert(session, newRecord);
     }
 
@@ -208,11 +208,11 @@ public class CallRecordFacade
             while (vStrTok.hasMoreTokens())
             {
                 int key = Integer.parseInt(vStrTok.nextToken());
-                CallRecordEntityData record = vQuerySession.getRow(session.getConnection(), key);
+                CallRecordEntityData record = vQuerySession.getRow(session, key);
                 // only delete calls that have not yet been documented
                 if (!record.getIsDocumented() || session.getRole() == AccountRole.ADMIN)
                 {
-                    vQuerySession.deleteRow(session.getConnection(), key);
+                    vQuerySession.deleteRow(session, key);
                     printCallDelete(key);
                 }
             }

@@ -13,6 +13,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import be.tba.ejb.pbx.session.CallRecordSqlAdapter;
+import be.tba.servlets.session.WebSession;
 import be.tba.util.constants.Constants;
 
 final public class DbCleanTimerTask extends TimerTask
@@ -45,10 +46,10 @@ final public class DbCleanTimerTask extends TimerTask
     public void run()
     {
         Object obj = new String();
-        Connection con = null;
+        WebSession session = null;
         try
         {
-            con = DriverManager.getConnection(Constants.MYSQL_URL);
+            session = new WebSession();
             File file = new File(Constants.RECORDS_OF_TODAY_PATH);
             if (file.exists())
             {
@@ -56,7 +57,7 @@ final public class DbCleanTimerTask extends TimerTask
             }
 
             CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
-            int deleted = vQuerySession.cleanDb(con);
+            int deleted = vQuerySession.cleanDb(session);
 
             //
             // int cnt = 0;
@@ -85,9 +86,8 @@ final public class DbCleanTimerTask extends TimerTask
         {
             try
             {
-                if (con != null)
-                    con.close();
-                con = null;
+                if (session != null && session.getConnection() != null)
+                	session.getConnection().close();
             }
             catch (SQLException ex)
             {

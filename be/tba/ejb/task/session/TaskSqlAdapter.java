@@ -42,7 +42,7 @@ public class TaskSqlAdapter extends AbstractSqlAdapter<TaskEntityData>
 
     public Collection<TaskEntityData> getTasks(WebSession webSession, String fwdNr)
     {
-        return executeSqlQuery(webSession.getConnection(), "SELECT * FROM TaskEntity WHERE FwdNr='" + fwdNr + "' AND IsRecuring=FALSE ORDER BY TimeStamp DESC");
+        return executeSqlQuery(webSession, "SELECT * FROM TaskEntity WHERE FwdNr='" + fwdNr + "' AND IsRecuring=FALSE ORDER BY TimeStamp DESC");
     }
 
     public Collection<TaskEntityData> getTasksForMonthforFwdNr(WebSession webSession, String fwdNr, int month, int year)
@@ -89,7 +89,7 @@ public class TaskSqlAdapter extends AbstractSqlAdapter<TaskEntityData>
             CallCalendar vCalendar = new CallCalendar();
             long vStart = vCalendar.getStartOfMonth(month, year);
             long vEnd = vCalendar.getEndOfMonth(month, year);
-            return executeSqlQuery(webSession.getConnection(), "SELECT * FROM TaskEntity WHERE DoneBy='" + empl + "' AND TimeStamp>" + vStart + " AND TimeStamp<=" + vEnd + " AND IsRecuring=FALSE ORDER BY TimeStamp DESC");
+            return executeSqlQuery(webSession, "SELECT * FROM TaskEntity WHERE DoneBy='" + empl + "' AND TimeStamp>" + vStart + " AND TimeStamp<=" + vEnd + " AND IsRecuring=FALSE ORDER BY TimeStamp DESC");
         }
         catch (Exception e)
         {
@@ -141,12 +141,12 @@ public class TaskSqlAdapter extends AbstractSqlAdapter<TaskEntityData>
      */
     public void removeTask(WebSession webSession, int key)
     {
-        executeSqlQuery(webSession.getConnection(), "DELETE FROM TaskEntity WHERE Id=" + key);
+        executeSqlQuery(webSession, "DELETE FROM TaskEntity WHERE Id=" + key);
     }
 
     public TaskEntityData getTask(WebSession webSession, int key)
     {
-        Collection<TaskEntityData> taskCollection = executeSqlQuery(webSession.getConnection(), "SELECT * FROM TaskEntity WHERE Id=" + key);
+        Collection<TaskEntityData> taskCollection = executeSqlQuery(webSession, "SELECT * FROM TaskEntity WHERE Id=" + key);
         if (taskCollection.size() == 1)
         {
             return taskCollection.iterator().next();
@@ -156,7 +156,7 @@ public class TaskSqlAdapter extends AbstractSqlAdapter<TaskEntityData>
     
     public void removeTasks(WebSession webSession, int accountID)
     {
-        executeSqlQuery(webSession.getConnection(), "DELETE FROM TaskEntity WHERE FwdNr='" + accountID + "'");
+        executeSqlQuery(webSession, "DELETE FROM TaskEntity WHERE FwdNr='" + accountID + "'");
     }
 
 
@@ -229,8 +229,8 @@ public class TaskSqlAdapter extends AbstractSqlAdapter<TaskEntityData>
 
     private Collection<TaskEntityData> queryAllTasksForFwdNr(WebSession webSession, String fwdNr, long start, long stop)
     {
-        Collection<TaskEntityData> vCollection = executeSqlQuery(webSession.getConnection(), "SELECT * FROM TaskEntity WHERE FwdNr='" + fwdNr + "' AND TimeStamp>" + start + " AND TimeStamp<=" + stop + " AND IsRecuring=FALSE ORDER BY TimeStamp DESC");
-        Collection<TaskEntityData> vRecuringCollection = executeSqlQuery(webSession.getConnection(), "SELECT * FROM TaskEntity WHERE FwdNr='" + fwdNr + "' AND StartTime<" + stop + " AND IsRecuring=TRUE ORDER BY TimeStamp DESC");
+        Collection<TaskEntityData> vCollection = executeSqlQuery(webSession, "SELECT * FROM TaskEntity WHERE FwdNr='" + fwdNr + "' AND TimeStamp>" + start + " AND TimeStamp<=" + stop + " AND IsRecuring=FALSE ORDER BY TimeStamp DESC");
+        Collection<TaskEntityData> vRecuringCollection = executeSqlQuery(webSession, "SELECT * FROM TaskEntity WHERE FwdNr='" + fwdNr + "' AND StartTime<" + stop + " AND IsRecuring=TRUE ORDER BY TimeStamp DESC");
         if (vCollection != null)
         {
             vCollection.addAll(vRecuringCollection);
@@ -244,8 +244,8 @@ public class TaskSqlAdapter extends AbstractSqlAdapter<TaskEntityData>
     
     private Collection<TaskEntityData> queryAllTasks(WebSession webSession, long start, long stop)
     {
-        Collection<TaskEntityData> vCollection = executeSqlQuery(webSession.getConnection(), "SELECT * FROM TaskEntity WHERE TimeStamp>" + start + " AND TimeStamp<=" + stop + " AND IsRecuring=FALSE ORDER BY TimeStamp DESC");
-        Collection<TaskEntityData> vRecuringCollection = executeSqlQuery(webSession.getConnection(), "SELECT * FROM TaskEntity WHERE StartTime<" + stop + stop + " AND IsRecuring=TRUE ORDER BY TimeStamp DESC");
+        Collection<TaskEntityData> vCollection = executeSqlQuery(webSession, "SELECT * FROM TaskEntity WHERE TimeStamp>" + start + " AND TimeStamp<=" + stop + " AND IsRecuring=FALSE ORDER BY TimeStamp DESC");
+        Collection<TaskEntityData> vRecuringCollection = executeSqlQuery(webSession, "SELECT * FROM TaskEntity WHERE StartTime<" + stop + stop + " AND IsRecuring=TRUE ORDER BY TimeStamp DESC");
         if (vCollection != null)
         {
             vCollection.addAll(vRecuringCollection);

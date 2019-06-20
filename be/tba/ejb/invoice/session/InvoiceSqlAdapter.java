@@ -83,8 +83,8 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
      */
     public int addInvoice(WebSession webSession, InvoiceEntityData data)
     {
-        addRow(webSession.getConnection(), data);
-        Collection<InvoiceEntityData> invoices = executeSqlQuery(webSession.getConnection(), "SELECT * FROM InvoiceEntity WHERE AccountFwdNr='" + data.getAccountFwdNr() + "' AND TotalCost=" + data.getTotalCost()  + " AND StartTime=" + data.getStartTime() + " AND StopTime=" + data.getStopTime());
+        addRow(webSession, data);
+        Collection<InvoiceEntityData> invoices = executeSqlQuery(webSession, "SELECT * FROM InvoiceEntity WHERE AccountFwdNr='" + data.getAccountFwdNr() + "' AND TotalCost=" + data.getTotalCost()  + " AND StartTime=" + data.getStartTime() + " AND StopTime=" + data.getStopTime());
         return ((InvoiceEntityData) invoices.toArray()[0]).getId();
     }
 
@@ -93,7 +93,7 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
      */
     public InvoiceEntityData getInvoiceById(WebSession webSession, String key)
     {
-        return getRow(webSession.getConnection(), Integer.parseInt(key));
+        return getRow(webSession, Integer.parseInt(key));
     }
 
     /**
@@ -118,7 +118,7 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
             DecimalFormat vCostFormatter = new DecimalFormat("#0.000");
             double rangeLow = Double.parseDouble(vCostFormatter.format(inclBtwCost /1.21 - 0.015));
             double rangeHigh = Double.parseDouble(vCostFormatter.format(inclBtwCost /1.21 + 0.015));
-            return executeSqlQuery(webSession.getConnection(), "SELECT * FROM InvoiceEntity WHERE IsInvoiceMailed=TRUE AND CreditId=-1 AND TotalCost BETWEEN " + rangeLow + " AND " + rangeHigh + " AND AccountFwdNr " + fwdNrSqlsequence); 
+            return executeSqlQuery(webSession, "SELECT * FROM InvoiceEntity WHERE IsInvoiceMailed=TRUE AND CreditId=-1 AND TotalCost BETWEEN " + rangeLow + " AND " + rangeHigh + " AND AccountFwdNr " + fwdNrSqlsequence); 
         }
         else
         {
@@ -142,7 +142,7 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
                 }
             }
             fwdNrSqlsequence = fwdNrSqlsequence + ")";
-            return executeSqlQuery(webSession.getConnection(), "SELECT * FROM InvoiceEntity WHERE IsInvoiceMailed=TRUE AND IsPayed=false AND CreditId=-1 AND AccountFwdNr " + fwdNrSqlsequence); 
+            return executeSqlQuery(webSession, "SELECT * FROM InvoiceEntity WHERE IsInvoiceMailed=TRUE AND IsPayed=false AND CreditId=-1 AND AccountFwdNr " + fwdNrSqlsequence); 
         }
         else
         {
@@ -155,7 +155,7 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
     {
         if (structuredId != null)
         {
-            return executeSqlQuery(webSession.getConnection(), "SELECT * FROM InvoiceEntity WHERE IsInvoiceMailed=TRUE AND CreditId=-1 AND StructuredId='" + structuredId + "'"); 
+            return executeSqlQuery(webSession, "SELECT * FROM InvoiceEntity WHERE IsInvoiceMailed=TRUE AND CreditId=-1 AND StructuredId='" + structuredId + "'"); 
         }
         return new Vector<InvoiceEntityData>();
     }
@@ -165,7 +165,7 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
      */
     public Collection<InvoiceEntityData> getInvoiceList(WebSession webSession, String fwdNr, int month, int year)
     {
-        return executeSqlQuery(webSession.getConnection(), "SELECT * FROM InvoiceEntity WHERE AccountFwdNr='" + fwdNr + "' AND Month=" + month + " AND Year=" + year + " ORDER BY AccountFwdNr DESC");
+        return executeSqlQuery(webSession, "SELECT * FROM InvoiceEntity WHERE AccountFwdNr='" + fwdNr + "' AND Month=" + month + " AND Year=" + year + " ORDER BY AccountFwdNr DESC");
     }
 
     /**
@@ -173,7 +173,7 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
      */
     public Collection<InvoiceEntityData> getInvoiceList(WebSession webSession, int month, int year)
     {
-        return executeSqlQuery(webSession.getConnection(), "SELECT * FROM InvoiceEntity WHERE Month=" + month + " AND Year=" + year + " ORDER BY YearSeqNr DESC");
+        return executeSqlQuery(webSession, "SELECT * FROM InvoiceEntity WHERE Month=" + month + " AND Year=" + year + " ORDER BY YearSeqNr DESC");
     }
 
     /**
@@ -181,7 +181,7 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
      */
     public Collection<InvoiceEntityData> getOpenInvoiceList(WebSession webSession)
     {
-        return executeSqlQuery(webSession.getConnection(), "SELECT * FROM InvoiceEntity WHERE IsPayed=FALSE AND FrozenFlag=TRUE ORDER BY InvoiceNr DESC");
+        return executeSqlQuery(webSession, "SELECT * FROM InvoiceEntity WHERE IsPayed=FALSE AND FrozenFlag=TRUE ORDER BY InvoiceNr DESC");
     }
 
     /**
@@ -191,7 +191,7 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
     {
         try
         {
-            Collection<InvoiceEntityData> vInvoiceList = executeSqlQuery(webSession.getConnection(), "SELECT * FROM InvoiceEntity WHERE Year=" + year + " AND FrozenFlag=TRUE ORDER BY YearSeqNr DESC");
+            Collection<InvoiceEntityData> vInvoiceList = executeSqlQuery(webSession, "SELECT * FROM InvoiceEntity WHERE Year=" + year + " AND FrozenFlag=TRUE ORDER BY YearSeqNr DESC");
             // InvoiceEntityHome vInvoiceHome = getEntityBean();
             // Collection vInvoiceList = vInvoiceHome.findFrozenByYear(year);
             if (vInvoiceList != null && vInvoiceList.size() > 0)
@@ -249,7 +249,7 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
     {
         try
         {
-            Collection<InvoiceEntityData> vInvoiceList = executeSqlQuery(webSession.getConnection(), "SELECT * FROM InvoiceEntity WHERE AccountFwdNr='" + fwdNr + "' AND Month=" + month + " AND Year=" + year + " ORDER BY AccountFwdNr DESC");
+            Collection<InvoiceEntityData> vInvoiceList = executeSqlQuery(webSession, "SELECT * FROM InvoiceEntity WHERE AccountFwdNr='" + fwdNr + "' AND Month=" + month + " AND Year=" + year + " ORDER BY AccountFwdNr DESC");
             // System.out.println("getInvoiceList for month " + month + ", year " +
             // year);
             // InvoiceEntityHome vInvoiceHome = getEntityBean();
@@ -316,13 +316,13 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
         for (Iterator<Integer> i = mailList.iterator(); i.hasNext();)
         {
             int vKey = i.next().intValue();
-            InvoiceEntityData vInvoiceData = getRow(webSession.getConnection(), vKey);
+            InvoiceEntityData vInvoiceData = getRow(webSession, vKey);
             if (vInvoiceData != null)
             {
                 if (mailIt(vInvoiceData))
                 {
                     vInvoiceData.setIsInvoiceMailed(true);
-                    updateRow(webSession.getConnection(), vInvoiceData);
+                    updateRow(webSession, vInvoiceData);
                 }
             }
         }
@@ -333,7 +333,7 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
         for (Iterator<Integer> i = freezeList.iterator(); i.hasNext();)
         {
             int vKey = i.next().intValue();
-            executeSqlQuery(webSession.getConnection(), "UPDATE InvoiceEntity SET IsPayed=true WHERE id=" + vKey);
+            executeSqlQuery(webSession, "UPDATE InvoiceEntity SET IsPayed=true WHERE id=" + vKey);
         }
     }
     
@@ -347,12 +347,12 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
             strBuf.append(",");
             strBuf.append(vKey);
         }
-        return executeSqlQuery(webSession.getConnection(), "SELECT * FROM InvoiceEntity WHERE IsInvoiceMailed=TRUE AND Id IN (" + strBuf.toString().substring(1) + ")"); 
+        return executeSqlQuery(webSession, "SELECT * FROM InvoiceEntity WHERE IsInvoiceMailed=TRUE AND Id IN (" + strBuf.toString().substring(1) + ")"); 
     }
 
     public void setPaymentInfo(WebSession webSession, int id, FintroPayment payment)
     {
-        executeSqlQuery(webSession.getConnection(), "UPDATE InvoiceEntity SET IsPayed=true, FintroId='" + payment.id + "', PayDate='" + payment.payDate + "', ValutaDate='" + payment.valutaDate + "', FromBankNr='" + payment.accountNrCustomer +"', PaymentDetails='" + payment.details + "' WHERE id=" + id);
+        executeSqlQuery(webSession, "UPDATE InvoiceEntity SET IsPayed=true, FintroId='" + payment.id + "', PayDate='" + payment.payDate + "', ValutaDate='" + payment.valutaDate + "', FromBankNr='" + payment.accountNrCustomer +"', PaymentDetails='" + payment.details + "' WHERE id=" + id);
 
     }
 
@@ -361,10 +361,10 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
      */
     public boolean freezeInvoice(WebSession webSession, int key, int invoiceNr)
     {
-        InvoiceEntityData vInvoiceData = getRow(webSession.getConnection(), key);
+        InvoiceEntityData vInvoiceData = getRow(webSession, key);
         if (vInvoiceData != null && vInvoiceData.getFrozenFlag() == false)
         {
-            System.out.println("freezeInvoice: current year seq nr:" + vInvoiceData.getYearSeqNr());
+            //System.out.println("freezeInvoice: current year seq nr:" + vInvoiceData.getYearSeqNr());
             if (vInvoiceData.getYearSeqNr() < 1)
             {
                 Calendar vCalendar = Calendar.getInstance();
@@ -387,7 +387,7 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
             // to handle good the windows style
             vInvoiceData.setFileName(escapeQuotes(vInvoiceData.getFileName().replace('\\', '/')));
             vInvoiceData.setFrozenFlag(true);
-            updateRow(webSession.getConnection(), vInvoiceData);
+            updateRow(webSession, vInvoiceData);
             return true;
         }
         return false;
@@ -397,7 +397,7 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
     {
         if (invoiceData == null || invoiceData.getFileName() == null || invoiceData.getFileName().length() == 0)
         {
-            System.out.println("Invoice not froozen for " + invoiceData.getAccountFwdNr());
+            //System.out.println("Invoice not froozen for " + invoiceData.getAccountFwdNr());
             return false;
         }
 

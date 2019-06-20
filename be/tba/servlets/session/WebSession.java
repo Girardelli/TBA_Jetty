@@ -84,6 +84,7 @@ final public class WebSession implements Serializable
     private String mFintroFileName = null;
     
     private String mFintroProcessLog = null;
+    private long mSqlTimer = 0;
 
     public WebSession() throws SQLException
     {
@@ -454,6 +455,22 @@ final public class WebSession implements Serializable
         System.out.println(caller + "(" + mUserId + ")WebSession.isExpired since " + (vCurrTime - vTimeout) / 1000 + " seconds.");
         return true;
     }
+    
+    public long getSqlTimer()
+    {
+    	return mSqlTimer;
+    }
+    
+    public void resetSqlTimer()
+    {
+    	mSqlTimer = 0;
+    }
+    
+    public void addSqlTimer(long cnt)
+    {
+    	mSqlTimer += cnt;
+    }
+    
 
     private void init()
     {
@@ -464,4 +481,5 @@ final public class WebSession implements Serializable
         mYear = calendar.get(Calendar.YEAR);
 
     }
+
 }

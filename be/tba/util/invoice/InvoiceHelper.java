@@ -249,7 +249,7 @@ public class InvoiceHelper
                 {
                     // start counting again at the old start point.
                     vStart = mInvoiceEntityData.getStartTime();
-                    System.out.println(mAccountEntityData.getFwdNumber() + ": Last invoice was a credit note: make new on for this months");
+                    //System.out.println(mAccountEntityData.getFwdNumber() + ": Last invoice was a credit note: make new on for this months");
                     mInvoiceEntityData = null;
                 }
                 else if (mInvoiceEntityData.getFrozenFlag())
@@ -259,21 +259,21 @@ public class InvoiceHelper
                     // starting from the stopTime of this last one.
                     vStart = mInvoiceEntityData.getStopTime() + 1;
                     mInvoiceEntityData = null;
-                    System.out.println(mAccountEntityData.getFwdNumber() + " : Last invoice was frozen: make a new one");
+                    //System.out.println(mAccountEntityData.getFwdNumber() + " : Last invoice was frozen: make a new one");
                 }
                 else
                 {
                     // the last invoice is not frozen: update this invoice with the
                     // figures till now.
                     vStart = mInvoiceEntityData.getStartTime();
-                    System.out.println(mAccountEntityData.getFwdNumber() + ": Last invoice was not frozen: update this one");
+                    //System.out.println(mAccountEntityData.getFwdNumber() + ": Last invoice was not frozen: update this one");
                 }
                 // mRecords = vQuerySession.getInvoiceCalls(vSession,
                 // mAccountEntityData.getFwdNumber(), mMonth, mYear);
             }
             else
             {
-                System.out.println(mAccountEntityData.getFwdNumber() + " : no invoices yet for this number for this month. Make one.");
+                //System.out.println(mAccountEntityData.getFwdNumber() + " : no invoices yet for this number for this month. Make one.");
 
                 // first invoice for this month: get all calls from the beginning of the month
             }
@@ -283,7 +283,7 @@ public class InvoiceHelper
             // There is already an invoice for this period
             if (mInvoiceEntityData.getCreditId() >= 0)
             {
-                System.out.println(mAccountEntityData.getFwdNumber() + ": credit note or original invoice was provided: show the frozen data.\r\nnew Start: " + vStart + " ==> " + mInvoiceEntityData.getStartTime() + "\r\nnew Stop:  " + vEnd + " ==> " + mInvoiceEntityData.getStopTime());
+                //System.out.println(mAccountEntityData.getFwdNumber() + ": credit note or original invoice was provided: show the frozen data.\r\nnew Start: " + vStart + " ==> " + mInvoiceEntityData.getStartTime() + "\r\nnew Stop:  " + vEnd + " ==> " + mInvoiceEntityData.getStopTime());
                 vStart = mInvoiceEntityData.getStartTime();
                 vEnd = mInvoiceEntityData.getStopTime();
             }
@@ -291,7 +291,7 @@ public class InvoiceHelper
             {
                 // the last invoice for this month was frozen: make a new one
                 // starting from the stopTime of this last one.
-                System.out.println(mAccountEntityData.getFwdNumber() + " : frozen invoice data, not related to credit note, provided by caller: show the frozen data.\r\nnew Start: " + vStart + " ==> " + mInvoiceEntityData.getStartTime() + "\r\nnew Stop:  " + vEnd + " ==> " + mInvoiceEntityData.getStopTime());
+                //System.out.println(mAccountEntityData.getFwdNumber() + " : frozen invoice data, not related to credit note, provided by caller: show the frozen data.\r\nnew Start: " + vStart + " ==> " + mInvoiceEntityData.getStartTime() + "\r\nnew Stop:  " + vEnd + " ==> " + mInvoiceEntityData.getStopTime());
                 vStart = mInvoiceEntityData.getStartTime();
                 vEnd = mInvoiceEntityData.getStopTime();
             }
@@ -299,7 +299,7 @@ public class InvoiceHelper
             {
                 // the last invoice is not frozen: update this invoice with the
                 // figures till now.
-                System.out.println(mAccountEntityData.getFwdNumber() + " : NOT frozen invoice data provided by caller: update this one.\r\nnew Start: " + vStart + " ==> " + mInvoiceEntityData.getStartTime());
+                //System.out.println(mAccountEntityData.getFwdNumber() + " : NOT frozen invoice data provided by caller: update this one.\r\nnew Start: " + vStart + " ==> " + mInvoiceEntityData.getStartTime());
                 vStart = mInvoiceEntityData.getStartTime();
             }
         }
@@ -354,7 +354,7 @@ public class InvoiceHelper
         mInvoiceData.AgendaCost = 0;
         mInvoiceData.CallsCost = 0.0;
         boolean vNewInvoiceRequired = false;
-        System.out.println("invoice type = " + mInvoiceData.Type);
+        //System.out.println("invoice type = " + mInvoiceData.Type);
         if (mInvoiceData.Type == kStandardInvoice || (mInvoiceData.Type == kWeekInvoice && (mCallCounts.TotalCalls > 0 || mCallCounts.SmsCalls > 0 || mCallCounts.FwdCalls > 0 || mCallCounts.FaxCalls > 0)))
         {
             vNewInvoiceRequired = true;
@@ -449,7 +449,7 @@ public class InvoiceHelper
             mTasks = vTaskSession.getTasksFromTillTimestamp(webSession, mAccountEntityData.getFwdNumber(), vStart, vEnd);
         }
         mInvoiceData.NrOfTasks = mTasks.size();
-        System.out.println(mInvoiceData.NrOfTasks + " Tasks found!!!");
+        //System.out.println(mInvoiceData.NrOfTasks + " Tasks found!!!");
         
         for (Iterator<TaskEntityData> i = mTasks.iterator(); i.hasNext();)
         {
@@ -536,12 +536,12 @@ public class InvoiceHelper
         {
             if (!mInvoiceEntityData.getFrozenFlag() && mInvoiceEntityData.getCreditId() < 0 && mInvoiceEntityData.getTotalCost() != mInvoiceData.TotalCost)
             {
-                System.out.println("new total cost " + mInvoiceData.TotalCost + " is not equal to old cost " + mInvoiceEntityData.getTotalCost());
+                //System.out.println("new total cost " + mInvoiceData.TotalCost + " is not equal to old cost " + mInvoiceEntityData.getTotalCost());
                 mInvoiceEntityData.setTotalCost(mInvoiceData.TotalCost);
-                System.out.println("invoice not frozen: update start-stop: start: " + mInvoiceEntityData.getStartTime() + "-->" + vStart + ", stop: " + mInvoiceEntityData.getStopTime() + "-->" + mCallCounts.LastInvoiceItem);
+                //System.out.println("invoice not frozen: update start-stop: start: " + mInvoiceEntityData.getStartTime() + "-->" + vStart + ", stop: " + mInvoiceEntityData.getStopTime() + "-->" + mCallCounts.LastInvoiceItem);
                 mInvoiceEntityData.setStartTime(vStart);
                 mInvoiceEntityData.setStopTime(mCallCounts.LastInvoiceItem);
-                vInvoiceSession.updateRow(webSession.getConnection(), mInvoiceEntityData);
+                vInvoiceSession.updateRow(webSession, mInvoiceEntityData);
             }
         }
     }
@@ -559,17 +559,17 @@ public class InvoiceHelper
         // !mInvoiceEntityData.getFrozenFlag())
         if (mNoValidCustomer ||  mAccountEntityData.getNoInvoice())
         {
-            System.out.println("No invoice doc generated for " + mAccountEntityData.getFullName() + ": getNoInvoice()=" + mAccountEntityData.getNoInvoice() + ", getFrozenFlag()=" + mInvoiceEntityData.getFrozenFlag());
+            //System.out.println("No invoice doc generated for " + mAccountEntityData.getFullName() + ": getNoInvoice()=" + mAccountEntityData.getNoInvoice() + ", getFrozenFlag()=" + mInvoiceEntityData.getFrozenFlag());
             return true;
         }
         if (mInvoiceEntityData == null)
         {
-            System.out.println("No invoice data found in DB for " + mAccountEntityData.getFullName());
+            //System.out.println("No invoice data found in DB for " + mAccountEntityData.getFullName());
             return true;
         }
         if (mInvoiceEntityData.getFileName() == null || mInvoiceEntityData.getFileName().length() == 0)
         {
-            System.out.println("No invoice doc generated for " + mAccountEntityData.getFullName() + " because file name was not set");
+            //System.out.println("No invoice doc generated for " + mAccountEntityData.getFullName() + " because file name was not set");
             return true;
         }
         // Calendar vToday = Calendar.getInstance();
@@ -960,10 +960,10 @@ public class InvoiceHelper
                                                                              // mFwdCalls
                                                                              // +
                                                                              // mFaxCalls;
-            if (customerData != null)
-                System.out.println("setCounters for " + customerData.getFullName() + ": " + callList.size() + "(in), " + callCounts.TotalCalls + "(total); " + callCounts.LongFwdCallSec + "sec (" + callCounts.LongFwdCalls + " calls)");
-            else
-                System.out.println("setCounters for unknown: " + callList.size() + "(in), " + callCounts.TotalCalls + "(total); " + callCounts.LongFwdCallSec + "sec (" + callCounts.LongFwdCalls + " calls)");
+            //if (customerData != null)
+                //System.out.println("setCounters for " + customerData.getFullName() + ": " + callList.size() + "(in), " + callCounts.TotalCalls + "(total); " + callCounts.LongFwdCallSec + "sec (" + callCounts.LongFwdCalls + " calls)");
+            //else
+                //System.out.println("setCounters for unknown: " + callList.size() + "(in), " + callCounts.TotalCalls + "(total); " + callCounts.LongFwdCallSec + "sec (" + callCounts.LongFwdCalls + " calls)");
         }
         return callCounts.TotalCalls;
     }

@@ -69,7 +69,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
     {
         try
         {
-            Collection<CallRecordEntityData> vRecordList = executeSqlQuery(webSession.getConnection(), "SELECT * FROM CallRecordEntity");
+            Collection<CallRecordEntityData> vRecordList = executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity");
             Vector<CallRecordEntityData> vVector = new Vector<CallRecordEntityData>();
             for (Iterator<CallRecordEntityData> i = vRecordList.iterator(); i.hasNext();)
             {
@@ -92,7 +92,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
      */
     public CallRecordEntityData getRecord(WebSession webSession, String key)
     {
-        return getRow(webSession.getConnection(), Integer.parseInt(key));
+        return getRow(webSession, Integer.parseInt(key));
     }
 
     /**
@@ -129,14 +129,14 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
             {
                 vToTimeStamp = vCallCalendar.getCurrentTimestamp();
             }
-            Collection<CallRecordEntityData> vCollection = executeSqlQuery(webSession.getConnection(), "SELECT * FROM CallRecordEntity WHERE IsDocumented=FALSE ORDER BY TimeStamp DESC");
+            Collection<CallRecordEntityData> vCollection = executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsDocumented=FALSE ORDER BY TimeStamp DESC");
             if (fwdNr == null)
             {
-                vCollection.addAll(executeSqlQuery(webSession.getConnection(), "SELECT * FROM CallRecordEntity WHERE IsDocumented=TRUE AND TimeStamp>" + vFromTimeStamp + " AND TimeStamp<=" + vToTimeStamp + " ORDER BY TimeStamp DESC"));
+                vCollection.addAll(executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsDocumented=TRUE AND TimeStamp>" + vFromTimeStamp + " AND TimeStamp<=" + vToTimeStamp + " ORDER BY TimeStamp DESC"));
             }
             else
             {
-                vCollection.addAll(executeSqlQuery(webSession.getConnection(), "SELECT * FROM CallRecordEntity WHERE IsDocumented=TRUE AND FwdNr='" + fwdNr + "' AND TimeStamp>" + vFromTimeStamp + " AND TimeStamp<=" + vToTimeStamp + " ORDER BY TimeStamp DESC"));
+                vCollection.addAll(executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsDocumented=TRUE AND FwdNr='" + fwdNr + "' AND TimeStamp>" + vFromTimeStamp + " AND TimeStamp<=" + vToTimeStamp + " ORDER BY TimeStamp DESC"));
             }
             return vCollection;
         }
@@ -156,11 +156,11 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
         {
             if (fwdNr == null)
             {
-                return executeSqlQuery(webSession.getConnection(), "SELECT * FROM CallRecordEntity WHERE IsIncomingCall=TRUE AND IsReleased=FALSE ORDER BY TimeStamp DESC");
+                return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsIncomingCall=TRUE AND IsReleased=FALSE ORDER BY TimeStamp DESC");
             }
             else
             {
-                return executeSqlQuery(webSession.getConnection(), "SELECT * FROM CallRecordEntity WHERE IsIncomingCall=TRUE AND IsReleased=FALSE AND FwdNr='" + fwdNr + "' ORDER BY TimeStamp DESC");
+                return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsIncomingCall=TRUE AND IsReleased=FALSE AND FwdNr='" + fwdNr + "' ORDER BY TimeStamp DESC");
             }
         }
         catch (Exception e)
@@ -179,11 +179,11 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
         {
             if (fwdNr == null)
             {
-                return executeSqlQuery(webSession.getConnection(), "SELECT * FROM CallRecordEntity WHERE IsIncomingCall=FALSE AND IsReleased=FALSE ORDER BY TimeStamp DESC");
+                return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsIncomingCall=FALSE AND IsReleased=FALSE ORDER BY TimeStamp DESC");
             }
             else
             {
-                return executeSqlQuery(webSession.getConnection(), "SELECT * FROM CallRecordEntity WHERE IsIncomingCall=FALSE AND IsReleased=FALSE AND FwdNr='" + fwdNr + "' ORDER BY TimeStamp DESC");
+                return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsIncomingCall=FALSE AND IsReleased=FALSE AND FwdNr='" + fwdNr + "' ORDER BY TimeStamp DESC");
             }
         }
         catch (Exception e)
@@ -200,7 +200,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
     {
         try
         {
-            return executeSqlQuery(webSession.getConnection(), "SELECT * FROM CallRecordEntity WHERE IsVirgin=TRUE ORDER BY TimeStamp DESC");
+            return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsVirgin=TRUE ORDER BY TimeStamp DESC");
         }
         catch (Exception e)
         {
@@ -218,11 +218,11 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
         {
             if (fwdNr == null)
             {
-                return executeSqlQuery(webSession.getConnection(), "SELECT * FROM CallRecordEntity WHERE IsIncomingCall=TRUE AND IsDocumented=FALSE ORDER BY TimeStamp DESC");
+                return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsIncomingCall=TRUE AND IsDocumented=FALSE ORDER BY TimeStamp DESC");
             }
             else
             {
-                return executeSqlQuery(webSession.getConnection(), "SELECT * FROM CallRecordEntity WHERE IsIncomingCall=TRUE AND IsDocumented=FALSE AND FwdNr='" + fwdNr + "' ORDER BY TimeStamp DESC");
+                return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsIncomingCall=TRUE AND IsDocumented=FALSE AND FwdNr='" + fwdNr + "' ORDER BY TimeStamp DESC");
             }
         }
         catch (Exception e)
@@ -241,11 +241,11 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
         {
             if (fwdNr == null)
             {
-                return executeSqlQuery(webSession.getConnection(), "SELECT * FROM CallRecordEntity WHERE IsIncomingCall=FALSE AND IsDocumented=FALSE ORDER BY TimeStamp DESC");
+                return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsIncomingCall=FALSE AND IsDocumented=FALSE ORDER BY TimeStamp DESC");
             }
             else
             {
-                return executeSqlQuery(webSession.getConnection(), "SELECT * FROM CallRecordEntity WHERE IsIncomingCall=FALSE AND IsDocumented=FALSE AND FwdNr='" + fwdNr + "' ORDER BY TimeStamp DESC");
+                return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsIncomingCall=FALSE AND IsDocumented=FALSE AND FwdNr='" + fwdNr + "' ORDER BY TimeStamp DESC");
             }
         }
         catch (Exception e)
@@ -264,11 +264,11 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
         {
             if (fwdNr == null)
             {
-                return executeSqlQuery(webSession.getConnection(), "SELECT * FROM CallRecordEntity WHERE IsDocumented=FALSE ORDER BY TimeStamp DESC");
+                return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsDocumented=FALSE ORDER BY TimeStamp DESC");
             }
             else
             {
-                return executeSqlQuery(webSession.getConnection(), "SELECT * FROM CallRecordEntity WHERE IsDocumented=FALSE AND FwdNr='" + fwdNr + "' ORDER BY TimeStamp DESC");
+                return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsDocumented=FALSE AND FwdNr='" + fwdNr + "' ORDER BY TimeStamp DESC");
             }
         }
         catch (Exception e)
@@ -287,11 +287,11 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
         {
             if (fwdNr == null)
             {
-                return executeSqlQuery(webSession.getConnection(), "SELECT * FROM CallRecordEntity WHERE IsIncomingCall=TRUE AND IsDocumented=TRUE ORDER BY TimeStamp DESC");
+                return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsIncomingCall=TRUE AND IsDocumented=TRUE ORDER BY TimeStamp DESC");
             }
             else
             {
-                return executeSqlQuery(webSession.getConnection(), "SELECT * FROM CallRecordEntity WHERE IsIncomingCall=TRUE AND IsDocumented=TRUE AND FwdNr='" + fwdNr + "' ORDER BY TimeStamp DESC");
+                return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsIncomingCall=TRUE AND IsDocumented=TRUE AND FwdNr='" + fwdNr + "' ORDER BY TimeStamp DESC");
             }
         }
         catch (Exception e)
@@ -310,11 +310,11 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
         {
             if (fwdNr == null)
             {
-                return executeSqlQuery(webSession.getConnection(), "SELECT * FROM CallRecordEntity WHERE IsIncomingCall=FALSE AND IsDocumented=TRUE ORDER BY TimeStamp DESC");
+                return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsIncomingCall=FALSE AND IsDocumented=TRUE ORDER BY TimeStamp DESC");
             }
             else
             {
-                return executeSqlQuery(webSession.getConnection(), "SELECT * FROM CallRecordEntity WHERE IsIncomingCall=FALSE AND IsDocumented=TRUE AND FwdNr='" + fwdNr + "' ORDER BY TimeStamp DESC");
+                return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsIncomingCall=FALSE AND IsDocumented=TRUE AND FwdNr='" + fwdNr + "' ORDER BY TimeStamp DESC");
             }
         }
         catch (Exception e)
@@ -333,11 +333,11 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
         {
             if (fwdNr == null)
             {
-                return executeSqlQuery(webSession.getConnection(), "SELECT * FROM CallRecordEntity WHERE IsDocumented=TRUE AND IsReleased=FALSE ORDER BY TimeStamp DESC");
+                return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsDocumented=TRUE AND IsReleased=FALSE ORDER BY TimeStamp DESC");
             }
             else
             {
-                return executeSqlQuery(webSession.getConnection(), "SELECT * FROM CallRecordEntity WHERE FwdNr='" + fwdNr + "' AND IsDocumented=TRUE AND IsReleased=FALSE ORDER BY TimeStamp DESC");
+                return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE FwdNr='" + fwdNr + "' AND IsDocumented=TRUE AND IsReleased=FALSE ORDER BY TimeStamp DESC");
             }
         }
         catch (Exception e)
@@ -359,11 +359,11 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
             long vEnd = vCalendar.getEndOfMonth(month, year);
             if (fwdNr == null)
             {
-                return executeSqlQuery(webSession.getConnection(), "SELECT * FROM CallRecordEntity WHERE TimeStamp>" + vStart + " AND TimeStamp<=" + vEnd + " AND IsDocumented=TRUE ORDER BY TimeStamp DESC");
+                return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE TimeStamp>" + vStart + " AND TimeStamp<=" + vEnd + " AND IsDocumented=TRUE ORDER BY TimeStamp DESC");
             }
             else
             {
-                return executeSqlQuery(webSession.getConnection(), "SELECT * FROM CallRecordEntity WHERE FwdNr='" + fwdNr + "' AND TimeStamp>" + vStart + " AND TimeStamp<=" + vEnd + " AND IsDocumented=TRUE ORDER BY TimeStamp DESC");
+                return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE FwdNr='" + fwdNr + "' AND TimeStamp>" + vStart + " AND TimeStamp<=" + vEnd + " AND IsDocumented=TRUE ORDER BY TimeStamp DESC");
             }
         }
         catch (Exception e)
@@ -385,11 +385,11 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
 
             if (fwdNr == null)
             {
-                return executeSqlQuery(webSession.getConnection(), "SELECT * FROM CallRecordEntity WHERE TimeStamp>" + vStart + " AND TimeStamp<=" + vCalendar.getCurrentTimestamp() + " AND IsDocumented=TRUE ORDER BY TimeStamp DESC");
+                return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE TimeStamp>" + vStart + " AND TimeStamp<=" + vCalendar.getCurrentTimestamp() + " AND IsDocumented=TRUE ORDER BY TimeStamp DESC");
             }
             else
             {
-                return executeSqlQuery(webSession.getConnection(), "SELECT * FROM CallRecordEntity WHERE FwdNr='" + fwdNr + "' AND TimeStamp>" + vStart + " AND TimeStamp<=" + vCalendar.getCurrentTimestamp() + " AND IsDocumented=TRUE ORDER BY TimeStamp DESC");
+                return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE FwdNr='" + fwdNr + "' AND TimeStamp>" + vStart + " AND TimeStamp<=" + vCalendar.getCurrentTimestamp() + " AND IsDocumented=TRUE ORDER BY TimeStamp DESC");
             }
         }
         catch (Exception e)
@@ -431,7 +431,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
             long vEndTime = vCalendar.getEndOfMonth(month, year);
 
             Vector<CallRecordEntityData> vOutList = new Vector<CallRecordEntityData>();
-            Collection<CallRecordEntityData> vCollection = executeSqlQuery(webSession.getConnection(), "SELECT * FROM CallRecordEntity WHERE FwdNr='" + fwdNr + "' AND TimeStamp>" + vStartTime + " AND TimeStamp<=" + vEndTime + " AND IsDocumented=TRUE ORDER BY TimeStamp DESC");
+            Collection<CallRecordEntityData> vCollection = executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE FwdNr='" + fwdNr + "' AND TimeStamp>" + vStartTime + " AND TimeStamp<=" + vEndTime + " AND IsDocumented=TRUE ORDER BY TimeStamp DESC");
 
             SortAndFilterOnString(vOutList, vCollection, str2find);
 
@@ -456,7 +456,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
             long vStartTime = vCalendar.getStartOfMonth(month, year);
             long vEndTime = vCalendar.getEndOfMonth(month, year);
 
-            Collection<CallRecordEntityData> vCollection = executeSqlQuery(webSession.getConnection(), "SELECT * FROM CallRecordEntity WHERE TimeStamp>" + vStartTime + " AND TimeStamp<=" + vEndTime + " AND IsMailed=TRUE AND isIncomingCall=TRUE");
+            Collection<CallRecordEntityData> vCollection = executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE TimeStamp>" + vStartTime + " AND TimeStamp<=" + vEndTime + " AND IsMailed=TRUE AND isIncomingCall=TRUE");
             return vCollection;
         }
         catch (Exception e)
@@ -478,7 +478,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
             long vEndTime = vCalendar.getEndOfMonth(month, year);
 
             // CallRecordEntityHome callRecordHome = getEntityBean();
-            return executeSqlQuery(webSession.getConnection(), "SELECT * FROM CallRecordEntity WHERE DoneBy='" + empl + "' AND TimeStamp>" + vStartTime + " AND TimeStamp<=" + vEndTime + " AND IsDocumented=TRUE AND IsMailed=TRUE ORDER BY TimeStamp DESC");
+            return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE DoneBy='" + empl + "' AND TimeStamp>" + vStartTime + " AND TimeStamp<=" + vEndTime + " AND IsDocumented=TRUE AND IsMailed=TRUE ORDER BY TimeStamp DESC");
 
             // Collection vCollection = callRecordHome.findDoneBy(empl, vStartTime,
             // vEndTime);
@@ -500,11 +500,11 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
         {
             if (fwdNr == null)
             {
-                return executeSqlQuery(webSession.getConnection(), "SELECT * FROM CallRecordEntity WHERE IsDocumented=TRUE AND IsMailed=FALSE ORDER BY TimeStamp DESC");
+                return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsDocumented=TRUE AND IsMailed=FALSE ORDER BY TimeStamp DESC");
             }
             else
             {
-                return executeSqlQuery(webSession.getConnection(), "SELECT * FROM CallRecordEntity WHERE IsDocumented=TRUE AND IsMailed=FALSE AND FwdNr='" + fwdNr + "' ORDER BY TimeStamp DESC");
+                return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsDocumented=TRUE AND IsMailed=FALSE AND FwdNr='" + fwdNr + "' ORDER BY TimeStamp DESC");
             }
         }
         catch (Exception e)
@@ -521,7 +521,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
     {
         try
         {
-            return executeSqlQuery(webSession.getConnection(), "SELECT * FROM CallRecordEntity WHERE IsDocumented=TRUE AND IsChanged=TRUE ORDER BY TimeStamp DESC");
+            return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsDocumented=TRUE AND IsChanged=TRUE ORDER BY TimeStamp DESC");
         }
         catch (Exception e)
         {
@@ -533,7 +533,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
     /**
      * @ejb:interface-method view-type="remote"
      */
-    public int cleanDb(Connection con)
+    public int cleanDb(WebSession webSession)
     {
         // if (count == 0)
         // return 0;
@@ -544,7 +544,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
             long vCurTimeStamp = vCalendar.getTimeInMillis();
             long vEndTime = vCurTimeStamp - Constants.RECORD_DELETE_EXPIRE;
 
-            Collection<CallRecordEntityData> vDummyVec = executeSqlQuery(con, "DELETE FROM CallRecordEntity WHERE Timestamp<" + vEndTime);
+            Collection<CallRecordEntityData> vDummyVec = executeSqlQuery(webSession, "DELETE FROM CallRecordEntity WHERE Timestamp<" + vEndTime);
             System.out.println("cleanDb removed " + vDummyVec.size() + " call records");
             return vDummyVec.size();
         }
@@ -561,14 +561,14 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
 
     public void removeCallRecord(WebSession webSession, int key)
     {
-        CallRecordEntityData vCallRecord = getRow(webSession.getConnection(), key);
+        CallRecordEntityData vCallRecord = getRow(webSession, key);
 
         if (vCallRecord.getIsNotLogged() || vCallRecord.getFwdNr().equals(Constants.NUMBER_BLOCK[0][0]) || vCallRecord.getFwdNr().equals(Constants.NUMBER_BLOCK[1][0]) || !vCallRecord.getIsDocumented())
-            deleteRow(webSession.getConnection(), key);
+            deleteRow(webSession, key);
         else
         {
             vCallRecord.setIsReleased(true);
-            updateRow(webSession.getConnection(), vCallRecord);
+            updateRow(webSession, vCallRecord);
         }
     }
 
@@ -577,7 +577,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
      */
     public Collection<ReleaseCallData> getAllReleaseData(WebSession webSession)
     {
-        Collection<CallRecordEntityData> vCollection = getAllRows(webSession.getConnection());
+        Collection<CallRecordEntityData> vCollection = getAllRows(webSession);
         Vector<ReleaseCallData> vResData = new Vector<ReleaseCallData>();
         for (Iterator<CallRecordEntityData> i = vCollection.iterator(); i.hasNext();)
         {
@@ -596,7 +596,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
      */
     public Collection<CallRecordEntityData> getNotLogged(WebSession webSession)
     {
-        return executeSqlQuery(webSession.getConnection(), "SELECT * FROM CallRecordEntity WHERE IsNotLogged=TRUE ORDER BY TimeStamp DESC");
+        return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsNotLogged=TRUE ORDER BY TimeStamp DESC");
     }
     
     static final long PERIOD = Constants.DAYS * 20;
@@ -608,7 +608,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
      */
     public void changeFwdNumber(WebSession webSession, String key, String newNr)
     {
-        executeSqlQuery(webSession.getConnection(), "UPDATE CallRecordEntity SET FwdNr='" + newNr + "' WHERE ID='" + key + "'");
+        executeSqlQuery(webSession, "UPDATE CallRecordEntity SET FwdNr='" + newNr + "' WHERE ID='" + key + "'");
     }
 
     /**
@@ -617,14 +617,14 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
     public void removeAccountCalls(WebSession webSession, int accountID)
     {
         System.out.println("removeAccountCalls for " + accountID);
-        executeSqlQuery(webSession.getConnection(), "DELETE FROM CallRecordEntity WHERE FwdNr='" + accountID + "'");
+        executeSqlQuery(webSession, "DELETE FROM CallRecordEntity WHERE FwdNr='" + accountID + "'");
     }
 
     private void collectInvoiceCalls(WebSession webSession, AccountEntityData customer, Collection<CallRecordEntityData> callList, long start, long stop)
     {
         // CallRecordEntityHome callRecordHome = getEntityBean();
 
-        Collection<CallRecordEntityData> vCollection = executeSqlQuery(webSession.getConnection(), "SELECT * FROM CallRecordEntity WHERE FwdNr='" + customer.getFwdNumber() + "' AND TimeStamp>" + start + " AND TimeStamp<=" + stop + " AND IsDocumented=TRUE AND IsMailed=TRUE ORDER BY TimeStamp DESC");
+        Collection<CallRecordEntityData> vCollection = executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE FwdNr='" + customer.getFwdNumber() + "' AND TimeStamp>" + start + " AND TimeStamp<=" + stop + " AND IsDocumented=TRUE AND IsMailed=TRUE ORDER BY TimeStamp DESC");
 
         // Collection vCollection =
         // callRecordHome.findDocumentedMailedFromTo(customer.getFwdNumber(),
@@ -659,7 +659,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
     private void collectInvoiceCallsHashTable(WebSession webSession, AccountEntityData customer, Hashtable<String, Collection<CallRecordEntityData>> callList, long start, long stop)
     {
         // CallRecordEntityHome callRecordHome = getEntityBean();
-        Collection<CallRecordEntityData> vCollection = executeSqlQuery(webSession.getConnection(), "SELECT * FROM CallRecordEntity WHERE FwdNr='" + customer.getFwdNumber() + "' AND TimeStamp>" + start + " AND TimeStamp<=" + stop + " AND IsDocumented=TRUE AND IsMailed=TRUE ORDER BY TimeStamp DESC");
+        Collection<CallRecordEntityData> vCollection = executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE FwdNr='" + customer.getFwdNumber() + "' AND TimeStamp>" + start + " AND TimeStamp<=" + stop + " AND IsDocumented=TRUE AND IsMailed=TRUE ORDER BY TimeStamp DESC");
 
         // Collection vCollection =
         // callRecordHome.findDocumentedMailedFromTo(customer.getFwdNumber(),
@@ -937,7 +937,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
                     newRecord.setIsMailed(false);
                 else
                     newRecord.setIsMailed(true);
-                addRow(webSession.getConnection(), newRecord);
+                addRow(webSession, newRecord);
                 System.out.println("addCallRecord: id = " + newRecord.getId() + ", fwdnr=" + newRecord.getFwdNr() + ", isMailed=" + newRecord.getIsMailed());
                 sLogger.info("addCallRecord: id={}, fwdnr={}, isMailed={}", newRecord.getId(), newRecord.getFwdNr(), newRecord.getIsMailed());
 
@@ -970,7 +970,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
         int i = 0;
         for (Iterator<CallRecordEntityData> iter = vList.iterator(); iter.hasNext();)
         {
-            deleteRow(webSession.getConnection(), iter.next().getId());
+            deleteRow(webSession, iter.next().getId());
             if (++i > 300)
                 break; // delete maximum 1000 calls to avoid out of memory
                        // problems
@@ -986,7 +986,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
         {
             CallRecordEntityData vCallRecord = iter.next();
             vCallRecord.setIsReleased(true);
-            updateRow(webSession.getConnection(), vCallRecord);
+            updateRow(webSession, vCallRecord);
         }
     }
 
@@ -996,7 +996,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
     public void setCallData(WebSession webSession, CallRecordEntityData data)
     {
         setIsDocumentedFlag(data);
-        updateRow(webSession.getConnection(), data);
+        updateRow(webSession, data);
     }
 
     /**
@@ -1012,11 +1012,11 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
      */
     public void setRelease(WebSession webSession, int key)
     {
-        CallRecordEntityData data = getRow(webSession.getConnection(), key);
+        CallRecordEntityData data = getRow(webSession, key);
         if (data != null)
         {
             data.setIsReleased(true);
-            updateRow(webSession.getConnection(), data);
+            updateRow(webSession, data);
         }
     }
 
@@ -1033,11 +1033,11 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
      */
     public void setIsMailed(WebSession webSession, int key)
     {
-        CallRecordEntityData data = getRow(webSession.getConnection(), key);
+        CallRecordEntityData data = getRow(webSession, key);
         if (data != null)
         {
             data.setIsMailed(true);
-            updateRow(webSession.getConnection(), data);
+            updateRow(webSession, data);
         }
     }
 
@@ -1047,11 +1047,11 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
 
     public void setUnRelease(WebSession webSession, int key)
     {
-        CallRecordEntityData data = getRow(webSession.getConnection(), key);
+        CallRecordEntityData data = getRow(webSession, key);
         if (data != null)
         {
             data.setIsReleased(false);
-            updateRow(webSession.getConnection(), data);
+            updateRow(webSession, data);
         }
     }
 
@@ -1062,7 +1062,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
 
     public void setShortText(WebSession webSession, int key, String text, boolean isKlant)
     {
-    	CallRecordEntityData data = getRow(webSession.getConnection(), key);
+    	CallRecordEntityData data = getRow(webSession, key);
         if (data != null)
         {
             String strippedText = text;
@@ -1080,7 +1080,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
         		data.setShortDescription(data.getShortDescription() + "<br>" + webSession.getUserId() + ": " + text);
         		data.setIsChanged(false);
             }
-        	updateRow(webSession.getConnection(), data);
+        	updateRow(webSession, data);
         }
     }
 
@@ -1113,7 +1113,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
                 newRecord.setIsMailed(false);
             else
                 newRecord.setIsMailed(true);
-            dbId = addRow(webSession.getConnection(), newRecord);
+            dbId = addRow(webSession, newRecord);
             System.out.println("addCallRecord: id = " + dbId + ", fwdnr=" + newRecord.getFwdNr() + ", isMailed=" + newRecord.getIsMailed());
             sLogger.info("addCallRecord: id={}, fwdnr={}, isMailed={}", dbId, newRecord.getFwdNr(), newRecord.getIsMailed());
         }
@@ -1126,7 +1126,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
 
     public void setTsAnswer(WebSession webSession, IntertelCallData data)
     {
-    	executeSqlQuery(webSession.getConnection(), "UPDATE CallRecordEntity SET TsAnswer='" + data.tsAnswer + "' WHERE ID='" + data.dbRecordId + "'");
+    	executeSqlQuery(webSession, "UPDATE CallRecordEntity SET TsAnswer='" + data.tsAnswer + "' WHERE ID='" + data.dbRecordId + "'");
     }
     
     public void setTsEnd(WebSession webSession, IntertelCallData data)
@@ -1143,18 +1143,18 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
     			text = "ShortDescription='Niet opgenomen', ";
     		}
     	}
-    	executeSqlQuery(webSession.getConnection(), "UPDATE CallRecordEntity SET " + text +  "TsEnd='" + data.tsEnd + "', Cost='" + data.getCostStr() + "' WHERE ID='" + data.dbRecordId + "'");
+    	executeSqlQuery(webSession, "UPDATE CallRecordEntity SET " + text +  "TsEnd='" + data.tsEnd + "', Cost='" + data.getCostStr() + "' WHERE ID='" + data.dbRecordId + "'");
     }
 
     public void setTransfer(WebSession webSession, IntertelCallData transferedInData, IntertelCallData transferOutData)
     {
-		executeSqlQuery(webSession.getConnection(), "UPDATE CallRecordEntity SET IsForwardCall=true WHERE ID='" + transferedInData.dbRecordId + "'");
-		executeSqlQuery(webSession.getConnection(), "UPDATE CallRecordEntity SET ShortDescription='Doorgeschakelde oproep van " + transferedInData.callingNr + " naar " + transferOutData.calledNr + "' WHERE ID='" + transferOutData.dbRecordId + "'");
+		executeSqlQuery(webSession, "UPDATE CallRecordEntity SET IsForwardCall=true WHERE ID='" + transferedInData.dbRecordId + "'");
+		executeSqlQuery(webSession, "UPDATE CallRecordEntity SET ShortDescription='Doorgeschakelde oproep van " + transferedInData.callingNr + " naar " + transferOutData.calledNr + "' WHERE ID='" + transferOutData.dbRecordId + "'");
     }
     
     public void setCallingNr(WebSession webSession, IntertelCallData data)
     {
-    	executeSqlQuery(webSession.getConnection(), "UPDATE CallRecordEntity SET FwdNr='" + data.callingNr + "' WHERE ID='" + data.dbRecordId + "'");
+    	executeSqlQuery(webSession, "UPDATE CallRecordEntity SET FwdNr='" + data.callingNr + "' WHERE ID='" + data.dbRecordId + "'");
     }
     
     static public void setIsDocumentedFlag(CallRecordEntityData record)

@@ -1,5 +1,6 @@
 package be.tba.util.data;
 
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Vector;
 
@@ -10,6 +11,8 @@ import java.sql.ResultSet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import be.tba.servlets.session.WebSession;
 
 public abstract class AbstractSqlAdapter<T>
 {
@@ -38,9 +41,9 @@ public abstract class AbstractSqlAdapter<T>
 
     abstract protected Vector<T> translateRsToValueObjects(ResultSet rs) throws SQLException;
 
-    public T getRow(Connection con, int key)
+    public T getRow(WebSession session, int key)
     {
-        Collection<T> collection = executeSqlQuery(con, "SELECT * FROM " + mTableName + " WHERE Id=" + key);
+        Collection<T> collection = executeSqlQuery(session, "SELECT * FROM " + mTableName + " WHERE Id=" + key);
         if (collection.size() == 1)
         {
             return collection.iterator().next();
@@ -48,35 +51,35 @@ public abstract class AbstractSqlAdapter<T>
         return null;
     }
 
-    public int addRow(Connection con, AbstractData data)
+    public int addRow(WebSession session, AbstractData data)
     {
-    	return executeInsertSql(con, "INSERT INTO " + mTableName + " VALUES (" + data.toValueString() + ")");
+    	return executeInsertSql(session, "INSERT INTO " + mTableName + " VALUES (" + data.toValueString() + ")");
     }
     
-    public void deleteRow(Connection con, int key)
+    public void deleteRow(WebSession session, int key)
     {
-        executeSqlQuery(con, "DELETE FROM " + mTableName + " WHERE Id=" + key);
+        executeSqlQuery(session, "DELETE FROM " + mTableName + " WHERE Id=" + key);
     }
 
-    public void updateRow(Connection con, AbstractData data)
+    public void updateRow(WebSession session, AbstractData data)
     {
         if (data != null)
         {
-            T row = getRow(con, data.getId());
+            T row = getRow(session, data.getId());
             if (row != null)
             {
-                executeSqlQuery(con, "UPDATE " + mTableName + " SET " + data.toNameValueString() + " WHERE Id=" + data.getId());
+                executeSqlQuery(session, "UPDATE " + mTableName + " SET " + data.toNameValueString() + " WHERE Id=" + data.getId());
             }
             else
             {
-                addRow(con, data);
+                addRow(session, data);
             }
         }
     }
 
-    public Collection<T> getAllRows(Connection con)
+    public Collection<T> getAllRows(WebSession session)
     {
-        return executeSqlQuery(con, "SELECT * FROM " + mTableName);
+        return executeSqlQuery(session, "SELECT * FROM " + mTableName);
     }
 
     protected String null2EmpthyString(String str)
@@ -89,16 +92,18 @@ public abstract class AbstractSqlAdapter<T>
         return str;
     }
 
-    protected int executeInsertSql(Connection con, String queryStr)
+    protected int executeInsertSql(WebSession session, String queryStr)
     {
     	Statement stmt = null;
     	ResultSet rs = null;
         try
         {
-            stmt = con.createStatement();
+            stmt = session.getConnection().createStatement();
             if (queryStr.startsWith("INSERT"))
             {
-                int cnt = stmt.executeUpdate(queryStr, Statement.RETURN_GENERATED_KEYS);
+            	long startTime = Calendar.getInstance().getTimeInMillis();
+            	int cnt = stmt.executeUpdate(queryStr, Statement.RETURN_GENERATED_KEYS);
+                session.addSqlTimer(Calendar.getInstance().getTimeInMillis() - startTime);
                 System.out.println(cnt + " new entry: SQL query: " + queryStr);
                 rs = stmt.getGeneratedKeys();
                 if(cnt == 1 && rs.next())
@@ -163,17 +168,19 @@ public abstract class AbstractSqlAdapter<T>
     	
     }
     
-    protected Collection<T> executeSqlQuery(Connection con, String queryStr)
+    protected Collection<T> executeSqlQuery(WebSession session, String queryStr)
     {
         Statement stmt = null;
         ResultSet rs = null;
         try
         {
-            stmt = con.createStatement();
+        	stmt = session.getConnection().createStatement();
             if (queryStr.startsWith("SELECT"))
             {
-                rs = stmt.executeQuery(queryStr);
-                Collection<T> col = translateRsToValueObjects(rs);
+            	long startTime = Calendar.getInstance().getTimeInMillis();
+            	rs = stmt.executeQuery(queryStr);
+            	session.addSqlTimer(Calendar.getInstance().getTimeInMillis() - startTime);
+            	Collection<T> col = translateRsToValueObjects(rs);
                 //System.out.println(col.size() + " entries: SQL query: " + queryStr);
                 
                 //sLogger.info("{} entries: SQL querry: {}", col.size(), queryStr);
@@ -181,7 +188,9 @@ public abstract class AbstractSqlAdapter<T>
             }
             else
             {
-                int cnt = stmt.executeUpdate(queryStr);
+            	long startTime = Calendar.getInstance().getTimeInMillis();
+            	int cnt = stmt.executeUpdate(queryStr);
+            	session.addSqlTimer(Calendar.getInstance().getTimeInMillis() - startTime);
                 System.out.println(cnt + " entries: SQL query: " + queryStr);
                 //sLogger.info("{} entries: SQL querry: {}", cnt, queryStr);
                 return new Vector<T>(cnt);

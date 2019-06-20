@@ -270,7 +270,7 @@ public class LoginServlet extends HttpServlet
             {
                 vAccount = vAccountSession.logIn(session, vRegData.getUserId(), vRegData.getPassword());
                 session.setFwdNumber(vAccount.getFwdNumber());
-                AccountCache.getInstance().update(session.getConnection());
+                AccountCache.getInstance().update(session);
             }
         }
         catch (Exception e)

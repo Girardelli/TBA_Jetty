@@ -163,7 +163,7 @@ public class CustomerDispatchServlet extends HttpServlet
                 {
                     // String vRole = (String) req.getParameter(Constants.ACCOUNT_ROLE);
                     AccountSqlAdapter vAccountSession = new AccountSqlAdapter();
-                    AccountEntityData vAccount = vAccountSession.getRow(vSession.getConnection(), AccountCache.getInstance().get(vSession.getFwdNumber()).getId());
+                    AccountEntityData vAccount = vAccountSession.getRow(vSession, AccountCache.getInstance().get(vSession.getFwdNumber()).getId());
                     vAccount.setEmail(req.getParameter(Constants.ACCOUNT_EMAIL));
                     vAccount.setInvoiceEmail(req.getParameter(Constants.ACCOUNT_INVOICE_EMAIL));
                     vAccount.setGsm(req.getParameter(Constants.ACCOUNT_GSM));
@@ -209,8 +209,8 @@ public class CustomerDispatchServlet extends HttpServlet
                     vAccount.setNoEmptyMails(req.getParameter(Constants.ACCOUNT_NO_EMPTY_MAILS) != null);
                     vAccount.setTextMail(req.getParameter(Constants.ACCOUNT_TEXT_MAIL) != null);
                     vAccount.setIsMailInvoice(req.getParameter(Constants.ACCOUNT_IS_MAIL_INVOICE) != null);
-                    vAccountSession.updateRow(vSession.getConnection(), vAccount);
-                    AccountCache.getInstance().update(vSession.getConnection());
+                    vAccountSession.updateRow(vSession, vAccount);
+                    AccountCache.getInstance().update(vSession);
                     rd = sc.getRequestDispatcher(Constants.CLIENT_PREF_JSP);
                 }
 

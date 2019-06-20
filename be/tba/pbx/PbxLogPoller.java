@@ -34,7 +34,7 @@ public class PbxLogPoller
             // yves System.setProperty(Context.INITIAL_CONTEXT_FACTORY,
             // "com.mysql.jdbc.jdbc2.optional.MysqlDataSource");
             // create the cash without the container support
-            AccountCache.getInstance(Constants.MYSQL_URL);
+            AccountCache.getInstance();
             mLogWriter = new CallLogDbWriter();
         }
         return mLogWriter;

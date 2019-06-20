@@ -46,7 +46,7 @@ public class InvoiceFacade
         if (vInvoice != null)
         {
             vInvoice.setCustomerRef((String) req.getParameter(Constants.INVOICE_CUST_REF));
-            vInvoiceSession.updateRow(session.getConnection(), vInvoice);
+            vInvoiceSession.updateRow(session, vInvoice);
         }
     }
 
@@ -73,7 +73,7 @@ public class InvoiceFacade
             {
                 vInvoice.setIsPayed(false);
             }
-            vInvoiceSession.updateRow(session.getConnection(), vInvoice);
+            vInvoiceSession.updateRow(session, vInvoice);
         }
     }
 
@@ -125,13 +125,13 @@ public class InvoiceFacade
             while (vStrTok.hasMoreTokens())
             {
                 int key = Integer.parseInt(vStrTok.nextToken());
-                InvoiceEntityData data = vInvoiceSession.getRow(session.getConnection(), key);
+                InvoiceEntityData data = vInvoiceSession.getRow(session, key);
                 if (data != null && data.getCreditId() > 0)
                 {
                     //delete also the credit note
-                    vInvoiceSession.deleteRow(session.getConnection(), data.getCreditId());
+                    vInvoiceSession.deleteRow(session, data.getCreditId());
                 }
-                vInvoiceSession.deleteRow(session.getConnection(), key);
+                vInvoiceSession.deleteRow(session, key);
             }
         }
     }
@@ -222,7 +222,7 @@ public class InvoiceFacade
         newInvoice.setStructuredId(IBANCheckDigit.IBAN_CHECK_DIGIT.calculateOGM(newInvoice.getInvoiceNr()));
         newInvoice.setFileName(InvoiceHelper.makeFileName(newInvoice));
 
-        vInvoiceSession.addRow(session.getConnection(), newInvoice);
+        vInvoiceSession.addRow(session, newInvoice);
     }
 
 
@@ -260,7 +260,7 @@ public class InvoiceFacade
                 // clear the content of this invoice by setting stop = start time.
                 // NO!, this messes up the InvoiceHelper logic. This is solved over there
                 //vInvoiceData.setStopTime(vInvoiceData.getStartTime());
-                vInvoiceSession.updateRow(session.getConnection(), vInvoiceData);
+                vInvoiceSession.updateRow(session, vInvoiceData);
                 
                 AccountEntityData account = AccountCache.getInstance().get(vInvoiceData.getAccountFwdNr());
                 CustomerData customerData = new CustomerData();
