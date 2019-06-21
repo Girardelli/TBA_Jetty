@@ -82,6 +82,8 @@ final public class AccountCache
     public void update(WebSession session)
     {
     	mRawCollection = Collections.synchronizedCollection(mAccountAdapter.getAllRows(session));
+        converToHashMap(mRawCollection);
+        buildMailingGroups();
     }
 
     public void update()
@@ -91,7 +93,6 @@ final public class AccountCache
 		{
 			session = new WebSession();
 			update(session);
-	    	
 		} 
         catch (SQLException e)
         {
@@ -123,8 +124,6 @@ final public class AccountCache
             }
 
         }
-        converToHashMap(mRawCollection);
-        buildMailingGroups();
     }
 
     public AccountEntityData get(String fwdNumber)
@@ -180,7 +179,7 @@ final public class AccountCache
         mEmployeeLists.clear();
         Vector<String> vSuperCustomers = new Vector<String>();
         AccountEntityData vEntry = null;
-        int y =0;
+        //int y =0;
 
         for (Iterator<AccountEntityData> i = rawList.iterator(); i.hasNext();)
         {
