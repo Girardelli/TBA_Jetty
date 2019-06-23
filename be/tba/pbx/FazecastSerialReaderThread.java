@@ -96,10 +96,10 @@ public class FazecastSerialReaderThread extends Thread implements SerialPortData
         case SerialPort.LISTENING_EVENT_DATA_AVAILABLE:
         	
             byte[] newData = new byte[mSerialPort.bytesAvailable()];
-            mSerialPort.readBytes(newData, newData.length);
-            mReadStrBuf.append(newData.toString());
+            int i = mSerialPort.readBytes(newData, newData.length);
+            mReadStrBuf.append(new String(newData));
             
-            sLogger.info("RS232: " + newData.toString());
+            sLogger.info("RS232 {} received: {}", i , new String(newData));
         	
             int eol = 0;
             while ((eol = mReadStrBuf.indexOf(System.getProperty("line.separator"))) >= 0)
