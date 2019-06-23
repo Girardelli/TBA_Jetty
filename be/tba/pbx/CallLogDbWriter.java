@@ -7,7 +7,7 @@ import be.tba.ejb.pbx.session.CallRecordSqlAdapter;
 import be.tba.servlets.session.WebSession;
 import be.tba.util.constants.Constants;
 
-public final class CallLogDbWriter extends JsscSerial64ReaderThread
+public final class CallLogDbWriter extends FazecastSerialReaderThread
 {
     final static Logger sLogger = LoggerFactory.getLogger(CallLogDbWriter.class);
 

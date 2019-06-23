@@ -8,15 +8,11 @@ import java.util.Calendar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import jssc.SerialPort;
-import jssc.SerialPortException;
-import jssc.SerialPortList;
-import jssc.SerialPortEvent;
-import jssc.SerialPortEventListener; 
+import com.fazecast.jSerialComm.*;
 
-public class JsscSerial64ReaderThread extends Thread implements SerialPortEventListener
+public class FazecastSerialReaderThread extends Thread implements SerialPortDataListener
 {
-    final static Logger sLogger = LoggerFactory.getLogger(JsscSerial64ReaderThread.class);
+    final static Logger sLogger = LoggerFactory.getLogger(FazecastSerialReaderThread.class);
 
     // Event mask & SerialPortEventListener interface
 
@@ -43,7 +39,7 @@ public class JsscSerial64ReaderThread extends Thread implements SerialPortEventL
 
     private boolean mIsOpen = false;;
 
-    public JsscSerial64ReaderThread()
+    public FazecastSerialReaderThread()
     {
         // super("myCallLogThread");
         mByteBuffer = new byte[2048]; // call record is expected to be 148
@@ -54,94 +50,81 @@ public class JsscSerial64ReaderThread extends Thread implements SerialPortEventL
 
     public void run()
     {
-        sLogger.info("jsscSerial64ReaderThread.run()");
+        sLogger.info("FazecastSerialReaderThread.run()");
         sLogger.info("Find available serial port names:");
 
-        String[] portNames = SerialPortList.getPortNames();
-        for (int i = 0; i < portNames.length; i++)
+        SerialPort[] ports = SerialPort.getCommPorts();
+        for (int i = 0; i < ports.length; i++)
         {
-            sLogger.info("Port name {}: {}", i, portNames[i]);
+            sLogger.info("Port name {}: {}", i, ports[i].getDescriptivePortName());
         }
-        if (portNames.length == 0)
+        if (ports.length == 0)
         {
             sLogger.error("No ports found");
             return;
         }
 
-        try
-        {
-            mSerialPort = new SerialPort(portNames[0]);
+//        try
+//        {
+            mSerialPort = ports[0];
+            mSerialPort.setComPortParameters(9600, 8, SerialPort.ONE_STOP_BIT, SerialPort.NO_PARITY);// Set params.
             mSerialPort.openPort();// Open serial port
             mIsOpen = true;
-            mSerialPort.setParams(9600, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);// Set
-                                                                                                              // params.
-
-            mSerialPort.addEventListener(this);
-            sLogger.info("jsscSerial64ReaderThread listenig for events on {}", portNames[0]);
-
-        }
-        catch (SerialPortException ex)
-        {
-            sLogger.error("Cannot open port", ex);
-        }
+            
+            mSerialPort.addDataListener(this);
+            
+//        catch (SerialPortException ex)
+//        {
+//            sLogger.error("Cannot open port", ex);
+//        }
     }
+
+	@Override
+	public int getListeningEvents() 
+	{
+		// TODO Auto-generated method stub
+		return SerialPort.LISTENING_EVENT_DATA_AVAILABLE;
+	}
 
     public void serialEvent(SerialPortEvent event)
     {
         switch (event.getEventType())
         {
-        case SerialPortEvent.CTS:
-        case SerialPortEvent.DSR:
-        case SerialPortEvent.ERR:
-        case SerialPortEvent.RING:
-        case SerialPortEvent.RLSD:
-        case SerialPortEvent.RXFLAG:
-        case SerialPortEvent.TXEMPTY:
-            break;
+        case SerialPort.LISTENING_EVENT_DATA_RECEIVED:
+        case SerialPort.LISTENING_EVENT_DATA_WRITTEN:
+           break;
 
-        case SerialPortEvent.RXCHAR:
-            try
+        case SerialPort.LISTENING_EVENT_DATA_AVAILABLE:
+        	
+            byte[] newData = new byte[mSerialPort.bytesAvailable()];
+            mSerialPort.readBytes(newData, newData.length);
+            mReadStrBuf.append(newData.toString());
+        	
+            int eol = 0;
+            while ((eol = mReadStrBuf.indexOf(System.getProperty("line.separator"))) >= 0)
             {
-                if (event.getEventValue() > 0)
-                {// Check bytes count in the input buffer
-                 // Read data, if 10 bytes available
-                    String newBytes = mSerialPort.readString(event.getEventValue());
-                    // sLogger.debug("received:{}", newBytes);
-                    mReadStrBuf.append(newBytes);
-
-                    int eol = 0;
-                    while ((eol = mReadStrBuf.indexOf(System.getProperty("line.separator"))) >= 0)
-                    {
-                        eol += 2;
-                        String newCallStr = mReadStrBuf.substring(0, eol);
-                        Forum700CallRecord record = new Forum700CallRecord(newCallStr);
-                        if (record.isValid())
-                        {
-                            // record.printRecord();
-                            printToFile(record.getFileRecord());
-                            writeToDb(record);
-                        }
-                        else
-                        {
-                            sLogger.info("Invalid record");
-                        }
-                        if (mReadStrBuf.length() == ++eol)
-                        {
-                            mReadStrBuf = new StringBuffer();
-                            break;
-                        }
-                        else
-                        {
-                            mReadStrBuf.delete(0, eol);
-                        }
-                    }
-
+                eol += 2;
+                String newCallStr = mReadStrBuf.substring(0, eol);
+                Forum700CallRecord record = new Forum700CallRecord(newCallStr);
+                if (record.isValid())
+                {
+                    // record.printRecord();
+                    printToFile(record.getFileRecord());
+                    writeToDb(record);
                 }
-            }
-            catch (Exception e)
-            {
-                sLogger.error("Cannot process event", e);
-                return;
+                else
+                {
+                    sLogger.info("Invalid record");
+                }
+                if (mReadStrBuf.length() == ++eol)
+                {
+                    mReadStrBuf = new StringBuffer();
+                    break;
+                }
+                else
+                {
+                    mReadStrBuf.delete(0, eol);
+                }
             }
             break;
         }
@@ -149,17 +132,10 @@ public class JsscSerial64ReaderThread extends Thread implements SerialPortEventL
 
     public void destroy()
     {
-        try
-        {
-            mSerialPort.removeEventListener();
-            mSerialPort.closePort();
-            mIsOpen = false;
-            sLogger.info("CallLogThread destroyed!!");
-        }
-        catch (SerialPortException ex)
-        {
-            sLogger.error("Destroy failed", ex);
-        }
+        mSerialPort.removeDataListener();
+        mSerialPort.closePort();
+        mIsOpen = false;
+        sLogger.info("CallLogThread destroyed!!");
     }
 
     public String getFileDir()
