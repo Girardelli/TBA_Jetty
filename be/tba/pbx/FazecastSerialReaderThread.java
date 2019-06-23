@@ -69,7 +69,6 @@ public class FazecastSerialReaderThread extends Thread implements SerialPortData
             sLogger.error("No ports found");
             return;
         }
-        mSerialPort = ports[0];
         mSerialPort.setComPortParameters(9600, 8, SerialPort.ONE_STOP_BIT, SerialPort.NO_PARITY);// Set params.
         mSerialPort.openPort();// Open serial port
         mIsOpen = true;
