@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,16 +91,20 @@ public class FazecastSerialReaderThread extends Thread implements SerialPortData
         {
         case SerialPort.LISTENING_EVENT_DATA_RECEIVED:
         case SerialPort.LISTENING_EVENT_DATA_WRITTEN:
-           sLogger.info("RS232: event received " + event.getEventType());
+           //sLogger.info("RS232: event received " + event.getEventType());
            break;
 
         case SerialPort.LISTENING_EVENT_DATA_AVAILABLE:
-        	
+        	try
+        	{
+        	    Thread.sleep(800);
+        	}
+        	catch(InterruptedException ex)	{  }        	
             byte[] newData = new byte[mSerialPort.bytesAvailable()];
             int i = mSerialPort.readBytes(newData, newData.length);
             mReadStrBuf.append(new String(newData));
             
-            sLogger.info("RS232 {} received: {}", i , new String(newData));
+            //sLogger.info("RS232 {} received: {}", i , new String(newData));
         	
             int eol = 0;
             while ((eol = mReadStrBuf.indexOf(System.getProperty("line.separator"))) >= 0)
