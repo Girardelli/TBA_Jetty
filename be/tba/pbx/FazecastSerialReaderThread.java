@@ -29,7 +29,7 @@ public class FazecastSerialReaderThread extends Thread implements SerialPortData
 
     private static String mFileScope = ""; // month, week, day
 
-    private SerialPort mSerialPort;
+    private SerialPort mSerialPort = null;
 
     private byte[] mByteBuffer;
 
@@ -57,26 +57,25 @@ public class FazecastSerialReaderThread extends Thread implements SerialPortData
         for (int i = 0; i < ports.length; i++)
         {
             sLogger.info("Port name {}: {}", i, ports[i].getDescriptivePortName());
+            if (ports[i].getDescriptivePortName().indexOf("COM1") != -1)
+            {
+            	// this is the one
+            	mSerialPort = ports[i];
+            	sLogger.info("COM1 found!");
+            }
         }
-        if (ports.length == 0)
+        if (ports.length == 0 || mSerialPort == null)
         {
             sLogger.error("No ports found");
             return;
         }
-
-//        try
-//        {
-            mSerialPort = ports[0];
-            mSerialPort.setComPortParameters(9600, 8, SerialPort.ONE_STOP_BIT, SerialPort.NO_PARITY);// Set params.
-            mSerialPort.openPort();// Open serial port
-            mIsOpen = true;
-            
-            mSerialPort.addDataListener(this);
-            
-//        catch (SerialPortException ex)
-//        {
-//            sLogger.error("Cannot open port", ex);
-//        }
+        mSerialPort = ports[0];
+        mSerialPort.setComPortParameters(9600, 8, SerialPort.ONE_STOP_BIT, SerialPort.NO_PARITY);// Set params.
+        mSerialPort.openPort();// Open serial port
+        mIsOpen = true;
+        
+        mSerialPort.addDataListener(this);
+        sLogger.error("Listening...");
     }
 
 	@Override
@@ -92,6 +91,7 @@ public class FazecastSerialReaderThread extends Thread implements SerialPortData
         {
         case SerialPort.LISTENING_EVENT_DATA_RECEIVED:
         case SerialPort.LISTENING_EVENT_DATA_WRITTEN:
+           sLogger.info("RS232: event received " + event.getEventType());
            break;
 
         case SerialPort.LISTENING_EVENT_DATA_AVAILABLE:
