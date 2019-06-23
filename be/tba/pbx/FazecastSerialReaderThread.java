@@ -99,6 +99,8 @@ public class FazecastSerialReaderThread extends Thread implements SerialPortData
             byte[] newData = new byte[mSerialPort.bytesAvailable()];
             mSerialPort.readBytes(newData, newData.length);
             mReadStrBuf.append(newData.toString());
+            
+            sLogger.info("RS232: " + newData.toString());
         	
             int eol = 0;
             while ((eol = mReadStrBuf.indexOf(System.getProperty("line.separator"))) >= 0)
