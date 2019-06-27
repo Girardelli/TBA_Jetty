@@ -168,7 +168,14 @@ out.println("</td>");
             <tr>
 			<td>
 		        <input class="tbabutton" type=submit name=action value="Refresh" onclick="filterCalls()">
+<%
+if (!vSession.getUserId().equals("MarieJH")) 
+{
+%>				
 				<input class="tbabutton" type=submit name=action value="Verwijderen" onclick="deleteCalls()"> 
+<% 
+}
+%>				
 				<input class="tbabutton" type=submit name=action value="Toevoegen" onclick="addRecord()"> 
 				<input class="tbabutton" type=submit name=action value="verzend mail"	onclick="testMail()">
                 <input class="tbabutton" type=submit name=action value="naar nieuwe oproepen"   onclick="toNewCalls()">

@@ -37,7 +37,7 @@ CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
 Collection<CallRecordEntityData> vRecords = vQuerySession.getxDaysBack(vSession, 0, null);
 %>
 <body>
-<p><span class="admintitle"> Nieuwe oproepen</span></p>
+<p><span class="admintitle"> Oproepenlijst: <%=vRecords.size()%> oproepen </span></p>
 <form name="calllistform" method="POST"	action="/tba/AdminDispatch">
 	<input type=hidden name=<%=Constants.RECORD_ID%> value=""> 
     <input type=hidden name=<%=Constants.RECORD_SHORT_TEXT%> value=""> 
@@ -61,7 +61,14 @@ Collection<CallRecordEntityData> vRecords = vQuerySession.getxDaysBack(vSession,
 		        <input class="tbabutton" type=submit name=action value="Oproep" onclick="newCall()">
 		        &nbsp;&nbsp;&nbsp;&nbsp;
 		        <input class="tbabutton" type=submit name=action value="Refresh" onclick="filterCalls()">
-				<input class="tbabutton" type=submit name=action value="Verwijderen" onclick="deleteCalls()"> 
+<%
+if (!vSession.getUserId().equals("MarieJH")) 
+{
+%>              
+                <input class="tbabutton" type=submit name=action value="Verwijderen" onclick="deleteCalls()"> 
+<% 
+}
+%>
 				<input class="tbabutton" type=submit name=action value="Toevoegen" onclick="addRecord()"> 
             </td>
             </tr>
