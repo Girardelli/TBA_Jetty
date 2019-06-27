@@ -613,7 +613,7 @@ public class CallRecordEntityData extends AbstractData
 
     static public String toSqlDeleteString(int key)
     {
-        return "DELETE FROM `callrecordentity` WHERE Id=" + key;
+        return "DELETE FROM `callrecordentity` WHERE Id=" + key +  "\r\n";
     }
 
     static public String toSqlUpdateString(CallRecordEntityData rec)
@@ -633,7 +633,7 @@ public class CallRecordEntityData extends AbstractData
      */
     static public String toSqlInsertString(CallRecordEntityData rec)
     {
-        return "INSERT INTO `callrecordentity` VALUES( " + rec.toValueString() + ")";
+        return "INSERT INTO `callrecordentity` VALUES( " + rec.toValueString() + ")\r\n";
     }
 
 }

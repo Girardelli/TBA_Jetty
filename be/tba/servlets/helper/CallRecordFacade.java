@@ -213,7 +213,7 @@ public class CallRecordFacade
                 if (!record.getIsDocumented() || session.getRole() == AccountRole.ADMIN)
                 {
                     vQuerySession.deleteRow(session, key);
-                    printCallDelete(key);
+                    printCallDelete(session, key);
                 }
             }
         }
@@ -346,13 +346,15 @@ public class CallRecordFacade
         webSession.setRecordId(null);
     }
 
-    private static void printCallDelete(int key)
+    private static void printCallDelete(WebSession session, int key)
     {
+    	Calendar calendar = Calendar.getInstance();
+
         lock.lock();
         try
         {
-            FileOutputStream logStream = getCallLogFileStream();
-            logStream.write(CallRecordEntityData.toSqlDeleteString(key).getBytes());
+            FileOutputStream logStream = getCallLogFileStream(calendar);
+            logStream.write((calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + " " + session.getUserId() + ": " + CallRecordEntityData.toSqlDeleteString(key)).getBytes());
         }
         catch (Exception e)
         {
@@ -386,11 +388,13 @@ public class CallRecordFacade
 
     private static void printCallInsert(WebSession session, CallRecordEntityData record)
     {
+    	Calendar calendar = Calendar.getInstance();
+
         lock.lock();
         try
         {
-            FileOutputStream logStream = getCallLogFileStream();
-            logStream.write(CallRecordEntityData.toSqlInsertString(record).getBytes());
+            FileOutputStream logStream = getCallLogFileStream(calendar);
+            logStream.write((calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + " " +  session.getUserId() + ": " + CallRecordEntityData.toSqlInsertString(record)).getBytes());
         }
         catch (Exception e)
         {
@@ -403,10 +407,8 @@ public class CallRecordFacade
         }
     }
 
-    private static FileOutputStream getCallLogFileStream() throws IOException
+    private static FileOutputStream getCallLogFileStream(Calendar calendar) throws IOException
     {
-        Calendar calendar = Calendar.getInstance();
-
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH) + 1;
         int day = calendar.get(Calendar.DAY_OF_MONTH);
