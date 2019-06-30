@@ -4,3 +4,5 @@
 /MailNowTask.class
 /MailTimerTask.class
 /TimerManager.class
+/TimerTaskIntf.class
+/UrlCheckTimerTask.class

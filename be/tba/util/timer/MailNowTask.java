@@ -9,7 +9,7 @@ import be.tba.ejb.mail.session.MailerSessionBean;
 import be.tba.servlets.session.WebSession;
 import be.tba.util.session.AccountCache;
 
-final public class MailNowTask
+final public class MailNowTask 
 {
     static public void send(String account)
     {

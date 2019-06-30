@@ -4,11 +4,14 @@
  */
 package be.tba.util.timer;
 
+import java.util.Collection;
+import java.util.Date;
 import java.util.Timer;
+import java.util.Vector;
 
 final public class TimerManager
 {
-    private final Timer mTimer;
+    private final Collection<TimerTaskIntf> mTimerList;
 
     private static TimerManager mInstance;
 
@@ -21,11 +24,21 @@ final public class TimerManager
 
     private TimerManager()
     {
-        mTimer = new Timer();
-        mTimer.scheduleAtFixedRate(new DbCleanTimerTask(), DbCleanTimerTask.getScheduleTime(), DbCleanTimerTask.getPeriod());
-        System.out.println("TimerManager() DbCleaner started.");
-
-        mTimer.schedule(new MailTimerTask(), 0, MailTimerTask.getPeriod());
-        System.out.println("TimerManager() MailTimerTask started.");
+    	mTimerList = new Vector<TimerTaskIntf>();
+    }
+    
+    public void add(TimerTaskIntf task)
+    {
+    	Timer taskTimer = new Timer();
+    	
+    	Date startTime = task.getStartTime();
+    	if (startTime == null)
+    	{
+    		startTime = new Date();
+    	}
+    	
+    	taskTimer.schedule(task.getTimerTask(), startTime, task.getPeriod());
+        System.out.println("TimerManager() added: " + task.getClass().getName());
+    	mTimerList.add(task);
     }
 }

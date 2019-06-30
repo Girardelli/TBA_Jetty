@@ -6,6 +6,7 @@ package be.tba.util.timer;
 
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.TimerTask;
@@ -16,16 +17,31 @@ import be.tba.util.constants.Constants;
 import be.tba.util.session.AccountCache;
 import be.tba.util.session.MailError;
 
-final public class MailTimerTask extends TimerTask
+final public class MailTimerTask extends TimerTask implements TimerTaskIntf
 {
     public MailTimerTask()
     {
     }
 
-    static public long getPeriod()
-    {
-        return Constants.MINUTES * 3;
-    }
+ 	@Override
+	public Date getStartTime() {
+		// TODO Auto-generated method stub
+ 		GregorianCalendar vCalendar = new GregorianCalendar();
+ 		return vCalendar.getTime();
+	}
+
+	@Override
+	public long getPeriod() {
+		// TODO Auto-generated method stub
+		return Constants.MINUTES * 5;
+	}
+
+	@Override
+	public TimerTask getTimerTask() {
+		// TODO Auto-generated method stub
+		return this;
+	}
+
 
     public void run()
     {
@@ -45,7 +61,7 @@ final public class MailTimerTask extends TimerTask
             try
             {
                 session = new WebSession();
-                Integer vKey = new Integer(vCalendar.get(Calendar.HOUR_OF_DAY) * 60 + vCalendar.get(Calendar.MINUTE));
+                Integer vKey = Integer.valueOf(vCalendar.get(Calendar.HOUR_OF_DAY) * 60 + vCalendar.get(Calendar.MINUTE));
 
                 Collection<AccountEntityData> mailGroup = AccountCache.getInstance().getMailingGroup(vKey);
                 if (mailGroup != null)
@@ -98,5 +114,4 @@ final public class MailTimerTask extends TimerTask
         return vCalendar.getTime().toString();
 
     }
-
 }

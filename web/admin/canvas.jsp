@@ -19,7 +19,8 @@ be.tba.util.exceptions.AccessDeniedException,
 be.tba.util.exceptions.InvalidValueException,
 be.tba.servlets.session.SessionManager,
 be.tba.util.session.AccountCache,
-be.tba.util.session.MailError"%>
+be.tba.util.session.MailError,
+be.tba.util.timer.UrlCheckTimerTask"%>
 
 <%!
 private StringBuilder allEntryIds;
@@ -37,7 +38,7 @@ CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
 Collection<CallRecordEntityData> vRecords = vQuerySession.getxDaysBack(vSession, 0, null);
 %>
 <body>
-<p><span class="admintitle"> Oproepenlijst: <%=vRecords.size()%> oproepen </span></p>
+
 <form name="calllistform" method="POST"	action="/tba/AdminDispatch">
 	<input type=hidden name=<%=Constants.RECORD_ID%> value=""> 
     <input type=hidden name=<%=Constants.RECORD_SHORT_TEXT%> value=""> 
@@ -51,6 +52,15 @@ Collection<CallRecordEntityData> vRecords = vQuerySession.getxDaysBack(vSession,
 		<!-- account list -->
 		<td valign="top" bgcolor="FFFFFF">
 			
+<%
+if (!UrlCheckTimerTask.getIsWebsiteUp())
+{
+%>
+    <br><p><span class="mtbtitle"> Telenet of website ligt plat!!</span></p>
+<%
+}
+%>
+<p><span class="admintitle"> Oproepenlijst: <%=vRecords.size()%> oproepen </span></p>
 	
 	<table  cellspacing='20' cellpadding='0' border='0' bgcolor="FFFFFF">
 	<tr>

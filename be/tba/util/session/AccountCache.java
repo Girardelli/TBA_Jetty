@@ -413,7 +413,7 @@ final public class AccountCache
             AccountEntityData vEntry = (AccountEntityData) i.next();
             if (vEntry.getMailHour1() > 0 && vEntry.getMailHour1() <= Constants.MAX_MAIL_HOUR)
             {
-                Integer vKey = new Integer(vEntry.getMailHour1() * 60 + vEntry.getMailMinutes1());
+                Integer vKey = Integer.valueOf(vEntry.getMailHour1() * 60 + vEntry.getMailMinutes1());
                 Collection<AccountEntityData> vMailGroup = mMailingGroups.get(vKey);
                 if (vMailGroup == null)
                 {
@@ -424,7 +424,7 @@ final public class AccountCache
             }
             if (vEntry.getMailHour2() > 0 && vEntry.getMailHour2() <= Constants.MAX_MAIL_HOUR)
             {
-                Integer vKey = new Integer(vEntry.getMailHour2() * 60 + vEntry.getMailMinutes2());
+                Integer vKey = Integer.valueOf(vEntry.getMailHour2() * 60 + vEntry.getMailMinutes2());
                 Collection<AccountEntityData> vMailGroup = mMailingGroups.get(vKey);
                 if (vMailGroup == null)
                 {
@@ -435,7 +435,7 @@ final public class AccountCache
             }
             if (vEntry.getMailHour3() > 0 && vEntry.getMailHour3() <= Constants.MAX_MAIL_HOUR)
             {
-                Integer vKey = new Integer(vEntry.getMailHour3() * 60 + vEntry.getMailMinutes3());
+                Integer vKey = Integer.valueOf(vEntry.getMailHour3() * 60 + vEntry.getMailMinutes3());
                 Collection<AccountEntityData> vMailGroup = mMailingGroups.get(vKey);
                 if (vMailGroup == null)
                 {

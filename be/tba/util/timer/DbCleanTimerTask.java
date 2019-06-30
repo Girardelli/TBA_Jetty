@@ -9,14 +9,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.TimerTask;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import be.tba.ejb.pbx.session.CallRecordSqlAdapter;
 import be.tba.servlets.session.WebSession;
 import be.tba.util.constants.Constants;
 
-final public class DbCleanTimerTask extends TimerTask
+final public class DbCleanTimerTask extends TimerTask implements TimerTaskIntf
 {
     // private static final int kCleanPerSession = 50;
 
@@ -24,7 +22,7 @@ final public class DbCleanTimerTask extends TimerTask
     {
     }
 
-    static public Date getScheduleTime()
+    public Date getStartTime()
     {
         GregorianCalendar vCalendar = new GregorianCalendar();
         vCalendar.set(Calendar.HOUR_OF_DAY, 3);
@@ -37,11 +35,19 @@ final public class DbCleanTimerTask extends TimerTask
         return vCalendar.getTime();
     }
 
-    static public long getPeriod()
-    {
-        return Constants.DAYS;
-        // return Constants.MINUTES * 2;
-    }
+	@Override
+	public TimerTask getTimerTask() {
+		// TODO Auto-generated method stub
+		return this;
+	}
+
+
+	@Override
+	public long getPeriod() 
+	{
+		// TODO Auto-generated method stub
+		return Constants.DAYS;
+	}
 
     public void run()
     {
@@ -95,5 +101,4 @@ final public class DbCleanTimerTask extends TimerTask
             }
         }
     }
-
 }
