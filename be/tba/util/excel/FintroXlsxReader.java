@@ -13,6 +13,7 @@ import java.util.Collection;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
+import org.apache.poi.openxml4j.opc.PackageAccess;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -84,7 +85,7 @@ final public class FintroXlsxReader
             mInvoiceSession = new InvoiceSqlAdapter();
             
          // XSSFWorkbook, File
-            pkg = OPCPackage.open(mInputFile);
+            pkg = OPCPackage.open(mInputFile, PackageAccess.READ);
             wb = new XSSFWorkbook(pkg);
             Sheet sheet = wb.getSheetAt(0);
             //for (int i = 1; i < 10; ++i)
