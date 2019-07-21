@@ -116,8 +116,9 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
             }
             fwdNrSqlsequence = fwdNrSqlsequence + ")";
             DecimalFormat vCostFormatter = new DecimalFormat("#0.000");
-            double rangeLow = Double.parseDouble(vCostFormatter.format(inclBtwCost /1.21 - 0.015));
-            double rangeHigh = Double.parseDouble(vCostFormatter.format(inclBtwCost /1.21 + 0.015));
+            // ugly way to force for '.' decimal separator. But Java is realy persistent on using dodgy OS settings that are hard control.
+            double rangeLow = Double.parseDouble(vCostFormatter.format(inclBtwCost /1.21 - 0.015).replace(',', '.'));
+            double rangeHigh = Double.parseDouble(vCostFormatter.format(inclBtwCost /1.21 + 0.015).replace(',', '.'));
             return executeSqlQuery(webSession, "SELECT * FROM InvoiceEntity WHERE IsInvoiceMailed=TRUE AND CreditId=-1 AND TotalCost BETWEEN " + rangeLow + " AND " + rangeHigh + " AND AccountFwdNr " + fwdNrSqlsequence); 
         }
         else

@@ -56,7 +56,7 @@ Collection<CallRecordEntityData> vRecords = vQuerySession.getxDaysBack(vSession,
 if (!UrlCheckTimerTask.getIsWebsiteUp())
 {
 %>
-    <br><p><span class="mtbtitle"> Telenet of website ligt plat!!</span></p>
+    <br><p><span class="mtbtitle"> Telenet ligt plat!! Klanten kunnen niet aan de website.</span></p>
 <%
 }
 %>

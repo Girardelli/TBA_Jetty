@@ -38,7 +38,6 @@ public class CustomerDispatchServlet extends HttpServlet
         RequestDispatcher rd = null;
         try
         {
-            res.setCharacterEncoding("UTF-8");
             req.setCharacterEncoding("UTF-8");
             res.setContentType("text/html");
             String vAction = (String) req.getParameter(Constants.SRV_ACTION);
