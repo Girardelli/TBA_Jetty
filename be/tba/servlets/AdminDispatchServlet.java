@@ -121,6 +121,7 @@ public class AdminDispatchServlet extends HttpServlet
                 {
                 case Constants.FIX_ACCOUNT_IDS:
                 {
+                	/*
                 	//Set<Integer> vTaskList = new HashSet<Integer>();
                     
                 	//**********************************
@@ -215,7 +216,7 @@ public class AdminDispatchServlet extends HttpServlet
                             }
 
                         }
-                    }
+                    }*/
                     break;
                 }
                 
