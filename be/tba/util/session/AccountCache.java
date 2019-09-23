@@ -1,10 +1,9 @@
-/*mRawCollection =
+/*mRawUnarchivedCollection =
  * TheBusinessAssistant b.v.b.a
  *
  */
 package be.tba.util.session;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Collections;
@@ -19,6 +18,8 @@ import java.util.Vector;
 
 import be.tba.ejb.account.interfaces.AccountEntityData;
 import be.tba.ejb.account.session.AccountSqlAdapter;
+import be.tba.ejb.invoice.interfaces.InvoiceEntityData;
+import be.tba.ejb.pbx.interfaces.CallRecordEntityData;
 import be.tba.servlets.session.WebSession;
 import be.tba.util.constants.AccountRole;
 import be.tba.util.constants.Constants;
@@ -28,14 +29,16 @@ final public class AccountCache
 {
     private AccountSqlAdapter mAccountAdapter = new AccountSqlAdapter();
     private Map<String, AccountEntityData> mFwdKeyList;
-    private Collection<AccountEntityData> mRawCollection;
+    private Map<Integer, AccountEntityData> mIdKeyList;
+    private Collection<AccountEntityData> mRawUnarchivedCollection;
     //private SortedMap<String, AccountEntityData> mNameSortedList; // without9000, 9001
     private SortedSet<AccountEntityData> mNameSortedList; // without9000, 9001
     private SortedSet<AccountEntityData> mNameSortedFullList;
-    private Map<String, Collection<AccountEntityData>> mSubCustomersLists;
+    private SortedSet<AccountEntityData> mCallCustomerSortedList;
+    private Map<Integer, Collection<AccountEntityData>> mSubCustomersLists;
     private Map<String, AccountEntityData> mEmployeeLists;
     private Map<Integer, Collection<AccountEntityData>> mMailingGroups;
-    private Map<String, Collection<String>> mAccountNr2FwdNrsMap;
+    private Map<String, Collection<Integer>> mBankAccountNr2AccountIdsMap;
     private int mLastMailTime = 0;
 
     /*
@@ -68,21 +71,24 @@ final public class AccountCache
 
     private AccountCache()
     {
-        mNameSortedList = Collections.synchronizedSortedSet(new TreeSet<AccountEntityData>());
+    	mRawUnarchivedCollection = new Vector<AccountEntityData>();
+    	mNameSortedList = Collections.synchronizedSortedSet(new TreeSet<AccountEntityData>());
         mNameSortedFullList = Collections.synchronizedSortedSet(new TreeSet<AccountEntityData>());
         mFwdKeyList = new HashMap<String, AccountEntityData>();
-        mSubCustomersLists = new HashMap<String, Collection<AccountEntityData>>();
+        mIdKeyList = new HashMap<Integer, AccountEntityData>();
+        mCallCustomerSortedList = Collections.synchronizedSortedSet(new TreeSet<AccountEntityData>());
+        mSubCustomersLists = new HashMap<Integer, Collection<AccountEntityData>>();
         mEmployeeLists = new HashMap<String, AccountEntityData>();
         mMailingGroups = new HashMap<Integer, Collection<AccountEntityData>>();
-        mAccountNr2FwdNrsMap = new HashMap<String, Collection<String>>();
+        mBankAccountNr2AccountIdsMap = new HashMap<String, Collection<Integer>>();
         mLastMailTime = 0;
 
     }
     
     public void update(WebSession session)
     {
-    	mRawCollection = Collections.synchronizedCollection(mAccountAdapter.getAllRows(session));
-        converToHashMap(mRawCollection);
+    	Collection<AccountEntityData> fullList = Collections.synchronizedCollection(mAccountAdapter.getAllRows(session));
+        converToHashMap(fullList);
         buildMailingGroups();
     }
 
@@ -126,6 +132,37 @@ final public class AccountCache
         }
     }
 
+    // this function must be removed in herfst van 2020 wanneer alle records een accountId zullen hebben.
+    // dan moet overal de get(int) function worden gebruikt.
+    public AccountEntityData get(CallRecordEntityData record)
+    {
+        if (record.getAccountId() > 0) // yves: to be changed in .getId() only in de herfst van 2020
+        {
+      	  return get(record.getAccountId());
+        }
+        else
+        {
+      	  return get(record.getFwdNr());
+        }
+    }
+    
+    public AccountEntityData get(InvoiceEntityData invoice)
+    {
+        if (invoice.getAccountID() > 0) // yves: to be changed in .getId() only in de herfst van 2020
+        {
+      	  return get(invoice.getAccountID());
+        }
+        else
+        {
+      	  return get(invoice.getAccountFwdNr());
+        }
+    }
+    
+    public AccountEntityData get(int id)
+    {
+    	return mIdKeyList.get(Integer.valueOf(id));
+    }
+
     public AccountEntityData get(String fwdNumber)
     {
         return (AccountEntityData) mFwdKeyList.get(fwdNumber);
@@ -136,12 +173,12 @@ final public class AccountCache
         return mEmployeeLists.values();
     }
 
-    public Collection<AccountEntityData> getSubCustomersList(String superCustomer)
+    public Collection<AccountEntityData> getSubCustomersList(int superCustomerId)
     {
-        return mSubCustomersLists.get(superCustomer);
+        return mSubCustomersLists.get(superCustomerId);
     }
 
-    public Collection<String> getSuperCustomersList()
+    public Collection<Integer> getSuperCustomersList()
     {
         return mSubCustomersLists.keySet();
     }
@@ -150,7 +187,7 @@ final public class AccountCache
     {
         return mNameSortedList;
     }
-
+    
     public Collection<AccountEntityData> getInvoiceCustomerList()
     {
         Vector<AccountEntityData> vInvoiceCustomers = new Vector<AccountEntityData>();
@@ -170,10 +207,23 @@ final public class AccountCache
         return mNameSortedList;
     }
 
+    public Collection<AccountEntityData> getCallCustomerList()
+    {
+        return mCallCustomerSortedList;
+    }
+
+    public Collection<Integer> getAllIds()
+    {
+    	return mIdKeyList.keySet();
+    }
+    
     private void converToHashMap(Collection<AccountEntityData> rawList)
     {
-        mNameSortedList.clear();
+    	mRawUnarchivedCollection.clear();
+    	mCallCustomerSortedList.clear();
+    	mNameSortedList.clear();
         mFwdKeyList.clear();
+        mIdKeyList.clear();
         mNameSortedFullList.clear();
         mSubCustomersLists.clear();
         mEmployeeLists.clear();
@@ -185,90 +235,109 @@ final public class AccountCache
         {
             vEntry = i.next();
             //System.out.println("check " + y++ + ": " +  vEntry.getFwdNumber());
-            
-            if (vEntry.getRole().equals(AccountRole._vCustomer) || vEntry.getRole().equals(AccountRole._vSubCustomer))
+            mIdKeyList.put(Integer.valueOf(vEntry.getId()), vEntry);
+            if (!vEntry.getIsArchived())
             {
-                // vMap.put(vEntry.getFwdNumber(), vEntry);
-            	boolean out = mNameSortedList.add(vEntry);
-            	//System.out.println("add to mNameSortedList: " +  vEntry.getFwdNumber() + (out ? " Pass" :  " Failed"));
-                mFwdKeyList.put(vEntry.getFwdNumber(), vEntry);
-                mNameSortedFullList.add(vEntry);
-                if (vEntry.getHasSubCustomers())
+            	mRawUnarchivedCollection.add(vEntry);
+                if (vEntry.getRole().equals(AccountRole._vCustomer) || vEntry.getRole().equals(AccountRole._vSubCustomer))
                 {
-                    Collection<AccountEntityData> vSubCustomerList = mSubCustomersLists.get(vEntry.getFwdNumber());
-                    if (vSubCustomerList == null)
+                    if (vEntry.getFwdNumber().matches("[0-9]+"))
                     {
-                        vSubCustomerList = new Vector<AccountEntityData>();
-                        mSubCustomersLists.put(vEntry.getFwdNumber(), vSubCustomerList);
-                        // System.out.println("added sub klanten lijst voor " + vEntry.getFullName() +
-                        // ". Super klanten lijst lengte=" + mSubCustomersLists.size());
+                    	mCallCustomerSortedList.add(vEntry);
                     }
-                }
+                	
+                	// vMap.put(vEntry.getFwdNumber(), vEntry);
+                	mNameSortedList.add(vEntry);
+                	//System.out.println("add to mNameSortedList: " +  vEntry.getFwdNumber() + (out ? " Pass" :  " Failed"));
+                	mFwdKeyList.put(vEntry.getFwdNumber(), vEntry);
+                    mNameSortedFullList.add(vEntry);
+                    if (vEntry.getHasSubCustomers())
+                    {
+                        Collection<AccountEntityData> vSubCustomerList = mSubCustomersLists.get(vEntry.getId());
+                        if (vSubCustomerList == null)
+                        {
+                            vSubCustomerList = new Vector<AccountEntityData>();
+                            mSubCustomersLists.put(vEntry.getId(), vSubCustomerList);
+                            // System.out.println("added sub klanten lijst voor " + vEntry.getFullName() +
+                            // ". Super klanten lijst lengte=" + mSubCustomersLists.size());
+                        }
+                    }
 
-                if (vEntry.getRole().equals(AccountRole._vSubCustomer) && vEntry.getSuperCustomer().length() > 0)
-                {
-                    // add to mSubCustomersLists
-                    Collection<AccountEntityData> vSubCustomerList = mSubCustomersLists.get(vEntry.getSuperCustomer());
-                    if (vSubCustomerList == null)
+                    if (vEntry.getRole().equals(AccountRole._vSubCustomer) && vEntry.getSuperCustomer().length() > 0)
                     {
-                        vSubCustomerList = new Vector<AccountEntityData>();
-                        mSubCustomersLists.put(vEntry.getSuperCustomer(), vSubCustomerList);
-                        vSuperCustomers.add(vEntry.getSuperCustomer());
-                        // System.out.println("created new super customer " +
-                        // vEntry.getSuperCustomer());
+                        // add to mSubCustomersLists
+                        Collection<AccountEntityData> vSubCustomerList = mSubCustomersLists.get(vEntry.getSuperCustomerId());
+                        if (vSubCustomerList == null)
+                        {
+                            vSubCustomerList = new Vector<AccountEntityData>();
+                            mSubCustomersLists.put(vEntry.getSuperCustomerId(), vSubCustomerList);
+                            vSuperCustomers.add(vEntry.getSuperCustomer());
+                            // System.out.println("created new super customer " +
+                            // vEntry.getSuperCustomer());
+                        }
+                        vSubCustomerList.add(vEntry);
+                        // System.out.println("added sub-klant onder " + vEntry.getSuperCustomer());
+                        // System.out.println("subcustomer list voor " + vEntry.getSuperCustomer() + "
+                        // is size " + vSubCustomerList.size());
                     }
-                    vSubCustomerList.add(vEntry);
-                    // System.out.println("added sub-klant onder " + vEntry.getSuperCustomer());
-                    // System.out.println("subcustomer list voor " + vEntry.getSuperCustomer() + "
-                    // is size " + vSubCustomerList.size());
                 }
-            }
-            else if (vEntry.getRole().equals(AccountRole._vAdminstrator) || vEntry.getRole().equals(AccountRole._vEmployee))
-            {
-                // add to mEmployeeLists
-                mEmployeeLists.put(vEntry.getFwdNumber(), vEntry);
-                mFwdKeyList.put(vEntry.getFwdNumber(), vEntry);
-                // System.out.println("added employee " + vEntry.getFullName() + ", " +
-                // vEntry.getId() + ", " + vEntry.getUserId());
-            }
-                 
-            
-            // fill in the AccountNrList
-            if (vEntry.getAccountNr() != null && !vEntry.getAccountNr().isEmpty())
-            {
-                String accountNrs = vEntry.getAccountNr();
-                StringTokenizer vTokenizer = new StringTokenizer(accountNrs, ",");
-                
-                while (vTokenizer.hasMoreTokens())
+                else if (vEntry.getRole().equals(AccountRole._vAdminstrator) || vEntry.getRole().equals(AccountRole._vEmployee))
                 {
-                    String accountNr = vTokenizer.nextToken();
-                    if (mAccountNr2FwdNrsMap.containsKey(accountNr))
-                    {
-                        Collection<String> FwdNrs = mAccountNr2FwdNrsMap.get(accountNr);
-                        FwdNrs.add(vEntry.getFwdNumber());
-                    }
-                    else
-                    {
-                        Collection<String> FwdNrs = new Vector<String>();
-                        FwdNrs.add(vEntry.getFwdNumber());
-                        mAccountNr2FwdNrsMap.put(accountNr, FwdNrs);
-                    }
+                    // add to mEmployeeLists
+                	mFwdKeyList.put(vEntry.getFwdNumber(), vEntry);
+                    mEmployeeLists.put(vEntry.getFwdNumber(), vEntry);
+                    // System.out.println("added employee " + vEntry.getFullName() + ", " +
+                    // vEntry.getId() + ", " + vEntry.getUserId());
+                }
+                     
+                
+                // fill in the AccountNrList
+                if (vEntry.getAccountNr() != null && !vEntry.getAccountNr().isEmpty())
+                {
+                    String bankAccountNrs = vEntry.getAccountNr();
+                    StringTokenizer vTokenizer = new StringTokenizer(bankAccountNrs, ",");
                     
-                    //System.out.println("matching FWD (" + vEntry.getFwdNumber() + ") nr to account Number: " + accountNr);
+                    while (vTokenizer.hasMoreTokens())
+                    {
+                        String bankAccountNr = vTokenizer.nextToken();
+                        if (mBankAccountNr2AccountIdsMap.containsKey(bankAccountNr))
+                        {
+                            Collection<Integer> ids = mBankAccountNr2AccountIdsMap.get(bankAccountNr);
+                            ids.add(Integer.valueOf(vEntry.getId()));
+                        }
+                        else
+                        {
+                            Collection<Integer> ids = new Vector<Integer>();
+                            ids.add(vEntry.getId());
+                            mBankAccountNr2AccountIdsMap.put(bankAccountNr, ids);
+                        }
+                        
+                        //System.out.println("matching FWD (" + vEntry.getFwdNumber() + ") nr to account Number: " + accountNr);
+                    }
                 }
             }
         }
         
         // set the HasSubCustomer flags
-        Set<String> superCustomers = mSubCustomersLists.keySet();
-        for (Iterator<String> i = superCustomers.iterator(); i.hasNext();)
+        Set<Integer> superCustomers = mSubCustomersLists.keySet();
+        for (Iterator<Integer> i = superCustomers.iterator(); i.hasNext();)
         {
-            String vSuperCustFwdNr = i.next();
-            AccountEntityData vSuperCust = get(vSuperCustFwdNr);
+            Integer vSuperCustId = i.next();
+            AccountEntityData vSuperCust = get(vSuperCustId.intValue());
             if (vSuperCust != null)
             {
                 vSuperCust.setHasSubCustomers(true);
             }
+            // also add subcustomers of supers that are call customers
+        	if (vSuperCust.getFwdNumber().matches("[0-9]+"))
+        	{
+                Collection<AccountEntityData> subcustomerList = getSubCustomersList(vSuperCustId);
+                for (Iterator<AccountEntityData> iter = subcustomerList.iterator(); iter.hasNext();)
+                {
+                	AccountEntityData subcustomer = iter.next();
+                   	mCallCustomerSortedList.add(subcustomer);
+                }
+        	}
         }
         // System.out.println("Before new mNameSortedList");
         // mNameSortedList = new TreeMap(new AccountNamesComparator());
@@ -305,7 +374,7 @@ final public class AccountCache
             Vector<String> vFreeNumbers = new Vector<String>();
             for (int i = 1; i < Constants.NUMBER_BLOCK.length; i++)
                 vFreeNumbers.add(Constants.NUMBER_BLOCK[i][0]);
-            for (Iterator<AccountEntityData> i = mRawCollection.iterator(); i.hasNext();)
+            for (Iterator<AccountEntityData> i = mRawUnarchivedCollection.iterator(); i.hasNext();)
             {
                 vFreeNumbers.remove((i.next()).getFwdNumber());
             }
@@ -320,7 +389,7 @@ final public class AccountCache
 
     public String idToFwdNr(int id)
     {
-        for (Iterator<AccountEntityData> i = mRawCollection.iterator(); i.hasNext();)
+        for (Iterator<AccountEntityData> i = mRawUnarchivedCollection.iterator(); i.hasNext();)
         {
             AccountEntityData entry = i.next();
             // System.out.println("idToFwdNr: id=" + id + "entry.getId()=" +
@@ -343,7 +412,7 @@ final public class AccountCache
         try
         {
             Vector<MailTriggerData> vTriggerList = new Vector<MailTriggerData>();
-            for (Iterator<AccountEntityData> i = mRawCollection.iterator(); i.hasNext();)
+            for (Iterator<AccountEntityData> i = mRawUnarchivedCollection.iterator(); i.hasNext();)
             {
                 AccountEntityData vEntry = i.next();
                 if (vEntry.getMailHour1() != 0 || vEntry.getMailMinutes1() != 0)
@@ -393,22 +462,22 @@ final public class AccountCache
         return null;
     }
     
-    public Collection<String> getFwdNumbersForAccountNr(String accountNr)
+    public Collection<Integer> getAccountIdsForBankAccountNr(String bankAccountNr)
     {
-    	if (accountNr != null && !accountNr.isEmpty())
+    	if (bankAccountNr != null && !bankAccountNr.isEmpty())
         {
-            if (mAccountNr2FwdNrsMap.containsKey(accountNr))
+            if (mBankAccountNr2AccountIdsMap.containsKey(bankAccountNr))
             {
-                return mAccountNr2FwdNrsMap.get(accountNr);
+                return mBankAccountNr2AccountIdsMap.get(bankAccountNr);
             }
         }
-        return new Vector<String>();
+        return new Vector<Integer>();
     }
 
     private void buildMailingGroups()
     {
         mMailingGroups.clear();
-        for (Iterator<AccountEntityData> i = mRawCollection.iterator(); i.hasNext();)
+        for (Iterator<AccountEntityData> i = mRawUnarchivedCollection.iterator(); i.hasNext();)
         {
             AccountEntityData vEntry = (AccountEntityData) i.next();
             if (vEntry.getMailHour1() > 0 && vEntry.getMailHour1() <= Constants.MAX_MAIL_HOUR)

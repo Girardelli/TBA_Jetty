@@ -105,8 +105,8 @@ public class InvoiceHelper
     // private jxl.format.CellFormat mBasicCellFormat;
 
     private Collection<CallRecordEntityData> mRecords;
-    private Hashtable<String, Collection<CallRecordEntityData>> mRecordsHashTable = null;
-    private Hashtable<String, Collection<TaskEntityData>> mTasksHashTable = null;
+    private Hashtable<Integer, Collection<CallRecordEntityData>> mRecordsHashTable = null;
+    private Hashtable<Integer, Collection<TaskEntityData>> mTasksHashTable = null;
 
     private Tarifs[] mTarifs = new Tarifs[4];
 
@@ -125,12 +125,12 @@ public class InvoiceHelper
     // Methods
     // -------------------------------------------------------------------------
 
-    public InvoiceHelper(WebSession webSession, String accountFwdNr, int month, int year)
+    public InvoiceHelper(WebSession webSession, int accountId, int month, int year)
     {
         try
         {
             System.out.println("InvoiceHelper(Account, month, year)");
-            mAccountEntityData = AccountCache.getInstance().get(accountFwdNr);
+            mAccountEntityData = AccountCache.getInstance().get(accountId);
             if (mAccountEntityData == null)
             {
                 mNoValidCustomer = true;
@@ -154,13 +154,13 @@ public class InvoiceHelper
         try
         // bij invoice generate wordt deze constructor gebruikt ???
         {
-            System.out.println("InvoiceHelper(InvoiceData=");
             if (invoiceData == null)
             {
                 throw (new Exception("InvoiceHelper called with invoiceData=null"));
             }
+            System.out.println("InvoiceHelper(InvoiceData; id=" + invoiceData.getId() + ", accountId=" + invoiceData.getAccountID() + ". accountFwdNr=" + invoiceData.getAccountFwdNr());
             mInvoiceEntityData = invoiceData;
-            mAccountEntityData = AccountCache.getInstance().get(mInvoiceEntityData.getAccountFwdNr());
+            mAccountEntityData = AccountCache.getInstance().get(mInvoiceEntityData);
             if (mAccountEntityData == null)
             {
                 mNoValidCustomer = true;
@@ -240,7 +240,7 @@ public class InvoiceHelper
         System.out.println("generate invoice for " + mAccountEntityData.getFullName());
         if (mInvoiceEntityData == null)
         {
-            mInvoiceEntityData = vInvoiceSession.getLastInvoice(webSession, mAccountEntityData.getFwdNumber(), mInvoiceData.Month, mInvoiceData.Year);
+            mInvoiceEntityData = vInvoiceSession.getLastInvoice(webSession, mAccountEntityData.getId(), mInvoiceData.Month, mInvoiceData.Year);
 
             if (mInvoiceEntityData != null)
             {
@@ -314,7 +314,7 @@ public class InvoiceHelper
          */
         if (mAccountEntityData.getHasSubCustomers())
         {
-            mRecordsHashTable = vQuerySession.getInvoiceCallsHashTable(webSession, mAccountEntityData.getFwdNumber(), vStart, vEnd);
+            mRecordsHashTable = vQuerySession.getInvoiceCallsHashTable(webSession, mAccountEntityData.getId(), vStart, vEnd);
             // System.out.println("subcust for " +
             // mAccountEntityData.getFwdNumber() + ": " +
             // mRecordsHashTable.size());
@@ -342,7 +342,7 @@ public class InvoiceHelper
         }
         else
         {
-            mRecords = vQuerySession.getInvoiceCalls(webSession, mAccountEntityData.getFwdNumber(), vStart, vEnd);
+            mRecords = vQuerySession.getInvoiceCalls(webSession, mAccountEntityData.getId(), vStart, vEnd);
         }
 
         // System.out.println(mAccountEntityData.getFwdNumber() + " : has " +
@@ -433,7 +433,7 @@ public class InvoiceHelper
 
         if (mAccountEntityData.getHasSubCustomers())
         {
-            mTasksHashTable = vTaskSession.getTasksFromTillTimestampHashtable(webSession, mAccountEntityData.getFwdNumber(), vStart, vEnd);
+            mTasksHashTable = vTaskSession.getTasksFromTillTimestampHashtable(webSession, mAccountEntityData.getId(), vStart, vEnd);
             if (mTasks == null)
             {
                 mTasks = new Vector<TaskEntityData>();
@@ -446,7 +446,7 @@ public class InvoiceHelper
         }
         else
         {
-            mTasks = vTaskSession.getTasksFromTillTimestamp(webSession, mAccountEntityData.getFwdNumber(), vStart, vEnd);
+            mTasks = vTaskSession.getTasksFromTillTimestamp(webSession, mAccountEntityData.getId(), vStart, vEnd);
         }
         mInvoiceData.NrOfTasks = mTasks.size();
         //System.out.println(mInvoiceData.NrOfTasks + " Tasks found!!!");
@@ -519,6 +519,7 @@ public class InvoiceHelper
             {
                 mInvoiceEntityData = new InvoiceEntityData();
                 mInvoiceEntityData.setAccountFwdNr(mAccountEntityData.getFwdNumber());
+                mInvoiceEntityData.setAccountID(mAccountEntityData.getId());
                 mInvoiceEntityData.setTotalCost(mInvoiceData.TotalCost);
                 mInvoiceEntityData.setMonth(mInvoiceData.Month);
                 mInvoiceEntityData.setYear(mInvoiceData.Year);
@@ -881,7 +882,7 @@ public class InvoiceHelper
 
     static public String makeFileName(InvoiceEntityData invoiceData)
     {
-        AccountEntityData account = AccountCache.getInstance().get(invoiceData.getAccountFwdNr());
+        AccountEntityData account = AccountCache.getInstance().get(invoiceData);
         if (account != null)
             return new String(Constants.INVOICE_DIR + invoiceData.getYear() + "\\" + Constants.MONTHS[invoiceData.getMonth()] + "\\Fac" + getInvoiceNumber(invoiceData.getYear(), invoiceData.getMonth(), invoiceData.getYearSeqNr()) + "-" + spaces2underscores(account.getFullName()) + ".pdf");
         else if (invoiceData.getCustomerName().length() > 0)
@@ -898,6 +899,23 @@ public class InvoiceHelper
             return invoiceData.getFileName().replace(target, replacer);
         }
         return "";
+    }
+    
+    static public String extractCustomerNameFromInvoiceFileName(String fileName)
+    {
+		if (fileName == null || fileName.isEmpty())
+			return "";
+    	String customerName = fileName.substring(fileName.indexOf("FacN-") + 6);
+		int stopIndex = customerName.indexOf(".doc");
+		if (stopIndex == -1)
+		{
+			stopIndex = customerName.indexOf(".pdf");
+		}
+		if (stopIndex == -1)
+		{
+			return "";
+		}
+		return customerName.substring(customerName.indexOf('-') + 1, stopIndex);
     }
 
     public int setCounters(CallCounts callCounts, Collection<CallRecordEntityData> callList, AccountEntityData customerData)
@@ -970,13 +988,13 @@ public class InvoiceHelper
 
     private void generateSubCustomerCostList()
     {
-        Set<String> vCallsSubCustomers = null;
-        Set<String> vTasksSubCustomers = null;
+        Set<Integer> vCallsSubCustomers = null;
+        Set<Integer> vTasksSubCustomers = null;
 
         if (mRecordsHashTable != null)
         {
             vCallsSubCustomers = mRecordsHashTable.keySet();
-            for (Iterator<String> i = vCallsSubCustomers.iterator(); i.hasNext();)
+            for (Iterator<Integer> i = vCallsSubCustomers.iterator(); i.hasNext();)
             {
                 mSubcustomerCostList.add(new SubcustomerCost(i.next()));
             }
@@ -984,10 +1002,10 @@ public class InvoiceHelper
         if (mTasksHashTable != null)
         {
             vTasksSubCustomers = mTasksHashTable.keySet();
-            for (Iterator<String> i = vTasksSubCustomers.iterator(); i.hasNext();)
+            for (Iterator<Integer> i = vTasksSubCustomers.iterator(); i.hasNext();)
             {
-                String vCustFwdNr = i.next();
-                SubcustomerCost subCust = new SubcustomerCost(vCustFwdNr);
+                Integer vCustId = i.next();
+                SubcustomerCost subCust = new SubcustomerCost(vCustId);
                 if (!mSubcustomerCostList.contains(subCust))
                 {
                     mSubcustomerCostList.add(subCust);
@@ -999,14 +1017,14 @@ public class InvoiceHelper
         for (Iterator<SubcustomerCost> i = mSubcustomerCostList.iterator(); i.hasNext();)
         {
             SubcustomerCost vSubcustomerCost = i.next();
-            String vCustFwdNr = vSubcustomerCost.getFwdNr();
-            AccountEntityData accountData = AccountCache.getInstance().get(vCustFwdNr);
+            int id = vSubcustomerCost.getAccountId();
+            AccountEntityData accountData = AccountCache.getInstance().get(id);
             vSubcustomerCost.setName(accountData.getFullName());
 
             double vCallCost = 0.0;
             double vTaskCost = 0.0;
 
-            Collection<CallRecordEntityData> vCallList = mRecordsHashTable.get(vCustFwdNr);
+            Collection<CallRecordEntityData> vCallList = mRecordsHashTable.get(id);
             if (vCallList != null)
             {
                 CallCounts callsCount = new CallCounts();
@@ -1035,7 +1053,7 @@ public class InvoiceHelper
                 System.out.println("No calls for " + accountData.getFullName());
             }
 
-            Collection<TaskEntityData> vTaskList = (Collection<TaskEntityData>) mTasksHashTable.get(vCustFwdNr);
+            Collection<TaskEntityData> vTaskList = (Collection<TaskEntityData>) mTasksHashTable.get(id);
             if (vTaskList != null)
             {
                 vSubcustomerCost.setTasks(vTaskList.size());

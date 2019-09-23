@@ -23,16 +23,20 @@ be.tba.util.invoice.*"%>
 vSession.setCallingJsp(Constants.ADD_INVOICE_JSP);
 %>
 <body>
+<p><span class="admintitle"> Niet meer in gebruik<br>
+</span></p>
+<!-- action name must be a URI name as it is set in the <application>.xml servlet-mapping tag.
+
 <p><span class="admintitle"> Factuur toevoegen voor een niet klant<br>
 </span></p>
 <table  cellspacing='0' cellpadding='0' border='0'
 	bgcolor="FFFFFF">
-	<!--Add Task jsp-->
+	
 	<tr>
 		<td valign="top" width="30" bgcolor="FFFFFF"></td>
 		<td valign="top" bgcolor="FFFFFF"><br>
 		<br>
-		<span class="bodytekst"> <!-- action name must be a URI name as it is set in the <application>.xml servlet-mapping tag.-->
+		<span class="bodytekst"> 
 		<form name="taskform" method="POST"
 			action="/tba/AdminDispatch">
 		<table width="100%" border="0" cellspacing="1" cellpadding="1">
@@ -72,7 +76,7 @@ function cancelAdd()
   document.taskform.<%=Constants.SRV_ACTION%>.value="<%=Constants.GOTO_INVOICE_ADMIN%>";
 }
 </script>
-
+-->
 </body>
 
 </html>

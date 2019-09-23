@@ -67,6 +67,7 @@ public class AccountEntityData extends be.tba.util.data.AbstractData implements 
     private boolean noInvoice;
     private boolean hasSubCustomers;
     private java.lang.String superCustomer;
+    private int superCustomerId;
     private boolean countAllLongCalls;
     private boolean countLongFwdCalls;
     private boolean noBtw;
@@ -90,12 +91,15 @@ public class AccountEntityData extends be.tba.util.data.AbstractData implements 
     private java.lang.String invoiceEmail;
     private java.lang.String accountNr;
     private String countryCode;
+    private boolean isArchived;
+    private String callProcessInfo;
 
     public AccountEntityData()
     {
     }
 
-    public AccountEntityData(int id, int wc_prime, String wc_alfa, java.lang.String userId, java.lang.String password, java.lang.String fwdNumber, java.lang.String role, java.lang.String fullName, java.lang.String custFilter, java.lang.String stateFilter, java.lang.String dirFilter, java.lang.String lastLogin, long lastLoginTS, long previousLoginTS, boolean isRegistered, boolean isAutoRelease, boolean isXmlMail, boolean is3W, java.lang.String w3_PersonId, java.lang.String w3_CompanyId, java.lang.String email, java.lang.String gsm, short invoiceType, long lastInvoiceTime, long lastMailTime, short mailHour1, short mailMinutes1, short mailHour2, short mailMinutes2, short mailHour3, short mailMinutes3, int facStdInCall, int facStdOutCall, int facOutLevel1, int facOutLevel2, int facOutLevel3, boolean isPriceAgendaFixed, int facAgendaCall, int facFaxCall, short agendaPriceUnit, int facSms, int facCallForward, int taskHourRate, java.lang.String companyName, java.lang.String attToName, java.lang.String street, java.lang.String city, java.lang.String btwNumber, boolean noInvoice, boolean hasSubCustomers, java.lang.String superCustomer, boolean countAllLongCalls, boolean countLongFwdCalls, boolean noBtw, boolean noEmptyMails, boolean textMail, double facLong, double facLongFwd, int facTblMinCalls_I, double facTblStartCost_I, double facTblExtraCost_I, int facTblMinCalls_II, double facTblStartCost_II, double facTblExtraCost_II, int facTblMinCalls_III, double facTblStartCost_III, double facTblExtraCost_III, int facTblMinCalls_IV, double facTblStartCost_IV, double facTblExtraCost_IV, boolean isMailInvoice, java.lang.String invoiceEmail, java.lang.String accountNr, String countryCode)
+    /* outdated !!
+    public AccountEntityData(int id, int wc_prime, String wc_alfa, java.lang.String userId, java.lang.String password, java.lang.String fwdNumber, java.lang.String role, java.lang.String fullName, java.lang.String custFilter, java.lang.String stateFilter, java.lang.String dirFilter, java.lang.String lastLogin, long lastLoginTS, long previousLoginTS, boolean isRegistered, boolean isAutoRelease, boolean isXmlMail, boolean is3W, java.lang.String w3_PersonId, java.lang.String w3_CompanyId, java.lang.String email, java.lang.String gsm, short invoiceType, long lastInvoiceTime, long lastMailTime, short mailHour1, short mailMinutes1, short mailHour2, short mailMinutes2, short mailHour3, short mailMinutes3, int facStdInCall, int facStdOutCall, int facOutLevel1, int facOutLevel2, int facOutLevel3, boolean isPriceAgendaFixed, int facAgendaCall, int facFaxCall, short agendaPriceUnit, int facSms, int facCallForward, int taskHourRate, java.lang.String companyName, java.lang.String attToName, java.lang.String street, java.lang.String city, java.lang.String btwNumber, boolean noInvoice, boolean hasSubCustomers, java.lang.String superCustomer, boolean countAllLongCalls, boolean countLongFwdCalls, boolean noBtw, boolean noEmptyMails, boolean textMail, double facLong, double facLongFwd, int facTblMinCalls_I, double facTblStartCost_I, double facTblExtraCost_I, int facTblMinCalls_II, double facTblStartCost_II, double facTblExtraCost_II, int facTblMinCalls_III, double facTblStartCost_III, double facTblExtraCost_III, int facTblMinCalls_IV, double facTblStartCost_IV, double facTblExtraCost_IV, boolean isMailInvoice, java.lang.String invoiceEmail, java.lang.String accountNr, String countryCode, boolean isArchived)
     {
         setId(id);
         setWcPrime(wc_prime);
@@ -171,7 +175,8 @@ public class AccountEntityData extends be.tba.util.data.AbstractData implements 
         setInvoiceEmail(invoiceEmail);
         setAccountNr(accountNr);
         setCountryCode(countryCode);
-    }
+        setIsArchived(isArchived);
+    } */
 
     public AccountEntityData(AccountEntityData otherData)
     {
@@ -227,6 +232,7 @@ public class AccountEntityData extends be.tba.util.data.AbstractData implements 
         setNoInvoice(otherData.getNoInvoice());
         setHasSubCustomers(otherData.getHasSubCustomers());
         setSuperCustomer(otherData.getSuperCustomer());
+        setSuperCustomerId(otherData.getSuperCustomerId());
         setCountAllLongCalls(otherData.getCountAllLongCalls());
         setCountLongFwdCalls(otherData.getCountLongFwdCalls());
         setNoBtw(otherData.getNoBtw());
@@ -249,7 +255,8 @@ public class AccountEntityData extends be.tba.util.data.AbstractData implements 
         setIsMailInvoice(otherData.getIsMailInvoice());
         setAccountNr(otherData.getAccountNr());
         setCountryCode(otherData.getCountryCode());
-        
+        setIsArchived(otherData.getIsArchived());
+        setCallProcessInfo(otherData.getCallProcessInfo());
 
     }
 
@@ -778,6 +785,16 @@ public class AccountEntityData extends be.tba.util.data.AbstractData implements 
         this.superCustomer = superCustomer;
     }
 
+    public int getSuperCustomerId()
+    {
+        return this.superCustomerId;
+    }
+
+    public void setSuperCustomerId(int superCustomerId)
+    {
+        this.superCustomerId = superCustomerId;
+    }
+
     public java.lang.String getAccountNr()
     {
         return this.accountNr;
@@ -998,6 +1015,26 @@ public class AccountEntityData extends be.tba.util.data.AbstractData implements 
         this.countryCode = countryCode;
     }
     
+    public boolean getIsArchived()
+    {
+        return this.textMail;
+    }
+
+    public void setIsArchived(boolean isArchived)
+    {
+        this.isArchived = isArchived;
+    }
+
+    public String getCallProcessInfo()
+    {
+    	return this.callProcessInfo;
+    }
+    
+    public void setCallProcessInfo(String info)
+    {
+    	this.callProcessInfo = info;
+    }
+    
     public String toString()
     {
         StringBuffer str = new StringBuffer("{");
@@ -1112,7 +1149,9 @@ public class AccountEntityData extends be.tba.util.data.AbstractData implements 
         str.append(getHasSubCustomers());
         str.append(",SuperCustomer='");
         str.append(((this.superCustomer != null) ? this.superCustomer : ""));
-        str.append("',CountAllLongCalls=");
+        str.append("',SuperCustomerID=");
+        str.append(getSuperCustomerId());
+        str.append(",CountAllLongCalls=");
         str.append(getCountAllLongCalls());
         str.append(",CountLongFwdCalls=");
         str.append(getCountLongFwdCalls());
@@ -1158,7 +1197,11 @@ public class AccountEntityData extends be.tba.util.data.AbstractData implements 
         str.append(((this.accountNr != null) ? escapeQuotes(this.accountNr) : ""));
         str.append("',CountryCode='");
         str.append(((this.countryCode != null) ? escapeQuotes(this.countryCode) : "BE"));
-        str.append("' ");
+        str.append("',IsArchived=");
+        str.append(getIsArchived());
+        str.append(",CallProcessInfo='");
+        str.append(((this.callProcessInfo != null) ? this.callProcessInfo : ""));
+        str.append("'");
         return (str.toString());
 
     }
@@ -1270,6 +1313,8 @@ public class AccountEntityData extends be.tba.util.data.AbstractData implements 
         str.append(",'");
         str.append(((this.superCustomer != null) ? this.superCustomer : ""));
         str.append("',");
+        str.append(getSuperCustomerId());
+        str.append(",");
         str.append(getCountAllLongCalls());
         str.append(",");
         str.append(getCountLongFwdCalls());
@@ -1315,6 +1360,10 @@ public class AccountEntityData extends be.tba.util.data.AbstractData implements 
         str.append(((this.accountNr != null) ? escapeQuotes(this.accountNr) : ""));
         str.append("','");
         str.append(((this.countryCode != null) ? escapeQuotes(this.countryCode) : "BE"));
+        str.append("',");
+        str.append(getIsArchived());
+        str.append(",'");
+        str.append(((this.callProcessInfo != null) ? this.callProcessInfo : ""));
         str.append("'");
         return (str.toString());
     }
@@ -1324,223 +1373,6 @@ public class AccountEntityData extends be.tba.util.data.AbstractData implements 
         if (pOther instanceof AccountEntityData)
         {
         	AccountEntityData lTest = (AccountEntityData) pOther;
-        	/*
-        	boolean lEquals = true;
-
-            lEquals = lEquals && this.id == lTest.id;
-             
-            if (this.userId == null)
-            {
-                lEquals = lEquals && (lTest.userId == null);
-            }
-            else
-            {
-                lEquals = lEquals && this.userId.equals(lTest.userId);
-            }
-            if (this.password == null)
-            {
-                lEquals = lEquals && (lTest.password == null);
-            }
-            else
-            {
-                lEquals = lEquals && this.password.equals(lTest.password);
-            }
-            if (this.fwdNumber == null)
-            {
-                lEquals = lEquals && (lTest.fwdNumber == null);
-            }
-            else
-            {
-                lEquals = lEquals && this.fwdNumber.equals(lTest.fwdNumber);
-            }
-            if (this.role == null)
-            {
-                lEquals = lEquals && (lTest.role == null);
-            }
-            else
-            {
-                lEquals = lEquals && this.role.equals(lTest.role);
-            }
-            if (this.fullName == null)
-            {
-                lEquals = lEquals && (lTest.fullName == null);
-            }
-            else
-            {
-                lEquals = lEquals && this.fullName.equals(lTest.fullName);
-            }
-            if (this.custFilter == null)
-            {
-                lEquals = lEquals && (lTest.custFilter == null);
-            }
-            else
-            {
-                lEquals = lEquals && this.custFilter.equals(lTest.custFilter);
-            }
-            if (this.stateFilter == null)
-            {
-                lEquals = lEquals && (lTest.stateFilter == null);
-            }
-            else
-            {
-                lEquals = lEquals && this.stateFilter.equals(lTest.stateFilter);
-            }
-            if (this.dirFilter == null)
-            {
-                lEquals = lEquals && (lTest.dirFilter == null);
-            }
-            else
-            {
-                lEquals = lEquals && this.dirFilter.equals(lTest.dirFilter);
-            }
-            if (this.lastLogin == null)
-            {
-                lEquals = lEquals && (lTest.lastLogin == null);
-            }
-            else
-            {
-                lEquals = lEquals && this.lastLogin.equals(lTest.lastLogin);
-            }
-            lEquals = lEquals && this.lastLoginTS == lTest.lastLoginTS;
-            lEquals = lEquals && this.previousLoginTS == lTest.previousLoginTS;
-            lEquals = lEquals && this.isRegistered == lTest.isRegistered;
-            lEquals = lEquals && this.isAutoRelease == lTest.isAutoRelease;
-            lEquals = lEquals && this.isXmlMail == lTest.isXmlMail;
-            lEquals = lEquals && this.is3W == lTest.is3W;
-            if (this.w3_PersonId == null)
-            {
-                lEquals = lEquals && (lTest.w3_PersonId == null);
-            }
-            else
-            {
-                lEquals = lEquals && this.w3_PersonId.equals(lTest.w3_PersonId);
-            }
-            if (this.w3_CompanyId == null)
-            {
-                lEquals = lEquals && (lTest.w3_CompanyId == null);
-            }
-            else
-            {
-                lEquals = lEquals && this.w3_CompanyId.equals(lTest.w3_CompanyId);
-            }
-            if (this.email == null)
-            {
-                lEquals = lEquals && (lTest.email == null);
-            }
-            else
-            {
-                lEquals = lEquals && this.email.equals(lTest.email);
-            }
-            if (this.invoiceEmail == null)
-            {
-                lEquals = lEquals && (lTest.invoiceEmail == null);
-            }
-            else
-            {
-                lEquals = lEquals && this.invoiceEmail.equals(lTest.invoiceEmail);
-            }
-            if (this.gsm == null)
-            {
-                lEquals = lEquals && (lTest.gsm == null);
-            }
-            else
-            {
-                lEquals = lEquals && this.gsm.equals(lTest.gsm);
-            }
-            lEquals = lEquals && this.invoiceType == lTest.invoiceType;
-            lEquals = lEquals && this.lastInvoiceTime == lTest.lastInvoiceTime;
-            lEquals = lEquals && this.lastMailTime == lTest.lastMailTime;
-            lEquals = lEquals && this.mailHour1 == lTest.mailHour1;
-            lEquals = lEquals && this.mailMinutes1 == lTest.mailMinutes1;
-            lEquals = lEquals && this.mailHour2 == lTest.mailHour2;
-            lEquals = lEquals && this.mailMinutes2 == lTest.mailMinutes2;
-            lEquals = lEquals && this.mailHour3 == lTest.mailHour3;
-            lEquals = lEquals && this.mailMinutes3 == lTest.mailMinutes3;
-            lEquals = lEquals && this.facStdInCall == lTest.facStdInCall;
-            lEquals = lEquals && this.facStdOutCall == lTest.facStdOutCall;
-            lEquals = lEquals && this.facOutLevel1 == lTest.facOutLevel1;
-            lEquals = lEquals && this.facOutLevel2 == lTest.facOutLevel2;
-            lEquals = lEquals && this.facOutLevel3 == lTest.facOutLevel3;
-            lEquals = lEquals && this.isPriceAgendaFixed == lTest.isPriceAgendaFixed;
-            lEquals = lEquals && this.facAgendaCall == lTest.facAgendaCall;
-            lEquals = lEquals && this.facFaxCall == lTest.facFaxCall;
-            lEquals = lEquals && this.agendaPriceUnit == lTest.agendaPriceUnit;
-            lEquals = lEquals && this.facSms == lTest.facSms;
-            lEquals = lEquals && this.facCallForward == lTest.facCallForward;
-            lEquals = lEquals && this.taskHourRate == lTest.taskHourRate;
-            if (this.companyName == null)
-            {
-                lEquals = lEquals && (lTest.companyName == null);
-            }
-            else
-            {
-                lEquals = lEquals && this.companyName.equals(lTest.companyName);
-            }
-            if (this.attToName == null)
-            {
-                lEquals = lEquals && (lTest.attToName == null);
-            }
-            else
-            {
-                lEquals = lEquals && this.attToName.equals(lTest.attToName);
-            }
-            if (this.street == null)
-            {
-                lEquals = lEquals && (lTest.street == null);
-            }
-            else
-            {
-                lEquals = lEquals && this.street.equals(lTest.street);
-            }
-            if (this.city == null)
-            {
-                lEquals = lEquals && (lTest.city == null);
-            }
-            else
-            {
-                lEquals = lEquals && this.city.equals(lTest.city);
-            }
-            if (this.btwNumber == null)
-            {
-                lEquals = lEquals && (lTest.btwNumber == null);
-            }
-            else
-            {
-                lEquals = lEquals && this.btwNumber.equals(lTest.btwNumber);
-            }
-            lEquals = lEquals && this.noInvoice == lTest.noInvoice;
-            lEquals = lEquals && this.hasSubCustomers == lTest.hasSubCustomers;
-            if (this.superCustomer == null)
-            {
-                lEquals = lEquals && (lTest.superCustomer == null);
-            }
-            else
-            {
-                lEquals = lEquals && this.superCustomer.equals(lTest.superCustomer);
-            }
-            lEquals = lEquals && this.countAllLongCalls == lTest.countAllLongCalls;
-            lEquals = lEquals && this.countLongFwdCalls == lTest.countLongFwdCalls;
-            lEquals = lEquals && this.noBtw == lTest.noBtw;
-            lEquals = lEquals && this.noEmptyMails == lTest.noEmptyMails;
-            lEquals = lEquals && this.textMail == lTest.textMail;
-            lEquals = lEquals && this.facLong == lTest.facLong;
-            lEquals = lEquals && this.facLongFwd == lTest.facLongFwd;
-            lEquals = lEquals && this.facTblMinCalls_I == lTest.facTblMinCalls_I;
-            lEquals = lEquals && this.facTblStartCost_I == lTest.facTblStartCost_I;
-            lEquals = lEquals && this.facTblExtraCost_I == lTest.facTblExtraCost_I;
-            lEquals = lEquals && this.facTblMinCalls_II == lTest.facTblMinCalls_II;
-            lEquals = lEquals && this.facTblStartCost_II == lTest.facTblStartCost_II;
-            lEquals = lEquals && this.facTblExtraCost_II == lTest.facTblExtraCost_II;
-            lEquals = lEquals && this.facTblMinCalls_III == lTest.facTblMinCalls_III;
-            lEquals = lEquals && this.facTblStartCost_III == lTest.facTblStartCost_III;
-            lEquals = lEquals && this.facTblExtraCost_III == lTest.facTblExtraCost_III;
-            lEquals = lEquals && this.facTblMinCalls_IV == lTest.facTblMinCalls_IV;
-            lEquals = lEquals && this.facTblStartCost_IV == lTest.facTblStartCost_IV;
-            lEquals = lEquals && this.facTblExtraCost_IV == lTest.facTblExtraCost_IV;
-            lEquals = lEquals && this.isMailInvoice == lTest.isMailInvoice;
-
-            return lEquals;
-*/
             return this.id == lTest.id;
         }
         else

@@ -59,7 +59,7 @@ try
 		out.println("<option value=\"" + vFwdNr + "\">" + vFullName);
 		if (vCustomer.getHasSubCustomers())
 		{
-		    Collection<AccountEntityData> subList = AccountCache.getInstance().getSubCustomersList(vFwdNr);
+		    Collection<AccountEntityData> subList = AccountCache.getInstance().getSubCustomersList(vCustomer.getId());
 		    
 		    synchronized(subList) 
 		    {
@@ -71,7 +71,8 @@ try
 		              out.println("<option value=\"" + vSubCustomer.getFwdNumber() + "\">" + vSubCustomer.getFullName());
 		            }
 		        }
-		    }%>
+		    }
+%>
 							    </select>
 							    </td>
 				            </tr>
@@ -88,7 +89,7 @@ try
 
 	<%
 	System.out.println("end SELECT_SUBCUSTOMER_JSP");
-}
+    }
 }
 catch (Exception e)
 {

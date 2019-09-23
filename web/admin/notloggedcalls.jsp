@@ -73,7 +73,7 @@ try
     for (Iterator i = vRecords.iterator(); i.hasNext();)
     {
       CallRecordEntityData vEntry = (CallRecordEntityData) i.next();
-      AccountEntityData vAccountEntityData = AccountCache.getInstance().get(vEntry.getFwdNr());
+      AccountEntityData vAccountEntityData = AccountCache.getInstance().get(vEntry);
       String vId = "id" + vEntry.getId();
       String vDate = vEntry.getDate();
       String vTime = vEntry.getTime();

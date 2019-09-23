@@ -18,6 +18,7 @@ public class CallRecordEntityData extends AbstractData
     */
     private static final long serialVersionUID = 1L;
     private int id;
+    private int accountId;
     // customer number
     private java.lang.String fwdNr;
     private java.lang.String date;
@@ -56,6 +57,7 @@ public class CallRecordEntityData extends AbstractData
     public CallRecordEntityData()
     {
     	id = 0;
+    	accountId=0;
         fwdNr = "";
         date = "";
         time = "";
@@ -91,6 +93,16 @@ public class CallRecordEntityData extends AbstractData
     public void setId(int id)
     {
         this.id = id;
+    }
+
+    public int getAccountId()
+    {
+        return this.accountId;
+    }
+
+    public void setAccountId(int id)
+    {
+        this.accountId = id;
     }
 
     public java.lang.String getFwdNr()
@@ -393,7 +405,8 @@ public class CallRecordEntityData extends AbstractData
     public String toNameValueString()
     {
         StringBuffer str = new StringBuffer();
-        str.append("FwdNr='" + ((this.getFwdNr() != null) ? this.getFwdNr() : "")); 
+        str.append("AccountID=" + getAccountId()); 
+        str.append(",FwdNr='" + ((this.getFwdNr() != null) ? this.getFwdNr() : "")); 
         str.append("',Date='" + ((this.getDate() != null) ? this.getDate() : "")); 
         str.append("',Time='" + ((this.getTime() != null) ? this.getTime() : "") );
         str.append("',Number='" + ((this.getNumber() != null) ? escapeQuotes(this.getNumber()) : "")); 
@@ -428,7 +441,8 @@ public class CallRecordEntityData extends AbstractData
     public String toValueString()
     {
         StringBuffer str = new StringBuffer();
-        str.append("'0','" + ((this.getFwdNr() != null) ? this.getFwdNr() : "")); 
+        str.append("'0'," + getAccountId());
+        str.append(",'" + ((this.getFwdNr() != null) ? this.getFwdNr() : "")); 
         str.append("','" + ((this.getDate() != null) ? this.getDate() : "")); 
         str.append("','" + ((this.getTime() != null) ? this.getTime() : "") );
         str.append("','" + ((this.getNumber() != null) ? escapeQuotes(this.getNumber()) : "")); 
@@ -467,85 +481,7 @@ public class CallRecordEntityData extends AbstractData
             boolean lEquals = true;
 
             lEquals = lEquals && this.id == lTest.id;
-            if (this.fwdNr == null)
-            {
-                lEquals = lEquals && (lTest.fwdNr == null);
-            }
-            else
-            {
-                lEquals = lEquals && this.fwdNr.equals(lTest.fwdNr);
-            }
-            if (this.date == null)
-            {
-                lEquals = lEquals && (lTest.date == null);
-            }
-            else
-            {
-                lEquals = lEquals && this.date.equals(lTest.date);
-            }
-            if (this.time == null)
-            {
-                lEquals = lEquals && (lTest.time == null);
-            }
-            else
-            {
-                lEquals = lEquals && this.time.equals(lTest.time);
-            }
-            if (this.number == null)
-            {
-                lEquals = lEquals && (lTest.number == null);
-            }
-            else
-            {
-                lEquals = lEquals && this.number.equals(lTest.number);
-            }
-            if (this.name == null)
-            {
-                lEquals = lEquals && (lTest.name == null);
-            }
-            else
-            {
-                lEquals = lEquals && this.name.equals(lTest.name);
-            }
-            if (this.cost == null)
-            {
-                lEquals = lEquals && (lTest.cost == null);
-            }
-            else
-            {
-                lEquals = lEquals && this.cost.equals(lTest.cost);
-            }
-            lEquals = lEquals && this.timeStamp == lTest.timeStamp;
-            lEquals = lEquals && this.isIncomingCall == lTest.isIncomingCall;
-            lEquals = lEquals && this.isDocumented == lTest.isDocumented;
-            lEquals = lEquals && this.isReleased == lTest.isReleased;
-            lEquals = lEquals && this.isNotLogged == lTest.isNotLogged;
-            lEquals = lEquals && this.isAgendaCall == lTest.isAgendaCall;
-            lEquals = lEquals && this.isSmsCall == lTest.isSmsCall;
-            lEquals = lEquals && this.isForwardCall == lTest.isForwardCall;
-            lEquals = lEquals && this.isImportantCall == lTest.isImportantCall;
-            lEquals = lEquals && this.is3W_call == lTest.is3W_call;
-            lEquals = lEquals && this.isMailed == lTest.isMailed;
-            lEquals = lEquals && this.invoiceLevel == lTest.invoiceLevel;
-            if (this.shortDescription == null)
-            {
-                lEquals = lEquals && (lTest.shortDescription == null);
-            }
-            else
-            {
-                lEquals = lEquals && this.shortDescription.equals(lTest.shortDescription);
-            }
-            lEquals = lEquals && this.isVirgin == lTest.isVirgin;
-            lEquals = lEquals && this.isFaxCall == lTest.isFaxCall;
-            if (this.doneBy == null)
-            {
-                lEquals = lEquals && (lTest.doneBy == null);
-            }
-            else
-            {
-                lEquals = lEquals && this.doneBy.equals(lTest.doneBy);
-            }
-
+            lEquals = lEquals && this.accountId == lTest.accountId;
             return lEquals;
         }
         else
@@ -557,57 +493,8 @@ public class CallRecordEntityData extends AbstractData
     public int hashCode()
     {
         int result = 17;
-
         result = 37 * result + (int) id;
-
-        result = 37 * result + ((this.fwdNr != null) ? this.fwdNr.hashCode() : 0);
-
-        result = 37 * result + ((this.date != null) ? this.date.hashCode() : 0);
-
-        result = 37 * result + ((this.time != null) ? this.time.hashCode() : 0);
-
-        result = 37 * result + ((this.number != null) ? this.number.hashCode() : 0);
-
-        result = 37 * result + ((this.name != null) ? this.name.hashCode() : 0);
-
-        result = 37 * result + ((this.cost != null) ? this.cost.hashCode() : 0);
-
-        result = 37 * result + (int) (timeStamp ^ (timeStamp >>> 32));
-
-        result = 37 * result + (isIncomingCall ? 0 : 1);
-
-        result = 37 * result + (isDocumented ? 0 : 1);
-
-        result = 37 * result + (isReleased ? 0 : 1);
-
-        result = 37 * result + (isNotLogged ? 0 : 1);
-
-        result = 37 * result + (isAgendaCall ? 0 : 1);
-
-        result = 37 * result + (isSmsCall ? 0 : 1);
-
-        result = 37 * result + (isForwardCall ? 0 : 1);
-
-        result = 37 * result + (isImportantCall ? 0 : 1);
-
-        result = 37 * result + (is3W_call ? 0 : 1);
-
-        result = 37 * result + (isMailed ? 0 : 1);
-
-        result = 37 * result + (int) invoiceLevel;
-
-        result = 37 * result + ((this.w3_CustomerId != null) ? this.w3_CustomerId.hashCode() : 0);
-
-        result = 37 * result + ((this.shortDescription != null) ? this.shortDescription.hashCode() : 0);
-
-        result = 37 * result + ((this.longDescription != null) ? this.longDescription.hashCode() : 0);
-
-        result = 37 * result + (isVirgin ? 0 : 1);
-
-        result = 37 * result + (isFaxCall ? 0 : 1);
-
-        result = 37 * result + ((this.doneBy != null) ? this.doneBy.hashCode() : 0);
-
+        result = 37 * result + (int) accountId;
         return result;
     }
 

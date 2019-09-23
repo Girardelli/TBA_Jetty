@@ -13,6 +13,7 @@
 	be.tba.util.exceptions.AccessDeniedException,
 	be.tba.servlets.session.SessionManager,
 	be.tba.util.session.AccountCache,
+	be.tba.util.invoice.InvoiceHelper,
 	
 	java.text.DecimalFormat,
 	be.tba.ejb.account.interfaces.AccountEntityData,
@@ -31,8 +32,6 @@ private StringBuilder allEntryIds;%>
                 int vYear = vSession.getYear();
                 Calendar vToday = Calendar.getInstance();
                 int vCurYear = vToday.get(Calendar.YEAR);
-
-                InitialContext vContext = new InitialContext();
 %>
 <body>
 <p><span class="admintitle"> Factuurlijst bewerken<br>
@@ -87,7 +86,7 @@ private StringBuilder allEntryIds;%>
 				</tr>
 			</table>
 			<br>
-			<input class="tbabutton" type=submit name=action value=" Factuur toevoegen " onclick="toevoegen()">
+			<!--  <input class="tbabutton" type=submit name=action value=" Factuur toevoegen " onclick="toevoegen()">-->
 			<input class="tbabutton" type=submit name=action value=" Verwijderen " onclick="verwijderen()">
 			<input class="tbabutton" type=submit name=action value=" Bevriezen en docs genereren " onclick="vriezen()">
             <input class="tbabutton" type=submit name=action value=" Mailen " onclick="mailen()">
@@ -160,24 +159,26 @@ private StringBuilder allEntryIds;%>
                  }
                  String vId = "id" + vEntry.getId();
                  String vEuroGif = "";
-                 String vCompanyName;
+                 String vCompanyName = "";
                  double vKost = vEntry.getTotalCost();
-                 AccountEntityData vAccount = AccountCache.getInstance().get(vEntry.getAccountFwdNr());
+                 AccountEntityData vAccount = AccountCache.getInstance().get(vEntry);
                  
-                 if (vAccount != null || (vEntry.getCustomerName() != null && vEntry.getCustomerName().length() > 0))
+                 //extractCustomerNameFromInvoiceFileName
+                 
+                 if (vAccount != null)
                  {
-                     if (vAccount != null)
-                     {
-                         vCompanyName = vAccount.getFullName();
-                     }
-                     else
-                     {
-                         vCompanyName = vEntry.getCustomerName();
-                     }
+                	 //System.out.println("name from AccountId");
+                	 vCompanyName = vAccount.getFullName();
                  }
+                 else if (vEntry.getCustomerName() != null && vEntry.getCustomerName().length() > 0)
+			 	 {
+                     //System.out.println("name from invoice customer name");
+                	 vCompanyName = vEntry.getCustomerName();
+				 }
                  else
                  {
-                 	vCompanyName = vEntry.getFileName();
+                     //System.out.println("name from filename");
+                	 vCompanyName = InvoiceHelper.extractCustomerNameFromInvoiceFileName(vEntry.getFileName());
                  }
 				if (vEntry.getIsPayed())
 				{

@@ -11,25 +11,25 @@ import be.tba.util.session.AccountCache;
 
 final public class MailNowTask 
 {
-    static public void send(String account)
+    static public void send(int accountId)
     {
         if (System.getenv("TBA_MAIL_ON") == null)
         {
             return;
         }
 
-        Thread t = new Thread(new MailNowThread(account));
+        Thread t = new Thread(new MailNowThread(accountId));
         t.start();
 
     }
 
     private static class MailNowThread implements Runnable
     {
-        private String mAccount;
+        private int mAccountId;
 
-        MailNowThread(String account)
+        MailNowThread(int accountId)
         {
-            mAccount = account;
+            mAccountId = accountId;
         }
 
         public void run()
@@ -41,14 +41,14 @@ final public class MailNowTask
             {
                 Thread.sleep(10000);
 
-                System.out.println("MailNowThread run for " + mAccount);
+                System.out.println("MailNowThread run for " + mAccountId);
                 session = new WebSession();
-                AccountEntityData vAccountData = AccountCache.getInstance().get(mAccount);
+                AccountEntityData vAccountData = AccountCache.getInstance().get(mAccountId);
 
                 String vEmail = vAccountData.getEmail();
                 if (vEmail != null && vEmail.length() > 0)
                 {
-                    MailerSessionBean.sendMail(session, vAccountData.getFwdNumber());
+                    MailerSessionBean.sendMail(session, vAccountData.getId());
                 }
                 session.Close();
             }

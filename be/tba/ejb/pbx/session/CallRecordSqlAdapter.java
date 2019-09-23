@@ -10,6 +10,7 @@ import java.util.Vector;
 import be.tba.ejb.account.interfaces.AccountEntityData;
 import be.tba.ejb.pbx.interfaces.CallRecordEntityData;
 import be.tba.pbx.Forum700CallRecord;
+import be.tba.servlets.helper.IntertelCallManager;
 import be.tba.servlets.session.WebSession;
 import be.tba.util.constants.Constants;
 import be.tba.util.data.AbstractSqlAdapter;
@@ -18,7 +19,6 @@ import be.tba.util.data.ReleaseCallData;
 import be.tba.util.session.AccountCache;
 import be.tba.util.timer.CallCalendar;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 
@@ -402,20 +402,20 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
     /**
      * @ejb:interface-method view-type="remote"
      */
-    public Collection<CallRecordEntityData> getInvoiceCalls(WebSession webSession, String fwdNr, long start, long stop)
+    public Collection<CallRecordEntityData> getInvoiceCalls(WebSession webSession, int accountId, long start, long stop)
     {
         Collection<CallRecordEntityData> vCallList = new Vector<CallRecordEntityData>();
-        collectInvoiceCalls(webSession, AccountCache.getInstance().get(fwdNr), vCallList, start, stop);
+        collectInvoiceCalls(webSession, AccountCache.getInstance().get(accountId), vCallList, start, stop);
         return vCallList;
     }
 
     /**
      * @ejb:interface-method view-type="remote"
      */
-    public Hashtable<String, Collection<CallRecordEntityData>> getInvoiceCallsHashTable(WebSession webSession, String fwdNr, long start, long stop)
+    public Hashtable<Integer, Collection<CallRecordEntityData>> getInvoiceCallsHashTable(WebSession webSession, int accountId, long start, long stop)
     {
-        Hashtable<String, Collection<CallRecordEntityData>> vCallList = new Hashtable<String, Collection<CallRecordEntityData>>();
-        collectInvoiceCallsHashTable(webSession, AccountCache.getInstance().get(fwdNr), vCallList, start, stop);
+        Hashtable<Integer, Collection<CallRecordEntityData>> vCallList = new Hashtable<Integer, Collection<CallRecordEntityData>>();
+        collectInvoiceCallsHashTable(webSession, AccountCache.getInstance().get(accountId), vCallList, start, stop);
         return vCallList;
     }
 
@@ -638,7 +638,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
         }
         if (customer.getHasSubCustomers())
         {
-            Collection<AccountEntityData> vSubCustomerList = AccountCache.getInstance().getSubCustomersList(customer.getFwdNumber());
+            Collection<AccountEntityData> vSubCustomerList = AccountCache.getInstance().getSubCustomersList(customer.getId());
             System.out.println(customer.getFullName() + " has " + vSubCustomerList.size() + " sub customers");
             for (Iterator<AccountEntityData> i = vSubCustomerList.iterator(); i.hasNext();)
             {
@@ -656,7 +656,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
         }
     }
 
-    private void collectInvoiceCallsHashTable(WebSession webSession, AccountEntityData customer, Hashtable<String, Collection<CallRecordEntityData>> callList, long start, long stop)
+    private void collectInvoiceCallsHashTable(WebSession webSession, AccountEntityData customer, Hashtable<Integer, Collection<CallRecordEntityData>> callList, long start, long stop)
     {
         // CallRecordEntityHome callRecordHome = getEntityBean();
         Collection<CallRecordEntityData> vCollection = executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE FwdNr='" + customer.getFwdNumber() + "' AND TimeStamp>" + start + " AND TimeStamp<=" + stop + " AND IsDocumented=TRUE AND IsMailed=TRUE ORDER BY TimeStamp DESC");
@@ -667,12 +667,12 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
         if (vCollection != null)
         {
             // vCollection = translateToValueObjects(vCollection);
-            callList.put(customer.getFwdNumber(), vCollection);
+            callList.put(customer.getId(), vCollection);
             System.out.println("collectInvoiceCallsHashTable for customer " + customer.getFullName() + ": " + vCollection.size() + "(" + start + ", " + stop + ")");
         }
         if (customer.getHasSubCustomers())
         {
-            Collection<AccountEntityData> vSubCustomerList = AccountCache.getInstance().getSubCustomersList(customer.getFwdNumber());
+            Collection<AccountEntityData> vSubCustomerList = AccountCache.getInstance().getSubCustomersList(customer.getId());
             System.out.println(customer.getFullName() + " has " + vSubCustomerList.size() + " sub customers");
             for (Iterator<AccountEntityData> i = vSubCustomerList.iterator(); i.hasNext();)
             {
@@ -929,7 +929,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
             Calendar vCalendar = Calendar.getInstance();
             newRecord.setTimeStamp(vCalendar.getTimeInMillis());
 
-            AccountEntityData vData = AccountCache.getInstance().get(newRecord.getFwdNr());
+            AccountEntityData vData = AccountCache.getInstance().get(newRecord);
 
             if (vData != null)
             {
@@ -996,6 +996,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
     public void setCallData(WebSession webSession, CallRecordEntityData data)
     {
         setIsDocumentedFlag(data);
+        IntertelCallManager.getInstance().updateOperatorMapping(data);
         updateRow(webSession, data);
     }
 
@@ -1087,6 +1088,9 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
     public int addIntertelCall(WebSession webSession, IntertelCallData data)
     {
     	CallRecordEntityData newRecord = new CallRecordEntityData();
+    	// to be removed:
+    	newRecord.setName(data.intertelCallId.substring(0, 6));
+
     	if (data.isIncoming)
     	{
     		newRecord.setFwdNr(data.calledNr); 
@@ -1097,19 +1101,19 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
     		newRecord.setFwdNr(data.callingNr);
     		newRecord.setNumber(data.calledNr);
     	}
-    	
+    	AccountEntityData vData = AccountCache.getInstance().get(newRecord);
     	newRecord.setTimeStamp(data.tsStart*1000);
     	newRecord.setTsStart(data.tsStart);
     	newRecord.setIsIncomingCall(data.isIncoming);
     	Calendar vToday = Calendar.getInstance();
     	newRecord.setDate(String.format("%02d/%02d/%02d", vToday.get(Calendar.DAY_OF_MONTH), vToday.get(Calendar.MONTH) + 1, vToday.get(Calendar.YEAR) - 2000));
     	newRecord.setTime(String.format("%02d:%02d", vToday.get(Calendar.HOUR_OF_DAY), vToday.get(Calendar.MINUTE)));
-    	AccountEntityData vData = AccountCache.getInstance().get(newRecord.getFwdNr());
   	   	int dbId = 0;
 
         if (vData != null)
         {
-            if (AccountCache.getInstance().isMailEnabled(vData))
+        	newRecord.setAccountId(vData.getId());
+        	if (AccountCache.getInstance().isMailEnabled(vData))
                 newRecord.setIsMailed(false);
             else
                 newRecord.setIsMailed(true);
@@ -1193,34 +1197,35 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
         {
             CallRecordEntityData entry = new CallRecordEntityData();
             entry.setId(rs.getInt(1));
-            entry.setFwdNr(null2EmpthyString(rs.getString(2)));
-            entry.setDate(null2EmpthyString(rs.getString(3)));
-            entry.setTime(null2EmpthyString(rs.getString(4)));
-            entry.setNumber(null2EmpthyString(rs.getString(5)));
-            entry.setName(null2EmpthyString(rs.getString(6)));
-            entry.setCost(null2EmpthyString(rs.getString(7)));
-            entry.setTimeStamp(rs.getLong(8));
-            entry.setIsIncomingCall(rs.getBoolean(9));
-            entry.setIsDocumented(rs.getBoolean(10));
-            entry.setIsReleased(rs.getBoolean(11));
-            entry.setIsNotLogged(rs.getBoolean(12));
-            entry.setIsAgendaCall(rs.getBoolean(13));
-            entry.setIsSmsCall(rs.getBoolean(14));
-            entry.setIsForwardCall(rs.getBoolean(15));
-            entry.setIsImportantCall(rs.getBoolean(16));
-            entry.setIs3W_call(rs.getBoolean(17));
-            entry.setIsMailed(rs.getBoolean(18));
-            entry.setInvoiceLevel(rs.getShort(19));
-            entry.setW3_CustomerId(null2EmpthyString(rs.getString(20)));
-            entry.setShortDescription(null2EmpthyString(rs.getString(21)));
-            entry.setLongDescription(null2EmpthyString(rs.getString(22)));
-            entry.setIsVirgin(rs.getBoolean(23));
-            entry.setIsFaxCall(rs.getBoolean(24));
-            entry.setIsChanged(rs.getBoolean(25));
-            entry.setDoneBy(null2EmpthyString(rs.getString(26)));
-            entry.setTsStart(rs.getLong(27));
-            entry.setTsAnswer(rs.getLong(28));
-            entry.setTsEnd(rs.getLong(29));
+            entry.setAccountId(rs.getInt(2));
+            entry.setFwdNr(null2EmpthyString(rs.getString(3)));
+            entry.setDate(null2EmpthyString(rs.getString(4)));
+            entry.setTime(null2EmpthyString(rs.getString(5)));
+            entry.setNumber(null2EmpthyString(rs.getString(6)));
+            entry.setName(null2EmpthyString(rs.getString(7)));
+            entry.setCost(null2EmpthyString(rs.getString(8)));
+            entry.setTimeStamp(rs.getLong(9));
+            entry.setIsIncomingCall(rs.getBoolean(10));
+            entry.setIsDocumented(rs.getBoolean(11));
+            entry.setIsReleased(rs.getBoolean(12));
+            entry.setIsNotLogged(rs.getBoolean(13));
+            entry.setIsAgendaCall(rs.getBoolean(14));
+            entry.setIsSmsCall(rs.getBoolean(15));
+            entry.setIsForwardCall(rs.getBoolean(16));
+            entry.setIsImportantCall(rs.getBoolean(17));
+            entry.setIs3W_call(rs.getBoolean(18));
+            entry.setIsMailed(rs.getBoolean(19));
+            entry.setInvoiceLevel(rs.getShort(20));
+            entry.setW3_CustomerId(null2EmpthyString(rs.getString(21)));
+            entry.setShortDescription(null2EmpthyString(rs.getString(22)));
+            entry.setLongDescription(null2EmpthyString(rs.getString(23)));
+            entry.setIsVirgin(rs.getBoolean(24));
+            entry.setIsFaxCall(rs.getBoolean(25));
+            entry.setIsChanged(rs.getBoolean(26));
+            entry.setDoneBy(null2EmpthyString(rs.getString(27)));
+            entry.setTsStart(rs.getLong(28));
+            entry.setTsAnswer(rs.getLong(29));
+            entry.setTsEnd(rs.getLong(30));
             vVector.add(entry);
         }
         return vVector;

@@ -120,7 +120,7 @@ if (!chatRecords.isEmpty())
              String spanId = "spanModal" + cnt;
              String spanVar = "spanVar" + cnt;
              String modalText = "modalText" + cnt;
-             out.println("<span class=\"tbaChat\" id=\"" + modalBtnId + "\" onclick=\"openModal('" + modalId + "');\"  >" + vEntry.getDate() + ", " + vEntry.getTime() + "&nbsp;&nbsp;" + AccountCache.getInstance().get(vEntry.getFwdNr()).getFullName() + "</span><br>");
+             out.println("<span class=\"tbaChat\" id=\"" + modalBtnId + "\" onclick=\"openModal('" + modalId + "');\"  >" + vEntry.getDate() + ", " + vEntry.getTime() + "&nbsp;&nbsp;" + AccountCache.getInstance().get(vEntry).getFullName() + "</span><br>");
              // fill the modal
 	    	 modalStrBuffer.append("<div id=\"" + modalId + "\" class=\"tbaModal\">\r\n");
              modalStrBuffer.append("<div class=\"modal-content\">\r\n");
@@ -128,7 +128,7 @@ if (!chatRecords.isEmpty())
 	         modalStrBuffer.append("<p><b>Naam:</b>&nbsp;" + vEntry.getName() + "\r\n");
 	         modalStrBuffer.append("<p><b>Nummer:</b>&nbsp;" + vEntry.getNumber() + "\r\n");
              modalStrBuffer.append("<p>" + vEntry.getDate() + ", " + vEntry.getTime() + "&nbsp;&nbsp;<b>\r\n");
-             modalStrBuffer.append(AccountCache.getInstance().get(vEntry.getFwdNr()).getFullName() + "</b></p>\r\n");
+             modalStrBuffer.append(AccountCache.getInstance().get(vEntry).getFullName() + "</b></p>\r\n");
              modalStrBuffer.append("<div class=\"old-modal-content\">" + vEntry.getShortDescription() + "<br><br>\r\n");
              modalStrBuffer.append("<textarea class=\"tbatextarea\" id=\"" + modalText + "\"></textarea></div>\r\n");
 	    	 modalStrBuffer.append("<p align=\"right\">\r\n");
@@ -171,7 +171,7 @@ if (!chatRecords.isEmpty())
              String spanId = "spanModal_" + cnt;
              String spanVar = "spanVar_" + cnt;
              String modalText = "modalText_" + cnt;
-             out.println("<span class=\"tbaChat\" id=\"" + modalBtnId + "\" onclick=\"openModal('" + modalId + "');\"  >" + vEntry.getDate() + ", " + vEntry.getTime() + "&nbsp;&nbsp;" + AccountCache.getInstance().get(vEntry.getFwdNr()).getFullName() + "</span><br>");
+             out.println("<span class=\"tbaChat\" id=\"" + modalBtnId + "\" onclick=\"openModal('" + modalId + "');\"  >" + vEntry.getDate() + ", " + vEntry.getTime() + "&nbsp;&nbsp;" + AccountCache.getInstance().get(vEntry).getFullName() + "</span><br>");
              // fill the modal
              modalStrBuffer.append("<div id=\"" + modalId + "\" class=\"tbaModal\">\r\n");
              modalStrBuffer.append("<div class=\"modal-content\">\r\n");
@@ -179,7 +179,7 @@ if (!chatRecords.isEmpty())
              modalStrBuffer.append("<p><b>Naam:</b>&nbsp;" + vEntry.getName() + "\r\n");
              modalStrBuffer.append("<p><b>Nummer:</b>&nbsp;" + vEntry.getNumber() + "\r\n");
              modalStrBuffer.append("<p>" + vEntry.getDate() + ", " + vEntry.getTime() + "&nbsp;&nbsp;<b>\r\n");
-             modalStrBuffer.append(AccountCache.getInstance().get(vEntry.getFwdNr()).getFullName() + "</b></p>\r\n");
+             modalStrBuffer.append(AccountCache.getInstance().get(vEntry).getFullName() + "</b></p>\r\n");
              modalStrBuffer.append("<div class=\"old-modal-content\">" + vEntry.getShortDescription() + "<br><br>\r\n");
              modalStrBuffer.append("<textarea  class=\"tbatextarea\" id=\"" + modalText + "\"></textarea></div>\r\n");
              modalStrBuffer.append("<p align=\"right\">\r\n");
@@ -236,7 +236,7 @@ else
 
       String vId = "id" + vEntry.getId();
       String customerName;
-      vAccountEntityData = AccountCache.getInstance().get(vEntry.getFwdNr());
+      vAccountEntityData = AccountCache.getInstance().get(vEntry);
       if (vAccountEntityData == null)
       {
           customerName = "Oude klant(" + vEntry.getFwdNr() + ")";

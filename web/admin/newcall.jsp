@@ -50,7 +50,7 @@ HttpSession vHttpSession = request.getSession();
 	if (vNewRecord != null)
     {
       // provide the customer call selection stuff
-     CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
+      CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
       Collection<CallRecordEntityData> vRecords = vQuerySession.getVirgins(vSession);
 
       if (vRecords.size() > 0)
@@ -79,11 +79,11 @@ HttpSession vHttpSession = request.getSession();
         {
           CallRecordEntityData vEntry = (CallRecordEntityData) i.next();
 
-          AccountEntityData vAccountEntityData = AccountCache.getInstance().get(vEntry.getFwdNr());
+          AccountEntityData vAccountEntityData = AccountCache.getInstance().get(vEntry);
           String name;
           if (vAccountEntityData == null)
           {
-            name = vEntry.getFwdNr() + "  is onbekend!";
+              name = vEntry.getFwdNr() + "  is onbekend!";
         	  System.out.println("Oproepen database refereert naar een klantnummer " + vEntry.getFwdNr() +
                                             " die niet gekend is. Maak een klant aan met deze klantnummer om deze oproepen zichtbaar te maken.");
           }

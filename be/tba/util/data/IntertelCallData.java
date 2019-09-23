@@ -8,6 +8,7 @@ public class IntertelCallData
 	
 	public String calledNr;
 	public String callingNr;
+	public String answeredBy;
 	public String phase;
 	public boolean isIncoming;
 	public long tsStart;
@@ -70,6 +71,13 @@ public class IntertelCallData
 		if (nr == null)
 			nr = "";
 		this.callingNr = last6Numbers(nr);
+	}
+	
+	public void setAnsweredBy(String phoneId)
+	{
+		if (phoneId == null)
+			phoneId = "";
+		this.answeredBy = phoneId;
 	}
 	
 //	public void setTransferData(IntertelCallData data)

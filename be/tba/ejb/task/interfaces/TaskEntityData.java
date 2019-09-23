@@ -24,17 +24,18 @@ public class TaskEntityData extends be.tba.util.data.AbstractData
     private double fixedPrice;
     private int timeSpend;
     private java.lang.String description;
-    private boolean isInvoiced;
     private boolean isRecuring;
     private long stopTime;
     private long startTime;
     private java.lang.String doneBy;
+    private int invoiceId;
+    private int accountId;
 
     public TaskEntityData()
     {
     }
 
-    public TaskEntityData(int id, java.lang.String fwdNr, java.lang.String date, long timeStamp, boolean isFixedPrice, double fixedPrice, int timeSpend, java.lang.String description, boolean isInvoiced, boolean isRecuring, long stopTime, long startTime, java.lang.String doneBy)
+    public TaskEntityData(int id, java.lang.String fwdNr, java.lang.String date, long timeStamp, boolean isFixedPrice, double fixedPrice, int timeSpend, java.lang.String description, boolean isRecuring, long stopTime, long startTime, java.lang.String doneBy, int invoiceId, int accountId)
     {
         setId(id);
         setFwdNr(fwdNr);
@@ -44,11 +45,12 @@ public class TaskEntityData extends be.tba.util.data.AbstractData
         setFixedPrice(fixedPrice);
         setTimeSpend(timeSpend);
         setDescription(description);
-        setIsInvoiced(isInvoiced);
         setIsRecuring(isRecuring);
         setStopTime(stopTime);
         setStartTime(startTime);
         setDoneBy(doneBy);
+        setInvoiceId(invoiceId);
+        setAccountId(accountId);
     }
 
     public TaskEntityData(TaskEntityData otherData)
@@ -61,12 +63,12 @@ public class TaskEntityData extends be.tba.util.data.AbstractData
         setFixedPrice(otherData.getFixedPrice());
         setTimeSpend(otherData.getTimeSpend());
         setDescription(otherData.getDescription());
-        setIsInvoiced(otherData.getIsInvoiced());
         setIsRecuring(otherData.getIsRecuring());
         setStopTime(otherData.getStopTime());
         setStartTime(otherData.getStartTime());
         setDoneBy(otherData.getDoneBy());
-
+        setInvoiceId(otherData.getInvoiceId());
+        setAccountId(otherData.getAccountId());
     }
 
     public be.tba.ejb.task.interfaces.TaskEntityPK getPrimaryKey()
@@ -155,16 +157,6 @@ public class TaskEntityData extends be.tba.util.data.AbstractData
         this.description = description;
     }
 
-    public boolean getIsInvoiced()
-    {
-        return this.isInvoiced;
-    }
-
-    public void setIsInvoiced(boolean isInvoiced)
-    {
-        this.isInvoiced = isInvoiced;
-    }
-
     public boolean getIsRecuring()
     {
         return this.isRecuring;
@@ -205,6 +197,26 @@ public class TaskEntityData extends be.tba.util.data.AbstractData
         this.doneBy = doneBy;
     }
 
+    public int getInvoiceId()
+    {
+        return this.invoiceId;
+    }
+
+    public void setInvoiceId(int invoiceId)
+    {
+        this.invoiceId = invoiceId;
+    }
+
+    public int getAccountId()
+    {
+        return this.accountId;
+    }
+
+    public void setAccountId(int accountId)
+    {
+        this.accountId = accountId;
+    }
+  
     public String toString()
     {
         StringBuffer str = new StringBuffer("{");
@@ -219,7 +231,32 @@ public class TaskEntityData extends be.tba.util.data.AbstractData
     {
         StringBuffer str = new StringBuffer();
 
-        str.append("FwdNr='" + ((this.fwdNr != null) ? this.fwdNr : "") + "',Date='" + ((this.date != null) ? escapeQuotes(this.date) : "") + "',TimeStamp=" + getTimeStamp() + ",IsFixedPrice=" + getIsFixedPrice() + ",FixedPrice=" + getFixedPrice() + ",TimeSpend=" + getTimeSpend() + ",Description='" + ((this.description != null) ? escapeQuotes(this.description) : "") + "',IsInvoiced=" + getIsInvoiced() + ",IsRecuring=" + getIsRecuring() + ",StartTime=" + getStartTime() + ",StopTime=" + getStopTime() + ",DoneBy='" + ((this.doneBy != null) ? this.doneBy : "") + "' ");
+        str.append("FwdNr='");
+        str.append((this.fwdNr != null) ? this.fwdNr : "");
+        str.append("',Date='");
+        str.append((this.date != null) ? escapeQuotes(this.date) : "");
+        str.append("',TimeStamp=");
+        str.append(getTimeStamp());
+        str.append(",IsFixedPrice=");
+        str.append(getIsFixedPrice());
+        str.append(",FixedPrice=");
+        str.append(getFixedPrice());
+        str.append(",TimeSpend=");
+        str.append(getTimeSpend());
+        str.append(",Description='");
+        str.append((this.description != null) ? escapeQuotes(this.description) : "");
+        str.append("',IsRecuring=");
+        str.append(getIsRecuring());
+        str.append(",StartTime=");
+        str.append(getStartTime());
+        str.append(",StopTime=");
+        str.append(getStopTime());
+        str.append(",DoneBy='");
+        str.append((this.doneBy != null) ? this.doneBy : "");
+        str.append("',InvoideId=");
+        str.append(getInvoiceId());
+        str.append(",AccountID=");
+        str.append(getAccountId());
         return (str.toString());
     }
 
@@ -227,9 +264,33 @@ public class TaskEntityData extends be.tba.util.data.AbstractData
     {
         StringBuffer str = new StringBuffer();
 
-        // "(1, '409031', '04/10/05', 1128528272192, 1, 220, 0, 'Nabelactie voor
-        // client'. ',0 ,0 ,0 ,0 ,'')
-        str.append("'0','" + ((this.fwdNr != null) ? this.fwdNr : "") + "','" + ((this.date != null) ? escapeQuotes(this.date) : "") + "'," + getTimeStamp() + "," + getIsFixedPrice() + "," + getFixedPrice() + "," + getTimeSpend() + ",'" + ((this.description != null) ? escapeQuotes(this.description) : "") + "'," + getIsInvoiced() + "," + getIsRecuring() + "," + getStartTime() + "," + getStopTime() + ",'" + ((this.doneBy != null) ? this.doneBy : "") + "'");
+        // "(1, '409031', '04/10/05', 1128528272192, 1, 220, 0, 'Nabelactie voor client'. ',0 ,0 ,0 ,0 ,'', 0)
+        str.append("'0','");
+        str.append((this.fwdNr != null) ? this.fwdNr : "");
+        str.append("','");
+        str.append((this.date != null) ? escapeQuotes(this.date) : "");
+        str.append("',");
+        str.append(getTimeStamp());
+        str.append(",");
+        str.append(getIsFixedPrice());
+        str.append(",");
+        str.append(getFixedPrice());
+        str.append(",");
+        str.append(getTimeSpend());
+        str.append(",'");
+        str.append((this.description != null) ? escapeQuotes(this.description) : "");
+        str.append("',");
+        str.append(getIsRecuring());
+        str.append(",");
+        str.append(getStartTime());
+        str.append(",");
+        str.append(getStopTime());
+        str.append(",'");
+        str.append((this.doneBy != null) ? this.doneBy : "");
+        str.append("',");
+        str.append(getInvoiceId());
+        str.append(",");
+        str.append(getAccountId());
         return (str.toString());
     }
 
@@ -241,47 +302,7 @@ public class TaskEntityData extends be.tba.util.data.AbstractData
             boolean lEquals = true;
 
             lEquals = lEquals && this.id == lTest.id;
-            if (this.fwdNr == null)
-            {
-                lEquals = lEquals && (lTest.fwdNr == null);
-            }
-            else
-            {
-                lEquals = lEquals && this.fwdNr.equals(lTest.fwdNr);
-            }
-            if (this.date == null)
-            {
-                lEquals = lEquals && (lTest.date == null);
-            }
-            else
-            {
-                lEquals = lEquals && this.date.equals(lTest.date);
-            }
             lEquals = lEquals && this.timeStamp == lTest.timeStamp;
-            lEquals = lEquals && this.isFixedPrice == lTest.isFixedPrice;
-            lEquals = lEquals && this.fixedPrice == lTest.fixedPrice;
-            lEquals = lEquals && this.timeSpend == lTest.timeSpend;
-            if (this.description == null)
-            {
-                lEquals = lEquals && (lTest.description == null);
-            }
-            else
-            {
-                lEquals = lEquals && this.description.equals(lTest.description);
-            }
-            lEquals = lEquals && this.isInvoiced == lTest.isInvoiced;
-            lEquals = lEquals && this.isRecuring == lTest.isRecuring;
-            lEquals = lEquals && this.stopTime == lTest.stopTime;
-            lEquals = lEquals && this.startTime == lTest.startTime;
-            if (this.doneBy == null)
-            {
-                lEquals = lEquals && (lTest.doneBy == null);
-            }
-            else
-            {
-                lEquals = lEquals && this.doneBy.equals(lTest.doneBy);
-            }
-
             return lEquals;
         }
         else
@@ -293,36 +314,8 @@ public class TaskEntityData extends be.tba.util.data.AbstractData
     public int hashCode()
     {
         int result = 17;
-
         result = 37 * result + (int) id;
-
-        result = 37 * result + ((this.fwdNr != null) ? this.fwdNr.hashCode() : 0);
-
-        result = 37 * result + ((this.date != null) ? this.date.hashCode() : 0);
-
-        result = 37 * result + (int) (timeStamp ^ (timeStamp >>> 32));
-
-        result = 37 * result + (isFixedPrice ? 0 : 1);
-
-        {
-            long l = Double.doubleToLongBits(fixedPrice);
-            result = 37 * result + (int) (l ^ (l >>> 32));
-        }
-
-        result = 37 * result + (int) timeSpend;
-
-        result = 37 * result + ((this.description != null) ? this.description.hashCode() : 0);
-
-        result = 37 * result + (isInvoiced ? 0 : 1);
-
-        result = 37 * result + (isRecuring ? 0 : 1);
-
         result = 37 * result + (int) (stopTime ^ (stopTime >>> 32));
-
-        result = 37 * result + (int) (startTime ^ (startTime >>> 32));
-
-        result = 37 * result + ((this.doneBy != null) ? this.doneBy.hashCode() : 0);
-
         return result;
     }
 

@@ -161,7 +161,7 @@
 				                            String vCollor = "CCDD00";
 				                            String vId = "id" + vEntry.getId();
 				                            double vKost = vEntry.getTotalCost();
-				                            AccountEntityData vAccount = AccountCache.getInstance().get(vEntry.getAccountFwdNr());
+				                            AccountEntityData vAccount = AccountCache.getInstance().get(vEntry);
 				                            
 				                            if (vAccount != null)
 				                            {

@@ -42,7 +42,7 @@ public class InvoiceFacade
         String vInvoiceId = req.getParameter(Constants.INVOICE_TO_SAVE);
         InvoiceSqlAdapter vInvoiceSession = new InvoiceSqlAdapter();
 
-        InvoiceEntityData vInvoice = vInvoiceSession.getInvoiceById(session, vInvoiceId);
+        InvoiceEntityData vInvoice = vInvoiceSession.getInvoiceById(session, Integer.valueOf(vInvoiceId).intValue());
         if (vInvoice != null)
         {
             vInvoice.setCustomerRef((String) req.getParameter(Constants.INVOICE_CUST_REF));
@@ -55,7 +55,7 @@ public class InvoiceFacade
         String vInvoiceId = req.getParameter(Constants.INVOICE_TO_SAVE);
         InvoiceSqlAdapter vInvoiceSession = new InvoiceSqlAdapter();
 
-        InvoiceEntityData vInvoice = vInvoiceSession.getInvoiceById(session, vInvoiceId);
+        InvoiceEntityData vInvoice = vInvoiceSession.getInvoiceById(session, Integer.valueOf(vInvoiceId).intValue());
         if (vInvoice != null)
         {
             vInvoice.setPayDate((String) req.getParameter(Constants.INVOICE_PAYDATE));
@@ -190,13 +190,16 @@ public class InvoiceFacade
                 AccountEntityData vAccountData = (AccountEntityData) vIter.next();
                 if (vAccountData.getNoInvoice())
                     continue;
-                InvoiceHelper vHelper = new InvoiceHelper(session, vAccountData.getFwdNumber(), session.getMonthsBack(), session.getYear());
+                InvoiceHelper vHelper = new InvoiceHelper(session, vAccountData.getId(), session.getMonthsBack(), session.getYear());
                 vHelper.storeOrUpdate(session);
                 vHelper.generatePdfInvoice();
             }
         }
     }
 
+    /*
+     * Not used anymore
+     
     public static void addInvoice(HttpServletRequest req, WebSession session)
     {
         InvoiceEntityData newInvoice = new InvoiceEntityData();
@@ -215,6 +218,7 @@ public class InvoiceFacade
         newInvoice.setYearSeqNr(0);
 
         newInvoice.setCustomerName((String) req.getParameter(Constants.INVOICE_CUSTOMER));
+        //newInvoice.setAccountID(Integer.valueOf((String) req.getParameter(Constants.ACCOUNT_ID)));
         InvoiceSqlAdapter vInvoiceSession = new InvoiceSqlAdapter();
         int invoiceNr = vInvoiceSession.getNewInvoiceNumber(session, vYear);
         newInvoice.setYearSeqNr(invoiceNr);
@@ -224,7 +228,7 @@ public class InvoiceFacade
 
         vInvoiceSession.addRow(session, newInvoice);
     }
-
+*/
 
     public static void generateCreditInvoice(HttpServletRequest req, WebSession session) 
     {
@@ -232,7 +236,7 @@ public class InvoiceFacade
         if (invoiceId != -1)
         {
             InvoiceSqlAdapter vInvoiceSession = new InvoiceSqlAdapter();
-            InvoiceEntityData vInvoiceData = vInvoiceSession.getInvoiceById(session, Integer.toString(invoiceId));
+            InvoiceEntityData vInvoiceData = vInvoiceSession.getInvoiceById(session, invoiceId);
             
             if (vInvoiceData != null)
             {
@@ -262,7 +266,7 @@ public class InvoiceFacade
                 //vInvoiceData.setStopTime(vInvoiceData.getStartTime());
                 vInvoiceSession.updateRow(session, vInvoiceData);
                 
-                AccountEntityData account = AccountCache.getInstance().get(vInvoiceData.getAccountFwdNr());
+                AccountEntityData account = AccountCache.getInstance().get(vInvoiceData);
                 CustomerData customerData = new CustomerData();
                 customerData.setId(account.getId());
                 customerData.setAddress1(account.getStreet());

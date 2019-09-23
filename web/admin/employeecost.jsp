@@ -93,7 +93,7 @@ try
 	  }
 	  else
 	  {
-	      taskCost = (vEntry.getTimeSpend() / 60) * (AccountCache.getInstance().get(vEntry.getFwdNr()).getTaskHourRate() / 100);
+	      taskCost = (vEntry.getTimeSpend() / 60) * (AccountCache.getInstance().get(vEntry.getAccountId()).getTaskHourRate() / 100);
 	  }
 	  totalTasks += taskCost;
 	  if (performanceMap.containsKey(vEntry.getDoneBy()))

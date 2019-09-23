@@ -157,6 +157,7 @@ public class Constants
     public static final String ACCOUNT_TEXT_MAIL = "_atm";
     public static final String ACCOUNT_IS_MAIL_INVOICE = "_ami";
     public static final String ACCOUNT_COUNTRY_CODE = "_acc";
+    public static final String ACCOUNT_INFO = "_aci";
     public static final String TASK_ID = "_tid";
     public static final String TASK_FORWARD_NUMBER = "_tfwnr";
     public static final String TASK_DATE = "_tdate";
@@ -305,6 +306,8 @@ public class Constants
     public static final String INVOICE_DETAIL = "INVOICE_DETAIL";
     public static final String MAIL_IT = "MAIL_IT";
     public static final String SHOW_MAIL_ERROR = "SHOW_MAIL_ERROR";
+    public static final String FIX_ACCOUNT_IDS = "FIX_ACCOUNT_IDS";
+    
 
     // LoginServlet actions
     public static final String ACTION_LOGIN = "ACTION_LOGIN";

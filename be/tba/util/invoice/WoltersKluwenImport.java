@@ -66,11 +66,11 @@ public class WoltersKluwenImport
         for (Iterator<InvoiceEntityData> i = invoiceList.iterator(); i.hasNext();)
         {
             InvoiceEntityData vEntry = i.next();
-            AccountEntityData account = AccountCache.getInstance().get(vEntry.getAccountFwdNr()); 
+            AccountEntityData account = AccountCache.getInstance().get(vEntry); 
             
             String exclStr = costFormatter.format(vEntry.getTotalCost());
             String vatStr =  costFormatter.format(vEntry.getTotalCost()*0.21);
-            String inclStr = costFormatter.format(new Double(exclStr.replace(',', '.')) + new Double(vatStr.replace(',', '.')));
+            String inclStr = costFormatter.format(Double.parseDouble(exclStr.replace(',', '.')) + Double.parseDouble(vatStr.replace(',', '.')));
             if (account != null && account.getNoBtw())
             {
             	vatStr = "0.00";

@@ -6,17 +6,28 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Vector;
 
+import be.tba.ejb.pbx.interfaces.CallRecordEntityData;
 import be.tba.util.data.IntertelCallData;
 
 public class IntertelCallManager 
 {
+	private final class PhoneLog
+	{
+		public String phoneId;
+		public long lastUsed;
+	}
+	
+	private static final int kCallCleaner = 100;
 	private static IntertelCallManager mInstance;
 	
 	private Map<String, IntertelCallData> mCallMap;
+	private Map<String, PhoneLog> mOperatorPhoneMap;
+	private int mCallCnt = 0;
 	
 	private IntertelCallManager()
 	{
 		mCallMap = new HashMap<String, IntertelCallData>();
+		mOperatorPhoneMap = new HashMap<String, PhoneLog>();
 	}
 
 	public static IntertelCallManager getInstance()
@@ -31,6 +42,12 @@ public class IntertelCallManager
 	public synchronized void newCall(IntertelCallData data)
 	{
 		mCallMap.put(data.intertelCallId, data);
+		if (++mCallCnt > kCallCleaner)
+		{
+			mCallCnt = 0;
+			cleanUpMaps();
+		}
+		//System.out.println(data.intertelCallId.substring(0, 6) + "-created in manager");
 	}
 	
 	public synchronized IntertelCallData get(String callId)
@@ -63,7 +80,7 @@ public class IntertelCallManager
         	String key = i.next();
         	IntertelCallData data = mCallMap.get(key);
         	
-        	System.out.println("getransferCall: " + transferCalledNr + "==" + data.calledNr + " && " + transferCallingNr + "==" + data.callingNr + " && " + transferedCallId + " != " +  data.intertelCallId);
+        	//System.out.println("getransferCall: " + transferCalledNr + "==" + data.calledNr + " && " + transferCallingNr + "==" + data.callingNr + " && " + transferedCallId + " != " +  data.intertelCallId);
         	
         	if (transferCalledNr.equals(data.calledNr) && transferCallingNr.equals(data.callingNr) && !transferedCallId.equals(data.intertelCallId))
         	{
@@ -76,8 +93,10 @@ public class IntertelCallManager
 	public synchronized void removeCall(String callId)
 	{
 		IntertelCallData data = mCallMap.get(callId);
+		if (data == null) return; // to be removed once we have switched to Intertel
 		if (data.tsEnd > 0)
 		{
+			//System.out.println(data.intertelCallId.substring(0, 6) + "-remove from manager");
 			mCallMap.remove(callId);
 		}
 	}
@@ -89,7 +108,40 @@ public class IntertelCallManager
 		return calls;
 	}
 	
-	public synchronized void cleanUpOldCalls()
+	
+	public synchronized void updateOperatorMapping(CallRecordEntityData data)
+	{
+		IntertelCallData call = getByDbId(data.getId());
+		if (call == null) return; // to be removed once we have switched to Intertel
+		boolean addIt = false;
+		if (mOperatorPhoneMap.containsKey(data.getDoneBy()))
+		{
+			PhoneLog phoneLog = mOperatorPhoneMap.get(data.getDoneBy());
+			if (phoneLog.equals(call.answeredBy))
+			{
+				// update timestamp
+				phoneLog.lastUsed = System.currentTimeMillis() / 1000l;
+			}
+			else
+			{
+				mOperatorPhoneMap.remove(data.getDoneBy());
+				addIt = true;
+			}
+		}
+		else
+		{
+			addIt = true;
+		}
+		if (addIt)
+		{
+			PhoneLog phoneLog = new PhoneLog();
+			phoneLog.phoneId = call.answeredBy;
+			phoneLog.lastUsed = System.currentTimeMillis() / 1000l;
+			mOperatorPhoneMap.put(data.getDoneBy(), phoneLog);
+		}
+	}
+	
+	private void cleanUpMaps()
 	{
 		long tsNow = System.currentTimeMillis() / 1000l;
 		
@@ -102,6 +154,19 @@ public class IntertelCallManager
         		mCallMap.remove(key);
         	}
         }
+        for (Iterator<String> i = mOperatorPhoneMap.keySet().iterator(); i.hasNext();)
+        {
+        	String key = i.next();
+        	PhoneLog phoneLog = mOperatorPhoneMap.get(key);
+        	if ((tsNow - phoneLog.lastUsed) > 3600)
+        	{
+        		mOperatorPhoneMap.remove(key);
+        		System.out.println("IntertelCallManager: removed from mOperatorPhoneMap: " + key);
+        	}
+        }
+        
+        
 	}
+	
 	
 }

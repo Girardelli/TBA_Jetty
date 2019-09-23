@@ -73,7 +73,7 @@ final public class MailTimerTask extends TimerTask implements TimerTaskIntf
                         {
                             try
                             {
-                                MailerSessionBean.sendMail(session, vAccount.getFwdNumber());
+                                MailerSessionBean.sendMail(session, vAccount.getId());
                                 System.out.println("Mail sent to " + vAccount.getFullName());
                             }
                             catch (Exception e)

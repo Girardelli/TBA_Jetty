@@ -31,11 +31,11 @@ private static final int kMaxMailMinutes = 56;
 try {
 vSession.setCallingJsp(Constants.UPDATE_ACCOUNT_JSP);
 
-String vFwdNr = (String) request.getParameter(Constants.ACCOUNT_ID);
-if (vFwdNr == null)
+String accountIdStr = (String) request.getParameter(Constants.ACCOUNT_ID);
+if (accountIdStr == null)
   throw new SystemErrorException("Interne fout: Account key null.");
-
-AccountEntityData vCustomer = AccountCache.getInstance().get(vFwdNr);
+int accountId = Integer.valueOf(accountIdStr);
+AccountEntityData vCustomer = AccountCache.getInstance().get(accountId);
 
 String vFullName = vCustomer.getFullName();
 vFullName = (vFullName == null) ? "" : vFullName;
@@ -49,6 +49,8 @@ String v3W_PersonId = vCustomer.getW3_PersonId();
 v3W_PersonId = (v3W_PersonId == null) ? "" : v3W_PersonId;
 String vW3_CompanyId = vCustomer.getW3_CompanyId();
 vW3_CompanyId = (vW3_CompanyId == null) ? "" : vW3_CompanyId;
+String vCallProcessInfo = vCustomer.getCallProcessInfo();
+
 
 
 int vMailHour1 = vCustomer.getMailHour1();
@@ -137,8 +139,8 @@ double vFacLongFwd = vCustomer.getFacLongFwd();
 								<td width="500" valign="top" class="bodybold"><%=AccountRole.fromShort(vCustomer.getRole()).getText()%></td>
 							</tr>
                             <tr>
-                                <td width="200" valign="top" class="adminsubsubtitle">supercustomer</td>
-                                <td width="500" valign="top" class="bodybold"> <%=(vCustomer.getSuperCustomer() != null ? vCustomer.getSuperCustomer() : "") %> </td>
+                                <td width="200" valign="top" class="adminsubsubtitle">mijn super klant</td>
+                                <td width="500" valign="top" class="bodybold"> <%=(vCustomer.getSuperCustomer() != null ? vCustomer.getSuperCustomer() : "-") %> </td>
 <!--                             </tr>
 
 
@@ -214,7 +216,7 @@ for (Iterator<String> n = vFreeNumbers.iterator(); n.hasNext();)
 								<td width="500" valign="top"><input type=text name=<%=Constants.ACCOUNT_EMAIL%> size=50 value="<%=vEmail%>"></td>
 							</tr>
 							<tr>
-								<td width="200" valign="top" class="adminsubsubtitle">Invoice
+								<td width="200" valign="top" class="adminsubsubtitle">Facturatie
 									e-mail</td>
 								<td width="500" valign="top"><input type=text
 									name=<%=Constants.ACCOUNT_INVOICE_EMAIL%> size=50
@@ -242,15 +244,24 @@ for (int i = 0; i < Constants.COUNTRY_CODES[0].length; i++)
         {
     %>
 							<tr>
-								<td width="200" valign="top" class="adminsubsubtitle">super	klant</td>
+								<td width="200" valign="top" class="adminsubsubtitle">Dit is een super klant</td>
 								<td width="500" valign="top" class="bodytekst"><input
 									type=checkbox name=<%=Constants.ACCOUNT_HAS_SUB_CUSTOMERS%>
 									value="<%=Constants.YES%>"
 									<%=(vCustomer.getHasSubCustomers()?kChecked:"")%>></td>
 							</tr>
-                        <%
+    <%
         }
     %>
+                            <tr>
+                                <td width="200" valign="top" class="adminsubsubtitle">Info</td>
+                                <td width="500" valign="top" class="bodytekst">Gebruik volgende html code om deze tekst te stylen:<br>
+                                    &ltb&gt<b>bold tekst</b>&lt/b&gt<br>
+                                    &lti&gt<i>italic tekst</i>&lt/i&gt<br>
+                                    &ltbr&gt om een nieuwe lijn aan te duiden.<br><br>                                      
+                                    <textarea name=<%=Constants.ACCOUNT_INFO%> rows=12 cols=70><%=(String) vCustomer.getCallProcessInfo()%></textarea>
+                                </td>
+                            </tr>
 						</table>
 						<%
         if (vSession.getRole() == AccountRole.ADMIN)
@@ -620,7 +631,7 @@ for (int i = 0; i < kMaxMailMinutes; i += 5)
 		<br>
 		<input class="tbabutton" type=reset value=" Blad Wissen "> 
         <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.GOTO_SAVE_ACCOUNT%>"> 
-        <input type=hidden name=<%=Constants.ACCOUNT_ID%> value="<%=vFwdNr%>"> 
+        <input type=hidden name=<%=Constants.ACCOUNT_ID%> value="<%=accountId%>"> 
         <input class="tbabutton" type=submit name=action value="Bewaar" onclick="Bewaar()"> 
         <input class="tbabutton" type=submit name=action value="De-registreren" onclick="Deregister()">&nbsp;&nbsp;
 		<input class="tbabutton" type=submit name=action value="Terug" onclick="cancelUpdate()">

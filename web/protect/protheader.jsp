@@ -66,13 +66,12 @@ SessionManager.getInstance().getSession(vSession.getSessionId(), "clientcalls.js
 						<div class="topMenu">&nbsp;&nbsp;&nbsp;Rubrieken&nbsp;&nbsp;&nbsp;</div>
 						<table class="menu" id="rubrieken" width="150">
 							<tr>
-								<td class="menu"><a class='norm'
-									href="/tba/CustomerDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACTION_SHOW_CALLS%>">Oproepen
-										bekijken</a><br> <a class='norm'
-									href="/tba/CustomerDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACTION_GOTO_SEARCH_PAGE%>">Oproepen
-										zoeken</a><br> <a class='norm'
-									href="/tba/CustomerDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACTION_SHOW_TASKS%>">Taken
-										bekijken</a><br></td>
+								<td class="menu">
+								    <a class='norm' href="/tba/CustomerDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACTION_SHOW_CALLS%>">Oproepen bekijken</a><br> 
+								    <a class='norm' href="/tba/CustomerDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACTION_GOTO_SEARCH_PAGE%>">Oproepen zoeken</a><br> 
+								    <a class='norm' href="/tba/CustomerDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACTION_SHOW_TASKS%>">Taken bekijken</a><br>
+                                    <a class='norm' href="/tba/CustomerDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACTION_SEARCH_CALLS%>">Zoeken in oproepen</a><br>
+                                </td>
 							</tr>
 						</table>
 					</td>

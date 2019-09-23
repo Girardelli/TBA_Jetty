@@ -70,7 +70,7 @@ public class MailerSessionBean
     /**
      * @ejb:interface-method view-type="remote"
      */
-    static public boolean sendMail(WebSession webSession, String fwdNr)
+    static public boolean sendMail(WebSession webSession, int accountId)
     {
         AccountEntityData vCustomer = null;
         try
@@ -83,7 +83,7 @@ public class MailerSessionBean
 
             vSession = (Session) vContext.lookup("java:comp/env/mail/Session");
 
-            vCustomer = AccountCache.getInstance().get(fwdNr);
+            vCustomer = AccountCache.getInstance().get(accountId);
 
             String vEmailAddr = vCustomer.getEmail();
             if (vEmailAddr == null)
@@ -289,7 +289,7 @@ public class MailerSessionBean
                 vBody.append("<td width=35  valign=top>" + vTime + "</td>");
                 if (account.getHasSubCustomers())
                 {
-                	AccountEntityData subCustomer = AccountCache.getInstance().get(vEntry.getFwdNr());
+                	AccountEntityData subCustomer = AccountCache.getInstance().get(vEntry);
                 	vBody.append("<td width=150 valign=top>" + subCustomer.getFullName() + "</td>");
                 }
                 vBody.append("<td width=85  valign=top>" + vNumber + "</td>");

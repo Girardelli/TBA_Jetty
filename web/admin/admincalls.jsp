@@ -122,7 +122,7 @@ if (vCustomerFilter == null) vCustomerFilter = Constants.ACCOUNT_FILTER_ALL;
 				<%
 out.println("<td width=\"170\" valign=\"top\"><select name=\"" + Constants.ACCOUNT_FILTER_CUSTOMER + "\" onchange=\"submit()\">");
 
-				Collection<AccountEntityData> list = AccountCache.getInstance().getCustomerList();
+				Collection<AccountEntityData> list = AccountCache.getInstance().getCallCustomerList();
 				synchronized(list) 
 				{
 				    for (Iterator<AccountEntityData> vIter = list.iterator(); vIter.hasNext();)
@@ -177,8 +177,18 @@ if (!vSession.getUserId().equals("MarieJH"))
 }
 %>				
 				<input class="tbabutton" type=submit name=action value="Toevoegen" onclick="addRecord()"> 
-				<input class="tbabutton" type=submit name=action value="verzend mail"	onclick="testMail()">
+				<input class="tbabutton" type=submit name=action value="verzend mail" onclick="testMail()">
                 <input class="tbabutton" type=submit name=action value="naar nieuwe oproepen"   onclick="toNewCalls()">
+                
+ <%
+if (vSession.getUserId().equals("esosrv")) 
+{
+%>              
+                <input class="tbabutton" type=submit name=action value="fix invoice accountId's" onclick="fixAccountIds()"> 
+<% 
+}
+%>              
+                
 <%
 if (MailError.getInstance().getError() != null) 
 {
@@ -260,7 +270,7 @@ else
 
       String vId = "id" + vEntry.getId();
       String customerName;
-      vAccountEntityData = AccountCache.getInstance().get(vEntry.getFwdNr());
+      vAccountEntityData = AccountCache.getInstance().get(vEntry);
       if (vAccountEntityData == null)
       {
           customerName = "Oude klant(" + vEntry.getFwdNr() + ")";
@@ -514,6 +524,12 @@ function testMail()
 {
   document.calllistform.<%=Constants.RECORD_TO_DELETE%>.value="";
   document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.MAIL_IT%>";
+}
+
+function fixAccountIds()
+{
+	document.calllistform.<%=Constants.RECORD_TO_DELETE%>.value="";
+	document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.FIX_ACCOUNT_IDS%>";
 }
 
 function mailError()

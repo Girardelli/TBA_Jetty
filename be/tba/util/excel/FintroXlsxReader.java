@@ -169,8 +169,8 @@ final public class FintroXlsxReader
             // for all bank account numbers in the payment list
         	String accountNrCustomer = vIter.next();
             Collection<FintroPayment> paymentsDoneByAccount = mPaymentsMap.get(accountNrCustomer);
-            Collection<String> fwdNrs = AccountCache.getInstance().getFwdNumbersForAccountNr(accountNrCustomer);
-            if (fwdNrs.isEmpty())
+            Collection<Integer> accountIds = AccountCache.getInstance().getAccountIdsForBankAccountNr(accountNrCustomer);
+            if (accountIds.isEmpty())
             {
             	System.out.println("-----------------------------");
             	// no TBA customer found with this bank account number
@@ -233,7 +233,7 @@ final public class FintroXlsxReader
                     {
                     	//System.out.println("structid found in db");
                     	InvoiceEntityData invoice = (InvoiceEntityData) vInvoices.toArray()[0];
-                    	AccountEntityData account = AccountCache.getInstance().get(invoice.getAccountFwdNr());
+                    	AccountEntityData account = AccountCache.getInstance().get(invoice);
                         double inclBtw = (account.getNoBtw() ? invoice.getTotalCost() : invoice.getTotalCost() * 1.21);
                         if (accountNrCustomer.equals(payment.accountNrCustomer) &&
                                 inclBtw > payment.amount - 0.015 && inclBtw < payment.amount + 0.015  )
@@ -260,7 +260,7 @@ final public class FintroXlsxReader
                 }
                 
                 // structured ID didn't work
-                Collection<InvoiceEntityData> vInvoices = mInvoiceSession.getInvoicesByValueAndFwdNrs(mWebSession, fwdNrs, payment.amount);
+                Collection<InvoiceEntityData> vInvoices = mInvoiceSession.getInvoicesByValueAndAccounts(mWebSession, accountIds, payment.amount);
                 if (!vInvoices.isEmpty())
                 {
                     if (vInvoices.size() == 1)
@@ -339,7 +339,7 @@ final public class FintroXlsxReader
                     // get open invoices for the customer:
                     boolean isInvoiceNrFound = false;
                     InvoiceEntityData openInvoice = null;
-                    Collection<InvoiceEntityData> openInvoices = mInvoiceSession.getUnpayedInvoicesByFwdNrs(mWebSession, fwdNrs);
+                    Collection<InvoiceEntityData> openInvoices = mInvoiceSession.getUnpayedInvoicesByAccounts(mWebSession, accountIds);
                     for (Iterator<InvoiceEntityData> invoiceIter = openInvoices.iterator(); invoiceIter.hasNext();)
                     {
                         openInvoice = invoiceIter.next();

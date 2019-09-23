@@ -2,16 +2,17 @@ package be.tba.util.invoice;
 
 public class SubcustomerCost
 {
-    private int mCalls = 0;
+    private int mAccountId;
+	private int mCalls = 0;
     private double mCallCost = 0.0;
     private int mTasks = 0;
     private double mTaskCost = 0.0;
     private String mName = "";
-    private String mFwdNr = "";
+    //private String mFwdNr = "";
 
-    public SubcustomerCost(String fwdNr)
+    public SubcustomerCost(int id)
     {
-        mFwdNr = fwdNr;
+    	mAccountId = id;
     }
 
     public int getCalls()
@@ -64,14 +65,14 @@ public class SubcustomerCost
         this.mName = name;
     }
 
-    public String getFwdNr()
+    public int getAccountId()
     {
-        return mFwdNr;
+        return mAccountId;
     }
 
-    public void setFwdNr(String fwdNr)
+    public void setAccountId(int id)
     {
-        this.mFwdNr = fwdNr;
+        this.mAccountId = id;
     }
 
     @Override
@@ -85,7 +86,7 @@ public class SubcustomerCost
             return false;
         SubcustomerCost bSubcustomerCost = (SubcustomerCost) b;
 
-        return this.mFwdNr.equals(bSubcustomerCost.mFwdNr);
+        return (this.mAccountId == bSubcustomerCost.mAccountId);
     }
 
 }

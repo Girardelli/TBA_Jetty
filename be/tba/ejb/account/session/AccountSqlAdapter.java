@@ -77,6 +77,12 @@ public class AccountSqlAdapter extends AbstractSqlAdapter<AccountEntityData>
         throw new AccountNotFoundException("De user id/paswoord combinatie is foutief.");
     }
 
+    public Collection<AccountEntityData> getAllNotArchived(WebSession session)
+    {
+        return executeSqlQuery(session, "SELECT * FROM AccountEntity where IsArchived=false");
+    }
+ 
+/*    
     public AccountEntityData getAccountByFwdNr(WebSession webSession, String fwdNr) throws AccountNotFoundException
     {
         Collection<AccountEntityData> collection = executeSqlQuery(webSession, "SELECT * FROM AccountEntity WHERE FwdNumber='" + fwdNr + "'");
@@ -87,7 +93,7 @@ public class AccountSqlAdapter extends AbstractSqlAdapter<AccountEntityData>
         System.out.println("Unexpected number of account (" + collection.size() + ") found for FwdNumber=" + fwdNr);
         throw new AccountNotFoundException("De user id/paswoord combinatie is foutief.");
     }
-
+*/
     public void deregister(WebSession webSession, int pkey) throws AccountNotFoundException
     {
         AccountEntityData account = getRow(webSession, pkey);
@@ -157,7 +163,7 @@ public class AccountSqlAdapter extends AbstractSqlAdapter<AccountEntityData>
 
     public void removeAccount(WebSession webSession, String key)
     {
-        deleteRow(webSession, Integer.parseInt(key));
+        executeSqlQuery(webSession, "UPDATE AccountEntity SET IsArchived=true, FwdNumber='' WHERE Id=" + key);
     }
 
     public void setAccount(WebSession webSession, AccountEntityData data)
@@ -196,7 +202,7 @@ public class AccountSqlAdapter extends AbstractSqlAdapter<AccountEntityData>
             strBuf.append(",");
             strBuf.append(vKey);
         }
-        return executeSqlQuery(webSession, "SELECT * FROM AccountEntity WHERE NoInvoice=FALSE AND Id IN (" + strBuf.toString().substring(1) + ")"); 
+        return executeSqlQuery(webSession, "SELECT * FROM AccountEntity WHERE NoInvoice=FALSE AND IsArchived=false AND Id IN (" + strBuf.toString().substring(1) + ")"); 
     }
     
     
@@ -211,6 +217,11 @@ public class AccountSqlAdapter extends AbstractSqlAdapter<AccountEntityData>
         }
         return (vMap);
     }
+    
+    public void setSuperCustomerId(WebSession webSession, int key, int superCustId)
+    {
+    	executeSqlQuery(webSession, "UPDATE AccountEntity SET SuperCustomerID=" + superCustId + " WHERE Id=" + key);
+    }
 
     public String toString()
     {
@@ -223,7 +234,7 @@ public class AccountSqlAdapter extends AbstractSqlAdapter<AccountEntityData>
         Vector<AccountEntityData> vVector = new Vector<AccountEntityData>();
         while (rs.next())
         {
-             AccountEntityData entry = new AccountEntityData();
+            AccountEntityData entry = new AccountEntityData();
             entry.setId(rs.getInt(1));
             entry.setWcPrime(rs.getInt(2));
             entry.setWcAlfa(null2EmpthyString(rs.getString(3)));
@@ -275,29 +286,32 @@ public class AccountSqlAdapter extends AbstractSqlAdapter<AccountEntityData>
             entry.setFacFaxCall(rs.getInt(49));
             entry.setHasSubCustomers(rs.getBoolean(50));
             entry.setSuperCustomer(null2EmpthyString(rs.getString(51)));
-            entry.setCountAllLongCalls(rs.getBoolean(52));
-            entry.setCountLongFwdCalls(rs.getBoolean(53));
-            entry.setNoBtw(rs.getBoolean(54));
-            entry.setNoEmptyMails(rs.getBoolean(55));
-            entry.setTextMail(rs.getBoolean(56));
-            entry.setFacLong(rs.getDouble(57));
-            entry.setFacLongFwd(rs.getDouble(58));
-            entry.setFacTblMinCalls_I(rs.getInt(59));
-            entry.setFacTblMinCalls_II(rs.getInt(60));
-            entry.setFacTblMinCalls_III(rs.getInt(61));
-            entry.setFacTblMinCalls_IV(rs.getInt(62));
-            entry.setFacTblStartCost_I(rs.getDouble(63));
-            entry.setFacTblStartCost_II(rs.getDouble(64));
-            entry.setFacTblStartCost_III(rs.getDouble(65));
-            entry.setFacTblStartCost_IV(rs.getDouble(66));
-            entry.setFacTblExtraCost_I(rs.getDouble(67));
-            entry.setFacTblExtraCost_II(rs.getDouble(68));
-            entry.setFacTblExtraCost_III(rs.getDouble(69));
-            entry.setFacTblExtraCost_IV(rs.getDouble(70));
-            entry.setIsMailInvoice(rs.getBoolean(71));
-            entry.setInvoiceEmail(null2EmpthyString(rs.getString(72)));
-            entry.setAccountNr(null2EmpthyString(rs.getString(73)));
-            entry.setCountryCode(null2EmpthyString(rs.getString(74)));
+            entry.setSuperCustomerId(rs.getInt(52));
+            entry.setCountAllLongCalls(rs.getBoolean(53));
+            entry.setCountLongFwdCalls(rs.getBoolean(54));
+            entry.setNoBtw(rs.getBoolean(55));
+            entry.setNoEmptyMails(rs.getBoolean(56));
+            entry.setTextMail(rs.getBoolean(57));
+            entry.setFacLong(rs.getDouble(58));
+            entry.setFacLongFwd(rs.getDouble(59));
+            entry.setFacTblMinCalls_I(rs.getInt(60));
+            entry.setFacTblMinCalls_II(rs.getInt(61));
+            entry.setFacTblMinCalls_III(rs.getInt(62));
+            entry.setFacTblMinCalls_IV(rs.getInt(63));
+            entry.setFacTblStartCost_I(rs.getDouble(64));
+            entry.setFacTblStartCost_II(rs.getDouble(65));
+            entry.setFacTblStartCost_III(rs.getDouble(66));
+            entry.setFacTblStartCost_IV(rs.getDouble(67));
+            entry.setFacTblExtraCost_I(rs.getDouble(68));
+            entry.setFacTblExtraCost_II(rs.getDouble(69));
+            entry.setFacTblExtraCost_III(rs.getDouble(70));
+            entry.setFacTblExtraCost_IV(rs.getDouble(71));
+            entry.setIsMailInvoice(rs.getBoolean(72));
+            entry.setInvoiceEmail(null2EmpthyString(rs.getString(73)));
+            entry.setAccountNr(null2EmpthyString(rs.getString(74)));
+            entry.setCountryCode(null2EmpthyString(rs.getString(75)));
+            entry.setIsArchived(rs.getBoolean(76));
+            entry.setCallProcessInfo(null2EmpthyString(rs.getString(77)));
             vVector.add(entry);
             // System.out.println("read from DB:" + entry.toNameValueString());
         }

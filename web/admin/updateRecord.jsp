@@ -55,7 +55,7 @@ if (mRecordData == null)
 }
 
 IntertelCallData intertelCall = IntertelCallManager.getInstance().getByDbId(mRecordData.getId());
-mCustomerData = AccountCache.getInstance().get(mRecordData.getFwdNr());
+mCustomerData = AccountCache.getInstance().get(mRecordData); // yves: to be changed in .getId() in de herfst van 2020
 
 String vDirStr = mRecordData.getIsIncomingCall() ? "Van Nummer" : "Naar Nummer";
 String vNumberHtml;
@@ -69,9 +69,9 @@ else
 <table  cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
 
 	<!--Update Record jsp-->
-	<tr>
-		<td valign="top" width="30" bgcolor="FFFFFF"></td>
-		<td valign="top" bgcolor="FFFFFF"><br>
+	<tr valign="top">
+		<td width="30" bgcolor="FFFFFF"></td>
+		<td bgcolor="FFFFFF"><br>
 		<br>
 		<span class="admintitle"> Voeg extra informatie toe aan oproep voor <%=mCustomerData.getFullName()%>.</span>
 		<br>
@@ -91,7 +91,7 @@ if (mCustomerData.getHasSubCustomers())
 	out.println("<select name=\"" + Constants.ACCOUNT_SUB_CUSTOMER + "\">");
     out.println("<option value=\"" + mCustomerData.getFwdNumber() +  "\" selected>" + mCustomerData.getFullName());
 
-    Collection<AccountEntityData> list = AccountCache.getInstance().getSubCustomersList(mCustomerData.getFwdNumber());
+    Collection<AccountEntityData> list = AccountCache.getInstance().getSubCustomersList(mCustomerData.getId());
     synchronized(list) 
     {
         for (Iterator<AccountEntityData> vIter = list.iterator(); vIter.hasNext();)
@@ -266,6 +266,30 @@ out.println("</select>");
 		</form>
 		</span> <br>
 		</td>
+<%
+if (!mCustomerData.getCallProcessInfo().isEmpty())
+{
+%>
+		
+		<td>
+		<table>
+		<tr>
+        <td bgcolor="FFFFFF"><br>
+        <br>
+        <span class="admintitle">Informatie die u moet weten voor deze klant.</span>
+        <br>
+        </td>
+		</tr>
+		<tr>
+        <td class="tdborder" valign="top" width="400">
+          <%=mCustomerData.getCallProcessInfo()%>
+        </td>
+		</tr>
+		</table>
+		</td>
+<%
+}
+%>
 	</tr>
 <%
 }

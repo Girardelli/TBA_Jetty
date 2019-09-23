@@ -16,6 +16,7 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
     private static final long serialVersionUID = 1L;
     private int id;
     private java.lang.String fileName = "";
+    private int accountID = 0;
     private java.lang.String accountFwdNr = "";
     private double totalCost = 0.0;
     private int month = 0;
@@ -47,10 +48,11 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
         creditId = -1;
     }
 
-    public InvoiceEntityData(int id, java.lang.String fileName, java.lang.String accountFwdNr, double totalCost, int month, int year, int yearSeqNr, java.lang.String invoiceNr, boolean frozenFlag, boolean isPayed, long startTime, long stopTime, java.lang.String customerName, boolean isInvoiceMailed, String invoiceDate, java.lang.String customerRef, java.lang.String payDate, int creditId, String fintroId, String valutaDate, String fromBankNr, String paymentDetails, String structuredId)
+    public InvoiceEntityData(int id, java.lang.String fileName, int accountID, java.lang.String accountFwdNr, double totalCost, int month, int year, int yearSeqNr, java.lang.String invoiceNr, boolean frozenFlag, boolean isPayed, long startTime, long stopTime, java.lang.String customerName, boolean isInvoiceMailed, String invoiceDate, java.lang.String customerRef, java.lang.String payDate, int creditId, String fintroId, String valutaDate, String fromBankNr, String paymentDetails, String structuredId)
     {
         setId(id);
         setFileName(fileName);
+        setAccountID(accountID);
         setAccountFwdNr(accountFwdNr);
         setTotalCost(totalCost);
         setMonth(month);
@@ -78,6 +80,7 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
     {
         setId(otherData.getId());
         setFileName(otherData.getFileName());
+        setAccountID(otherData.getAccountID());
         setAccountFwdNr(otherData.getAccountFwdNr());
         setTotalCost(otherData.getTotalCost());
         setMonth(otherData.getMonth());
@@ -127,6 +130,16 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
         this.fileName = fileName;
     }
 
+    public int getAccountID()
+    {
+        return this.accountID;
+    }
+
+    public void setAccountID(int accountID)
+    {
+        this.accountID = accountID;
+    }
+    
     public java.lang.String getAccountFwdNr()
     {
         return this.accountFwdNr;
@@ -468,30 +481,54 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
     public String toNameValueString()
     {
         StringBuffer str = new StringBuffer();
-
-        str.append("fileName='" + ((this.fileName != null) ? this.fileName : "") + 
-                "',accountFwdNr='" + ((this.accountFwdNr != null) ? this.accountFwdNr : "") + 
-                "',totalCost=" + getTotalCost() + 
-                ",month=" + getMonth() + 
-                ",year=" + getYear() + 
-                ",yearSeqNr=" + getYearSeqNr() + 
-                ",invoiceNr='" + ((this.getInvoiceNr() != null) ? this.getInvoiceNr() : "") + 
-                "',frozenFlag=" + getFrozenFlag() + 
-                ",isPayed=" + getIsPayed() + 
-                ",startTime=" + getStartTime() + 
-                ",stopTime=" + getStopTime() + 
-                ",customerName='" + ((this.getCustomerName() != null) ? this.getCustomerName() : "") + 
-                "',isInvoiceMailed=" + getIsInvoiceMailed() + 
-                ",invoiceDate='" + ((this.getInvoiceDate() != null) ? this.getInvoiceDate() : "") + 
-                "',customerRef='" + ((this.getCustomerRef() != null) ? this.getCustomerRef() : "") + 
-                "',payDate='" + ((this.getPayDate() != null) ? this.getPayDate() : "") + 
-                "',creditId=" + getCreditId() + 
-                ",fintroId='" + ((this.getFintroId() != null) ? this.getFintroId() : "") + 
-                "',valutaDate='" + ((this.getValutaDate() != null) ? this.getValutaDate() : "") +
-                "',fromBankNr='" + ((this.getFromBankNr() != null) ? this.getFromBankNr() : "") +
-                "',paymentDetails='" + ((this.getPaymentDetails() != null) ? this.getPaymentDetails() : "") +
-                "',structuredId='" + ((this.getStructuredId() != null) ? this.getStructuredId() : "") + "'");
-                return (str.toString());
+        str.append("FileName='");
+        str.append((this.fileName != null) ? this.fileName : "");
+        str.append("',AccountID=");
+        str.append(getAccountID());
+        str.append(",AccountFwdNr='");
+        str.append((this.accountFwdNr != null) ? this.accountFwdNr : "");
+        str.append("',TotalCost=");
+        str.append(getTotalCost());
+        str.append(",Month=");
+        str.append(getMonth());
+        str.append(",Year=");
+        str.append(getYear());
+        str.append(",YearSeqNr=");
+        str.append(getYearSeqNr());
+        str.append(",InvoiceNr='");
+        str.append((this.invoiceNr != null) ? this.invoiceNr : "");
+        str.append("',FrozenFlag=");
+        str.append(getFrozenFlag());
+        str.append(",IsPayed=");
+        str.append(getIsPayed());
+        str.append(",StartTime=");
+        str.append(getStartTime());
+        str.append(",StopTime=");
+        str.append(getStopTime());
+        str.append(",CustomerName='");
+        str.append((this.customerName != null) ? this.customerName : "");
+        str.append("',IsInvoiceMailed=");
+        str.append(getIsInvoiceMailed());
+        str.append(",InvoiceDate='");
+        str.append((this.invoiceDate != null) ? this.invoiceDate : "");
+        str.append("',CustomerRef='");
+        str.append((this.customerRef != null) ? this.customerRef : "");
+        str.append("',PayDate='");
+        str.append((this.payDate != null) ? this.payDate : "");
+        str.append("',CreditId=");
+        str.append(getCreditId());
+        str.append(",FintroId='");
+        str.append((this.fintroId != null) ? this.fintroId : "");
+        str.append("',ValutaDate='");
+        str.append((this.valutaDate != null) ? this.valutaDate : "");
+        str.append("',FromBankNr='");
+        str.append((this.fromBankNr != null) ? this.fromBankNr : "");
+        str.append("',PaymentDetails='");
+        str.append((this.paymentDetails != null) ? this.paymentDetails : "");
+        str.append("',StructuredId='");
+        str.append((this.structuredId != null) ? this.structuredId : "");
+        str.append("'");
+        return (str.toString());
     }
 
     public String toValueString()
@@ -499,29 +536,53 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
         StringBuffer str = new StringBuffer();
 
         // "(1, '409031', '04/10/05', 1128528272192, 1, 220, 0, 'Nabelactie voor client'. ',0 ,0 ,0 ,0 ,'')
-        str.append("'0','" + ((this.fileName != null) ? this.fileName : "") + 
-                "','" + ((this.accountFwdNr != null) ? this.accountFwdNr : "") + 
-                "'," + getTotalCost() + 
-                "," + getMonth() + 
-                "," + getYear() + 
-                "," + getYearSeqNr() + 
-                ",'" + getInvoiceNr() + 
-                "'," + getFrozenFlag() + 
-                "," + getIsPayed() + 
-                "," + getStartTime() + 
-                "," + getStopTime() + 
-                ",'" + getCustomerName() + 
-                "'," + getIsInvoiceMailed() + 
-                ",'" + getInvoiceDate() + 
-                "','" + getCustomerRef() + 
-                "','" + getPayDate() + 
-                "'," + getCreditId() +
-                ",'" + getFintroId() + 
-                "','" + getValutaDate() +
-                "','" + getFromBankNr() +
-                "','" + getPaymentDetails() + 
-                "','" + getStructuredId() + 
-                "'");
+        str.append("'0','");
+        str.append((this.fileName != null) ? this.fileName : "");
+        str.append("',");
+        str.append(getAccountID());
+        str.append(",'");
+        str.append((this.accountFwdNr != null) ? this.accountFwdNr : "");
+        str.append("',");
+        str.append(getTotalCost());
+        str.append(",");
+        str.append(getMonth());
+        str.append(",");
+        str.append(getYear());
+        str.append(",");
+        str.append(getYearSeqNr());
+        str.append(",'");
+        str.append((this.invoiceNr != null) ? this.invoiceNr : "");
+        str.append("',");
+        str.append(getFrozenFlag());
+        str.append(",");
+        str.append(getIsPayed());
+        str.append(",");
+        str.append(getStartTime());
+        str.append(",");
+        str.append(getStopTime());
+        str.append(",'");
+        str.append((this.customerName != null) ? this.customerName : "");
+        str.append("',");
+        str.append(getIsInvoiceMailed());
+        str.append(",'");
+        str.append((this.invoiceDate != null) ? this.invoiceDate : "");
+        str.append("','");
+        str.append((this.customerRef != null) ? this.customerRef : "");
+        str.append("','");
+        str.append((this.payDate != null) ? this.payDate : "");
+        str.append("',");
+        str.append(getCreditId());
+        str.append(",'");
+        str.append((this.fintroId != null) ? this.fintroId : "");
+        str.append("','");
+        str.append((this.valutaDate != null) ? this.valutaDate : "");
+        str.append("','");
+        str.append((this.fromBankNr != null) ? this.fromBankNr : "");
+        str.append("','");
+        str.append((this.paymentDetails != null) ? this.paymentDetails : "");
+        str.append("','");
+        str.append((this.structuredId != null) ? this.structuredId : "");
+        str.append("'");
         return (str.toString());
     }
 

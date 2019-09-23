@@ -39,9 +39,10 @@ public class AccountFacade
 
     public static void deregisterAccount(WebSession session, HttpServletRequest req) throws AccountNotFoundException
     {
-        String vFwdNr = (String) req.getParameter(Constants.ACCOUNT_ID);
+        String accountIdStr = (String) req.getParameter(Constants.ACCOUNT_ID);
+        int accountId = Integer.valueOf(accountIdStr);
         AccountSqlAdapter vAccountSession = new AccountSqlAdapter();
-        vAccountSession.deregister(session, AccountCache.getInstance().get(vFwdNr).getId());
+        vAccountSession.deregister(session, accountId);
         AccountCache.getInstance().update(session);
     }
 
@@ -120,12 +121,13 @@ public class AccountFacade
 
     public static void mailCustomer(HttpServletRequest req, WebSession session)
     {
-        String vFwdNr = (String) req.getParameter(Constants.ACCOUNT_ID);
-        AccountEntityData vAccountData = AccountCache.getInstance().get(vFwdNr);
+        String accountIdStr = (String) req.getParameter(Constants.ACCOUNT_ID);
+        int accountId = Integer.valueOf(accountIdStr);
+        AccountEntityData vAccountData = AccountCache.getInstance().get(accountId);
         String vEmail = vAccountData.getEmail();
         if (vEmail != null && vEmail.length() > 0)
         {
-            MailerSessionBean.sendMail(session, vAccountData.getFwdNumber());
+            MailerSessionBean.sendMail(session, vAccountData.getId());
         }
     }
 
@@ -152,8 +154,9 @@ public class AccountFacade
 
     public static AccountEntityData updateAccountData(HttpServletRequest req)
     {
-        String vFwdNr = (String) req.getParameter(Constants.ACCOUNT_ID);
-        AccountEntityData vAccount = new AccountEntityData(AccountCache.getInstance().get(vFwdNr));
+        String accountIdStr = (String) req.getParameter(Constants.ACCOUNT_ID);
+        int accountId = Integer.valueOf(accountIdStr);
+        AccountEntityData vAccount = new AccountEntityData(AccountCache.getInstance().get(accountId));
         vAccount.setFullName(req.getParameter(Constants.ACCOUNT_FULLNAME));
         vAccount.setFwdNumber(req.getParameter(Constants.ACCOUNT_FORWARD_NUMBER));
 // these fields do not come back from the page because they cannot be altered anymore
@@ -304,6 +307,7 @@ public class AccountFacade
         vAccount.setCity(req.getParameter(Constants.ACCOUNT_CITY));
         vAccount.setBtwNumber(req.getParameter(Constants.ACCOUNT_BTW_NUMBER));
         vAccount.setAccountNr(req.getParameter(Constants.ACCOUNT_NR));
+        vAccount.setCallProcessInfo(req.getParameter(Constants.ACCOUNT_INFO));
 
         vAccount.setNoInvoice(req.getParameter(Constants.ACCOUNT_NO_INVOICE) != null);
         vAccount.setNoBtw(req.getParameter(Constants.ACCOUNT_NO_BTW) != null);
@@ -316,14 +320,13 @@ public class AccountFacade
 
     private static void RecursiveDelete(WebSession session, int accountID)
     {
-        String accountFwdNr = AccountCache.getInstance().idToFwdNr(accountID);
-        AccountEntityData vRemovedAccount = AccountCache.getInstance().get(accountFwdNr);
+        AccountEntityData vRemovedAccount = AccountCache.getInstance().get(accountID);
 
         if (vRemovedAccount != null)
         {
             if (vRemovedAccount.getHasSubCustomers())
             {
-                Collection<AccountEntityData> list = AccountCache.getInstance().getSubCustomersList(accountFwdNr);
+                Collection<AccountEntityData> list = AccountCache.getInstance().getSubCustomersList(accountID);
                 for (Iterator<AccountEntityData> vIter = list.iterator(); vIter.hasNext();)
                 {
                     AccountEntityData vValue = vIter.next();

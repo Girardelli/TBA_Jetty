@@ -110,7 +110,7 @@ try
       				onmouseover="hooverOnRow('<%=vId%>','<%=vRowInd%>','#FFFF99')"
       				onmouseout="hooverOffRow('<%=vId%>','<%=vRowInd%>','#FFCC66')"
       				onclick="updateDeleteFlag('<%=vId%>','<%=vEntry.getId()%>','<%=vRowInd%>')"
-      				ondblclick="changeUrl('/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACCOUNT_UPDATE%>&<%=Constants.ACCOUNT_ID%>=<%=vEntry.getFwdNumber()%>');">
+      				ondblclick="changeUrl('/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACCOUNT_UPDATE%>&<%=Constants.ACCOUNT_ID%>=<%=vEntry.getId()%>');">
       				<td bgcolor="FFFFFF"><img src=<%=vRegImg%> width="16" height="16" border="0"></td>
       				<td valign="top" class="bodytekst"><%=vNumber%></td>
       				<td valign="top" class="bodytekst"><%=vGsm%></td>
@@ -137,7 +137,7 @@ try
           AccountEntityData vEntry = vIter.next();
           if (vEntry.getHasSubCustomers())
           {
-       		  Collection<AccountEntityData> subList = AccountCache.getInstance().getSubCustomersList(vEntry.getFwdNumber());
+       		  Collection<AccountEntityData> subList = AccountCache.getInstance().getSubCustomersList(vEntry.getId());
         	  System.out.print("sublist for " + vEntry.getFwdNumber() + " has " + subList.size() + " members");  
               %>
               <p><span class="admintitle"> <%=vEntry.getFullName()%></span></p>
@@ -186,7 +186,7 @@ try
 		                    onmouseover="hooverOnRow('<%=vId%>','<%=vRowInd%>','#FFFF99')"
 		                    onmouseout="hooverOffRow('<%=vId%>','<%=vRowInd%>','#FFCC66')"
 		                    onclick="updateDeleteFlag('<%=vId%>','<%=vSubEntry.getId()%>','<%=vRowInd%>')"
-		                    ondblclick="changeUrl('/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACCOUNT_UPDATE%>&<%=Constants.ACCOUNT_ID%>=<%=vNumber%>');">
+		                    ondblclick="changeUrl('/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACCOUNT_UPDATE%>&<%=Constants.ACCOUNT_ID%>=<%=vSubEntry.getId()%>');">
 		                    <td bgcolor="FFFFFF"><img src=<%=vRegImg%> width="16"
 		                        height="16" border="0"></td>
 		                    <td valign="top" class="bodytekst"><%=vNumber%></td>

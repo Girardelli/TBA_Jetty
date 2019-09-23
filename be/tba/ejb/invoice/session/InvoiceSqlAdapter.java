@@ -26,6 +26,8 @@ import javax.naming.InitialContext;
 
 import be.tba.ejb.account.interfaces.AccountEntityData;
 import be.tba.ejb.invoice.interfaces.InvoiceEntityData;
+import be.tba.ejb.task.interfaces.TaskEntityData;
+import be.tba.ejb.task.session.TaskSqlAdapter;
 import be.tba.servlets.session.WebSession;
 import be.tba.util.constants.Constants;
 import be.tba.util.data.AbstractSqlAdapter;
@@ -84,66 +86,66 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
     public int addInvoice(WebSession webSession, InvoiceEntityData data)
     {
         addRow(webSession, data);
-        Collection<InvoiceEntityData> invoices = executeSqlQuery(webSession, "SELECT * FROM InvoiceEntity WHERE AccountFwdNr='" + data.getAccountFwdNr() + "' AND TotalCost=" + data.getTotalCost()  + " AND StartTime=" + data.getStartTime() + " AND StopTime=" + data.getStopTime());
+        Collection<InvoiceEntityData> invoices = executeSqlQuery(webSession, "SELECT * FROM InvoiceEntity WHERE AccountID=" + data.getAccountID() + " AND TotalCost=" + data.getTotalCost()  + " AND StartTime=" + data.getStartTime() + " AND StopTime=" + data.getStopTime());
         return ((InvoiceEntityData) invoices.toArray()[0]).getId();
     }
 
     /**
      * @ejb:interface-method view-type="remote"
      */
-    public InvoiceEntityData getInvoiceById(WebSession webSession, String key)
+    public InvoiceEntityData getInvoiceById(WebSession webSession, int key)
     {
-        return getRow(webSession, Integer.parseInt(key));
+        return getRow(webSession, key);
     }
 
     /**
      * @ejb:interface-method view-type="remote"
      */
-    public Collection<InvoiceEntityData> getInvoicesByValueAndFwdNrs(WebSession webSession, Collection<String> fwdNrs, double inclBtwCost)
+    public Collection<InvoiceEntityData> getInvoicesByValueAndAccounts(WebSession webSession, Collection<Integer> accountIDs, double inclBtwCost)
     {
-        if (fwdNrs != null && !fwdNrs.isEmpty())
+        if (accountIDs != null && !accountIDs.isEmpty())
         {
             
-            String fwdNrSqlsequence = "IN ('";
+            String accountIdSqlsequence = "IN (";
             
-            for (Iterator<String> vFwdNrsIter = fwdNrs.iterator(); vFwdNrsIter.hasNext();)
+            for (Iterator<Integer> vFwdNrsIter = accountIDs.iterator(); vFwdNrsIter.hasNext();)
             {
-                fwdNrSqlsequence = fwdNrSqlsequence + vFwdNrsIter.next() + "'";
+            	accountIdSqlsequence = accountIdSqlsequence + vFwdNrsIter.next();
                 if (vFwdNrsIter.hasNext())
                 {
-                    fwdNrSqlsequence = fwdNrSqlsequence + ",'";
+                	accountIdSqlsequence = accountIdSqlsequence + ",";
                 }
             }
-            fwdNrSqlsequence = fwdNrSqlsequence + ")";
+            accountIdSqlsequence = accountIdSqlsequence + ")";
             DecimalFormat vCostFormatter = new DecimalFormat("#0.000");
             // ugly way to force for '.' decimal separator. But Java is realy persistent on using dodgy OS settings that are hard control.
             double rangeLow = Double.parseDouble(vCostFormatter.format(inclBtwCost /1.21 - 0.015).replace(',', '.'));
             double rangeHigh = Double.parseDouble(vCostFormatter.format(inclBtwCost /1.21 + 0.015).replace(',', '.'));
-            return executeSqlQuery(webSession, "SELECT * FROM InvoiceEntity WHERE IsInvoiceMailed=TRUE AND CreditId=-1 AND TotalCost BETWEEN " + rangeLow + " AND " + rangeHigh + " AND AccountFwdNr " + fwdNrSqlsequence); 
+            return executeSqlQuery(webSession, "SELECT * FROM InvoiceEntity WHERE IsInvoiceMailed=TRUE AND CreditId=-1 AND TotalCost BETWEEN " + rangeLow + " AND " + rangeHigh + " AND AccountID " + accountIdSqlsequence); 
         }
         else
         {
-            System.out.println("getInvoicesByValueAndFwdNrs: FwdNrs null or empty");
+            System.out.println("getInvoicesByValueAndFwdNrs: accountID's null or empty");
         }
         return new Vector<InvoiceEntityData>();
     }
 
-    public Collection<InvoiceEntityData> getUnpayedInvoicesByFwdNrs(WebSession webSession, Collection<String> fwdNrs)
+    public Collection<InvoiceEntityData> getUnpayedInvoicesByAccounts(WebSession webSession, Collection<Integer> accountIDs)
     {
-        if (fwdNrs != null && !fwdNrs.isEmpty())
+        if (accountIDs != null && !accountIDs.isEmpty())
         {
-            String fwdNrSqlsequence = "IN ('";
+            String accountIdSqlsequence = "IN (";
             
-            for (Iterator<String> vFwdNrsIter = fwdNrs.iterator(); vFwdNrsIter.hasNext();)
+            for (Iterator<Integer> vFwdNrsIter = accountIDs.iterator(); vFwdNrsIter.hasNext();)
             {
-                fwdNrSqlsequence = fwdNrSqlsequence + vFwdNrsIter.next() + "'";
+            	accountIdSqlsequence = accountIdSqlsequence + vFwdNrsIter.next();
                 if (vFwdNrsIter.hasNext())
                 {
-                    fwdNrSqlsequence = fwdNrSqlsequence + ",'";
+                	accountIdSqlsequence = accountIdSqlsequence + ",";
                 }
             }
-            fwdNrSqlsequence = fwdNrSqlsequence + ")";
-            return executeSqlQuery(webSession, "SELECT * FROM InvoiceEntity WHERE IsInvoiceMailed=TRUE AND IsPayed=false AND CreditId=-1 AND AccountFwdNr " + fwdNrSqlsequence); 
+            accountIdSqlsequence = accountIdSqlsequence + ")";
+            return executeSqlQuery(webSession, "SELECT * FROM InvoiceEntity WHERE IsInvoiceMailed=TRUE AND IsPayed=false AND CreditId=-1 AND AccountID " + accountIdSqlsequence); 
         }
         else
         {
@@ -164,9 +166,9 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
     /**
      * @ejb:interface-method view-type="remote"
      */
-    public Collection<InvoiceEntityData> getInvoiceList(WebSession webSession, String fwdNr, int month, int year)
+    public Collection<InvoiceEntityData> getInvoiceList(WebSession webSession, int accountId, int month, int year)
     {
-        return executeSqlQuery(webSession, "SELECT * FROM InvoiceEntity WHERE AccountFwdNr='" + fwdNr + "' AND Month=" + month + " AND Year=" + year + " ORDER BY AccountFwdNr DESC");
+        return executeSqlQuery(webSession, "SELECT * FROM InvoiceEntity WHERE AccountID=" + accountId + " AND Month=" + month + " AND Year=" + year + " ORDER BY AccountID DESC");
     }
 
     /**
@@ -246,11 +248,11 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
     /**
      * @ejb:interface-method view-type="remote"
      */
-    public InvoiceEntityData getLastInvoice(WebSession webSession, String fwdNr, int month, int year)
+    public InvoiceEntityData getLastInvoice(WebSession webSession, int accountId, int month, int year)
     {
         try
         {
-            Collection<InvoiceEntityData> vInvoiceList = executeSqlQuery(webSession, "SELECT * FROM InvoiceEntity WHERE AccountFwdNr='" + fwdNr + "' AND Month=" + month + " AND Year=" + year + " ORDER BY AccountFwdNr DESC");
+            Collection<InvoiceEntityData> vInvoiceList = executeSqlQuery(webSession, "SELECT * FROM InvoiceEntity WHERE AccountID=" + accountId + " AND Month=" + month + " AND Year=" + year + " ORDER BY AccountID DESC");
             // System.out.println("getInvoiceList for month " + month + ", year " +
             // year);
             // InvoiceEntityHome vInvoiceHome = getEntityBean();
@@ -299,7 +301,9 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
                 int vKey = i.next().intValue();
                 int vNr = getNewInvoiceNumber(webSession, year);
                 if (vNr < 1 || !freezeInvoice(webSession, vKey, vNr))
-                    break;
+                {
+                	System.out.println("Failed to freeze invoice with key=" + vKey + " and number " + vNr);
+                }
             }
         }
         catch (Exception e)
@@ -354,7 +358,11 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
     public void setPaymentInfo(WebSession webSession, int id, FintroPayment payment)
     {
         executeSqlQuery(webSession, "UPDATE InvoiceEntity SET IsPayed=true, FintroId='" + payment.id + "', PayDate='" + payment.payDate + "', ValutaDate='" + payment.valutaDate + "', FromBankNr='" + payment.accountNrCustomer +"', PaymentDetails='" + payment.details + "' WHERE id=" + id);
+    }
 
+    public void setAccountId(WebSession webSession, int key, int accountID, String accountName)
+    {
+        executeSqlQuery(webSession, "UPDATE InvoiceEntity SET AccountID=" + accountID + ", CustomerName='" + accountName  + "' WHERE id=" + key);
     }
 
     /**
@@ -384,6 +392,16 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
             InvoiceHelper vHelper = new InvoiceHelper(vInvoiceData, webSession);
             vHelper.storeOrUpdate(webSession);
             vHelper.generatePdfInvoice();
+            // set invoiceID on tasks
+            
+            Collection<TaskEntityData> tasks = vHelper.getTasks();
+            TaskSqlAdapter vTaskSession = new TaskSqlAdapter();
+            
+            for (Iterator<TaskEntityData> i = tasks.iterator(); i.hasNext();)
+            {
+                TaskEntityData task = i.next();
+                vTaskSession.setInvoiceId(webSession, task.getId(), vInvoiceData.getId());
+            }
             // replace windows style '\\' with unix style '/'. DB does not seem
             // to handle good the windows style
             vInvoiceData.setFileName(escapeQuotes(vInvoiceData.getFileName().replace('\\', '/')));
@@ -398,7 +416,7 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
     {
         if (invoiceData == null || invoiceData.getFileName() == null || invoiceData.getFileName().length() == 0)
         {
-            //System.out.println("Invoice not froozen for " + invoiceData.getAccountFwdNr());
+            //System.out.println("Invoice not froozen for " + invoiceData.getAccountId());
             return false;
         }
 
@@ -406,7 +424,7 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
         Address[] vTo = new InternetAddress[1];
         try
         {
-            vCustomer = AccountCache.getInstance().get(invoiceData.getAccountFwdNr());
+            vCustomer = AccountCache.getInstance().get(invoiceData);
 
             BufferedReader reader = new BufferedReader(new FileReader(Constants.INVOICE_DIR + "\\factuurMail.txt"));
             String vBody = reader.readLine() + "\r\n";
@@ -514,27 +532,28 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
             InvoiceEntityData entry = new InvoiceEntityData();
             entry.setId(rs.getInt(1));
             entry.setFileName(null2EmpthyString(rs.getString(2)));
-            entry.setAccountFwdNr(null2EmpthyString(rs.getString(3)));
-            entry.setTotalCost(rs.getDouble(4));
-            entry.setMonth(rs.getInt(5));
-            entry.setYear(rs.getInt(6));
-            entry.setYearSeqNr(rs.getInt(7));
-            entry.setInvoiceNr(null2EmpthyString(rs.getString(8)));
-            entry.setFrozenFlag(rs.getBoolean(9));
-            entry.setIsPayed(rs.getBoolean(10));
-            entry.setStartTime(rs.getLong(11));
-            entry.setStopTime(rs.getLong(12));
-            entry.setCustomerName(null2EmpthyString(rs.getString(13)));
-            entry.setIsInvoiceMailed(rs.getBoolean(14));
-            entry.setInvoiceDate(null2EmpthyString(rs.getString(15)));
-            entry.setCustomerRef(null2EmpthyString(rs.getString(16)));
-            entry.setPayDate(null2EmpthyString(rs.getString(17)));
-            entry.setCreditId(rs.getInt(18));
-            entry.setFintroId(null2EmpthyString(rs.getString(19)));
-            entry.setValutaDate(null2EmpthyString(rs.getString(20)));
-            entry.setFromBankNr(null2EmpthyString(rs.getString(21)));
-            entry.setPaymentDetails(null2EmpthyString(rs.getString(22)));
-            entry.setStructuredId(null2EmpthyString(rs.getString(23)));
+            entry.setAccountID(rs.getInt(3));
+            entry.setAccountFwdNr(null2EmpthyString(rs.getString(4)));
+            entry.setTotalCost(rs.getDouble(5));
+            entry.setMonth(rs.getInt(6));
+            entry.setYear(rs.getInt(7));
+            entry.setYearSeqNr(rs.getInt(8));
+            entry.setInvoiceNr(null2EmpthyString(rs.getString(9)));
+            entry.setFrozenFlag(rs.getBoolean(10));
+            entry.setIsPayed(rs.getBoolean(11));
+            entry.setStartTime(rs.getLong(12));
+            entry.setStopTime(rs.getLong(13));
+            entry.setCustomerName(null2EmpthyString(rs.getString(14)));
+            entry.setIsInvoiceMailed(rs.getBoolean(15));
+            entry.setInvoiceDate(null2EmpthyString(rs.getString(16)));
+            entry.setCustomerRef(null2EmpthyString(rs.getString(17)));
+            entry.setPayDate(null2EmpthyString(rs.getString(18)));
+            entry.setCreditId(rs.getInt(19));
+            entry.setFintroId(null2EmpthyString(rs.getString(20)));
+            entry.setValutaDate(null2EmpthyString(rs.getString(21)));
+            entry.setFromBankNr(null2EmpthyString(rs.getString(22)));
+            entry.setPaymentDetails(null2EmpthyString(rs.getString(23)));
+            entry.setStructuredId(null2EmpthyString(rs.getString(24)));
             vVector.add(entry);
             // System.out.println("InvoiceEntityData: " + entry.toNameValueString());
         }

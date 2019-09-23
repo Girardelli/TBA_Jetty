@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -27,7 +28,8 @@ public class CallRecordFacade
 
     public static void retrieveRecordForUpdate(HttpServletRequest req, WebSession session)
     {
-        String vKey = (String) req.getParameter(Constants.RECORD_ID);
+    	System.out.println("retrieveRecordForUpdate()");
+    	String vKey = (String) req.getParameter(Constants.RECORD_ID);
 
         CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
         session.setCurrentRecord(vQuerySession.getRecord(session, vKey));
@@ -35,7 +37,8 @@ public class CallRecordFacade
     
     public static void updateShortText(HttpServletRequest req, WebSession session)
     {
-        String vKey = (String) req.getParameter(Constants.RECORD_ID);
+    	System.out.println("updateShortText()");
+    	String vKey = (String) req.getParameter(Constants.RECORD_ID);
         String shortText = (String) req.getParameter(Constants.RECORD_SHORT_TEXT);
 
         CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
@@ -43,10 +46,14 @@ public class CallRecordFacade
     }
     
     
-
+    /*
+     * this method saves (updates) a record that was opened from the call list.
+     * 
+     */
     public static void saveRecord(HttpServletRequest req, WebSession session)
     {
-        CallRecordSqlAdapter vCallLogWriterSession = new CallRecordSqlAdapter();
+    	System.out.println("saveRecord()");
+    	CallRecordSqlAdapter vCallLogWriterSession = new CallRecordSqlAdapter();
 
         // Check the record and add it if it is a valid one.
 
@@ -57,10 +64,12 @@ public class CallRecordFacade
         }
         else
         {
-            AccountEntityData vOldCustomer = AccountCache.getInstance().get(vCallData.getFwdNr());
+            AccountEntityData vOldCustomer = AccountCache.getInstance().get(vCallData);
             if (vOldCustomer.getHasSubCustomers() && req.getParameter(Constants.ACCOUNT_SUB_CUSTOMER) != null)
             {
                 vCallData.setFwdNr(req.getParameter(Constants.ACCOUNT_SUB_CUSTOMER));
+                AccountEntityData newCustomer = AccountCache.getInstance().get(vCallData);
+                vCallData.setAccountId(newCustomer.getId());
                 System.out.println("Super customer call: set fwd number to " + vCallData.getFwdNr());
             }
             else
@@ -71,7 +80,7 @@ public class CallRecordFacade
                     {
                         // customer changed!! Check the isMailed flag.
                         vCallData.setFwdNr((String) req.getParameter(Constants.ACCOUNT_FORWARD_NUMBER));
-                        AccountEntityData vNewCustomer = AccountCache.getInstance().get(vCallData.getFwdNr());
+                        AccountEntityData vNewCustomer = AccountCache.getInstance().get(vCallData);
 
                         if (AccountCache.getInstance().isMailEnabled(vNewCustomer))
                             vCallData.setIsMailed(false);
@@ -94,7 +103,7 @@ public class CallRecordFacade
             vCallData.setIsImportantCall(req.getParameter(Constants.RECORD_IMPORTANT) != null);
             if (!prevIsImportant && vCallData.getIsImportantCall())
             {
-                MailNowTask.send(vCallData.getFwdNr());
+                MailNowTask.send(vCallData.getAccountId());
             }
             vCallData.setIsFaxCall(req.getParameter(Constants.RECORD_FAX) != null);
             if (req.getParameter(Constants.RECORD_INVOICE_LEVEL) != null)
@@ -126,9 +135,15 @@ public class CallRecordFacade
         }
     }
 
+    /*
+     * this method is called when the operator creates a call from scratch, and knowing already for what
+     * customer she is creating it. This call shall be saved in the database as a fully valid and documented call.
+     * So this call shall not be stored as a 'unmapped' call that must be linked to an incoming call afterwards. 
+     */
     public static void saveManualRecord(HttpServletRequest req, WebSession session)
     {
-        CallRecordEntityData newRecord = new CallRecordEntityData();
+    	System.out.println("saveManualRecord()");
+    	CallRecordEntityData newRecord = new CallRecordEntityData();
         Calendar vCalendar = Calendar.getInstance();
         newRecord.setIsNotLogged(false);
         newRecord.setIsReleased(false);
@@ -155,7 +170,8 @@ public class CallRecordFacade
         newRecord.setTimeStamp(vCalendar.getTimeInMillis());
         newRecord.setDoneBy(session.getUserId());
 
-        AccountEntityData vData = AccountCache.getInstance().get(newRecord.getFwdNr());
+        AccountEntityData vData = AccountCache.getInstance().get(newRecord);
+        newRecord.setAccountId(vData.getId());
         if (vData != null && vData.getIs3W())
             newRecord.setIs3W_call(true);
         else
@@ -186,7 +202,7 @@ public class CallRecordFacade
         CallRecordSqlAdapter.setIsDocumentedFlag(newRecord);
         if (newRecord.getIsImportantCall())
         {
-            MailNowTask.send(newRecord.getFwdNr());
+            MailNowTask.send(newRecord.getAccountId());
         }
 
         // Check the record and add it if it is a valid one.
@@ -219,10 +235,15 @@ public class CallRecordFacade
         }
     }
 
-    // new call is created
+    /* This method is called when a new call is created from scratch. An incoming call shall (can be) be selected later
+     * when the call is ended and recorded by the call log. 
+     * For the time being this new 'unmapped' call is saved in the session context of the operator. 
+     * 
+     */
     public static void createNewUnmappedCall(HttpServletRequest req, WebSession webSession)
     {
-        CallRecordEntityData newRecord = new CallRecordEntityData();
+    	System.out.println("createNewUnmappedCall()");
+    	CallRecordEntityData newRecord = new CallRecordEntityData();
         newRecord.setIsNotLogged(false);
         newRecord.setIsReleased(false);
         newRecord.setIsChanged(false);
@@ -246,7 +267,8 @@ public class CallRecordFacade
     // and show it on the refreshed jsp page.
     public static void updateNewUnmappedCall(HttpServletRequest req, WebSession webSession)
     {
-        CallRecordEntityData newRecord = webSession.getNewUnmappedCall();
+    	System.out.println("updateNewUnmappedCall()");
+    	CallRecordEntityData newRecord = webSession.getNewUnmappedCall();
         if (newRecord == null)
         {
             // strange situation
@@ -267,7 +289,7 @@ public class CallRecordFacade
         newRecord.setIsImportantCall(req.getParameter(Constants.RECORD_IMPORTANT) != null);
         if (!prevIsImportant && newRecord.getIsImportantCall())
         {
-            MailNowTask.send(newRecord.getFwdNr());
+            MailNowTask.send(newRecord.getAccountId());
         }
         newRecord.setIsFaxCall(req.getParameter(Constants.RECORD_FAX) != null);
         newRecord.setName((String) req.getParameter(Constants.RECORD_CALLER_NAME));
@@ -278,7 +300,8 @@ public class CallRecordFacade
 
     public static boolean saveNewCall(HttpServletRequest req, WebSession webSession)
     {
-        updateNewUnmappedCall(req, webSession);
+    	System.out.println("saveNewCall()");
+    	updateNewUnmappedCall(req, webSession);
         
         CallRecordEntityData vNewCall = webSession.getNewUnmappedCall();
         String vKey = (String) req.getParameter(Constants.RECORD_ID);
@@ -297,7 +320,7 @@ public class CallRecordFacade
             vNewRecord.setIsAgendaCall(vNewCall.getIsAgendaCall());
             if (!vNewRecord.getIsImportantCall() && vNewCall.getIsImportantCall())
             {
-                MailNowTask.send(vNewRecord.getFwdNr());
+                MailNowTask.send(vNewRecord.getAccountId());
             }
             vNewRecord.setIsForwardCall(vNewCall.getIsForwardCall());
             vNewRecord.setIsFaxCall(vNewCall.getIsFaxCall());
@@ -307,15 +330,25 @@ public class CallRecordFacade
             vNewRecord.setDoneBy(webSession.getUserId());
             vQuerySession.setCallData(webSession, vNewRecord);
             vNewCall.setFwdNr(vNewRecord.getFwdNr());
+            vNewCall.setAccountId(vNewRecord.getAccountId());
             vNewCall.setId(vNewRecord.getId());
             
-            Collection <AccountEntityData> subcustomers = AccountCache.getInstance().getSubCustomersList(vNewRecord.getFwdNr());
+            Collection <AccountEntityData> subcustomers = AccountCache.getInstance().getSubCustomersList(vNewRecord.getAccountId());
             //System.out.println("saveNewCall: id = " + vNewRecord.getId());
             if (subcustomers != null && !subcustomers.isEmpty())
             {
+            	System.out.println("subcustomer must be selected(account id=" + vNewRecord.getAccountId());
+            	for (Iterator<AccountEntityData> iter = subcustomers.iterator(); iter.hasNext();)
+            	{
+            		AccountEntityData acc = iter.next();
+            		System.out.println("subcustomer: " + acc.getFullName());
+            	}
+                    
+            	
+            	
                 //System.out.println("there are subcustomers. Set the super customer=" + vNewRecord.getFwdNr() + ", record key=" + vKey);
                 // set the fwdNr of the super customer so that selectSubCustomer.jsp can prepare the sub customers list
-                //req.setAttribute(Constants.ACCOUNT_ID, vNewCall.getFwdNr());
+                //req.setAttribute(Constants.ACCOUNT_ID, vNewCall.getId());
                 webSession.setRecordId(vKey);
                 return true;
             }
@@ -332,7 +365,8 @@ public class CallRecordFacade
 
     public static void saveNewSubCustomer(HttpServletRequest req, WebSession webSession, String vNewFwdNr)
     {
-        CallRecordSqlAdapter vCallLogWriterSession = new CallRecordSqlAdapter();
+    	System.out.println("saveNewSubCustomer()");
+    	CallRecordSqlAdapter vCallLogWriterSession = new CallRecordSqlAdapter();
         vCallLogWriterSession.changeFwdNumber(webSession, webSession.getRecordId(), vNewFwdNr);
         webSession.setNewUnmappedCall(null);
         webSession.setRecordId(null);
@@ -342,7 +376,8 @@ public class CallRecordFacade
     // look for a call with this key in the WebSession NewUnmappedCalls, and remove it.
     public static void removeNewCall(HttpServletRequest req, WebSession webSession)
     {
-        webSession.setNewUnmappedCall(null);
+    	System.out.println("removeNewCall()");
+    	webSession.setNewUnmappedCall(null);
         webSession.setRecordId(null);
     }
 

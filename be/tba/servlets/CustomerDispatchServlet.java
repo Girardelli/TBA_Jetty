@@ -49,6 +49,13 @@ public class CustomerDispatchServlet extends HttpServlet
                 throw new AccessDeniedException("U bent niet aangemeld.");
             SessionManager.getInstance().getSession(vSession.getSessionId(), "AdminDispatchServlet(" + vAction + ")");
 
+            AccountEntityData customer = AccountCache.getInstance().get(vSession.getFwdNumber());
+            if (customer == null)
+            {
+            	SessionManager.getInstance().remove(vSession.getSessionId());
+                throw new LostSessionException();
+            }
+            
             // String vSessionId = (String) req.getParameter(Constants.SESSION_ID);
             if (vAction == null)
             {
@@ -73,10 +80,12 @@ public class CustomerDispatchServlet extends HttpServlet
 
                 System.out.println("\nCustomerDispatchServlet: userid:" + vSession.getUserId() + ", page sessionid:" + vSession.getSessionId() + ", websessionid:" + vSession.getSessionId() + " action=" + vAction);
 
+                switch (vAction)
+                {
                 // ==============================================================================================
                 // DELETE RECORD
                 // ==============================================================================================
-                if (vAction.equals(Constants.RECORD_DELETE))
+                case Constants.RECORD_DELETE:
                 {
                     String vLtd = (String) req.getParameter(Constants.RECORD_TO_DELETE);
                     StringTokenizer vStrTok = new StringTokenizer(vLtd, ",");
@@ -87,78 +96,86 @@ public class CustomerDispatchServlet extends HttpServlet
                         vCallLogWriterSession.setRelease(vSession, vStrTok.nextToken());
                     }
                     rd = sc.getRequestDispatcher(Constants.CLIENT_CALLS_JSP);
+                    break;
                 }
 
                 // ==============================================================================================
                 // VIEW CALLS
                 // ==============================================================================================
-                else if (vAction.equals(Constants.ACTION_SHOW_CALLS))
+                case Constants.ACTION_SHOW_CALLS:
                 {
                     Calendar calendar = Calendar.getInstance();
                     vSession.setYear(calendar.get(Calendar.YEAR));
                     vSession.setMonthsBack(calendar.get(Calendar.MONTH));
                     rd = sc.getRequestDispatcher(Constants.CLIENT_CALLS_JSP);
+                    break;
                 }
 
                 // ==============================================================================================
                 // CALLS_REFRESH
                 // ==============================================================================================
-                else if (vAction.equals(Constants.ACTION_REFRESH_CALLS))
+                case Constants.ACTION_REFRESH_CALLS:
                 {
                     rd = sc.getRequestDispatcher(Constants.CLIENT_CALLS_JSP);
+                    break;
                 }
 
                 // ==============================================================================================
                 // RECORD_SHOW_NEXT
                 // ==============================================================================================
-                else if (vAction.equals(Constants.RECORD_SHOW_NEXT))
+                case Constants.RECORD_SHOW_NEXT:
                 {
                     if (!vSession.isCurrentMonth())
                         vSession.incrementMonthsBack();
                     rd = sc.getRequestDispatcher(Constants.CLIENT_CALLS_JSP);
+                    break;
                 }
 
                 // ==============================================================================================
                 // RECORD_SHOW_PREV
                 // ==============================================================================================
-                else if (vAction.equals(Constants.RECORD_SHOW_PREV))
+                case Constants.RECORD_SHOW_PREV:
                 {
                     vSession.decrementMonthsBack();
                     rd = sc.getRequestDispatcher(Constants.CLIENT_CALLS_JSP);
+                    break;
                 }
 
                 // ==============================================================================================
                 // TASK_SHOW_NEXT
                 // ==============================================================================================
-                else if (vAction.equals(Constants.TASK_SHOW_NEXT))
+                case Constants.TASK_SHOW_NEXT:
                 {
                     if (!vSession.isCurrentMonth())
                         vSession.incrementMonthsBack();
                     rd = sc.getRequestDispatcher(Constants.CLIENT_SHOW_TASKS_JSP);
+                    break;
                 }
 
                 // ==============================================================================================
                 // TASK_SHOW_PREV
                 // ==============================================================================================
-                else if (vAction.equals(Constants.TASK_SHOW_PREV))
+                case Constants.TASK_SHOW_PREV:
                 {
                     vSession.decrementMonthsBack();
                     rd = sc.getRequestDispatcher(Constants.CLIENT_SHOW_TASKS_JSP);
+                    break;
                 }
 
                 // ==============================================================================================
                 // UPDATE PREFERENCES
                 // ==============================================================================================
-                else if (vAction.equals(Constants.UPDATE_PREFS))
+                case Constants.UPDATE_PREFS:
                 {
                     rd = sc.getRequestDispatcher(Constants.CLIENT_PREF_JSP);
+                    break;
 
                 }
 
                 // ==============================================================================================
                 // SAVE PREFERENCES
                 // ==============================================================================================
-                else if (vAction.equals(Constants.SAVE_PREFS))
+                case Constants.SAVE_PREFS:
                 {
                     // String vRole = (String) req.getParameter(Constants.ACCOUNT_ROLE);
                     AccountSqlAdapter vAccountSession = new AccountSqlAdapter();
@@ -211,24 +228,26 @@ public class CustomerDispatchServlet extends HttpServlet
                     vAccountSession.updateRow(vSession, vAccount);
                     AccountCache.getInstance().update(vSession);
                     rd = sc.getRequestDispatcher(Constants.CLIENT_PREF_JSP);
+                    break;
                 }
 
                 // ==============================================================================================
                 // MODIFY RECORD
                 // ==============================================================================================
-                else if (vAction.equals(Constants.RECORD_UPDATE))
+                case Constants.RECORD_UPDATE:
                 {
                     String vKey = (String) req.getParameter(Constants.RECORD_ID);
 
                     CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
                     vSession.setCurrentRecord(vQuerySession.getRecord(vSession, vKey));
                     rd = sc.getRequestDispatcher(Constants.CLIENT_SHOW_REC_JSP);
+                    break;
                 }
 
                 // ==============================================================================================
                 // SAVE RECORD
                 // ==============================================================================================
-                else if (vAction.equals(Constants.SAVE_RECORD))
+                case Constants.SAVE_RECORD:
                 {
                     if (req.getParameter(Constants.RECORD_SHORT_TEXT) != null)
                     {
@@ -250,29 +269,39 @@ public class CustomerDispatchServlet extends HttpServlet
                         }
                     }
                     rd = sc.getRequestDispatcher(Constants.CLIENT_CALLS_JSP);
+                    break;
                 }
 
                 // ==============================================================================================
                 // GOTO SEARCH PAGE
                 // ==============================================================================================
-                else if (vAction.equals(Constants.ACTION_GOTO_SEARCH_PAGE))
+                case Constants.ACTION_GOTO_SEARCH_PAGE:
                 {
                     vSession.setSearchString("");
                     rd = sc.getRequestDispatcher(Constants.CLIENT_SEARCH_JSP);
+                    break;
                 }
 
                 // ==============================================================================================
                 // GOTO SHOW TASKS PAGE
                 // ==============================================================================================
-                else if (vAction.equals(Constants.ACTION_SHOW_TASKS))
+                case Constants.ACTION_SHOW_TASKS:
                 {
                     vSession.setSearchString("");
                     rd = sc.getRequestDispatcher(Constants.CLIENT_SHOW_TASKS_JSP);
+                    break;
                 }
 
                 // ==============================================================================================
                 // SEARCH PAGE
                 // ==============================================================================================
+                case Constants.ACTION_SEARCH_CALLS:
+                {
+                    if (req.getParameter(Constants.RECORD_SEARCH_STR) != null)
+                        vSession.setSearchString((String) req.getParameter(Constants.RECORD_SEARCH_STR));
+                    rd = sc.getRequestDispatcher(Constants.CLIENT_SEARCH_JSP);
+                    break;
+                }
                 // else if
                 // (vAction.equals(Constants.ACTION_SEARCH_CALLS))
                 // {
@@ -287,45 +316,35 @@ public class CustomerDispatchServlet extends HttpServlet
                 // }
 
                 // ==============================================================================================
-                // GOTO_RECORD_SEARCH
-                // ==============================================================================================
-                else if (vAction.equals(Constants.ACTION_SEARCH_CALLS))
-                {
-                    if (req.getParameter(Constants.RECORD_SEARCH_STR) != null)
-                        vSession.setSearchString((String) req.getParameter(Constants.RECORD_SEARCH_STR));
-                    Calendar calendar = Calendar.getInstance();
-                    vSession.setYear(calendar.get(Calendar.YEAR));
-                    vSession.setMonthsBack(calendar.get(Calendar.MONTH));
-                    rd = sc.getRequestDispatcher(Constants.CLIENT_SEARCH_JSP);
-                }
-
-                // ==============================================================================================
                 // SEARCH_SHOW_NEXT
                 // ==============================================================================================
-                else if (vAction.equals(Constants.SEARCH_SHOW_NEXT))
+                case Constants.SEARCH_SHOW_NEXT:
                 {
                     // System.out.println("AdminDispatchServlet: SEARCH_SHOW_NEXT");
 
                     if (!vSession.isCurrentMonth())
                         vSession.incrementMonthsBack();
                     rd = sc.getRequestDispatcher(Constants.CLIENT_SEARCH_JSP);
+                    break;
                 }
 
                 // ==============================================================================================
                 // SEARCH_SHOW_PREV
                 // ==============================================================================================
-                else if (vAction.equals(Constants.SEARCH_SHOW_PREV))
+                case Constants.SEARCH_SHOW_PREV:
                 {
                     vSession.decrementMonthsBack();
                     rd = sc.getRequestDispatcher(Constants.CLIENT_SEARCH_JSP);
+                    break;
                 }
 
                 // ==============================================================================================
                 // error
                 // ==============================================================================================
-                else
+                default:
                 {
                     throw new SystemErrorException("Onbekende actie (" + vAction + ")");
+                }
                 }
                 rd.forward(req, res);
             }
