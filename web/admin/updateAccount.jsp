@@ -190,7 +190,7 @@ if (vCustomer.getRole().equals(AccountRole._vSubCustomer))
         {
     %>
 								<td width="500" valign="top" class="bodytekst">014/ <select
-									name=<%=Constants.ACCOUNT_FORWARD_NUMBER%>>
+									name=<%=Constants.ACCOUNT_FORWARD_NUMBER%> >
 										<%
 out.println("<option value=\"" + vCustomer.getFwdNumber() + "\">" + vCustomer.getFwdNumber());
 Collection<String> vFreeNumbers = AccountCache.getInstance().getFreeNumbers();
@@ -207,7 +207,7 @@ for (Iterator<String> n = vFreeNumbers.iterator(); n.hasNext();)
         }
         else
         {
-            out.println("<td width=\"500\" valign=\"top\">(014)" + vCustomer.getFwdNumber() + "></td>"); 
+            out.println("<td width=\"500\" valign=\"top\">(014)" + vCustomer.getFwdNumber() + "</td>"); 
         }
     %>
 							</tr>

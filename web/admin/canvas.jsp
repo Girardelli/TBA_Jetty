@@ -4,6 +4,12 @@
 <head>
 <meta HTTP-EQUIV="Refresh" content="<%=Constants.REFRESH%>;URL=\tba\admin\canvas.jsp">
 <title>TheBusinessAssistant administrator pages</title>
+ <style>
+     iframe {
+          height: 800px;
+     }
+ </style>
+
 </head>
 <%@ page 
 contentType="text/html;charset=UTF-8" language="java"
@@ -48,7 +54,7 @@ Collection<CallRecordEntityData> vRecords = vQuerySession.getxDaysBack(vSession,
 	<tr>
 		<!-- white space -->
 		<td valign="top" width="20" bgcolor="FFFFFF"></td>
-
+		
 		<!-- account list -->
 		<td valign="top" bgcolor="FFFFFF">
 			
@@ -72,7 +78,7 @@ if (!UrlCheckTimerTask.getIsWebsiteUp())
 		        &nbsp;&nbsp;&nbsp;&nbsp;
 		        <input class="tbabutton" type=submit name=action value="Refresh" onclick="filterCalls()">
 <%
-if (!vSession.getUserId().equals("MarieJH")) 
+if (vSession.getRole() == AccountRole.ADMIN) 
 {
 %>              
                 <input class="tbabutton" type=submit name=action value="Verwijderen" onclick="deleteCalls()"> 
@@ -333,7 +339,16 @@ else
   }
 }
 allEntryIds.append("]");
-out.println("</table>");
+%>
+            </table>
+        </td>
+        <!-- Intertel screen 
+        <td valign="top" bgcolor="FFFFFF">
+            <iframe src="https://pbxonline.be/tools/webconsole" width="800"></iframe>
+        </td> -->
+    </tr>
+</table>
+<%
 out.println(modalStrBuffer.toString());
 }
 catch (Exception e)

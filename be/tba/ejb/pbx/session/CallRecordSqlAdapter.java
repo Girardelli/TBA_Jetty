@@ -1089,7 +1089,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
     {
     	CallRecordEntityData newRecord = new CallRecordEntityData();
     	// to be removed:
-    	newRecord.setName(data.intertelCallId.substring(0, 6));
+    	//newRecord.setName(data.intertelCallId.substring(0, 6));
 
     	if (data.isIncoming)
     	{
