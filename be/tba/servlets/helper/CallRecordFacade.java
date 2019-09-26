@@ -53,6 +53,7 @@ public class CallRecordFacade
     public static void saveRecord(HttpServletRequest req, WebSession session)
     {
     	System.out.println("saveRecord()");
+    	AccountEntityData vNewCustomer = null;
     	CallRecordSqlAdapter vCallLogWriterSession = new CallRecordSqlAdapter();
 
         // Check the record and add it if it is a valid one.
@@ -80,7 +81,7 @@ public class CallRecordFacade
                     {
                         // customer changed!! Check the isMailed flag.
                         vCallData.setFwdNr((String) req.getParameter(Constants.ACCOUNT_FORWARD_NUMBER));
-                        AccountEntityData vNewCustomer = AccountCache.getInstance().get(vCallData);
+                        vNewCustomer = AccountCache.getInstance().get(vCallData);
 
                         if (AccountCache.getInstance().isMailEnabled(vNewCustomer))
                             vCallData.setIsMailed(false);
@@ -103,7 +104,7 @@ public class CallRecordFacade
             vCallData.setIsImportantCall(req.getParameter(Constants.RECORD_IMPORTANT) != null);
             if (!prevIsImportant && vCallData.getIsImportantCall())
             {
-                MailNowTask.send(vCallData.getAccountId());
+                MailNowTask.send(vNewCustomer);
             }
             vCallData.setIsFaxCall(req.getParameter(Constants.RECORD_FAX) != null);
             if (req.getParameter(Constants.RECORD_INVOICE_LEVEL) != null)

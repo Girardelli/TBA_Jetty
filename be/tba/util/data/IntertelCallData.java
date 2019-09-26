@@ -96,6 +96,12 @@ public class IntertelCallData
 		{
 			return (int)(tsEnd - tsAnswer);
 		}
+		// to be removed!!!!! --> bug in new Intertel webhook logging, missing answer event
+		else if (tsStart > 0 && tsEnd > 0)
+		{
+			System.out.println("No tsAnswer timestamp logged: return full length=" + (int)(tsStart - tsAnswer));
+			return (int)(tsStart - tsAnswer);
+		}
 		return 0;
 	}
 	
