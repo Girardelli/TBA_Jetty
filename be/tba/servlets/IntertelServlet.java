@@ -106,6 +106,10 @@ public class IntertelServlet extends HttpServlet
 //			return;
 //		}
 		data = mIntertelCallManager.get(intertelCallId);
+		if (data == null && !phase.equals("start"))
+		{
+			System.out.println("\r\nERROR: INtertel event with call ID not found: " + intertelCallId);
+		}
 		switch (phase)
     	{
     	case "start":

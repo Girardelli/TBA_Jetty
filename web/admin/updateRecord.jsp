@@ -267,7 +267,7 @@ out.println("</select>");
 		</span> <br>
 		</td>
 <%
-if (!mCustomerData.getCallProcessInfo().isEmpty())
+if (mCustomerData.getCallProcessInfo() != null && !mCustomerData.getCallProcessInfo().isEmpty())
 {
 %>
 		

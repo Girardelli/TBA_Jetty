@@ -17,6 +17,11 @@ final public class MailNowTask
         {
             return;
         }
+        if (account == null)
+        {
+        	System.out.println("ERROR: MailNowThread.send with null account");
+        	return;
+        }
 
         Thread t = new Thread(new MailNowThread(account));
         t.start();
@@ -53,7 +58,16 @@ final public class MailNowTask
                 String vEmail = mAccountData.getEmail();
                 if (vEmail != null && vEmail.length() > 0)
                 {
-                    MailerSessionBean.sendMail(session, mAccountData.getId());
+                    if (!MailerSessionBean.sendMail(session, mAccountData.getId()))
+            		{
+                    	System.out.println("MailNowThread sendmail failed: wait 5 sec and retry");
+                    	// wait another 5 seconds an retry once
+                    	Thread.sleep(5000);
+                        if (!MailerSessionBean.sendMail(session, mAccountData.getId()))
+                		{
+                        	System.out.println("MailNowThread sendmail failed again");
+                		}
+            		}
                 }
                 session.Close();
             }
