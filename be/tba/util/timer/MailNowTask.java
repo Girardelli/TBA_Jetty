@@ -4,6 +4,8 @@
  */
 package be.tba.util.timer;
 
+import java.util.Properties;
+
 import be.tba.ejb.account.interfaces.AccountEntityData;
 import be.tba.ejb.mail.session.MailerSessionBean;
 import be.tba.servlets.session.WebSession;
@@ -15,7 +17,8 @@ final public class MailNowTask
     {
         if (System.getenv("TBA_MAIL_ON") == null)
         {
-            return;
+            
+        	return;
         }
         if (account == null)
         {

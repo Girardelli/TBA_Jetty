@@ -19,6 +19,8 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.naming.InitialContext;
 
+import com.sun.mail.smtp.SMTPTransport;
+
 import be.tba.ejb.account.interfaces.AccountEntityData;
 import be.tba.ejb.pbx.interfaces.CallRecordEntityData;
 import be.tba.ejb.pbx.session.CallRecordSqlAdapter;
@@ -75,15 +77,15 @@ public class MailerSessionBean
         AccountEntityData vCustomer = null;
         try
         {
-            System.out.println("sendMail start:");
-            InitialContext vContext = new InitialContext();
-            Session vSession = null;
+//            InitialContext vContext = new InitialContext();
+//            Session vSession = null;
             // mail/Session name is configured in web.xml in the jetty war
             //vSession = (Session) PortableRemoteObject.narrow(vContext.lookup("java:comp/env/mail/Session"), Session.class);
 
-            vSession = (Session) vContext.lookup("java:comp/env/mail/Session");
+//            vSession = (Session) vContext.lookup("java:comp/env/mail/Session");
 
             vCustomer = AccountCache.getInstance().get(accountId);
+            System.out.println("sendMail start for:" + vCustomer.getFullName());
 
             String vEmailAddr = vCustomer.getEmail();
             if (vEmailAddr == null)
@@ -151,19 +153,28 @@ public class MailerSessionBean
                         vTo = new InternetAddress[1];
                         vTo[0] = new InternetAddress("yves.willems@theBusinessAssistant.be");
                     }
-
-                    MimeMessage m = new MimeMessage(vSession);
-                    m.setFrom();
-
-                    m.setRecipients(Message.RecipientType.TO, vTo);
-                    m.setSubject("Uw oproepenlijst tot " + DateFormat.getDateInstance(DateFormat.LONG, new Locale("nl", "BE")).format(date) + " " + vCustomer.getFullName());
-                    m.setSentDate(date);
-                    m.setContent(vBody.toString(), "text/html");
+                    Properties prop = System.getProperties();
+                    Session session = Session.getInstance(prop, null);
+                    MimeMessage msg = new MimeMessage(session);
+                    msg.setFrom(new InternetAddress("nancy.olyslaegers@thebusinessassistant.be"));
+                    msg.setRecipients(Message.RecipientType.TO, vTo);
+                    msg.setSubject("Uw oproepenlijst tot " + DateFormat.getDateInstance(DateFormat.LONG, new Locale("nl", "BE")).format(date) + " " + vCustomer.getFullName());
+                    msg.setSentDate(date);
+                    msg.setContent(vBody.toString(), "text/html");
                     if (isImportant.get())
                     {
-                        m.addHeader("X-Priority", "2");
+                    	msg.addHeader("X-Priority", "2");
                     }
-                    Transport.send(m);
+        			// Get SMTPTransport
+                    SMTPTransport t = (SMTPTransport) session.getTransport("smtp");
+        			
+        			// connect
+                    //t.setStartTLS(true);
+                    t.connect("smtp.telenet.be", "a120569", "gzb625");
+        			// send
+                    t.sendMessage(msg, msg.getAllRecipients());
+                    System.out.println("Response: " + t.getLastServerResponse());
+                    t.close();	        
                     flagRecordsAsMailed(webSession, vRecords, vWriterSession);
                     // vAccountSession.setAccount(vCustomer);
                 }
