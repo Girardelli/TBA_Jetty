@@ -102,7 +102,8 @@ public class CallRecordEntityData extends AbstractData
 
     public void setAccountId(int id)
     {
-        this.accountId = id;
+        System.out.println("call.setAccountId with " + id + " for " + this.getFwdNr());
+    	this.accountId = id;
     }
 
     public java.lang.String getFwdNr()

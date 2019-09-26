@@ -288,15 +288,20 @@ public class CallRecordFacade
         newRecord.setIsForwardCall(req.getParameter(Constants.RECORD_FORWARD) != null);
         boolean prevIsImportant = newRecord.getIsImportantCall();
         newRecord.setIsImportantCall(req.getParameter(Constants.RECORD_IMPORTANT) != null);
-        if (!prevIsImportant && newRecord.getIsImportantCall())
-        {
-            MailNowTask.send(newRecord.getAccountId());
-        }
         newRecord.setIsFaxCall(req.getParameter(Constants.RECORD_FAX) != null);
         newRecord.setName((String) req.getParameter(Constants.RECORD_CALLER_NAME));
         newRecord.setShortDescription((String) req.getParameter(Constants.RECORD_SHORT_TEXT));
         newRecord.setLongDescription((String) req.getParameter(Constants.RECORD_LONG_TEXT));
         newRecord.setDoneBy(webSession.getUserId());
+        if (newRecord.getAccountId() == 0)
+        {
+        	AccountEntityData vData = AccountCache.getInstance().get(newRecord);
+            newRecord.setAccountId(vData.getId());
+        }
+        if (!prevIsImportant && newRecord.getIsImportantCall())
+        {
+            MailNowTask.send(newRecord.getAccountId());
+        }
     }
 
     public static boolean saveNewCall(HttpServletRequest req, WebSession webSession)
@@ -319,16 +324,21 @@ public class CallRecordFacade
             vNewRecord.setLongDescription(vNewCall.getLongDescription());
             vNewRecord.setIsSmsCall(vNewCall.getIsSmsCall());
             vNewRecord.setIsAgendaCall(vNewCall.getIsAgendaCall());
-            if (!vNewRecord.getIsImportantCall() && vNewCall.getIsImportantCall())
-            {
-                MailNowTask.send(vNewRecord.getAccountId());
-            }
             vNewRecord.setIsForwardCall(vNewCall.getIsForwardCall());
             vNewRecord.setIsFaxCall(vNewCall.getIsFaxCall());
             vNewRecord.setIsVirgin(false);
             vNewRecord.setIsNotLogged(false);
             vNewRecord.setIsChanged(false);
             vNewRecord.setDoneBy(webSession.getUserId());
+            if (vNewRecord.getAccountId() == 0) 
+            {
+                AccountEntityData vData = AccountCache.getInstance().get(vNewRecord);
+                vNewRecord.setAccountId(vData.getId());
+            }
+            if (!vNewRecord.getIsImportantCall() && vNewCall.getIsImportantCall())
+            {
+                MailNowTask.send(vNewRecord.getAccountId());
+            }
             vQuerySession.setCallData(webSession, vNewRecord);
             vNewCall.setFwdNr(vNewRecord.getFwdNr());
             vNewCall.setAccountId(vNewRecord.getAccountId());
