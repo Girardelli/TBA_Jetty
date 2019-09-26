@@ -122,7 +122,7 @@ public class IntertelServlet extends HttpServlet
         		data.setCurrentPhase(phase);
         		data.setCurrentPhase(req.getParameter("answeredby"));
         		mCallRecordSqlAdapter.setTsAnswer(mSession, data);
-        		System.out.println(data.intertelCallId.substring(0, 6) + "-answered");
+        		System.out.println(data.intertelCallId + "-answered");
 
     		}
     		break;
@@ -136,7 +136,7 @@ public class IntertelServlet extends HttpServlet
     			data.setTsTransfer(timestamp); 
     			data.setCurrentPhase(phase);
     			mCallRecordSqlAdapter.setTransfer(mSession, data, transferOutCall);
-    			System.out.println(data.intertelCallId.substring(0, 6) + "-transfered");
+    			System.out.println(data.intertelCallId + "-transfered");
 
     		}
     		break;
@@ -148,20 +148,23 @@ public class IntertelServlet extends HttpServlet
         		mCallRecordSqlAdapter.setTsEnd(mSession, data);
         		data.setCurrentPhase(phase);
     			data.isEndDone = true;
-    			System.out.println(data.intertelCallId.substring(0, 6) + "-end");
+    			System.out.println(data.intertelCallId + "-end");
 
     		}
     		break;
     		
     	case "summary":
-    		data.isSummaryDone = true;
-    		if (!data.isIncoming)
-			{	
-    			data.setCallingNr(req.getParameter("viaDID"));
-        		mCallRecordSqlAdapter.setCallingNr(mSession, data);
-        		System.out.println(data.intertelCallId.substring(0, 6) + "-summary");
+    		if (data != null) 
+    		{
+        		data.isSummaryDone = true;
+        		if (!data.isIncoming)
+    			{	
+        			data.setCallingNr(req.getParameter("viaDID"));
+            		mCallRecordSqlAdapter.setCallingNr(mSession, data);
+            		System.out.println(data.intertelCallId + "-summary");
 
-			}
+    			}
+    		}
     		break;
 
     	default:
@@ -177,7 +180,7 @@ public class IntertelServlet extends HttpServlet
 		{
     		mIntertelCallManager.removeCall(intertelCallId);
 			writeToFile(data);
-			System.out.println(data.intertelCallId.substring(0, 6) + "-finalize with write to log");
+			System.out.println(data.intertelCallId + "-finalize with write to log");
 		}
     }
 
