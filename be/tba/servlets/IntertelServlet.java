@@ -63,7 +63,7 @@ public class IntertelServlet extends HttpServlet
     	writeParmsToFile(req);
 		String phase = req.getParameter("origin");
 		//sLogger.info("Intertel servlet doPost");
-    	//System.out.println("Intertel servlet doPost: " + phase);
+    	System.out.println("Intertel servlet doPost: " + phase);
     	IntertelCallData data;
     	
     	if (mSession == null || mSession.getConnection() == null)
@@ -122,7 +122,7 @@ public class IntertelServlet extends HttpServlet
         		data.setCurrentPhase(phase);
         		data.setCurrentPhase(req.getParameter("answeredby"));
         		mCallRecordSqlAdapter.setTsAnswer(mSession, data);
-        		//System.out.println(data.intertelCallId.substring(0, 6) + "-answered");
+        		System.out.println(data.intertelCallId.substring(0, 6) + "-answered");
 
     		}
     		break;
@@ -136,7 +136,7 @@ public class IntertelServlet extends HttpServlet
     			data.setTsTransfer(timestamp); 
     			data.setCurrentPhase(phase);
     			mCallRecordSqlAdapter.setTransfer(mSession, data, transferOutCall);
-    			//System.out.println(data.intertelCallId.substring(0, 6) + "-transfered");
+    			System.out.println(data.intertelCallId.substring(0, 6) + "-transfered");
 
     		}
     		break;
@@ -148,7 +148,7 @@ public class IntertelServlet extends HttpServlet
         		mCallRecordSqlAdapter.setTsEnd(mSession, data);
         		data.setCurrentPhase(phase);
     			data.isEndDone = true;
-    			//System.out.println(data.intertelCallId.substring(0, 6) + "-end");
+    			System.out.println(data.intertelCallId.substring(0, 6) + "-end");
 
     		}
     		break;
@@ -159,7 +159,7 @@ public class IntertelServlet extends HttpServlet
 			{	
     			data.setCallingNr(req.getParameter("viaDID"));
         		mCallRecordSqlAdapter.setCallingNr(mSession, data);
-        		//System.out.println(data.intertelCallId.substring(0, 6) + "-summary");
+        		System.out.println(data.intertelCallId.substring(0, 6) + "-summary");
 
 			}
     		break;
@@ -168,12 +168,16 @@ public class IntertelServlet extends HttpServlet
     		System.out.println("Intertel servlet doPost: unknown 'origin'=" + phase);
         	        	
     	}
-		if (data.isEndDone && data.isSummaryDone)
+		if (data == null)
+		{
+			System.out.println("INtertel call cannot be removed: data=null");
+			return;
+		}
+		else if (data.isEndDone && data.isSummaryDone)
 		{
     		mIntertelCallManager.removeCall(intertelCallId);
 			writeToFile(data);
-			//System.out.println(data.intertelCallId.substring(0, 6) + "-finalize with write to log");
-
+			System.out.println(data.intertelCallId.substring(0, 6) + "-finalize with write to log");
 		}
     }
 
