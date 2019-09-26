@@ -933,7 +933,8 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
 
             if (vData != null)
             {
-                if (AccountCache.getInstance().isMailEnabled(vData))
+            	newRecord.setAccountId(vData.getId());
+            	if (AccountCache.getInstance().isMailEnabled(vData))
                     newRecord.setIsMailed(false);
                 else
                     newRecord.setIsMailed(true);

@@ -172,7 +172,7 @@ HttpSession vHttpSession = request.getSession();
 if (vIsVirgin)
 {
   out.println("<input class=\"tbabutton\" type=submit name=action value=\" Bewaar \">");
-  out.println("<input type=hidden name=" + Constants.SRV_ACTION + " value=\"" + Constants.GET_OPEN_CALLS + "\" >");
+  out.println("<input type=hidden name=" + Constants.SRV_ACTION + " value=\"" + Constants.REFRESH_OPEN_CALLS + "\" >");
 
 }
 else

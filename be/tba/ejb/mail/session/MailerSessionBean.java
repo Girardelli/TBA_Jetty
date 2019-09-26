@@ -14,11 +14,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.mail.Address;
 import javax.mail.Message;
 import javax.mail.Session;
-import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import javax.naming.InitialContext;
-
 import com.sun.mail.smtp.SMTPTransport;
 
 import be.tba.ejb.account.interfaces.AccountEntityData;
@@ -77,15 +74,7 @@ public class MailerSessionBean
         AccountEntityData vCustomer = null;
         try
         {
-//            InitialContext vContext = new InitialContext();
-//            Session vSession = null;
-            // mail/Session name is configured in web.xml in the jetty war
-            //vSession = (Session) PortableRemoteObject.narrow(vContext.lookup("java:comp/env/mail/Session"), Session.class);
-
-//            vSession = (Session) vContext.lookup("java:comp/env/mail/Session");
-
             vCustomer = AccountCache.getInstance().get(accountId);
-            System.out.println("sendMail start for:" + vCustomer.getFullName());
 
             String vEmailAddr = vCustomer.getEmail();
             if (vEmailAddr == null)
@@ -111,6 +100,7 @@ public class MailerSessionBean
             AtomicBoolean isImportant = new AtomicBoolean(false);
             if (!vRecords.isEmpty() || !vCustomer.getNoEmptyMails())
             {
+                System.out.println("sendMail start for:" + vCustomer.getFullName());
                 StringBuffer vBody;
                 if (vCustomer.getIsXmlMail())
                 {

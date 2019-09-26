@@ -22,12 +22,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import be.tba.ejb.account.interfaces.AccountEntityData;
-import be.tba.ejb.account.session.AccountSqlAdapter;
-import be.tba.ejb.invoice.interfaces.InvoiceEntityData;
-import be.tba.ejb.invoice.session.InvoiceSqlAdapter;
 import be.tba.ejb.mail.session.MailerSessionBean;
-import be.tba.ejb.task.interfaces.TaskEntityData;
-import be.tba.ejb.task.session.TaskSqlAdapter;
 import be.tba.servlets.helper.AccountFacade;
 import be.tba.servlets.helper.CallRecordFacade;
 import be.tba.servlets.helper.InvoiceFacade;
@@ -485,16 +480,6 @@ public class AdminDispatchServlet extends HttpServlet
                 // NEW_CALL
                 // ==============================================================================================
                 case Constants.NEW_CALL:
-                {
-                    CallRecordFacade.updateNewUnmappedCall(req, vSession);
-                    rd = sc.getRequestDispatcher(Constants.NEW_CALL_JSP);
-                    break;
-                }
-
-                // ==============================================================================================
-                // GET_OPEN_CALLS
-                // ==============================================================================================
-                case Constants.GET_OPEN_CALLS:
                 {
                     CallRecordFacade.createNewUnmappedCall(req, vSession);
                     rd = sc.getRequestDispatcher(Constants.NEW_CALL_JSP);

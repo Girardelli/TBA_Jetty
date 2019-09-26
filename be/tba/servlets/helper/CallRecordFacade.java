@@ -261,7 +261,9 @@ public class CallRecordFacade
         webSession.setNewUnmappedCall(newRecord);
     }
 
-    // this function is to refresh the new call page with an updated list of incoming calls
+    // this function is called:
+    //   - when a new not yet call is created (none existing that shal be mapped later on a logged call
+    //   - to refresh the new call page with an updated list of incoming calls
     // so that the user can select his call form this list.
     // because this is a server loop call, possible changes to that new call data must be stored
     // temporally in the NewUnmappedCalls Map in the WebSession so that the jsp can take that data
@@ -286,24 +288,18 @@ public class CallRecordFacade
         newRecord.setIsAgendaCall(req.getParameter(Constants.RECORD_AGENDA) != null);
         newRecord.setIsSmsCall(req.getParameter(Constants.RECORD_SMS) != null);
         newRecord.setIsForwardCall(req.getParameter(Constants.RECORD_FORWARD) != null);
-        boolean prevIsImportant = newRecord.getIsImportantCall();
         newRecord.setIsImportantCall(req.getParameter(Constants.RECORD_IMPORTANT) != null);
         newRecord.setIsFaxCall(req.getParameter(Constants.RECORD_FAX) != null);
         newRecord.setName((String) req.getParameter(Constants.RECORD_CALLER_NAME));
         newRecord.setShortDescription((String) req.getParameter(Constants.RECORD_SHORT_TEXT));
         newRecord.setLongDescription((String) req.getParameter(Constants.RECORD_LONG_TEXT));
         newRecord.setDoneBy(webSession.getUserId());
-        if (newRecord.getAccountId() == 0)
-        {
-        	AccountEntityData vData = AccountCache.getInstance().get(newRecord);
-            newRecord.setAccountId(vData.getId());
-        }
-        if (!prevIsImportant && newRecord.getIsImportantCall())
-        {
-            MailNowTask.send(newRecord.getAccountId());
-        }
     }
 
+    /*
+     * called from the new call page when a recorded (from PBX) call is selected. Both recorded and already created 
+     * new call shall be merged into the recorded call in the database.
+     */
     public static boolean saveNewCall(HttpServletRequest req, WebSession webSession)
     {
     	System.out.println("saveNewCall()");
@@ -354,9 +350,6 @@ public class CallRecordFacade
             		AccountEntityData acc = iter.next();
             		System.out.println("subcustomer: " + acc.getFullName());
             	}
-                    
-            	
-            	
                 //System.out.println("there are subcustomers. Set the super customer=" + vNewRecord.getFwdNr() + ", record key=" + vKey);
                 // set the fwdNr of the super customer so that selectSubCustomer.jsp can prepare the sub customers list
                 //req.setAttribute(Constants.ACCOUNT_ID, vNewCall.getId());
