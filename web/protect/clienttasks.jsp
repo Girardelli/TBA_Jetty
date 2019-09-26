@@ -58,7 +58,8 @@ Last Checked In By: $Author: Yves Willems $
 
  		if (vSession == null)
  			throw new AccessDeniedException("U bent niet aangemeld.");
-
+ 		vSession.setCallingJsp(Constants.CLIENT_SHOW_TASKS_JSP);  
+ 		  
  		if (vSession.getFwdNumber() == null)
  			throw new AccessDeniedException(
  			        "Account nummer not set in session.");

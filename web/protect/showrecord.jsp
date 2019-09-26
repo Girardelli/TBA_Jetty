@@ -22,6 +22,11 @@ private CallRecordEntityData mRecordData;
 private String mCustomerName;
 %>
 	<%
+	if (vSession == null)
+		  throw new AccessDeniedException("U bent niet aangemeld bij deze administratie pagina's.");
+	
+	vSession.setCallingJsp(Constants.CLIENT_SHOW_REC_JSP);  
+
   CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
 
   mRecordData = vQuerySession.getRecord(vSession, (String) request.getParameter(Constants.RECORD_ID));

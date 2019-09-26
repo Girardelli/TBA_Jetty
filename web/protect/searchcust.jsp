@@ -43,6 +43,7 @@ try
 
 if (vSession == null)
   throw new AccessDeniedException("U bent niet aangemeld bij deze administratie pagina's.");
+vSession.setCallingJsp(Constants.CLIENT_SEARCH_JSP);  
 
 boolean vCustomerFilterOn = false;
 

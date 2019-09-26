@@ -77,7 +77,7 @@ public class CustomerDispatchServlet extends HttpServlet
             {
                 if (!vSession.getRole().getShort().equals(AccountRole.ADMIN.getShort()) && !vSession.getRole().getShort().equals(AccountRole.CUSTOMER.getShort()) && !vSession.getRole().getShort().equals(AccountRole.SUBCUSTOMER.getShort()))
                     throw new AccessDeniedException("access denied for " + vSession.getUserId() + " with role " + vSession.getRole().getShort());
-
+                rd = sc.getRequestDispatcher(vSession.getCallingJsp());
                 System.out.println("\nCustomerDispatchServlet: userid:" + vSession.getUserId() + ", page sessionid:" + vSession.getSessionId() + ", websessionid:" + vSession.getSessionId() + " action=" + vAction);
 
                 switch (vAction)
@@ -116,7 +116,8 @@ public class CustomerDispatchServlet extends HttpServlet
                 // ==============================================================================================
                 case Constants.ACTION_REFRESH_CALLS:
                 {
-                    rd = sc.getRequestDispatcher(Constants.CLIENT_CALLS_JSP);
+                	vSession.setDaysBack(0);
+                	//rd = sc.getRequestDispatcher(Constants.CLIENT_CALLS_JSP);
                     break;
                 }
 
@@ -125,9 +126,9 @@ public class CustomerDispatchServlet extends HttpServlet
                 // ==============================================================================================
                 case Constants.RECORD_SHOW_NEXT:
                 {
-                    if (!vSession.isCurrentMonth())
-                        vSession.incrementMonthsBack();
-                    rd = sc.getRequestDispatcher(Constants.CLIENT_CALLS_JSP);
+                	vSession.setDaysBack(vSession.getDaysBack() - 7);
+                	if (vSession.getDaysBack() < 0) vSession.setDaysBack(0);
+                    //rd = sc.getRequestDispatcher(Constants.CLIENT_CALLS_JSP);
                     break;
                 }
 
@@ -136,8 +137,8 @@ public class CustomerDispatchServlet extends HttpServlet
                 // ==============================================================================================
                 case Constants.RECORD_SHOW_PREV:
                 {
-                    vSession.decrementMonthsBack();
-                    rd = sc.getRequestDispatcher(Constants.CLIENT_CALLS_JSP);
+                	vSession.setDaysBack(vSession.getDaysBack() + 7);
+                	//rd = sc.getRequestDispatcher(Constants.CLIENT_CALLS_JSP);
                     break;
                 }
 
@@ -148,7 +149,7 @@ public class CustomerDispatchServlet extends HttpServlet
                 {
                     if (!vSession.isCurrentMonth())
                         vSession.incrementMonthsBack();
-                    rd = sc.getRequestDispatcher(Constants.CLIENT_SHOW_TASKS_JSP);
+                    //rd = sc.getRequestDispatcher(Constants.CLIENT_SHOW_TASKS_JSP);
                     break;
                 }
 
@@ -158,7 +159,7 @@ public class CustomerDispatchServlet extends HttpServlet
                 case Constants.TASK_SHOW_PREV:
                 {
                     vSession.decrementMonthsBack();
-                    rd = sc.getRequestDispatcher(Constants.CLIENT_SHOW_TASKS_JSP);
+                    //rd = sc.getRequestDispatcher(Constants.CLIENT_SHOW_TASKS_JSP);
                     break;
                 }
 
@@ -302,18 +303,6 @@ public class CustomerDispatchServlet extends HttpServlet
                     rd = sc.getRequestDispatcher(Constants.CLIENT_SEARCH_JSP);
                     break;
                 }
-                // else if
-                // (vAction.equals(Constants.ACTION_SEARCH_CALLS))
-                // {
-                // if
-                // (req.getParameter(Constants.RECORD_SEARCH_STR)
-                // != null)
-                // ;
-                // vSession.setSearchString((String)
-                // req.getParameter(Constants.RECORD_SEARCH_STR));
-                // rd =
-                // sc.getRequestDispatcher(Constants.CLIENT_SEARCH_JSP);
-                // }
 
                 // ==============================================================================================
                 // SEARCH_SHOW_NEXT

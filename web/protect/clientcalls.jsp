@@ -45,73 +45,66 @@ allEntryIds = new StringBuilder("[");
 		<!-- account list -->
 		<td valign="top" bgcolor="FFFFFF"><br>
         <p><span class="admintitle"> Huidig geregistreerde oproepen:
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="tbabutton" type=submit name=action value="Herlaad" onclick="refresh()"> 
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="tbabutton" type=submit name=action value="Herlaad (Vandaag)" onclick="refresh()"> 
         </span></p>
 <%
   InitialContext vContext = new InitialContext();
 
   if (vSession == null)
     throw new AccessDeniedException("U bent niet aangemeld.");
-    
+  vSession.setCallingJsp(Constants.CLIENT_CALLS_JSP);  
   if (vSession.getFwdNumber() == null)
     throw new AccessDeniedException("Account nummer not set in session.");
 
   CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
 
-  Collection<CallRecordEntityData> vRecords = vQuerySession.getDocumentedForMonth(vSession, vSession.getFwdNumber(), vSession.getMonthsBack(), vSession.getYear());
+  Collection<CallRecordEntityData> vRecords = vQuerySession.getxWeeksBack(vSession, vSession.getDaysBack(), vSession.getFwdNumber());
   
   AccountEntityData vAccount = AccountCache.getInstance().get(vSession.getFwdNumber());
 %>
 <input class="tbabutton" type=submit name=action value="Vorige Oproepen" onclick="showPrevious()"> 
 <%
-if (!vSession.isCurrentMonth())
+if (vSession.getDaysBack() > 0)
 {
 out.println("<input class=\"tbabutton\" type=submit name=action value=\"Volgende Oproepen\"  onclick=\"showNext()\">");
 }
 
   
   out.println("<br><br><table border=\"0\" cellspacing=\"2\" cellpadding=\"2\">");
+  if (vSession.getDaysBack() > 0)
+  {
+	    out.println("<span class=\"adminsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + vSession.getDaysBack() + "&nbsp;dagen terug:</span>");
+  }
+  else 
+  {
+      out.println("<span class=\"adminsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vandaag:</span>");
+  }
   if (vRecords == null || vRecords.size() == 0)
   {
-    out.println("<span class=\"adminsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Er zijn geen nieuwe oproepgegevens beschikbaar voor de maand " + vSession.getMonthsBackString() + ".</span>");
+    out.println("<span class=\"adminsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Er zijn geen nieuwe oproepgegevens beschikbaar voor deze periode.</span>");
     out.println("</table>");
   }
   else
   {
     if (vRecords.size() == 1)
-      out.println("<span class=\"bodytekst\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Er is </span><span class=\"bodyredbold\">1</span><span class=\"bodytekst\">  oproep beschikbaar voor de maand " + vSession.getMonthsBackString() + ".</span>");
+      out.println("<span class=\"bodytekst\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Er is </span><span class=\"bodyredbold\">1</span><span class=\"bodytekst\">  oproep beschikbaar voor deze periode.</span>");
     else
-      out.println("<span class=\"bodytekst\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Er zijn </span><span class=\"bodyredbold\">" + vRecords.size() + "</span><span class=\"bodytekst\"> oproepen beschikbaar voor de maand " + vSession.getMonthsBackString() + ".</span>");
+      out.println("<span class=\"bodytekst\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Er zijn </span><span class=\"bodyredbold\">" + vRecords.size() + "</span><span class=\"bodytekst\"> oproepen beschikbaar voor deze periode.</span>");
     int vNewCnt = 0;
     long vLastLogin = vAccount.getPreviousLoginTS();
-    for (Iterator<CallRecordEntityData> i = vRecords.iterator(); i.hasNext();)
-    {
-      CallRecordEntityData vEntry = i.next();
-      if (vEntry.getTimeStamp() > vLastLogin)
-        ++vNewCnt;
-    }  
-    if (vNewCnt > 0)
-    {
-      if (vNewCnt == 1)
-        out.println("<br><span class=\"bodytekst\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sinds uw laatste login is er </span><span class=\"bodyredbold\">1</span><span class=\"bodytekst\">  nieuwe oproep beschikbaar.</span>");
-      else
-        out.println("<br><span class=\"bodytekst\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sinds uw laatste login zijn er </span><span class=\"bodyredbold\">" + vNewCnt + "</span><span class=\"bodytekst\">  nieuwe oproepen beschikbaar.</span>");
-    }
-    else
-      out.println("<br><span class=\"bodytekst\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sinds uw laatste login zijn er geen nieuwe oproepen geregistreerd.</span>");
-    
-    out.println("              <br><br>");
-    out.println("              <tr>");
-    out.println("                <td width=\"30\" bgcolor=\"FFFFFF\"></td>");
-    out.println("                <td width=\"20\"  valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\"></td>");
-    out.println("                <td width=\"65\"  valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Datum</td>");
-    out.println("                <td width=\"45\"  valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Uur</td>");
-    out.println("                <td width=\"80\"  valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Nummer</td>");
-    out.println("                <td width=\"200\" valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Naam</td>");
-    out.println("                <td width=\"500\" valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Omschrijving</td>");
-    out.println("                <td width=\"80\"  valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Info</td>");
-    out.println("              </tr>");
-
+    %>
+    <br><br>
+    <tr>
+    <td width="30" bgcolor="FFFFFF"></td>
+    <td width="20"  valign="top" class="topMenu" bgcolor="F89920"></td>
+    <td width="65"  valign="top" class="topMenu" bgcolor="F89920">&nbsp;Datum</td>
+    <td width="45"  valign="top" class="topMenu" bgcolor="F89920">&nbsp;Uur</td>
+    <td width="80"  valign="top" class="topMenu" bgcolor="F89920">&nbsp;Nummer</td>
+    <td width="200" valign="top" class="topMenu" bgcolor="F89920">&nbsp;Naam</td>
+    <td width="500" valign="top" class="topMenu" bgcolor="F89920">&nbsp;Omschrijving</td>
+    <td width="80"  valign="top" class="topMenu" bgcolor="F89920">&nbsp;Info</td>
+    </tr>
+<%
     int vRowInd = 0;
     for (Iterator<CallRecordEntityData> i = vRecords.iterator(); i.hasNext();)
     {
@@ -189,10 +182,6 @@ catch (Exception ex)
   ex.printStackTrace();
 }
 %>
-	</td>
-</table>
-</td>
-</tr>
 </table>
 </form>
 

@@ -147,6 +147,41 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
         return new Vector<CallRecordEntityData>();
     }
 
+    public Collection<CallRecordEntityData> getxWeeksBack(WebSession webSession, int daysBack, String fwdNr)
+    {
+        try
+        {
+
+            // CallRecordEntityHome callRecordHome = getEntityBean();
+            CallCalendar vCallCalendar = new CallCalendar();
+            long vFromTimeStamp = vCallCalendar.getDaysBack(daysBack);
+            long vToTimeStamp = 0;
+            if (daysBack >= 7)
+            {
+                vToTimeStamp = vCallCalendar.getDaysBack(daysBack - 7);
+            }
+            else
+            {
+                vToTimeStamp = vCallCalendar.getCurrentTimestamp() + 60000; // add 1 minute in teh future
+            }
+            Collection<CallRecordEntityData> vCollection = executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsDocumented=FALSE ORDER BY TimeStamp DESC");
+            if (fwdNr == null)
+            {
+                vCollection.addAll(executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsDocumented=TRUE AND TimeStamp>" + vFromTimeStamp + " AND TimeStamp<=" + vToTimeStamp + " ORDER BY TimeStamp DESC"));
+            }
+            else
+            {
+                vCollection.addAll(executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsDocumented=TRUE AND FwdNr='" + fwdNr + "' AND TimeStamp>" + vFromTimeStamp + " AND TimeStamp<=" + vToTimeStamp + " ORDER BY TimeStamp DESC"));
+            }
+            return vCollection;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return new Vector<CallRecordEntityData>();
+    }
+    
     /**
      * @ejb:interface-method view-type="remote"
      */
@@ -390,6 +425,32 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
             else
             {
                 return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE FwdNr='" + fwdNr + "' AND TimeStamp>" + vStart + " AND TimeStamp<=" + vCalendar.getCurrentTimestamp() + " AND IsDocumented=TRUE ORDER BY TimeStamp DESC");
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return new Vector<CallRecordEntityData>();
+    }
+
+    /**
+     * @ejb:interface-method view-type="remote"
+     */
+    public Collection<CallRecordEntityData> getDocumentedLastWeek(WebSession webSession, String fwdNr)
+    {
+        try
+        {
+            CallCalendar vCalendar = new CallCalendar();
+            long vStart = vCalendar.getStartOfToday() - 7*24*60*1000;
+
+            if (fwdNr == null)
+            {
+                return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE TimeStamp>" + vStart + " AND IsDocumented=TRUE ORDER BY TimeStamp DESC");
+            }
+            else
+            {
+                return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE FwdNr='" + fwdNr + "' AND TimeStamp>" + vStart + " AND IsDocumented=TRUE ORDER BY TimeStamp DESC");
             }
         }
         catch (Exception e)
