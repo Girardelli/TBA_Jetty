@@ -164,7 +164,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
             {
                 vToTimeStamp = vCallCalendar.getCurrentTimestamp() + 60000; // add 1 minute in teh future
             }
-            Collection<CallRecordEntityData> vCollection = executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsDocumented=FALSE ORDER BY TimeStamp DESC");
+            Collection<CallRecordEntityData> vCollection = new Vector<CallRecordEntityData>();
             if (fwdNr == null)
             {
                 vCollection.addAll(executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsDocumented=TRUE AND TimeStamp>" + vFromTimeStamp + " AND TimeStamp<=" + vToTimeStamp + " ORDER BY TimeStamp DESC"));
