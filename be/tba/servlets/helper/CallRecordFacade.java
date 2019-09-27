@@ -82,13 +82,21 @@ public class CallRecordFacade
                         // customer changed!! Check the isMailed flag.
                         vCallData.setFwdNr((String) req.getParameter(Constants.ACCOUNT_FORWARD_NUMBER));
                         vNewCustomer = AccountCache.getInstance().get(vCallData);
+                        vCallData.setAccountId(vNewCustomer.getId());
 
                         if (AccountCache.getInstance().isMailEnabled(vNewCustomer))
                             vCallData.setIsMailed(false);
                         else
                             vCallData.setIsMailed(true);
                     }
+                    
                 }
+            }
+            if (vCallData.getAccountId() == 0)
+            {
+            	AccountEntityData customer = AccountCache.getInstance().get(vCallData);
+                if (customer != null)
+                	vCallData.setAccountId(customer.getId());
             }
             vCallData.setNumber((String) req.getParameter(Constants.RECORD_NUMBER));
             vCallData.setName((String) req.getParameter(Constants.RECORD_CALLER_NAME));
