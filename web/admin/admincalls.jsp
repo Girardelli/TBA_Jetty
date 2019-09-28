@@ -4,6 +4,12 @@
 <head>
 <meta HTTP-EQUIV="Refresh" content="<%=Constants.REFRESH%>;URL=\tba\admin\admincalls.jsp">
 <title>TheBusinessAssistant administrator pages</title>
+<style>
+iframe 
+{
+     height: 800px;
+}
+</style>
 </head>
 <%@ page 
 contentType="text/html;charset=UTF-8" language="java"
@@ -104,13 +110,14 @@ if (vCustomerFilter == null) vCustomerFilter = Constants.ACCOUNT_FILTER_ALL;
     <input type=hidden name=<%=Constants.RECORD_TO_DELETE%> value=""> 
 	<input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.GOTO_RECORD_ADMIN%>"> 
 <table  cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
+    <tr><td><br></td></tr>
 	<tr>
 		<!-- white space -->
 		<td valign="top" width="20" bgcolor="FFFFFF"></td>
 
 		<!-- account list -->
 		<td valign="top" bgcolor="FFFFFF">
-		<br><p><span class="admintitle"> Oproepenlijst: <%=vRecords.size()%> oproepen </span></p>	
+		<p><span class="admintitle"> Oproepenlijst: <%=vRecords.size()%> oproepen </span></p>	
 	
 	<table  cellspacing='20' cellpadding='0' border='0' bgcolor="FFFFFF">
 	<tr>
@@ -119,8 +126,9 @@ if (vCustomerFilter == null) vCustomerFilter = Constants.ACCOUNT_FILTER_ALL;
 			<tr>
 				<td width="150" valign="top" class="adminsubtitle">&nbsp;Klant</td>
 				<td width="10" valign="top">:</td>
+				<td width="170" valign="top">
+				<select name="<%=Constants.ACCOUNT_FILTER_CUSTOMER%>" onchange="submit()">
 				<%
-out.println("<td width=\"170\" valign=\"top\"><select name=\"" + Constants.ACCOUNT_FILTER_CUSTOMER + "\" onchange=\"submit()\">");
 
 				Collection<AccountEntityData> list = AccountCache.getInstance().getCallCustomerList();
 				synchronized(list) 
@@ -128,48 +136,50 @@ out.println("<td width=\"170\" valign=\"top\"><select name=\"" + Constants.ACCOU
 				    for (Iterator<AccountEntityData> vIter = list.iterator(); vIter.hasNext();)
 				    {
 				        AccountEntityData vData = vIter.next();
-				        out.println("<option value=\"" + vData.getFwdNumber() + (vCustomerFilter.equals(vData.getFwdNumber()) ? "\" selected>" : "\">") + vData.getFullName());
+				        out.println("<option value=\"" + vData.getFwdNumber() + (vCustomerFilter.equals(vData.getFwdNumber()) ? "\" selected>" : "\">") + vData.getFullName() + "</option>");
 				    }
 				}
-out.println("<option value=\"" + Constants.NUMBER_BLOCK[0][0] + (vCustomerFilter.equals(Constants.NUMBER_BLOCK[0][0]) ? "\" selected>" : "\">") + Constants.NUMBER_BLOCK[0][3]);
-out.println("<option value=\"" + Constants.NUMBER_BLOCK[1][0] + (vCustomerFilter.equals(Constants.NUMBER_BLOCK[1][0]) ? "\" selected>" : "\">") + Constants.NUMBER_BLOCK[1][3]);
-out.println("<option value=\"" + Constants.ACCOUNT_FILTER_ALL + (vCustomerFilter.equals(Constants.ACCOUNT_FILTER_ALL) ? "\" selected>" : "\">") + "Alle klanten");
-out.println("</select></td>");
-%>
+				%>
+				<option value="<%=Constants.NUMBER_BLOCK[0][0]%>" <%=(vCustomerFilter.equals(Constants.NUMBER_BLOCK[0][0]) ? "\"selected\"" : "")%>> <%=(vCustomerFilter.equals(Constants.NUMBER_BLOCK[0][0]) ? "\"selected\"" : "")%> <%=Constants.NUMBER_BLOCK[0][3]%></option>
+				<option value="<%=Constants.NUMBER_BLOCK[1][0]%>" <%=(vCustomerFilter.equals(Constants.NUMBER_BLOCK[1][0]) ? "\"selected\"" : "")%>> <%=Constants.NUMBER_BLOCK[1][3]%></option>
+				<option value="<%=Constants.ACCOUNT_FILTER_ALL%>" <%=(vCustomerFilter.equals(Constants.ACCOUNT_FILTER_ALL) ? "\"selected\"" : "")%>> Alle klanten</option>
+			 </select>
+			 </td>
 			</tr>
+			<!--  
 			<tr>
 				<td width="150" valign="top" class="adminsubtitle">&nbsp;Oproep	status</td>
 				<td width="10" valign="top">:</td>
 				<%
-out.println("<td width=\"170\" valign=\"top\">");
-out.println("  <select name=\"" + Constants.ACCOUNT_FILTER_CALL_STATE + "\" onchange=\"submit()\">");
-out.println("  <option value=\"" + Constants.ACCOUNT_FILTER_UNFINISHED + (vCallStateFilter.equals(Constants.ACCOUNT_FILTER_UNFINISHED) ? "\" selected>" : "\">") + "Onvolledige");
-out.println("  <option value=\"" + Constants.ACCOUNT_FILTER_FINISHED + (vCallStateFilter.equals(Constants.ACCOUNT_FILTER_FINISHED) ? "\" selected>" : "\">") + "Volledige");
-out.println("  <option value=\"" + Constants.ACCOUNT_FILTER_ALL + (vCallStateFilter.equals(Constants.ACCOUNT_FILTER_ALL) ? "\" selected>" : "\">") + "Alle");
-out.println("  </select>");
-out.println("</td>");
+//out.println("<td width=\"170\" valign=\"top\">");
+//out.println("  <select name=\"" + Constants.ACCOUNT_FILTER_CALL_STATE + "\" onchange=\"submit()\">");
+//out.println("  <option value=\"" + Constants.ACCOUNT_FILTER_UNFINISHED + (vCallStateFilter.equals(Constants.ACCOUNT_FILTER_UNFINISHED) ? "\" selected>" : "\">") + "Onvolledige");
+//out.println("  <option value=\"" + Constants.ACCOUNT_FILTER_FINISHED + (vCallStateFilter.equals(Constants.ACCOUNT_FILTER_FINISHED) ? "\" selected>" : "\">") + "Volledige");
+//out.println("  <option value=\"" + Constants.ACCOUNT_FILTER_ALL + (vCallStateFilter.equals(Constants.ACCOUNT_FILTER_ALL) ? "\" selected>" : "\">") + "Alle");
+//out.println("  </select>");
+//out.println("</td>");
 %>
 			</tr>
 			<tr>
 				<td width="150" valign="top" class="adminsubtitle">&nbsp;Inkomend/Uitgaand</td>
 				<td width="10" valign="top">:</td>
 				<%
-out.println("<td width=\"170\" valign=\"top\">");
-out.println("  <select name=\"" + Constants.ACCOUNT_FILTER_CALL_DIR + "\" onchange=\"submit()\">");
-out.println("  <option value=\"" + Constants.ACCOUNT_FILTER_IN + (vCallDirectionFilter.equals(Constants.ACCOUNT_FILTER_IN) ? "\" selected>" : "\">") + "InKomende");
-out.println("  <option value=\"" + Constants.ACCOUNT_FILTER_OUT + (vCallDirectionFilter.equals(Constants.ACCOUNT_FILTER_OUT) ? "\" selected>" : "\">") + "Uitgaande");
-out.println("  <option value=\"" + Constants.ACCOUNT_FILTER_ALL + (vCallDirectionFilter.equals(Constants.ACCOUNT_FILTER_ALL) ? "\" selected>" : "\">") + "In- en Uitgaande");
-out.println("  </select>");
-out.println("</td>");
+//out.println("<td width=\"170\" valign=\"top\">");
+//out.println("  <select name=\"" + Constants.ACCOUNT_FILTER_CALL_DIR + "\" onchange=\"submit()\">");
+//out.println("  <option value=\"" + Constants.ACCOUNT_FILTER_IN + (vCallDirectionFilter.equals(Constants.ACCOUNT_FILTER_IN) ? "\" selected>" : "\">") + "InKomende");
+//out.println("  <option value=\"" + Constants.ACCOUNT_FILTER_OUT + (vCallDirectionFilter.equals(Constants.ACCOUNT_FILTER_OUT) ? "\" selected>" : "\">") + "Uitgaande");
+//out.println("  <option value=\"" + Constants.ACCOUNT_FILTER_ALL + (vCallDirectionFilter.equals(Constants.ACCOUNT_FILTER_ALL) ? "\" selected>" : "\">") + "In- en Uitgaande");
+//out.println("  </select>");
+//out.println("</td>");
 %>
-			</tr>
+			</tr>-->
 			</table>
 			<table border="0" cellspacing="5" cellpadding="0">
             <tr>
 			<td>
 		        <input class="tbabutton" type=submit name=action value="Refresh" onclick="filterCalls()">
 <%
-if (!vSession.getUserId().equals("MarieJH")) 
+if (vSession.getRole() == AccountRole.ADMIN)  
 {
 %>				
 				<input class="tbabutton" type=submit name=action value="Verwijderen" onclick="deleteCalls()"> 
@@ -233,22 +243,22 @@ else
 if (vRecords == null || vRecords.size() == 0)
 {
 	if (vCustomerFilter == null || vCustomerFilter.equals(Constants.ACCOUNT_FILTER_ALL))
-	  out.println("<br><br><span class=\"adminsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Er zijn geen oproepgegevens beschikbaar (" + vSession.getDaysBack() + " dagen terug).</span>");
+	  out.println("<br><span class=\"adminsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Er zijn geen oproepgegevens beschikbaar (" + vSession.getDaysBack() + " dagen terug).</span>");
 	else
-      out.println("<br><br><span class=\"adminsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Er zijn geen oproepgegevens beschikbaar (" + vSession.getMonthsBack() + " maanden terug).</span>");
+      out.println("<br><span class=\"adminsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Er zijn geen oproepgegevens beschikbaar (" + vSession.getMonthsBack() + " maanden terug).</span>");
 }
 else
 {
   if (vSession.getDaysBack() > 0)
   {
 	    if (vCustomerFilter == null || vCustomerFilter.equals(Constants.ACCOUNT_FILTER_ALL))
-	        out.println("<br><br><span class=\"adminsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Oproepen van " + vSession.getDaysBack() + " dagen terug.</span><br>");
+	        out.println("<br><span class=\"adminsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Oproepen van " + vSession.getDaysBack() + " dagen terug.</span><br>");
       else
-    	    out.println("<br><br><span class=\"adminsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Oproepen van " + vSession.getMonthsBack() + " maanden terug.</span><br>");
+    	    out.println("<br><span class=\"adminsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Oproepen van " + vSession.getMonthsBack() + " maanden terug.</span><br>");
   }
   %>
   <table border="0" cellspacing="2" cellpadding="4">
-                <br><tr>
+                <tr>
                   <td width="20" bgcolor="FFFFFF"></td>
                   <td width="10" valign="top" class="topMenu" bgcolor="F89920"></td>
                   <td width="200" valign="top" class="topMenu" bgcolor="F89920">&nbsp;Klant</td>
@@ -365,9 +375,23 @@ else
   {
       allEntryIds.deleteCharAt(allEntryIds.length() - 1);
   }
+%>
+  </table>
+<%  
 }
 allEntryIds.append("]");
-out.println("</table>");
+%>
+	</td>
+    <!-- Intertel Callpark screen 
+    <td valign="top" bgcolor="FFFFFF">
+        <!-- <iframe src="https://pbxonline.be/tools/webconsole" width="500"></iframe> -->
+        <iframe name="intertelFrame" src="https://pbxonline.be/index.php" width="500" onload=" frames['intertelFrame'].location.href='https://pbxonline.be/index.php?uname='+getUserName();"></iframe>
+    </td> -->
+  </tr>
+</table>
+</form>
+<% 
+
 if (vRecords != null && vRecords.size() > 0)
 {
   out.println("<br><br><input class=\"tbabutton\" type=submit name=action value=\"Vorige Oproepen\"  onclick=\"showPrevious()\">");

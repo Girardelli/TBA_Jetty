@@ -399,7 +399,7 @@ public class AdminDispatchServlet extends HttpServlet
                 // ==============================================================================================
                 case Constants.UPDATE_SHORT_TEXT:
                 {
-                	CallRecordFacade.updateShortText(req, vSession);
+                	CallRecordFacade.updateShortText(req, vSession, false);
                     //rd = sc.getRequestDispatcher(Constants.CANVAS_JSP);
                     break;
                 }

@@ -20,6 +20,7 @@ import be.tba.ejb.account.interfaces.AccountEntityData;
 import be.tba.ejb.account.session.AccountSqlAdapter;
 import be.tba.ejb.invoice.interfaces.InvoiceEntityData;
 import be.tba.ejb.pbx.interfaces.CallRecordEntityData;
+import be.tba.ejb.task.interfaces.TaskEntityData;
 import be.tba.servlets.session.WebSession;
 import be.tba.util.constants.AccountRole;
 import be.tba.util.constants.Constants;
@@ -155,6 +156,18 @@ final public class AccountCache
         else
         {
       	  return get(invoice.getAccountFwdNr());
+        }
+    }
+    
+    public AccountEntityData get(TaskEntityData task)
+    {
+        if (task.getAccountId() > 0) // yves: to be changed in .getId() only in de herfst van 2020
+        {
+      	  return get(task.getAccountId());
+        }
+        else
+        {
+      	  return get(task.getFwdNr());
         }
     }
     

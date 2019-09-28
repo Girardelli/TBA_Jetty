@@ -16,6 +16,7 @@ import be.tba.ejb.account.interfaces.AccountEntityData;
 import be.tba.ejb.account.session.AccountSqlAdapter;
 import be.tba.ejb.pbx.interfaces.CallRecordEntityData;
 import be.tba.ejb.pbx.session.CallRecordSqlAdapter;
+import be.tba.servlets.helper.CallRecordFacade;
 import be.tba.servlets.session.SessionManager;
 import be.tba.servlets.session.WebSession;
 import be.tba.util.constants.AccountRole;
@@ -250,25 +251,7 @@ public class CustomerDispatchServlet extends HttpServlet
                 // ==============================================================================================
                 case Constants.SAVE_RECORD:
                 {
-                    if (req.getParameter(Constants.RECORD_SHORT_TEXT) != null)
-                    {
-
-                        // Check the record and add it
-                        // if it is a valid one.
-
-                        CallRecordEntityData vCallData = vSession.getCurrentRecord();
-                        if (vCallData == null)
-                            System.out.println("CustomerDispatchServlet: no call record in session context (SAVE RECORD)");
-                        else
-                        {
-                            String vText = vCallData.getShortDescription();
-                            if (vText.length() > 0)
-                            {
-                                CallRecordSqlAdapter vCallLogWriterSession = new CallRecordSqlAdapter();
-                                vCallLogWriterSession.setShortText(vSession, vCallData.getId(), req.getParameter(Constants.RECORD_SHORT_TEXT), true);
-                            }
-                        }
-                    }
+                  	CallRecordFacade.updateShortText(req, vSession, true);
                     rd = sc.getRequestDispatcher(Constants.CLIENT_CALLS_JSP);
                     break;
                 }

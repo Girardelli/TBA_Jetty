@@ -34,11 +34,12 @@ if (mTaskData == null)
   out.println("no call Task set in session context when entering updaterecord.jsp");
   return;
 }
-
-mCustomerData = AccountCache.getInstance().get(mTaskData.getAccountId());
+System.out.println("task.invoiceId=" + mTaskData.getInvoiceId() );
+mCustomerData = AccountCache.getInstance().get(mTaskData);
 %>
 
 <body>
+<form name="taskform" method="POST" action="/tba/AdminDispatch">
 <table  cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
 
 	<!--Update task jsp-->
@@ -47,8 +48,6 @@ mCustomerData = AccountCache.getInstance().get(mTaskData.getAccountId());
 		<td valign="top" width="30" bgcolor="FFFFFF"></td>
 		<td valign="top" bgcolor="FFFFFF"><br>
 		<br>
-		<span class="bodytekst"> <!-- action name must be a URI name as it is set in the <application>.xml servlet-mapping tag.-->
-		<form name="taskform" method="POST" action="/tba/AdminDispatch">
 		<table width="100%" border="0" cellspacing="1" cellpadding="1">
 		
 <% if (mTaskData.getInvoiceId() > 0 ||
@@ -59,7 +58,7 @@ mCustomerData = AccountCache.getInstance().get(mTaskData.getAccountId());
             <tr>
                 <td width="50"></td>
                 <td width="250" valign="top" class="adminsubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;klant</td>
-                <td width="580" valign="top"><%=mTaskData.getFwdNr()%></td>
+                <td width="580" valign="top"><%=mCustomerData.getFullName()%></td>
             </tr>
             <tr>
                 <td width="50"></td>
@@ -199,19 +198,23 @@ else
 		<br>
 		<br>
 		<input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.SAVE_TASK%>"> 
-<% if (mTaskData.getInvoiceId() > 0 ||
-        //or a recuring task that has been stopped
-        (mTaskData.getIsRecuring() && mTaskData.getStopTime() < Long.MAX_VALUE))
+<% if (mTaskData.getInvoiceId() == 0 ||
+        //or a recuring task that has not been stopped
+        (mTaskData.getIsRecuring() && mTaskData.getStopTime() == Long.MAX_VALUE))
 {
 %>      
 		<input class="tbabutton" type=submit name=action value=" Bewaar "> 
 		<input class="tbabutton" type=reset> 
 <%
 }
+else
+{
+%>
+        <span class="adminsubsubtitle">Deze taak is opgenomen in een bevrozen factuur en kan daardoor niet meer worden aangepast.</span><br>
+<%
+}
 %>
 		<input class="tbabutton" type=submit value=" Terug " onclick="cancelUpdate();">
-		</form>
-		</span> <br>
 		</td>
 	</tr>
 
@@ -223,6 +226,7 @@ catch (Exception e)
 }
 %>
 </table>
+</form>
 
 </body>
 

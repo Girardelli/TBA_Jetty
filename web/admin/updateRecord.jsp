@@ -231,7 +231,7 @@ if (mCustomerData.getIs3W())
 					name=<%=Constants.RECORD_LONG_TEXT%> rows=10 cols=70><%=(String) mRecordData.getLongDescription()%></textarea></td>
 			</tr>
 <%
-if (intertelCall == null)
+if (intertelCall == null && !mRecordData.getIsMailed())
 {
 %>
 			<tr>

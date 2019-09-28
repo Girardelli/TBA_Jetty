@@ -123,6 +123,10 @@ out.println("</tr>");
 				<td width="550" valign="top"><textarea
 					name=<%=Constants.RECORD_SHORT_TEXT%> rows=10 cols=70></textarea></td>
 			</tr>
+			<%
+			if (mRecordData.getLongDescription() != null && !mRecordData.getLongDescription().isEmpty())
+			{
+			%>
 			<tr>
 				<td width="30"></td>
 				<td width="170" valign="top" class="adminsubsubtitle"><img
@@ -130,6 +134,9 @@ out.println("</tr>");
 					height="10">&nbsp;Bijkomende Informatie</td>
 				<td width="550" valign="top" class="bodytekst"><%=(String) mRecordData.getLongDescription()%></td>
 			</tr>
+            <%
+			}
+            %>
 		</table>
 		</td>
 	</tr>

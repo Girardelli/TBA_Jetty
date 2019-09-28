@@ -35,17 +35,18 @@ public class CallRecordFacade
         session.setCurrentRecord(vQuerySession.getRecord(session, vKey));
     }
     
-    public static void updateShortText(HttpServletRequest req, WebSession session)
+    public static void updateShortText(HttpServletRequest req, WebSession session, boolean isCustomer)
     {
     	System.out.println("updateShortText()");
     	String vKey = (String) req.getParameter(Constants.RECORD_ID);
         String shortText = (String) req.getParameter(Constants.RECORD_SHORT_TEXT);
-
-        CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
-        vQuerySession.setShortText(session, Integer.parseInt(vKey), shortText, false);
+        if (shortText != null && !shortText.isEmpty())
+        {
+            CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
+            vQuerySession.setShortText(session, Integer.parseInt(vKey), shortText, isCustomer);
+        }
     }
-    
-    
+
     /*
      * this method saves (updates) a record that was opened from the call list.
      * 
@@ -75,13 +76,14 @@ public class CallRecordFacade
             }
             else
             {
-                if (req.getParameter(Constants.ACCOUNT_FORWARD_NUMBER) != null)
+                String newFwdNr = req.getParameter(Constants.ACCOUNT_FORWARD_NUMBER);
+            	if (newFwdNr != null)
                 {
-                    if (!vCallData.getFwdNr().equals((String) req.getParameter(Constants.ACCOUNT_FORWARD_NUMBER)))
+                    if (!vCallData.getFwdNr().equals(newFwdNr))
                     {
-                        // customer changed!! Check the isMailed flag.
-                        vCallData.setFwdNr((String) req.getParameter(Constants.ACCOUNT_FORWARD_NUMBER));
-                        vNewCustomer = AccountCache.getInstance().get(vCallData);
+                    	// customer changed!! Check the isMailed flag.
+                        vCallData.setFwdNr(newFwdNr);
+                        vNewCustomer = AccountCache.getInstance().get(newFwdNr);
                         vCallData.setAccountId(vNewCustomer.getId());
 
                         if (AccountCache.getInstance().isMailEnabled(vNewCustomer))
@@ -89,7 +91,6 @@ public class CallRecordFacade
                         else
                             vCallData.setIsMailed(true);
                     }
-                    
                 }
             }
             if (vCallData.getAccountId() == 0)
@@ -102,18 +103,11 @@ public class CallRecordFacade
             vCallData.setName((String) req.getParameter(Constants.RECORD_CALLER_NAME));
             vCallData.setShortDescription((String) req.getParameter(Constants.RECORD_SHORT_TEXT));
             vCallData.setLongDescription((String) req.getParameter(Constants.RECORD_LONG_TEXT));
-            vCallData.setW3_CustomerId((String) req.getParameter(Constants.RECORD_3W_CUSTOMER_ID));
-            if (req.getParameter(Constants.RECORD_DIR) != null)
-                vCallData.setIsIncomingCall(((String) req.getParameter(Constants.RECORD_DIR)).equals(Constants.RECORD_DIR_IN));
             vCallData.setIsSmsCall(req.getParameter(Constants.RECORD_SMS) != null);
             vCallData.setIsAgendaCall(req.getParameter(Constants.RECORD_AGENDA) != null);
             vCallData.setIsForwardCall(req.getParameter(Constants.RECORD_FORWARD) != null);
             boolean prevIsImportant = vCallData.getIsImportantCall();
             vCallData.setIsImportantCall(req.getParameter(Constants.RECORD_IMPORTANT) != null);
-            if (!prevIsImportant && vCallData.getIsImportantCall())
-            {
-                MailNowTask.send(vNewCustomer);
-            }
             vCallData.setIsFaxCall(req.getParameter(Constants.RECORD_FAX) != null);
             if (req.getParameter(Constants.RECORD_INVOICE_LEVEL) != null)
             {
@@ -141,6 +135,10 @@ public class CallRecordFacade
             vCallData.setDoneBy(session.getUserId());
             vCallLogWriterSession.setCallData(session, vCallData);
             printCallInsert(session, vCallData);
+            if (!prevIsImportant && vCallData.getIsImportantCall())
+            {
+                MailNowTask.send(vNewCustomer);
+            }
         }
     }
 

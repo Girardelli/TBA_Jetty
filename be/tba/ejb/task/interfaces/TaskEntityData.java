@@ -253,7 +253,7 @@ public class TaskEntityData extends be.tba.util.data.AbstractData
         str.append(getStopTime());
         str.append(",DoneBy='");
         str.append((this.doneBy != null) ? this.doneBy : "");
-        str.append("',InvoideId=");
+        str.append("',InvoiceId=");
         str.append(getInvoiceId());
         str.append(",AccountID=");
         str.append(getAccountId());

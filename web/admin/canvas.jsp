@@ -4,11 +4,12 @@
 <head>
 <meta HTTP-EQUIV="Refresh" content="<%=Constants.REFRESH%>;URL=\tba\admin\canvas.jsp">
 <title>TheBusinessAssistant administrator pages</title>
- <style>
-     iframe {
-          height: 800px;
-     }
- </style>
+<style>
+iframe 
+{
+     height: 800px;
+}
+</style>
 
 </head>
 <%@ page 
@@ -51,6 +52,7 @@ Collection<CallRecordEntityData> vRecords = vQuerySession.getxDaysBack(vSession,
     <input type=hidden name=<%=Constants.RECORD_TO_DELETE%> value=""> 
 	<input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.GOTO_CANVAS%>"> 
 <table  cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
+	<tr><td><br></td></tr>
 	<tr>
 		<!-- white space -->
 		<td valign="top" width="20" bgcolor="FFFFFF"></td>
@@ -96,7 +98,7 @@ if (vSession.getRole() == AccountRole.ADMIN)
             
         </table>
 	</td>
-	<td width="10">
+	<td width="3">
     </td>
 <%
 Collection<CallRecordEntityData> chatRecords = vQuerySession.getChatRecords(vSession);
@@ -214,13 +216,13 @@ if (!chatRecords.isEmpty())
 
 if (vRecords == null || vRecords.size() == 0)
 {
-   out.println("<br><br><span class=\"adminsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Er zijn geen oproep (" + vSession.getMonthsBack() + " maanden terug).</span>");
+   out.println("<br><span class=\"adminsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Er zijn geen oproepen.</span>");
 }
 else
 {
 %>
   <table border="0" cellspacing="2" cellpadding="4">
-                <br><tr>
+                <tr>
                   <td width="20" bgcolor="FFFFFF"></td>
                   <td width="10" valign="top" class="topMenu" bgcolor="F89920"></td>
                   <td width="200" valign="top" class="topMenu" bgcolor="F89920">&nbsp;Klant</td>
@@ -337,17 +339,20 @@ else
   {
       allEntryIds.deleteCharAt(allEntryIds.length() - 1);
   }
+%>
+  </table>
+<%
 }
 allEntryIds.append("]");
 %>
-            </table>
         </td>
-        <!-- Intertel screen 
-        <td valign="top" bgcolor="FFFFFF">
-            <iframe src="https://pbxonline.be/tools/webconsole" width="800"></iframe>
-        </td> -->
+        <!-- Intertel Callpark screen 
+    <td valign="top" bgcolor="FFFFFF">
+        <iframe src="https://pbxonline.be/tools/webconsole" width="500"></iframe>
+    </td> -->
     </tr>
 </table>
+</form>
 <%
 out.println(modalStrBuffer.toString());
 }
