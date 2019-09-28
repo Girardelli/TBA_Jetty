@@ -354,7 +354,7 @@ public class CallRecordFacade
             	for (Iterator<AccountEntityData> iter = subcustomers.iterator(); iter.hasNext();)
             	{
             		AccountEntityData acc = iter.next();
-            		System.out.println("subcustomer: " + acc.getFullName());
+            		//System.out.println("subcustomer: " + acc.getFullName());
             	}
                 //System.out.println("there are subcustomers. Set the super customer=" + vNewRecord.getFwdNr() + ", record key=" + vKey);
                 // set the fwdNr of the super customer so that selectSubCustomer.jsp can prepare the sub customers list
