@@ -31,7 +31,7 @@ vSession.setCallingJsp(Constants.ADMIN_SEARCH_JSP);
 
 boolean vCustomerFilterOn = false;
 
-String vCustomerFilter = (String) vSession.getCallFilter().getCustFilter();//request.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER);
+String vCustomerFilter = vSession.getCallFilter().getCustFilter();
 if (vCustomerFilter != null)
 {
   if (vCustomerFilter.equals(Constants.ACCOUNT_FILTER_ALL))
@@ -64,10 +64,10 @@ if (vCustomerFilter == null) vCustomerFilter = Constants.ACCOUNT_FILTER_ALL;
 					name="<%=Constants.ACCOUNT_FILTER_CUSTOMER%>">
 					<%
 out.println("<option value=\"" + Constants.ACCOUNT_FILTER_ALL + (vCustomerFilter.equals(Constants.ACCOUNT_FILTER_ALL) ? "\" selected>" : "\">") + "selecteer klant");
-					Collection list = AccountCache.getInstance().getCustomerList();
+					Collection<AccountEntityData> list = AccountCache.getInstance().getCustomerList();
 					synchronized(list) 
 					{
-					    for (Iterator vIter = list.iterator(); vIter.hasNext();)
+					    for (Iterator<AccountEntityData> vIter = list.iterator(); vIter.hasNext();)
 					    {
 					        AccountEntityData vData = (AccountEntityData) vIter.next();
 					        out.println("<option value=\"" + vData.getFwdNumber() + (vCustomerFilter.equals(vData.getFwdNumber()) ? "\" selected>" : "\">") + vData.getFullName());
@@ -77,7 +77,7 @@ out.println("<option value=\"" + Constants.ACCOUNT_FILTER_ALL + (vCustomerFilter
 				</select></td>
 			</tr>
 			<tr>
-				<td width="225" valign="top" class="adminsubtitle">&nbsp;Zoek tekst</td>
+				<td width="225" valign="top" class="adminsubtitle"><br>&nbsp;Zoek tekst</td>
 				<td width="10" valign="top">:</td>
 				<td width="590" valign="top"><input type=text size=50
 					name=<%=Constants.RECORD_SEARCH_STR%>
@@ -99,7 +99,7 @@ if (!vSession.isCurrentMonth())
 		<table width="825" border="0" cellspacing="2" cellpadding="4">
 			<%
 
-Collection vRecords = null;
+Collection<CallRecordEntityData> vRecords = null;
 if (vSession.getSearchString() != null && vSession.getSearchString().length() > 0)
 {
   CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
@@ -141,10 +141,10 @@ if (vSession.getSearchString() != null && vSession.getSearchString().length() > 
 
     int vRowInd = 0;
 
-    for (Iterator i = vRecords.iterator(); i.hasNext();)
+    for (Iterator<CallRecordEntityData> i = vRecords.iterator(); i.hasNext();)
     {
       
-      CallRecordEntityData vEntry = (CallRecordEntityData) i.next();
+      CallRecordEntityData vEntry = i.next();
 
       String vId = "id" + vEntry.getId();
       String vDate = vEntry.getDate();
@@ -224,9 +224,11 @@ e.printStackTrace();
 		</form>
 		</td>
 	</tr>
+</table>
+</body>
 
 
-	<script type="text/javascript">
+<script type="text/javascript">
 	var linesToDelete = new Array();
 	
 	function hooverOnRow(id, rowInd, colour)
@@ -268,9 +270,6 @@ function showNext()
 }
 
 </script>
-</table>
-
-</body>
 
 </html>
 

@@ -108,7 +108,7 @@ if (vCustomerFilter == null) vCustomerFilter = Constants.ACCOUNT_FILTER_ALL;
 	<input type=hidden name=<%=Constants.RECORD_ID%> value=""> 
     <input type=hidden name=<%=Constants.RECORD_SHORT_TEXT%> value=""> 
     <input type=hidden name=<%=Constants.RECORD_TO_DELETE%> value=""> 
-	<input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.GOTO_RECORD_ADMIN%>"> 
+	<input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.GOTO_CANVAS%>"> 
 <table  cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
     <tr><td><br></td></tr>
 	<tr>
@@ -384,7 +384,7 @@ allEntryIds.append("]");
 	</td>
     <!-- Intertel Callpark screen 
     <td valign="top" bgcolor="FFFFFF">
-        <!-- <iframe src="https://pbxonline.be/tools/webconsole" width="500"></iframe> -->
+        <!-- <iframe src="https://pbxonline.be/tools/webconsole" width="500"></iframe>
         <iframe name="intertelFrame" src="https://pbxonline.be/index.php" width="500" onload=" frames['intertelFrame'].location.href='https://pbxonline.be/index.php?uname='+getUserName();"></iframe>
     </td> -->
   </tr>
@@ -506,7 +506,7 @@ function reverseSelection()
 function filterCalls()
 {
   document.calllistform.<%=Constants.RECORD_TO_DELETE%>.value="";
-  document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.GOTO_RECORD_ADMIN%>";
+  document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.GOTO_CANVAS%>";
 }
 
 function addRecord()

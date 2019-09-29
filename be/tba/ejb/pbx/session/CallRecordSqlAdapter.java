@@ -116,8 +116,6 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
     {
         try
         {
-
-            // CallRecordEntityHome callRecordHome = getEntityBean();
             CallCalendar vCallCalendar = new CallCalendar();
             long vFromTimeStamp = vCallCalendar.getDaysBack(daysBack);
             long vToTimeStamp = 0;
@@ -130,7 +128,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
                 vToTimeStamp = vCallCalendar.getCurrentTimestamp();
             }
             Collection<CallRecordEntityData> vCollection = executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsDocumented=FALSE ORDER BY TimeStamp DESC");
-            if (fwdNr == null)
+            if (fwdNr == null || fwdNr.equals(Constants.ACCOUNT_FILTER_ALL))
             {
                 vCollection.addAll(executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsDocumented=TRUE AND TimeStamp>" + vFromTimeStamp + " AND TimeStamp<=" + vToTimeStamp + " ORDER BY TimeStamp DESC"));
             }
@@ -151,8 +149,6 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
     {
         try
         {
-
-            // CallRecordEntityHome callRecordHome = getEntityBean();
             CallCalendar vCallCalendar = new CallCalendar();
             long vFromTimeStamp = vCallCalendar.getDaysBack(daysBack);
             long vToTimeStamp = 0;
@@ -165,7 +161,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
                 vToTimeStamp = vCallCalendar.getCurrentTimestamp() + 60000; // add 1 minute in teh future
             }
             Collection<CallRecordEntityData> vCollection = new Vector<CallRecordEntityData>();
-            if (fwdNr == null)
+            if (fwdNr == null || fwdNr.equals(Constants.ACCOUNT_FILTER_ALL))
             {
                 vCollection.addAll(executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsDocumented=TRUE AND TimeStamp>" + vFromTimeStamp + " AND TimeStamp<=" + vToTimeStamp + " ORDER BY TimeStamp DESC"));
             }
@@ -1000,7 +996,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
                 else
                     newRecord.setIsMailed(true);
                 addRow(webSession, newRecord);
-                System.out.println("addCallRecord: id = " + newRecord.getId() + ", fwdnr=" + newRecord.getFwdNr() + ", isMailed=" + newRecord.getIsMailed());
+                //System.out.println("addCallRecord: id = " + newRecord.getId() + ", fwdnr=" + newRecord.getFwdNr() + ", isMailed=" + newRecord.getIsMailed());
                 sLogger.info("addCallRecord: id={}, fwdnr={}, isMailed={}", newRecord.getId(), newRecord.getFwdNr(), newRecord.getIsMailed());
 
             }

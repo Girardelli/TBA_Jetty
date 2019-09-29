@@ -14,7 +14,6 @@ import javax.servlet.http.HttpSession;
 
 import be.tba.ejb.account.interfaces.AccountEntityData;
 import be.tba.ejb.account.session.AccountSqlAdapter;
-import be.tba.ejb.pbx.interfaces.CallRecordEntityData;
 import be.tba.ejb.pbx.session.CallRecordSqlAdapter;
 import be.tba.servlets.helper.CallRecordFacade;
 import be.tba.servlets.session.SessionManager;
@@ -79,7 +78,7 @@ public class CustomerDispatchServlet extends HttpServlet
                 if (!vSession.getRole().getShort().equals(AccountRole.ADMIN.getShort()) && !vSession.getRole().getShort().equals(AccountRole.CUSTOMER.getShort()) && !vSession.getRole().getShort().equals(AccountRole.SUBCUSTOMER.getShort()))
                     throw new AccessDeniedException("access denied for " + vSession.getUserId() + " with role " + vSession.getRole().getShort());
                 rd = sc.getRequestDispatcher(vSession.getCallingJsp());
-                System.out.println("\nCustomerDispatchServlet: userid:" + vSession.getUserId() + ", page sessionid:" + vSession.getSessionId() + ", websessionid:" + vSession.getSessionId() + " action=" + vAction);
+                System.out.println("\nCustomerDispatchServlet: userid:" + vSession.getUserId() + ", websessionid:" + vSession.getSessionId() + " action=" + vAction);
 
                 switch (vAction)
                 {

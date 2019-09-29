@@ -234,7 +234,7 @@ public class Constants
 
     // AdminDispatchServlet actions
     public static final String GOTO_CANVAS = "GOTO_CANVAS";
-    public static final String GOTO_RECORD_ADMIN = "GOTO_RECORD_ADMIN";
+    //public static final String GOTO_RECORD_ADMIN = "GOTO_RECORD_ADMIN";
     public static final String RECORD_DELETE = "RECORD_DELETE";
     public static final String RECORD_UPDATE = "RECORD_UPDATE";
     public static final String GOTO_ADD_RECORD = "GOTO_ADD_RECORD";

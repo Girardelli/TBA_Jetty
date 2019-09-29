@@ -43,7 +43,7 @@ if (mRecordData == null)
         <span class="admintitle"> Deze oproep is niet meer gekend in de database.</span>
         <br>
         <form name="calllistform" method="POST" action="/tba/AdminDispatch">
-        <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.GOTO_RECORD_ADMIN%>"> 
+        <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.GOTO_CANVAS%>"> 
         <input class="tbabutton" type=submit value="Cancel" onclick="cancelUpdate();">
         </form>
         </td>
@@ -66,6 +66,7 @@ else
 %>
 
 <body>
+<form name="calllistform" method="POST" action="/tba/AdminDispatch">
 <table  cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
 
 	<!--Update Record jsp-->
@@ -76,7 +77,6 @@ else
 		<span class="admintitle"> Voeg extra informatie toe aan oproep voor <%=mCustomerData.getFullName()%>.</span>
 		<br>
 		<span class="bodytekst">
-		<form name="calllistform" method="POST"	action="/tba/AdminDispatch">
 		<table width="100%" border="0" cellspacing="1" cellpadding="1">
 <% 
 if (mCustomerData.getHasSubCustomers())
@@ -86,18 +86,18 @@ if (mCustomerData.getHasSubCustomers())
 				<td width="50"></td>
 				<td width="170" valign="top" class="adminsubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Oproep voor</td>
 				<td width="530" valign="top">
+				<select name="<%=Constants.ACCOUNT_SUB_CUSTOMER%>" onchange="submit()">
+				<option value="<%=mCustomerData.getFwdNumber()%>" selected> <%=mCustomerData.getFullName()%></option>
 <%
-
-	out.println("<select name=\"" + Constants.ACCOUNT_SUB_CUSTOMER + "\">");
-    out.println("<option value=\"" + mCustomerData.getFwdNumber() +  "\" selected>" + mCustomerData.getFullName());
-
     Collection<AccountEntityData> list = AccountCache.getInstance().getSubCustomersList(mCustomerData.getId());
     synchronized(list) 
     {
         for (Iterator<AccountEntityData> vIter = list.iterator(); vIter.hasNext();)
         {
 			AccountEntityData vValue = vIter.next();
-			out.println("<option value=\"" + vValue.getFwdNumber() +  "\">" + vValue.getFullName());
+%>
+            <option value="<%=vValue.getFwdNumber()%>"><%=vValue.getFullName()%></option>
+<%
         }
     }
 %>	
@@ -263,7 +263,6 @@ out.println("</select>");
 		<input class="tbabutton" type=submit name=action value="Bewaar"> 
 		<input class="tbabutton" type=reset> 
 		<input class="tbabutton" type=submit value="Cancel" onclick="cancelUpdate();">
-		</form>
 		</span> <br>
 		</td>
 <%
@@ -298,17 +297,18 @@ catch (Exception ex)
   ex.printStackTrace();
 }
 %>
+</table>
+</form>
+</body>
 
 <script type="text/javascript">
 
 function cancelUpdate()
 {
-  document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.GOTO_RECORD_ADMIN%>";
+  document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.GOTO_CANVAS%>";
 }
 </script>
-</table>
 
-</body>
 
 </html>
 

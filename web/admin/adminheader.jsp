@@ -82,9 +82,7 @@ private String vSessionId;
 						<table class="menu" id="rubrieken" width="150">
 							<tr>
 								<td class="menu"><a class='norm'
-                                    href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_CANVAS%>"><nobr>Nieuwe Oproepen</nobr></a>
-                                    <br> <a class='norm'
-									href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_RECORD_ADMIN%>"><nobr>Oproepen lijst</nobr></a>
+									href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_CANVAS%>"><nobr>Oproepen lijst</nobr></a>
 									<br> <a class='norm'
 									href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_ACCOUNT_ADMIN%>"><nobr>Klanten</nobr></a>
                                     <br> <a class='norm'

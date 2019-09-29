@@ -355,7 +355,8 @@ public class AdminDispatchServlet extends HttpServlet
                     String custFilter = (String) vSession.getCallFilter().getCustFilter();
                     if (custFilter != null && !custFilter.equals(Constants.ACCOUNT_FILTER_ALL))
                     {
-                        vSession.setMonthsBack(vSession.getMonthsBack() + 1);
+                        if (!vSession.isCurrentMonth())
+                            vSession.incrementMonthsBack();
                     }
                     else
                     {
@@ -373,7 +374,7 @@ public class AdminDispatchServlet extends HttpServlet
                     String custFilter = (String) vSession.getCallFilter().getCustFilter();
                     if (custFilter != null && !custFilter.equals(Constants.ACCOUNT_FILTER_ALL))
                     {
-                        vSession.setMonthsBack(vSession.getMonthsBack() - 1);
+                        vSession.decrementMonthsBack();
                     }
                     else
                     {
@@ -460,6 +461,7 @@ public class AdminDispatchServlet extends HttpServlet
                 // ==============================================================================================
                 case Constants.GOTO_CANVAS:
                 {
+                    vSession.getCallFilter().setCustFilter(req.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER));
                     rd = sc.getRequestDispatcher(Constants.CANVAS_JSP);
                     break;
                 }
@@ -467,14 +469,14 @@ public class AdminDispatchServlet extends HttpServlet
                 // ==============================================================================================
                 // FILTER RECORD LIST
                 // ==============================================================================================
-                case Constants.GOTO_RECORD_ADMIN:
-                {
-                    vSession.getCallFilter().setCustFilter((String) req.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER));
-                    vSession.getCallFilter().setStateFilter((String) req.getParameter(Constants.ACCOUNT_FILTER_CALL_STATE));
-                    vSession.getCallFilter().setDirFilter((String) req.getParameter(Constants.ACCOUNT_FILTER_CALL_DIR));
-                    rd = sc.getRequestDispatcher(Constants.ADMIN_CALLS_JSP);
-                    break;
-                }
+//                case Constants.GOTO_RECORD_ADMIN:
+//                {
+//                    vSession.getCallFilter().setCustFilter((String) req.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER));
+//                    vSession.getCallFilter().setStateFilter((String) req.getParameter(Constants.ACCOUNT_FILTER_CALL_STATE));
+//                    vSession.getCallFilter().setDirFilter((String) req.getParameter(Constants.ACCOUNT_FILTER_CALL_DIR));
+//                    rd = sc.getRequestDispatcher(Constants.ADMIN_CALLS_JSP);
+//                    break;
+//                }
 
                 // ==============================================================================================
                 // NEW_CALL
@@ -1161,8 +1163,8 @@ public class AdminDispatchServlet extends HttpServlet
             System.out.println("URI:" + req.getRequestURI() + "?" + req.getQueryString());
             e.printStackTrace();
         }
-        if (vSession != null)
-        	System.out.println("httprequest done: SQL timer=" + vSession.getSqlTimer());
+//        if (vSession != null)
+//        	System.out.println("httprequest done: SQL timer=" + vSession.getSqlTimer());
         
     }
 

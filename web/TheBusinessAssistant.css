@@ -114,6 +114,25 @@ visibility:hidden;
 	color: black;
 }
 
+.tbabuttonorange {
+    border-radius: 10px;
+    background: #F89920;
+    border: none;
+    color: white;
+    padding: 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+.tbabuttonorange:hover {
+    background: #fbc27d;
+    color: black;
+}
+
+
 .tbaChat{
     border-radius: 5px;
     width: 300px;

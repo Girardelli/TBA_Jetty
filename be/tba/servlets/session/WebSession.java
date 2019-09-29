@@ -434,6 +434,7 @@ final public class WebSession implements Serializable
         mMonthsBack = calendar.get(Calendar.MONTH);
         mYear = calendar.get(Calendar.YEAR);
         mInvoiceId = -1;
+        mDaysBack = 0;
     }
 
     public boolean isExpired(String caller)
@@ -478,6 +479,7 @@ final public class WebSession implements Serializable
         Calendar calendar = Calendar.getInstance();
         mLastAccess = calendar.getTimeInMillis();
         mMonthsBack = calendar.get(Calendar.MONTH);
+        mDaysBack = 0;
         mYear = calendar.get(Calendar.YEAR);
 
     }

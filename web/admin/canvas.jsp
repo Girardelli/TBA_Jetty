@@ -38,11 +38,28 @@ StringBuffer modalScriptStrBuffer = new StringBuffer("\r\n//#######  My Modal sc
 try
 {
 vSession.setCallingJsp(Constants.CANVAS_JSP);
-allEntryIds = new StringBuilder("[");
+
+
+
+
+String vCustomerFilter = vSession.getCallFilter().getCustFilter();
+if (vCustomerFilter == null) 
+{
+	vSession.getCallFilter().setCustFilter(Constants.ACCOUNT_FILTER_ALL);
+	vCustomerFilter = Constants.ACCOUNT_FILTER_ALL;
+}
 
 CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
 //Collection<CallRecordEntityData> vRecords = vRecords = vQuerySession.getUnDocumented(vSession, null);
-Collection<CallRecordEntityData> vRecords = vQuerySession.getxDaysBack(vSession, 0, null);
+Collection<CallRecordEntityData> vRecords = null;
+if (vCustomerFilter.equals(Constants.ACCOUNT_FILTER_ALL))
+{
+   vRecords = vQuerySession.getxDaysBack(vSession, vSession.getDaysBack(), vCustomerFilter);
+}
+else
+{
+   vRecords = vQuerySession.getDocumentedForMonth(vSession, vCustomerFilter, vSession.getMonthsBack(), vSession.getYear());
+}
 %>
 <body>
 
@@ -69,14 +86,73 @@ if (!UrlCheckTimerTask.getIsWebsiteUp())
 }
 %>
 <p><span class="admintitle"> Oproepenlijst: <%=vRecords.size()%> oproepen </span></p>
-	
+<%
+if (vRecords == null || vRecords.size() == 0)
+{
+    if (vCustomerFilter.equals(Constants.ACCOUNT_FILTER_ALL))
+    {
+%>
+      <br><span class="adminsubtitle">Er zijn geen oproepgegevens beschikbaar (<%=vSession.getDaysBack()%> dagen terug).</span>
+<%
+    }
+    else
+    {
+%>
+      <br><span class="adminsubtitle">Er zijn geen oproepgegevens beschikbaar voor maand (<%=Constants.MONTHS[vSession.getMonthsBack()]%>).</span>
+<%
+    }
+}
+else
+{
+      if (vCustomerFilter.equals(Constants.ACCOUNT_FILTER_ALL))
+      {
+%>
+      <br><span class="adminsubtitle">Oproepen van <%=vSession.getDaysBack()%> dagen terug.</span>
+<%
+      }
+      else
+      {
+%>
+      <br><span class="adminsubtitle">Oproepen tijdens de maand <%=Constants.MONTHS[vSession.getMonthsBack()]%>.</span>
+<%
+      }
+}
+%>	
 	<table  cellspacing='20' cellpadding='0' border='0' bgcolor="FFFFFF">
 	<tr>
 	<td class="tdborder">
 			<table border="0" cellspacing="5" cellpadding="0">
+			<tr>
+			<td><table><tr>
+			
+			
+                <td width="50" valign="top" class="adminsubtitle">&nbsp;Klant</td>
+                <td width="10" valign="top">:</td>
+                <td valign="top">
+                <select name="<%=Constants.ACCOUNT_FILTER_CUSTOMER%>" onchange="submit()">
+                <%
+
+                Collection<AccountEntityData> list = AccountCache.getInstance().getCallCustomerList();
+                synchronized(list) 
+                {
+                    for (Iterator<AccountEntityData> vIter = list.iterator(); vIter.hasNext();)
+                    {
+                        AccountEntityData vData = vIter.next();
+%>
+                    <option value="<%=vData.getFwdNumber()%>"<%=(vCustomerFilter.equals(vData.getFwdNumber()) ? " selected" : "")%>><%=vData.getFullName()%></option>
+<%
+                    }
+                }
+                %>
+	                <option value="<%=Constants.NUMBER_BLOCK[0][0]%>"<%=(vCustomerFilter.equals(Constants.NUMBER_BLOCK[0][0]) ? " selected" : "")%>><%=Constants.NUMBER_BLOCK[0][3]%></option>
+	                <option value="<%=Constants.NUMBER_BLOCK[1][0]%>"<%=(vCustomerFilter.equals(Constants.NUMBER_BLOCK[1][0]) ? " selected" : "")%>><%=Constants.NUMBER_BLOCK[1][3]%></option>
+	                <option value="<%=Constants.ACCOUNT_FILTER_ALL%>"<%=(vCustomerFilter.equals(Constants.ACCOUNT_FILTER_ALL) ? " selected" : "")%>>Alle klanten</option>
+                </select>
+               </td>
+                </tr></table></td>
             <tr>
 			<td>
-		        <input class="tbabutton" type=submit name=action value="Oproep" onclick="newCall()">
+		        <input class="tbabuttonorange" type=submit name=action value="Oproep" onclick="newCall()">
 		        &nbsp;&nbsp;&nbsp;&nbsp;
 		        <input class="tbabutton" type=submit name=action value="Refresh" onclick="filterCalls()">
 <%
@@ -88,17 +164,61 @@ if (vSession.getRole() == AccountRole.ADMIN)
 }
 %>
 				<input class="tbabutton" type=submit name=action value="Toevoegen" onclick="addRecord()"> 
-            </td>
+				<input class="tbabutton" type=submit name=action value="verzend mail" onclick="testMail()">
+<%
+if (vSession.getUserId().equals("esosrv")) 
+{
+%>              
+                <input class="tbabutton" type=submit name=action value="fix invoice accountId's" onclick="fixAccountIds()"> 
+<% 
+}
+%>              
+             </td>
             </tr>
             <tr>
             <td>
-                <input class="tbabutton" type=submit name=action value="Naar oproepenlijst" onclick="toCallList()">
+<%if (vCustomerFilter == null || vCustomerFilter.equals(Constants.ACCOUNT_FILTER_ALL)) 
+{
+%>      
+		        <input class="tbabutton" type=submit name=action value="10 dagen vroeger" onclick="showPrevious10()"> 
+		        <input class="tbabutton" type=submit name=action value="1 dag vroeger" onclick="showPrevious()"> 
+<%
+    if (vSession.getDaysBack() > 0)
+    {
+%>      
+                <input class="tbabutton" type=submit name=action value="1 dag later" onclick="showNext()"> 
+<%
+    }
+    if (vSession.getDaysBack() >= 10)
+    {
+%>      
+                <input class="tbabutton" type=submit name=action value="10 dagen later" onclick="showNext10()"> 
+<%
+    }
+}
+else
+{
+%>      
+			    <input class="tbabutton" type=submit name=action value="1 maand vroeger" onclick="showPrevious()"> 
+			    <input class="tbabutton" type=submit name=action value="1 maand later" onclick="showNext()"> 
+<%
+}
+%>
             </td>
             </tr>
-            
+<%
+if (MailError.getInstance().getError() != null) 
+{
+%>      
+            <tr><td>
+                <input class="tbabutton" type=submit name=action value="Mail Error" onclick="mailError()">
+            </td></tr>
+<% 
+}
+%>      
         </table>
 	</td>
-	<td width="3">
+	<td width="1">
     </td>
 <%
 Collection<CallRecordEntityData> chatRecords = vQuerySession.getChatRecords(vSession);
@@ -210,18 +330,12 @@ if (!chatRecords.isEmpty())
 	</td>
 	</tr>
 	</table>
-	
-			
-<%
-
-if (vRecords == null || vRecords.size() == 0)
+<% 
+allEntryIds = new StringBuilder("[");
+if (vRecords != null && vRecords.size() > 0)
 {
-   out.println("<br><span class=\"adminsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Er zijn geen oproepen.</span>");
-}
-else
-{
-%>
-  <table border="0" cellspacing="2" cellpadding="4">
+%>	
+    <table border="0" cellspacing="2" cellpadding="4">
                 <tr>
                   <td width="20" bgcolor="FFFFFF"></td>
                   <td width="10" valign="top" class="topMenu" bgcolor="F89920"></td>
@@ -464,6 +578,30 @@ function addRecord()
   document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.GOTO_ADD_RECORD%>";
 }
 
+function showPrevious10()
+{
+  document.calllistform.<%=Constants.RECORD_TO_DELETE%>.value="";
+  document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.RECORD_SHOW_PREV_10%>";
+}
+
+function showPrevious()
+{
+  document.calllistform.<%=Constants.RECORD_TO_DELETE%>.value="";
+  document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.RECORD_SHOW_PREV%>";
+}
+
+function showNext()
+{
+  document.calllistform.<%=Constants.RECORD_TO_DELETE%>.value="";
+  document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.RECORD_SHOW_NEXT%>";
+}
+
+function showNext10()
+{
+  document.calllistform.<%=Constants.RECORD_TO_DELETE%>.value="";
+  document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.RECORD_SHOW_NEXT_10%>";
+}
+
 function changeUrl(newURL) 
 {
   location=newURL;
@@ -482,7 +620,7 @@ function mailError()
 
 function toCallList()
 {
-  document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.GOTO_RECORD_ADMIN%>";
+  document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.GOTO_CANVAS%>";
 }
 
 
