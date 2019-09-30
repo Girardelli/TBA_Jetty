@@ -86,7 +86,7 @@ if (mCustomerData.getHasSubCustomers())
 				<td width="50"></td>
 				<td width="170" valign="top" class="adminsubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Oproep voor</td>
 				<td width="530" valign="top">
-				<select name="<%=Constants.ACCOUNT_SUB_CUSTOMER%>" onchange="submit()">
+				<select name="<%=Constants.ACCOUNT_SUB_CUSTOMER%>" >
 				<option value="<%=mCustomerData.getFwdNumber()%>" selected> <%=mCustomerData.getFullName()%></option>
 <%
     Collection<AccountEntityData> list = AccountCache.getInstance().getSubCustomersList(mCustomerData.getId());

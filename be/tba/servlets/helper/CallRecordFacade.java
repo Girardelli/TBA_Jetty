@@ -70,9 +70,9 @@ public class CallRecordFacade
             if (vOldCustomer.getHasSubCustomers() && req.getParameter(Constants.ACCOUNT_SUB_CUSTOMER) != null)
             {
                 vCallData.setFwdNr(req.getParameter(Constants.ACCOUNT_SUB_CUSTOMER));
-                AccountEntityData newCustomer = AccountCache.getInstance().get(vCallData);
+                AccountEntityData newCustomer = AccountCache.getInstance().get(vCallData.getFwdNr()); // take FwdNr because vCallDatat still has the previous accountId and shall make that new FwdNr shall be skipped.
                 vCallData.setAccountId(newCustomer.getId());
-                System.out.println("Super customer call: set fwd number to " + vCallData.getFwdNr());
+                System.out.println("Super customer call: set fwd number to " + vCallData.getFwdNr() + ", new account ID=" + newCustomer.getId());
             }
             else
             {

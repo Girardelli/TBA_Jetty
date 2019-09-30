@@ -466,9 +466,12 @@ allEntryIds.append("]");
     </td> -->
     </tr>
 </table>
-</form>
 <%
 out.println(modalStrBuffer.toString());
+%>
+</form>
+<%
+
 }
 catch (Exception e)
 {
