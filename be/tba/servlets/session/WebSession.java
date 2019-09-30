@@ -90,22 +90,11 @@ final public class WebSession implements Serializable
     {
         try
         {
-            System.out.println("Create WebSession without DataSource");
+            //System.out.println("Create WebSession without DataSource");
             init();
-            //InitialContext ctx = new InitialContext();
-            //DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/MySqlDS");
-            //mConnection = ds.getConnection();
             mConnection = DriverManager.getConnection(Constants.MYSQL_URL);
-            //System.out.println("WebSession created");
-
-            // mConnection = DriverManager.getConnection("jdbc:mysql://localhost/tbadb");
         }
-/*        catch (NamingException ex)
-        {
-            ex.printStackTrace();
-            System.out.println("Error in WebSession. Can not create DB Connection.");
-        }
-*/        catch (Exception ex)
+        catch (Exception ex)
         {
             ex.printStackTrace();
             System.out.println("Error in WebSession. Can not create DB Connection.");
@@ -114,18 +103,8 @@ final public class WebSession implements Serializable
 
     public WebSession(String mysqlURL) throws SQLException
     {
-        // try
-        // {
-        //System.out.println("Create WebSession with DataSource");
         init();
-        // mConnection = ds.getConnection();
         mConnection = DriverManager.getConnection(mysqlURL);
-        // }
-        // catch (NamingException ex)
-        // {
-        // ex.printStackTrace();
-        // System.out.println("Error in WebSession. Can not create DB Connection.");
-        // }
     }
 
     public void Close()
