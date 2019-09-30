@@ -137,7 +137,7 @@ public class CallRecordFacade
             printCallInsert(session, vCallData);
             if (!prevIsImportant && vCallData.getIsImportantCall())
             {
-                MailNowTask.send(vNewCustomer);
+                MailNowTask.send(vCallData.getAccountId());
             }
         }
     }
@@ -209,7 +209,7 @@ public class CallRecordFacade
         CallRecordSqlAdapter.setIsDocumentedFlag(newRecord);
         if (newRecord.getIsImportantCall())
         {
-            MailNowTask.send(newRecord.getAccountId());
+            MailNowTask.send(vData.getId());
         }
 
         // Check the record and add it if it is a valid one.
