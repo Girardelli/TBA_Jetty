@@ -73,6 +73,7 @@ public class AccountFacade
                 System.out.println("no error on employee add");
             }
             newAccount.setSuperCustomer("");
+            newAccount.setSuperCustomerId(0);
             newAccount.setFwdNumber(newAccount.getUserId());
         }
         else if (role == AccountRole.SUBCUSTOMER)
@@ -85,6 +86,7 @@ public class AccountFacade
         	newAccount.setUserId("");
             newAccount.setPassword("");
             newAccount.setSuperCustomer(superCustomer);
+            newAccount.setSuperCustomerId(AccountCache.getInstance().get(superCustomer).getId());
             newAccount.setFwdNumber(req.getParameter(Constants.ACCOUNT_FORWARD_NUMBER));
         }
         else
@@ -92,6 +94,7 @@ public class AccountFacade
             newAccount.setUserId("");
             newAccount.setPassword("");
             newAccount.setSuperCustomer("");
+            newAccount.setSuperCustomerId(0);
             newAccount.setFwdNumber(req.getParameter(Constants.ACCOUNT_FORWARD_NUMBER));
         }
         newAccount.setCompanyName("");

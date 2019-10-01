@@ -242,13 +242,14 @@ final public class AccountCache
         mEmployeeLists.clear();
         Vector<String> vSuperCustomers = new Vector<String>();
         AccountEntityData vEntry = null;
-        //int y =0;
+//        int y =0;
 
         for (Iterator<AccountEntityData> i = rawList.iterator(); i.hasNext();)
         {
             vEntry = i.next();
             //System.out.println("check " + y++ + ": " +  vEntry.getFwdNumber());
             mIdKeyList.put(Integer.valueOf(vEntry.getId()), vEntry);
+            //System.out.println("mIdKeyList " + ++y + " (size=" +mIdKeyList.size() + "): added " +  vEntry.getFwdNumber() + ", with ID=" + vEntry.getId());
             if (!vEntry.getIsArchived())
             {
             	mRawUnarchivedCollection.add(vEntry);
@@ -271,8 +272,7 @@ final public class AccountCache
                         {
                             vSubCustomerList = new Vector<AccountEntityData>();
                             mSubCustomersLists.put(vEntry.getId(), vSubCustomerList);
-                            // System.out.println("added sub klanten lijst voor " + vEntry.getFullName() +
-                            // ". Super klanten lijst lengte=" + mSubCustomersLists.size());
+                            //System.out.println(++y +" added first lege sub klanten lijst voor " + vEntry.getFullName() + ", ID=" + vEntry.getId()); 
                         }
                     }
 
@@ -285,13 +285,10 @@ final public class AccountCache
                             vSubCustomerList = new Vector<AccountEntityData>();
                             mSubCustomersLists.put(vEntry.getSuperCustomerId(), vSubCustomerList);
                             vSuperCustomers.add(vEntry.getSuperCustomer());
-                            // System.out.println("created new super customer " +
-                            // vEntry.getSuperCustomer());
+                            //System.out.println(++y +"added first sub klanten lijst voor " + vEntry.getSuperCustomer() + ", ID=" + vEntry.getSuperCustomerId());
                         }
                         vSubCustomerList.add(vEntry);
-                        // System.out.println("added sub-klant onder " + vEntry.getSuperCustomer());
-                        // System.out.println("subcustomer list voor " + vEntry.getSuperCustomer() + "
-                        // is size " + vSubCustomerList.size());
+                        //System.out.println("     add sub customer " + vEntry.getFullName() + " to list for id=" + vEntry.getSuperCustomerId());
                     }
                 }
                 else if (vEntry.getRole().equals(AccountRole._vAdminstrator) || vEntry.getRole().equals(AccountRole._vEmployee))
@@ -330,27 +327,34 @@ final public class AccountCache
                 }
             }
         }
-        
+//        y=0;
         // set the HasSubCustomer flags
         Set<Integer> superCustomers = mSubCustomersLists.keySet();
         for (Iterator<Integer> i = superCustomers.iterator(); i.hasNext();)
         {
             Integer vSuperCustId = i.next();
-            AccountEntityData vSuperCust = get(vSuperCustId.intValue());
+            AccountEntityData vSuperCust = get(vSuperCustId);
+//        	System.out.println(++y + ": " + vSuperCustId + " returns " + (vSuperCust == null ? "null": vSuperCust.getFwdNumber()));
             if (vSuperCust != null)
             {
-                vSuperCust.setHasSubCustomers(true);
+            	vSuperCust.setHasSubCustomers(true);
+                // also add subcustomers of supers that are call customers
+            	if (vSuperCust.getFwdNumber().matches("[0-9]+"))
+            	{
+                    Collection<AccountEntityData> subcustomerList = getSubCustomersList(vSuperCustId);
+                    for (Iterator<AccountEntityData> iter = subcustomerList.iterator(); iter.hasNext();)
+                    {
+                    	AccountEntityData subcustomer = iter.next();
+                       	mCallCustomerSortedList.add(subcustomer);
+                    }
+            	}
             }
-            // also add subcustomers of supers that are call customers
-        	if (vSuperCust.getFwdNumber().matches("[0-9]+"))
-        	{
-                Collection<AccountEntityData> subcustomerList = getSubCustomersList(vSuperCustId);
-                for (Iterator<AccountEntityData> iter = subcustomerList.iterator(); iter.hasNext();)
-                {
-                	AccountEntityData subcustomer = iter.next();
-                   	mCallCustomerSortedList.add(subcustomer);
-                }
-        	}
+            else
+            {
+            	System.out.println("######## strange error for id=" + vSuperCustId);
+            	continue;
+            }
+            
         }
         // System.out.println("Before new mNameSortedList");
         // mNameSortedList = new TreeMap(new AccountNamesComparator());

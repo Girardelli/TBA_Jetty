@@ -28,9 +28,7 @@ public class CallRecordFacade
 
     public static void retrieveRecordForUpdate(HttpServletRequest req, WebSession session)
     {
-    	System.out.println("retrieveRecordForUpdate()");
     	String vKey = (String) req.getParameter(Constants.RECORD_ID);
-
         CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
         session.setCurrentRecord(vQuerySession.getRecord(session, vKey));
     }
