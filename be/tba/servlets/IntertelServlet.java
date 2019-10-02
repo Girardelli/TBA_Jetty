@@ -128,7 +128,7 @@ public class IntertelServlet extends HttpServlet
         		data.setCurrentPhase(phase);
         		data.setCurrentPhase(req.getParameter("answeredby"));
         		mCallRecordSqlAdapter.setTsAnswer(mSession, data);
-        		System.out.println(data.intertelCallId + "-answered");
+        		//System.out.println(data.intertelCallId + "-answered");
 
     		}
     		break;
@@ -142,7 +142,7 @@ public class IntertelServlet extends HttpServlet
     			data.setTsTransfer(timestamp); 
     			data.setCurrentPhase(phase);
     			mCallRecordSqlAdapter.setTransfer(mSession, data, transferOutCall);
-    			System.out.println(data.intertelCallId + "-transfered");
+    			//System.out.println(data.intertelCallId + "-transfered");
 
     		}
     		break;
@@ -154,7 +154,7 @@ public class IntertelServlet extends HttpServlet
         		mCallRecordSqlAdapter.setTsEnd(mSession, data);
         		data.setCurrentPhase(phase);
     			data.isEndDone = true;
-    			System.out.println(data.intertelCallId + "-end");
+    			//System.out.println(data.intertelCallId + "-end");
 
     		}
     		break;
@@ -167,8 +167,7 @@ public class IntertelServlet extends HttpServlet
     			{	
         			data.setCallingNr(req.getParameter("viaDID"));
             		mCallRecordSqlAdapter.setCallingNr(mSession, data);
-            		System.out.println(data.intertelCallId + "-summary");
-
+            		//System.out.println(data.intertelCallId + "-summary");
     			}
     		}
     		break;
@@ -186,7 +185,7 @@ public class IntertelServlet extends HttpServlet
 		{
     		mIntertelCallManager.removeCall(intertelCallId);
 			writeToFile(data);
-			System.out.println(data.intertelCallId + "-finalize with write to log");
+			//System.out.println(data.intertelCallId + "-finalize with write to log");
 		}
     }
 

@@ -47,7 +47,7 @@ public class IntertelCallManager
 			mCallCnt = 0;
 			cleanUpMaps();
 		}
-		System.out.println(data.intertelCallId + "-created in manager");
+		//System.out.println(data.intertelCallId + "-created in manager");
 	}
 	
 	public synchronized IntertelCallData get(String callId)
@@ -96,7 +96,7 @@ public class IntertelCallManager
 		if (data == null) return; // to be removed once we have switched to Intertel
 		if (data.tsEnd > 0)
 		{
-			System.out.println(data.intertelCallId + "-remove from manager");
+			//System.out.println(data.intertelCallId + "-remove from manager");
 			mCallMap.remove(callId);
 		}
 	}
@@ -144,7 +144,7 @@ public class IntertelCallManager
 	private void cleanUpMaps()
 	{
 		long tsNow = System.currentTimeMillis() / 1000l;
-		System.out.println("IntertelCallManager.cleanUpMaps() called");
+		//System.out.println("IntertelCallManager.cleanUpMaps() called");
 		
         for (Iterator<String> i = mCallMap.keySet().iterator(); i.hasNext();)
         {
@@ -162,7 +162,7 @@ public class IntertelCallManager
         	if ((tsNow - phoneLog.lastUsed) > 3600)
         	{
         		mOperatorPhoneMap.remove(key);
-        		System.out.println("IntertelCallManager: removed from mOperatorPhoneMap: " + key);
+        		//System.out.println("IntertelCallManager: removed from mOperatorPhoneMap: " + key);
         	}
         }
         
