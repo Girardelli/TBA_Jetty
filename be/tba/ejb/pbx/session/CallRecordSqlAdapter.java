@@ -179,7 +179,6 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
             {
                 vToTimeStamp = vCallCalendar.getCurrentTimestamp() + 60000; // add 1 minute in teh future
             }
-            Collection<CallRecordEntityData> vCollection = new Vector<CallRecordEntityData>();
             return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsDocumented=TRUE AND TimeStamp>" + vFromTimeStamp + " AND TimeStamp<=" + vToTimeStamp + " AND FwdNr IN (" + CustomerIdsIN + ") ORDER BY TimeStamp DESC");
         }
         catch (Exception e)
@@ -572,7 +571,26 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
             }
             else
             {
-                return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsDocumented=TRUE AND IsMailed=FALSE AND FwdNr='" + fwdNr + "' ORDER BY TimeStamp DESC");
+            	AccountEntityData customer = AccountCache.getInstance().get(fwdNr);
+            	
+            	String CustomerIdsIN = "'" + fwdNr + "'";
+            	if (customer.getHasSubCustomers())
+            	{
+            		Collection<AccountEntityData> subCustomers = AccountCache.getInstance().getSubCustomersList(customer.getId());
+                	if (subCustomers != null)
+                	{
+                        for (Iterator<AccountEntityData> i = subCustomers.iterator(); i.hasNext();)
+                        {
+                            AccountEntityData vEntry = i.next();
+                            if (!AccountCache.getInstance().isMailEnabled(vEntry) || vEntry.getEmail() == null || vEntry.getEmail().isEmpty())
+                            {
+                            	// no email set for this subcustomer --> mail the calls to the supercustomer
+                            	CustomerIdsIN = CustomerIdsIN.concat(",'" + vEntry.getFwdNumber() + "'");
+                            }
+                        }
+                	}
+            	}
+                return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsDocumented=TRUE AND IsMailed=FALSE AND FwdNr IN (" + CustomerIdsIN + ") ORDER BY TimeStamp DESC");
             }
         }
         catch (Exception e)
