@@ -220,16 +220,16 @@ public class AdminDispatchServlet extends HttpServlet
                 // ==============================================================================================
                 case Constants.MAIL_IT:
                 {
-                    Collection<Integer> list = AccountCache.getInstance().getSuperCustomersList();
-                    synchronized (list)
-                    {
-                        for (Iterator<Integer> vIter = list.iterator(); vIter.hasNext();)
-                        {
-                        	Integer accountId = vIter.next();
-                            AccountEntityData accountData = AccountCache.getInstance().get(accountId);
-                            System.out.println("addAccount: accountdata for vValue=" + accountId + " is " + (accountData == null ? "null" : accountData.getFullName()));
-                        }
-                    }
+//                    Collection<Integer> list = AccountCache.getInstance().getSuperCustomersList();
+//                    synchronized (list)
+//                    {
+//                        for (Iterator<Integer> vIter = list.iterator(); vIter.hasNext();)
+//                        {
+//                        	Integer accountId = vIter.next();
+//                            AccountEntityData accountData = AccountCache.getInstance().get(accountId);
+//                            System.out.println("addAccount: accountdata for vValue=" + accountId + " is " + (accountData == null ? "null" : accountData.getFullName()));
+//                        }
+//                    }
 
                     String vCustomerFilter = (String) vSession.getCallFilter().getCustFilter();
                     if (vCustomerFilter != null && !vCustomerFilter.equals(Constants.ACCOUNT_FILTER_ALL))
@@ -240,7 +240,7 @@ public class AdminDispatchServlet extends HttpServlet
                             if (vAccountData != null)
                             {
                                 String vEmail = vAccountData.getEmail();
-                                if (vEmail != null && vEmail.length() > 0 && (vAccountData.getMailHour1() > 8 || vAccountData.getMailHour2() > 8 || vAccountData.getMailHour3() > 8))
+                                if (vEmail != null && !vEmail.isEmpty() && AccountCache.getInstance().isMailEnabled(vAccountData))
                                 {
                                     MailerSessionBean.sendMail(vSession, vAccountData.getId());
                                 }
