@@ -3,6 +3,7 @@ package be.tba.servlets;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Enumeration;
@@ -113,8 +114,9 @@ public class IntertelServlet extends HttpServlet
 		switch (phase)
     	{
     	case "start":
-            // Check the record and add it if it is a valid one.
-    		data = new IntertelCallData(isIncoming, calledNr, callingNr, intertelCallId, timestamp, phase);
+			checkDbConnection();
+			// Check the record and add it if it is a valid one.
+			data = new IntertelCallData(isIncoming, calledNr, callingNr, intertelCallId, timestamp, phase);
     		mIntertelCallManager.newCall(data);
     		data.setDbRecordId(mCallRecordSqlAdapter.addIntertelCall(mSession, data));
     		break;
@@ -226,6 +228,29 @@ public class IntertelServlet extends HttpServlet
         strBuf.append(String.format("%02d/%02d/%02d %02d:%02d %12s --> %12s %s %s\r\n", vToday.get(Calendar.DAY_OF_MONTH), vToday.get(Calendar.MONTH) + 1, vToday.get(Calendar.YEAR) - 2000, vToday.get(Calendar.HOUR_OF_DAY), vToday.get(Calendar.MINUTE), data.callingNr, data.calledNr, (data.tsAnswer != 0) ? Long.toString(data.tsEnd-data.tsAnswer) : "gemist", data.isTransferOutCall ? "(doorgeschakeld)" : ""));
         fileStream.write(strBuf.toString().getBytes());
         fileStream.close();
-    }    
+    }  
+    
+    private boolean checkDbConnection()
+    {
+    	try 
+    	{
+    		Connection connection = mSession.getConnection();
+			if (connection != null)
+			{
+				if (connection.isValid(2))
+				{
+					return true;
+				}
+				connection.close();
+			}
+			mSession = new WebSession(Constants.MYSQL_URL);
+			return true;
+		} 
+    	catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return false;
+    }
     
 }

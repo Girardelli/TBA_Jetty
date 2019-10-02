@@ -35,10 +35,10 @@ public class CallRecordFacade
     
     public static void updateShortText(HttpServletRequest req, WebSession session, boolean isCustomer)
     {
-    	System.out.println("updateShortText()");
+    	//System.out.println("updateShortText()");
     	String vKey = (String) req.getParameter(Constants.RECORD_ID);
         String shortText = (String) req.getParameter(Constants.RECORD_SHORT_TEXT);
-        if (shortText != null && !shortText.isEmpty())
+        if (shortText != null)
         {
             CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
             vQuerySession.setShortText(session, Integer.parseInt(vKey), shortText, isCustomer);

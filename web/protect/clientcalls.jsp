@@ -58,7 +58,7 @@ allEntryIds = new StringBuilder("[");
 
   CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
 
-  Collection<CallRecordEntityData> vRecords = vQuerySession.getxWeeksBack(vSession, vSession.getDaysBack(), vSession.getFwdNumber());
+  Collection<CallRecordEntityData> vRecords = vQuerySession.getxWeeksBackIncludingSubcustomer(vSession, vSession.getDaysBack(), vSession.getFwdNumber());
   
   AccountEntityData vAccount = AccountCache.getInstance().get(vSession.getFwdNumber());
 %>
@@ -96,9 +96,16 @@ out.println("<input class=\"tbabutton\" type=submit name=action value=\"Volgende
     <br><br>
     <tr>
     <td width="30" bgcolor="FFFFFF"></td>
-    <td width="20"  valign="top" class="topMenu" bgcolor="F89920"></td>
     <td width="65"  valign="top" class="topMenu" bgcolor="F89920">&nbsp;Datum</td>
     <td width="45"  valign="top" class="topMenu" bgcolor="F89920">&nbsp;Uur</td>
+<%
+if (vAccount.getHasSubCustomers())
+{
+	%>
+	<td width="200"  valign="top" class="topMenu" bgcolor="F89920">&nbsp;Medewerker</td>
+	<%
+}
+%>
     <td width="80"  valign="top" class="topMenu" bgcolor="F89920">&nbsp;Nummer</td>
     <td width="200" valign="top" class="topMenu" bgcolor="F89920">&nbsp;Naam</td>
     <td width="500" valign="top" class="topMenu" bgcolor="F89920">&nbsp;Omschrijving</td>
@@ -140,10 +147,9 @@ out.println("<input class=\"tbabutton\" type=submit name=action value=\"Volgende
       {
         vInfoGifs = vInfoGifs.concat("<img src=\"/tba/images/fax.gif\" alt=\"binnenkomende fax voor u verwerkt\" height=\"13\" border=\"0\">&nbsp;");
       }
-      String vImportant = "";
       if (vEntry.getIsImportantCall())
       {
-        vImportant = vImportant.concat("<img src=\"/tba/images/important.gif\" alt=\"belangrijke oproep!\" height=\"13\" border=\"0\">&nbsp;");
+    	  vInfoGifs = vInfoGifs.concat("<img src=\"/tba/images/important.gif\" alt=\"belangrijke oproep!\" height=\"13\" border=\"0\">&nbsp;");
       }
       String vInOut;
       if (vEntry.getIsIncomingCall())
@@ -154,10 +160,25 @@ out.println("<input class=\"tbabutton\" type=submit name=action value=\"Volgende
 	<tr bgcolor="FFCC66" id=<%=vId%> class="bodytekst"
 		ondblclick="changeUrl('/tba/CustomerDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.RECORD_UPDATE%>&<%=Constants.RECORD_ID%>=<%=vEntry.getId()%>');">
 		<td width="30" bgcolor="FFFFFF"><img src=<%=vInOut%> height="13" border="0"></td>
-		<td width="20" valign="top"><%=vImportant%></td>
 		<td width="65" valign="top"><%=vDate%></td>
 		<td width="45" valign="top"><%=vTime%></td>
-		<td width="80" valign="top"><%=vNumber%></td>
+<%
+if (vAccount.getHasSubCustomers())
+{
+	if (vEntry.getAccountId() > 0)
+	{
+    %>
+        <td width="200" valign="top">&nbsp;<%=AccountCache.getInstance().get(vEntry.getAccountId()).getFullName()%></td>
+    <%
+	}
+	else
+	{
+    %>
+        <td width="200" valign="top">&nbsp;</td>
+    <%
+	}
+}
+%>		<td width="80" valign="top"><%=vNumber%></td>
 		<td width="200" valign="top"><%=vName%></td>
 		<td width="500" valign="top"><%=vShortDesc%></td>
 		<td width="80" valign="top"><%=vInfoGifs%></td>

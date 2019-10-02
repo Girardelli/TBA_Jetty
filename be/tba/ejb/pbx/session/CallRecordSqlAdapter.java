@@ -145,11 +145,30 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
         return new Vector<CallRecordEntityData>();
     }
 
-    public Collection<CallRecordEntityData> getxWeeksBack(WebSession webSession, int daysBack, String fwdNr)
+    /*
+     * Only for customer calls: Clientcalls.jsp
+     */
+    public Collection<CallRecordEntityData> getxWeeksBackIncludingSubcustomer(WebSession webSession, int daysBack, String fwdNr)
     {
         try
         {
-            CallCalendar vCallCalendar = new CallCalendar();
+        	AccountEntityData customer = AccountCache.getInstance().get(fwdNr);
+        	
+        	String CustomerIdsIN = "'" + fwdNr + "'";
+        	if (customer.getHasSubCustomers())
+        	{
+        		Collection<AccountEntityData> subCustomers = AccountCache.getInstance().getSubCustomersList(customer.getId());
+            	if (subCustomers != null)
+            	{
+                    for (Iterator<AccountEntityData> i = subCustomers.iterator(); i.hasNext();)
+                    {
+                        AccountEntityData vEntry = i.next();
+                        CustomerIdsIN = CustomerIdsIN.concat(",'" + vEntry.getFwdNumber() + "'");
+                    }
+            	}
+        	}
+            
+        	CallCalendar vCallCalendar = new CallCalendar();
             long vFromTimeStamp = vCallCalendar.getDaysBack(daysBack);
             long vToTimeStamp = 0;
             if (daysBack >= 7)
@@ -161,15 +180,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
                 vToTimeStamp = vCallCalendar.getCurrentTimestamp() + 60000; // add 1 minute in teh future
             }
             Collection<CallRecordEntityData> vCollection = new Vector<CallRecordEntityData>();
-            if (fwdNr == null || fwdNr.equals(Constants.ACCOUNT_FILTER_ALL))
-            {
-                vCollection.addAll(executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsDocumented=TRUE AND TimeStamp>" + vFromTimeStamp + " AND TimeStamp<=" + vToTimeStamp + " ORDER BY TimeStamp DESC"));
-            }
-            else
-            {
-                vCollection.addAll(executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsDocumented=TRUE AND FwdNr='" + fwdNr + "' AND TimeStamp>" + vFromTimeStamp + " AND TimeStamp<=" + vToTimeStamp + " ORDER BY TimeStamp DESC"));
-            }
-            return vCollection;
+            return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsDocumented=TRUE AND TimeStamp>" + vFromTimeStamp + " AND TimeStamp<=" + vToTimeStamp + " AND FwdNr IN (" + CustomerIdsIN + ") ORDER BY TimeStamp DESC");
         }
         catch (Exception e)
         {
@@ -676,19 +687,13 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
         System.out.println("removeAccountCalls for " + accountID);
         executeSqlQuery(webSession, "DELETE FROM CallRecordEntity WHERE FwdNr='" + accountID + "'");
     }
-
+    
     private void collectInvoiceCalls(WebSession webSession, AccountEntityData customer, Collection<CallRecordEntityData> callList, long start, long stop)
     {
         // CallRecordEntityHome callRecordHome = getEntityBean();
 
         Collection<CallRecordEntityData> vCollection = executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE FwdNr='" + customer.getFwdNumber() + "' AND TimeStamp>" + start + " AND TimeStamp<=" + stop + " AND IsDocumented=TRUE AND IsMailed=TRUE ORDER BY TimeStamp DESC");
 
-        // Collection vCollection =
-        // callRecordHome.findDocumentedMailedFromTo(customer.getFwdNumber(),
-        // start, stop);
-        // System.out.println("findDocumentedMailedFromTo(" +
-        // customer.getFwdNumber() + ", " + start + ", " + stop + ") returns " +
-        // vCollection.size() + " calls");
         if (vCollection != null)
         {
             callList.addAll(vCollection);
