@@ -1059,7 +1059,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
     }
 
     /**
-     * @ejb:interface-method view-type="remote"
+     * to be removed
      */
     public void releaseCallRecords(WebSession webSession, Collection<CallRecordEntityData> vList)
     {
@@ -1094,12 +1094,13 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
      */
     public void setRelease(WebSession webSession, int key)
     {
-        CallRecordEntityData data = getRow(webSession, key);
-        if (data != null)
-        {
-            data.setIsReleased(true);
-            updateRow(webSession, data);
-        }
+    	executeSqlQuery(webSession, "UPDATE CallRecordEntity SET IsReleased=TRUE WHERE Id=" + key);
+//    	CallRecordEntityData data = getRow(webSession, key);
+//        if (data != null)
+//        {
+//            data.setIsReleased(true);
+//            updateRow(webSession, data);
+//        }
     }
 
     /**
@@ -1115,12 +1116,14 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
      */
     public void setIsMailed(WebSession webSession, int key)
     {
-        CallRecordEntityData data = getRow(webSession, key);
-        if (data != null)
-        {
-            data.setIsMailed(true);
-            updateRow(webSession, data);
-        }
+    	executeSqlQuery(webSession, "UPDATE CallRecordEntity SET IsMailed=TRUE WHERE Id=" + key);
+
+//    	CallRecordEntityData data = getRow(webSession, key);
+//        if (data != null)
+//        {
+//            data.setIsMailed(true);
+//            updateRow(webSession, data);
+//        }
     }
 
     /**
@@ -1129,12 +1132,13 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
 
     public void setUnRelease(WebSession webSession, int key)
     {
-        CallRecordEntityData data = getRow(webSession, key);
-        if (data != null)
-        {
-            data.setIsReleased(false);
-            updateRow(webSession, data);
-        }
+    	executeSqlQuery(webSession, "UPDATE CallRecordEntity SET IsReleased=FALSE WHERE Id=" + key);
+//        CallRecordEntityData data = getRow(webSession, key);
+//        if (data != null)
+//        {
+//            data.setIsReleased(false);
+//            updateRow(webSession, data);
+//        }
     }
 
     public void setUnRelease(WebSession webSession, String key)

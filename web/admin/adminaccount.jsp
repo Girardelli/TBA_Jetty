@@ -138,7 +138,7 @@ try
           if (vEntry.getHasSubCustomers())
           {
        		  Collection<AccountEntityData> subList = AccountCache.getInstance().getSubCustomersList(vEntry.getId());
-        	  System.out.print("sublist for " + vEntry.getFwdNumber() + " has " + subList.size() + " members");  
+        	  //System.out.print("sublist for " + vEntry.getFwdNumber() + " has " + subList.size() + " members");  
               %>
               <p><span class="admintitle"> <%=vEntry.getFullName()%></span></p>
               <table border="0" cellspacing="2" cellpadding="4">
