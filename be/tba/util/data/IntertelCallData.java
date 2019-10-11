@@ -100,7 +100,7 @@ public class IntertelCallData
 		else if (tsStart > 0 && tsEnd > 0)
 		{
 			System.out.println("No tsAnswer timestamp logged: return full length=" + (int)(tsStart - tsEnd));
-			return (int)(tsStart - tsEnd);
+			return (int)(tsEnd - tsStart);
 		}
 		return 0;
 	}

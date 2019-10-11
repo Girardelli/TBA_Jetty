@@ -30,13 +30,12 @@ be.tba.util.data.*"%>
 
 <body>
 
+<form name="newcallform" method="POST" action="/tba/AdminDispatch">
 <table border="0" cellspacing="0" cellpadding="0" bgcolor="FFFFFF">
 		<tr>
 			<td valign="top" width="30" bgcolor="FFFFFF"></td>
 			<td valign="top" bgcolor="FFFFFF"><br>
 			<br>
-			<span class="bodytekst"> <!-- action name must be a URI name as it is set in the <application>.xml servlet-mapping tag.-->
-			<form name="newcallform" method="POST" action="/tba/AdminDispatch">
 			<%
 try
 {
@@ -58,9 +57,9 @@ HttpSession vHttpSession = request.getSession();
         vNewCallsAvailable = true;
 %>
 			<table width="100%" border="0" cellspacing="1" cellpadding="1">
-				<tr>
+				<tr><td>
 					<span class="adminsubtitle">Selecteer 1 van onderstaande oproepen.</span>
-				</tr>
+				</td></tr>
 				<tr>
 					<td>
 					<table width="100%" border="0" cellspacing="2" cellpadding="4">
@@ -120,9 +119,9 @@ HttpSession vHttpSession = request.getSession();
 					<br>
 					</td>
 				</tr>
-				<tr>
+				<tr><td>
 					<span class="adminsubtitle"></span>
-				</tr>
+				</td></tr>
 			</table>
 			<%
       }
@@ -130,16 +129,16 @@ HttpSession vHttpSession = request.getSession();
       {
 %>
 			<table width="100%" border="0" cellspacing="1" cellpadding="1">
-				<tr>
+				<tr><td>
 					<span class="adminsubtitle">Er zijn geen nieuwe oproepen beschikbaar.</span>
 					<br>
 					<br>
-				</tr>
+				</td></tr>
 			</table>
 			<%
       }
   }
-  if (vNewRecord == null)
+  else
   {
     vNewRecord = new CallRecordEntityData();
   }
@@ -274,13 +273,10 @@ else
 						name=<%=Constants.RECORD_LONG_TEXT%> rows=10 cols=70><%=(String) vNewRecord.getLongDescription()%></textarea></td>
 				</tr>
 			</table>
-			<br>
-			<br>
-			</form>
-			</span> <br>
 			</td>
 		</tr>
 </table>
+</form>
 	<%
 }
 catch (Exception e)
