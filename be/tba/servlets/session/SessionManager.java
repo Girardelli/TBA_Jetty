@@ -4,12 +4,14 @@
  */
 package be.tba.servlets.session;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.Vector;
 
 import be.tba.util.exceptions.AccessDeniedException;
 import be.tba.util.exceptions.LostSessionException;
@@ -66,6 +68,21 @@ final public class SessionManager
         }
         return vState;
     }
+    
+    public Collection<WebSession> getActiveWebSockets()
+    {
+    	Collection<WebSession> vValuesList = mMap.values();
+        Collection<WebSession> result = new Vector<WebSession>();
+        for (Iterator<WebSession> i = vValuesList.iterator(); i.hasNext();)
+        {
+        	WebSession session = i.next();
+        	if (session.isWsActive())
+        	{
+        		result.add(session);
+        	}
+        }    
+        return result;
+    }
 
     public void clean()
     {
@@ -90,6 +107,8 @@ final public class SessionManager
     {
         mMap = Collections.synchronizedMap(new HashMap<String, WebSession>());
         mRand = new Random();
+        System.out.println("SessionManager created");
+
     }
 
     private String generateId()

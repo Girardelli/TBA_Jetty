@@ -47,6 +47,10 @@
      <servlet-class>be.tba.servlets.IntertelServlet</servlet-class>
    </servlet>
 
+  <servlet>
+     <servlet-name>TbaWebSocketServlet</servlet-name>
+     <servlet-class>be.tba.servlets.TbaWebSocketServlet</servlet-class>
+   </servlet>
   
   <!-- == Servlet mappings ================================================ -->
 
@@ -83,6 +87,11 @@
   <servlet-mapping>
      <servlet-name>IntertelServlet</servlet-name>
      <url-pattern>/intertel</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+     <servlet-name>TbaWebSocketServlet</servlet-name>
+     <url-pattern>/ws</url-pattern>
   </servlet-mapping>
 
   <!-- ==================================================================== -->

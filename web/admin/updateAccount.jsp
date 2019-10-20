@@ -125,6 +125,7 @@ double vFacLongFwd = vCustomer.getFacLongFwd();
 						<input class="tbabutton" type=submit name=action value="De-registreren" onclick="Deregister()">&nbsp;&nbsp;
 						<input class="tbabutton" type=submit name=action value=" Terug " onclick="cancelUpdate()">&nbsp;&nbsp; 
 						<input class="tbabutton" type=submit name=action value=" Verstuur Mail " onclick="mailCustomer()"> 
+                        <input class="tbabutton" type=submit name=action value=" Archiveer " onclick="archive()"> 
 						<br>
 						<p class="adminsubtitle">
 							<img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Algemene informatie:
@@ -667,6 +668,10 @@ function mailCustomer()
   document.updateForm.<%=Constants.SRV_ACTION%>.value="<%=Constants.MAIL_CUSTOMER%>";
 }
 
+function archive()
+{
+	document.updateForm.<%=Constants.SRV_ACTION%>.value="<%=Constants.GOTO_ACCOUNT_DELETE%>";
+}
 
 
 </script>

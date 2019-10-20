@@ -33,7 +33,7 @@ public class UrlCheckTimerTask extends TimerTask implements TimerTaskIntf
 	public long getPeriod() {
 		// TODO Auto-generated method stub
 //		return Constants.MINUTES;
-		return Constants.SECONDS * 5;
+		return Constants.SECONDS * 15;
 	}
 
 	@Override
@@ -71,6 +71,10 @@ public class UrlCheckTimerTask extends TimerTask implements TimerTaskIntf
 			urlIsUp = false;
 			System.out.println("UrlCheckTimerTask returned: " + e.getClass().getName());
 			//e.printStackTrace();
+			if (con != null)
+			{
+				con.disconnect();
+			}
 		}
 		if (urlIsUp != UrlCheckTimerTask.isUrlUp)
 		{

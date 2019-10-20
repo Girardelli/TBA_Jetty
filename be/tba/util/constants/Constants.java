@@ -16,7 +16,8 @@ public class Constants
     public static final String MASTER_LOGIN_NAME = "esosrv";
     public static final String MASTER_LOGIN_PASWORD = "";
     public static final String NANCY_EMAIL = "nancy.olyslaegers@theBusinessAssistant.be";
-
+    public static final String WS_LOGIN = "loginid:";
+    
     // Account Role strings.
     public static final String EJB_ACC_ROLE_CUSTOMER = "klant";
     public static final String EJB_ACC_ROLE_ADMIN = "admin";
@@ -475,6 +476,7 @@ public class Constants
     public static final String INVOICE_NO_CALLS = "_itnc";
     public static final String INVOICE_TYPE_WEEK = "_itwe";
 
+    
     private Constants()
     {
     }

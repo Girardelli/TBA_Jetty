@@ -225,7 +225,7 @@
                 </td>
             </tr>
             <tr>
-                <td width="250" valign="top" class="adminsubtitle">&nbsp;Bedrag (incl BTW)</td>
+                <td width="250" valign="top" class="adminsubtitle">&nbsp;Gestructureerde mededeling</td>
                 <td width="10" valign="top">:</td>
                 <td width="270" valign="top"> <%=vInvoiceData.getStructuredId()%>
                 </td>

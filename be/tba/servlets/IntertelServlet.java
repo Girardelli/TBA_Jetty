@@ -18,6 +18,8 @@ import be.tba.servlets.helper.IntertelCallManager;
 import be.tba.servlets.session.WebSession;
 import be.tba.util.constants.Constants;
 import be.tba.util.data.IntertelCallData;
+import be.tba.websockets.TbaWebSocketAdapter;
+import be.tba.websockets.WebSocketData;
 
 
 public class IntertelServlet extends HttpServlet
@@ -119,6 +121,10 @@ public class IntertelServlet extends HttpServlet
 			data = new IntertelCallData(isIncoming, calledNr, callingNr, intertelCallId, timestamp, phase);
     		mIntertelCallManager.newCall(data);
     		data.setDbRecordId(mCallRecordSqlAdapter.addIntertelCall(mSession, data));
+    		if (data.isIncoming)
+    		{
+    			TbaWebSocketAdapter.broadcast(new WebSocketData(WebSocketData.NEW_CALL, timestamp, data.intertelCallId, data.name, data.dbRecordId));
+    		}
     		break;
     		
     	case "answer":
@@ -128,8 +134,12 @@ public class IntertelServlet extends HttpServlet
         		data.setCurrentPhase(phase);
         		data.setCurrentPhase(req.getParameter("answeredby"));
         		mCallRecordSqlAdapter.setTsAnswer(mSession, data);
+        		if (data.isIncoming)
+        		{
+        		   
+        			TbaWebSocketAdapter.broadcast(new WebSocketData(WebSocketData.CALL_ANSWERED, timestamp, data.intertelCallId, data.name, data.dbRecordId));
+        		}
         		//System.out.println(data.intertelCallId + "-answered");
-
     		}
     		break;
     		
@@ -137,7 +147,7 @@ public class IntertelServlet extends HttpServlet
     		if (data != null)
     		{
     			// transfer called party answers
-    			IntertelCallData transferOutCall = mIntertelCallManager.getransferCall(intertelCallId, calledNr, IntertelCallData.kTbaNr);
+    			IntertelCallData transferOutCall = mIntertelCallManager.getTransferCall(intertelCallId, calledNr, IntertelCallData.kTbaNr);
     			transferOutCall.setIsTransfer();
     			data.setTsTransfer(timestamp); 
     			data.setCurrentPhase(phase);

@@ -1,6 +1,8 @@
 package be.tba.util.data;
 
+import be.tba.ejb.account.interfaces.AccountEntityData;
 import be.tba.util.constants.Constants;
+import be.tba.util.session.AccountCache;
 
 public class IntertelCallData 
 {
@@ -16,6 +18,7 @@ public class IntertelCallData
 	public long tsTransfer;
 	public long tsEnd;
 	public String intertelCallId;
+	public String name;
 	//public IntertelCallData transferData;
 	public int dbRecordId;
 	public boolean isTransferOutCall;
@@ -34,6 +37,14 @@ public class IntertelCallData
 		this.intertelCallId = callId;
 		this.isEndDone = false;
 		this.isSummaryDone = false;
+		if (isIncoming)
+		{
+			AccountEntityData account = AccountCache.getInstance().get(this.calledNr);
+			if (account != null)
+			{
+				this.name = new String(account.getFullName());
+			}
+		}
 	}
 	
 	public void setDbRecordId(int id)
@@ -43,7 +54,7 @@ public class IntertelCallData
 	
 	public void setCurrentPhase(String phase)
 	{
-		this.phase = phase;
+		this.phase = (phase == null?"":phase);
 	}
 	
 	public void setTsAnswer(long tsAnswer)
@@ -114,6 +125,11 @@ public class IntertelCallData
 	{
 		// to find transfered call
 		return (calledNr.equals(data.calledNr) && callingNr.equals(data.callingNr) && !intertelCallId.equals(data.intertelCallId));
+	}
+	
+	public String toString()
+	{
+	   return ("calledNr=" + calledNr + ", callingNr=" + callingNr + ", phase=" + phase + ", call-id" + intertelCallId); 
 	}
 	
 	private String secondsToString(int seconds)

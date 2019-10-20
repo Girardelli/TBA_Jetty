@@ -132,9 +132,26 @@ visibility:hidden;
     color: black;
 }
 
+.trBlock{
+    border-radius: 5px;
+    background: #488FCD;
+    border: none;
+    color: white;
+    padding: 5px;
+    text-align: left;
+    text-decoration: none;
+    font-size: 16px;
+    margin: 2px 2px;
+    cursor: pointer;
+}
+.trBlock:hover {
+    background: #9fc5e6;
+    color: black;
+}
 
 .tbaChat{
     border-radius: 5px;
+    border-width: 2px;
     width: 300px;
     background: #488FCD;
     border: none;
@@ -154,6 +171,7 @@ visibility:hidden;
 
 .tdborder {
 border-radius: 10px;
+border-width: 2px;
 border-style: solid; 
 border-color: #488FCD;
 background-color:rgba(248, 153, 32, 0.2);
@@ -179,6 +197,7 @@ vertical-align: top;
 /* Modal Content */
 .modal-content {
 border-radius: 10px;
+border-width: 2px;
 border-style: solid; 
 border-color: #488FCD;
 background-color:rgb(248, 205, 148);
@@ -190,6 +209,7 @@ width: 555px;
 
 .old-modal-content {
 border-radius: 5px;
+border-width: 2px;
 border-style: solid; 
 border-color: #488FCD;
 background-color:#FFFFFF;

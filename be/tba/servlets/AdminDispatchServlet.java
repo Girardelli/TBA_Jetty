@@ -91,7 +91,8 @@ public class AdminDispatchServlet extends HttpServlet
 
             synchronized (vSession)
             {
-                if (vSession.getRole() != AccountRole.ADMIN && vSession.getRole() != AccountRole.EMPLOYEE)
+            	vSession.setWsActive(false);
+            	if (vSession.getRole() != AccountRole.ADMIN && vSession.getRole() != AccountRole.EMPLOYEE)
                     throw new AccessDeniedException("access denied for " + vSession.getUserId());
 
                 rd = sc.getRequestDispatcher(vSession.getCallingJsp());
@@ -594,12 +595,12 @@ public class AdminDispatchServlet extends HttpServlet
                         if (role == AccountRole.ADMIN || role == AccountRole.EMPLOYEE)
                         {
                             System.out.println("goto account delete: setCurrentAccountId=" + vLtd + ", account fwdnr=" + accountData.getFwdNumber());
-                            AccountFacade.deleteAccount(vSession, Integer.parseInt(vLtd));
+                            AccountFacade.archiveAccount(vSession, Integer.parseInt(vLtd));
                             rd = sc.getRequestDispatcher(Constants.ADMIN_EMPLOYEE_JSP);
                         }
                         else
                         {
-                            req.setAttribute(Constants.ERROR_TXT, "Het verwijderen van een klant heeft als gevolg dat al zijn gegevens, " + "oproepen en taken volledig verwijderd worden uit de database.\n" + "Wilt u hiermee verder gaan?");
+                            req.setAttribute(Constants.ERROR_TXT, "Als je doorgaat wordt dit account gearchiveerd. Je kan dit account terug actief maken via de pagina 'gearchiveerde klanten'. Wilt u hiermee verder gaan?");
                             req.setAttribute(Constants.NEXT_PAGE, Constants.ACCOUNT_DELETE);
                             req.setAttribute(Constants.PREVIOUS_PAGE, Constants.GOTO_ACCOUNT_ADMIN);
                             vSession.setCurrentAccountId(vLtd);
@@ -638,7 +639,7 @@ public class AdminDispatchServlet extends HttpServlet
                     System.out.println("account delete: key=" + vSession.getCurrentAccountId() + ", fwd nr=" + accountData.getFwdNumber());
 
                     AccountRole role = AccountRole.fromShort(accountData.getRole());
-                    AccountFacade.deleteAccount(vSession, Integer.parseInt(vSession.getCurrentAccountId()));
+                    AccountFacade.archiveAccount(vSession, Integer.parseInt(vSession.getCurrentAccountId()));
                     if (role == AccountRole.ADMIN || role == AccountRole.EMPLOYEE)
                     {
                         rd = sc.getRequestDispatcher(Constants.ADMIN_EMPLOYEE_JSP);

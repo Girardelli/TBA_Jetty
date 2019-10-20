@@ -53,7 +53,7 @@ try
 		        <input type=hidden name=<%=Constants.ACCOUNT_TO_DELETE%> value=""> 
 		        <input type=hidden name=<%=Constants.SRV_ACTION%> value="yves"> 
  				<td width="80"><input class="tbabutton" type=submit name=action value=" Toevoegen "	onclick="addAccount()"></td>
-				<td width="80"><input class="tbabutton" type=submit name=action value=" Verwijder "	onclick="deleteAccount()"></td>
+				<td width="80"><input class="tbabutton" type=submit name=action value=" Archiveren "	onclick="deleteAccount()"></td>
                 </form>
 			</tr>
 		</table>

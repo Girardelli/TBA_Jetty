@@ -161,9 +161,14 @@ public class AccountSqlAdapter extends AbstractSqlAdapter<AccountEntityData>
         addRow(webSession, data);
     }
 
-    public void removeAccount(WebSession webSession, String key)
+    public void archiveAccount(WebSession webSession, int key)
     {
         executeSqlQuery(webSession, "UPDATE AccountEntity SET IsArchived=true, FwdNumber='' WHERE Id=" + key);
+    }
+
+    public void activateAccount(WebSession webSession, int key)
+    {
+        executeSqlQuery(webSession, "UPDATE AccountEntity SET IsArchived=false WHERE Id=" + key);
     }
 
     public void setAccount(WebSession webSession, AccountEntityData data)

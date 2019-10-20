@@ -13,6 +13,8 @@ import java.sql.SQLException;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.eclipse.jetty.websocket.api.Session;
+
 import be.tba.ejb.account.interfaces.AccountEntityData;
 import be.tba.ejb.pbx.interfaces.CallRecordEntityData;
 import be.tba.ejb.task.interfaces.TaskEntityData;
@@ -85,6 +87,8 @@ final public class WebSession implements Serializable
     
     private String mFintroProcessLog = null;
     private long mSqlTimer = 0;
+    private boolean mIsWebSocketActive = false;
+    private Session mWsSession = null;
 
     public WebSession() throws SQLException
     {
@@ -415,7 +419,28 @@ final public class WebSession implements Serializable
         mInvoiceId = -1;
         mDaysBack = 0;
     }
-
+    
+    public Session getWsSession()
+    {
+    	return mWsSession;
+    }
+    
+    public void setWsSession(Session session)
+    {
+    	mWsSession = session;
+    	mIsWebSocketActive = true;
+    }
+   
+    public boolean isWsActive()
+    {
+    	return mWsSession != null && mIsWebSocketActive;
+    }
+    
+    public void setWsActive(boolean state)
+    {
+    	mIsWebSocketActive = state;
+    }
+    
     public boolean isExpired(String caller)
     {
         long vTimeout = Constants.ADMIN_SESSION_TIMEOUT;

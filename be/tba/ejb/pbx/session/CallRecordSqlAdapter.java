@@ -1248,7 +1248,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
     
     static public void setIsDocumentedFlag(CallRecordEntityData record)
     {
-        if (record.getNumber().length() != 0 && record.getName().length() != 0 && ((String) record.getShortDescription()).length() != 0 && (!record.getIs3W_call() || (record.getW3_CustomerId() != null && record.getW3_CustomerId().length() != 0)))
+        if (record.getNumber() != null && record.getNumber().length() != 0 && record.getName() != null && record.getName().length() != 0 && (record.getShortDescription() != null && record.getShortDescription().length() != 0) && (!record.getIs3W_call() || (record.getW3_CustomerId() != null && record.getW3_CustomerId().length() != 0)))
         {
             record.setIsDocumented(true);
         }

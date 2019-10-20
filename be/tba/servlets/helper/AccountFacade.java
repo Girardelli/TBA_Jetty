@@ -24,9 +24,9 @@ import be.tba.servlets.session.WebSession;
 
 public class AccountFacade
 {
-    public static void deleteAccount(WebSession session, int accountID)
+    public static void archiveAccount(WebSession session, int accountID)
     {
-    	RecursiveDelete(session, accountID);
+    	RecursiveArchive(session, accountID);
         AccountCache.getInstance().update(session);
     }
 
@@ -321,7 +321,7 @@ public class AccountFacade
         return vAccount;
     }
 
-    private static void RecursiveDelete(WebSession session, int accountID)
+    private static void RecursiveArchive(WebSession session, int accountID)
     {
         AccountEntityData vRemovedAccount = AccountCache.getInstance().get(accountID);
 
@@ -333,18 +333,13 @@ public class AccountFacade
                 for (Iterator<AccountEntityData> vIter = list.iterator(); vIter.hasNext();)
                 {
                     AccountEntityData vValue = vIter.next();
-                    RecursiveDelete(session, vValue.getId());
+                    RecursiveArchive(session, vValue.getId());
                     System.out.println("deleteAccount: also deleted subcustomer " + vValue.getFullName());
                 }
             }
         }
         AccountSqlAdapter vAccountSession = new AccountSqlAdapter();
-        vAccountSession.deleteRow(session, accountID);
-        
-        CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
-        vQuerySession.removeAccountCalls(session, accountID);
-        TaskSqlAdapter taskAdapter = new TaskSqlAdapter();
-        taskAdapter.removeTasks(session, accountID);
+        vAccountSession.archiveAccount(session, accountID);
     }
 
     

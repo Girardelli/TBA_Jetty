@@ -7,3 +7,5 @@
 /RegisterData.class
 /ReleaseCallData.class
 /IntertelCallData.class
+/WebSocketData.class
+/WebSocketMessage.class
