@@ -440,7 +440,7 @@ var linesToDelete = new Array();
 window.name="callswindow"; 
 
 
-var socket = new WebSocket("ws://localhost:8080/tba/ws");
+var socket = new WebSocket("ws://thebusinessassistant.be/tba/ws");
 var pendingCalls = [];
 <%
 Collection<String> calls = IntertelCallManager.getInstance().getPendingCallList();
