@@ -254,9 +254,9 @@ be.tba.util.timer.UrlCheckTimerTask"%>
  					modalStrBuffer.append("</p></div></div>\r\n");
  					// fill the script
  					modalScriptStrBuffer
- 							.append("var " + spanVar + "= document.getElementById(\"" + spanId + "\");\r\n");
+ 							.append("<script>\r\nvar " + spanVar + "= document.getElementById(\"" + spanId + "\");\r\n");
  					modalScriptStrBuffer.append(
- 							spanVar + ".onclick = function() {modal.style.display = \"none\"; }\r\n\r\n");
+ 							spanVar + ".onclick = function() {modal.style.display = \"none\"; }\r\n</script>\r\n");
  				}
  			}
  			if (cnt == 0) {
@@ -437,10 +437,8 @@ be.tba.util.timer.UrlCheckTimerTask"%>
 
 var linesToDelete = new Array();
 
-window.name="callswindow"; 
 
-
-var socket = new WebSocket("ws://thebusinessassistant.be/tba/ws");
+var socket = new WebSocket("wss://thebusinessassistant.be/tba/ws");
 var pendingCalls = [];
 <%
 Collection<String> calls = IntertelCallManager.getInstance().getPendingCallList();
@@ -455,9 +453,14 @@ for (Iterator<String> i = calls.iterator(); i.hasNext();)
 var isRingOn = getRingOn();
 console.log(' at start isRingOn=' + isRingOn);
 var ring = document.getElementById("ringRing"); 
-setOnOffText();
-updatePendingCalls();
-setInterval(updatePendingCalls, 5000);
+
+
+window.onload = function() 
+{
+    setOnOffText();
+    updatePendingCalls();
+    setInterval(updatePendingCalls, 5000);
+};
 
 function playRing() 
 { 
@@ -798,6 +801,7 @@ window.onclick = function(event)
       modal.style.display = "none";
   }
 }
+
 <%out.println(modalScriptStrBuffer.toString());%>
                 
 </script>
