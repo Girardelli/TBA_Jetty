@@ -451,7 +451,7 @@ for (Iterator<String> i = calls.iterator(); i.hasNext();)
 }
 %>
 var isRingOn = getRingOn();
-console.log(' at start isRingOn=' + isRingOn);
+//console.log(' at start isRingOn=' + isRingOn);
 var ring = document.getElementById("ringRing"); 
 
 
@@ -478,7 +478,7 @@ function setOnOffText()
    {
 	    document.getElementById('onOffButton').innerHTML = "<img src=\"/tba/images/soundOff.jpg\" alt=\"zet geluid aan / af\" style=\"width:30px;height:30px;\">";
    }
-   console.log('isRingOn=' + isRingOn);
+   //console.log('isRingOn=' + isRingOn);
 }
 
 
@@ -487,7 +487,7 @@ function alterAudioOnOff()
     isRingOn ^= 1;
     setOnOffText();
     setCookie('ringOn', isRingOn, 7); 
-   console.log('alter: isRingOn=' + isRingOn);
+   //console.log('alter: isRingOn=' + isRingOn);
 } 
 
 
@@ -583,7 +583,7 @@ function updatePendingCalls()
     }
 	content += "</table>";
     
-	console.log("updatePendingCalls(): " + content);
+	//console.log("updatePendingCalls(): " + content);
 
 	document.getElementById('pendingCalls').innerHTML = content;
 }
@@ -611,22 +611,22 @@ function getCookie(cname)
 	    }
 	    if (c.indexOf(name) == 0) 
 	    {
-	    	console.log('cookie found:' + c);
+	    	//console.log('cookie found:' + c);
 	      return c.substring(name.length, c.length);
 	    }
 	  }
-	  console.log('cookie ' + cname + ' not found');
+	  //console.log('cookie ' + cname + ' not found');
 	  return "";
 }
 
 function setCookie(cname, cvalue, exdays) 
 {
-	console.log('setCookie(' + cname + '=' + cvalue + ';' + exdays + ')');  
+	//console.log('setCookie(' + cname + '=' + cvalue + ';' + exdays + ')');  
 	var d = new Date();
 	  d.setTime(d.getTime() + (exdays*24*60*60*1000));
 	  var expires = "expires="+ d.toUTCString();
 	  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-	  console.log('set cookie: ' + cname + "=" + cvalue + ";" + expires + ";path=/");
+	  //console.log('set cookie: ' + cname + "=" + cvalue + ";" + expires + ";path=/");
 }
 	
 function hooverOnRow(id, rowInd)
@@ -677,7 +677,7 @@ function deleteCalls()
 
 function selectAll()
 {
-	console.log("Selecet all loggging");
+	//console.log("Select all loggging");
 	var allArr = <%=allEntryIds.toString()%>;
   for (var i = 0; i < allArr.length; i++) // length -1 because we have entered an extra ',' at the end
   {
