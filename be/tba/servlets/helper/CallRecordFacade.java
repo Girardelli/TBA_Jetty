@@ -231,7 +231,7 @@ public class CallRecordFacade
                 int key = Integer.parseInt(vStrTok.nextToken());
                 CallRecordEntityData record = vQuerySession.getRow(session, key);
                 // only delete calls that have not yet been documented
-                if (!record.getIsDocumented() || session.getRole() == AccountRole.ADMIN)
+                if (record != null && (!record.getIsDocumented() || session.getRole() == AccountRole.ADMIN))
                 {
                     vQuerySession.deleteRow(session, key);
                     printCallDelete(session, key);
