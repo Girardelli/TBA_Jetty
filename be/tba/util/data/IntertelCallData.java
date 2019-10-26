@@ -18,12 +18,13 @@ public class IntertelCallData
 	public long tsTransfer;
 	public long tsEnd;
 	public String intertelCallId;
-	public String name;
+	public String customer;
 	//public IntertelCallData transferData;
 	public int dbRecordId;
 	public boolean isTransferOutCall;
 	public boolean isEndDone;
 	public boolean isSummaryDone;
+	public boolean isWsRemoved; //tell whether this call was already removed from websocket list
 	
 	public IntertelCallData(boolean isIncoming, String calledNr, String CallingNr, String callId, long tsStart, String phase)
 	{
@@ -37,12 +38,13 @@ public class IntertelCallData
 		this.intertelCallId = callId;
 		this.isEndDone = false;
 		this.isSummaryDone = false;
+		this.isWsRemoved = false;
 		if (isIncoming)
 		{
 			AccountEntityData account = AccountCache.getInstance().get(this.calledNr);
 			if (account != null)
 			{
-				this.name = new String(account.getFullName());
+				this.customer = new String(account.getFullName());
 			}
 		}
 	}
@@ -60,6 +62,7 @@ public class IntertelCallData
 	public void setTsAnswer(long tsAnswer)
 	{
 		this.tsAnswer = tsAnswer;
+		this.isWsRemoved = true;
 	}
 	
 	public void setTsTransfer(long tsTransfer)
@@ -75,6 +78,7 @@ public class IntertelCallData
 	public void setTsEnd(long tsEnd)
 	{
 		this.tsEnd = tsEnd;
+		this.isWsRemoved = true;
 	}
 	
 	public void setCallingNr(String nr)

@@ -1077,7 +1077,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
     public void setCallData(WebSession webSession, CallRecordEntityData data)
     {
         setIsDocumentedFlag(data);
-        IntertelCallManager.getInstance().updateOperatorMapping(data);
+        IntertelCallManager.getInstance().updateOperatorMapping(data, webSession.getSessionId());
         updateRow(webSession, data);
     }
 

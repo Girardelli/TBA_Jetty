@@ -1,5 +1,7 @@
 package be.tba.websockets;
 
+import be.tba.util.data.IntertelCallData;
+
 public class WebSocketData 
 {
 	public static  final int AUTHENTICATION_LOGIN = 1;
@@ -11,14 +13,18 @@ public class WebSocketData
     public String callId;
     public String customer;
     public int dbId;
+    public String answeredByPhoneId;
+    public String answeredBySession;
     
-    public WebSocketData(int operation, long timeSt, String callId, String customer, int dbId)
+    public WebSocketData(int operation, long timeSt, IntertelCallData data)
     {
 		this.operation = operation;
 		this.timeStamp = timeSt;
-		this.callId = callId;
-		this.customer = customer;
-		this.dbId = dbId;
+		this.callId = data.intertelCallId;
+		this.customer = data.customer;
+		this.dbId = data.dbRecordId;
+		this.answeredByPhoneId = data.answeredBy;
+		this.answeredBySession = "";
     }
     
 	public String toString()

@@ -20,6 +20,8 @@ public class IntertelCallManager
    private final class PhoneLog
    {
       public String phoneId;
+      public String userId;
+      public String sessionId;
       public long lastUsed;
    }
 
@@ -127,14 +129,14 @@ public class IntertelCallManager
          System.out.println("getPendingCallList " + call);
          if (call.phase.equals("start"))
          {
-            WebSocketData data = new WebSocketData(WebSocketData.NEW_CALL, call.tsStart, call.intertelCallId, call.name, call.dbRecordId);
+            WebSocketData data = new WebSocketData(WebSocketData.NEW_CALL, call.tsStart, call);
             pendingCalls.add((new Gson()).toJson(data, WebSocketData.class));
          }
       }
       return pendingCalls;
    }
 
-   public synchronized void updateOperatorMapping(CallRecordEntityData data)
+   public synchronized void updateOperatorMapping(CallRecordEntityData data, String sessionId)
    {
       IntertelCallData call = getByDbId(data.getId());
       if (call == null)
@@ -160,9 +162,21 @@ public class IntertelCallManager
       {
          PhoneLog phoneLog = new PhoneLog();
          phoneLog.phoneId = call.answeredBy;
+         phoneLog.userId = data.getDoneBy();
+         phoneLog.sessionId = sessionId;
          phoneLog.lastUsed = System.currentTimeMillis() / 1000l;
-         mOperatorPhoneMap.put(data.getDoneBy(), phoneLog);
+         mOperatorPhoneMap.put(phoneLog.phoneId, phoneLog);
       }
+   }
+   
+   public String getSessionIdForPhoneId(String phoneId)
+   {
+      PhoneLog phoneLog = mOperatorPhoneMap.get(phoneId);
+      if (phoneLog != null)
+      {
+         return phoneLog.sessionId;
+      }
+      return "";
    }
 
    private void cleanUpMaps()
