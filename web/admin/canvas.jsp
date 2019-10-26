@@ -29,7 +29,7 @@ be.tba.util.timer.UrlCheckTimerTask"%>
 <%!private StringBuilder allEntryIds;%>
 
 <%
-	StringBuffer modalScriptStrBuffer = new StringBuffer("\r\n//#######  My Modal scripts ######\r\n\r\n");
+	StringBuffer modalScriptStrBuffer = new StringBuffer("<!-- \r\n//#######  My Modal scripts ######\r\n\r\n -->");
 	try {
 		vSession.setCallingJsp(Constants.CANVAS_JSP);
 		// this is the websocket page. Make sure this user is known to the WS broadcast
@@ -205,9 +205,9 @@ be.tba.util.timer.UrlCheckTimerTask"%>
 
  					// fill the script
  					modalScriptStrBuffer
- 							.append("var " + spanVar + "= document.getElementById(\"" + spanId + "\");\r\n");
+ 							.append("<script>\r\nvar " + spanVar + "= document.getElementById(\"" + spanId + "\");\r\n");
  					modalScriptStrBuffer.append(
- 							spanVar + ".onclick = function() {modal.style.display = \"none\"; }\r\n\r\n");
+ 							spanVar + ".onclick = function() {modal.style.display = \"none\"; }\r\n</script>\r\n");
  				}
  			}
  			if (cnt == 0) {
@@ -801,11 +801,8 @@ window.onclick = function(event)
       modal.style.display = "none";
   }
 }
-
-<%out.println(modalScriptStrBuffer.toString());%>
-                
 </script>
-
+<%out.println(modalScriptStrBuffer.toString());%>
 </body>
 
 </html>
