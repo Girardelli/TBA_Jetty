@@ -550,7 +550,7 @@ socket.onmessage = function(msg)
    	      {
    	        console.log("removed pending call");
             pendingCalls.splice(i, 1);
-            if (json.answeredBySession == <%=vSession.getSessionId()%>)
+            if (json.answeredBySession == '<%=vSession.getSessionId()%>')
             {
                 changeUrl("/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.RECORD_UPDATE%>&<%=Constants.RECORD_ID%>=" + pendingCalls[i].dbId);
             }
