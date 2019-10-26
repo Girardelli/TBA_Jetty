@@ -167,6 +167,7 @@ public class IntertelServlet extends HttpServlet
             if (data.isIncoming && !data.isWsRemoved)
             {
                TbaWebSocketAdapter.broadcast(new WebSocketData(WebSocketData.CALL_ANSWERED, timestamp, data));
+               data.isWsRemoved = true;
             }
     		}
     		break;

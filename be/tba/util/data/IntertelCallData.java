@@ -78,7 +78,6 @@ public class IntertelCallData
 	public void setTsEnd(long tsEnd)
 	{
 		this.tsEnd = tsEnd;
-		this.isWsRemoved = true;
 	}
 	
 	public void setCallingNr(String nr)
@@ -114,7 +113,7 @@ public class IntertelCallData
 		// to be removed!!!!! --> bug in new Intertel webhook logging, missing answer event
 		else if (tsStart > 0 && tsEnd > 0)
 		{
-			System.out.println("No tsAnswer timestamp logged: return full length=" + (int)(tsStart - tsEnd));
+			System.out.println("No tsAnswer timestamp logged: return full length=" + (int)(tsEnd - tsStart));
 			return (int)(tsEnd - tsStart);
 		}
 		return 0;
