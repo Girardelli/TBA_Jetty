@@ -132,7 +132,7 @@ public class IntertelServlet extends HttpServlet
     		{
         		data.setTsAnswer(timestamp);
         		data.setCurrentPhase(phase);
-        		data.setAnsweredBy(req.getParameter("answeredby"));
+        		data.setAnsweredBy(req.getParameter("answerby"));
         		mCallRecordSqlAdapter.setTsAnswer(mSession, data);
         		if (data.isIncoming)
         		{
