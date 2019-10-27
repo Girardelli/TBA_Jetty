@@ -139,6 +139,7 @@ public class IntertelCallManager
    public synchronized void updateOperatorMapping(CallRecordEntityData data, String sessionId)
    {
       IntertelCallData call = getByDbId(data.getId());
+      System.out.println("updateOperatorMapping: data.getId()=" + data.getId() + ", sessionId=" + sessionId + ", call" + call);
       if (call == null || call.answeredBy.isEmpty())
       {
          return; // to be removed once we have switched to Intertel
