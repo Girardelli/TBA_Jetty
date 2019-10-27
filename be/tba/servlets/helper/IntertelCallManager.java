@@ -139,19 +139,24 @@ public class IntertelCallManager
    public synchronized void updateOperatorMapping(CallRecordEntityData data, String sessionId)
    {
       IntertelCallData call = getByDbId(data.getId());
-      if (call == null)
-         return; // to be removed once we have switched to Intertel
-      boolean addIt = false;
-      if (mOperatorPhoneMap.containsKey(data.getDoneBy()))
+      if (call == null || call.answeredBy.isEmpty())
       {
-         PhoneLog phoneLog = mOperatorPhoneMap.get(data.getDoneBy());
-         if (phoneLog.equals(call.answeredBy))
+         return; // to be removed once we have switched to Intertel
+      }
+      boolean addIt = false;
+      if (mOperatorPhoneMap.containsKey(call.answeredBy))
+      {
+         PhoneLog phoneLog = mOperatorPhoneMap.get(call.answeredBy);
+         if (phoneLog.phoneId.equals(call.answeredBy))
          {
-            // update timestamp
+            // already mapped: update timestamp
+            System.out.println("updateOperatorMapping : match");
             phoneLog.lastUsed = System.currentTimeMillis() / 1000l;
-         } else
+         } 
+         else
          {
-            mOperatorPhoneMap.remove(data.getDoneBy());
+            System.out.println("updateOperatorMapping : no match");
+            mOperatorPhoneMap.remove(phoneLog.phoneId);
             addIt = true;
          }
       } else
@@ -165,6 +170,7 @@ public class IntertelCallManager
          phoneLog.userId = data.getDoneBy();
          phoneLog.sessionId = sessionId;
          phoneLog.lastUsed = System.currentTimeMillis() / 1000l;
+         System.out.println("mOperatorPhoneMap.put(" + phoneLog.phoneId+ ", sessionId=" + phoneLog.sessionId);
          mOperatorPhoneMap.put(phoneLog.phoneId, phoneLog);
       }
    }
