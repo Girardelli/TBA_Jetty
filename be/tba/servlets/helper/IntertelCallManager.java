@@ -66,9 +66,11 @@ public class IntertelCallManager
    public synchronized IntertelCallData getByDbId(int id)
    {
       Collection<IntertelCallData> calls = mCallMap.values();
+      System.out.println("getByDbId: list size=" + calls.size());
       for (Iterator<IntertelCallData> itr = calls.iterator(); itr.hasNext();)
       {
          IntertelCallData call = itr.next();
+         System.out.println("call.dbRecordId=" + call.dbRecordId + ", id=" + id);
          if (call.dbRecordId == id)
          {
             return call;
