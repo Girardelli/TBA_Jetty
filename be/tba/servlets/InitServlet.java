@@ -9,6 +9,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
 import be.tba.util.session.AccountCache;
+import be.tba.util.timer.CallManagerCleanupTimerTask;
 import be.tba.util.timer.DbCleanTimerTask;
 import be.tba.util.timer.MailTimerTask;
 import be.tba.util.timer.TimerManager;
@@ -39,6 +40,7 @@ public class InitServlet extends GenericServlet
             vTimerManager.add(new DbCleanTimerTask());
             vTimerManager.add(new MailTimerTask());
             vTimerManager.add(new UrlCheckTimerTask());
+            vTimerManager.add(new CallManagerCleanupTimerTask());
         }
         catch (Exception e)
         {

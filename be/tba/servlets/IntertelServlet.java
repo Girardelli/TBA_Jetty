@@ -196,7 +196,7 @@ public class IntertelServlet extends HttpServlet
 		}
 		else if (data.isEndDone && data.isSummaryDone)
 		{
-    		mIntertelCallManager.removeCall(intertelCallId);
+    		//mIntertelCallManager.removeCall(intertelCallId);
 			writeToFile(data);
 			//System.out.println(data.intertelCallId + "-finalize with write to log");
 		}

@@ -178,7 +178,7 @@ public class IntertelCallManager
       }
    }
    
-   public String getSessionIdForPhoneId(String phoneId)
+   public synchronized String getSessionIdForPhoneId(String phoneId)
    {
       PhoneLog phoneLog = mOperatorPhoneMap.get(phoneId);
       if (phoneLog != null)
@@ -188,7 +188,7 @@ public class IntertelCallManager
       return "";
    }
 
-   private void cleanUpMaps()
+   public synchronized void cleanUpMaps()
    {
       long tsNow = System.currentTimeMillis() / 1000l;
       // System.out.println("IntertelCallManager.cleanUpMaps() called");
@@ -197,7 +197,8 @@ public class IntertelCallManager
       {
          String key = i.next();
          IntertelCallData data = mCallMap.get(key);
-         if (data.tsStart < (tsNow - 7200)) // 2 hours
+         if ((data.tsEnd != 0 &&  data.tsEnd < (tsNow - 1000)) ||
+               (data.tsStart < (tsNow - 7200))) // 2 hours
          {
             mCallMap.remove(key);
          }
