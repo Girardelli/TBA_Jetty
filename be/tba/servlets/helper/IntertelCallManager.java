@@ -23,6 +23,11 @@ public class IntertelCallManager
       public String userId;
       public String sessionId;
       public long lastUsed;
+      
+      public String toString()
+      {
+         return "PhoneId=" + phoneId + ", userId=" + userId + ", sessionId=" + sessionId;
+      }
    }
 
    private static final int kCallCleaner = 100;
@@ -49,12 +54,13 @@ public class IntertelCallManager
 
    public synchronized void newCall(IntertelCallData data)
    {
+      System.out.println("IntertelCallManager.newCall: " + data.toString());
       mCallMap.put(data.intertelCallId, data);
-      if (++mCallCnt > kCallCleaner)
-      {
-         mCallCnt = 0;
-         cleanUpMaps();
-      }
+//      if (++mCallCnt > kCallCleaner)
+//      {
+//         mCallCnt = 0;
+//         cleanUpMaps();
+//      }
       // System.out.println(data.intertelCallId + "-created in manager");
    }
 
@@ -66,16 +72,17 @@ public class IntertelCallManager
    public synchronized IntertelCallData getByDbId(int id)
    {
       Collection<IntertelCallData> calls = mCallMap.values();
-      System.out.println("getByDbId: list size=" + calls.size());
+      System.out.println("getByDbId(" + id + "): list size=" + calls.size());
       for (Iterator<IntertelCallData> itr = calls.iterator(); itr.hasNext();)
       {
          IntertelCallData call = itr.next();
-         System.out.println("call.dbRecordId=" + call.dbRecordId + ", id=" + id);
+         System.out.println("    check call.dbRecordId=" + call.dbRecordId + ", id=" + id);
          if (call.dbRecordId == id)
          {
             return call;
          }
       }
+      System.out.println("getByDbId(" + id + ") not found");
       return null;
    }
 
@@ -103,17 +110,17 @@ public class IntertelCallManager
       return null;
    }
 
-   public synchronized void removeCall(String callId)
-   {
-      IntertelCallData data = mCallMap.get(callId);
-      if (data == null)
-         return; // to be removed once we have switched to Intertel
-      if (data.tsEnd > 0)
-      {
-         // System.out.println(data.intertelCallId + "-remove from manager");
-         mCallMap.remove(callId);
-      }
-   }
+//   public synchronized void removeCall(String callId)
+//   {
+//      IntertelCallData data = mCallMap.get(callId);
+//      if (data == null)
+//         return; // to be removed once we have switched to Intertel
+//      if (data.tsEnd > 0)
+//      {
+//         // System.out.println(data.intertelCallId + "-remove from manager");
+//         mCallMap.remove(callId);
+//      }
+//   }
 
    public synchronized Collection<IntertelCallData> getCallList()
    {
@@ -173,7 +180,7 @@ public class IntertelCallManager
          phoneLog.userId = data.getDoneBy();
          phoneLog.sessionId = sessionId;
          phoneLog.lastUsed = System.currentTimeMillis() / 1000l;
-         System.out.println("mOperatorPhoneMap.put(" + phoneLog.phoneId+ ", sessionId=" + phoneLog.sessionId);
+         System.out.println("mOperatorPhoneMap.put: " + phoneLog.toString());
          mOperatorPhoneMap.put(phoneLog.phoneId, phoneLog);
       }
    }
@@ -185,6 +192,7 @@ public class IntertelCallManager
       {
          return phoneLog.sessionId;
       }
+      System.out.println("getSessionIdForPhoneId: " + phoneId + " not found");
       return "";
    }
 
@@ -200,6 +208,8 @@ public class IntertelCallManager
          if ((data.tsEnd != 0 &&  data.tsEnd < (tsNow - 1000)) ||
                (data.tsStart < (tsNow - 7200))) // 2 hours
          {
+            System.out.println("IntertelCallManager.removeCall: " + data.toString());
+            
             mCallMap.remove(key);
          }
       }
@@ -209,6 +219,7 @@ public class IntertelCallManager
          PhoneLog phoneLog = mOperatorPhoneMap.get(key);
          if ((tsNow - phoneLog.lastUsed) > 3600)
          {
+            System.out.println("IntertelCallManager.removeOperator: " + phoneLog.toString());
             mOperatorPhoneMap.remove(key);
             // System.out.println("IntertelCallManager: removed from mOperatorPhoneMap: " +
             // key);

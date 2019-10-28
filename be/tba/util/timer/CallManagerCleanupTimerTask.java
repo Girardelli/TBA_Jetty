@@ -1,7 +1,5 @@
 package be.tba.util.timer;
 
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.Date;
 import java.util.TimerTask;
 
