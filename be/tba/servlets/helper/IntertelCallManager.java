@@ -191,7 +191,7 @@ public class IntertelCallManager
    public synchronized void cleanUpMaps()
    {
       long tsNow = System.currentTimeMillis() / 1000l;
-      // System.out.println("IntertelCallManager.cleanUpMaps() called");
+      System.out.println("IntertelCallManager.cleanUpMaps(). mCallMap.size()=" + mCallMap.size() + ", mOperatorPhoneMap=" + mOperatorPhoneMap.size());
 
       for (Iterator<String> i = mCallMap.keySet().iterator(); i.hasNext();)
       {

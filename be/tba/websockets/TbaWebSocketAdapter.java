@@ -89,7 +89,7 @@ public class TbaWebSocketAdapter extends WebSocketAdapter
          {
             try
             {
-               System.out.println("send websocket event:");
+               System.out.println("send websocket event: " + data.toString());
                session.getWsSession().getRemote().sendString(sGson.toJson(data, WebSocketData.class));
             } catch (IOException e)
             {

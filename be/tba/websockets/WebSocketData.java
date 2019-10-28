@@ -29,7 +29,7 @@ public class WebSocketData
     
 	public String toString()
 	{
-		return "WebSocketData: callId=" +  callId + ", customer=" + customer;
+		return "WebSocketData: callId=" +  callId + ", customer=" + customer + ", dbId=" + dbId + ", PhoneId=" + answeredByPhoneId + ", session=" + answeredBySession;
 	}
 
 }
