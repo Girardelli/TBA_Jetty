@@ -24,8 +24,8 @@ public class CallManagerCleanupTimerTask extends TimerTask implements TimerTaskI
    @Override
    public long getPeriod() {
       // TODO Auto-generated method stub
-//    return Constants.MINUTES;
-      return Constants.MINUTES * 5;
+    return Constants.SECONDS * 20;
+//      return Constants.MINUTES * 5;
    }
 
    @Override

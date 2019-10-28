@@ -72,12 +72,11 @@ public class TbaWebSocketAdapter extends WebSocketAdapter
 
    public static void broadcast(WebSocketData data)
    {
-      System.out.println("broadcast: ");
       if (data.operation == WebSocketData.CALL_ANSWERED)
       {
          // this session ID shall be used by the canvas JSP to open the call update window automatically.
          data.answeredBySession = IntertelCallManager.getInstance().getSessionIdForPhoneId(data.answeredByPhoneId);
-         System.out.println("data.answeredBySession=" + data.answeredBySession);
+         //System.out.println("data.answeredBySession=" + data.answeredBySession);
          
       }
       
@@ -89,7 +88,7 @@ public class TbaWebSocketAdapter extends WebSocketAdapter
          {
             try
             {
-               System.out.println("send websocket event: " + data.toString());
+               System.out.println("----------------------------------\r\nsend websocket event: " + data.toString());
                session.getWsSession().getRemote().sendString(sGson.toJson(data, WebSocketData.class));
             } catch (IOException e)
             {

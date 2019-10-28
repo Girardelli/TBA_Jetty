@@ -39,6 +39,7 @@ public class IntertelCallData
 		this.isEndDone = false;
 		this.isSummaryDone = false;
 		this.isWsRemoved = false;
+		this.answeredBy = "";
 		if (isIncoming)
 		{
 			AccountEntityData account = AccountCache.getInstance().get(this.calledNr);

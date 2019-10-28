@@ -109,7 +109,7 @@ if (!vSession.isCurrentMonth())
 allEntryIds = new StringBuilder("[");
 
 
-Collection vTasks = null;
+Collection<TaskEntityData> vTasks = null;
 TaskSqlAdapter vTaskSession = new TaskSqlAdapter();
 
 vTasks = vTaskSession.getTasksForMonthforFwdNr(vSession, vCustomerFilter, vSession.getMonthsBack(), vSession.getYear());
@@ -141,15 +141,14 @@ if (vTasks != null && vTasks.size() > 0)
 			<%
   int vRowInd = 0;
   DecimalFormat vCostFormatter = new DecimalFormat("#0.00");
-  for (Iterator i = vTasks.iterator(); i.hasNext();)
+  for (Iterator<TaskEntityData> i = vTasks.iterator(); i.hasNext();)
   {
-    TaskEntityData vEntry = ((TaskEntityData) i.next());
+    TaskEntityData vEntry = i.next();
 
     String vId = "id" + vEntry.getId();
     String vKost;
     if (vEntry.getIsFixedPrice())
     {
-      System.out.println("fixed price double:" + vEntry.getFixedPrice());
       vKost = new String(vCostFormatter.format(vEntry.getFixedPrice()) + "Euro (fixed)");   
     }
     else
@@ -172,7 +171,6 @@ if (vTasks != null && vTasks.size() > 0)
       vInfoGifs = vInfoGifs.concat("<img src=\"/tba/images/recurintask.gif\" height=\"13\" border=\"0\">&nbsp;");
     }
     
-	System.out.println("task: " + vEntry.getDescription());
 	if (vSession.getRole() == AccountRole.ADMIN)
 	{
 %>

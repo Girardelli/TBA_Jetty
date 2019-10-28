@@ -135,7 +135,7 @@ public class IntertelCallManager
       for (Iterator<IntertelCallData> i = mCallMap.values().iterator(); i.hasNext();)
       {
          IntertelCallData call = i.next();
-         System.out.println("getPendingCallList " + call);
+         //System.out.println("getPendingCallList " + call.toString());
          if (call.phase.equals("start"))
          {
             WebSocketData data = new WebSocketData(WebSocketData.NEW_CALL, call.tsStart, call);
@@ -165,7 +165,7 @@ public class IntertelCallManager
          } 
          else
          {
-            System.out.println("updateOperatorMapping : no match");
+            System.out.println("updateOperatorMapping : no match. remove " + phoneLog.toString());
             mOperatorPhoneMap.remove(phoneLog.phoneId);
             addIt = true;
          }
