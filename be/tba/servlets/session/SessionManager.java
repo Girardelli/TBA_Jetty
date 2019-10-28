@@ -95,7 +95,7 @@ final public class SessionManager
             if (vState.isExpired("cleaner"))
             {
                 vState.Close();
-                mMap.remove(sessionId);
+                i.remove();
                 cnt++;
             }
         }

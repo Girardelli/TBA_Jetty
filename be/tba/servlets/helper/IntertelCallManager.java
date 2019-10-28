@@ -199,7 +199,7 @@ public class IntertelCallManager
    public synchronized void cleanUpMaps()
    {
       long tsNow = System.currentTimeMillis() / 1000l;
-      System.out.println("IntertelCallManager.cleanUpMaps(). mCallMap.size()=" + mCallMap.size() + ", mOperatorPhoneMap=" + mOperatorPhoneMap.size());
+      System.out.println(this + ". mCallMap.size()=" + mCallMap.size() + ", mOperatorPhoneMap=" + mOperatorPhoneMap.size());
 
       for (Iterator<String> i = mCallMap.keySet().iterator(); i.hasNext();)
       {
@@ -209,8 +209,7 @@ public class IntertelCallManager
                (data.tsStart < (tsNow - 7200))) // 2 hours
          {
             System.out.println("IntertelCallManager.removeCall: " + data.toString());
-            
-            mCallMap.remove(key);
+            i.remove();
          }
       }
       for (Iterator<String> i = mOperatorPhoneMap.keySet().iterator(); i.hasNext();)
@@ -220,7 +219,7 @@ public class IntertelCallManager
          if ((tsNow - phoneLog.lastUsed) > 3600)
          {
             System.out.println("IntertelCallManager.removeOperator: " + phoneLog.toString());
-            mOperatorPhoneMap.remove(key);
+            i.remove();
             // System.out.println("IntertelCallManager: removed from mOperatorPhoneMap: " +
             // key);
          }
