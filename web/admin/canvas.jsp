@@ -549,11 +549,14 @@ socket.onmessage = function(msg)
    	      if (pendingCalls[i].callId == json.callId)
    	      {
    	        console.log("removed pending call. answeredBySession=" + json.answeredBySession + ", I am session=<%=vSession.getSessionId()%>");
-            pendingCalls.splice(i, 1);
             if (json.answeredBySession == '<%=vSession.getSessionId()%>')
             {
                 console.log("change URL");
                 changeUrl("/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.RECORD_UPDATE%>&<%=Constants.RECORD_ID%>=" + pendingCalls[i].dbId);
+            }
+            else
+            {
+                pendingCalls.splice(i, 1);
             }
             break;
    	      }
