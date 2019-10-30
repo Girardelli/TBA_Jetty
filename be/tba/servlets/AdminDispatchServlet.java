@@ -405,9 +405,20 @@ public class AdminDispatchServlet extends HttpServlet
                     //rd = sc.getRequestDispatcher(Constants.CANVAS_JSP);
                     break;
                 }
-                
+                                
                 // ==============================================================================================
-                // MODIFY RECORD
+                // AUTO_RECORD_UPDATE
+                // ==============================================================================================
+                case Constants.AUTO_RECORD_UPDATE:
+                {
+                    CallRecordFacade.retrieveRecordForUpdate(req, vSession);
+                    vSession.setIsAutoUpdateRecord(true);
+                    rd = sc.getRequestDispatcher(Constants.UPDATE_RECORD_JSP);
+                    break;
+                }
+
+                // ==============================================================================================
+                // RECORD_UPDATE
                 // ==============================================================================================
                 case Constants.RECORD_UPDATE:
                 {

@@ -28,6 +28,9 @@ private String vRecordId = null;
 try
 {
 vSession.setCallingJsp(Constants.UPDATE_RECORD_JSP);
+boolean isAutoUpdateRecord = vSession.isAutoUpdateRecord();
+vSession.setIsAutoUpdateRecord(false);
+
 mRecordData = vSession.getCurrentRecord();
 if (mRecordData == null)
 {
@@ -59,10 +62,17 @@ mCustomerData = AccountCache.getInstance().get(mRecordData); // yves: to be chan
 
 String vDirStr = mRecordData.getIsIncomingCall() ? "Van Nummer" : "Naar Nummer";
 String vNumberHtml;
+if (isAutoUpdateRecord)
+{
+   vNumberHtml = intertelCall.calledNr;
+}
+else
+{
 if (mRecordData.getNumber().length() == 0)
   vNumberHtml = new String("<input type=text size=20 name=" + Constants.RECORD_NUMBER + " value=\"\">");
 else
   vNumberHtml = new String("<input type=text size=20 name=" + Constants.RECORD_NUMBER + " value=\"" + mRecordData.getNumber() + "\">");
+}
 %>
 
 <body>
@@ -189,18 +199,11 @@ if (mCustomerData.getInvoiceType() == InvoiceHelper.kTelemarketingInvoice)
 					src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Uur</td>
 				<td width="530" valign="top" class="bodytekst"><%=mRecordData.getTime()%></td>
 			</tr>
-<%
-if (intertelCall == null)
-{
-%>
 			<tr>
 				<td width="50"></td>
 				<td width="170" valign="top" class="adminsubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;<%=vDirStr%></td>
 				<td width="530" valign="top"><%=vNumberHtml%></td>
 			</tr>
-<%
-}
-%>
 			<tr>
 				<td width="50"></td>
 				<td width="170" valign="top" class="adminsubsubtitle"><img
@@ -231,7 +234,7 @@ if (mCustomerData.getIs3W())
 					name=<%=Constants.RECORD_LONG_TEXT%> rows=10 cols=70><%=(String) mRecordData.getLongDescription()%></textarea></td>
 			</tr>
 <%
-if (intertelCall == null)// && !mRecordData.getIsMailed())
+if (!isAutoUpdateRecord)// && !mRecordData.getIsMailed())
 {
 %>
 			<tr>
@@ -260,6 +263,14 @@ out.println("</select>");
 		<br>
 		<br>
 		<input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.SAVE_RECORD%>"> 
+<%
+if (isAutoUpdateRecord)
+{
+%>
+        <input type=hidden name=<%=Constants.RECORD_NUMBER%> value="<%=intertelCall.calledNr%>">
+<%
+}
+%>
 		<input class="tbabutton" type=submit name=action value="Bewaar"> 
 		<input class="tbabutton" type=reset> 
 		<input class="tbabutton" type=submit value="Cancel" onclick="cancelUpdate();">

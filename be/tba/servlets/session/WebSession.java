@@ -89,6 +89,7 @@ final public class WebSession implements Serializable
     private long mSqlTimer = 0;
     private boolean mIsWebSocketActive = false;
     private Session mWsSession = null;
+    private boolean mIsAutoUpdateRecord = false;
 
     public WebSession() throws SQLException
     {
@@ -440,6 +441,17 @@ final public class WebSession implements Serializable
     {
     	mIsWebSocketActive = state;
     }
+    
+    public boolean isAutoUpdateRecord()
+    {
+      return mIsAutoUpdateRecord;
+    }
+    
+    public void setIsAutoUpdateRecord(boolean state)
+    {
+       mIsAutoUpdateRecord = state;
+    }
+    
     
     public boolean isExpired(String caller)
     {

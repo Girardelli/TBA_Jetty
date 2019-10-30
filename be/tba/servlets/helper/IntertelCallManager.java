@@ -199,7 +199,7 @@ public class IntertelCallManager
    public synchronized void cleanUpMaps()
    {
       long tsNow = System.currentTimeMillis() / 1000l;
-      System.out.println(this + ". mCallMap.size()=" + mCallMap.size() + ", mOperatorPhoneMap=" + mOperatorPhoneMap.size());
+      //System.out.println(this + ". mCallMap.size()=" + mCallMap.size() + ", mOperatorPhoneMap=" + mOperatorPhoneMap.size());
 
       for (Iterator<String> i = mCallMap.keySet().iterator(); i.hasNext();)
       {

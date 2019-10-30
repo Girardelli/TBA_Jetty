@@ -238,6 +238,7 @@ public class Constants
     //public static final String GOTO_RECORD_ADMIN = "GOTO_RECORD_ADMIN";
     public static final String RECORD_DELETE = "RECORD_DELETE";
     public static final String RECORD_UPDATE = "RECORD_UPDATE";
+    public static final String AUTO_RECORD_UPDATE = "AUTO_RECORD_UPDATE";
     public static final String GOTO_ADD_RECORD = "GOTO_ADD_RECORD";
     public static final String RECORD_SHOW_PREV = "RECORD_SHOW_PREV";
     public static final String RECORD_SHOW_NEXT = "RECORD_SHOW_NEXT";

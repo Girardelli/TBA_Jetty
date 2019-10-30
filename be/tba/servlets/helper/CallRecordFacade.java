@@ -133,7 +133,7 @@ public class CallRecordFacade
             vCallData.setDoneBy(session.getUserId());
             vCallLogWriterSession.setCallData(session, vCallData);
             printCallInsert(session, vCallData);
-            if (!prevIsImportant && vCallData.getIsImportantCall())
+            if (!prevIsImportant && vCallData.getIsImportantCall() && vCallData.getIsDocumented())
             {
                 MailNowTask.send(vCallData.getAccountId());
             }

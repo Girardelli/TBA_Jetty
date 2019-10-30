@@ -1071,14 +1071,38 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
         }
     }
 
+ 
     /**
      * @ejb:interface-method view-type="remote"
      */
     public void setCallData(WebSession webSession, CallRecordEntityData data)
     {
+       setIsDocumentedFlag(data);
+       IntertelCallManager.getInstance().updateOperatorMapping(data, webSession.getSessionId());
+       updateRow(webSession, data);
+    }
+    
+    
+    /**
+     * @ejb:interface-method view-type="remote"
+     */
+    public void setOperatorLogging(WebSession webSession, CallRecordEntityData data)
+    {
         setIsDocumentedFlag(data);
         IntertelCallManager.getInstance().updateOperatorMapping(data, webSession.getSessionId());
-        updateRow(webSession, data);
+        StringBuffer sqlCmd = new StringBuffer("UPDATE CallRecordEntity SET IsAgendaCall=");
+        sqlCmd.append(data.getIsAgendaCall()); 
+        sqlCmd.append(",IsSmsCall=" + data.getIsSmsCall()); 
+        sqlCmd.append(",IsForwardCall=" + data.getIsForwardCall()); 
+        sqlCmd.append(",IsImportantCall=" + data.getIsImportantCall()); 
+        sqlCmd.append(",IsFaxCall=" + data.getIsFaxCall()); 
+        sqlCmd.append(",AccountID=" + data.getAccountId()); 
+        sqlCmd.append(",Name='" + ((data.getName() != null) ? escapeQuotes(data.getName()) : "")); 
+        sqlCmd.append("',ShortDescription='" + ((data.getShortDescription() != null) ? escapeQuotes(data.getShortDescription()) : "")); 
+        sqlCmd.append("',LongDescription='" + ((data.getLongDescription() != null) ? escapeQuotes(data.getLongDescription()) : "")); 
+        sqlCmd.append("',DoneBy='" + ((data.getDoneBy() != null) ? data.getDoneBy() : "")); 
+        sqlCmd.append("' WHERE Id=" + data.getId());
+        executeSqlQuery(webSession, sqlCmd.toString());
     }
 
     /**

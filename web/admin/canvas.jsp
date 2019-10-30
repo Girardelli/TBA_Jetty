@@ -552,7 +552,7 @@ socket.onmessage = function(msg)
             if (json.answeredBySession == '<%=vSession.getSessionId()%>')
             {
                 console.log("change URL");
-                changeUrl("/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.RECORD_UPDATE%>&<%=Constants.RECORD_ID%>=" + pendingCalls[i].dbId);
+                changeUrl("/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.AUTO_RECORD_UPDATE%>&<%=Constants.RECORD_ID%>=" + pendingCalls[i].dbId);
             }
             else
             {
