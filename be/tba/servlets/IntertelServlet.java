@@ -197,8 +197,9 @@ public class IntertelServlet extends HttpServlet
 		}
 		else if (data.isEndDone && data.isSummaryDone)
 		{
+		   // do not remove after receiving the end events. We need this call from teh manager to further process it.
 		   //System.out.println("Remove call: " + data.toString());
-		   mIntertelCallManager.removeCall(mSession, data);
+		   //mIntertelCallManager.removeCall(mSession, data);
 			writeToFile(data);
 			//System.out.println(data.intertelCallId + "-finalize with write to log");
 		}
