@@ -1079,6 +1079,11 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
     {
        setIsDocumentedFlag(data);
        IntertelCallManager.getInstance().updateOperatorMapping(data, webSession.getSessionId());
+       if (data.getTsAnswer() > 0)
+       {
+          setOperatorLogging(webSession, data);
+          return;
+       }
        updateRow(webSession, data);
     }
     
@@ -1096,15 +1101,31 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
         sqlCmd.append(",IsForwardCall=" + data.getIsForwardCall()); 
         sqlCmd.append(",IsImportantCall=" + data.getIsImportantCall()); 
         sqlCmd.append(",IsFaxCall=" + data.getIsFaxCall()); 
-        sqlCmd.append(",AccountID=" + data.getAccountId()); 
+        sqlCmd.append(",IsDocumented=" + data.getIsDocumented());
+        sqlCmd.append(",IsReleased=" + data.getIsReleased()); 
+        sqlCmd.append(",IsNotLogged=" + data.getIsNotLogged()); 
+        sqlCmd.append(",IsMailed=" + data.getIsMailed()); 
+        sqlCmd.append(",IsVirgin=" + data.getIsVirgin()); 
+        sqlCmd.append(",IsFaxCall=" + data.getIsFaxCall()); 
+        sqlCmd.append(",IsChanged=" + data.getIsChanged()); 
         sqlCmd.append(",Name='" + ((data.getName() != null) ? escapeQuotes(data.getName()) : "")); 
         sqlCmd.append("',ShortDescription='" + ((data.getShortDescription() != null) ? escapeQuotes(data.getShortDescription()) : "")); 
         sqlCmd.append("',LongDescription='" + ((data.getLongDescription() != null) ? escapeQuotes(data.getLongDescription()) : "")); 
         sqlCmd.append("',DoneBy='" + ((data.getDoneBy() != null) ? data.getDoneBy() : "")); 
-        sqlCmd.append("' WHERE Id=" + data.getId());
+        sqlCmd.append("',InvoiceLevel=" + data.getInvoiceLevel()); 
+        
+        if (!webSession.isAutoUpdateRecord())
+        {
+           // this is not a save resulting from an auto update.
+           // fill also the other possible changed fields
+           sqlCmd.append(",FwdNr='" + ((data.getFwdNr() != null) ? data.getFwdNr() : ""));  
+           sqlCmd.append("',Number='" + ((data.getNumber() != null) ? escapeQuotes(data.getNumber()) : "")); 
+           sqlCmd.append("',AccountID=" + data.getAccountId()); 
+        }
+        sqlCmd.append(" WHERE Id=" + data.getId());
         executeSqlQuery(webSession, sqlCmd.toString());
     }
-
+    
     /**
      * @ejb:interface-method view-type="remote"
      */

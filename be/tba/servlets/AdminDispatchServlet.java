@@ -339,6 +339,7 @@ public class AdminDispatchServlet extends HttpServlet
                 {
                    System.out .println("execute REMOVE_PENDING_CALL");
                    IntertelCallManager.getInstance().removeCall(vSession, Integer.parseInt(req.getParameter(Constants.PENDING_CALL_ID)));
+                   vSession.setIsAutoUpdateRecord(false);
                    break;
                 }
                 
@@ -446,6 +447,7 @@ public class AdminDispatchServlet extends HttpServlet
                 case Constants.SAVE_RECORD:
                 {
                     CallRecordFacade.saveRecord(req, vSession);
+                    vSession.setIsAutoUpdateRecord(false);
                     rd = sc.getRequestDispatcher(Constants.CANVAS_JSP);
                     break;
                 }

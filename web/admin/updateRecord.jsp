@@ -29,7 +29,7 @@ try
 {
 vSession.setCallingJsp(Constants.UPDATE_RECORD_JSP);
 boolean isAutoUpdateRecord = vSession.isAutoUpdateRecord();
-vSession.setIsAutoUpdateRecord(false);
+
 
 mRecordData = vSession.getCurrentRecord();
 if (mRecordData == null)
