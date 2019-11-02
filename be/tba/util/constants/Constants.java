@@ -231,6 +231,7 @@ public class Constants
     public static final String PREVIOUS_PAGE = "_ppg";
     public static final String ACCOUNT_FWDNR = "_afwd";
     public static final String NEW_ACCOUNT_FWDNR = "_nafwd";
+    public static final String PENDING_CALL_ID = "_pci";
     public static final String TBA_HOME = "home";
 
     // AdminDispatchServlet actions
@@ -306,6 +307,7 @@ public class Constants
     public static final String INVOICE_SETPAYED = "INVOICE_SETPAYED";
     public static final String INVOICE_DETAIL = "INVOICE_DETAIL";
     public static final String MAIL_IT = "MAIL_IT";
+    public static final String REMOVE_PENDING_CALL = "REMOVE_PENDING_CALL";
     public static final String SHOW_MAIL_ERROR = "SHOW_MAIL_ERROR";
     public static final String FIX_ACCOUNT_IDS = "FIX_ACCOUNT_IDS";
     

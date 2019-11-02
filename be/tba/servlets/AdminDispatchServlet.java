@@ -25,6 +25,7 @@ import be.tba.ejb.account.interfaces.AccountEntityData;
 import be.tba.ejb.mail.session.MailerSessionBean;
 import be.tba.servlets.helper.AccountFacade;
 import be.tba.servlets.helper.CallRecordFacade;
+import be.tba.servlets.helper.IntertelCallManager;
 import be.tba.servlets.helper.InvoiceFacade;
 import be.tba.servlets.helper.TaskFacade;
 import be.tba.servlets.session.SessionManager;
@@ -329,6 +330,18 @@ public class AdminDispatchServlet extends HttpServlet
                     rd = sc.getRequestDispatcher(Constants.SHOW_ERROR_JSP);
                     break;
                 }
+                
+                
+                // ==============================================================================================
+                // REMOVE_PENDING_CALL button pushed
+                // ==============================================================================================
+                case Constants.REMOVE_PENDING_CALL:
+                {
+                   System.out .println("execute REMOVE_PENDING_CALL");
+                   IntertelCallManager.getInstance().removeCall(vSession, Integer.parseInt(req.getParameter(Constants.PENDING_CALL_ID)));
+                   break;
+                }
+                
                 // ==============================================================================================
                 // GOTO_NOTLOGGED_CALLS button pushed
                 // ==============================================================================================

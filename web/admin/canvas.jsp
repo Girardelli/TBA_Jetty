@@ -87,7 +87,8 @@ be.tba.util.timer.UrlCheckTimerTask"%>
                   <tr>
                      <td valign='bottom'>
                         <!-- ################ pending calls ################ -->
-                        <div id="pendingCalls"></div> <br> <!-- ################ buttons ################ -->
+                        <div id="pendingCalls"></div> <br> 
+                        <!-- ################ buttons ################ -->
                         <table class="tdborder" width=100%>
                            <tr>
                               <td>
@@ -123,8 +124,8 @@ be.tba.util.timer.UrlCheckTimerTask"%>
  %> <input class="tbabutton" type=submit name=action value="Verwijderen" onclick="deleteCalls()"> <%
  	}
  %> <input class="tbabutton" type=submit name=action value="Toevoegen" onclick="addRecord()"> <input class="tbabutton" type=submit name=action value="verzend mail" onclick="testMail()"> <%
- 	if (vSession.getUserId().equals("esosrv")) {
- %> <input class="tbabutton" type=submit name=action value="fix invoice accountId's" onclick="fixAccountIds()"> <%
+ 	if (vSession.getUserId().equals("esosrv") && false) { // hidden
+ %> <input class="tbabutton" type=submit name=action value="add intertel call" onclick="fixAccountIds()"> <%
  	}
  %></td>
                            </tr>
@@ -437,8 +438,21 @@ be.tba.util.timer.UrlCheckTimerTask"%>
 
 var linesToDelete = new Array();
 
-
+<%
+if (System.getenv("TBA_MAIL_ON") != null)
+{
+%>
 var socket = new WebSocket("wss://thebusinessassistant.be/tba/ws");
+<%
+}
+else
+{
+%>
+var socket = new WebSocket("ws://localhost:8080/tba/ws");
+<%
+}
+%>
+
 var pendingCalls = [];
 <%
 Collection<String> calls = IntertelCallManager.getInstance().getPendingCallList();
@@ -584,8 +598,10 @@ function updatePendingCalls()
     {
         for (i = 0; i < pendingCalls.length; i++) 
         {
-            content += "<tr onclick=\"changeUrl('/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.RECORD_UPDATE%>&<%=Constants.RECORD_ID%>=" + pendingCalls[i].dbId + "');\">";
-            content += "<td><table width=100% class='trBlock'><tr><td>" + timeStamp2Txt(pendingCalls[i].timeStamp, now) + "</td><td width=20px></td><td>" + pendingCalls[i].customer + "</td></tr></table></td></tr>";
+            content += "<tr>";
+            content += "<td><img src='/tba/images/deleteCross.gif' width='16' height='16' border='0' onclick=\"changeUrl('/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.REMOVE_PENDING_CALL%>&<%=Constants.PENDING_CALL_ID%>=" + pendingCalls[i].dbId + "');\"></td><td><table width=100% class='trBlock' onclick=\"changeUrl('/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.RECORD_UPDATE%>&<%=Constants.RECORD_ID%>=" + pendingCalls[i].dbId + "');\"><tr><td>" + 
+              timeStamp2Txt(pendingCalls[i].timeStamp, now) + "</td><td width=20px></td><td>" + 
+              pendingCalls[i].customer + "</td></tr></table></td></tr>";
         }
     }
 	content += "</table>";

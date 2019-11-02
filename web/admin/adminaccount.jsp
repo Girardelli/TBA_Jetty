@@ -317,9 +317,8 @@ function downloadExportFile()
         if (linesToDelete[i] != null)
           shorterArr[j++] = linesToDelete[i];
       document.downloadfileform.<%=Constants.ACCOUNT_TO_DELETE%>.value=shorterArr.join();
-      document.downloadfileform.<%=Constants.SRV_ACTION%>.value="<%=Constants.DOWNLOAD_WK_KLANTEN_XML%>
-                            ";
-                            }
+      document.downloadfileform.<%=Constants.SRV_ACTION%>.value="<%=Constants.DOWNLOAD_WK_KLANTEN_XML%>";
+}
                         </script>
    </table>
 

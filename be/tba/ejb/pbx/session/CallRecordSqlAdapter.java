@@ -1270,6 +1270,11 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
     	executeSqlQuery(webSession, "UPDATE CallRecordEntity SET FwdNr='" + data.callingNr + "' WHERE ID='" + data.dbRecordId + "'");
     }
     
+    public void setNotAnswered(WebSession webSession, IntertelCallData data)
+    {
+      executeSqlQuery(webSession, "UPDATE CallRecordEntity SET Cost='00:00:00', ShortDescription='verloren oproep' WHERE ID=" + data.dbRecordId);
+    }
+    
     static public void setIsDocumentedFlag(CallRecordEntityData record)
     {
         if (record.getNumber() != null && record.getNumber().length() != 0 && record.getName() != null && record.getName().length() != 0 && (record.getShortDescription() != null && record.getShortDescription().length() != 0) && (!record.getIs3W_call() || (record.getW3_CustomerId() != null && record.getW3_CustomerId().length() != 0)))

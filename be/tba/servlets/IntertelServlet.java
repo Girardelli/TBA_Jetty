@@ -192,12 +192,13 @@ public class IntertelServlet extends HttpServlet
     	}
 		if (data == null)
 		{
-			System.out.println("INtertel call cannot be removed: data=null");
+			//System.out.println("INtertel call cannot be found: data=null");
 			return;
 		}
 		else if (data.isEndDone && data.isSummaryDone)
 		{
-    		//mIntertelCallManager.removeCall(intertelCallId);
+		   //System.out.println("Remove call: " + data.toString());
+		   mIntertelCallManager.removeCall(mSession, data);
 			writeToFile(data);
 			//System.out.println(data.intertelCallId + "-finalize with write to log");
 		}

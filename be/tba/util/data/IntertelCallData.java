@@ -133,7 +133,7 @@ public class IntertelCallData
 	
 	public String toString()
 	{
-	   return ("calledNr=" + calledNr + ", callingNr=" + callingNr + ", phase=" + phase + ", call-id=" + intertelCallId + ", answerdBy=" + answeredBy); 
+	   return ("calledNr=" + calledNr + ", callingNr=" + callingNr + ", phase=" + phase + ", call-id=" + intertelCallId + ", answerdBy=" + answeredBy + ", tsStart=" + tsStart + ", tsAnswer=" + tsAnswer + ", tsEnd=" + tsEnd); 
 	}
 	
 	private String secondsToString(int seconds)

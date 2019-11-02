@@ -8,11 +8,10 @@ import java.util.Vector;
 
 import com.google.gson.Gson;
 
-import be.tba.ejb.account.interfaces.AccountEntityData;
 import be.tba.ejb.pbx.interfaces.CallRecordEntityData;
+import be.tba.ejb.pbx.session.CallRecordSqlAdapter;
+import be.tba.servlets.session.WebSession;
 import be.tba.util.data.IntertelCallData;
-import be.tba.util.session.AccountCache;
-import be.tba.websockets.TbaWebSocketAdapter;
 import be.tba.websockets.WebSocketData;
 
 public class IntertelCallManager
@@ -30,12 +29,10 @@ public class IntertelCallManager
       }
    }
 
-   private static final int kCallCleaner = 100;
    private static IntertelCallManager mInstance;
 
    private Map<String, IntertelCallData> mCallMap;
    private Map<String, PhoneLog> mOperatorPhoneMap;
-   private int mCallCnt = 0;
 
    private IntertelCallManager()
    {
@@ -64,6 +61,26 @@ public class IntertelCallManager
       // System.out.println(data.intertelCallId + "-created in manager");
    }
 
+   public synchronized void removeCall(WebSession session, int callDbId)
+   {
+      //System.out.println("IntertelCallManager.removeCall with id:" + callDbId);
+      removeCall(session, getByDbId(callDbId));
+   }
+
+   public synchronized void removeCall(WebSession session, IntertelCallData data)
+   {
+      if (data != null)
+      {
+         IntertelCallData removedCall = mCallMap.remove(data.intertelCallId);
+         //System.out.println("IntertelCallManager.removeCall done: " + removedCall.toString());
+         if (data.tsAnswer == 0 || data.tsEnd == 0)
+         {
+            CallRecordSqlAdapter vCallLogWriterSession = new CallRecordSqlAdapter();
+            vCallLogWriterSession.setNotAnswered(session, data);
+         }
+      }
+   }
+
    public synchronized IntertelCallData get(String callId)
    {
       return mCallMap.get(callId);
@@ -72,11 +89,11 @@ public class IntertelCallManager
    public synchronized IntertelCallData getByDbId(int id)
    {
       Collection<IntertelCallData> calls = mCallMap.values();
-      System.out.println("getByDbId(" + id + "): list size=" + calls.size());
+      //System.out.println("getByDbId(" + id + "): list size=" + calls.size());
       for (Iterator<IntertelCallData> itr = calls.iterator(); itr.hasNext();)
       {
          IntertelCallData call = itr.next();
-         System.out.println("    check call.dbRecordId=" + call.dbRecordId + ", id=" + id);
+         //System.out.println("    check call.dbRecordId=" + call.dbRecordId + ", id=" + id);
          if (call.dbRecordId == id)
          {
             return call;
@@ -148,7 +165,7 @@ public class IntertelCallManager
    public synchronized void updateOperatorMapping(CallRecordEntityData data, String sessionId)
    {
       IntertelCallData call = getByDbId(data.getId());
-      System.out.println("updateOperatorMapping: data.getId()=" + data.getId() + ", sessionId=" + sessionId + ", call" + call);
+      //System.out.println("updateOperatorMapping: data.getId()=" + data.getId() + ", sessionId=" + sessionId + ", call" + call);
       if (call == null || call.answeredBy.isEmpty())
       {
          return; // to be removed once we have switched to Intertel
@@ -192,7 +209,7 @@ public class IntertelCallManager
       {
          return phoneLog.sessionId;
       }
-      System.out.println("getSessionIdForPhoneId: " + phoneId + " not found");
+      //System.out.println("getSessionIdForPhoneId: " + phoneId + " not found");
       return "";
    }
 
@@ -206,9 +223,9 @@ public class IntertelCallManager
          String key = i.next();
          IntertelCallData data = mCallMap.get(key);
          if ((data.tsEnd != 0 &&  data.tsEnd < (tsNow - 1000)) ||
-               (data.tsStart < (tsNow - 7200))) // 2 hours
+               (data.tsStart < (tsNow - 60*30))) // 0.5 hours
          {
-            System.out.println("IntertelCallManager.removeCall: " + data.toString());
+            //System.out.println("Cleanup: IntertelCallManager.removeCall (tsNow=" + tsNow + "): " + data.toString());
             i.remove();
          }
       }
@@ -216,9 +233,9 @@ public class IntertelCallManager
       {
          String key = i.next();
          PhoneLog phoneLog = mOperatorPhoneMap.get(key);
-         if ((tsNow - phoneLog.lastUsed) > 3600)
+         if ((tsNow - phoneLog.lastUsed) > 3600) // 1 hour
          {
-            System.out.println("IntertelCallManager.removeOperator: " + phoneLog.toString());
+            //System.out.println("CleanUP: IntertelCallManager.removeOperator: " + phoneLog.toString());
             i.remove();
             // System.out.println("IntertelCallManager: removed from mOperatorPhoneMap: " +
             // key);
