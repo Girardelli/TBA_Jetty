@@ -209,7 +209,7 @@ public class IntertelCallManager
       {
          return phoneLog.sessionId;
       }
-      //System.out.println("getSessionIdForPhoneId: " + phoneId + " not found");
+      System.out.println("getSessionIdForPhoneId: " + phoneId + " not found");
       return "";
    }
 
