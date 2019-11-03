@@ -144,8 +144,10 @@ public class IntertelServlet extends HttpServlet
     		      // conclude that this is a transfered call. Treat it as such because the Intertel bugs will not help you
     		      data.callParkBug_transferLink = transferedCall;
     		      transferedCall.callParkBug_transferLink = data;
-    		      
     		      data.callingNr = transferedCall.calledNr;
+    		      System.out.println("transfered call: start");
+               System.out.println(transferedCall);
+               System.out.println(data);
     		   }
     		}
     		break;
@@ -188,6 +190,9 @@ public class IntertelServlet extends HttpServlet
     		      // process this event on the outgoing call
                data.callParkBug_transferLink.callingNr = data.calledNr; 
     		      data = data.callParkBug_transferLink;
+               System.out.println("transfered call: end");
+               System.out.println(data);
+               System.out.println(data.callParkBug_transferLink);
     		   }
     		   data.setTsEnd(timestamp);
         		mCallRecordSqlAdapter.setTsEnd(mSession, data);
@@ -209,6 +214,9 @@ public class IntertelServlet extends HttpServlet
         		{
         		   // process this event on the outgoing call
         		   data = data.callParkBug_transferLink;
+               System.out.println("transfered call: summary");
+               System.out.println(data);
+               System.out.println(data.callParkBug_transferLink);
         		}
     		   data.isSummaryDone = true;
         		if (!data.isIncoming)
