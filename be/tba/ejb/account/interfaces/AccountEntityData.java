@@ -1017,7 +1017,7 @@ public class AccountEntityData extends be.tba.util.data.AbstractData implements 
     
     public boolean getIsArchived()
     {
-        return this.textMail;
+        return this.isArchived;
     }
 
     public void setIsArchived(boolean isArchived)
