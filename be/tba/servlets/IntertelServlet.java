@@ -126,6 +126,28 @@ public class IntertelServlet extends HttpServlet
     		{
     			TbaWebSocketAdapter.broadcast(new WebSocketData(WebSocketData.NEW_CALL, timestamp, data));
     		}
+    		else
+    		{
+    		   // ********************************************
+    		   // logic to cope with the fact that the call park feature does not behave as expected
+    		   //---------------------------------------------
+    		   // check whether there is an incoming call answered with an answerBy id equal to the phone_number_from of this outgoing call.
+    		   // In that case I conclude that the incoming call being transferred to an outside number.
+    		   // Result:
+    		   //   - make sure that the calling party is the initially called customer
+    		   //   - cope with the buggy end and summary events of the transfered call because they carry the ID of the incomming call
+    		   // (!!! call log of a transfered call appended at the bottom of this source file)
+    		  
+    		   IntertelCallData transferedCall = mIntertelCallManager.getTransferCall_CallParkBugs(data);
+    		   if (transferedCall != null)
+    		   {
+    		      // conclude that this is a transfered call. Treat it as such because the Intertel bugs will not help you
+    		      data.callParkBug_transferLink = transferedCall;
+    		      transferedCall.callParkBug_transferLink = data;
+    		      
+    		      data.callingNr = transferedCall.calledNr;
+    		   }
+    		}
     		break;
     		
     	case "answer":
@@ -160,7 +182,14 @@ public class IntertelServlet extends HttpServlet
     	case "end":
     		if (data != null) 
     		{
-        		data.setTsEnd(timestamp);
+        		// check for the callPark buggy behaviour
+    		   if (data.callParkBug_transferLink != null && data.tsEnd != 0)
+    		   {
+    		      // process this event on the outgoing call
+               data.callParkBug_transferLink.callingNr = data.calledNr; 
+    		      data = data.callParkBug_transferLink;
+    		   }
+    		   data.setTsEnd(timestamp);
         		mCallRecordSqlAdapter.setTsEnd(mSession, data);
         		data.setCurrentPhase(phase);
     			data.isEndDone = true;
@@ -176,12 +205,17 @@ public class IntertelServlet extends HttpServlet
     	case "summary":
     		if (data != null) 
     		{
-        		data.isSummaryDone = true;
+        		if (data.callParkBug_transferLink != null && data.isSummaryDone)
+        		{
+        		   // process this event on the outgoing call
+        		   data = data.callParkBug_transferLink;
+        		}
+    		   data.isSummaryDone = true;
         		if (!data.isIncoming)
     			{	
         			data.setCallingNr(req.getParameter("viaDID"));
-            		mCallRecordSqlAdapter.setCallingNr(mSession, data);
-            		//System.out.println(data.intertelCallId + "-summary");
+            	mCallRecordSqlAdapter.setCallingNr(mSession, data);
+            	//System.out.println(data.intertelCallId + "-summary");
     			}
     		}
     		break;
@@ -204,7 +238,6 @@ public class IntertelServlet extends HttpServlet
 			//System.out.println(data.intertelCallId + "-finalize with write to log");
 		}
     }
-
 
     private void writeParmsToFile(HttpServletRequest req) throws IOException
     {
@@ -269,3 +302,113 @@ public class IntertelServlet extends HttpServlet
     }
     
 }
+
+/**********************************************************************
+ * 
+ * 3214757397 --> 3214490398 (kantoor) --> 32473949777
+ * 
+ * 
+ * 
+ * 
+phone_number_to: 3214490398
+inout: IN
+origin: start
+phone_number_from: 3214757397
+knummer: 190313
+hash: e7b2d0a9b1636516fd0d143f9cb0296c81dfdbf4482e1ff0db6e226c7d9e6a54
+call_id: SipAgenT01-0000013a
+timestamp: 1572793249
+---------------------------------------
+phone_number_to: 3214490398
+inout: INTERN
+origin: answer
+phone_number_from: 3214757397
+knummer: 190313
+answerby: aoelsaiyiiteysvnchbe609
+hash: e7b06727be8a82ce4024b6f24e71aa925b38cf2208efb5ee132bdce45952231d
+call_id: SipAgenT01-0000013a
+timestamp: 1572793268
+---------------------------------------
+         phone_number_to: 32473949777
+         inout: OUT
+         origin: start
+         phone_number_from: aoelsaiyiiteysvnchbe609
+         knummer: 190313
+         hash: f132555b537cf1121baabfa7694f63298bf81f6bafb028c6a4b8db809bcff110
+         call_id: aoelsaiyiiteysvnchbe609-0000013d
+         timestamp: 1572793277
+---------------------------------------
+         phone_number_to: 32473949777
+         inout: OUT
+         origin: answer
+         phone_number_from: aoelsaiyiiteysvnchbe609
+         knummer: 190313
+         answerby: 3214409003
+         hash: cfa03b7ec59f4198a117070f65d3bdad2794e477d0f9da96665fe4f47be21f8f
+         call_id: aoelsaiyiiteysvnchbe609-0000013d
+         timestamp: 1572793283
+---------------------------------------
+phone_number_to: 
+inout: IN
+origin: end
+phone_number_from: 
+knummer: 190313
+hash: 7b210e989725ed8b2d89f8480974d86b69c6df0a01051dc96e6b6288edaf5cde
+call_id: SipAgenT01-0000013a
+timestamp: 1572793291
+--------------------------------------- ---> 23 seconden answer -end
+viaDID: 
+call_start_date: 2019-11-03
+origin: summary
+call_time: 0
+knummer: 190313
+call_id: SipAgenT01-0000013a
+phone_number_to: 
+inout: IN
+call_answer_time: 16:01:31
+call_answer_date: 2019-11-03
+phone_number_from: 
+call_end_date: aoelsaiyiiteysvnchbe609
+call_start_time: 16:01:08
+hash: 392f338b6ad0b9639dd4c8602447217265f3a54fa9a820fe4db94f0e383854e2
+timestamp: 1572793291
+status: unanswered
+---------------------------------------
+
+
+oproep is doorgeschakeld.
+Als 1 van de 2 parties inhaakt krijgen we de end en sumary eventsvan deze call.
+Deze dragen de call-id van de initiele oproep
+
+
+         phone_number_to: 3214490398
+         inout: IN
+         origin: end
+         phone_number_from: 3214757397
+         knummer: 190313
+         hash: d68cd75815bdc1d35b9143df21811e325fe35f75ecbc06890c9121f52562d9f1
+         call_id: SipAgenT01-0000013a
+         timestamp: 1572793322
+--------------------------------------- --> 54 seconden anser - 2de end
+         viaDID: 3214490398
+         call_start_date: 2019-11-03
+         call_end_time: 16:02:02
+         answeredby: 3214409003
+         origin: summary
+         call_time: 54
+         knummer: 190313
+         call_id: SipAgenT01-0000013a
+         phone_number_to: 3214490398
+         inout: IN
+         call_answer_time: 16:01:08
+         call_answer_date: 2019-11-03
+         phone_number_from: 3214757397
+         call_end_date: 2019-11-03
+         call_start_time: 16:01:17
+         hash: 6eb857979dc9a0fab9259f303c5bc81ab10fea385896e390636cfb08846ed49b
+         timestamp: 1572793322
+         status: answered
+---------------------------------------
+
+ */
+

@@ -25,6 +25,7 @@ public class IntertelCallData
 	public boolean isEndDone;
 	public boolean isSummaryDone;
 	public boolean isWsRemoved; //tell whether this call was already removed from websocket list
+	public IntertelCallData callParkBug_transferLink;
 	
 	public IntertelCallData(boolean isIncoming, String calledNr, String CallingNr, String callId, long tsStart, String phase)
 	{
@@ -39,6 +40,7 @@ public class IntertelCallData
 		this.isEndDone = false;
 		this.isSummaryDone = false;
 		this.isWsRemoved = false;
+		this.callParkBug_transferLink = null;
 		this.answeredBy = "";
 		if (isIncoming)
 		{

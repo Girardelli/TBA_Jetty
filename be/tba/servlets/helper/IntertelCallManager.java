@@ -126,7 +126,25 @@ public class IntertelCallManager
       }
       return null;
    }
+   
+   public synchronized IntertelCallData getTransferCall_CallParkBugs(IntertelCallData transferedCall)
+   {
+      // callId is of the incomming call that is transfered. We are looking for a call
+      // that has NOT this ID
+      // CallingNr: tba number
+      // calledNr: number to who the call is transfered
 
+      for (Iterator<IntertelCallData> i = mCallMap.values().iterator(); i.hasNext();)
+      {
+         IntertelCallData call = i.next();
+         if (call.isIncoming && call.tsEnd == 0 && !transferedCall.intertelCallId.equals(call.intertelCallId) && transferedCall.callingNr.equals(call.answeredBy))
+         {
+            return call;
+         }
+      }
+      return null;
+   }
+   
    public synchronized Collection<IntertelCallData> getCallList()
    {
       Collection<IntertelCallData> calls = new Vector<IntertelCallData>();
