@@ -1245,7 +1245,12 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
 
    public void setCallingNr(WebSession webSession, IntertelCallData data)
    {
-      executeSqlQuery(webSession, "UPDATE CallRecordEntity SET FwdNr='" + data.callingNr + "' WHERE ID='" + data.dbRecordId + "'");
+      executeSqlQuery(webSession, "UPDATE CallRecordEntity SET FwdNr='" + IntertelCallData.last6Numbers(data.callingNr) + "' WHERE ID='" + data.dbRecordId + "'");
+   }
+   
+   public void setForwardCallFlag(WebSession webSession, IntertelCallData data)
+   {
+      executeSqlQuery(webSession, "UPDATE CallRecordEntity SET IsForwardCall=true WHERE ID=" + data.dbRecordId);
    }
 
    public void setNotAnswered(WebSession webSession, IntertelCallData data)

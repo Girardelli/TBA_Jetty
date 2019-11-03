@@ -190,6 +190,7 @@ public class IntertelServlet extends HttpServlet
     		      // process this event on the outgoing call
                data.callParkBug_transferLink.callingNr = data.calledNr; 
     		      data = data.callParkBug_transferLink;
+    		      mCallRecordSqlAdapter.setForwardCallFlag(mSession, data);
                System.out.println("transfered call: end");
                System.out.println(data);
                System.out.println(data.callParkBug_transferLink);
