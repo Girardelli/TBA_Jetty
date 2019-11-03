@@ -133,11 +133,14 @@ public class IntertelCallManager
       // that has NOT this ID
       // CallingNr: tba number
       // calledNr: number to who the call is transfered
-
+int y = 1;
       for (Iterator<IntertelCallData> i = mCallMap.values().iterator(); i.hasNext();)
       {
          IntertelCallData call = i.next();
-         if (call.isIncoming && call.tsEnd == 0 && !transferedCall.intertelCallId.equals(call.intertelCallId) && transferedCall.callingNr.equals(call.answeredBy))
+         System.out.println("getTransferCall_CallParkBugs " + y++);
+         System.out.println(transferedCall);
+         System.out.println(call);
+         if (call != transferedCall && call.isIncoming && call.tsEnd == 0 && transferedCall.callingNr.equals(call.answeredBy))
          {
             return call;
          }
