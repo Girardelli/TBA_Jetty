@@ -30,9 +30,9 @@ public class IntertelCallData
 	public IntertelCallData(boolean isIncoming, String calledNr, String callingNr, String callId, long tsStart, String phase)
 	{
 		// incoming calls: only keep the last 6 numbers to match it with the customer FwdNr (Constants)
-		this.calledNr = isIncoming ? last6Numbers(calledNr) : callingNr;
+		this.calledNr = calledNr;
 		// outgoing calls: save the standard TBA number. The summary event shall update this to the actual number (e.g. when outgoing code is used)
-		this.callingNr = isIncoming ? callingNr : calledNr;
+		this.callingNr = callingNr;
 		this.phase = phase;
 		this.isIncoming = isIncoming;
 		this.tsStart = tsStart;
