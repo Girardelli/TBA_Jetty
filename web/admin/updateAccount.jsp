@@ -633,6 +633,7 @@ for (int i = 0; i < kMaxMailMinutes; i += 5)
 		<input class="tbabutton" type=reset value=" Blad Wissen "> 
         <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.GOTO_SAVE_ACCOUNT%>"> 
         <input type=hidden name=<%=Constants.ACCOUNT_ID%> value="<%=accountId%>"> 
+        <input type=hidden name=<%=Constants.ACCOUNT_TO_DELETE%> value="<%=accountId%>"> 
         <input class="tbabutton" type=submit name=action value="Bewaar" onclick="Bewaar()"> 
         <input class="tbabutton" type=submit name=action value="De-registreren" onclick="Deregister()">&nbsp;&nbsp;
 		<input class="tbabutton" type=submit name=action value="Terug" onclick="cancelUpdate()">
