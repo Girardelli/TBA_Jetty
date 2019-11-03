@@ -27,12 +27,12 @@ public class IntertelCallData
 	public boolean isWsRemoved; //tell whether this call was already removed from websocket list
 	public IntertelCallData callParkBug_transferLink;
 	
-	public IntertelCallData(boolean isIncoming, String calledNr, String CallingNr, String callId, long tsStart, String phase)
+	public IntertelCallData(boolean isIncoming, String calledNr, String callingNr, String callId, long tsStart, String phase)
 	{
 		// incoming calls: only keep the last 6 numbers to match it with the customer FwdNr (Constants)
 		this.calledNr = isIncoming ? last6Numbers(calledNr) : calledNr;
 		// outgoing calls: save the standard TBA number. The summary event shall update this to the actual number (e.g. when outgoing code is used)
-		this.callingNr = isIncoming ? CallingNr : kTbaNr;
+		this.callingNr = isIncoming ? callingNr : calledNr;
 		this.phase = phase;
 		this.isIncoming = isIncoming;
 		this.tsStart = tsStart;
@@ -81,13 +81,15 @@ public class IntertelCallData
 	public void setTsEnd(long tsEnd)
 	{
 		this.tsEnd = tsEnd;
+		if (this.isIncoming)
+		   this.calledNr = last6Numbers(calledNr);
+		else
+		   this.callingNr = last6Numbers(callingNr);
 	}
 	
 	public void setCallingNr(String nr)
 	{
-		if (nr == null)
-			nr = "";
-		this.callingNr = last6Numbers(nr);
+		this.callingNr = ((nr == null) ? "" : nr);
 	}
 	
 	public void setAnsweredBy(String phoneId)
@@ -143,7 +145,7 @@ public class IntertelCallData
 		return String.format("%d:%02d:%02d", seconds / 3600, seconds % 3600 / 60, seconds % 60);
 	}
 	
-	private String last6Numbers(String nr)
+	public static String last6Numbers(String nr)
 	{
 		if (nr.length() > 6)
 		{

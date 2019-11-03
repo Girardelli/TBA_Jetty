@@ -1223,12 +1223,12 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
 
     	if (data.isIncoming)
     	{
-    		newRecord.setFwdNr(data.calledNr); 
+    		newRecord.setFwdNr(IntertelCallData.last6Numbers(data.calledNr)); 
     		newRecord.setNumber(data.callingNr);
     	}
     	else
     	{
-    		newRecord.setFwdNr(data.callingNr);
+    		newRecord.setFwdNr(IntertelCallData.last6Numbers(data.callingNr));
     		newRecord.setNumber(data.calledNr);
     	}
     	AccountEntityData vData = AccountCache.getInstance().get(newRecord);
