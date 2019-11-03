@@ -44,7 +44,7 @@ public class IntertelCallData
 		this.answeredBy = "";
 		if (isIncoming)
 		{
-			AccountEntityData account = AccountCache.getInstance().get(this.calledNr);
+			AccountEntityData account = AccountCache.getInstance().get(last6Numbers(this.calledNr));
 			if (account != null)
 			{
 				this.customer = new String(account.getFullName());
