@@ -208,7 +208,7 @@ final public class AccountCache
         for (Iterator<AccountEntityData> i = getCustomerList().iterator(); i.hasNext();)
         {
             AccountEntityData vEntry = i.next();
-            if (vEntry.getNoInvoice())
+            if (vEntry.getNoInvoice() || vEntry.getIsArchived())
                 continue;
             vInvoiceCustomers.add(vEntry);
         }

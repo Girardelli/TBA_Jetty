@@ -74,8 +74,11 @@ be.tba.util.session.*"%>
                					for (Iterator<AccountEntityData> vIter = list.iterator(); vIter.hasNext();) {
                						AccountEntityData vEntry = vIter.next();
 
-               						if (AccountRole.fromShort(vEntry.getRole()) == AccountRole.SUBCUSTOMER)
+               						if (AccountRole.fromShort(vEntry.getRole()) == AccountRole.SUBCUSTOMER ||
+               						      vEntry.getIsArchived())
+               						{
                							continue;
+               						}
                						String vGsm = vEntry.getGsm();
                						vGsm = (vGsm == null) ? "" : vGsm;
                						String vNumber = vEntry.getFwdNumber();

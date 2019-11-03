@@ -99,7 +99,7 @@
 		{
 		    for (Iterator<AccountEntityData> vIter = list.iterator(); vIter.hasNext();)
 		    {
-		        AccountEntityData vData = (AccountEntityData) vIter.next();
+                AccountEntityData vData = (AccountEntityData) vIter.next();
 		        out.println("<option value=\"" + vData.getFwdNumber() + (vCustomerFilter.equals(vData.getFwdNumber()) ? "\" selected>" : "\">") + vData.getFullName());
 		    }
 		}
