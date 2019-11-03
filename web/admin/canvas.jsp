@@ -272,7 +272,7 @@ be.tba.util.timer.UrlCheckTimerTask"%>
                </table>
       <p>
          <span class="admintitle"> Oproepenlijst: <%=vRecords.size()%> oproepen</span>
-         <button id="onOffButton" onclick="alterAudioOnOff()" type="button"><img src="/tba/images/soundOff.jpg" alt="zet geluid aan / af" style="width:30px;height:30px;"></button>
+         <button id="onOffButton" onclick="alterAudioOnOff()" type="button"><img src="/tba/images/soundOff.jpg" alt="zet geluid aan / af" width='30' height='30' border='0'></button>
       </p>
       <%
       	if (vRecords == null || vRecords.size() == 0) {
@@ -479,18 +479,23 @@ window.onload = function()
 function playRing() 
 { 
   if (isRingOn == 1)
-    ring.play(); 
+  {
+      // wait 8,5 seconds to play to let the welcoe promt play first
+      setTimeout(function () {
+          ring.play();
+      }, 8500);
+  }
 } 
 
 function setOnOffText()
 {
    if (isRingOn == 1)
    {
-	    document.getElementById('onOffButton').innerHTML = "<img src=\"/tba/images/soundOn.jpg\" alt=\"zet geluid aan / af\" style=\"width:30px;height:30px;\">";
+        document.getElementById('onOffButton').innerHTML = "<img src='/tba/images/soundOn.jpg' alt='zet geluid aan / af' width='30' height='30' border='0'>";
    }
    else
    {
-	    document.getElementById('onOffButton').innerHTML = "<img src=\"/tba/images/soundOff.jpg\" alt=\"zet geluid aan / af\" style=\"width:30px;height:30px;\">";
+	    document.getElementById('onOffButton').innerHTML = "<img src='/tba/images/soundOff.jpg' alt='zet geluid aan / af' width='30' height='30' border='0'>";
    }
    //console.log('isRingOn=' + isRingOn);
 }
