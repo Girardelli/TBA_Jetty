@@ -51,7 +51,7 @@ public class IntertelCallManager
 
    public synchronized void newCall(IntertelCallData data)
    {
-      System.out.println("IntertelCallManager.newCall: " + data.toString());
+//      System.out.println("IntertelCallManager.newCall: " + data.toString());
       mCallMap.put(data.intertelCallId, data);
 //      if (++mCallCnt > kCallCleaner)
 //      {
@@ -89,7 +89,7 @@ public class IntertelCallManager
    public synchronized IntertelCallData getByDbId(int id)
    {
       Collection<IntertelCallData> calls = mCallMap.values();
-      System.out.println("getByDbId(" + id + "): list size=" + calls.size());
+      //System.out.println("getByDbId(" + id + "): list size=" + calls.size());
       for (Iterator<IntertelCallData> itr = calls.iterator(); itr.hasNext();)
       {
          IntertelCallData call = itr.next();
@@ -133,19 +133,19 @@ public class IntertelCallManager
       // that has NOT this ID
       // CallingNr: tba number
       // calledNr: number to who the call is transfered
-int y = 1;
+//int y = 1;
       for (Iterator<IntertelCallData> i = mCallMap.values().iterator(); i.hasNext();)
       {
          IntertelCallData call = i.next();
-         System.out.println("getTransferCall_CallParkBugs " + y++);
-         System.out.println(transferedCall);
-         System.out.println(call);
+//         System.out.println("getTransferCall_CallParkBugs " + y++);
+//         System.out.println(transferedCall);
+//         System.out.println(call);
          if (call != transferedCall && call.isIncoming && call.tsEnd == 0 && transferedCall.callingNr.equals(call.answeredBy))
          {
             return call;
          }
       }
-      System.out.println("getTransferCall_CallParkBugs returns null");
+//      System.out.println("getTransferCall_CallParkBugs returns null");
       return null;
    }
    
