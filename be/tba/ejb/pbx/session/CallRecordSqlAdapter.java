@@ -1185,6 +1185,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
          newRecord.setFwdNr(IntertelCallData.last6Numbers(data.callingNr));
          newRecord.setNumber(data.calledNr);
       }
+      System.out.println("getAccount: FwdNr=" + newRecord.getFwdNr() + ", number=" + newRecord.getNumber());
       AccountEntityData vAccount = AccountCache.getInstance().get(newRecord);
       if (vAccount == null)
       {
