@@ -83,7 +83,7 @@ public class PhoneMapManager
    {
       IntertelCallData call = IntertelCallManager.getInstance().getByDbId(data.getId());
       PhoneMapSqlAdapter sqlAdapter = null;
-      System.out.println("updateOperatorMapping: data.getId()=" + data.getId() + ", sessionId=" + session.getSessionId() + ", call" + call);
+      //System.out.println("updateOperatorMapping: data.getId()=" + data.getId() + ", sessionId=" + session.getSessionId() + ", call" + call);
       if (call == null || call.answeredBy.isEmpty())
       {
          return; // to be removed once we have switched to Intertel
@@ -95,13 +95,13 @@ public class PhoneMapManager
          if (phoneMapData.phoneUserMap.phoneId.equals(call.answeredBy))
          {
             // already mapped: update timestamp
-            System.out.println("updateOperatorMapping : match");
+            //System.out.println("updateOperatorMapping : match");
             phoneMapData.lastUsed = System.currentTimeMillis() / 1000l;
             phoneMapData.sessionId = session.getSessionId();
          } 
          else
          {
-            System.out.println("updateOperatorMapping : no match. remove " + phoneMapData.toString());
+            //System.out.println("updateOperatorMapping : no match. remove " + phoneMapData.toString());
             mOperatorPhoneMap.remove(phoneMapData.phoneUserMap.phoneId);
             sqlAdapter = new PhoneMapSqlAdapter();
             sqlAdapter.deleteRow(session, phoneMapData.phoneUserMap.id);

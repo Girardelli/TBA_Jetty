@@ -28,7 +28,7 @@ public class TbaWebSocketAdapter extends WebSocketAdapter
       super.onWebSocketConnect(session);
       this.session = session;
 
-      System.out.println("MessagingAdapter.onWebSocketConnect");
+      //System.out.println("MessagingAdapter.onWebSocketConnect");
 
    }
 
@@ -36,7 +36,7 @@ public class TbaWebSocketAdapter extends WebSocketAdapter
    public void onWebSocketClose(int statusCode, String reason)
    {
       this.session = null;
-      System.err.println("Close connection " + statusCode + ", " + reason);
+      //System.err.println("Close connection " + statusCode + ", " + reason);
       webSession.setWsSession(null);
       webSession.setWsActive(false);
       super.onWebSocketClose(statusCode, reason);
@@ -46,7 +46,7 @@ public class TbaWebSocketAdapter extends WebSocketAdapter
    public void onWebSocketText(String message)
    {
       super.onWebSocketText(message);
-      System.out.println("MessagingAdapter.onWebSocketText: " + message);
+      //System.out.println("MessagingAdapter.onWebSocketText: " + message);
 
       if (message.startsWith(Constants.WS_LOGIN))
       {
@@ -89,7 +89,7 @@ public class TbaWebSocketAdapter extends WebSocketAdapter
          {
             try
             {
-               System.out.println("----------------------------------\r\nsend websocket event: " + data.toString());
+               //System.out.println("----------------------------------\r\nsend websocket event: " + data.toString());
                session.getWsSession().getRemote().sendString(sGson.toJson(data, WebSocketData.class));
             } catch (IOException e)
             {

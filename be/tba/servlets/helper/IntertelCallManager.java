@@ -170,7 +170,7 @@ public class IntertelCallManager
          if ((data.tsEnd != 0 &&  data.tsEnd < (tsNow - 1000)) ||
                (data.tsStart < (tsNow - 60*30))) // 0.5 hours
          {
-            System.out.println("Cleanup: IntertelCallManager.removeCall (tsNow=" + tsNow + "): " + data.toString());
+            //System.out.println("Cleanup: IntertelCallManager.removeCall (tsNow=" + tsNow + "): " + data.toString());
             i.remove();
          }
       }
