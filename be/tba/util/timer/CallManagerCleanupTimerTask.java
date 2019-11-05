@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.TimerTask;
 
 import be.tba.servlets.helper.IntertelCallManager;
+import be.tba.servlets.helper.PhoneMapManager;
 import be.tba.util.constants.Constants;
 
 public class CallManagerCleanupTimerTask extends TimerTask implements TimerTaskIntf 
@@ -37,7 +38,9 @@ public class CallManagerCleanupTimerTask extends TimerTask implements TimerTaskI
    @Override
    public void run() 
    {
-      IntertelCallManager.getInstance().cleanUpMaps();
+      IntertelCallManager.getInstance().cleanUpMap();
+      //PhoneMapManager.getInstance().cleanUpMap();
+      
    }
 
 }

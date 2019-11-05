@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import be.tba.ejb.account.interfaces.AccountEntityData;
 import be.tba.ejb.account.session.AccountSqlAdapter;
+import be.tba.servlets.helper.PhoneMapManager;
 import be.tba.servlets.session.SessionManager;
 import be.tba.servlets.session.WebSession;
 import be.tba.util.constants.AccountRole;
@@ -61,9 +62,10 @@ public class AdminLoginServlet extends HttpServlet
                 String vKey = SessionManager.getInstance().add(vSession);
                 vSession.init(vUserId, vKey);
                 vSession.setRole(AccountRole.fromShort(vAccount.getRole()));
-
                 vSession.setFwdNumber(vAccount.getFwdNumber());
 
+                PhoneMapManager.getInstance().mapNewLogin(vUserId, vSession.getSessionId());
+                
                 // do your thing
                 // res.setHeader("fullname", acctValue.getFullName());
                 httpSession.setAttribute(Constants.SESSION_OBJ, vSession);

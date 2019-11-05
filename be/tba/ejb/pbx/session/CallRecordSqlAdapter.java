@@ -11,6 +11,7 @@ import be.tba.ejb.account.interfaces.AccountEntityData;
 import be.tba.ejb.pbx.interfaces.CallRecordEntityData;
 import be.tba.pbx.Forum700CallRecord;
 import be.tba.servlets.helper.IntertelCallManager;
+import be.tba.servlets.helper.PhoneMapManager;
 import be.tba.servlets.session.WebSession;
 import be.tba.util.constants.Constants;
 import be.tba.util.data.AbstractSqlAdapter;
@@ -1035,7 +1036,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
    public void setCallData(WebSession webSession, CallRecordEntityData data)
    {
       setIsDocumentedFlag(data);
-      IntertelCallManager.getInstance().updateOperatorMapping(data, webSession.getSessionId());
+      PhoneMapManager.getInstance().updateOperatorMapping(data, webSession);
       if (data.getTsAnswer() > 0)
       {
          setOperatorLogging(webSession, data);
@@ -1050,7 +1051,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
    public void setOperatorLogging(WebSession webSession, CallRecordEntityData data)
    {
       setIsDocumentedFlag(data);
-      IntertelCallManager.getInstance().updateOperatorMapping(data, webSession.getSessionId());
+      PhoneMapManager.getInstance().updateOperatorMapping(data, webSession);
       StringBuffer sqlCmd = new StringBuffer("UPDATE CallRecordEntity SET IsAgendaCall=");
       sqlCmd.append(data.getIsAgendaCall());
       sqlCmd.append(",IsSmsCall=" + data.getIsSmsCall());

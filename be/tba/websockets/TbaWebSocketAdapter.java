@@ -9,6 +9,7 @@ import org.eclipse.jetty.websocket.api.WebSocketAdapter;
 import com.google.gson.Gson;
 
 import be.tba.servlets.helper.IntertelCallManager;
+import be.tba.servlets.helper.PhoneMapManager;
 import be.tba.servlets.session.SessionManager;
 import be.tba.servlets.session.WebSession;
 import be.tba.util.constants.Constants;
@@ -75,7 +76,7 @@ public class TbaWebSocketAdapter extends WebSocketAdapter
       if (data.operation == WebSocketData.CALL_ANSWERED)
       {
          // this session ID shall be used by the canvas JSP to open the call update window automatically.
-         data.answeredBySession = IntertelCallManager.getInstance().getSessionIdForPhoneId(data.answeredByPhoneId);
+         data.answeredBySession = PhoneMapManager.getInstance().getSessionIdForPhoneId(data.answeredByPhoneId);
          //System.out.println("data.answeredBySession=" + data.answeredBySession);
          
       }

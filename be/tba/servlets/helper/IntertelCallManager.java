@@ -16,28 +16,13 @@ import be.tba.websockets.WebSocketData;
 
 public class IntertelCallManager
 {
-   private final class PhoneLog
-   {
-      public String phoneId;
-      public String userId;
-      public String sessionId;
-      public long lastUsed;
-      
-      public String toString()
-      {
-         return "PhoneId=" + phoneId + ", userId=" + userId + ", sessionId=" + sessionId;
-      }
-   }
-
    private static IntertelCallManager mInstance;
 
    private Map<String, IntertelCallData> mCallMap;
-   private Map<String, PhoneLog> mOperatorPhoneMap;
 
    private IntertelCallManager()
    {
       mCallMap = new HashMap<String, IntertelCallData>();
-      mOperatorPhoneMap = new HashMap<String, PhoneLog>();
    }
 
    public static IntertelCallManager getInstance()
@@ -71,7 +56,7 @@ public class IntertelCallManager
    {
       if (data != null)
       {
-         IntertelCallData removedCall = mCallMap.remove(data.intertelCallId);
+         mCallMap.remove(data.intertelCallId);
          //System.out.println("IntertelCallManager.removeCall done: " + removedCall.toString());
          if (data.tsAnswer == 0 || data.tsEnd == 0)
          {
@@ -172,58 +157,8 @@ public class IntertelCallManager
       return pendingCalls;
    }
 
-   public synchronized void updateOperatorMapping(CallRecordEntityData data, String sessionId)
-   {
-      IntertelCallData call = getByDbId(data.getId());
-      System.out.println("updateOperatorMapping: data.getId()=" + data.getId() + ", sessionId=" + sessionId + ", call" + call);
-      if (call == null || call.answeredBy.isEmpty())
-      {
-         return; // to be removed once we have switched to Intertel
-      }
-      boolean addIt = false;
-      if (mOperatorPhoneMap.containsKey(call.answeredBy))
-      {
-         PhoneLog phoneLog = mOperatorPhoneMap.get(call.answeredBy);
-         if (phoneLog.phoneId.equals(call.answeredBy))
-         {
-            // already mapped: update timestamp
-            System.out.println("updateOperatorMapping : match");
-            phoneLog.lastUsed = System.currentTimeMillis() / 1000l;
-         } 
-         else
-         {
-            System.out.println("updateOperatorMapping : no match. remove " + phoneLog.toString());
-            mOperatorPhoneMap.remove(phoneLog.phoneId);
-            addIt = true;
-         }
-      } else
-      {
-         addIt = true;
-      }
-      if (addIt)
-      {
-         PhoneLog phoneLog = new PhoneLog();
-         phoneLog.phoneId = call.answeredBy;
-         phoneLog.userId = data.getDoneBy();
-         phoneLog.sessionId = sessionId;
-         phoneLog.lastUsed = System.currentTimeMillis() / 1000l;
-         System.out.println("mOperatorPhoneMap.put: " + phoneLog.toString());
-         mOperatorPhoneMap.put(phoneLog.phoneId, phoneLog);
-      }
-   }
    
-   public synchronized String getSessionIdForPhoneId(String phoneId)
-   {
-      PhoneLog phoneLog = mOperatorPhoneMap.get(phoneId);
-      if (phoneLog != null)
-      {
-         return phoneLog.sessionId;
-      }
-      System.out.println("getSessionIdForPhoneId: " + phoneId + " not found");
-      return "";
-   }
-
-   public synchronized void cleanUpMaps()
+   public synchronized void cleanUpMap()
    {
       long tsNow = System.currentTimeMillis() / 1000l;
       //System.out.println(this + ". mCallMap.size()=" + mCallMap.size() + ", mOperatorPhoneMap=" + mOperatorPhoneMap.size());
@@ -239,19 +174,5 @@ public class IntertelCallManager
             i.remove();
          }
       }
-      for (Iterator<String> i = mOperatorPhoneMap.keySet().iterator(); i.hasNext();)
-      {
-         String key = i.next();
-         PhoneLog phoneLog = mOperatorPhoneMap.get(key);
-         if ((tsNow - phoneLog.lastUsed) > 3600) // 1 hour
-         {
-            System.out.println("CleanUP: IntertelCallManager.removeOperator: " + phoneLog.toString());
-            i.remove();
-            // System.out.println("IntertelCallManager: removed from mOperatorPhoneMap: " +
-            // key);
-         }
-      }
-
    }
-
 }
