@@ -172,6 +172,8 @@ public class IntertelServlet extends HttpServlet
     		{
     			// transfer called party answers
     			IntertelCallData transferOutCall = mIntertelCallManager.getTransferCall(data, calledNr, IntertelCallData.kTbaNr);
+            data.setTsTransfer(timestamp); 
+            data.setCurrentPhase(phase);
     			if (transferOutCall != null)
     			{
     			   transferOutCall.setIsTransfer();
@@ -179,11 +181,9 @@ public class IntertelServlet extends HttpServlet
                transferOutCall.callTransferLink = data;
                transferOutCall.callingNr = data.calledNr;
                transferOutCall.customer = data.customer;
+               data.setTsEnd(timestamp);
+               mCallRecordSqlAdapter.setTransfer(mSession, data, transferOutCall);
     			}
-    			
-    			data.setTsTransfer(timestamp); 
-    			data.setCurrentPhase(phase);
-    			mCallRecordSqlAdapter.setTransfer(mSession, data, transferOutCall);
     			//System.out.println(data.intertelCallId + "-transfered");
 
     		}
@@ -200,8 +200,17 @@ public class IntertelServlet extends HttpServlet
     		      data = data.callParkBug_transferLink;
     		      mCallRecordSqlAdapter.setForwardCallFlag(mSession, data.callParkBug_transferLink);
     		   } */
-    		   data.setTsEnd(timestamp);
-        		mCallRecordSqlAdapter.setTsEnd(mSession, data);
+        		if (data.callTransferLink != null && data.callTransferLink.isTransferOutCall)
+        		{
+        		   // also end this one as this event is actually the end of the transfered call
+        		   data.callTransferLink.setTsEnd(timestamp);
+        		   mCallRecordSqlAdapter.setTsEnd(mSession, data.callTransferLink);
+        		}
+        		else
+        		{
+               data.setTsEnd(timestamp);
+               mCallRecordSqlAdapter.setTsEnd(mSession, data);
+        		}
         		data.setCurrentPhase(phase);
     			data.isEndDone = true;
     			//System.out.println(data.intertelCallId + "-end");
@@ -225,7 +234,7 @@ public class IntertelServlet extends HttpServlet
         		if (!data.isIncoming)
     			{	
         			data.setCallingNr(req.getParameter("viaDID"));
-            	mCallRecordSqlAdapter.setCallingNr(mSession, data);
+            	//mCallRecordSqlAdapter.setCallingNr(mSession, data);
             	//System.out.println(data.intertelCallId + "-summary");
     			}
     		}
