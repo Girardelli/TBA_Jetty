@@ -177,7 +177,7 @@ public class IntertelServlet extends HttpServlet
     			   transferOutCall.setIsTransfer();
                data.callTransferLink = transferOutCall;
                transferOutCall.callTransferLink = data;
-               transferOutCall.callingNr = data.callingNr;
+               transferOutCall.callingNr = data.calledNr;
                transferOutCall.customer = data.customer;
     			}
     			
