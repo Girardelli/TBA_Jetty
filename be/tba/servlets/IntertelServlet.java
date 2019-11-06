@@ -171,10 +171,14 @@ public class IntertelServlet extends HttpServlet
     		if (data != null)
     		{
     			// transfer called party answers
-    			IntertelCallData transferOutCall = mIntertelCallManager.getTransferCall(intertelCallId, calledNr, IntertelCallData.kTbaNr);
+    			IntertelCallData transferOutCall = mIntertelCallManager.getTransferCall(data, calledNr, IntertelCallData.kTbaNr);
     			if (transferOutCall != null)
     			{
-    			  transferOutCall.setIsTransfer();
+    			   transferOutCall.setIsTransfer();
+               data.callTransferLink = transferOutCall;
+               transferOutCall.callTransferLink = data;
+               transferOutCall.callingNr = data.callingNr;
+               transferOutCall.customer = data.customer;
     			}
     			
     			data.setTsTransfer(timestamp); 

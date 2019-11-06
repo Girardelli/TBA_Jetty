@@ -88,7 +88,7 @@ public class IntertelCallManager
       return null;
    }
 
-   public synchronized IntertelCallData getTransferCall(String transferedCallId, String transferCalledNr, String transferCallingNr)
+   public synchronized IntertelCallData getTransferCall(IntertelCallData originCall, String transferCalledNr, String transferCallingNr)
    {
       // callId is of the incomming call that is transfered. We are looking for a call
       // that has NOT this ID
@@ -104,7 +104,7 @@ public class IntertelCallManager
          // data.calledNr + " && " + transferCallingNr + "==" + data.callingNr + " && " +
          // transferedCallId + " != " + data.intertelCallId);
 
-         if (transferCalledNr.equals(data.calledNr) && transferCallingNr.equals(data.callingNr) && !transferedCallId.equals(data.intertelCallId))
+         if (transferCalledNr.equals(data.calledNr) && transferCallingNr.equals(data.callingNr) && !originCall.intertelCallId.equals(data.intertelCallId))
          {
             return data;
          }
