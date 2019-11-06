@@ -126,7 +126,7 @@ public class IntertelServlet extends HttpServlet
     		{
     			TbaWebSocketAdapter.broadcast(new WebSocketData(WebSocketData.NEW_CALL, timestamp, data));
     		}
-    		else
+/*    		else
     		{
     		   // ********************************************
     		   // logic to cope with the fact that the call park feature does not behave as expected
@@ -149,7 +149,7 @@ public class IntertelServlet extends HttpServlet
 //               System.out.println(transferedCall);
 //               System.out.println(data);
     		   }
-    		}
+    		} */
     		break;
     		
     	case "answer":
@@ -172,7 +172,11 @@ public class IntertelServlet extends HttpServlet
     		{
     			// transfer called party answers
     			IntertelCallData transferOutCall = mIntertelCallManager.getTransferCall(intertelCallId, calledNr, IntertelCallData.kTbaNr);
-    			transferOutCall.setIsTransfer();
+    			if (transferOutCall != null)
+    			{
+    			  transferOutCall.setIsTransfer();
+    			}
+    			
     			data.setTsTransfer(timestamp); 
     			data.setCurrentPhase(phase);
     			mCallRecordSqlAdapter.setTransfer(mSession, data, transferOutCall);
@@ -185,16 +189,13 @@ public class IntertelServlet extends HttpServlet
     		if (data != null) 
     		{
         		// check for the callPark buggy behaviour
-    		   if (data.callParkBug_transferLink != null && data.tsEnd != 0)
+/*    		   if (data.callParkBug_transferLink != null && data.tsEnd != 0)
     		   {
     		      // process this event on the outgoing call
                data.callParkBug_transferLink.callingNr = data.calledNr; 
     		      data = data.callParkBug_transferLink;
     		      mCallRecordSqlAdapter.setForwardCallFlag(mSession, data.callParkBug_transferLink);
-//               System.out.println("transfered call: end");
-//               System.out.println(data);
-//               System.out.println(data.callParkBug_transferLink);
-    		   }
+    		   } */
     		   data.setTsEnd(timestamp);
         		mCallRecordSqlAdapter.setTsEnd(mSession, data);
         		data.setCurrentPhase(phase);
@@ -211,14 +212,11 @@ public class IntertelServlet extends HttpServlet
     	case "summary":
     		if (data != null) 
     		{
-        		if (data.callParkBug_transferLink != null && data.isSummaryDone)
+/*        		if (data.callParkBug_transferLink != null && data.isSummaryDone)
         		{
         		   // process this event on the outgoing call
         		   data = data.callParkBug_transferLink;
-//               System.out.println("transfered call: summary");
-//               System.out.println(data);
-//               System.out.println(data.callParkBug_transferLink);
-        		}
+        		} */
     		   data.isSummaryDone = true;
         		if (!data.isIncoming)
     			{	

@@ -62,9 +62,9 @@ mCustomerData = AccountCache.getInstance().get(mRecordData); // yves: to be chan
 
 String vDirStr = mRecordData.getIsIncomingCall() ? "Van Nummer" : "Naar Nummer";
 String vNumberHtml;
-if (isAutoUpdateRecord)
+if (isAutoUpdateRecord && intertelCall != null)
 {
-   vNumberHtml = intertelCall.calledNr;
+   vNumberHtml = intertelCall.callingNr;
 }
 else
 {
@@ -264,7 +264,7 @@ out.println("</select>");
 		<br>
 		<input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.SAVE_RECORD%>"> 
 <%
-if (isAutoUpdateRecord)
+if (isAutoUpdateRecord && intertelCall != null)
 {
 %>
         <input type=hidden name=<%=Constants.RECORD_NUMBER%> value="<%=intertelCall.calledNr%>">

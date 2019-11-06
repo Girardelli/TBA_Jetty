@@ -45,7 +45,7 @@ public class IntertelCallData
 		if (isIncoming)
 		{
 			AccountEntityData account = AccountCache.getInstance().get(last6Numbers(this.calledNr));
-			System.out.println("AccountCache.getInstance().get(" + last6Numbers(this.calledNr) + ") returned " + account);
+			//System.out.println("AccountCache.getInstance().get(" + last6Numbers(this.calledNr) + ") returned " + account);
 			if (account != null)
 			{
 				this.customer = new String(account.getFullName());
