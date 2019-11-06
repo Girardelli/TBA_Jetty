@@ -7,6 +7,8 @@ import be.tba.util.session.AccountCache;
 public class IntertelCallData 
 {
 	public static String kTbaNr = Constants.NUMBER_BLOCK[0][0];
+   public static String kTbaName = Constants.NUMBER_BLOCK[0][3];
+	
 	
 	public String calledNr;
 	public String callingNr;
@@ -40,7 +42,7 @@ public class IntertelCallData
 		this.isEndDone = false;
 		this.isSummaryDone = false;
 		this.isWsRemoved = false;
-		this.callParkBug_transferLink = null;
+		this.callParkBug_transferLink = null; 
 		this.answeredBy = "";
 		if (isIncoming)
 		{
@@ -50,6 +52,20 @@ public class IntertelCallData
 			{
 				this.customer = new String(account.getFullName());
 			}
+		}
+		else
+		{
+         AccountEntityData account = AccountCache.getInstance().get(last6Numbers(this.callingNr));
+         //System.out.println("AccountCache.getInstance().get(" + last6Numbers(this.calledNr) + ") returned " + account);
+         if (account != null)
+         {
+            this.customer = new String(account.getFullName());
+         }
+         else
+         {
+            this.callingNr = kTbaNr;
+            this.customer = kTbaName;
+         }
 		}
 	}
 	
