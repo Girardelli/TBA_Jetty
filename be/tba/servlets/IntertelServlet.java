@@ -236,7 +236,7 @@ public class IntertelServlet extends HttpServlet
                // regular outgoing call not answered
                data.setCallingNr(req.getParameter("viaDID"));
             }
-            data.callTransferLink.setTsEnd(timestamp);
+            data.setTsEnd(timestamp);
             mCallRecordSqlAdapter.setTsEnd(mSession, data);
     		}
     		break;
