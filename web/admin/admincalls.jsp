@@ -22,7 +22,6 @@ be.tba.util.constants.EjbJndiNames,
 be.tba.ejb.pbx.session.CallRecordSqlAdapter,
 be.tba.util.constants.Constants,
 be.tba.util.exceptions.AccessDeniedException,
-be.tba.util.exceptions.InvalidValueException,
 be.tba.servlets.session.SessionManager,
 be.tba.util.session.AccountCache,
 be.tba.util.session.MailError"%>

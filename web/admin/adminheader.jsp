@@ -34,7 +34,6 @@ be.tba.util.constants.EjbJndiNames,
 be.tba.util.constants.Constants,
 be.tba.util.constants.AccountRole,
 be.tba.util.exceptions.AccessDeniedException,
-be.tba.util.exceptions.InvalidValueException,
 be.tba.servlets.session.SessionManager,
 be.tba.util.session.AccountCache"%>
 

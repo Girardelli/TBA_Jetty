@@ -9,7 +9,7 @@ package be.tba.util.exceptions;
  * @author Yves Willems
  * @version $Revision: 1.1 $
  */
-public class AccessDeniedException extends Exception
+public class AccessDeniedException extends TbaException
 {
 
     // -------------------------------------------------------------------------

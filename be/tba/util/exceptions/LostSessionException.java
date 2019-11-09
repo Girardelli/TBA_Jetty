@@ -9,7 +9,7 @@ package be.tba.util.exceptions;
  * @author Yves Willems
  * @version $Revision: 1.1 $
  */
-public class LostSessionException extends Exception
+public class LostSessionException extends TbaException
 {
 
     // -------------------------------------------------------------------------

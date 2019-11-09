@@ -12,7 +12,7 @@ package be.tba.util.exceptions;
  * @author Yves Willems
  * @version $Revision: 1.1 $
  */
-public class SystemErrorException extends Exception
+public class SystemErrorException extends TbaException
 {
 
     // -------------------------------------------------------------------------
