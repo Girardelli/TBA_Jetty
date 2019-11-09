@@ -925,15 +925,15 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
             addRow(webSession, newRecord);
             // System.out.println("addCallRecord: id = " + newRecord.getId() + ", fwdnr=" +
             // newRecord.getFwdNr() + ", isMailed=" + newRecord.getIsMailed());
-            sLogger.info("addCallRecord: id={}, fwdnr={}, isMailed={}", newRecord.getId(), newRecord.getFwdNr(), newRecord.getIsMailed());
+            //sLogger.info("addCallRecord: id={}, fwdnr={}, isMailed={}", newRecord.getId(), newRecord.getFwdNr(), newRecord.getIsMailed());
 
          } else
          {
             sLogger.info("addCallRecord failed: no account found for {}", newRecord.getFwdNr());
          }
 
-         System.out.println("Call logged: " + newRecord.getFwdNr() + (newRecord.getIsIncomingCall() ? "<--" : "-->") + newRecord.getNumber());
-         sLogger.info("Call logged: " + newRecord.getFwdNr() + (newRecord.getIsIncomingCall() ? "<--" : "-->") + newRecord.getNumber());
+         //System.out.println("Call logged: " + newRecord.getFwdNr() + (newRecord.getIsIncomingCall() ? "<--" : "-->") + newRecord.getNumber());
+         //sLogger.info("Call logged: " + newRecord.getFwdNr() + (newRecord.getIsIncomingCall() ? "<--" : "-->") + newRecord.getNumber());
          return;
       } catch (Exception e)
       {
