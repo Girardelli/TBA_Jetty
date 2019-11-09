@@ -136,6 +136,7 @@ public class IntertelServlet extends HttpServlet
     		      data.callTransferLink = transferedCall;
     		      transferedCall.callTransferLink = data;
     		      data.callingNr = transferedCall.calledNr;
+    		      mCallRecordSqlAdapter.setCallingNr(mSession, data);
 //    		      System.out.println("transfered call: start");
 //               System.out.println(transferedCall);
 //               System.out.println(data);
