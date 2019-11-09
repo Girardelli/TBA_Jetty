@@ -82,22 +82,6 @@ public class CustomerDispatchServlet extends HttpServlet
 
                 switch (vAction)
                 {
-                // ==============================================================================================
-                // DELETE RECORD
-                // ==============================================================================================
-                case Constants.RECORD_DELETE:
-                {
-                    String vLtd = (String) req.getParameter(Constants.RECORD_TO_DELETE);
-                    StringTokenizer vStrTok = new StringTokenizer(vLtd, ",");
-
-                    CallRecordSqlAdapter vCallLogWriterSession = new CallRecordSqlAdapter();
-                    while (vStrTok.hasMoreTokens())
-                    {
-                        vCallLogWriterSession.setRelease(vSession, vStrTok.nextToken());
-                    }
-                    rd = sc.getRequestDispatcher(Constants.CLIENT_CALLS_JSP);
-                    break;
-                }
 
                 // ==============================================================================================
                 // VIEW CALLS
@@ -186,12 +170,6 @@ public class CustomerDispatchServlet extends HttpServlet
                     vAccount.setGsm(req.getParameter(Constants.ACCOUNT_GSM));
                     vAccount.setCountryCode(req.getParameter(Constants.ACCOUNT_COUNTRY_CODE));
                     vAccount.setIsAutoRelease(req.getParameter(Constants.ACCOUNT_AUTO_RELEASE) != null);
-
-                    if (vSession.getIs3W())
-                    {
-                        vAccount.setW3_PersonId(req.getParameter(Constants.ACCOUNT_3W_PERSON_ID));
-                        vAccount.setW3_CompanyId(req.getParameter(Constants.ACCOUNT_3W_COMPANY_ID));
-                    }
 
                     if (req.getParameter(Constants.ACCOUNT_MAIL_ON1) != null)
                     {

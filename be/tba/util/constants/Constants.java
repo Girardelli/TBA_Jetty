@@ -59,7 +59,6 @@ public class Constants
     public static final String ADMIN_CALLS_JSP = "/admin/admincalls.jsp";
     public static final String INVOICE_JSP = "/admin/invoice.jsp";
     public static final String ADMIN_SEARCH_JSP = "/admin/search.jsp";
-    public static final String ADMIN_NOTLOGGEDCALLS_JSP = "/admin/notloggedcalls.jsp";
     public static final String ADMIN_TASK_JSP = "/admin/admintasks.jsp";
     public static final String ADD_TASK_JSP = "/admin/addtask.jsp";
     public static final String ADD_INVOICE_JSP = "/admin/addinvoice.jsp";
@@ -112,9 +111,6 @@ public class Constants
     public static final String ACCOUNT_MAIL_UUR3 = "_auu3";
     public static final String ACCOUNT_MAIL_MINUTEN3 = "_ami3";
     public static final String ACCOUNT_INVOICE_TYPE = "_aind";
-    public static final String ACCOUNT_3W_CUSTOMER = "_3W";
-    public static final String ACCOUNT_3W_PERSON_ID = "_3Wpid";
-    public static final String ACCOUNT_3W_COMPANY_ID = "_3Wcid";
     public static final String ACCOUNT_FAC_STD_IN_CALL = "_fcsic";
     public static final String ACCOUNT_FAC_STD_OUT_CALL = "_fcsoc";
     public static final String ACCOUNT_FAC_FAX_CALL = "_fcfax";
@@ -199,8 +195,6 @@ public class Constants
     public static final String RECORD_TEMP_CALLER = "_tca";
     public static final String RECORD_SHORT_TEXT = "_stx";
     public static final String RECORD_LONG_TEXT = "_ltx";
-    public static final String RECORD_3W_CUSTOMER_ID = "_3Wrid";
-    public static final String RECORD_3W_CALL = "_3Wrcl";
     public static final String RECORD_TIME = "_rti";
     public static final String RECORD_DATE = "_rdt";
     public static final String RECORD_DIR = "_rdi";
@@ -283,7 +277,6 @@ public class Constants
     public static final String EMPLCOST_SHOW_NEXT = "EMPLCOST_SHOW_NEXT";
     public static final String GOTO_TASK_ADMIN = "GOTO_TASK_ADMIN";
     public static final String GOTO_TASK_ADD = "GOTO_TASK_ADD";
-    public static final String GOTO_NOTLOGGED_CALLS = "GOTO_NOTLOGGED_CALLS";
     public static final String SAVE_TASK = "SAVE_TASK";
     public static final String MAIL_CUSTOMER = "MAIL_CUSTOMER";
     public static final String REFRESH_OPEN_CALLS = "REFRESH_OPEN_CALLS";
@@ -441,7 +434,6 @@ public class Constants
     public static final long HOURS = MINUTES * 60;
     public static final long DAYS = HOURS * 24;
     public static final long RECORD_DELETE_EXPIRE = DAYS * 365; // 90 days
-    public static final long RECORD_NOTLOGGED_EXPIRE = DAYS * 10; // 10 days
     public static final long RECORD_AUTO_RELEASE_EXPIRE = DAYS * 3; // 10 days
     public static final long CUSTOMER_SESSION_TIMEOUT = MINUTES * 120; // 5 minuten
     public static final long ADMIN_SESSION_TIMEOUT = MINUTES * 60; // 50 minuten

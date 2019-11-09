@@ -62,7 +62,6 @@ public class AdminDispatchServlet extends HttpServlet
             //log.info("doGet()");
             sc = getServletContext();
             res.setContentType("text/html");
-            res.setCharacterEncoding("UTF-8");
             req.setCharacterEncoding("UTF-8");
             
             // parsing the multipart content must be done before any getXXX call on the request
@@ -88,7 +87,7 @@ public class AdminDispatchServlet extends HttpServlet
             vSession.resetSqlTimer();
             SessionManager.getInstance().getSession(vSession.getSessionId(), "AdminDispatchServlet(" + vAction + ")");
 
-            System.out.println("\nAdminDispatchServlet (http session: " + vSession + "): userid:" + vSession.getUserId() + ", websessionid:" + vSession.getSessionId() + " action=" + vAction);
+            System.out.println("\nAdminDispatchServlet: userid:" + vSession.getUserId() + ", websessionid:" + vSession.getSessionId() + " action=" + vAction);
 
             synchronized (vSession)
             {
@@ -343,15 +342,6 @@ public class AdminDispatchServlet extends HttpServlet
                    break;
                 }
                 
-                // ==============================================================================================
-                // GOTO_NOTLOGGED_CALLS button pushed
-                // ==============================================================================================
-                case Constants.GOTO_NOTLOGGED_CALLS:
-                {
-                    rd = sc.getRequestDispatcher(Constants.ADMIN_NOTLOGGEDCALLS_JSP);
-                    break;
-                }
-
                 // ==============================================================================================
                 // RECORD_SHOW_NEXT_10
                 // ==============================================================================================
@@ -696,7 +686,7 @@ public class AdminDispatchServlet extends HttpServlet
                     AccountEntityData account = AccountCache.getInstance().get(accountId);
                     String vOldNr = account.getFwdNumber();
                     String vNewNr = (String) req.getParameter(Constants.ACCOUNT_FORWARD_NUMBER);
-                    AccountEntityData newData = AccountFacade.updateAccountData(req);
+                    AccountEntityData newData = AccountFacade.updateAccountData(vSession, req);
                     System.out.println("old nr=" + vOldNr + ", new nr=" + vNewNr);
                     if (vOldNr != null && vNewNr != null && !vOldNr.equals(vNewNr))
                     {

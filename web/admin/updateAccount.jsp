@@ -45,10 +45,6 @@ String vInvoiceEmail = vCustomer.getInvoiceEmail();
 vInvoiceEmail = (vInvoiceEmail == null) ? "" : vInvoiceEmail;
 String vGsm = vCustomer.getGsm();
 vGsm = (vGsm == null) ? "" : vGsm;
-String v3W_PersonId = vCustomer.getW3_PersonId();
-v3W_PersonId = (v3W_PersonId == null) ? "" : v3W_PersonId;
-String vW3_CompanyId = vCustomer.getW3_CompanyId();
-vW3_CompanyId = (vW3_CompanyId == null) ? "" : vW3_CompanyId;
 String vCallProcessInfo = vCustomer.getCallProcessInfo();
 
 
@@ -349,31 +345,6 @@ for (int i = 0; i < kMaxMailMinutes; i += 5)
 									value="<%=Constants.YES%>" <%=(vTextMail?kChecked:"")%>>
 								</td>
 							</tr>
-							<br>
-							<tr>
-								<td width="300" valign="top" class="adminsubsubtitle">3W
-									settings</td>
-								<td width="40" valign="top" class="bodytekst"><input
-									type=checkbox name=<%=Constants.ACCOUNT_3W_CUSTOMER%>
-									value="<%=Constants.YES%>"
-									<%=(vCustomer.getIs3W()?kChecked:"")%>></td>
-								<td width="100" valign="top" class="bodytekst">
-								<select name=<%=Constants.ACCOUNT_3W_COMPANY_ID%>>
-									<option value="<%=Constants.NONE%>">geen selectie
-					<option value="3W" <%=(vW3_CompanyId.equals("3W")?kSelected:"")%>>3W
-					Associates
-					<option value="3WFINANCE"
-						<%=(vW3_CompanyId.equals("3WFINANCE")?kSelected:"")%>>3W Finance
-					
-					<option value="3WICT"
-						<%=(vW3_CompanyId.equals("3WICT")?kSelected:"")%>>3W ICT
-				</select></td>
-				<td width="300" valign="top" class="adminsubsubtitle">3W Persoon ID
-				</td>
-				<td width="300" valign="top"><input type=text
-					name=<%=Constants.ACCOUNT_3W_PERSON_ID%> size=20
-					value="<%=v3W_PersonId%>"></td>
-			</tr>
 		</table>
 		<p class="adminsubtitle"><img src=".\images\blueSphere.gif" width="10"
 			height="10">&nbsp;Facturatiegegevens:</p>
@@ -533,7 +504,7 @@ for (int i = 0; i < kMaxMailMinutes; i += 5)
 				<td width="250" valign="top" class="adminsubsubtitle">Oproepdoorschakelen</td>
 				<td width="400" valign="top" class="bodytekst"><input type=text
 					name=<%=Constants.ACCOUNT_FAC_CALL_FORWARD%> size=3
-					value="<%=vFacCallForward%>">&nbsp;&nbsp;Euro cent</td>
+					value="<%=vFacCallForward%>">&nbsp;&nbsp;Euro cent (dit wordt niet meer aangerekend omdat automatisch buitengaande oproepen worden gemaakt.)</td>
 			</tr>
             <tr>
                 <td width="50" valign="top"></td>
@@ -630,8 +601,7 @@ for (int i = 0; i < kMaxMailMinutes; i += 5)
 		</table>
 		<br>
 		<br>
-		<input class="tbabutton" type=reset value=" Blad Wissen "> 
-        <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.GOTO_SAVE_ACCOUNT%>"> 
+		<input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.GOTO_SAVE_ACCOUNT%>"> 
         <input type=hidden name=<%=Constants.ACCOUNT_ID%> value="<%=accountId%>"> 
         <input type=hidden name=<%=Constants.ACCOUNT_TO_DELETE%> value="<%=accountId%>"> 
         <input class="tbabutton" type=submit name=action value="Bewaar" onclick="Bewaar()"> 

@@ -58,8 +58,6 @@ final public class WebSession implements Serializable
 
     private AccountEntityData mNewAccount = null;
 
-    private boolean mIs3W = false;
-
     private String mSearchString = "";
 
     private int mDaysBack = 0;
@@ -267,16 +265,6 @@ final public class WebSession implements Serializable
     public HttpServletRequest getOldRequest()
     {
         return mOldRequest;
-    }
-
-    public void setIs3W(boolean is3W)
-    {
-        mIs3W = is3W;
-    }
-
-    public boolean getIs3W()
-    {
-        return mIs3W;
     }
 
     public void setSearchString(String searchString)

@@ -35,7 +35,6 @@ allEntryIds = new StringBuilder("[");
 
 <form name="calllistform" method="GET"
 	action="/tba/CustomerDispatch"><input type=hidden
-	name=<%=Constants.RECORD_TO_DELETE%> value=""> <input type=hidden
 	name=<%=Constants.SRV_ACTION%> value="<%=Constants.ACTION_SHOW_CALLS%>"> 
 <table cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
 	<tr>
@@ -280,19 +279,16 @@ function openRecord(id, rowInd)
 
 function showPrevious()
 {
-  document.calllistform.<%=Constants.RECORD_TO_DELETE%>.value="";
   document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.RECORD_SHOW_PREV%>";
 }
 
 function showNext()
 {
-  document.calllistform.<%=Constants.RECORD_TO_DELETE%>.value="";
   document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.RECORD_SHOW_NEXT%>";
 }
 
 function refresh()
 {
-  document.calllistform.<%=Constants.RECORD_TO_DELETE%>.value="";
   document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.ACTION_REFRESH_CALLS%>";
 }
 </script>

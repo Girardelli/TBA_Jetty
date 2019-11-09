@@ -96,14 +96,6 @@ out.println("</select>");
 %>
 				</td>
 			</tr>
-			<tr>
-				<td width="50"></td>
-				<td width="120" valign="top" class="adminsubsubtitle"><img
-					src=".\images\blueSphere.gif" width="10" height="10">&nbsp;3W klant</td>
-				<td width="580" valign="top" class="bodytekst"><input
-					type=checkbox name=<%=Constants.ACCOUNT_3W_CUSTOMER%>
-					value="<%=Constants.YES%>"></td>
-			</tr>
 		</table>
 		<br>
 		<br>

@@ -33,9 +33,6 @@ public class AccountEntityData extends be.tba.util.data.AbstractData implements 
     private boolean isRegistered;
     private boolean isAutoRelease;
     private boolean isXmlMail;
-    private boolean is3W;
-    private java.lang.String w3_PersonId;
-    private java.lang.String w3_CompanyId;
     private java.lang.String email;
     private java.lang.String gsm;
     private short invoiceType;
@@ -98,85 +95,6 @@ public class AccountEntityData extends be.tba.util.data.AbstractData implements 
     {
     }
 
-    /* outdated !!
-    public AccountEntityData(int id, int wc_prime, String wc_alfa, java.lang.String userId, java.lang.String password, java.lang.String fwdNumber, java.lang.String role, java.lang.String fullName, java.lang.String custFilter, java.lang.String stateFilter, java.lang.String dirFilter, java.lang.String lastLogin, long lastLoginTS, long previousLoginTS, boolean isRegistered, boolean isAutoRelease, boolean isXmlMail, boolean is3W, java.lang.String w3_PersonId, java.lang.String w3_CompanyId, java.lang.String email, java.lang.String gsm, short invoiceType, long lastInvoiceTime, long lastMailTime, short mailHour1, short mailMinutes1, short mailHour2, short mailMinutes2, short mailHour3, short mailMinutes3, int facStdInCall, int facStdOutCall, int facOutLevel1, int facOutLevel2, int facOutLevel3, boolean isPriceAgendaFixed, int facAgendaCall, int facFaxCall, short agendaPriceUnit, int facSms, int facCallForward, int taskHourRate, java.lang.String companyName, java.lang.String attToName, java.lang.String street, java.lang.String city, java.lang.String btwNumber, boolean noInvoice, boolean hasSubCustomers, java.lang.String superCustomer, boolean countAllLongCalls, boolean countLongFwdCalls, boolean noBtw, boolean noEmptyMails, boolean textMail, double facLong, double facLongFwd, int facTblMinCalls_I, double facTblStartCost_I, double facTblExtraCost_I, int facTblMinCalls_II, double facTblStartCost_II, double facTblExtraCost_II, int facTblMinCalls_III, double facTblStartCost_III, double facTblExtraCost_III, int facTblMinCalls_IV, double facTblStartCost_IV, double facTblExtraCost_IV, boolean isMailInvoice, java.lang.String invoiceEmail, java.lang.String accountNr, String countryCode, boolean isArchived)
-    {
-        setId(id);
-        setWcPrime(wc_prime);
-        setWcAlfa(wc_alfa);
-        setUserId(userId);
-        setPassword(password);
-        setFwdNumber(fwdNumber);
-        setRole(role);
-        setFullName(fullName);
-        setCustFilter(custFilter);
-        setStateFilter(stateFilter);
-        setDirFilter(dirFilter);
-        setLastLogin(lastLogin);
-        setLastLoginTS(lastLoginTS);
-        setPreviousLoginTS(previousLoginTS);
-        setIsRegistered(isRegistered);
-        setIsAutoRelease(isAutoRelease);
-        setIsXmlMail(isXmlMail);
-        setIs3W(is3W);
-        setW3_PersonId(w3_PersonId);
-        setW3_CompanyId(w3_CompanyId);
-        setEmail(email);
-        setGsm(gsm);
-        setInvoiceType(invoiceType);
-        setLastInvoiceTime(lastInvoiceTime);
-        setLastMailTime(lastMailTime);
-        setMailHour1(mailHour1);
-        setMailMinutes1(mailMinutes1);
-        setMailHour2(mailHour2);
-        setMailMinutes2(mailMinutes2);
-        setMailHour3(mailHour3);
-        setMailMinutes3(mailMinutes3);
-        setFacStdInCall(facStdInCall);
-        setFacStdOutCall(facStdOutCall);
-        setFacOutLevel1(facOutLevel1);
-        setFacOutLevel2(facOutLevel2);
-        setFacOutLevel3(facOutLevel3);
-        setIsPriceAgendaFixed(isPriceAgendaFixed);
-        setFacAgendaCall(facAgendaCall);
-        setFacFaxCall(facFaxCall);
-        setAgendaPriceUnit(agendaPriceUnit);
-        setFacSms(facSms);
-        setFacCallForward(facCallForward);
-        setTaskHourRate(taskHourRate);
-        setCompanyName(companyName);
-        setAttToName(attToName);
-        setStreet(street);
-        setCity(city);
-        setBtwNumber(btwNumber);
-        setNoInvoice(noInvoice);
-        setHasSubCustomers(hasSubCustomers);
-        setSuperCustomer(superCustomer);
-        setCountAllLongCalls(countAllLongCalls);
-        setCountLongFwdCalls(countLongFwdCalls);
-        setNoBtw(noBtw);
-        setNoEmptyMails(noEmptyMails);
-        setTextMail(textMail);
-        setFacLong(facLong);
-        setFacLongFwd(facLongFwd);
-        setFacTblMinCalls_I(facTblMinCalls_I);
-        setFacTblStartCost_I(facTblStartCost_I);
-        setFacTblExtraCost_I(facTblExtraCost_I);
-        setFacTblMinCalls_II(facTblMinCalls_II);
-        setFacTblStartCost_II(facTblStartCost_II);
-        setFacTblExtraCost_II(facTblExtraCost_II);
-        setFacTblMinCalls_III(facTblMinCalls_III);
-        setFacTblStartCost_III(facTblStartCost_III);
-        setFacTblExtraCost_III(facTblExtraCost_III);
-        setFacTblMinCalls_IV(facTblMinCalls_IV);
-        setFacTblStartCost_IV(facTblStartCost_IV);
-        setFacTblExtraCost_IV(facTblExtraCost_IV);
-        setIsMailInvoice(isMailInvoice);
-        setInvoiceEmail(invoiceEmail);
-        setAccountNr(accountNr);
-        setCountryCode(countryCode);
-        setIsArchived(isArchived);
-    } */
 
     public AccountEntityData(AccountEntityData otherData)
     {
@@ -197,9 +115,6 @@ public class AccountEntityData extends be.tba.util.data.AbstractData implements 
         setIsRegistered(otherData.getIsRegistered());
         setIsAutoRelease(otherData.getIsAutoRelease());
         setIsXmlMail(otherData.getIsXmlMail());
-        setIs3W(otherData.getIs3W());
-        setW3_PersonId(otherData.getW3_PersonId());
-        setW3_CompanyId(otherData.getW3_CompanyId());
         setEmail(otherData.getEmail());
         setInvoiceEmail(otherData.getInvoiceEmail());
         setGsm(otherData.getGsm());
@@ -433,36 +348,6 @@ public class AccountEntityData extends be.tba.util.data.AbstractData implements 
     public void setIsXmlMail(boolean isXmlMail)
     {
         this.isXmlMail = isXmlMail;
-    }
-
-    public boolean getIs3W()
-    {
-        return this.is3W;
-    }
-
-    public void setIs3W(boolean is3W)
-    {
-        this.is3W = is3W;
-    }
-
-    public java.lang.String getW3_PersonId()
-    {
-        return this.w3_PersonId;
-    }
-
-    public void setW3_PersonId(java.lang.String w3_PersonId)
-    {
-        this.w3_PersonId = w3_PersonId;
-    }
-
-    public java.lang.String getW3_CompanyId()
-    {
-        return this.w3_CompanyId;
-    }
-
-    public void setW3_CompanyId(java.lang.String w3_CompanyId)
-    {
-        this.w3_CompanyId = w3_CompanyId;
     }
 
     public java.lang.String getEmail()
@@ -1081,13 +966,7 @@ public class AccountEntityData extends be.tba.util.data.AbstractData implements 
         str.append(getIsAutoRelease());
         str.append(",IsXmlMail=");
         str.append(getIsXmlMail());
-        str.append(",Is3W=");
-        str.append(getIs3W());
-        str.append(",W3_PersonId='");
-        str.append(((this.w3_PersonId != null) ? this.w3_PersonId : ""));
-        str.append("',W3_CompanyId='");
-        str.append(((this.w3_CompanyId != null) ? this.w3_CompanyId : ""));
-        str.append("',Email='");
+        str.append(",Email='");
         str.append(((this.email != null) ? this.email : ""));
         str.append("',Gsm='");
         str.append(((this.gsm != null) ? escapeQuotes(this.gsm) : ""));
@@ -1244,13 +1123,7 @@ public class AccountEntityData extends be.tba.util.data.AbstractData implements 
         str.append(getIsAutoRelease());
         str.append(",");
         str.append(getIsXmlMail());
-        str.append(",");
-        str.append(getIs3W());
         str.append(",'");
-        str.append(((this.w3_PersonId != null) ? this.w3_PersonId : ""));
-        str.append("','");
-        str.append(((this.w3_CompanyId != null) ? this.w3_CompanyId : ""));
-        str.append("','");
         str.append(((this.email != null) ? this.email : ""));
         str.append("','");
         str.append(((this.gsm != null) ? this.gsm : ""));

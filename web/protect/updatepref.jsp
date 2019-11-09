@@ -42,10 +42,6 @@ String vInvoiceEmail = vCustomer.getInvoiceEmail();
 vInvoiceEmail = (vInvoiceEmail == null) ? "" : vInvoiceEmail;
 String vGsm = vCustomer.getGsm();
 vGsm = (vGsm == null) ? "" : vGsm;
-String v3W_PersonId = vCustomer.getW3_PersonId();
-v3W_PersonId = (v3W_PersonId == null) ? "" : v3W_PersonId;
-String vW3_CompanyId = vCustomer.getW3_CompanyId();
-vW3_CompanyId = (vW3_CompanyId == null) ? "" : vW3_CompanyId;
 
 int vMailHour1 = vCustomer.getMailHour1();
 boolean vIsMailOn1 = true;
@@ -184,48 +180,18 @@ for (int i = 0; i < kMaxMailMinutes; i += 5)
 					<input type=checkbox name=<%=Constants.ACCOUNT_NO_EMPTY_MAILS%> value="<%=Constants.YES%>" <%=(vNoEmptyMails?kChecked:"")%>>
 				</td>
 			</tr>
-			<br>
 			<tr>
 				<td width="200" valign="top" class="adminsubsubtitle">Zend in text format</td>
 				<td width="40" valign="top" class="bodytekst">
 					<input type=checkbox name=<%=Constants.ACCOUNT_TEXT_MAIL%> value="<%=Constants.YES%>" <%=(vTextMail?kChecked:"")%>>
 				</td>
 			</tr>
-            <br>
             <tr>
                 <td width="200" valign="top" class="adminsubsubtitle">Verstuur mijn factuur per mail</td>
                 <td width="40" valign="top" class="bodytekst">
                     <input type=checkbox name=<%=Constants.ACCOUNT_IS_MAIL_INVOICE%> value="<%=Constants.YES%>" <%=(vInvoicePerMail?kChecked:"")%>>
                 </td>
             </tr>
-			<%
-if (vCustomer.getIs3W())
-{
-%>
-
-			<tr>
-				<td width="200" valign="top" class="adminsubsubtitle"><img
-					src="/tba/images/blueSphere.gif" width="10"
-					height="10">&nbsp;3W settings</td>
-				<td width="150" valign="top" class="bodytekst"><select
-					name=<%=Constants.ACCOUNT_3W_COMPANY_ID%>>
-					<option value="<%=Constants.NONE%>">geen selectie
-					<option value="3W" <%=(vW3_CompanyId.equals("3W")? kSelected:"")%>>3W
-					Associates
-					<option value="3WFINANCE "
-						<%=(vW3_CompanyId.equals("3WFINANCE")?kSelected:"")%>>3W Finance
-					
-					<option value="3WICT "
-						<%=(vW3_CompanyId.equals("3WICT")?kSelected:"")%>>3W ICT
-				</select></td>
-				<td width="150" valign="top" class="bodytekst">3W Persoon ID</td>
-				<td width="200" valign="top"><input type=text
-					name=<%=Constants.ACCOUNT_3W_PERSON_ID%> size=20
-					value="<%=v3W_PersonId%>"></td>
-			</tr>
-			<%
-}
-%>
 		</table>
 		<br>
 		<input class="tbabutton" type=reset value=" Blad Wissen "> 
@@ -241,7 +207,7 @@ e.printStackTrace();
 }
 
 %>
-<script type="text/javascript">
+<script>
 function Bewaar()
 {
   document.updateForm.<%=Constants.SRV_ACTION%>.value="<%=Constants.SAVE_PREFS%>";

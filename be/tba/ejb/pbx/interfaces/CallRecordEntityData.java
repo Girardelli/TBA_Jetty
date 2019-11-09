@@ -32,16 +32,12 @@ public class CallRecordEntityData extends AbstractData
     private long timeStamp;
     private boolean isIncomingCall;
     private boolean isDocumented;
-    private boolean isReleased;
-    private boolean isNotLogged;
     private boolean isAgendaCall;
     private boolean isSmsCall;
     private boolean isForwardCall;
     private boolean isImportantCall;
-    private boolean is3W_call;
     private boolean isMailed;
     private short invoiceLevel;
-    private java.lang.String w3_CustomerId;
     private java.lang.String shortDescription;
     private java.lang.String longDescription;
     private boolean isVirgin;
@@ -67,16 +63,12 @@ public class CallRecordEntityData extends AbstractData
         timeStamp = 0;
         isIncomingCall = false;
         isDocumented = false;
-        isReleased = false;
-        isNotLogged = false;
         isAgendaCall = false;
         isSmsCall = false;
         isForwardCall = false;
         isImportantCall = false;
-        is3W_call = false;
         isMailed = false;
         invoiceLevel = InvoiceHelper.kLevel1;
-        w3_CustomerId = "";
         shortDescription = "";
         longDescription = "";
         isVirgin = true;
@@ -196,26 +188,6 @@ public class CallRecordEntityData extends AbstractData
         this.isDocumented = isDocumented;
     }
 
-    public boolean getIsReleased()
-    {
-        return this.isReleased;
-    }
-
-    public void setIsReleased(boolean isReleased)
-    {
-        this.isReleased = isReleased;
-    }
-
-    public boolean getIsNotLogged()
-    {
-        return this.isNotLogged;
-    }
-
-    public void setIsNotLogged(boolean isNotLogged)
-    {
-        this.isNotLogged = isNotLogged;
-    }
-
     public boolean getIsAgendaCall()
     {
         return this.isAgendaCall;
@@ -256,16 +228,6 @@ public class CallRecordEntityData extends AbstractData
         this.isImportantCall = isImportantCall;
     }
 
-    public boolean getIs3W_call()
-    {
-        return this.is3W_call;
-    }
-
-    public void setIs3W_call(boolean is3W_call)
-    {
-        this.is3W_call = is3W_call;
-    }
-
     public boolean getIsMailed()
     {
         return this.isMailed;
@@ -284,16 +246,6 @@ public class CallRecordEntityData extends AbstractData
     public void setInvoiceLevel(short invoiceLevel)
     {
         this.invoiceLevel = invoiceLevel;
-    }
-
-    public java.lang.String getW3_CustomerId()
-    {
-        return this.w3_CustomerId;
-    }
-
-    public void setW3_CustomerId(java.lang.String w3_CustomerId)
-    {
-        this.w3_CustomerId = w3_CustomerId;
     }
 
     public java.lang.String getShortDescription()
@@ -416,17 +368,13 @@ public class CallRecordEntityData extends AbstractData
         str.append("',TimeStamp=" + getTimeStamp() );
         str.append(",IsIncomingCall=" + getIsIncomingCall() );
         str.append(",IsDocumented=" + getIsDocumented());
-        str.append(",IsReleased=" + getIsReleased()); 
-        str.append(",IsNotLogged=" + getIsNotLogged()); 
-        str.append(",IsAgendaCall=" + getIsAgendaCall()); 
+       str.append(",IsAgendaCall=" + getIsAgendaCall()); 
         str.append(",IsSmsCall=" + getIsSmsCall()); 
         str.append(",IsForwardCall=" + getIsForwardCall()); 
         str.append(",IsImportantCall=" + getIsImportantCall()); 
-        str.append(",Is3W_call=" + getIs3W_call()); 
         str.append(",IsMailed=" + getIsMailed()); 
         str.append(",InvoiceLevel=" + getInvoiceLevel()); 
-        str.append(",W3_CustomerId='" + getW3_CustomerId()); 
-        str.append("',ShortDescription='" + ((this.getShortDescription() != null) ? escapeQuotes(this.getShortDescription()) : "")); 
+        str.append(",ShortDescription='" + ((this.getShortDescription() != null) ? escapeQuotes(this.getShortDescription()) : "")); 
         str.append("',LongDescription='" + ((this.getLongDescription() != null) ? escapeQuotes(this.getLongDescription()) : "")); 
         str.append("',IsVirgin=" + getIsVirgin()); 
         str.append(",IsFaxCall=" + getIsFaxCall()); 
@@ -452,17 +400,13 @@ public class CallRecordEntityData extends AbstractData
         str.append("'," + getTimeStamp() );
         str.append("," + getIsIncomingCall() );
         str.append("," + getIsDocumented());
-        str.append("," + getIsReleased()); 
-        str.append("," + getIsNotLogged()); 
         str.append("," + getIsAgendaCall()); 
         str.append("," + getIsSmsCall()); 
         str.append("," + getIsForwardCall()); 
         str.append("," + getIsImportantCall()); 
-        str.append("," + getIs3W_call()); 
         str.append("," + getIsMailed()); 
         str.append("," + getInvoiceLevel()); 
-        str.append(",'" + getW3_CustomerId()); 
-        str.append("','" + ((this.getShortDescription() != null) ? escapeQuotes(this.getShortDescription()) : "")); 
+        str.append(",'" + ((this.getShortDescription() != null) ? escapeQuotes(this.getShortDescription()) : "")); 
         str.append("','" + ((this.getLongDescription() != null) ? escapeQuotes(this.getLongDescription()) : "")); 
         str.append("'," + getIsVirgin()); 
         str.append("," + getIsFaxCall()); 

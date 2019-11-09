@@ -57,7 +57,12 @@ if (mRecordData == null)
   return;
 }
 
-IntertelCallData intertelCall = IntertelCallManager.getInstance().getByDbId(mRecordData.getId());
+IntertelCallData intertelCall = null;
+if (isAutoUpdateRecord)
+{
+   intertelCall = IntertelCallManager.getInstance().getByDbId(mRecordData.getId());
+}
+   
 mCustomerData = AccountCache.getInstance().get(mRecordData); // yves: to be changed in .getId() in de herfst van 2020
 
 String vDirStr = mRecordData.getIsIncomingCall() ? "Van Nummer" : "Naar Nummer";
@@ -210,14 +215,8 @@ if (mCustomerData.getInvoiceType() == InvoiceHelper.kTelemarketingInvoice)
 					src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Naam</td>
 				<td width="530" valign="top"><input type=text size=30
 					name=<%=Constants.RECORD_CALLER_NAME%>
-					value="<%=mRecordData.getName()%>"> <%
-if (mCustomerData.getIs3W())
-{
-  if (mRecordData.getW3_CustomerId() == null)
-    mRecordData.setW3_CustomerId("");
-  out.println("&nbsp;&nbsp;&nbsp;3W klant ID&nbsp;<input type=text size=20 name=" + Constants.RECORD_3W_CUSTOMER_ID + " value=\"" + mRecordData.getW3_CustomerId() + "\" >");
-}
-%></td>
+					value="<%=mRecordData.getName()%>"> 
+               </td>
 			</tr>
 			<tr>
 				<td width="50"></td>

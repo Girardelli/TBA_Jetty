@@ -132,10 +132,15 @@ public class IntertelCallData
 		{
 			return (int)(tsEnd - tsAnswer);
 		}
+		else if (tsAnswer == 0 && !isIncoming)
+		{
+		   // unanswered outgoing call
+		   return 0;
+		}
 		// to be removed!!!!! --> bug in new Intertel webhook logging, missing answer event
 		else if (tsStart > 0 && tsEnd > 0)
 		{
-			System.out.println("No tsAnswer timestamp logged: return full length=" + (int)(tsEnd - tsStart));
+			//System.out.println("No tsAnswer timestamp logged: return full length=" + (int)(tsEnd - tsStart));
 			return (int)(tsEnd - tsStart);
 		}
 		return 0;

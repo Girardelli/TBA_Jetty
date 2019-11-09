@@ -165,7 +165,6 @@ HttpSession vHttpSession = request.getSession();
    vNewRecord.setIsForwardCall(request.getParameter(Constants.RECORD_FORWARD) != null ? request.getParameter(Constants.RECORD_FORWARD) != null : false);
    vNewRecord.setIsImportantCall(request.getParameter(Constants.RECORD_IMPORTANT) != null ? request.getParameter(Constants.RECORD_IMPORTANT) != null : false);
    vNewRecord.setIsFaxCall(request.getParameter(Constants.RECORD_FAX) != null ? request.getParameter(Constants.RECORD_FAX) != null : false);
-   vNewRecord.setIs3W_call(false);
 
 if (vIsVirgin)
 {

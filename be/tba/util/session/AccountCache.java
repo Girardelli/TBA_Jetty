@@ -369,7 +369,6 @@ final public class AccountCache
          AccountEntityData vEntryCnst = new AccountEntityData();
          vEntryCnst.setFullName(Constants.NUMBER_BLOCK[i][3]);
          vEntryCnst.setFwdNumber(Constants.NUMBER_BLOCK[i][0]);
-         vEntryCnst.setIs3W(false);
          vEntryCnst.setMailMinutes1((short) 0);
          vEntryCnst.setMailHour1((short) 0);
          vEntryCnst.setMailMinutes2((short) 0);

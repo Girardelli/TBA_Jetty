@@ -325,10 +325,6 @@ else
       {
         vInfoGifs = vInfoGifs.concat("<img src=\"/tba/images/fax.gif\"  height=\"13\" border=\"0\">&nbsp;");
       }
-      if (vEntry.getIs3W_call())
-      {
-        vInfoGifs = vInfoGifs.concat("<img src=\"/tba/images/3w.gif\"  height=\"13\" border=\"0\">&nbsp;");
-      }
       String vImportant = "";
       if (vEntry.getIsImportantCall())
       {

@@ -119,7 +119,6 @@ public class DbPopulator
                     vRecord.setIsImportantCall(false);
 
                 vRecord.setFwdNr(vTokenArr[2]);
-                vRecord.setW3_CustomerId(vTokenArr[3]);
                 vRecord.setDate(vTokenArr[4]);
                 vRecord.setTime(vTokenArr[5]);
                 vRecord.setTimeStamp(vCalendar.getTimeInMillis());
@@ -129,13 +128,7 @@ public class DbPopulator
                 vRecord.setLongDescription("");
                 vRecord.setCost("");
                 vRecord.setIsDocumented(true);
-                vRecord.setIsReleased(false);
-                vRecord.setIsNotLogged(false);
                 vRecord.setIsSmsCall(false);
-                if (vTokenArr[2].equals("409030"))
-                    vRecord.setIs3W_call(true);
-                else
-                    vRecord.setIs3W_call(false);
                 vRecord.setIsMailed(true);
                 vRecord.setInvoiceLevel((short) 0);
 

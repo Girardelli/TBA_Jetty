@@ -398,16 +398,6 @@ public class MailerSessionBean
             // CallRecordEntityData vEntry = ((CallRecordEntityData)
             // records.get((Long) i.next()));//.getValueObject();
 
-            String v3W_Id = account.getW3_CompanyId();
-            String v3W_Person = account.getW3_PersonId();
-            String v3W_CompanyId = vEntry.getW3_CustomerId();
-
-            if (account.getIs3W())
-            {
-                if (v3W_Id == null || v3W_Id.length() == 0 || v3W_Person == null || v3W_Person.length() == 0 || v3W_CompanyId == null || v3W_CompanyId.length() == 0)
-                    continue; // invalid
-            }
-
             String vDate = vEntry.getDate();
             String vTime = vEntry.getTime();
             String vNumber = vEntry.getNumber();
@@ -420,12 +410,6 @@ public class MailerSessionBean
 
             vBody.append(" <object>\n");
 
-            if (account.getIs3W())
-            {
-                vBody.append("  <company>" + v3W_Id + "</company>\n");
-                vBody.append("  <dn>" + v3W_CompanyId + "</dn>\n");
-                vBody.append("  <person>" + v3W_Person + "</person>\n");
-            }
             vBody.append("  <date>" + vDate + "</date>\n");
             vBody.append("  <time>" + vTime + "</time>\n");
             vBody.append("  <description>" + vShortDesc + "</description>\n");

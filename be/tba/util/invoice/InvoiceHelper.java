@@ -494,7 +494,7 @@ public class InvoiceHelper
             mInvoiceData.SmsUnitCost = mAccountEntityData.getFacSms() / 100;
             mInvoiceData.SmsCost = mCallCounts.SmsCalls * mInvoiceData.SmsUnitCost;
             mInvoiceData.FwdUnitCost = mAccountEntityData.getFacCallForward() / 100;
-            mInvoiceData.FwdCost = mCallCounts.FwdCalls * mInvoiceData.FwdUnitCost;
+            mInvoiceData.FwdCost = 0.0; //mCallCounts.FwdCalls * mInvoiceData.FwdUnitCost; // forwarded calls now generate an outgoing call
             mInvoiceData.FacLongUnit = mInvoiceData.CostFormatter.format(mAccountEntityData.getFacLong());
             mInvoiceData.LongCost = mCallCounts.LongCallSec * mAccountEntityData.getFacLong();
             mInvoiceData.FacLongFwdUnit = mInvoiceData.CostFormatter.format(mAccountEntityData.getFacLongFwd());

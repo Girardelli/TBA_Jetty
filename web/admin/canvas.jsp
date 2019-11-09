@@ -118,11 +118,11 @@ be.tba.util.timer.UrlCheckTimerTask"%>
                               </td>
                            </tr>
                            <tr>
-                              <td><input class="tbabuttonorange" type=submit name=action value="Oproep" onclick="newCall()"> &nbsp;&nbsp;&nbsp;&nbsp; <input class="tbabutton" type=submit name=action value="Refresh"> <%
- 	if (vSession.getRole() == AccountRole.ADMIN) {
- %> <input class="tbabutton" type=submit name=action value="Verwijderen" onclick="deleteCalls()"> <%
- 	}
- %> <input class="tbabutton" type=submit name=action value="Toevoegen" onclick="addRecord()"> <input class="tbabutton" type=submit name=action value="verzend mail" onclick="testMail()"> <%
+                              <td>
+                              <input class="tbabuttonorange" type=submit name=action value="Refresh"> 
+                              <input class="tbabutton" type=submit name=action value="Verwijderen" onclick="deleteCalls()">
+                              <input class="tbabutton" type=submit name=action value="Toevoegen" onclick="addRecord()"> 
+                              <input class="tbabutton" type=submit name=action value="verzend mail" onclick="testMail()"> <%
  	if (vSession.getUserId().equals("esosrv") && false) { // hidden
  %> <input class="tbabutton" type=submit name=action value="add intertel call" onclick="fixAccountIds()"> <%
  	}
@@ -367,10 +367,6 @@ be.tba.util.timer.UrlCheckTimerTask"%>
          				if (vEntry.getIsFaxCall()) {
          					vInfoGifs = vInfoGifs
          							.concat("<img src=\"/tba/images/fax.gif\"  height=\"13\" border=\"0\">&nbsp;");
-         				}
-         				if (vEntry.getIs3W_call()) {
-         					vInfoGifs = vInfoGifs
-         							.concat("<img src=\"/tba/images/3w.gif\"  height=\"13\" border=\"0\">&nbsp;");
          				}
          				String vImportant = "";
          				if (vEntry.getIsImportantCall()) {

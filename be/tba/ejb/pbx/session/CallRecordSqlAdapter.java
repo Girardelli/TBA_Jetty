@@ -10,13 +10,11 @@ import java.util.Vector;
 import be.tba.ejb.account.interfaces.AccountEntityData;
 import be.tba.ejb.pbx.interfaces.CallRecordEntityData;
 import be.tba.pbx.Forum700CallRecord;
-import be.tba.servlets.helper.IntertelCallManager;
 import be.tba.servlets.helper.PhoneMapManager;
 import be.tba.servlets.session.WebSession;
 import be.tba.util.constants.Constants;
 import be.tba.util.data.AbstractSqlAdapter;
 import be.tba.util.data.IntertelCallData;
-import be.tba.util.data.ReleaseCallData;
 import be.tba.util.session.AccountCache;
 import be.tba.util.timer.CallCalendar;
 
@@ -192,10 +190,10 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
       {
          if (fwdNr == null)
          {
-            return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsIncomingCall=TRUE AND IsReleased=FALSE ORDER BY TimeStamp DESC");
+            return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsIncomingCall=TRUE ORDER BY TimeStamp DESC");
          } else
          {
-            return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsIncomingCall=TRUE AND IsReleased=FALSE AND FwdNr='" + fwdNr + "' ORDER BY TimeStamp DESC");
+            return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsIncomingCall=TRUE AND FwdNr='" + fwdNr + "' ORDER BY TimeStamp DESC");
          }
       } catch (Exception e)
       {
@@ -213,10 +211,10 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
       {
          if (fwdNr == null)
          {
-            return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsIncomingCall=FALSE AND IsReleased=FALSE ORDER BY TimeStamp DESC");
+            return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsIncomingCall=FALSE ORDER BY TimeStamp DESC");
          } else
          {
-            return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsIncomingCall=FALSE AND IsReleased=FALSE AND FwdNr='" + fwdNr + "' ORDER BY TimeStamp DESC");
+            return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsIncomingCall=FALSE AND FwdNr='" + fwdNr + "' ORDER BY TimeStamp DESC");
          }
       } catch (Exception e)
       {
@@ -354,10 +352,10 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
       {
          if (fwdNr == null)
          {
-            return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsDocumented=TRUE AND IsReleased=FALSE ORDER BY TimeStamp DESC");
+            return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsDocumented=TRUE ORDER BY TimeStamp DESC");
          } else
          {
-            return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE FwdNr='" + fwdNr + "' AND IsDocumented=TRUE AND IsReleased=FALSE ORDER BY TimeStamp DESC");
+            return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE FwdNr='" + fwdNr + "' AND IsDocumented=TRUE ORDER BY TimeStamp DESC");
          }
       } catch (Exception e)
       {
@@ -606,50 +604,6 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
       return 0;
    }
 
-   /**
-    * @ejb:interface-method view-type="remote"
-    */
-
-   public void removeCallRecord(WebSession webSession, int key)
-   {
-      CallRecordEntityData vCallRecord = getRow(webSession, key);
-
-      if (vCallRecord.getIsNotLogged() || vCallRecord.getFwdNr().equals(Constants.NUMBER_BLOCK[0][0]) || vCallRecord.getFwdNr().equals(Constants.NUMBER_BLOCK[1][0]) || !vCallRecord.getIsDocumented())
-         deleteRow(webSession, key);
-      else
-      {
-         vCallRecord.setIsReleased(true);
-         updateRow(webSession, vCallRecord);
-      }
-   }
-
-   /**
-    * @ejb:interface-method view-type="remote"
-    */
-   public Collection<ReleaseCallData> getAllReleaseData(WebSession webSession)
-   {
-      Collection<CallRecordEntityData> vCollection = getAllRows(webSession);
-      Vector<ReleaseCallData> vResData = new Vector<ReleaseCallData>();
-      for (Iterator<CallRecordEntityData> i = vCollection.iterator(); i.hasNext();)
-      {
-         CallRecordEntityData vEntry = i.next();
-         vResData.add(new ReleaseCallData(vEntry.getId(), vEntry.getFwdNr(), vEntry.getTimeStamp(), vEntry.getIsReleased(), vEntry.getIsNotLogged()));
-      }
-
-      // System.out.println( "getAllReleaseData: " + vCollection.size() +
-      // " entries." );
-
-      return vResData;
-   }
-
-   /**
-    * @ejb:interface-method view-type="remote"
-    */
-   public Collection<CallRecordEntityData> getNotLogged(WebSession webSession)
-   {
-      return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsNotLogged=TRUE ORDER BY TimeStamp DESC");
-   }
-
    static final long PERIOD = Constants.DAYS * 20;
 
    static final long LOOPS = 365 / 20;
@@ -825,11 +779,6 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
                vRemoveEntry = false;
             }
             strBuilder = new StringBuilder();
-            if ((ReplaceNoCaseSensitive(vEntry.getW3_CustomerId(), vLowerFinder, strBuilder)))
-            {
-               vEntry.setW3_CustomerId(strBuilder.toString());
-               vRemoveEntry = false;
-            }
             if (!vRemoveEntry)
             {
                outputList.add(vEntry);
@@ -875,9 +824,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
       {
          record.logRecord();
          CallRecordEntityData newRecord = new CallRecordEntityData();
-         newRecord.setIsNotLogged(false);
          newRecord.setIsDocumented(false);
-         newRecord.setIsReleased(false);
          newRecord.setIsChanged(false);
 
          if (record.isIncomingCall())
@@ -897,8 +844,6 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
                   if (record.mDuration.equals("00:00:00"))
                   {
                      System.out.println("missed call from " + record.mExtCorrNumber + "!!");
-                     newRecord.setIsNotLogged(true);
-                     // newRecord.setIsReleased(true);
                      break;
                   }
                   if (i == 0 || i == 2) // TheBusinessAssistant or thuis
@@ -965,7 +910,6 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
          newRecord.setShortDescription("");
          newRecord.setLongDescription("");
          newRecord.setCost(record.mDuration);
-         newRecord.setW3_CustomerId("");
          Calendar vCalendar = Calendar.getInstance();
          newRecord.setTimeStamp(vCalendar.getTimeInMillis());
 
@@ -1004,35 +948,6 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
    /**
     * @ejb:interface-method view-type="remote"
     */
-
-   public void deleteCallRecords(WebSession webSession, Collection<CallRecordEntityData> vList)
-   {
-      int i = 0;
-      for (Iterator<CallRecordEntityData> iter = vList.iterator(); iter.hasNext();)
-      {
-         deleteRow(webSession, iter.next().getId());
-         if (++i > 300)
-            break; // delete maximum 1000 calls to avoid out of memory
-                   // problems
-      }
-   }
-
-   /**
-    * to be removed
-    */
-   public void releaseCallRecords(WebSession webSession, Collection<CallRecordEntityData> vList)
-   {
-      for (Iterator<CallRecordEntityData> iter = vList.iterator(); iter.hasNext();)
-      {
-         CallRecordEntityData vCallRecord = iter.next();
-         vCallRecord.setIsReleased(true);
-         updateRow(webSession, vCallRecord);
-      }
-   }
-
-   /**
-    * @ejb:interface-method view-type="remote"
-    */
    public void setCallData(WebSession webSession, CallRecordEntityData data)
    {
       setIsDocumentedFlag(data);
@@ -1059,8 +974,6 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
       sqlCmd.append(",IsImportantCall=" + data.getIsImportantCall());
       sqlCmd.append(",IsFaxCall=" + data.getIsFaxCall());
       sqlCmd.append(",IsDocumented=" + data.getIsDocumented());
-      sqlCmd.append(",IsReleased=" + data.getIsReleased());
-      sqlCmd.append(",IsNotLogged=" + data.getIsNotLogged());
       sqlCmd.append(",IsMailed=" + data.getIsMailed());
       sqlCmd.append(",IsVirgin=" + data.getIsVirgin());
       sqlCmd.append(",IsFaxCall=" + data.getIsFaxCall());
@@ -1086,28 +999,6 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
    /**
     * @ejb:interface-method view-type="remote"
     */
-   public void setRelease(WebSession webSession, String key)
-   {
-      setRelease(webSession, Integer.parseInt(key));
-   }
-
-   /**
-    * @ejb:interface-method view-type="remote"
-    */
-   public void setRelease(WebSession webSession, int key)
-   {
-      executeSqlQuery(webSession, "UPDATE CallRecordEntity SET IsReleased=TRUE WHERE Id=" + key);
-//    	CallRecordEntityData data = getRow(webSession, key);
-//        if (data != null)
-//        {
-//            data.setIsReleased(true);
-//            updateRow(webSession, data);
-//        }
-   }
-
-   /**
-    * @ejb:interface-method view-type="remote"
-    */
    public void setIsMailed(WebSession webSession, String key)
    {
       setIsMailed(webSession, Integer.parseInt(key));
@@ -1126,26 +1017,6 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
 //            data.setIsMailed(true);
 //            updateRow(webSession, data);
 //        }
-   }
-
-   /**
-    * @ejb:interface-method view-type="remote"
-    */
-
-   public void setUnRelease(WebSession webSession, int key)
-   {
-      executeSqlQuery(webSession, "UPDATE CallRecordEntity SET IsReleased=FALSE WHERE Id=" + key);
-//        CallRecordEntityData data = getRow(webSession, key);
-//        if (data != null)
-//        {
-//            data.setIsReleased(false);
-//            updateRow(webSession, data);
-//        }
-   }
-
-   public void setUnRelease(WebSession webSession, String key)
-   {
-      setUnRelease(webSession, Integer.parseInt(key));
    }
 
    public void setShortText(WebSession webSession, int key, String text, boolean isKlant)
@@ -1233,7 +1104,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
       {
          // regular outgoing call
          String callingParty = "";//"', FwdNr='" + data.callingNr;
-         if (data.tsTransfer > 0)
+         if (data.tsAnswer > 0)
          {
             callingParty = "', FwdNr='" + IntertelCallData.last6Numbers(data.answeredBy);
          }
@@ -1266,8 +1137,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
 
    static public void setIsDocumentedFlag(CallRecordEntityData record)
    {
-      if (record.getNumber() != null && record.getNumber().length() != 0 && record.getName() != null && record.getName().length() != 0 && (record.getShortDescription() != null && record.getShortDescription().length() != 0)
-            && (!record.getIs3W_call() || (record.getW3_CustomerId() != null && record.getW3_CustomerId().length() != 0)))
+      if (record.getNumber() != null && record.getNumber().length() != 0 && record.getName() != null && record.getName().length() != 0 && (record.getShortDescription() != null && record.getShortDescription().length() != 0))
       {
          record.setIsDocumented(true);
       } else
@@ -1306,25 +1176,21 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
          entry.setTimeStamp(rs.getLong(9));
          entry.setIsIncomingCall(rs.getBoolean(10));
          entry.setIsDocumented(rs.getBoolean(11));
-         entry.setIsReleased(rs.getBoolean(12));
-         entry.setIsNotLogged(rs.getBoolean(13));
-         entry.setIsAgendaCall(rs.getBoolean(14));
-         entry.setIsSmsCall(rs.getBoolean(15));
-         entry.setIsForwardCall(rs.getBoolean(16));
-         entry.setIsImportantCall(rs.getBoolean(17));
-         entry.setIs3W_call(rs.getBoolean(18));
-         entry.setIsMailed(rs.getBoolean(19));
-         entry.setInvoiceLevel(rs.getShort(20));
-         entry.setW3_CustomerId(null2EmpthyString(rs.getString(21)));
-         entry.setShortDescription(null2EmpthyString(rs.getString(22)));
-         entry.setLongDescription(null2EmpthyString(rs.getString(23)));
-         entry.setIsVirgin(rs.getBoolean(24));
-         entry.setIsFaxCall(rs.getBoolean(25));
-         entry.setIsChanged(rs.getBoolean(26));
-         entry.setDoneBy(null2EmpthyString(rs.getString(27)));
-         entry.setTsStart(rs.getLong(28));
-         entry.setTsAnswer(rs.getLong(29));
-         entry.setTsEnd(rs.getLong(30));
+         entry.setIsAgendaCall(rs.getBoolean(12));
+         entry.setIsSmsCall(rs.getBoolean(13));
+         entry.setIsForwardCall(rs.getBoolean(14));
+         entry.setIsImportantCall(rs.getBoolean(15));
+         entry.setIsMailed(rs.getBoolean(16));
+         entry.setInvoiceLevel(rs.getShort(17));
+         entry.setShortDescription(null2EmpthyString(rs.getString(18)));
+         entry.setLongDescription(null2EmpthyString(rs.getString(19)));
+         entry.setIsVirgin(rs.getBoolean(20));
+         entry.setIsFaxCall(rs.getBoolean(21));
+         entry.setIsChanged(rs.getBoolean(22));
+         entry.setDoneBy(null2EmpthyString(rs.getString(23)));
+         entry.setTsStart(rs.getLong(24));
+         entry.setTsAnswer(rs.getLong(25));
+         entry.setTsEnd(rs.getLong(26));
          vVector.add(entry);
       }
       return vVector;

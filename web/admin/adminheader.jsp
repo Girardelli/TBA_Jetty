@@ -85,8 +85,6 @@ private String vSessionId;
 									<br> <a class='norm'
 									href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_ACCOUNT_ADMIN%>"><nobr>Klanten</nobr></a>
                                     <br> <a class='norm'
-                                    href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_NOTLOGGED_CALLS%>"><nobr>Gemiste
-											Oproepen</nobr></a> <br> <a class='norm'
 									href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_RECORD_SEARCH%>"><nobr>Zoeken</nobr></a>
 									<br> <a class='norm'
 									href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_TASK_ADMIN%>"><nobr>Taken</nobr></a>

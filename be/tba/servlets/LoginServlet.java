@@ -112,7 +112,6 @@ public class LoginServlet extends HttpServlet
                     vSession.init(vUserId, vKey);
                     vSession.setRole(AccountRole.fromShort(vAccount.getRole()));
                     vSession.setFwdNumber(vAccount.getFwdNumber());
-                    vSession.setIs3W(vAccount.getIs3W());
                     Calendar calendar = Calendar.getInstance();
                     vSession.setYear(calendar.get(Calendar.YEAR));
                     vSession.setMonthsBack(calendar.get(Calendar.MONTH));
