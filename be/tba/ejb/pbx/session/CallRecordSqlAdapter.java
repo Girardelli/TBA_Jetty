@@ -1100,15 +1100,23 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
       {
          shortDescr = "ShortDescription='Niet opgenomen', ";
       }
-      if (!data.isIncoming && !data.isTransferOutCall)
+      if (!data.isIncoming)
       {
-         // regular outgoing call
-         String callingParty = "";//"', FwdNr='" + data.callingNr;
-         if (data.tsAnswer > 0)
+         if (data.isTransferOutCall)
          {
-            callingParty = "', FwdNr='" + IntertelCallData.last6Numbers(data.answeredBy);
+            // transfered outgoing call
+            executeSqlQuery(webSession, "UPDATE CallRecordEntity SET " + shortDescr + "TsEnd='" + data.tsEnd + "', Cost='" + data.getCostStr() + "' WHERE ID='" + data.dbRecordId + "'");
          }
-         executeSqlQuery(webSession, "UPDATE CallRecordEntity SET " + shortDescr + "TsEnd='" + data.tsEnd + "', Cost='" + data.getCostStr() + callingParty + "' WHERE ID='" + data.dbRecordId + "'");
+         else
+         {
+            // regular outgoing call
+            String callingParty = "";//"', FwdNr='" + data.callingNr;
+            if (data.tsAnswer > 0)
+            {
+               callingParty = "', FwdNr='" + IntertelCallData.last6Numbers(data.answeredBy);
+            }
+            executeSqlQuery(webSession, "UPDATE CallRecordEntity SET " + shortDescr + "TsEnd='" + data.tsEnd + "', Cost='" + data.getCostStr() + callingParty + "' WHERE ID='" + data.dbRecordId + "'");
+         }
          return;
       }
       executeSqlQuery(webSession, "UPDATE CallRecordEntity SET " + shortDescr + "TsEnd='" + data.tsEnd + "', Cost='" + data.getCostStr() + "' WHERE ID='" + data.dbRecordId + "'");
