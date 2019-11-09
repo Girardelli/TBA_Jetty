@@ -116,8 +116,7 @@ public class IntertelServlet extends HttpServlet
     		{
     			TbaWebSocketAdapter.broadcast(new WebSocketData(WebSocketData.NEW_CALL, timestamp, data));
     		}
-    		writeToFile(data);
-/*    		else
+    		else
     		{
     		   // ********************************************
     		   // logic to cope with the fact that the call park feature does not behave as expected
@@ -133,14 +132,16 @@ public class IntertelServlet extends HttpServlet
     		   if (transferedCall != null)
     		   {
     		      // conclude that this is a transfered call. Treat it as such because the Intertel bugs will not help you
-    		      data.callParkBug_transferLink = transferedCall;
-    		      transferedCall.callParkBug_transferLink = data;
+    		      // When the transfered call is not answered, there will be no 'transfer' event. But in stead both calls shall be finished properly
+    		      data.callTransferLink = transferedCall;
+    		      transferedCall.callTransferLink = data;
     		      data.callingNr = transferedCall.calledNr;
 //    		      System.out.println("transfered call: start");
 //               System.out.println(transferedCall);
 //               System.out.println(data);
     		   }
-    		} */
+            writeToFile(data);
+    		} 
     		break;
     		
     	case "answer":
