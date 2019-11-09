@@ -30,6 +30,8 @@ public class IntertelServlet extends HttpServlet
 	private WebSession mSession;
 	private IntertelCallManager mIntertelCallManager;
 	private CallRecordSqlAdapter mCallRecordSqlAdapter;
+	private static String kFileScope = "day"; // month, week, day
+
 	
 	public IntertelServlet()
 	{
@@ -64,7 +66,7 @@ public class IntertelServlet extends HttpServlet
 	public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
     {
 		//System.out.println("Intertel servlet doPost");
-    	writeParmsToFile(req);
+    	//writeParmsToFile(req);
 		String phase = req.getParameter("origin");
 		//sLogger.info("Intertel servlet doPost");
     	System.out.println("Intertel servlet doPost: " + phase);
@@ -97,18 +99,6 @@ public class IntertelServlet extends HttpServlet
     	boolean isIncoming =  (inOut.equals("IN"));
     	long timestamp = Long.parseLong(req.getParameter("timestamp"));
     	
-    	//WebSession session;
-//		try 
-//		{
-//			mSession = new WebSession(Constants.MYSQL_URL);
-//		} 
-//		catch (SQLException e) 
-//		{
-//			// TODO Auto-generated catch block
-//			System.out.println(e.getMessage());
-//			e.printStackTrace();
-//			return;
-//		}
 		data = mIntertelCallManager.get(intertelCallId);
 		if (data == null && !phase.equals("start"))
 		{
@@ -126,6 +116,7 @@ public class IntertelServlet extends HttpServlet
     		{
     			TbaWebSocketAdapter.broadcast(new WebSocketData(WebSocketData.NEW_CALL, timestamp, data));
     		}
+    		writeToFile(data);
 /*    		else
     		{
     		   // ********************************************
@@ -244,6 +235,7 @@ public class IntertelServlet extends HttpServlet
     		System.out.println("Intertel servlet doPost: unknown 'origin'=" + phase);
         	        	
     	}
+		/*
 		if (data == null)
 		{
 			//System.out.println("INtertel call cannot be found: data=null");
@@ -256,7 +248,7 @@ public class IntertelServlet extends HttpServlet
 		   //mIntertelCallManager.removeCall(mSession, data);
 			writeToFile(data);
 			//System.out.println(data.intertelCallId + "-finalize with write to log");
-		}
+		} */
     }
 
     private void writeParmsToFile(HttpServletRequest req) throws IOException
@@ -283,17 +275,37 @@ public class IntertelServlet extends HttpServlet
     
     private void writeToFile(IntertelCallData data) throws IOException
     {
-        File file = new File(Constants.INTERTELL_CALLLOG_PATH, "calls.txt");
-        StringBuffer strBuf = new StringBuffer();
-        if (!file.exists())
+       Calendar calendar = Calendar.getInstance();
+
+       int year = calendar.get(Calendar.YEAR);
+       int month = calendar.get(Calendar.MONTH) + 1;
+       String fileName;
+       
+       if (kFileScope.equals("day"))
+       {
+           int day = calendar.get(Calendar.DAY_OF_MONTH);
+           fileName = new String(year + "-" + month + "-" + day + ".log");
+       }
+       else if (kFileScope.equals("month"))
+       {
+          fileName = new String(year + "-" + month + ".log");
+       }
+       else // if (kFileScope.equals("week"))
+       {
+          int week = calendar.get(Calendar.WEEK_OF_YEAR);
+          fileName = new String(year + "-" + week + ".log");
+       }
+       StringBuffer strBuf = new StringBuffer();
+       File file = new File(Constants.INTERTELL_CALLLOG_PATH, fileName);
+       if (!file.exists())
         {
             file.createNewFile();
-        	strBuf.append("datum    uur            van -->         naar duur   (info)\r\n");
+            strBuf.append("datum    uur            van -->         naar\r\n");
         }
         FileOutputStream fileStream = new FileOutputStream(file, true);
         
         Calendar vToday = Calendar.getInstance();
-        strBuf.append(String.format("%02d/%02d/%02d %02d:%02d %12s --> %12s %s %s\r\n", vToday.get(Calendar.DAY_OF_MONTH), vToday.get(Calendar.MONTH) + 1, vToday.get(Calendar.YEAR) - 2000, vToday.get(Calendar.HOUR_OF_DAY), vToday.get(Calendar.MINUTE), data.callingNr, data.calledNr, (data.tsAnswer != 0) ? Long.toString(data.tsEnd-data.tsAnswer) : "gemist", data.isTransferOutCall ? "(doorgeschakeld)" : ""));
+        strBuf.append(String.format("%02d/%02d/%02d %02d:%02d %12s --> %12s\r\n", vToday.get(Calendar.DAY_OF_MONTH), vToday.get(Calendar.MONTH) + 1, vToday.get(Calendar.YEAR) - 2000, vToday.get(Calendar.HOUR_OF_DAY), vToday.get(Calendar.MINUTE), data.callingNr, data.calledNr));
         fileStream.write(strBuf.toString().getBytes());
         fileStream.close();
     }  
