@@ -1235,6 +1235,12 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
             text = "ShortDescription='Niet opgenomen', ";
          }
       }
+      if (!data.isIncoming && !data.isTransferOutCall)
+      {
+         // regular outgoing call
+         executeSqlQuery(webSession, "UPDATE CallRecordEntity SET " + text + "TsEnd='" + data.tsEnd + "', Cost='" + data.getCostStr() + "', FwdNr='" +  IntertelCallData.last6Numbers(data.answeredBy) + "' WHERE ID='" + data.dbRecordId + "'");
+         return;
+      }
       executeSqlQuery(webSession, "UPDATE CallRecordEntity SET " + text + "TsEnd='" + data.tsEnd + "', Cost='" + data.getCostStr() + "' WHERE ID='" + data.dbRecordId + "'");
    }
 
