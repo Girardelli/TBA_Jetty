@@ -191,6 +191,9 @@ public class IntertelServlet extends HttpServlet
     		      data = data.callParkBug_transferLink;
     		      mCallRecordSqlAdapter.setForwardCallFlag(mSession, data.callParkBug_transferLink);
     		   } */
+    		   
+    		   
+    		   /*
         		if (data.callTransferLink != null && data.callTransferLink.isTransferOutCall)
         		{
         		   // also end this one as this event is actually the end of the transfered call
@@ -202,6 +205,7 @@ public class IntertelServlet extends HttpServlet
                data.setTsEnd(timestamp);
                mCallRecordSqlAdapter.setTsEnd(mSession, data);
         		}
+        		*/
         		data.setCurrentPhase(phase);
     			data.isEndDone = true;
     			//System.out.println(data.intertelCallId + "-end");
@@ -222,12 +226,18 @@ public class IntertelServlet extends HttpServlet
         		   data = data.callParkBug_transferLink;
         		} */
     		   data.isSummaryDone = true;
-        		if (!data.isIncoming)
-    			{	
-        			data.setCallingNr(req.getParameter("viaDID"));
-            	//mCallRecordSqlAdapter.setCallingNr(mSession, data);
-            	//System.out.println(data.intertelCallId + "-summary");
-    			}
+            if (data.callTransferLink != null && data.callTransferLink.isTransferOutCall)
+            {
+               // also end this one as this event is actually the end of the transfered call
+               data = data.callTransferLink;
+            }
+            else if (!data.isIncoming && data.tsAnswer == 0)
+            {  
+               // regular outgoing call not answered
+               data.setCallingNr(req.getParameter("viaDID"));
+            }
+            data.callTransferLink.setTsEnd(timestamp);
+            mCallRecordSqlAdapter.setTsEnd(mSession, data);
     		}
     		break;
 
