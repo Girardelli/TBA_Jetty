@@ -128,6 +128,7 @@ public class IntertelServlet extends HttpServlet
     		   //   - cope with the buggy end and summary events of the transfered call because they carry the ID of the incomming call
     		   // (!!! call log of a transfered call appended at the bottom of this source file)
     		  
+    		   data.callingNr = callingNr; // reset this to the original calling Party id to check for the telephone id
     		   IntertelCallData transferedCall = mIntertelCallManager.getTransferCall_CallParkBugs(data);
     		   if (transferedCall != null)
     		   {
