@@ -163,6 +163,15 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
         return new Vector<InvoiceEntityData>();
     }
 
+    public Collection<InvoiceEntityData> getInvoiceByFintroId(WebSession webSession, String fintroId)
+    {
+        if (fintroId != null)
+        {
+            return executeSqlQuery(webSession, "SELECT * FROM InvoiceEntity WHERE IsInvoiceMailed=TRUE AND CreditId=-1 AND IsPayed=1 AND FintroId='" + fintroId + "'"); 
+        }
+        return new Vector<InvoiceEntityData>();
+    }
+
     /**
      * @ejb:interface-method view-type="remote"
      */
