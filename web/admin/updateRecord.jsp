@@ -89,12 +89,12 @@ else
 		<td width="30" bgcolor="FFFFFF"></td>
 		<td bgcolor="FFFFFF"><br>
 		<br>
-		<span class="admintitle"> Voeg extra informatie toe aan oproep voor <%=mCustomerData.getFullName()%>.</span>
+		<span class="admintitle"> Voeg extra informatie toe aan oproep voor <%=((mCustomerData == null) ? "" : mCustomerData.getFullName())%>.</span>
 		<br>
 		<span class="bodytekst">
 		<table width="100%" border="0" cellspacing="1" cellpadding="1">
 <% 
-if (mCustomerData.getHasSubCustomers())
+if (mCustomerData != null && mCustomerData.getHasSubCustomers())
 {
 %>
 			<tr>
@@ -179,7 +179,7 @@ if (mCustomerData.getHasSubCustomers())
 					alt="binnenkomende fax voor u verwerkt" height="13" border="0"></td>
 			</tr>
 			<%
-if (mCustomerData.getInvoiceType() == InvoiceHelper.kTelemarketingInvoice)
+if (mCustomerData != null && mCustomerData.getInvoiceType() == InvoiceHelper.kTelemarketingInvoice)
 {
   out.println("<tr>");
   out.println("<td width=\"50\"></td>");
@@ -276,7 +276,7 @@ if (isAutoUpdateRecord && intertelCall != null)
 		</span> <br>
 		</td>
 <%
-if (mCustomerData.getCallProcessInfo() != null && !mCustomerData.getCallProcessInfo().isEmpty())
+if (mCustomerData != null && mCustomerData.getCallProcessInfo() != null && !mCustomerData.getCallProcessInfo().isEmpty())
 {
 %>
 		
