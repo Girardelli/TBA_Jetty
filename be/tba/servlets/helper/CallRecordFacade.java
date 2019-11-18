@@ -55,9 +55,9 @@ public class CallRecordFacade
       // Check the record and add it if it is a valid one.
 
       CallRecordEntityData vCallData = session.getCurrentRecord();
-      if (vCallData == null || vCallData.getIsMailed())
+      if (vCallData == null)
       {
-         System.out.println("AdminDispatchServlet: no call record in session context (SAVE RECORD)");
+         System.out.println("AdminDispatchServlet: no call record in session context (SAVE RECORD), vCallData=" + vCallData);
          return;
       }
       AccountEntityData vNewCustomer = null;
@@ -73,6 +73,7 @@ public class CallRecordFacade
       } else
       {
          String newFwdNr = req.getParameter(Constants.ACCOUNT_FORWARD_NUMBER);
+         System.out.println("ACCOUNT_FORWARD_NUMBER=" + newFwdNr + ", vCallData.getFwdNr=" + vCallData.getFwdNr());
          if (newFwdNr != null)
          {
             if (!vCallData.getFwdNr().equals(newFwdNr))
