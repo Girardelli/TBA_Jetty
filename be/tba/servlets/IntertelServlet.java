@@ -66,7 +66,7 @@ public class IntertelServlet extends HttpServlet
 	public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
     {
 		//System.out.println("Intertel servlet doPost");
-    	//writeParmsToFile(req);
+    	writeParmsToFile(req);
 		String phase = req.getParameter("origin");
 		//sLogger.info("Intertel servlet doPost");
     	System.out.println("Intertel servlet doPost: " + phase);
