@@ -63,7 +63,7 @@ public class CallRecordFacade
       AccountEntityData vNewCustomer = null;
       CallRecordSqlAdapter vCallLogWriterSession = new CallRecordSqlAdapter();
       AccountEntityData vOldCustomer = AccountCache.getInstance().get(vCallData);
-      if (vOldCustomer.getHasSubCustomers() && req.getParameter(Constants.ACCOUNT_SUB_CUSTOMER) != null)
+      if (vOldCustomer != null && vOldCustomer.getHasSubCustomers() && req.getParameter(Constants.ACCOUNT_SUB_CUSTOMER) != null)
       {
          vCallData.setFwdNr(req.getParameter(Constants.ACCOUNT_SUB_CUSTOMER));
          AccountEntityData newCustomer = AccountCache.getInstance().get(vCallData.getFwdNr()); // take FwdNr because vCallDatat still has the previous accountId and shall make
@@ -106,7 +106,7 @@ public class CallRecordFacade
       boolean prevIsImportant = vCallData.getIsImportantCall();
       vCallData.setIsImportantCall(req.getParameter(Constants.RECORD_IMPORTANT) != null);
       vCallData.setIsFaxCall(req.getParameter(Constants.RECORD_FAX) != null);
-      if (req.getParameter(Constants.RECORD_INVOICE_LEVEL) != null)
+      if (vOldCustomer != null && req.getParameter(Constants.RECORD_INVOICE_LEVEL) != null)
       {
          if (vOldCustomer.getInvoiceType() == InvoiceHelper.kTelemarketingInvoice)
          {
