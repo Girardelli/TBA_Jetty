@@ -156,12 +156,12 @@ final public class FintroXlsxReader
 
    }
 
-   public Map<String, Collection<FintroPayment>> getPaymentsMap()
-   {
-      return mPaymentsMap;
-   }
+//   public Map<String, Collection<FintroPayment>> getPaymentsMap()
+//   {
+//      return mPaymentsMap;
+//   }
 
-   public void processPaymentsMap()
+   private void processPaymentsMap()
    {
       for (Iterator<String> vIter = mPaymentsMap.keySet().iterator(); vIter.hasNext();)
       {
@@ -185,43 +185,9 @@ final public class FintroXlsxReader
             System.out.println("-----------------------------");
             // for all payments done via the bank account number accountNrCustomer
             FintroPayment payment = vPayIter.next();
-            String structuredId = "";
             // System.out.println(payment.details);
             // check for a structured message like: 'MEDEDELING : 181200070764'
-            int y = payment.details.indexOf("MEDEDELING : ");
-            if (y >= 0 && payment.details.length() > y + 13 + 12)
-            {
-               y += 13;
-               String flatId = payment.details.substring(y, y + 12);
-               // System.out.println("Flat Structured ID found: " + flatId);
-               if (flatId.length() == 12)
-               {
-                  byte[] numberArr = flatId.getBytes();
-                  int x = 0;
-                  while (x < 12 && numberArr[x] >= '0' && numberArr[x] <= '9')
-                  {
-                     ++x;
-                  }
-                  if (x == 12)
-                  {
-                     structuredId = "+++" + flatId.substring(0, 3) + "/" + flatId.substring(3, 7) + "/" + flatId.substring(7) + "+++";
-                  }
-                  else
-                  {
-                     // System.out.println("x = " + x);
-                  }
-               }
-            }
-            if (structuredId.isEmpty())
-            {
-               // check for a structured message like: +++090/9337/55493+++
-               int i = payment.details.indexOf("+++");
-               if (i >= 0)
-               {
-                  // details hold a structured ID
-                  structuredId = payment.details.substring(i, i + 20);
-               }
-            }
+            String structuredId = getStructuredId(payment);
             // ------------------------------------------
             // here we start finding a match with invoices
             boolean isMatchFound = false;
@@ -243,13 +209,13 @@ final public class FintroXlsxReader
                   {
                      mWrongValuePayments.add(new InvoicePaymentStr(invoice, payment));
                   }
-                  isMatchFound = true;
+                  // isMatchFound = true;
                   // continue with the next payment
                   continue;
                }
                else
                {
-                  System.out.println("ERROR: structid not found in db");
+                  System.out.println("ERROR: structid not found in db. Id=" + structuredId);
                }
             }
             else
@@ -455,7 +421,10 @@ final public class FintroXlsxReader
       for (Iterator<FintroPayment> vPayIter = mNotMatchingPayments.iterator(); vPayIter.hasNext();)
       {
          FintroPayment payment = vPayIter.next();
-         strBuf.append("Bedrag: " + payment.amount + " (excl BTW: " + vCostFormatter.format(payment.amount / 1.21) + ")<br>" + payment.details + "<br><br>");
+         strBuf.append("Bedrag: " + payment.amount + " (excl BTW: " + vCostFormatter.format(payment.amount / 1.21) + ")<br>");
+         strBuf.append(payment.details);
+         strBuf.append("<br>FintroId: " + payment.id);
+         strBuf.append("<br>ValutaDate: " + payment.valutaDate + "<br><br>");
       }
       String notMatchingPayments = strBuf.toString();
       // System.out.println("\r\nNot matching payments: \r\n" + strBuf.toString());
@@ -472,7 +441,10 @@ final public class FintroXlsxReader
       {
          InvoicePaymentStr invoicePayment = vInvoicePaymentIter.next();
          strBuf.append("Factuur " + invoicePayment.invoice.getInvoiceNr() + ", bedrag: " + vCostFormatter.format(invoicePayment.invoice.getTotalCost() * 1.21) + " (Excl BTW)=" + invoicePayment.invoice.getTotalCost() + "<br>Bedrag betaald:  " + invoicePayment.payment.amount + " (excl BTW: " + vCostFormatter.format(invoicePayment.payment.amount / 1.21) + ")<br>Van Banknummer:  "
-               + invoicePayment.payment.accountNrCustomer + "<br>" + invoicePayment.payment.details + "<br><br>");
+               + invoicePayment.payment.accountNrCustomer + "<br>");
+         strBuf.append(invoicePayment.payment.details);
+         strBuf.append("<br>FintroId: " + invoicePayment.payment.id);
+         strBuf.append("<br>ValutaDate: " + invoicePayment.payment.valutaDate + "<br><br>");
       }
       String wrongValuePayments = strBuf.toString();
 
@@ -509,6 +481,46 @@ final public class FintroXlsxReader
       oStream.close();
    }
 
+   private String getStructuredId(FintroPayment payment)
+   {
+      String structuredId = "";
+      int y = payment.details.indexOf("MEDEDELING : ");
+      if (y >= 0 && payment.details.length() > y + 13 + 12)
+      {
+         y += 13;
+         String flatId = payment.details.substring(y, y + 12);
+         // System.out.println("Flat Structured ID found: " + flatId);
+         if (flatId.length() == 12)
+         {
+            byte[] numberArr = flatId.getBytes();
+            int x = 0;
+            while (x < 12 && numberArr[x] >= '0' && numberArr[x] <= '9')
+            {
+               ++x;
+            }
+            if (x == 12)
+            {
+               structuredId = "+++" + flatId.substring(0, 3) + "/" + flatId.substring(3, 7) + "/" + flatId.substring(7) + "+++";
+            }
+            else
+            {
+               // System.out.println("x = " + x);
+            }
+         }
+      }
+      if (structuredId.isEmpty())
+      {
+         // check for a structured message like: +++090/9337/55493+++
+         int i = payment.details.indexOf("+++");
+         if (i >= 0)
+         {
+            // details hold a structured ID
+            structuredId = payment.details.substring(i, i + 20);
+         }
+      }
+      return structuredId;
+   }
+   
    private boolean isInvoiceNrFoundInDetail(String invoiceNr, String detail)
    {
       // System.out.println("isInvoiceNrFoundInDetail(invoiceNr=" + invoiceNr + ",

@@ -47,8 +47,6 @@ allEntryIds = new StringBuilder("[");
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="tbabutton" type=submit name=action value="Herlaad (Vandaag)" onclick="refresh()"> 
         </span></p>
 <%
-  InitialContext vContext = new InitialContext();
-
   if (vSession == null)
     throw new AccessDeniedException("U bent niet aangemeld.");
   vSession.setCallingJsp(Constants.CLIENT_CALLS_JSP);  
@@ -98,7 +96,7 @@ out.println("<input class=\"tbabutton\" type=submit name=action value=\"Volgende
     <td width="65"  valign="top" class="topMenu" bgcolor="F89920">&nbsp;Datum</td>
     <td width="45"  valign="top" class="topMenu" bgcolor="F89920">&nbsp;Uur</td>
 <%
-if (vAccount.getHasSubCustomers())
+if (vAccount != null && vAccount.getHasSubCustomers())
 {
 	%>
 	<td width="200"  valign="top" class="topMenu" bgcolor="F89920">&nbsp;Medewerker</td>
@@ -162,7 +160,7 @@ if (vAccount.getHasSubCustomers())
 		<td width="65" valign="top"><%=vDate%></td>
 		<td width="45" valign="top"><%=vTime%></td>
 <%
-if (vAccount.getHasSubCustomers())
+if (vAccount != null && vAccount.getHasSubCustomers())
 {
 	if (vEntry.getAccountId() > 0)
 	{

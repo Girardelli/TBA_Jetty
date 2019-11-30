@@ -149,7 +149,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
       {
          AccountEntityData customer = AccountCache.getInstance().get(fwdNr);
 
-         String CustomerIdsIN = "'" + fwdNr + "'";
+         String customerIdsIN = "'" + fwdNr + "'";
          if (customer.getHasSubCustomers())
          {
             Collection<AccountEntityData> subCustomers = AccountCache.getInstance().getSubCustomersList(customer.getId());
@@ -158,7 +158,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
                for (Iterator<AccountEntityData> i = subCustomers.iterator(); i.hasNext();)
                {
                   AccountEntityData vEntry = i.next();
-                  CustomerIdsIN = CustomerIdsIN.concat(",'" + vEntry.getFwdNumber() + "'");
+                  customerIdsIN = customerIdsIN.concat(",'" + vEntry.getFwdNumber() + "'");
                }
             }
          }
@@ -173,7 +173,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
          {
             vToTimeStamp = vCallCalendar.getCurrentTimestamp() + 60000; // add 1 minute in teh future
          }
-         return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsDocumented=TRUE AND TimeStamp>" + vFromTimeStamp + " AND TimeStamp<=" + vToTimeStamp + " AND FwdNr IN (" + CustomerIdsIN + ") ORDER BY TimeStamp DESC");
+         return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsDocumented=TRUE AND TimeStamp>" + vFromTimeStamp + " AND TimeStamp<=" + vToTimeStamp + " AND FwdNr IN (" + customerIdsIN + ") ORDER BY TimeStamp DESC");
       } catch (Exception e)
       {
          e.printStackTrace();
@@ -463,12 +463,27 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
    {
       try
       {
+         AccountEntityData customer = AccountCache.getInstance().get(fwdNr);
+
+         String customerIdsIN = "'" + fwdNr + "'";
+         if (customer.getHasSubCustomers())
+         {
+            Collection<AccountEntityData> subCustomers = AccountCache.getInstance().getSubCustomersList(customer.getId());
+            if (subCustomers != null)
+            {
+               for (Iterator<AccountEntityData> i = subCustomers.iterator(); i.hasNext();)
+               {
+                  AccountEntityData vEntry = i.next();
+                  customerIdsIN = customerIdsIN.concat(",'" + vEntry.getFwdNumber() + "'");
+               }
+            }
+         }
          CallCalendar vCalendar = new CallCalendar();
          long vStartTime = vCalendar.getStartOfMonth(month, year);
          long vEndTime = vCalendar.getEndOfMonth(month, year);
 
          Vector<CallRecordEntityData> vOutList = new Vector<CallRecordEntityData>();
-         Collection<CallRecordEntityData> vCollection = executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE FwdNr='" + fwdNr + "' AND TimeStamp>" + vStartTime + " AND TimeStamp<=" + vEndTime + " AND IsDocumented=TRUE ORDER BY TimeStamp DESC");
+         Collection<CallRecordEntityData> vCollection = executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE TimeStamp>" + vStartTime + " AND TimeStamp<=" + vEndTime + " AND IsDocumented=TRUE AND FwdNr IN (" + customerIdsIN + ") ORDER BY TimeStamp DESC");
 
          SortAndFilterOnString(vOutList, vCollection, str2find);
 

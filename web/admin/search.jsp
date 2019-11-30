@@ -30,6 +30,10 @@ try
 vSession.setCallingJsp(Constants.ADMIN_SEARCH_JSP);
 
 boolean vCustomerFilterOn = false;
+AccountEntityData vAccount = AccountCache.getInstance().get(vSession.getCallFilter().getCustFilter());
+
+if  (vAccount == null) System.out.println("account not found for " + vSession.getFwdNumber());
+
 
 String vCustomerFilter = vSession.getCallFilter().getCustFilter();
 if (vCustomerFilter != null)
@@ -37,9 +41,6 @@ if (vCustomerFilter != null)
   if (vCustomerFilter.equals(Constants.ACCOUNT_FILTER_ALL))
     vCustomerFilter = null;
 }
-
-InitialContext vContext = new InitialContext();
-
 if (vCustomerFilter == null) vCustomerFilter = Constants.ACCOUNT_FILTER_ALL;
 
 %>
@@ -52,13 +53,11 @@ if (vCustomerFilter == null) vCustomerFilter = Constants.ACCOUNT_FILTER_ALL;
 		<!-- account list -->
 		<td valign="top" width="825" bgcolor="FFFFFF"><br>
 		<p><span class="admintitle"> Oproepen zoeken</span></p>
-		<form name="searchform" method="POST"
-			action="/tba/AdminDispatch"><input type=hidden
-			name=<%=Constants.SRV_ACTION%>
-			value="<%=Constants.GOTO_RECORD_SEARCH%>"> 
-		<table width="825" border="0" cellspacing="0" cellpadding="0">
+		<form name="searchform" method="POST" action="/tba/AdminDispatch">
+        <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.GOTO_RECORD_SEARCH%>"> 
+		<table width="825" border="0" cellspacing="2" cellpadding="2">
 			<tr>
-				<td width="225" valign="top" class="adminsubtitle">&nbsp;Klant</td>
+				<td width="225" valign="top" class="adminsubtitle">Klant</td>
 				<td width="10" valign="top">:</td>
 				<td width="590" valign="top"><select
 					name="<%=Constants.ACCOUNT_FILTER_CUSTOMER%>">
@@ -77,7 +76,7 @@ out.println("<option value=\"" + Constants.ACCOUNT_FILTER_ALL + (vCustomerFilter
 				</select></td>
 			</tr>
 			<tr>
-				<td width="225" valign="top" class="adminsubtitle"><br>&nbsp;Zoek tekst</td>
+				<td width="225" valign="top" class="adminsubtitle">Zoek tekst</td>
 				<td width="10" valign="top">:</td>
 				<td width="590" valign="top"><input type=text size=50
 					name=<%=Constants.RECORD_SEARCH_STR%>
@@ -127,18 +126,27 @@ if (vSession.getSearchString() != null && vSession.getSearchString().length() > 
       {
          out.println("<br><span class=\"adminsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + vRecords.size() + " zoekresultaten voor deze maand.</span><br>");
       }
-    out.println("              <br><tr>");
-    out.println("                <td width=\"20\" bgcolor=\"FFFFFF\"></td>");
-    out.println("                <td width=\"10\" valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\"></td>");
-    out.println("                <td width=\"55\"  valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Datum</td>");
-    out.println("                <td width=\"35\"  valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Uur</td>");
-    out.println("                <td width=\"85\"  valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Nummer</td>");
-    out.println("                <td width=\"140\" valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Naam</td>");
-    out.println("                <td width=\"380\" valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Omschrijving</td>");
-    out.println("                <td width=\"100\"  valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Infos</td>");
-    out.println("              </tr>");
+      %>
+    <br><tr>
+    <td width="20" bgcolor="FFFFFF"></td>
+    <td width="10" valign="top" class="topMenu" bgcolor="F89920"></td>
+    <td width="55"  valign="top" class="topMenu" bgcolor="F89920">&nbsp;Datum</td>
+    <td width="35"  valign="top" class="topMenu" bgcolor="F89920">&nbsp;Uur</td>
+    <%
+    if (vAccount != null && vAccount.getHasSubCustomers())
+    {
+        %>
+        <td width="200"  valign="top" class="topMenu" bgcolor="F89920">&nbsp;Medewerker</td>
+        <%
+    }
+    %>
+    <td width="85"  valign="top" class="topMenu" bgcolor="F89920">&nbsp;Nummer</td>
+    <td width="140" valign="top" class="topMenu" bgcolor="F89920">&nbsp;Naam</td>
+    <td width="380" valign="top" class="topMenu" bgcolor="F89920">&nbsp;Omschrijving</td>
+    <td width="100"  valign="top" class="topMenu" bgcolor="F89920">&nbsp;Infos</td>
+    </tr>
 
-
+<%
     int vRowInd = 0;
 
     for (Iterator<CallRecordEntityData> i = vRecords.iterator(); i.hasNext();)
@@ -199,6 +207,23 @@ if (vSession.getSearchString() != null && vSession.getSearchString().length() > 
 				<td width="10" valign="top"><%=vImportant%></td>
 				<td width="55" valign="top"><%=vStyleStart%><%=vDate%><%=vStyleEnd%></td>
 				<td width="35" valign="top"><%=vStyleStart%><%=vTime%><%=vStyleEnd%></td>
+<%
+if (vAccount != null && vAccount.getHasSubCustomers())
+{
+    if (vEntry.getAccountId() > 0)
+    {
+    %>
+        <td width="200" valign="top">&nbsp;<%=AccountCache.getInstance().get(vEntry.getAccountId()).getFullName()%></td>
+    <%
+    }
+    else
+    {
+    %>
+        <td width="200" valign="top">&nbsp;</td>
+    <%
+    }
+}
+%>
 				<td width="85" valign="top"><%=vStyleStart%><%=vNumber%><%=vStyleEnd%></td>
 				<td width="140" valign="top"><%=vStyleStart%><%=vName%><%=vStyleEnd%></td>
 				<td width="380" valign="top"><%=vStyleStart%><%=vShortDesc%><%=vStyleEnd%></td>

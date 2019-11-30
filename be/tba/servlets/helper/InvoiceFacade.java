@@ -261,6 +261,8 @@ public class InvoiceFacade
                 int id = vInvoiceSession.addInvoice(session, vCreditInvoiceData);
                 // link the original to the credit note
                 vInvoiceData.setCreditId(id);
+                vInvoiceData.setIsPayed(true);
+                vInvoiceData.setPaymentDetails("Gecrediteerd");
                 // clear the content of this invoice by setting stop = start time.
                 // NO!, this messes up the InvoiceHelper logic. This is solved over there
                 //vInvoiceData.setStopTime(vInvoiceData.getStartTime());

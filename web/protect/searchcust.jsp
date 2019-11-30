@@ -15,8 +15,8 @@ Version: $Revision: 1.0 $
 Last Checked In: $Date: 2003/06/18 04:11:35 $
 Last Checked In By: $Author: Yves Willems $
 --%>
-	<%@ page
-		import="javax.ejb.*,
+<%@ page
+import="javax.ejb.*,
 java.util.*,
 
 
@@ -32,11 +32,9 @@ be.tba.util.constants.Constants,
 be.tba.util.exceptions.AccessDeniedException,
 be.tba.servlets.session.SessionManager,
 be.tba.util.invoice.InvoiceHelper,
+be.tba.util.session.AccountCache,
 be.tba.util.data.*"%>
-
-
-	<%
-
+<%
 try
 {
 
@@ -44,6 +42,7 @@ try
 if (vSession == null)
   throw new AccessDeniedException("U bent niet aangemeld bij deze administratie pagina's.");
 vSession.setCallingJsp(Constants.CLIENT_SEARCH_JSP);  
+AccountEntityData vAccount = AccountCache.getInstance().get(vSession.getFwdNumber());
 
 boolean vCustomerFilterOn = false;
 
@@ -68,9 +67,9 @@ if (vCustomerFilter == null) vCustomerFilter = Constants.ACCOUNT_FILTER_ALL;
 		<p><span class="admintitle"> Oproepen zoeken</span></p>
 		<form name="searchform" method="POST" action="/tba/CustomerDispatch">
 			<input type="hidden" name="<%=Constants.SRV_ACTION%>" value="<%=Constants.ACTION_SEARCH_CALLS%>"> 
-		<table width="710" border="0" cellspacing="0" cellpadding="0">
+		<table width="610" border="0" cellspacing="2" cellpadding="2">
 			<tr>
-				<td width="200" valign="top" class="adminsubsubtitle">&nbsp;Zoek tekst</td>
+				<td width="100" valign="top" class="adminsubsubtitle">Zoek tekst</td>
 				<td width="10" valign="top" class="adminsubsubtitle">:</td>
 				<td width="500" valign="top"><input type="text"
 					name="<%=Constants.RECORD_SEARCH_STR%>" size="50"
@@ -91,7 +90,7 @@ if (!vSession.isCurrentMonth())
 			<%
 
 
-Collection vRecords = null;
+Collection<CallRecordEntityData> vRecords = null;
 if (vSession.getSearchString() != null && vSession.getSearchString().length() > 0)
 {
   CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
@@ -121,24 +120,33 @@ if (vSession.getSearchString() != null && vSession.getSearchString().length() > 
       {
          out.println("<span class=\"adminsubsubtitle\">" + vRecords.size() + " zoekresultaten voor deze maand.</span><br>");
       }
-    out.println("              <br><tr>");
-    out.println("                <td width=\"20\" bgcolor=\"FFFFFF\"></td>");
-    out.println("                <td width=\"10\" valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\"></td>");
-    out.println("                <td width=\"55\" valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Datum</td>");
-    out.println("                <td width=\"35\" valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Uur</td>");
-    out.println("                <td width=\"85\" valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Nummer</td>");
-    out.println("                <td width=\"140\" valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Naam</td>");
-    out.println("                <td width=\"280\" valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Omschrijving</td>");
-    out.println("                <td width=\"100\" valign=\"top\" class=\"topMenu\" bgcolor=\"F89920\">&nbsp;Infos</td>");
-    out.println("              </tr>");
-
+      %>
+    <br><tr>
+    <td width="20" bgcolor="FFFFFF"></td>
+    <td width="10" valign="top" class="topMenu" bgcolor="F89920"></td>
+    <td width="55" valign="top" class="topMenu" bgcolor="F89920">&nbsp;Datum</td>
+    <td width="35" valign="top" class="topMenu" bgcolor="F89920">&nbsp;Uur</td>
+    <%
+    if (vAccount != null && vAccount.getHasSubCustomers())
+    {
+        %>
+        <td width="200"  valign="top" class="topMenu" bgcolor="F89920">&nbsp;Medewerker</td>
+        <%
+    }
+    %>
+    <td width="85" valign="top" class="topMenu" bgcolor="F89920">&nbsp;Nummer</td>
+    <td width="140" valign="top" class="topMenu" bgcolor="F89920">&nbsp;Naam</td>
+    <td width="280" valign="top" class="topMenu" bgcolor="F89920">&nbsp;Omschrijving</td>
+    <td width="100" valign="top" class="topMenu" bgcolor="F89920">&nbsp;Infos</td>
+    </tr>
+<%
 
     int vRowInd = 0;
 
-    for (Iterator i = vRecords.iterator(); i.hasNext();)
+    for (Iterator<CallRecordEntityData> i = vRecords.iterator(); i.hasNext();)
     {
       
-      CallRecordEntityData vEntry = (CallRecordEntityData) i.next();
+      CallRecordEntityData vEntry = i.next();
 
       String vId = "id" + vEntry.getId();
       String vDate = vEntry.getDate();
@@ -189,6 +197,23 @@ if (vSession.getSearchString() != null && vSession.getSearchString().length() > 
 				<td width="10" valign="top"><%=vImportant%></td>
 				<td width="55" valign="top"><%=vDate%></td>
 				<td width="35" valign="top"><%=vTime%></td>
+<%
+if (vAccount != null && vAccount.getHasSubCustomers())
+{
+    if (vEntry.getAccountId() > 0)
+    {
+    %>
+        <td width="200" valign="top">&nbsp;<%=AccountCache.getInstance().get(vEntry.getAccountId()).getFullName()%></td>
+    <%
+    }
+    else
+    {
+    %>
+        <td width="200" valign="top">&nbsp;</td>
+    <%
+    }
+}
+%>
 				<td width="85" valign="top"><%=vNumber%></td>
 				<td width="140" valign="top"><%=vName%></td>
 				<td width="280" valign="top"><%=vShortDesc%></td>
