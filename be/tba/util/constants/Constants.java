@@ -290,6 +290,7 @@ public class Constants
     public static final String DOWNLOAD_FINTRO_PROCESS_TXT = "DOWNLOAD_FINTRO_PROCESS_TXT";
     public static final String DOWNLOAD_WK_VERKOPEN_XML = "DOWNLOAD_WK_VERKOPEN_XML";
     public static final String DOWNLOAD_WK_KLANTEN_XML = "DOWNLOAD_WK_KLANTEN_XML";
+    public static final String DOWNLOAD_FACTUUR = "DOWNLOAD_FACTUUR";
     public static final String GOTO_INVOICE_ADD = "GOTO_INVOICE_ADD";
     public static final String INVOICE_ADD = "INVOICE_ADD";
     public static final String GOTO_EMPLOYEE_ADMIN = "GOTO_EMPLOYEE_ADMIN";

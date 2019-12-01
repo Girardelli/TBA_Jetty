@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import be.tba.ejb.invoice.interfaces.InvoiceEntityData;
+import be.tba.ejb.invoice.session.InvoiceSqlAdapter;
 import be.tba.servlets.helper.AccountFacade;
 import be.tba.servlets.helper.InvoiceFacade;
 import be.tba.servlets.session.SessionManager;
@@ -84,6 +86,22 @@ public class FileDownloadServlet extends HttpServlet
                     File file = AccountFacade.generateKlantenXml(request, vSession);
                     response.setHeader("Content-disposition", "attachment; filename=" + Constants.WC_KLANTEN_XML);
                     downloadFile(file.getAbsolutePath(), response.getOutputStream());
+                }
+                else if (vAction.equals(Constants.DOWNLOAD_FACTUUR))
+                {
+                   int vInvoiceId = vSession.getInvoiceId();
+                   if (vInvoiceId > 0)
+                   {
+                       InvoiceSqlAdapter vInvoiceSession = new InvoiceSqlAdapter();
+                       InvoiceEntityData vInvoiceData = vInvoiceSession.getInvoiceById(vSession, vInvoiceId);
+                        if (vInvoiceData != null)
+                        {
+                           File file = new File(vInvoiceData.getFileName());
+                           response.setHeader("Content-disposition", "attachment; filename=" + vInvoiceData.getInvoiceNr() + ".pdf");
+                           downloadFile(file.getAbsolutePath(), response.getOutputStream());
+                        }
+                   }
+                   
                 }
             }
         }

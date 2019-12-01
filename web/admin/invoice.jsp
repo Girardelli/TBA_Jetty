@@ -66,7 +66,7 @@
 
 %>
 <body>
-<p><span class="admintitle"> Facturen maken <%=(vAccountData == null)? "Selecteer een klant en maand." : "" %><br>
+<p><span class="admintitle">&nbsp;&nbsp;&nbsp;Facturen maken <%=(vAccountData == null)? "Selecteer een klant en maand." : "" %><br>
 <br>
 <br>
 </span></p>
@@ -122,6 +122,8 @@
 					%>
 				</select>
 				</td>
+            </tr>
+            <tr>
 				<td width="250" valign="top" class="adminsubtitle">&nbsp;Jaar</td>
 				<td width="10" valign="top">:</td>
 				<td width="270" valign="top">
@@ -146,100 +148,99 @@
 </td>
 </tr>
 </table>
-</form>
-</body>
+
 <%
             return;
 		}
-        if (vInvoiceData != null && vInvoiceData.getFrozenFlag())
-       	{
-       		if (vInvoiceData.getIsInvoiceMailed())
-       		{
-       			String fintroId;
-       			String valutaDate;
-       			String message;
-       			String payDate;
-       			String fromBankNr;
-       			if (vInvoiceData.getIsPayed())
-       			{
-                       // not possible to change this data
-       				fintroId = vInvoiceData.getFintroId();
-                    valutaDate = vInvoiceData.getValutaDate();
-                    message = vInvoiceData.getPaymentDetails();
-                    payDate = vInvoiceData.getPayDate();
-                    fromBankNr = vInvoiceData.getFromBankNr();
-       			}
-       			else
-       			{
-       				// allow to enter this data manually
-                    fintroId = "<input type=text name=\"" + Constants.TASK_FINTROID + "\" value=\"" + vInvoiceData.getFintroId() + "\">";
-                    valutaDate = "<input type=text name=\"" + Constants.TASK_VAL_DATE + "\" value=\"" + vInvoiceData.getValutaDate() + "\">";
-                    message = "<input width=\"500\" type=text name=\"" + Constants.TASK_PAY_DETAILS + "\" value=\"" + vInvoiceData.getPaymentDetails() + "\">";
-                    payDate = "<input type=text name=\"" + Constants.INVOICE_PAYDATE + "\" value=\"" + vInvoiceData.getPayDate() + "\">";
-                    fromBankNr = "<input type=text name=\"" + Constants.TASK_FROM_BANK_NR + "\" value=\"" + vInvoiceData.getFromBankNr() + "\">";
-       			}
+        if (vInvoiceData != null)
+ 		{
+   			if (vInvoiceData.getIsInvoiceMailed())
+   			{
+               String fintroId;
+               String valutaDate;
+               String message;
+               String payDate;
+               String fromBankNr;
+    			if (vInvoiceData.getIsPayed())
+    			{
+                          // not possible to change this data
+                  fintroId = vInvoiceData.getFintroId();
+                  valutaDate = vInvoiceData.getValutaDate();
+                  message = vInvoiceData.getPaymentDetails();
+                  payDate = vInvoiceData.getPayDate();
+                  fromBankNr = vInvoiceData.getFromBankNr();
+    			}
+    			else
+    			{
+                  // allow to enter this data manually
+                  fintroId = "<input type=text name=\"" + Constants.TASK_FINTROID + "\" value=\"" + vInvoiceData.getFintroId() + "\">";
+                  valutaDate = "<input type=text name=\"" + Constants.TASK_VAL_DATE + "\" value=\"" + vInvoiceData.getValutaDate() + "\">";
+                  message = "<input width=\"500\" type=text name=\"" + Constants.TASK_PAY_DETAILS + "\" value=\"" + vInvoiceData.getPaymentDetails() + "\">";
+                  payDate = "<input type=text name=\"" + Constants.INVOICE_PAYDATE + "\" value=\"" + vInvoiceData.getPayDate() + "\">";
+                  fromBankNr = "<input type=text name=\"" + Constants.TASK_FROM_BANK_NR + "\" value=\"" + vInvoiceData.getFromBankNr() + "\">";
+    			}
 %>
         <br><br>Het factuurnummer is bevrozen en kan niet meer aangepast worden.<br>
         <table  border="0" cellspacing="2" cellpadding="2">
             <tr>
                 <td width="250" valign="top" class="adminsubtitle">&nbsp;Factuur nummer</td>
                 <td width="10" valign="top">:</td>
-                <td width="270" valign="top"> <%=vInvoiceData.getInvoiceNr()%>
+                <td width="400" valign="top"> <%=vInvoiceData.getInvoiceNr()%>
                 </td>
             </tr>
             <br>
             <tr>
                 <td width="250" valign="top" class="adminsubtitle">&nbsp;FintroID</td>
                 <td width="10" valign="top">:</td>
-                <td width="270" valign="top"> <%=fintroId%>
+                <td width="400" valign="top"> <%=fintroId%>
                 </td>
             </tr>
             <tr>
                 <td width="250" valign="top" class="adminsubtitle">&nbsp;Valuta Datum</td>
                 <td width="10" valign="top">:</td>
-                <td width="270" valign="top"> <%=valutaDate%>
+                <td width="400" valign="top"> <%=valutaDate%>
                 </td>
             </tr>
             <tr>
                 <td width="250" valign="top" class="adminsubtitle">&nbsp;Betaald op</td>
                 <td width="10" valign="top">:</td>
-                <td width="270" valign="top"> <%=payDate%>
+                <td width="400" valign="top"> <%=payDate%>
                 </td>
             </tr>
             <tr>
                 <td width="250" valign="top" class="adminsubtitle">&nbsp;Mededeling</td>
                 <td width="10" valign="top">:</td>
-                <td width="270" valign="top"> <%=message%>
+                <td width="400" valign="top"> <%=message%>
                 </td>
             </tr>
             <tr>
                 <td width="250" valign="top" class="adminsubtitle">&nbsp;Van Banknummer</td>
                 <td width="10" valign="top">:</td>
-                <td width="270" valign="top"> <%=fromBankNr%>
+                <td width="400" valign="top"> <%=fromBankNr%>
                 </td>
             </tr>
             <tr>
-                <td width="250" valign="top" class="adminsubtitle">&nbsp;Bedrag (incl BTW)</td>
+                <td width="250" valign="top" class="adminsubtitle">&nbsp;Bedrag (excl BTW)</td>
                 <td width="10" valign="top">:</td>
-                <td width="270" valign="top"> <%=vInvoiceData.getTotalCost()%>
+                <td width="400" valign="top"><b> <%=vInvoiceData.getTotalCost()%></b>
                 </td>
             </tr>
             <tr>
                 <td width="250" valign="top" class="adminsubtitle">&nbsp;Gestructureerde mededeling</td>
                 <td width="10" valign="top">:</td>
-                <td width="270" valign="top"> <%=vInvoiceData.getStructuredId()%>
+                <td width="400" valign="top"> <%=vInvoiceData.getStructuredId()%>
                 </td>
             </tr>
             <tr>
                 <td width="250" valign="top" class="adminsubtitle">&nbsp;PDF bestand</td>
                 <td width="10" valign="top">:</td>
-                <td width="270" valign="top"> <%=vInvoiceData.getFileName()%>
+                <td width="400" valign="top"> <%=vInvoiceData.getFileName()%>
                 </td>
             </tr>
             <tr>
                 <td width="250" valign="top" class="adminsubtitle">&nbsp;Klant referencie</td>
                 <td width="10" valign="top">:</td>
-                <td width="270" valign="top"> <%=vInvoiceData.getCustomerRef().isEmpty()?"-":vInvoiceData.getCustomerRef()%>
+                <td width="400" valign="top"> <%=vInvoiceData.getCustomerRef().isEmpty()?"-":vInvoiceData.getCustomerRef()%>
                 </td>
             </tr>
             
@@ -249,13 +250,15 @@
         <input class="tbabutton" type=submit name=action value=" Maak Credit Nota " onclick="createCreditNote()" > 
         </span></p>
 <%
-        	    // get the lists:
-                TaskSqlAdapter vTaskSession = new TaskSqlAdapter();
-        		vTasks = vTaskSession.getTasksForInvoice(vSession, vInvoiceData.getId());
-        	    CallRecordSqlAdapter vCallRecordSession = new CallRecordSqlAdapter();
-        	    vRecords = vCallRecordSession.getInvoiceCalls(vSession, vInvoiceData.getAccountID(), vInvoiceData.getStartTime(), vInvoiceData.getStopTime());
-       		}
+            }
+     	    // get the lists:
+            TaskSqlAdapter vTaskSession = new TaskSqlAdapter();
+     		vTasks = vTaskSession.getTasksForInvoice(vSession, vInvoiceData.getId());
+     	    CallRecordSqlAdapter vCallRecordSession = new CallRecordSqlAdapter();
+     	    vRecords = vCallRecordSession.getInvoiceCalls(vSession, vInvoiceData.getAccountID(), vInvoiceData.getStartTime(), vInvoiceData.getStopTime());
        	}
+        
+        
         %>
         <p><span class=\"adminsubtitle\"> 
         <input class="tbabutton" type=submit name=action value=" Terug naar lijst " onclick="backToList()" > 
@@ -265,71 +268,74 @@
         // *********************************************************************************
         // Not frozen invoice: InvoiceHelper is called and all details shall be printed
         //
+        InvoiceHelper vInvoiceHelper = null;
 		if (vInvoiceData == null || vInvoiceData.getFrozenFlag() == false)
        	{
-        		// No invoice yet or not yet frozen, so get the help of InvoiceHelper to collect the current invoice
-                InvoiceHelper vInvoiceHelper = null;
-                if (vSession.getMonthsBack() != CallFilter.kNoMonth && vCustomerFilter != null && !vCustomerFilter.equals(Constants.ACCOUNT_FILTER_ALL))
-                {
-                    if (vInvoiceData != null)
-                    {
-                        if (vInvoiceData.getCreditId() != 0)
-                        {
-                            vInvoiceHelper = new InvoiceHelper(vInvoiceData, vSession);
-                        }
-                    }
-                    else
-                    {
-                        AccountEntityData account = AccountCache.getInstance().get(vCustomerFilter);
-                        if (account != null)
-                        {
-                            vInvoiceHelper = new InvoiceHelper(vSession, account.getId(), vMonth, vYear);
-                        }
-                        else
-                        {
-                            vInvoiceHelper = null;
-                        }
-                    }
-                    if (vInvoiceHelper != null)
-                    {
-                    	System.out.println("invoiceHelper created: run it!");
-                        vInvoiceHelper.storeOrUpdate(vSession);
-                        vSession.setInvoiceHelper(vInvoiceHelper);
-                        vRecords = vInvoiceHelper.getCallRecords();
-                        vTasks = vInvoiceHelper.getTasks();
-                        System.out.println("invoiceHelper loaded: tasks=" + (vTasks==null?"null":vTasks.size()) + ", records=" + (vRecords==null?"null":vRecords.size()));
-                    }
-                }
-                out.println("<p><span class=\"adminsubtitle\"><br>");
-                out.println("Facturatiegegevens voor de maand " + vSession.getMonthsBackString() + ", " + vSession.getYear() + ":<br><br>");
-
-                if ((vRecords == null || vRecords.size() == 0) && (vTasks == null || vTasks.size() == 0))
-                {
-                	out.println("<br><br>Er zijn geen facturatiegegevens beschikbaar voor de geselecteerde periode.<br><br>");
-                }
-                else
-                {
+     		// No invoice yet or not yet frozen, so get the help of InvoiceHelper to collect the current invoice
+             if (vSession.getMonthsBack() != CallFilter.kNoMonth && vCustomerFilter != null && !vCustomerFilter.equals(Constants.ACCOUNT_FILTER_ALL))
+             {
+                 if (vInvoiceData != null)
+                 {
+                     if (vInvoiceData.getCreditId() != 0)
+                     {
+                         vInvoiceHelper = new InvoiceHelper(vInvoiceData, vSession);
+                     }
+                 }
+                 else
+                 {
+                     AccountEntityData account = AccountCache.getInstance().get(vCustomerFilter);
+                     if (account != null)
+                     {
+                         vInvoiceHelper = new InvoiceHelper(vSession, account.getId(), vMonth, vYear);
+                     }
+                     else
+                     {
+                         vInvoiceHelper = null;
+                     }
+                 }
+                 if (vInvoiceHelper != null)
+                 {
+                 	System.out.println("invoiceHelper created: run it!");
+                     vInvoiceHelper.storeOrUpdate(vSession);
+                     vSession.setInvoiceHelper(vInvoiceHelper);
+                     vRecords = vInvoiceHelper.getCallRecords();
+                     vTasks = vInvoiceHelper.getTasks();
+                     System.out.println("invoiceHelper loaded: tasks=" + (vTasks==null?"null":vTasks.size()) + ", records=" + (vRecords==null?"null":vRecords.size()));
+                 }
+             }
+       	 }
 %>
-                    </span></p>
-                    <table width="643" border="0" cellspacing="0" cellpadding="0">
+          <p><span class="adminsubtitle"><br>
+          Facturatiegegevens voor de maand <%=vSession.getMonthsBackString() + ", " + vSession.getYear()%> :<br><br>
+          </span></p>
 <%
-                            System.out.println("invoice type = " + vAccountData.getInvoiceType());
-                            if (vAccountData.getInvoiceType() == InvoiceHelper.kStandardInvoice || 
-                                vAccountData.getInvoiceType() == InvoiceHelper.kWeekInvoice)
-                            {
-                                if (vRecords == null || vRecords.size() == 0)
-                                {
-                                    out.println("<p><span class=\"adminsubtitle\"> Geen oproepen voor de geselecteerde maand.</span></p>");
-                                }
-                            
-                                if (vAccountData.getInvoiceType() == InvoiceHelper.kStandardInvoice)
-                                {
-                                    out.println("<p><span class=\"adminsubtitle\"> Standaard facturatie. (Group " + vInvoiceHelper.getInvoiceGroupStr() + ")</span></p>");
-                                }
-                                else if (vAccountData.getInvoiceType() == InvoiceHelper.kWeekInvoice)
-                                {
-                                    out.println("<p><span class=\"adminsubtitle\"> Week facturatie. (Group " + vInvoiceHelper.getInvoiceGroupStr() + ")</span></p>");
-                                }
+
+//          if ((vRecords == null || vRecords.size() == 0) && (vTasks == null || vTasks.size() == 0))
+//          {
+//          	out.println("<br><br>Er zijn geen facturatiegegevens beschikbaar voor de geselecteerde periode.<br><br>");
+//          }
+//          else 
+             if (vInvoiceHelper != null)
+          {
+%>
+              <table width="643" border="0" cellspacing="0" cellpadding="0">
+<%
+                if (vAccountData.getInvoiceType() == InvoiceHelper.kStandardInvoice || 
+                    vAccountData.getInvoiceType() == InvoiceHelper.kWeekInvoice)
+                {
+                    if (vRecords == null || vRecords.size() == 0)
+                    {
+                        out.println("<p><span class=\"adminsubtitle\"> Geen oproepen voor de geselecteerde maand.</span></p>");
+                    }
+                
+                    if (vAccountData.getInvoiceType() == InvoiceHelper.kStandardInvoice)
+                    {
+                        out.println("<p><span class=\"adminsubtitle\"> Standaard facturatie. (Group " + vInvoiceHelper.getInvoiceGroupStr() + ")</span></p>");
+                    }
+                    else if (vAccountData.getInvoiceType() == InvoiceHelper.kWeekInvoice)
+                    {
+                        out.println("<p><span class=\"adminsubtitle\"> Week facturatie. (Group " + vInvoiceHelper.getInvoiceGroupStr() + ")</span></p>");
+                    }
                 %>
 
                     <tr>
@@ -488,9 +494,9 @@
                               else if (vAccountData.getInvoiceType() == InvoiceHelper.kTelemarketingInvoice)
                               {
                     %>
-	                <tr>
+	                <tr><td>
 	                <p><span class="adminsubtitle"> Telemarketing facturatie.</span></p>
-	                </tr>
+	                </td></tr>
                     <tr>
                         <td width="20"></td>
                         <td width="200" valign="top" class="adminsubtitle">&nbsp;&nbsp;Kosten rubriek</td>
@@ -557,9 +563,9 @@
                                 else if (vAccountData.getInvoiceType() == InvoiceHelper.kNoCallsAccount)
                                 {
         %>
-                    <tr>
+                    <tr><td>
                     <p><span class="adminsubtitle"> Facturatie zonder oproepen.</span></p>
-                    </tr>
+                    </td></tr>
                     <tr>
                         <td width="20"></td>
                         <td width="200" valign="top" class="adminsubtitle">&nbsp;&nbsp;Kosten rubriek</td>
@@ -615,26 +621,67 @@
                         <td width="100" valign="top" class="bodyredbold">&nbsp;&nbsp;<%=vInvoiceHelper.getTotalCost()%>&nbsp;&nbsp;(<%=vInvoiceHelper.getTotalCostInclBTW()%> incl BTW)</td>
                     </tr>
                 </table>
- 		<br>
-		<%
-		
+ 		<%
+        }
+        else if (vInvoiceData != null && vInvoiceData.getFrozenFlag())
+        {
+           %>
+           <table>
+              <tr>
+                  <td width="20"></td>
+                  <td width="120" valign="top" class="adminsubtitle">&nbsp;&nbsp;Factuurnummer</td>
+                  <td width="1">:</td>
+                  <td width="200" valign="top" class="adminsubtitle">&nbsp;&nbsp;<%=vInvoiceData.getInvoiceNr()%></td>
+              </tr>
+              <tr>
+                  <td width="20"></td>
+                  <td width="120" valign="top" class="adminsubtitle">&nbsp;&nbsp;Factuurdatum</td>
+                  <td width="1">:</td>
+                  <td width="200" valign="top" class="adminsubtitle">&nbsp;&nbsp;<%=vInvoiceData.getInvoiceDate()%></td>
+              </tr>
+              <tr>
+                  <td width="20"></td>
+                  <td width="120" valign="top" class="adminsubtitle">&nbsp;&nbsp;Aantal oproepen</td>
+                  <td width="1">:</td>
+                  <td width="200" valign="top" class="adminsubtitle">&nbsp;&nbsp;<%=(vRecords != null? vRecords.size():0)%></td>
+              </tr>
+              <tr>
+                  <td width="20"></td>
+                  <td width="120" valign="top" class="adminsubtitle">&nbsp;&nbsp;Aantal taken</td>
+                  <td width="1">:</td>
+                  <td width="200" valign="top" class="adminsubtitle">&nbsp;&nbsp;<%=(vTasks != null? vTasks.size():0)%></td>
+              </tr>
+              <tr>
+                  <td width="20"></td>
+                  <td width="120" valign="top" class="adminsubtitle">&nbsp;&nbsp;Totaal</td>
+                  <td width="1">:</td>
+                  <td width="200" valign="top" class="adminsubtitle">&nbsp;&nbsp;<%=vInvoiceData.getTotalCost()%>&nbsp;&nbsp;(excl BTW)</td>
+              </tr>
+           </table>
+           
+           <%
+        }
+          
+          
 		// print the lists
 		if (vTasks != null && vTasks.size() > 0)
 		{
 	    %>
+        <br>
+        <br>
 		<p class="adminsubtitle"><img src=".\images\blueSphere.gif"
 			width="10" height="10">&nbsp;&nbsp;&nbsp;Takenlijst voor deze maand:</p>
-		<table width="100%" border="0" cellspacing="2" cellpadding="2">
+		<table border="0" cellspacing="2" cellpadding="2">
 			<tr>
 				<td width="20" bgcolor="FFFFFF"></td>
-				<td width="40" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Datum</td>
-				<td width="295" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Omschrijving</td>
+				<td width="55" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Datum</td>
+				<td width="400" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Omschrijving</td>
 				<td width="100" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Kost</td>
 			</tr>
 			<%
-							for (Iterator i = vTasks.iterator(); i.hasNext();)
+							for (Iterator<TaskEntityData> i = vTasks.iterator(); i.hasNext();)
 							{
-							    TaskEntityData vEntry = ((TaskEntityData) i.next());
+							    TaskEntityData vEntry = i.next();
 							
 							    String vId = "id" + vEntry.getId();
 							    String vKost;
@@ -649,91 +696,99 @@
 							    {
 							        vTaskCost = ((double) vEntry.getTimeSpend() / 60.00) * ((double) vAccountData.getTaskHourRate() / 100.00);
 							    }
-						        vKost = new String(vInvoiceHelper.format(vTaskCost) + " Euro");
+                                if (vInvoiceHelper != null)
+                                {
+                                   vKost = new String(vInvoiceHelper.format(vTaskCost) + " Euro");
+                                }
+                                else
+                                {
+                                   vKost = new String(vTaskCost + " Euro");
+                                }
+						        
 						%>
 						<tr bgcolor="FFCC66" id=<%=vId%> class="bodytekst">
 				<td width="20" bgcolor="FFFFFF"></td>
-				<td width="40" valign="top"><%=vEntry.getDate()%></td>
-				<td width="295" valign="top"><%=vEntry.getDescription()%></td>
+				<td width="55" valign="top"><%=vEntry.getDate()%></td>
+				<td width="400" valign="top"><%=vEntry.getDescription()%></td>
 				<td width="100" valign="top"><%=vKost%></td>
 			</tr>
 			<%
 							}
 			%>
 		</table>
-		<br>
-		<br>
 		<%
 		}
 		if (vRecords != null && vRecords.size() > 0)
 		{
 		%>
+        <br>
+        <br>
 		<p class="adminsubtitle"><img src=".\images\blueSphere.gif"
 			width="10" height="10">&nbsp;&nbsp;&nbsp;Oproepenlijst:</p>
-		<table width="100%" border="0" cellspacing="2" cellpadding="2">
+		<table border="0" cellspacing="2" cellpadding="2">
 			<tr>
 				<td width="20" bgcolor="FFFFFF"></td>
 				<td width="10" valign="top" class="topMenu" bgcolor="#F89920"></td>
 				<td width="55" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Datum</td>
-				<td width="35" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Uur</td>
-				<td width="85" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Nummer</td>
-				<td width="140" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Naam</td>
-				<td width="50" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Duur</td>
-				<td width="50" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Infos</td>
+				<td width="40" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Uur</td>
+				<td width="110" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Nummer</td>
+				<td width="400" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Naam</td>
+				<td width="60" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Duur</td>
+				<td width="100" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Infos</td>
 			</tr>
 	
-			<%
-								 int vRowInd = 0;
-								 for (Iterator i = vRecords.iterator(); i.hasNext();)
-								 {
-								 	CallRecordEntityData vEntry = ((CallRecordEntityData) i.next());
-								
-								 	String vId = "id" + vEntry.getId();
-								    String vDate = vEntry.getDate();
-								    String vTime = vEntry.getTime();
-								    String vNumber = vEntry.getNumber();
-								    String vName = vEntry.getName();
-								    String vDuration = vEntry.getCost();
-								    vName = vName == null ? "" : vName;
-								    String vStyleStart = "";
-								    String vStyleEnd = "";
-								    String vInOut;
-								    if (vEntry.getIsIncomingCall())
-								        vInOut = "\"/tba/images/incall.gif\"";
-								    else
-								        vInOut = "\"/tba/images/outcall.gif\"";
-								    String vInfoGifs = "";
-								    if (vEntry.getIsAgendaCall())
-								    {
-								        vInfoGifs = vInfoGifs.concat("<img src=\"/tba/images/agenda.gif\" height=\"13\" border=\"0\">&nbsp;");
-								    }
-								    if (vEntry.getIsSmsCall())
-								    {
-								        vInfoGifs = vInfoGifs.concat("<img src=\"/tba/images/sms.gif\"  height=\"13\" border=\"0\">&nbsp;");
-								    }
-								    if (vEntry.getIsForwardCall())
-								    {
-								        vInfoGifs = vInfoGifs.concat("<img src=\"/tba/images/telefoon.gif\"  height=\"13\" border=\"0\">&nbsp;");
-								    }
-								    if (vEntry.getIsFaxCall())
-								    {
-								        vInfoGifs = vInfoGifs.concat("<img src=\"/tba/images/fax.gif\"  height=\"13\" border=\"0\">&nbsp;");
-								    }
-							      	String vImportant = "";
-							        if (vEntry.getIsImportantCall())
-						         	{
-						             	vImportant = vImportant.concat("<img src=\"/tba/images/important.gif\"  height=\"13\" border=\"0\">&nbsp;");
-						            }
-						            long seconds = InvoiceHelper.duration2Seconds(vDuration);
-						            if (seconds > Constants.NORMAL_CALL_LENGTH)
-					                {
-					                    vInfoGifs = vInfoGifs.concat("<span class=\"bodyredbold\">L" + (seconds-Constants.NORMAL_CALL_LENGTH) + "</span>&nbsp;");
-					                }
-					                if (!vEntry.getIsDocumented())
-					                {
-					                    vStyleStart = "<b>";
-					                    vStyleEnd = "</b>";
-					                }
+<%
+      		 int vRowInd = 0;
+      		 for (Iterator<CallRecordEntityData> i = vRecords.iterator(); i.hasNext();)
+      		 {
+      		 	CallRecordEntityData vEntry = i.next();
+      		
+      		 	String vId = "id" + vEntry.getId();
+      		    String vDate = vEntry.getDate();
+      		    String vTime = vEntry.getTime();
+      		    String vNumber = vEntry.getNumber();
+      		    String vName = vEntry.getName();
+      		    String vDuration = vEntry.getCost();
+      		    vName = vName == null ? "" : vName;
+      		    String vStyleStart = "";
+      		    String vStyleEnd = "";
+      		    String vInOut;
+      		    if (vEntry.getIsIncomingCall())
+      		        vInOut = "\"/tba/images/incall.gif\"";
+      		    else
+      		        vInOut = "\"/tba/images/outcall.gif\"";
+      		    String vInfoGifs = "";
+      		    if (vEntry.getIsAgendaCall())
+      		    {
+      		        vInfoGifs = vInfoGifs.concat("<img src=\"/tba/images/agenda.gif\" height=\"13\" border=\"0\">&nbsp;");
+      		    }
+      		    if (vEntry.getIsSmsCall())
+      		    {
+      		        vInfoGifs = vInfoGifs.concat("<img src=\"/tba/images/sms.gif\"  height=\"13\" border=\"0\">&nbsp;");
+      		    }
+      		    if (vEntry.getIsForwardCall())
+      		    {
+      		        vInfoGifs = vInfoGifs.concat("<img src=\"/tba/images/telefoon.gif\"  height=\"13\" border=\"0\">&nbsp;");
+      		    }
+      		    if (vEntry.getIsFaxCall())
+      		    {
+      		        vInfoGifs = vInfoGifs.concat("<img src=\"/tba/images/fax.gif\"  height=\"13\" border=\"0\">&nbsp;");
+      		    }
+      	      	String vImportant = "";
+      	        if (vEntry.getIsImportantCall())
+            	{
+                	vImportant = vImportant.concat("<img src=\"/tba/images/important.gif\"  height=\"13\" border=\"0\">&nbsp;");
+               }
+               long seconds = InvoiceHelper.duration2Seconds(vDuration);
+               if (seconds > Constants.NORMAL_CALL_LENGTH)
+                {
+                    vInfoGifs = vInfoGifs.concat("<span class=\"bodyredbold\">L" + (seconds-Constants.NORMAL_CALL_LENGTH) + "</span>&nbsp;");
+                }
+                if (!vEntry.getIsDocumented())
+                {
+                    vStyleStart = "<b>";
+                    vStyleEnd = "</b>";
+                }
 				%>
 			<tr bgcolor="FFCC66" id=<%=vId%> class="bodytekst" onmouseover="hooverOnRow('<%=vId%>','<%=vRowInd%>')"
 					onmouseout="hooverOffRow('<%=vId%>','<%=vRowInd%>')"
@@ -741,27 +796,43 @@
 				<td width="20" bgcolor="FFFFFF"><img src=<%=vInOut%> height="13" border="0"></td>
 				<td width="10" valign="top"><%=vImportant%></td>
 				<td width="55" valign="top"><%=vStyleStart%><%=vDate%><%=vStyleEnd%></td>
-				<td width="35" valign="top"><%=vStyleStart%><%=vTime%><%=vStyleEnd%></td>
-				<td width="85" valign="top"><%=vStyleStart%><%=vNumber%><%=vStyleEnd%></td>
-				<td width="140" valign="top"><%=vStyleStart%><%=vName%><%=vStyleEnd%></td>
-				<td width="50" valign="top"><%=vDuration%></td>
-				<td width="50" valign="top"><%=vInfoGifs%></td>
+				<td width="40" valign="top"><%=vStyleStart%><%=vTime%><%=vStyleEnd%></td>
+				<td width="110" valign="top"><%=vStyleStart%><%=vNumber%><%=vStyleEnd%></td>
+				<td width="400" valign="top"><%=vStyleStart%><%=vName%><%=vStyleEnd%></td>
+				<td width="60" valign="top"><%=vDuration%></td>
+				<td width="100" valign="top"><%=vInfoGifs%></td>
 			</tr>
 			<%
-									vRowInd++;
-								}
+			vRowInd++;
+		}
 			%>
 			</table>
 			<%
-	        			    }
-				       	}
-	}
+    }
 		%>
 		</td>
 	</tr>
 </table>
 <input type=hidden name=<%=Constants.INVOICE_TO_SAVE%> value="<%=vInvoiceId%>"> 
 </form>
+<%
+        if (vInvoiceData != null && vInvoiceData.getFrozenFlag())
+        {
+%>
+<form name="downloadfileform" method="POST" action="/tba/download">
+<table>
+
+    <tr>
+        <!-- white space -->
+        <td valign="top" width="20" bgcolor="FFFFFF"></td>
+        <td valign="top" bgcolor="FFFFFF">
+        <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.DOWNLOAD_FACTUUR%>"> <input class="tbabutton" type=submit name=action value=" Download Factuur " onclick="downloadFactuur()">
+</td></tr></table>
+</form>
+<%
+        }
+%>
+
 </body>
 
             <%
