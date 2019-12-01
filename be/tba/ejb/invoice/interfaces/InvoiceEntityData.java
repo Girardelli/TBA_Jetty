@@ -41,39 +41,12 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
     public String fromBankNr = "";
     public String paymentDetails = "";
     public String structuredId = ""; //gestructureerde mededeling (Modulo 97 protected)
+    public String comment = ""; 
 
 
     public InvoiceEntityData()
     {
         creditId = -1;
-    }
-
-    public InvoiceEntityData(int id, java.lang.String fileName, int accountID, java.lang.String accountFwdNr, double totalCost, int month, int year, int yearSeqNr, java.lang.String invoiceNr, boolean frozenFlag, boolean isPayed, long startTime, long stopTime, java.lang.String customerName, boolean isInvoiceMailed, String invoiceDate, java.lang.String customerRef, java.lang.String payDate, int creditId, String fintroId, String valutaDate, String fromBankNr, String paymentDetails, String structuredId)
-    {
-        setId(id);
-        setFileName(fileName);
-        setAccountID(accountID);
-        setAccountFwdNr(accountFwdNr);
-        setTotalCost(totalCost);
-        setMonth(month);
-        setYear(year);
-        setYearSeqNr(yearSeqNr);
-        setInvoiceNr(invoiceNr);
-        setFrozenFlag(frozenFlag);
-        setIsPayed(isPayed);
-        setStartTime(startTime);
-        setStopTime(stopTime);
-        setCustomerName(customerName);
-        setIsInvoiceMailed(isInvoiceMailed);
-        setInvoiceDate(invoiceDate);
-        setCustomerRef(customerRef);
-        setPayDate(payDate);
-        setCreditId(creditId);
-        setFintroId(fintroId);
-        setValutaDate(valutaDate);
-        setFromBankNr(fromBankNr);
-        setPaymentDetails(paymentDetails);
-        setStructuredId(structuredId);
     }
 
     public InvoiceEntityData(InvoiceEntityData otherData)
@@ -102,6 +75,7 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
         setFromBankNr(otherData.getFromBankNr());
         setPaymentDetails(otherData.getPaymentDetails());
         setStructuredId(otherData.getStructuredId());
+        setComment(otherData.getComment());
     }
 
     public be.tba.ejb.invoice.interfaces.InvoiceEntityPK getPrimaryKey()
@@ -360,7 +334,17 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
     {
         this.structuredId = structuredId;
     }
-    
+
+    public String getComment()
+    {
+        return this.comment;
+    }
+   
+    public void setComment(String comment)
+    {
+        this.comment = comment;
+    }
+
     public boolean equals(Object pOther)
     {
         if (pOther instanceof InvoiceEntityData)
@@ -369,14 +353,6 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
             boolean lEquals = true;
 
             lEquals = lEquals && this.id == lTest.id;
-            if (this.fileName == null)
-            {
-                lEquals = lEquals && (lTest.fileName == null);
-            }
-            else
-            {
-                lEquals = lEquals && this.fileName.equals(lTest.fileName);
-            }
             if (this.accountFwdNr == null)
             {
                 lEquals = lEquals && (lTest.accountFwdNr == null);
@@ -397,37 +373,6 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
             {
                 lEquals = lEquals && this.invoiceNr.equals(lTest.invoiceNr);
             }
-            lEquals = lEquals && this.frozenFlag == lTest.frozenFlag;
-            lEquals = lEquals && this.creditId == lTest.creditId;
-            lEquals = lEquals && this.isPayed == lTest.isPayed;
-            lEquals = lEquals && this.startTime == lTest.startTime;
-            lEquals = lEquals && this.stopTime == lTest.stopTime;
-            if (this.customerName == null)
-            {
-                lEquals = lEquals && (lTest.customerName == null);
-            }
-            else
-            {
-                lEquals = lEquals && this.customerName.equals(lTest.customerName);
-            }
-            lEquals = lEquals && this.isInvoiceMailed == lTest.isInvoiceMailed;
-            if (this.customerRef == null)
-            {
-                lEquals = lEquals && (lTest.customerRef == null);
-            }
-            else
-            {
-                lEquals = lEquals && this.customerRef.equals(lTest.customerRef);
-            }
-            if (this.payDate == null)
-            {
-                lEquals = lEquals && (lTest.payDate == null);
-            }
-            else
-            {
-                lEquals = lEquals && this.payDate.equals(lTest.payDate);
-            }
-
             return lEquals;
         }
         else
@@ -456,25 +401,6 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
         result = 37 * result + (int) year;
 
         result = 37 * result + (int) yearSeqNr;
-
-        result = 37 * result + ((this.invoiceNr != null) ? this.invoiceNr.hashCode() : 0);
-
-        result = 37 * result + (frozenFlag ? 0 : 1);
-
-        result = 37 * result + (isPayed ? 0 : 1);
-
-        result = 37 * result + (int) (startTime ^ (startTime >>> 32));
-
-        result = 37 * result + (int) (stopTime ^ (stopTime >>> 32));
-
-        result = 37 * result + ((this.customerName != null) ? this.customerName.hashCode() : 0);
-
-        result = 37 * result + (isInvoiceMailed ? 0 : 1);
-
-        result = 37 * result + ((this.customerRef != null) ? this.customerRef.hashCode() : 0);
-
-        result = 37 * result + ((this.payDate != null) ? this.payDate.hashCode() : 0);
-        result = 37 * result + creditId;
         return result;
     }
 
@@ -527,6 +453,8 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
         str.append((this.paymentDetails != null) ? this.paymentDetails : "");
         str.append("',StructuredId='");
         str.append((this.structuredId != null) ? this.structuredId : "");
+        str.append("',Comment='");
+        str.append((this.comment != null) ? this.comment : "");
         str.append("'");
         return (str.toString());
     }
@@ -582,6 +510,8 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
         str.append((this.paymentDetails != null) ? this.paymentDetails : "");
         str.append("','");
         str.append((this.structuredId != null) ? this.structuredId : "");
+        str.append("','");
+        str.append((this.comment != null) ? this.comment : "");
         str.append("'");
         return (str.toString());
     }

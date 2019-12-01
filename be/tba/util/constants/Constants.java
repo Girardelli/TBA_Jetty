@@ -184,6 +184,7 @@ public class Constants
     public static final String NO_CUSTOMER = "_ncu";
     public static final String FINTRO_FILE = "_iff";
     public static final String FINTRO_PROCESS_FILE = "_ipf";
+    public static final String INVOICE_INFO = "_ii";
 
     // filter
     public static final String ACCOUNT_FILTER_CUSTOMER = "_fcus";

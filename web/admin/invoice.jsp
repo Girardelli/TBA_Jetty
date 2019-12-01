@@ -243,7 +243,13 @@
                 <td width="400" valign="top"> <%=vInvoiceData.getCustomerRef().isEmpty()?"-":vInvoiceData.getCustomerRef()%>
                 </td>
             </tr>
-            
+             <tr>
+                <td width="250" valign="top" class="adminsubtitle">&nbsp;Informatie</td>
+                <td width="10" valign="top">:</td>
+               <td width="400" valign="top" class="bodytekst">                                      
+                   <textarea name=<%=Constants.INVOICE_INFO%> rows=12 cols=70><%=(String) vInvoiceData.getComment()%></textarea>
+               </td>
+             </tr>
         </table>
         <p><span class=\"adminsubtitle\"> 
         <input class="tbabutton" type=submit name=action value=" Bewaar " onclick="savePayDate()" > 
@@ -657,11 +663,10 @@
                   <td width="1">:</td>
                   <td width="200" valign="top" class="adminsubtitle">&nbsp;&nbsp;<%=vInvoiceData.getTotalCost()%>&nbsp;&nbsp;(excl BTW)</td>
               </tr>
-           </table>
+          </table>
            
            <%
         }
-          
           
 		// print the lists
 		if (vTasks != null && vTasks.size() > 0)
@@ -869,11 +874,6 @@ function hooverOffRow(id, rowInd, colour)
 function getInvoice()
 {
   document.invoiceform.<%=Constants.SRV_ACTION%>.value="<%=Constants.GOTO_INVOICE%>";
-}
-
-function saveInvoice()
-{
-    document.invoiceform.<%=Constants.SRV_ACTION%>.value="<%=Constants.SAVE_INVOICE%>";
 }
 
 function savePayDate()

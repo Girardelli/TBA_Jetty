@@ -64,8 +64,9 @@ public class InvoiceFacade
             vInvoice.setFromBankNr((String) req.getParameter(Constants.TASK_FROM_BANK_NR));
             vInvoice.setValutaDate((String) req.getParameter(Constants.TASK_VAL_DATE));
             vInvoice.setPaymentDetails((String) req.getParameter(Constants.TASK_PAY_DETAILS));
+            vInvoice.setComment((String) req.getParameter(Constants.INVOICE_INFO));
 
-            if (vInvoice.getPayDate() != null || vInvoice.getPayDate().length() > 0)
+            if (vInvoice.getPayDate() != null && vInvoice.getPayDate().length() > 0)
             {
                 vInvoice.setIsPayed(true);
             }
