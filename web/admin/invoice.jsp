@@ -4,11 +4,7 @@
 
 <%@ page
 	import="javax.ejb.*,java.util.*,
-	
-	
-	javax.naming.Context,
-	javax.naming.InitialContext,
-	
+    java.text.DecimalFormat,
 	javax.ejb.*,
 	be.tba.ejb.account.interfaces.*,
 	be.tba.ejb.pbx.interfaces.*,
@@ -38,7 +34,7 @@
         {
             vCustomerFilter = Constants.ACCOUNT_FILTER_ALL;
         }
-	    
+        DecimalFormat costFormatter = new DecimalFormat("#0.00");
 	    int vMonth = vSession.getMonthsBack();
 	    int vYear = vSession.getYear();
 	    int vInvoiceId = vSession.getInvoiceId();
@@ -222,7 +218,7 @@
             <tr>
                 <td width="250" valign="top" class="adminsubtitle">&nbsp;Bedrag (excl BTW)</td>
                 <td width="10" valign="top">:</td>
-                <td width="400" valign="top"><b> <%=vInvoiceData.getTotalCost()%></b>
+                <td width="400" valign="top"><b> <%=costFormatter.format(vInvoiceData.getTotalCost())%></b>
                 </td>
             </tr>
             <tr>
@@ -661,7 +657,7 @@
                   <td width="20"></td>
                   <td width="120" valign="top" class="adminsubtitle">&nbsp;&nbsp;Totaal</td>
                   <td width="1">:</td>
-                  <td width="200" valign="top" class="adminsubtitle">&nbsp;&nbsp;<%=vInvoiceData.getTotalCost()%>&nbsp;&nbsp;(excl BTW)</td>
+                  <td width="200" valign="top" class="adminsubtitle">&nbsp;&nbsp;<%=costFormatter.format(vInvoiceData.getTotalCost())%>&nbsp;&nbsp;(excl BTW)</td>
               </tr>
           </table>
            

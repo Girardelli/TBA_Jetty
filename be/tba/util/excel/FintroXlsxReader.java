@@ -5,11 +5,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Vector;
 import java.util.Collection;
+import java.util.Date;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
@@ -60,10 +62,13 @@ final public class FintroXlsxReader
    private Collection<FintroPayment> mNotMatchingPayments = null;
    private Collection<InvoicePaymentStr> mWrongValuePayments = null;
    private Collection<FintroPayment> mUnknownAccountNrs = null;
+   private Collection<FintroPayment> mErrorPayments = null;
    private String mHtmlProcessLog;
    private String mTxtProcessLog;
    private File mInputFile;
    private String mOutputFileName;
+   private StringBuffer mLog;
+   private DecimalFormat mCostFormatter;
 
    public FintroXlsxReader(String input)
    {
@@ -76,6 +81,9 @@ final public class FintroXlsxReader
       mNotMatchingPayments = new Vector<FintroPayment>();
       mUnknownAccountNrs = new Vector<FintroPayment>();
       mWrongValuePayments = new Vector<InvoicePaymentStr>();
+      mErrorPayments = new Vector<FintroPayment>();
+      mLog = new StringBuffer();
+      mCostFormatter = new DecimalFormat("#0.00");
 
       try
       {
@@ -112,7 +120,22 @@ final public class FintroXlsxReader
             // Row row = sheet.getRow(i);
             FintroPayment entry = new FintroPayment();
             entry.id = row.getCell(ID).toString();
-            entry.payDate = row.getCell(EXEC_DATE).toString();
+            
+            try 
+            {
+               // try reading it as a date field. (!!! it is not clear here what the date format was on the computer importing the content)
+               Date date = row.getCell(EXEC_DATE).getDateCellValue();
+               // serious hack I'm doing here. If the date column does not read in as a string, excel has formated this 
+               // cell as date but with a wrong (US) local setting. Therefore treat month as day and day as month!!!!
+               SimpleDateFormat dt1 = new SimpleDateFormat("MM/dd/yyyy");
+               entry.payDate = dt1.format(date); 
+            }
+            catch (Exception ex1)
+            {
+               sLogger.error("date cell cannot be read as text. unknown cell format");
+               entry.payDate = row.getCell(EXEC_DATE).toString();
+            }
+//            sLogger.info(entry.payDate);
             entry.valutaDate = row.getCell(VALUTA_DATE).toString();
             entry.amount = row.getCell(AMOUNT).getNumericCellValue();
             entry.accountNrCustomer = row.getCell(CUST_ACCOUNT).toString();
@@ -215,6 +238,7 @@ final public class FintroXlsxReader
                }
                else
                {
+                  mLog.append("ERROR: structid " + structuredId + " in payment " + payment.id  + " not found in db<br>");
                   System.out.println("ERROR: structid not found in db. Id=" + structuredId);
                }
             }
@@ -377,28 +401,53 @@ final public class FintroXlsxReader
       Collection<InvoiceEntityData> alreadyUsedFintroIdInvoices = mInvoiceSession.getInvoiceByFintroId(mWebSession, payment.id);
       if (alreadyUsedFintroIdInvoices.size() > 0)
       {
-         // the fintroID in this payment was already used to set an invoice as 'payed'.
-         mConfirmedPayedInvoices.add((InvoiceEntityData) alreadyUsedFintroIdInvoices.toArray()[0]);
-         return;
-      }
-      mInvoiceSession.setPaymentInfo(mWebSession, invoice.getId(), payment);
-      if (invoice.getIsPayed())
-      {
-         // System.out.println("Confirmed " + invoice.getInvoiceNr() + " with \"" +
-         // payment.details + "\"");
-         mConfirmedPayedInvoices.add(invoice);
+         InvoiceEntityData dbInvoice = (InvoiceEntityData) alreadyUsedFintroIdInvoices.toArray()[0];
+         if (alreadyUsedFintroIdInvoices.size() == 1)
+         {
+            mConfirmedPayedInvoices.add((InvoiceEntityData) alreadyUsedFintroIdInvoices.toArray()[0]);
+            if (dbInvoice.getId() != invoice.getId())
+            {
+               mLog.append("INFO: payment " + payment.id  + ": match found on open invoice " + invoice.getInvoiceNr() + " (id=" + invoice.getId() + "), but this payment was already linked in DB to "+ dbInvoice.getInvoiceNr() + " (id=" + dbInvoice.getId() + ")<br>");
+            }
+         }
+         else
+         {
+            mErrorPayments.add(payment);
+            mLog.append("ERROR: payment " + payment.id  + ": already multiple matches found in DB for this FintoId: ");
+            for (InvoiceEntityData entry : alreadyUsedFintroIdInvoices)
+            {
+               mLog.append(", ");
+               mLog.append(entry.getInvoiceNr());
+            }
+            mLog.append("<br>");
+         }
       }
       else
       {
-         // System.out.println("Mapped " + invoice.getInvoiceNr() + " with \"" +
-         // payment.details + "\"");
-         mNewPayedInvoices.add(invoice);
+         // FintroId not found in the DB
+         if (invoice.getIsPayed())
+         {
+            if (payment.id.equals(invoice.getFintroId()))
+            {
+               mLog.append("INFO : payment " + payment.id  + ": should have been found in DB based on FinrtoId on invoice " + invoice.getInvoiceNr() + " (id=" + invoice.getId() + ")<br>");
+               mConfirmedPayedInvoices.add(invoice);
+            }
+            else
+            {
+               mLog.append("ERROR: payment " + payment.id  + ": matches invoice " + invoice.getInvoiceNr() + " (id=" + invoice.getId() + "), but this invoice was set as payed with another FintroId=" + invoice.getFintroId() + "<br>");
+               mErrorPayments.add(payment);
+            }
+         }
+         else
+         {
+            mInvoiceSession.setPaymentInfo(mWebSession, invoice.getId(), payment);
+            mNewPayedInvoices.add(invoice);
+         }
       }
    }
 
    private void createProcessLogs() throws IOException
    {
-      DecimalFormat vCostFormatter = new DecimalFormat("#0.00");
       StringBuilder strBuf = new StringBuilder();
       for (Iterator<InvoiceEntityData> vPayIter = mConfirmedPayedInvoices.iterator(); vPayIter.hasNext();)
       {
@@ -421,10 +470,7 @@ final public class FintroXlsxReader
       for (Iterator<FintroPayment> vPayIter = mNotMatchingPayments.iterator(); vPayIter.hasNext();)
       {
          FintroPayment payment = vPayIter.next();
-         strBuf.append("Bedrag: " + payment.amount + " (excl BTW: " + vCostFormatter.format(payment.amount / 1.21) + ")<br>");
-         strBuf.append(payment.details);
-         strBuf.append("<br>FintroId: " + payment.id);
-         strBuf.append("<br>ValutaDate: " + payment.valutaDate + "<br><br>");
+         fillPaymentStrBuffer(payment, strBuf);
       }
       String notMatchingPayments = strBuf.toString();
       // System.out.println("\r\nNot matching payments: \r\n" + strBuf.toString());
@@ -432,7 +478,7 @@ final public class FintroXlsxReader
       for (Iterator<FintroPayment> vPayIter = mUnknownAccountNrs.iterator(); vPayIter.hasNext();)
       {
          FintroPayment payment = vPayIter.next();
-         strBuf.append("Bedrag: " + payment.amount + " (excl BTW: " + vCostFormatter.format(payment.amount / 1.21) + ")<br>Van Banknummer:  " + payment.accountNrCustomer + "<br>" + payment.details + "<br><br>");
+         fillPaymentStrBuffer(payment, strBuf);
       }
       String unknownAccountNrs = strBuf.toString();
 
@@ -440,25 +486,57 @@ final public class FintroXlsxReader
       for (Iterator<InvoicePaymentStr> vInvoicePaymentIter = mWrongValuePayments.iterator(); vInvoicePaymentIter.hasNext();)
       {
          InvoicePaymentStr invoicePayment = vInvoicePaymentIter.next();
-         strBuf.append("Factuur " + invoicePayment.invoice.getInvoiceNr() + ", bedrag: " + vCostFormatter.format(invoicePayment.invoice.getTotalCost() * 1.21) + " (Excl BTW)=" + invoicePayment.invoice.getTotalCost() + "<br>Bedrag betaald:  " + invoicePayment.payment.amount + " (excl BTW: " + vCostFormatter.format(invoicePayment.payment.amount / 1.21) + ")<br>Van Banknummer:  "
+         strBuf.append("Factuur " + invoicePayment.invoice.getInvoiceNr() + ", bedrag: " + mCostFormatter.format(invoicePayment.invoice.getTotalCost() * 1.21) + " (Excl BTW)=" + invoicePayment.invoice.getTotalCost() + "<br>Bedrag betaald:  " + invoicePayment.payment.amount + " (excl BTW: " + mCostFormatter.format(invoicePayment.payment.amount / 1.21) + ")<br>Van Banknummer:  "
                + invoicePayment.payment.accountNrCustomer + "<br>");
          strBuf.append(invoicePayment.payment.details);
          strBuf.append("<br>FintroId: " + invoicePayment.payment.id);
          strBuf.append("<br>ValutaDate: " + invoicePayment.payment.valutaDate + "<br><br>");
       }
       String wrongValuePayments = strBuf.toString();
+      strBuf = new StringBuilder();
+      for (Iterator<FintroPayment> vPayIter = mErrorPayments.iterator(); vPayIter.hasNext();)
+      {
+         FintroPayment payment = vPayIter.next();
+         fillPaymentStrBuffer(payment, strBuf);      
+      }
+      String errorPayments = strBuf.toString();
 
       StringBuilder htmlProcessLogStrBuf = new StringBuilder();
-      htmlProcessLogStrBuf.append("<b>Nog niet gekende rekeningnummers (of geen klant/factuur betaling):</b><br>");
-      htmlProcessLogStrBuf.append(unknownAccountNrs);
-      htmlProcessLogStrBuf.append("<br><b>Foutieve betalingen:</b><br>");
-      htmlProcessLogStrBuf.append(wrongValuePayments);
-      htmlProcessLogStrBuf.append("<br><b>Niet erkende betalingen:</b><br>");
-      htmlProcessLogStrBuf.append(notMatchingPayments);
-      htmlProcessLogStrBuf.append("<br><b>Bevestigde betalingen (waren al als 'betaald' gezet):</b><br>");
-      htmlProcessLogStrBuf.append(confirmedPayments);
-      htmlProcessLogStrBuf.append("<br><b>Nieuwe betalingen:</b><br>");
-      htmlProcessLogStrBuf.append(newPayedInvoices);
+      if (mLog.length() > 0)
+      {
+         htmlProcessLogStrBuf.append("<b>Process ERROR Log:</b><br>");
+         htmlProcessLogStrBuf.append(mLog.toString() + "<br><br>");
+      }
+      if (errorPayments.length() > 0)
+      {
+         htmlProcessLogStrBuf.append("<b>Error payments:</b><br>");
+         htmlProcessLogStrBuf.append(errorPayments);
+      }
+      if (unknownAccountNrs.length() > 0)
+      {
+         htmlProcessLogStrBuf.append("<b>Nog niet gekende rekeningnummers (of geen klant/factuur betaling):</b><br>");
+         htmlProcessLogStrBuf.append(unknownAccountNrs);
+      }
+      if (wrongValuePayments.length() > 0)
+      {
+         htmlProcessLogStrBuf.append("<br><b>Foutieve betalingen:</b><br>");
+         htmlProcessLogStrBuf.append(wrongValuePayments);
+      }
+      if (notMatchingPayments.length() > 0)
+      {
+         htmlProcessLogStrBuf.append("<br><b>Niet erkende betalingen:</b><br>");
+         htmlProcessLogStrBuf.append(notMatchingPayments);
+      }
+      if (confirmedPayments.length() > 0)
+      {
+         htmlProcessLogStrBuf.append("<br><b>Bevestigde betalingen (waren al als 'betaald' gezet):</b><br>");
+         htmlProcessLogStrBuf.append(confirmedPayments);
+      }
+      if (newPayedInvoices.length() > 0)
+      {
+         htmlProcessLogStrBuf.append("<br><b>Nieuwe betalingen:</b><br>");
+         htmlProcessLogStrBuf.append(newPayedInvoices);
+      }
       htmlProcessLogStrBuf.append("<br><br>");
       mHtmlProcessLog = htmlProcessLogStrBuf.toString();
       mTxtProcessLog = mHtmlProcessLog.replaceAll("<b>", "");
@@ -535,5 +613,13 @@ final public class FintroXlsxReader
       // System.out.println("month=" + month + ", seqnr=" + seqnr );
 
       return (detail.indexOf(month) != -1 && detail.indexOf(seqnr) != -1);
+   }
+   
+   private void fillPaymentStrBuffer(FintroPayment payment, StringBuilder strBuf)
+   {
+      strBuf.append("Bedrag: " + payment.amount + " (excl BTW: " + mCostFormatter.format(payment.amount / 1.21) + ")<br>");
+      strBuf.append(payment.details);
+      strBuf.append("<br>FintroId: " + payment.id);
+      strBuf.append("<br>ValutaDate: " + payment.valutaDate + "<br><br>");
    }
 }

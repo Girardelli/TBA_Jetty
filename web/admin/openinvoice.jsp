@@ -76,7 +76,7 @@
 			<td valign="top" width="20" bgcolor="FFFFFF"></td>
 	
 			<!-- account list -->
-			<td valign="top" width="865" bgcolor="FFFFFF">
+			<td valign="top" bgcolor="FFFFFF">
 				<br>
 			<%
 			   	            // check whether a Fintro file was uploaded

@@ -242,7 +242,7 @@ public abstract class AbstractSqlAdapter<T>
         return new Vector<T>();
     }
 
-    protected String escapeQuotes(String in)
+    static public String escapeQuotes(String in)
     {
         if (in.indexOf('\'') >= 0)
         {

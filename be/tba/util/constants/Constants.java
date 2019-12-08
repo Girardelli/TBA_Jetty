@@ -185,6 +185,9 @@ public class Constants
     public static final String FINTRO_FILE = "_iff";
     public static final String FINTRO_PROCESS_FILE = "_ipf";
     public static final String INVOICE_INFO = "_ii";
+    public static final String INVOICE_IS_CREDITNOTA = "_iic";
+    public static final String INVOICE_NR = "_inr";
+    public static final String INVOICE_DESCRIPTION = "_ide";
 
     // filter
     public static final String ACCOUNT_FILTER_CUSTOMER = "_fcus";
@@ -231,6 +234,7 @@ public class Constants
 
     // AdminDispatchServlet actions
     public static final String GOTO_CANVAS = "GOTO_CANVAS";
+    public static final String GOTO_ADD_INVOICE = "GOTO_ADD_INVOICE";
     //public static final String GOTO_RECORD_ADMIN = "GOTO_RECORD_ADMIN";
     public static final String RECORD_DELETE = "RECORD_DELETE";
     public static final String RECORD_UPDATE = "RECORD_UPDATE";

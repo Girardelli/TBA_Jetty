@@ -31,6 +31,7 @@ public class TbaPdfInvoice
     DecimalFormat mCostFormatter = new DecimalFormat("#0.00");
 
     private final int kSpacing = 17;
+    private final int kDescrSpacing = 12;
 
     /**
      * This will create a blank PDF and write the contents to a file.
@@ -99,6 +100,24 @@ public class TbaPdfInvoice
 
     }
 
+    public void createManualInvoice()
+    {
+       if (mCustomerData == null || mInvoiceData == null)
+       {
+           throw new IllegalArgumentException("data objects are not set.");
+       }
+       try
+       {
+           fillAddress();
+           fillDescription(false);
+       }
+       catch (Exception e)
+       {
+           System.err.println(e.getMessage());
+           e.printStackTrace();
+       }
+    }
+    
     public void createCreditNote()
     {
         if (mCustomerData == null)
@@ -233,7 +252,33 @@ public class TbaPdfInvoice
         writeText(mPage1, mInvoiceData.InvoiceNr, PDType1Font.TIMES_ROMAN, 11, 185, 484);
         writeText(mPage1, mInvoiceData.Date, PDType1Font.TIMES_ROMAN, 11, 185, 470);
 
-        if (isCreditNote)
+        if (!mInvoiceData.Description.isEmpty())
+        {
+           final int kWidth = 60;
+           int start = 0;
+           int end  = kWidth;
+           int len = mInvoiceData.Description.length();
+           int lineCnt = 0;
+
+           while (lineCnt < 4)
+           {
+              int extra = mInvoiceData.Description.indexOf(' ', end);
+              if (extra > end)
+              {
+                 end = extra;
+              }
+              end = Integer.min(end, len);
+              writeText(mPage1, mInvoiceData.Description.substring(start, end), PDType1Font.TIMES_ITALIC, 11, 100, 420 - (kDescrSpacing*lineCnt));
+              if (start + end > len)
+              {
+                 break;
+              }
+              start = end;
+              end = end + kWidth;
+              ++lineCnt;
+           }
+        }
+        else if (isCreditNote)
         {
             writeText(mPage1, "Credit nota", PDType1Font.TIMES_ITALIC, 11, 100, 420);
         }

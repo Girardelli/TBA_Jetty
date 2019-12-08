@@ -78,7 +78,7 @@ private String vSessionId;
 					<td onmouseover="showmenu('rubrieken')"
 						onmouseout="hidemenu('rubrieken')">
 						<div class="topMenu">&nbsp;&nbsp;&nbsp;Rubrieken&nbsp;&nbsp;&nbsp;</div>
-						<table class="menu" id="rubrieken" width="150">
+						<table class="menu" id="rubrieken">
 							<tr>
 								<td class="menu"><a class='norm'
 									href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_CANVAS%>"><nobr>Oproepen lijst</nobr></a>
@@ -113,20 +113,16 @@ private String vSessionId;
 
 					<td onmouseover="showmenu('tba_admin')"
 						onmouseout="hidemenu('tba_admin')">
-						<div class="topMenu">&nbsp;&nbsp;&nbsp;TBA
-							Admin&nbsp;&nbsp;&nbsp;</div>
-						<table class="menu" id="tba_admin" width="150">
+						<div class="topMenu">&nbsp;&nbsp;&nbsp;TBA Admin&nbsp;&nbsp;&nbsp;</div>
+						<table class="menu" id="tba_admin">
 							<tr>
-								<td class="menu"><a class='norm'
-									href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_INVOICE%>">Maak
-										Factuur</a> <br> <a class='norm'
-									href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_INVOICE_ADMIN%>">Factuur
-										lijst</a> <br> <a class='norm'
-									href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_OPEN_INVOICE%>">Open
-										facturen</a> <br> <a class='norm'
-									href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_EMPLOYEE_ADMIN%>">Werknemers</a>
-									<br> <a class='norm'
-									href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_EMPLOYEE_COST%>">Prestaties</a>
+								<td class="menu">
+                                    <a class='norm' href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_INVOICE_ADMIN%>">Factuur lijst</a> <br> 
+                                    <a class='norm' href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_INVOICE%>">Maak Factuur</a> <br> 
+                                    <a class='norm' href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_ADD_INVOICE%>">Maak Manueel Factuur</a> <br> 
+                                    <a class='norm' href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_OPEN_INVOICE%>">Open facturen</a> <br> 
+                                    <a class='norm' href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_EMPLOYEE_ADMIN%>">Werknemers</a><br> 
+                                    <a class='norm' href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_EMPLOYEE_COST%>">Prestaties</a>
 								</td>
 							</tr>
 						</table>

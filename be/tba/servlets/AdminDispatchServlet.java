@@ -790,6 +790,26 @@ public class AdminDispatchServlet extends HttpServlet
                 }
 
                 // ==============================================================================================
+                // GOTO_ADD_INVOICE
+                // ==============================================================================================
+                case Constants.GOTO_ADD_INVOICE:
+                {
+                   vSession.getCallFilter().setCustFilter(req.getParameter(Constants.ACCOUNT_FILTER_ALL)); 
+                   rd = sc.getRequestDispatcher(Constants.ADD_INVOICE_JSP);
+                    break;
+                }
+
+                // ==============================================================================================
+                // INVOICES ADD
+                // ==============================================================================================
+                case Constants.INVOICE_ADD:
+                {
+                    InvoiceFacade.addManualInvoice(req, vSession);
+                    rd = sc.getRequestDispatcher(Constants.CANVAS_JSP);
+                    break;
+                }
+                
+                // ==============================================================================================
                 // GOTO_INVOICE
                 // ==============================================================================================
                 case Constants.GOTO_INVOICE:
@@ -960,27 +980,6 @@ public class AdminDispatchServlet extends HttpServlet
                     break;
                 }
                 
-                // ==============================================================================================
-                // GOTO INVOICE ADD
-                // ==============================================================================================
-//                case Constants.GOTO_INVOICE_ADD:
-//                {
-//                    rd = sc.getRequestDispatcher(Constants.ADD_INVOICE_JSP);
-//                    System.out.println("add invoice jsp must come now:" + Constants.ADD_INVOICE_JSP);
-//                break;
-//
-//                }
-
-                // ==============================================================================================
-                // INVOICES ADD
-                // ==============================================================================================
-//                case Constants.INVOICE_ADD:
-//                {
-//                    InvoiceFacade.addInvoice(req, vSession);
-//                    rd = sc.getRequestDispatcher(Constants.ADMIN_INVOICE_JSP);
-//                break;
-//                }
-
                 // ==============================================================================================
                 // GOTO_RECORD_SEARCH
                 // ==============================================================================================

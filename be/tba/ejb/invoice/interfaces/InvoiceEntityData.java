@@ -3,12 +3,14 @@
  */
 package be.tba.ejb.invoice.interfaces;
 
+import java.util.Comparator;
+
 /**
  * Data object for InvoiceEntity.
  *
  * @xdoclet-generated at 1-01-15
  */
-public class InvoiceEntityData extends be.tba.util.data.AbstractData implements java.io.Serializable
+public class InvoiceEntityData extends be.tba.util.data.AbstractData implements java.io.Serializable, Comparable<InvoiceEntityData>
 {
     /**
     *
@@ -42,6 +44,7 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
     public String paymentDetails = "";
     public String structuredId = ""; //gestructureerde mededeling (Modulo 97 protected)
     public String comment = ""; 
+    public String description = ""; 
 
 
     public InvoiceEntityData()
@@ -76,6 +79,7 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
         setPaymentDetails(otherData.getPaymentDetails());
         setStructuredId(otherData.getStructuredId());
         setComment(otherData.getComment());
+        setDescription(otherData.getDescription());
     }
 
     public be.tba.ejb.invoice.interfaces.InvoiceEntityPK getPrimaryKey()
@@ -345,6 +349,17 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
         this.comment = comment;
     }
 
+    public String getDescription()
+    {
+        return this.description;
+    }
+   
+    public void setDescription(String description)
+    {
+        this.description = description;
+    }
+  
+    
     public boolean equals(Object pOther)
     {
         if (pOther instanceof InvoiceEntityData)
@@ -455,6 +470,8 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
         str.append((this.structuredId != null) ? this.structuredId : "");
         str.append("',Comment='");
         str.append((this.comment != null) ? this.comment : "");
+        str.append("',Description='");
+        str.append((this.description != null) ? this.description : "");
         str.append("'");
         return (str.toString());
     }
@@ -512,8 +529,17 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
         str.append((this.structuredId != null) ? this.structuredId : "");
         str.append("','");
         str.append((this.comment != null) ? this.comment : "");
+        str.append("','");
+        str.append((this.description != null) ? this.description : "");
         str.append("'");
         return (str.toString());
     }
+
+   @Override
+   public int compareTo(InvoiceEntityData o)
+   {
+      // TODO Auto-generated method stub
+      return this.fintroId.compareTo(o.fintroId);
+  }
 
 }

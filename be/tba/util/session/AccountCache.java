@@ -298,30 +298,29 @@ final public class AccountCache
                // System.out.println("added employee " + vEntry.getFullName() + ", " +
                // vEntry.getId() + ", " + vEntry.getUserId());
             }
+         }
+         // fill in the AccountNrList
+         if (vEntry.getAccountNr() != null && !vEntry.getAccountNr().isEmpty())
+         {
+            String bankAccountNrs = vEntry.getAccountNr();
+            StringTokenizer vTokenizer = new StringTokenizer(bankAccountNrs, ",");
 
-            // fill in the AccountNrList
-            if (vEntry.getAccountNr() != null && !vEntry.getAccountNr().isEmpty())
+            while (vTokenizer.hasMoreTokens())
             {
-               String bankAccountNrs = vEntry.getAccountNr();
-               StringTokenizer vTokenizer = new StringTokenizer(bankAccountNrs, ",");
-
-               while (vTokenizer.hasMoreTokens())
+               String bankAccountNr = vTokenizer.nextToken();
+               if (mBankAccountNr2AccountIdsMap.containsKey(bankAccountNr))
                {
-                  String bankAccountNr = vTokenizer.nextToken();
-                  if (mBankAccountNr2AccountIdsMap.containsKey(bankAccountNr))
-                  {
-                     Collection<Integer> ids = mBankAccountNr2AccountIdsMap.get(bankAccountNr);
-                     ids.add(Integer.valueOf(vEntry.getId()));
-                  } else
-                  {
-                     Collection<Integer> ids = new Vector<Integer>();
-                     ids.add(vEntry.getId());
-                     mBankAccountNr2AccountIdsMap.put(bankAccountNr, ids);
-                  }
-
-                  // System.out.println("matching FWD (" + vEntry.getFwdNumber() + ") nr to
-                  // account Number: " + accountNr);
+                  Collection<Integer> ids = mBankAccountNr2AccountIdsMap.get(bankAccountNr);
+                  ids.add(Integer.valueOf(vEntry.getId()));
+               } else
+               {
+                  Collection<Integer> ids = new Vector<Integer>();
+                  ids.add(vEntry.getId());
+                  mBankAccountNr2AccountIdsMap.put(bankAccountNr, ids);
                }
+
+               // System.out.println("matching FWD (" + vEntry.getFwdNumber() + ") nr to
+               // account Number: " + accountNr);
             }
          }
       }

@@ -3,12 +3,17 @@ package be.tba.ejb.invoice.session;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
+import java.util.SortedSet;
 import java.util.StringTokenizer;
+import java.util.TreeSet;
 import java.util.Vector;
 
 import javax.activation.DataHandler;
@@ -37,6 +42,7 @@ import be.tba.util.invoice.InvoiceHelper;
 import be.tba.util.session.AccountCache;
 
 import java.sql.SQLException;
+import java.text.Collator;
 import java.text.DecimalFormat;
 import java.sql.ResultSet;
 
@@ -98,6 +104,12 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
         return getRow(webSession, key);
     }
 
+    public SortedSet<InvoiceEntityData> getAllRowsSorted(WebSession webSession)
+    {
+       return new TreeSet<InvoiceEntityData>(getAllRows(webSession));
+    }
+    
+    
     /**
      * @ejb:interface-method view-type="remote"
      */
@@ -172,6 +184,16 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
         return new Vector<InvoiceEntityData>();
     }
 
+    public Collection<InvoiceEntityData> getInvoiceByNr(WebSession webSession, String number)
+    {
+        if (number != null && !number.isEmpty())
+        {
+            return executeSqlQuery(webSession, "SELECT * FROM InvoiceEntity WHERE InvoiceNr='" + number + "'"); 
+        }
+        return new Vector<InvoiceEntityData>();
+    }
+    
+    
     /**
      * @ejb:interface-method view-type="remote"
      */
@@ -374,6 +396,17 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
         executeSqlQuery(webSession, "UPDATE InvoiceEntity SET AccountID=" + accountID + ", CustomerName='" + accountName  + "' WHERE id=" + key);
     }
 
+    public void setPaymentDates(WebSession webSession, InvoiceEntityData payment)
+    {
+        executeSqlQuery(webSession, "UPDATE InvoiceEntity SET PayDate='" + payment.getPayDate() + "', ValutaDate='" + payment.getValutaDate() + "' WHERE id=" + payment.getId());
+    }
+
+    public void setCreditReference(WebSession webSession, InvoiceEntityData invoice, int id)
+    {
+        executeSqlQuery(webSession, "UPDATE InvoiceEntity SET CreditId=" + id + ", IsPayed=true WHERE id=" + invoice.getId());
+    }
+
+
     /**
      * @ejb:interface-method view-type="remote"
      */
@@ -538,38 +571,55 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
         Vector<InvoiceEntityData> vVector = new Vector<InvoiceEntityData>();
         while (rs.next())
         {
-            InvoiceEntityData entry = new InvoiceEntityData();
-            entry.setId(rs.getInt(1));
-            entry.setFileName(null2EmpthyString(rs.getString(2)));
-            entry.setAccountID(rs.getInt(3));
-            entry.setAccountFwdNr(null2EmpthyString(rs.getString(4)));
-            entry.setTotalCost(rs.getDouble(5));
-            entry.setMonth(rs.getInt(6));
-            entry.setYear(rs.getInt(7));
-            entry.setYearSeqNr(rs.getInt(8));
-            entry.setInvoiceNr(null2EmpthyString(rs.getString(9)));
-            entry.setFrozenFlag(rs.getBoolean(10));
-            entry.setIsPayed(rs.getBoolean(11));
-            entry.setStartTime(rs.getLong(12));
-            entry.setStopTime(rs.getLong(13));
-            entry.setCustomerName(null2EmpthyString(rs.getString(14)));
-            entry.setIsInvoiceMailed(rs.getBoolean(15));
-            entry.setInvoiceDate(null2EmpthyString(rs.getString(16)));
-            entry.setCustomerRef(null2EmpthyString(rs.getString(17)));
-            entry.setPayDate(null2EmpthyString(rs.getString(18)));
-            entry.setCreditId(rs.getInt(19));
-            entry.setFintroId(null2EmpthyString(rs.getString(20)));
-            entry.setValutaDate(null2EmpthyString(rs.getString(21)));
-            entry.setFromBankNr(null2EmpthyString(rs.getString(22)));
-            entry.setPaymentDetails(null2EmpthyString(rs.getString(23)));
-            entry.setStructuredId(null2EmpthyString(rs.getString(24)));
-            entry.setComment(null2EmpthyString(rs.getString(25)));
-            vVector.add(entry);
+            vVector.add(getFields(rs));
             // System.out.println("InvoiceEntityData: " + entry.toNameValueString());
         }
         return vVector;
     }
 
+    protected SortedSet<InvoiceEntityData> translateRsToSortedValueObjects(ResultSet rs) throws SQLException
+    {
+       SortedSet<InvoiceEntityData> sortedList = new TreeSet<InvoiceEntityData>( );
+        while (rs.next())
+        {
+           sortedList.add(getFields(rs));
+            // System.out.println("InvoiceEntityData: " + entry.toNameValueString());
+        }
+        return sortedList;
+    }
+
+    private InvoiceEntityData getFields(ResultSet rs)  throws SQLException
+    {
+       InvoiceEntityData entry = new InvoiceEntityData();
+       entry.setId(rs.getInt(1));
+       entry.setFileName(null2EmpthyString(rs.getString(2)));
+       entry.setAccountID(rs.getInt(3));
+       entry.setAccountFwdNr(null2EmpthyString(rs.getString(4)));
+       entry.setTotalCost(rs.getDouble(5));
+       entry.setMonth(rs.getInt(6));
+       entry.setYear(rs.getInt(7));
+       entry.setYearSeqNr(rs.getInt(8));
+       entry.setInvoiceNr(null2EmpthyString(rs.getString(9)));
+       entry.setFrozenFlag(rs.getBoolean(10));
+       entry.setIsPayed(rs.getBoolean(11));
+       entry.setStartTime(rs.getLong(12));
+       entry.setStopTime(rs.getLong(13));
+       entry.setCustomerName(null2EmpthyString(rs.getString(14)));
+       entry.setIsInvoiceMailed(rs.getBoolean(15));
+       entry.setInvoiceDate(null2EmpthyString(rs.getString(16)));
+       entry.setCustomerRef(null2EmpthyString(rs.getString(17)));
+       entry.setPayDate(null2EmpthyString(rs.getString(18)));
+       entry.setCreditId(rs.getInt(19));
+       entry.setFintroId(null2EmpthyString(rs.getString(20)));
+       entry.setValutaDate(null2EmpthyString(rs.getString(21)));
+       entry.setFromBankNr(null2EmpthyString(rs.getString(22)));
+       entry.setPaymentDetails(null2EmpthyString(rs.getString(23)));
+       entry.setStructuredId(null2EmpthyString(rs.getString(24)));
+       entry.setComment(null2EmpthyString(rs.getString(25)));
+       entry.setDescription(null2EmpthyString(rs.getString(26)));
+       return entry;
+    }
+    
     /**
      * Describes the instance and its content for debugging purpose
      *

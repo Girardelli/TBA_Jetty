@@ -15,8 +15,10 @@ import be.tba.ejb.invoice.interfaces.InvoiceEntityData;
 import be.tba.ejb.invoice.session.InvoiceSqlAdapter;
 import be.tba.servlets.session.WebSession;
 import be.tba.util.constants.Constants;
+import be.tba.util.data.AbstractSqlAdapter;
 import be.tba.util.invoice.CustomerData;
 import be.tba.util.invoice.IBANCheckDigit;
+import be.tba.util.invoice.InvoiceData;
 import be.tba.util.invoice.InvoiceHelper;
 import be.tba.util.invoice.TbaPdfInvoice;
 import be.tba.util.invoice.WoltersKluwenImport;
@@ -198,38 +200,109 @@ public class InvoiceFacade
         }
     }
 
-    /*
-     * Not used anymore
-     
-    public static void addInvoice(HttpServletRequest req, WebSession session)
+    public static void addManualInvoice(HttpServletRequest req, WebSession session)
     {
+       System.out.println("addManualInvoice enter");
+        InvoiceSqlAdapter vInvoiceSession = new InvoiceSqlAdapter();
         InvoiceEntityData newInvoice = new InvoiceEntityData();
         Calendar vCalendar = Calendar.getInstance();
+        int vDay = vCalendar.get(Calendar.DAY_OF_MONTH);
         int vMonth = vCalendar.get(Calendar.MONTH);
         int vYear = vCalendar.get(Calendar.YEAR);
-
-        newInvoice.setAccountFwdNr("");
+        
+        newInvoice.setAccountID(Integer.parseInt((String) req.getParameter(Constants.ACCOUNT_ID)));
+        AccountEntityData account = AccountCache.getInstance().get(newInvoice.getAccountID());
+        newInvoice.setAccountFwdNr(account.getFwdNumber());
         newInvoice.setTotalCost(Double.parseDouble((String) req.getParameter(Constants.INVOICE_AMONTH)));
-        newInvoice.setMonth(vMonth);
-        newInvoice.setYear(vYear);
+        newInvoice.setMonth(Integer.parseInt((String) req.getParameter(Constants.INVOICE_MONTH)));
+        newInvoice.setYear(Integer.parseInt((String) req.getParameter(Constants.INVOICE_YEAR)));
         newInvoice.setFrozenFlag(true);
         newInvoice.setIsPayed(false);
-        newInvoice.setStartTime(0);
-        newInvoice.setStopTime(0);
+        newInvoice.setStartTime(vCalendar.getTimeInMillis());
+        newInvoice.setStopTime(vCalendar.getTimeInMillis());
         newInvoice.setYearSeqNr(0);
-
+        newInvoice.setInvoiceDate(String.format("%02d/%02d/%4d", vDay, vMonth, vYear));
+        newInvoice.setDescription((String) req.getParameter(Constants.INVOICE_DESCRIPTION));
+        // -1 means regular invoice
+        // 0 means this is a credit invoice
+        // db id means it is a regular invoice with a credit invoice counterpart indicated by this id.
+        String creditNotePrefix = "";
+        if (req.getParameter(Constants.INVOICE_IS_CREDITNOTA) != null)
+        {
+           newInvoice.setCreditId(0);
+           newInvoice.setIsPayed(true);
+           creditNotePrefix = "C";
+           if (newInvoice.getTotalCost() > 0)
+           {
+              newInvoice.setTotalCost(-newInvoice.getTotalCost());
+           }
+        }
+        else
+        {
+           newInvoice.setCreditId(-1);
+        }
+       
         newInvoice.setCustomerName((String) req.getParameter(Constants.INVOICE_CUSTOMER));
         //newInvoice.setAccountID(Integer.valueOf((String) req.getParameter(Constants.ACCOUNT_ID)));
-        InvoiceSqlAdapter vInvoiceSession = new InvoiceSqlAdapter();
         int invoiceNr = vInvoiceSession.getNewInvoiceNumber(session, vYear);
         newInvoice.setYearSeqNr(invoiceNr);
-        newInvoice.setInvoiceNr(InvoiceHelper.getInvoiceNumber(newInvoice.getYear(), newInvoice.getMonth(), invoiceNr));
+        newInvoice.setInvoiceNr(creditNotePrefix + InvoiceHelper.getInvoiceNumber(newInvoice.getYear(), newInvoice.getMonth(), invoiceNr));
         newInvoice.setStructuredId(IBANCheckDigit.IBAN_CHECK_DIGIT.calculateOGM(newInvoice.getInvoiceNr()));
         newInvoice.setFileName(InvoiceHelper.makeFileName(newInvoice));
+        newInvoice.setFileName(AbstractSqlAdapter.escapeQuotes(newInvoice.getFileName().replace('\\', '/')));
+        
+        int id = vInvoiceSession.addRow(session, newInvoice);
+        if (newInvoice.getCreditId() == 0)
+        {
+           String tobeCreditedInvoiceNr = (String) req.getParameter(Constants.INVOICE_NR);
+           if (tobeCreditedInvoiceNr != null &&  !tobeCreditedInvoiceNr.isEmpty())
+           {
+              Collection<InvoiceEntityData> invoices = vInvoiceSession.getInvoiceByNr(session, tobeCreditedInvoiceNr);
+              if (invoices.size() == 1)
+              {
+                 vInvoiceSession.setCreditReference(session, (InvoiceEntityData) invoices.toArray()[0], id);
+              }
+           }
+        }
+        System.out.println("created manual invoice " + newInvoice.getInvoiceNr() + " with id=" + id);
+        File vTemplate = new File(Constants.INVOICE_HEAD_TMPL);
+        File vTarget = new File(newInvoice.getFileName());
 
-        vInvoiceSession.addRow(session, newInvoice);
+        File vPath = vTarget.getParentFile();
+        if (!vPath.exists())
+        {
+            // dir doesn't exist
+            vPath.mkdirs();
+        }
+        
+        CustomerData custData = new CustomerData();
+        custData.setId(account.getId());
+        custData.setAddress1(account.getStreet());
+        custData.setAddress2(account.getCity());
+        custData.setBtwNr(account.getBtwNumber());
+        custData.setName(account.getCompanyName());
+        custData.setTAV(account.getAttToName());
+        InvoiceData invoiceData = new InvoiceData();
+        invoiceData.Btw = newInvoice.getTotalCost()*0.21;
+        invoiceData.TotalCost = newInvoice.getTotalCost();
+        invoiceData.InvoiceNr = newInvoice.getInvoiceNr();
+        invoiceData.StructuredId = newInvoice.getStructuredId();
+        invoiceData.Description = newInvoice.getDescription();
+        invoiceData.Month = newInvoice.getMonth();
+        invoiceData.Year = newInvoice.getYear();
+        
+        
+        TbaPdfInvoice pdfInvoice = new TbaPdfInvoice(vTarget, vTemplate);
+//        pdfInvoice.setCallCounts(mCallCounts);
+        pdfInvoice.setCustomerData(custData);
+        pdfInvoice.setInvoiceData(invoiceData);
+//        pdfInvoice.setTaskData(mTasks);
+//        pdfInvoice.setSubCustomers(mSubcustomerCostList);
+        pdfInvoice.createManualInvoice();
+        pdfInvoice.closeAndSave();
+
     }
-*/
+
 
     public static void generateCreditInvoice(HttpServletRequest req, WebSession session) 
     {

@@ -47,6 +47,7 @@ public class InvoiceData
     public String CustomerRef = "";
     public String PayDate = "";
     public int Id = 0;
+    public String Description = "";
 
     public InvoiceData()
     {
