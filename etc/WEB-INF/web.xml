@@ -10,46 +10,85 @@
 
   <!-- == Servlet definitions ============================================ -->
 
-
+	<servlet>
+		<servlet-name>default</servlet-name>
+		<servlet-class>org.eclipse.jetty.servlet.DefaultServlet</servlet-class>
+		<init-param>
+			<param-name>dirAllowed</param-name>
+			<param-value>false</param-value>
+		</init-param>
+	</servlet>
   <servlet>
     <servlet-name>LoginServlet</servlet-name>
     <servlet-class>be.tba.servlets.LoginServlet</servlet-class>
+	<init-param>
+        <param-name>dirAllowed</param-name>
+        <param-value>false</param-value>
+    </init-param>
   </servlet>
 
   <servlet>
     <servlet-name>AdminLoginServlet</servlet-name>
     <servlet-class>be.tba.servlets.AdminLoginServlet</servlet-class>
+	<init-param>
+        <param-name>dirAllowed</param-name>
+        <param-value>false</param-value>
+    </init-param>
   </servlet>
 
   <servlet>
     <servlet-name>InitServlet</servlet-name>
     <servlet-class>be.tba.servlets.InitServlet</servlet-class>
     <load-on-startup>1</load-on-startup>
+	<init-param>
+        <param-name>dirAllowed</param-name>
+        <param-value>false</param-value>
+    </init-param>
   </servlet>
 
   <servlet>
     <servlet-name>AdminDispatchServlet</servlet-name>
     <servlet-class>be.tba.servlets.AdminDispatchServlet</servlet-class>
+	<init-param>
+        <param-name>dirAllowed</param-name>
+        <param-value>false</param-value>
+    </init-param>
   </servlet>
 
   <servlet>
     <servlet-name>CustomerDispatchServlet</servlet-name>
     <servlet-class>be.tba.servlets.CustomerDispatchServlet</servlet-class>
+	<init-param>
+        <param-name>dirAllowed</param-name>
+        <param-value>false</param-value>
+    </init-param>
   </servlet>
   
   <servlet>
      <servlet-name>FileDownloadServlet</servlet-name>
      <servlet-class>be.tba.servlets.FileDownloadServlet</servlet-class>
+	<init-param>
+        <param-name>dirAllowed</param-name>
+        <param-value>false</param-value>
+    </init-param>
   </servlet>
   
   <servlet>
      <servlet-name>IntertelServlet</servlet-name>
      <servlet-class>be.tba.servlets.IntertelServlet</servlet-class>
+	<init-param>
+        <param-name>dirAllowed</param-name>
+        <param-value>false</param-value>
+    </init-param>
    </servlet>
 
   <servlet>
      <servlet-name>TbaWebSocketServlet</servlet-name>
      <servlet-class>be.tba.servlets.TbaWebSocketServlet</servlet-class>
+	<init-param>
+        <param-name>dirAllowed</param-name>
+        <param-value>false</param-value>
+    </init-param>
    </servlet>
   
   <!-- == Servlet mappings ================================================ -->
