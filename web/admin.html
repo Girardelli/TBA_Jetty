@@ -8,6 +8,7 @@
  <!-- <meta HTTP-EQUIV="Refresh" content="30">-->
   <meta name="Copyright" content="Copyright © 2003 TheBusinessAssistant, All rights reserved.">
   <meta name="Distribution" content="Global">
+  <meta http-equiv="cache-control" content="no-cache">
   <link rel="shortcut icon" href="./images/favicon.png" type="image/x-icon" />
   <link rel="stylesheet" type="text/css" href="TheBusinessAssistant.css" title="main">
 </head>
@@ -35,7 +36,7 @@
             <p>
             <span class="bodytekst">
               <!-- action name must be a URI name as it is set in the <application>.xml servlet-mapping tag.-->
-              <form method="GET" action="/tba/AdminLogin">
+              <form method="POST" action="/tba/AdminLogin">
                 <table width="700" border="0" cellspacing="2" cellpadding="2">
                   <tr>
                     <td width="200" valign="top" class="bodytekst">&nbsp;&nbsp;&nbsp;&nbsp;User Id</td>

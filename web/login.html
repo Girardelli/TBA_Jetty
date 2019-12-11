@@ -8,6 +8,7 @@
  <!-- <meta HTTP-EQUIV="Refresh" content="30">-->
   <meta name="Copyright" content="Copyright © 2003 TheBusinessAssistant, All rights reserved.">
   <meta name="Distribution" content="Global">
+  <meta http-equiv="cache-control" content="no-cache">
   <link rel="shortcut icon" href="./images/favicon.png" type="image/x-icon" />
   <link rel="stylesheet" type="text/css" href="/tba/TheBusinessAssistant.css" title="main">
 </head>
@@ -34,7 +35,7 @@ Bent u een nieuwe klant, registreer dan eerst.
             <p>
             <span class="bodytekst">
               <!-- action name must be a URI name as it is set in the <application>.xml servlet-mapping tag.-->
-              <form name="loginform" method="GET" action="/tba/Login">
+              <form name="loginform" method="POST" action="/tba/Login">
                 <table width="520" border="0" cellspacing="2" cellpadding="2">
                   <tr>
                     <td width="120" valign="top" class="bodytekst">&nbsp;&nbsp;&nbsp;&nbsp;Login naam</td>
