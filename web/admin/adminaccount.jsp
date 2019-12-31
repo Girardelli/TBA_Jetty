@@ -42,7 +42,7 @@ be.tba.util.session.*"%>
                      <input type=hidden name=<%=Constants.ACCOUNT_TO_DELETE%> value=""> <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.DOWNLOAD_WK_KLANTEN_XML%>"> <input class="tbabutton" type=submit name=action value=" Download export file "
                         onclick="downloadExportFile()">
                   </form>
-                  <form name="adminaccform" method="GET" action="/tba/AdminDispatch">
+                  <form name="adminaccform" method="POST" action="/tba/AdminDispatch">
                      <input type=hidden name=<%=Constants.ACCOUNT_TO_DELETE%> value=""> <input type=hidden name=<%=Constants.SRV_ACTION%> value="yves">
                      <td width="80"><input class="tbabutton" type=submit name=action value=" Toevoegen " onclick="addAccount()"></td>
                      <td width="80"><input class="tbabutton" type=submit name=action value=" Archiveren " onclick="deleteAccount()"></td>

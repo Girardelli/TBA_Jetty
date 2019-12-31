@@ -106,7 +106,7 @@ if (vCustomerFilter == null) vCustomerFilter = Constants.ACCOUNT_FILTER_ALL;
 <form name="calllistform" method="POST"	action="/tba/AdminDispatch">
 	<input type=hidden name=<%=Constants.RECORD_ID%> value=""> 
     <input type=hidden name=<%=Constants.RECORD_SHORT_TEXT%> value=""> 
-    <input type=hidden name=<%=Constants.RECORD_TO_DELETE%> value=""> 
+    <input type=hidden name=<%=Constants.RECORDS_TO_HANDLE%> value=""> 
 	<input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.GOTO_CANVAS%>"> 
 <table  cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
     <tr><td><br></td></tr>
@@ -346,7 +346,7 @@ else
 		onmouseover="hooverOnRow('<%=vId%>','<%=vRowInd%>')"
 		onmouseout="hooverOffRow('<%=vId%>','<%=vRowInd%>')"
 		onclick="updateDeleteFlag('<%=vId%>','<%=vEntry.getId()%>','<%=vRowInd%>')"
-		ondblclick="changeUrl('/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.RECORD_UPDATE%>&<%=Constants.RECORD_ID%>=<%=vEntry.getId()%>');">
+		ondblclick="changeUrl('/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACTION_GOTO_RECORD_UPDATE%>&<%=Constants.RECORD_ID%>=<%=vEntry.getId()%>');">
 		<td width="20" bgcolor="FFFFFF"><img src=<%=vInOut%> height="13" border="0"></td>
 		<td width="10" valign="top"><%=vImportant%></td>
 		<td width="200" valign="top"><%=vStyleStart%><%=customerName%><%=vStyleEnd%></td>
@@ -449,10 +449,10 @@ function deleteCalls()
   for (var i = 0; i < linesToDelete.length; i++)
     if (linesToDelete[i] != null)
       shorterArr[j++] = linesToDelete[i];
-  document.calllistform.<%=Constants.RECORD_TO_DELETE%>.value=shorterArr.join();
+  document.calllistform.<%=Constants.RECORDS_TO_HANDLE%>.value=shorterArr.join();
   document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.RECORD_DELETE%>";
 
-  document.<%=Constants.RECORD_TO_DELETE%>.value=shorterArr.join();
+  document.<%=Constants.RECORDS_TO_HANDLE%>.value=shorterArr.join();
 }
 
 function selectAll()
@@ -500,37 +500,37 @@ function reverseSelection()
 
 function filterCalls()
 {
-  document.calllistform.<%=Constants.RECORD_TO_DELETE%>.value="";
+  document.calllistform.<%=Constants.RECORDS_TO_HANDLE%>.value="";
   document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.GOTO_CANVAS%>";
 }
 
 function addRecord()
 {
-  document.calllistform.<%=Constants.RECORD_TO_DELETE%>.value="";
+  document.calllistform.<%=Constants.RECORDS_TO_HANDLE%>.value="";
   document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.GOTO_ADD_RECORD%>";
 }
 
 function showPrevious10()
 {
-  document.calllistform.<%=Constants.RECORD_TO_DELETE%>.value="";
+  document.calllistform.<%=Constants.RECORDS_TO_HANDLE%>.value="";
   document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.RECORD_SHOW_PREV_10%>";
 }
 
 function showPrevious()
 {
-  document.calllistform.<%=Constants.RECORD_TO_DELETE%>.value="";
+  document.calllistform.<%=Constants.RECORDS_TO_HANDLE%>.value="";
   document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.RECORD_SHOW_PREV%>";
 }
 
 function showNext()
 {
-  document.calllistform.<%=Constants.RECORD_TO_DELETE%>.value="";
+  document.calllistform.<%=Constants.RECORDS_TO_HANDLE%>.value="";
   document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.RECORD_SHOW_NEXT%>";
 }
 
 function showNext10()
 {
-  document.calllistform.<%=Constants.RECORD_TO_DELETE%>.value="";
+  document.calllistform.<%=Constants.RECORDS_TO_HANDLE%>.value="";
   document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.RECORD_SHOW_NEXT_10%>";
 }
 
@@ -541,13 +541,13 @@ function changeUrl(newURL)
 
 function testMail()
 {
-  document.calllistform.<%=Constants.RECORD_TO_DELETE%>.value="";
+  document.calllistform.<%=Constants.RECORDS_TO_HANDLE%>.value="";
   document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.MAIL_IT%>";
 }
 
 function fixAccountIds()
 {
-	document.calllistform.<%=Constants.RECORD_TO_DELETE%>.value="";
+	document.calllistform.<%=Constants.RECORDS_TO_HANDLE%>.value="";
 	document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.FIX_ACCOUNT_IDS%>";
 }
 

@@ -56,8 +56,10 @@ be.tba.util.timer.UrlCheckTimerTask"%>
       <source src="audio/Ringing_Phone.mp3" type="audio/mp3">
    </audio>
    <form name="calllistform" method="POST" action="/tba/AdminDispatch">
-      <input type=hidden name=<%=Constants.RECORD_ID%> value=""> <input type=hidden name=<%=Constants.RECORD_SHORT_TEXT%> value=""> <input type=hidden name=<%=Constants.RECORD_TO_DELETE%> value=""> <input type=hidden name=<%=Constants.SRV_ACTION%>
-         value="<%=Constants.GOTO_CANVAS%>">
+      <input type=hidden name=<%=Constants.RECORD_ID%> value=""> 
+      <input type=hidden name=<%=Constants.RECORD_SHORT_TEXT%> value=""> 
+      <input type=hidden name=<%=Constants.RECORDS_TO_HANDLE%> value=""> 
+      <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.GOTO_CANVAS%>">
       <table>
          <tr>
             <td><br></td>
@@ -271,7 +273,7 @@ be.tba.util.timer.UrlCheckTimerTask"%>
                </table>
       <p>
          <span class="admintitle"> Oproepenlijst: <%=vRecords.size()%> oproepen</span>
-         <button id="onOffButton" onclick="alterAudioOnOff()" type="button"><img src="/tba/images/soundOff.jpg" alt="zet geluid aan / af" width='30' height='30' border='0'></button>
+<!--          <button id="onOffButton" onclick="alterAudioOnOff()" type="button"><img src="/tba/images/soundOff.jpg" alt="zet geluid aan / af" width='30' height='30' border='0'></button> --> 
       </p>
       <%
       	if (vRecords == null || vRecords.size() == 0) {
@@ -383,7 +385,7 @@ be.tba.util.timer.UrlCheckTimerTask"%>
          				}
          %>
          <tr bgcolor="FFCC66" id=<%=vId%> class="bodytekst" onmouseover="hooverOnRow('<%=vId%>','<%=vRowInd%>')" onmouseout="hooverOffRow('<%=vId%>','<%=vRowInd%>')" onclick="updateDeleteFlag('<%=vId%>','<%=vEntry.getId()%>','<%=vRowInd%>')"
-            ondblclick="changeUrl('/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.RECORD_UPDATE%>&<%=Constants.RECORD_ID%>=<%=vEntry.getId()%>');">
+            ondblclick="changeUrl('/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACTION_GOTO_RECORD_UPDATE%>&<%=Constants.RECORD_ID%>=<%=vEntry.getId()%>');">
             <td width="20" bgcolor="FFFFFF"><img src=<%=vInOut%> height="13" border="0"></td>
             <td width="10" valign="top"><%=vImportant%></td>
             <td width="200" valign="top"><%=vStyleStart%><%=customerName%><%=vStyleEnd%></td>
@@ -599,7 +601,7 @@ function updatePendingCalls()
         for (i = 0; i < pendingCalls.length; i++) 
         {
             content += "<tr>";
-            content += "<td><img src='/tba/images/deleteCross.gif' width='16' height='16' border='0' onclick=\"changeUrl('/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.REMOVE_PENDING_CALL%>&<%=Constants.PENDING_CALL_ID%>=" + pendingCalls[i].dbId + "');\"></td><td><table width=100% class='trBlock' onclick=\"changeUrl('/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.RECORD_UPDATE%>&<%=Constants.RECORD_ID%>=" + pendingCalls[i].dbId + "');\"><tr><td>" + 
+            content += "<td><img src='/tba/images/deleteCross.gif' width='16' height='16' border='0' onclick=\"changeUrl('/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.REMOVE_PENDING_CALL%>&<%=Constants.PENDING_CALL_ID%>=" + pendingCalls[i].dbId + "');\"></td><td><table width=100% class='trBlock' onclick=\"changeUrl('/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACTION_GOTO_RECORD_UPDATE%>&<%=Constants.RECORD_ID%>=" + pendingCalls[i].dbId + "');\"><tr><td>" + 
               timeStamp2Txt(pendingCalls[i].timeStamp, now) + "</td><td width=20px></td><td>" + 
               pendingCalls[i].customer + "</td></tr></table></td></tr>";
         }
@@ -692,10 +694,10 @@ function deleteCalls()
   for (var i = 0; i < linesToDelete.length; i++)
     if (linesToDelete[i] != null)
       shorterArr[j++] = linesToDelete[i];
-  document.calllistform.<%=Constants.RECORD_TO_DELETE%>.value=shorterArr.join();
+  document.calllistform.<%=Constants.RECORDS_TO_HANDLE%>.value=shorterArr.join();
   document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.RECORD_DELETE%>";
 
-  document.<%=Constants.RECORD_TO_DELETE%>.value=shorterArr.join();
+  document.<%=Constants.RECORDS_TO_HANDLE%>.value=shorterArr.join();
 }
 
 function selectAll()
@@ -743,31 +745,31 @@ function reverseSelection()
 
 function addRecord()
 {
-  document.calllistform.<%=Constants.RECORD_TO_DELETE%>.value="";
+  document.calllistform.<%=Constants.RECORDS_TO_HANDLE%>.value="";
   document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.GOTO_ADD_RECORD%>";
 }
 
 function showPrevious10()
 {
-  document.calllistform.<%=Constants.RECORD_TO_DELETE%>.value="";
+  document.calllistform.<%=Constants.RECORDS_TO_HANDLE%>.value="";
   document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.RECORD_SHOW_PREV_10%>";
 }
 
 function showPrevious()
 {
-  document.calllistform.<%=Constants.RECORD_TO_DELETE%>.value="";
+  document.calllistform.<%=Constants.RECORDS_TO_HANDLE%>.value="";
   document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.RECORD_SHOW_PREV%>";
 }
 
 function showNext()
 {
-  document.calllistform.<%=Constants.RECORD_TO_DELETE%>.value="";
+  document.calllistform.<%=Constants.RECORDS_TO_HANDLE%>.value="";
   document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.RECORD_SHOW_NEXT%>";
 }
 
 function showNext10()
 {
-  document.calllistform.<%=Constants.RECORD_TO_DELETE%>.value="";
+  document.calllistform.<%=Constants.RECORDS_TO_HANDLE%>.value="";
   document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.RECORD_SHOW_NEXT_10%>";
 }
 
@@ -778,7 +780,7 @@ function changeUrl(newURL)
 
 function testMail()
 {
-  document.calllistform.<%=Constants.RECORD_TO_DELETE%>.value="";
+  document.calllistform.<%=Constants.RECORDS_TO_HANDLE%>.value="";
   document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.MAIL_IT%>";
 }
 

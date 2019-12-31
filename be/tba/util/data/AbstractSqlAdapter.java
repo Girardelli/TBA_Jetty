@@ -182,7 +182,7 @@ public abstract class AbstractSqlAdapter<T>
             	Collection<T> col = translateRsToValueObjects(rs);
                 //System.out.println(col.size() + " entries: SQL query: " + queryStr);
                 
-                //sLogger.info("{} entries: SQL querry: {}", col.size(), queryStr);
+                sLogger.info("{} entries: SQL query: {}", col.size(), queryStr);
                 return col;
             }
             else

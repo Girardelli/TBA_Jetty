@@ -143,7 +143,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
    /*
     * Only for customer calls: Clientcalls.jsp
     */
-   public Collection<CallRecordEntityData> getxWeeksBackIncludingSubcustomer(WebSession webSession, int daysBack, String fwdNr)
+   public Collection<CallRecordEntityData> getxWeeksBackIncludingSubcustomer(WebSession webSession, int daysBack, String fwdNr, boolean includeArchived)
    {
       try
       {
@@ -173,7 +173,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
          {
             vToTimeStamp = vCallCalendar.getCurrentTimestamp() + 60000; // add 1 minute in teh future
          }
-         return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsDocumented=TRUE AND TimeStamp>" + vFromTimeStamp + " AND TimeStamp<=" + vToTimeStamp + " AND FwdNr IN (" + customerIdsIN + ") ORDER BY TimeStamp DESC");
+         return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsDocumented=TRUE AND IsArchived=" + (includeArchived?"TRUE":"FALSE") + " AND TimeStamp>" + vFromTimeStamp + " AND TimeStamp<=" + vToTimeStamp + " AND FwdNr IN (" + customerIdsIN + ") ORDER BY TimeStamp DESC");
       } catch (Exception e)
       {
          e.printStackTrace();
@@ -587,7 +587,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
    {
       try
       {
-         return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsDocumented=TRUE AND IsChanged=TRUE ORDER BY TimeStamp DESC");
+         return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsDocumented=TRUE AND IsChanged=TRUE AND IsArchived=FALSE ORDER BY TimeStamp DESC");
       } catch (Exception e)
       {
          e.printStackTrace();
@@ -1034,7 +1034,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
 //        }
    }
 
-   public void setShortText(WebSession webSession, int key, String text, boolean isKlant)
+   public void setShortText(WebSession webSession, int key, String text, boolean isKlant, boolean isArchived)
    {
       CallRecordEntityData data = getRow(webSession, key);
       if (data != null)
@@ -1048,6 +1048,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
          {
             data.setShortDescription(data.getShortDescription() + "<br>&nbsp;&nbsp;<span class=\"bodygreenbold\">" + text + "</span>");
             data.setIsChanged(true);
+            data.setIsArchived(isArchived);
          } else
          {
             data.setShortDescription(data.getShortDescription() + "<br>" + webSession.getUserId() + ": " + text);
@@ -1106,7 +1107,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
 
    public void setTsAnswer(WebSession webSession, IntertelCallData data)
    {
-      executeSqlQuery(webSession, "UPDATE CallRecordEntity SET TsAnswer='" + data.tsAnswer + "' WHERE ID='" + data.dbRecordId + "'");
+      executeSqlQuery(webSession, "UPDATE CallRecordEntity SET TsAnswer='" + data.tsAnswer + "' WHERE Id='" + data.dbRecordId + "'");
    }
 
    public void setTsEnd(WebSession webSession, IntertelCallData data)
@@ -1121,7 +1122,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
          if (data.isTransferOutCall)
          {
             // transfered outgoing call
-            executeSqlQuery(webSession, "UPDATE CallRecordEntity SET " + shortDescr + "TsEnd='" + data.tsEnd + "', Cost='" + data.getCostStr() + "' WHERE ID='" + data.dbRecordId + "'");
+            executeSqlQuery(webSession, "UPDATE CallRecordEntity SET " + shortDescr + "TsEnd='" + data.tsEnd + "', Cost='" + data.getCostStr() + "' WHERE Id='" + data.dbRecordId + "'");
          }
          else
          {
@@ -1131,22 +1132,22 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
             {
                callingParty = "', FwdNr='" + IntertelCallData.last6Numbers(data.answeredBy);
             }
-            executeSqlQuery(webSession, "UPDATE CallRecordEntity SET " + shortDescr + "TsEnd='" + data.tsEnd + "', Cost='" + data.getCostStr() + callingParty + "' WHERE ID='" + data.dbRecordId + "'");
+            executeSqlQuery(webSession, "UPDATE CallRecordEntity SET " + shortDescr + "TsEnd='" + data.tsEnd + "', Cost='" + data.getCostStr() + callingParty + "' WHERE Id='" + data.dbRecordId + "'");
          }
          return;
       }
-      executeSqlQuery(webSession, "UPDATE CallRecordEntity SET " + shortDescr + "TsEnd='" + data.tsEnd + "', Cost='" + data.getCostStr() + "' WHERE ID='" + data.dbRecordId + "'");
+      executeSqlQuery(webSession, "UPDATE CallRecordEntity SET " + shortDescr + "TsEnd='" + data.tsEnd + "', Cost='" + data.getCostStr() + "' WHERE Id='" + data.dbRecordId + "'");
    }
 
    public void setTransfer(WebSession webSession, IntertelCallData transferedInData, IntertelCallData transferOutData)
    {
-      executeSqlQuery(webSession, "UPDATE CallRecordEntity SET IsForwardCall=true, TsEnd='" + transferedInData.tsEnd + "', Cost='" + transferedInData.getCostStr() + "' WHERE ID='" + transferedInData.dbRecordId + "'");
-      executeSqlQuery(webSession, "UPDATE CallRecordEntity SET FwdNr='" + IntertelCallData.last6Numbers(transferOutData.callingNr) + "', ShortDescription='Doorgeschakelde oproep van " + transferedInData.callingNr + " naar " + transferOutData.calledNr + "' WHERE ID='" + transferOutData.dbRecordId + "'");
+      executeSqlQuery(webSession, "UPDATE CallRecordEntity SET IsForwardCall=true, TsEnd='" + transferedInData.tsEnd + "', Cost='" + transferedInData.getCostStr() + "' WHERE Id='" + transferedInData.dbRecordId + "'");
+      executeSqlQuery(webSession, "UPDATE CallRecordEntity SET FwdNr='" + IntertelCallData.last6Numbers(transferOutData.callingNr) + "', ShortDescription='Doorgeschakelde oproep van " + transferedInData.callingNr + " naar " + transferOutData.calledNr + "' WHERE Id='" + transferOutData.dbRecordId + "'");
    }
 
    public void setCallingNr(WebSession webSession, IntertelCallData data)
    {
-      executeSqlQuery(webSession, "UPDATE CallRecordEntity SET FwdNr='" + IntertelCallData.last6Numbers(data.callingNr) + "' WHERE ID='" + data.dbRecordId + "'");
+      executeSqlQuery(webSession, "UPDATE CallRecordEntity SET FwdNr='" + IntertelCallData.last6Numbers(data.callingNr) + "' WHERE Id='" + data.dbRecordId + "'");
    }
    
    public void setForwardCallFlag(WebSession webSession, IntertelCallData data)
@@ -1156,7 +1157,12 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
 
    public void setNotAnswered(WebSession webSession, IntertelCallData data)
    {
-      executeSqlQuery(webSession, "UPDATE CallRecordEntity SET Cost='00:00:00', ShortDescription='verloren oproep' WHERE ID=" + data.dbRecordId);
+      executeSqlQuery(webSession, "UPDATE CallRecordEntity SET Cost='00:00:00', ShortDescription='verloren oproep' WHERE Id=" + data.dbRecordId);
+   }
+   
+   public void archiveRecords(WebSession webSession, String inStrOfKeys)
+   {
+      executeSqlQuery(webSession, "UPDATE CallRecordEntity SET IsArchived=true WHERE Id IN (" + inStrOfKeys + ")");
    }
 
    static public void setIsDocumentedFlag(CallRecordEntityData record)
@@ -1211,10 +1217,11 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
          entry.setIsVirgin(rs.getBoolean(20));
          entry.setIsFaxCall(rs.getBoolean(21));
          entry.setIsChanged(rs.getBoolean(22));
-         entry.setDoneBy(null2EmpthyString(rs.getString(23)));
-         entry.setTsStart(rs.getLong(24));
-         entry.setTsAnswer(rs.getLong(25));
-         entry.setTsEnd(rs.getLong(26));
+         entry.setIsArchived(rs.getBoolean(23));
+         entry.setDoneBy(null2EmpthyString(rs.getString(24)));
+         entry.setTsStart(rs.getLong(25));
+         entry.setTsAnswer(rs.getLong(26));
+         entry.setTsEnd(rs.getLong(27));
          vVector.add(entry);
       }
       return vVector;

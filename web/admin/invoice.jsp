@@ -793,7 +793,7 @@
 				%>
 			<tr bgcolor="FFCC66" id=<%=vId%> class="bodytekst" onmouseover="hooverOnRow('<%=vId%>','<%=vRowInd%>')"
 					onmouseout="hooverOffRow('<%=vId%>','<%=vRowInd%>')"
-				ondblclick="changeUrl('/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.RECORD_UPDATE%>&<%=Constants.RECORD_ID%>=<%=vEntry.getId()%>');">
+				ondblclick="changeUrl('/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACTION_GOTO_RECORD_UPDATE%>&<%=Constants.RECORD_ID%>=<%=vEntry.getId()%>');">
 				<td width="20" bgcolor="FFFFFF"><img src=<%=vInOut%> height="13" border="0"></td>
 				<td width="10" valign="top"><%=vImportant%></td>
 				<td width="55" valign="top"><%=vStyleStart%><%=vDate%><%=vStyleEnd%></td>

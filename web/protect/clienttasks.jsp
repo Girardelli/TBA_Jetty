@@ -38,10 +38,10 @@ Last Checked In By: $Author: Yves Willems $
 	{
 %>
 
-<form name="tasklistform" method="GET"
+<form name="tasklistform" method="POST"
 	action="/tba/CustomerDispatch">
 	<input type=hidden name=<%=Constants.SRV_ACTION%>
-		value="<%=Constants.ACTION_SHOW_TASKS%>">
+		value="<%=Constants.ACTION_GOTO_SHOW_TASKS%>">
 	<table  cellspacing='0' cellpadding='0' border='0'
 		bgcolor="FFFFFF">
 		<tr>

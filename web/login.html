@@ -13,6 +13,7 @@
   <link rel="stylesheet" type="text/css" href="/tba/TheBusinessAssistant.css" title="main">
 </head>
 <body>
+<form name="loginform" method="POST" action="/tba/Login">
 <table border="0" cellspacing="0" cellpadding="0">
 
 <!--header 1-->
@@ -20,7 +21,11 @@
   <tr>
     <td><img src="/tba/images/TBA-Logo.png" style="padding:10px;" height="70" alt=""></td>
   </tr>
+    <tr>
+        <td style="padding: 0px;" colspan="0" bgcolor="#F89920" height="2"></td>
+    </tr>
 <!--Customer Login window-->
+  <tr>
     <td>
       <table border="0" cellpadding="0" cellspacing="0">
         <tr>
@@ -28,31 +33,28 @@
           </td>
           <td valign="top" bgcolor="FFFFFF">
             <br><br>
-            <span class="bodysubtitle"> Geef uw gebruikersnaam en paswoord in om uw persoonlijke assistent te starten.
+            <span class="admintitle"> Geef uw gebruikersnaam en paswoord in om uw persoonlijke assistent te starten.
 Bent u een nieuwe klant, registreer dan eerst.
             </span>
             <br>
             <p>
             <span class="bodytekst">
               <!-- action name must be a URI name as it is set in the <application>.xml servlet-mapping tag.-->
-              <form name="loginform" method="POST" action="/tba/Login">
-                <table width="520" border="0" cellspacing="2" cellpadding="2">
+              
+                <table border="0" cellspacing="2" cellpadding="2">
                   <tr>
-                    <td width="120" valign="top" class="bodytekst">&nbsp;&nbsp;&nbsp;&nbsp;Login naam</td>
-                    <td width="400" valign="top">&nbsp;<input type=text name=_uid size=20></td>
+                    <td width="120" valign="middle" class="bodytekst">&nbsp;&nbsp;&nbsp;&nbsp;Login naam</td>
+                    <td width="400" valign="middle">&nbsp;<input type=text name=_uid size=20></td>
                   </tr>
                   <tr>
-                    <td width="120" valign="top" class="bodytekst">&nbsp;&nbsp;&nbsp;&nbsp;paswoord</td>
-                    <td width="400" valign="top">&nbsp;<input type=password name=_pwd size=20></td>
+                    <td width="120" valign="middle" class="bodytekst">&nbsp;&nbsp;&nbsp;&nbsp;paswoord</td>
+                    <td width="400" valign="middle">&nbsp;<input type=password name=_pwd size=20></td>
                   </tr>
                 </table>
                 <br><br>
                 <input type=hidden name=_act value="">
-                <input class="tbabutton" type=submit name=action value="Login" onclick="login()">
-                <input class="tbabutton" type=reset> &nbsp;&nbsp;&nbsp;
+                <input class="tbabutton" type=submit name=action value="Login" onclick="login()">&nbsp;&nbsp;&nbsp;&nbsp;
                 <input class="tbabutton" type=submit name=action value="Registreren" onclick="register()">
-                <input class="tbabutton" type=reset value=" Exit " onclick="window.close();return false;">
-              </form>
             </span>
             <br>
             </p>
@@ -60,18 +62,20 @@ Bent u een nieuwe klant, registreer dan eerst.
         </tr>
       </table>
     </td>
-
+  </tr>
+</table>
+</form>
 <script>
 function login()
 {
-  document.loginform._act.value="ACTION_LOGIN";
+  document.loginform._act.value="_a88";
 }
 
 function register()
 {
-  document.loginform._act.value="ACTION_REGISTER";
+  document.loginform._act.value="_a89";
 }
 </script>
-</table>
+
 </body>
 </html>

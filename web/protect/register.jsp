@@ -14,63 +14,9 @@
 <link rel="stylesheet" type="text/css"
 	href="TheBusinessAssistant.css" title="main">
 </head>
-<!--
-<script language="JavaScript">
-var sURL = unescape(window.location.pathname);
+<%@ page import="java.util.*,
+be.tba.util.constants.*"%>
 
-function doLoad()
-{
-    // the timeout value should be the same as in the "refresh" meta-tag
-    setTimeout( "refresh()", 30*1000 );
-}
-
-function refresh()
-{
-    //  This version of the refresh function will cause a new
-    //  entry in the visitor's history.  It is provided for
-    //  those browsers that only support JavaScript 1.0.
-    //
-    window.location.href = sURL;
-}
-
-</script>
-
-<script language="JavaScript1.1">
-
-function refresh()
-{
-    //  This version does NOT cause an entry in the browser's
-    //  page view history.  Most browsers will always retrieve
-    //  the document from the web-server whether it is already
-    //  in the browsers page-cache or not.
-    //
-    window.location.replace( sURL );
-}
-
-</script>
-
-<script language="JavaScript1.2">
-
-function refresh()
-{
-    //  This version of the refresh function will be invoked
-    //  for browsers that support JavaScript version 1.2
-    //
-
-    //  The argument to the location.reload function determines
-    //  if the browser should retrieve the document from the
-    //  web-server.  In our example all we need to do is cause
-    //  the JavaScript block in the document body to be
-    //  re-evaluated.  If we needed to pull the document from
-    //  the web-server again (such as where the document contents
-    //  change dynamically) we would pass the argument as 'true'.
-    //
-    window.location.reload( false );
-}
-
-</script>
-<body onload="doLoad()">
--->
 <body>
 
 <table border="0" cellspacing="0" cellpadding="0" bgcolor="FFFFFF">
@@ -85,25 +31,19 @@ function refresh()
 		</table>
 		</td>
 	</tr>
-	<%--
-File: register.jsp
-Description:  admin page that displays all logged calls.
+    <tr>
+        <td style="padding: 0px;" colspan="0" bgcolor="#F89920" height="2"></td>
+    </tr>
 
-Copyright ( c ) 2003 TheBusinessAssistant.  All rights reserved.
-Version: $Revision: 1.0 $
-Last Checked In: $Date: 2003/06/18 04:11:35 $
-Last Checked In By: $Author: Yves Willems $
---%>
-	<%@ page import="java.util.*,
-be.tba.util.constants.*"%>
-
-	<%
+<%
 try
 {
-  Vector vErrorList = (Vector) request.getAttribute(Constants.ERROR_VECTOR);
+  Collection<String> vErrorList = (Collection<String>) request.getAttribute(Constants.ERROR_VECTOR);
 %>
 	<!--Customer Register window-->
+   <tr>
 	<td>
+    <form name="loginform" method="POST" action="/tba/Login"><br>
 	<table border="0" cellpadding="0" cellspacing="0" width="580">
 		<tr>
 			<td valign="top" width="60" bgcolor="FFFFFF"></td>
@@ -112,9 +52,9 @@ try
       if (vErrorList != null && vErrorList.size() > 0)
       {
         out.println("<br><span class=\"bodyredbold\">");
-        for (Iterator i = vErrorList.iterator(); i.hasNext();)
+        for (Iterator<String> i = vErrorList.iterator(); i.hasNext();)
         {
-          out.println("<img src=\"/tba/images/blueVink.gif\" border=\"0\">" + (String) i.next() + "<br>");
+          out.println("<img src=\"/tba/images/blueVink.gif\" border=\"0\">" + i.next() + "<br>");
         }
         out.println("</span>");
       }
@@ -124,10 +64,8 @@ try
       }
 %> <br>
 			<p><span class="bodytekst"> <!-- action name must be a URI name as it is set in the <application>.xml servlet-mapping tag.-->
-			<form name="loginform" method="GET"
-				action="/tba/Login"><br>
-			Vul hier uw registratiecode in die je van ons bekomen hebt.<br>
-			<table width="520" border="0" cellspacing="2" cellpadding="2">
+			Vul hier uw registratiecode in die je van The Business Assistant bekomen hebt.<br>
+			<table border="0" cellspacing="2" cellpadding="2">
 				<tr>
 					<td width="120" valign="top" class="bodyredbold">registratiecode</td>
 					<td width="350" valign="top"><input type=text
@@ -136,7 +74,7 @@ try
 			</table>
 			<br>
 			Uw login naam moet tussen de 5 en 10 karakters bevatten.<br>
-			<table width="520" border="0" cellspacing="2" cellpadding="2">
+			<table border="0" cellspacing="2" cellpadding="2">
 				<tr>
 					<td width="120" valign="top" class="bodysubsubtitle">login naam</td>
 					<td width="350" valign="top"><input type=text
@@ -145,7 +83,7 @@ try
 			</table>
 			<br>
 			Uw paswoord moet tussen de 6 en 10 karakters bevatten.<br>
-			<table width="520" border="0" cellspacing="2" cellpadding="2">
+			<table border="0" cellspacing="2" cellpadding="2">
 				<tr>
 					<td width="120" valign="top" class="bodysubsubtitle">paswoord</td>
 					<td width="350" valign="top"><input type=password
@@ -162,13 +100,15 @@ try
 			<br>
 			<input type=hidden name=<%=Constants.SRV_ACTION%>
 				value="<%=Constants.ACTION_REGISTER%>"> <input class="tbabutton" type=submit
-				name=action value="Registreer"> <input class="tbabutton" type=reset></form>
+				name=action value="Registreer">
 			</span> <br>
 			</p>
 			</td>
 		</tr>
 	</table>
+    </form>
 	</td>
+   </tr>
 
 	<%
 }

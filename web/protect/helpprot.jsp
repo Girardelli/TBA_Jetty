@@ -1,6 +1,9 @@
 <html>
 <%@ include file="protheader.jsp" %>
 
+<%
+vSession.setCallingJsp(Constants.CLIENT_CALLS_JSP);
+%>
 <head>
 </head>
 	<table  cellspacing='0' cellpadding='0' border='0'
@@ -12,39 +15,37 @@
 			<td valign="top" width="30" bgcolor="FFFFFF"></td>
 			<td class="bodytext" valign="top" bgcolor="FFFFFF"><br><br><span
 				class="admintitle">Help pagina's</span> <br> <br> <span
-				class="adminsubtitle">Algemeen:</span> <br>
-				<table width="700" border="0" cellspacing="4" cellpadding="4">
+				class="admintitle">Algemeen:</span> <br>
+				<table border="0" cellspacing="4" cellpadding="4">
 					<tr>
 						<td width="25"></td>
 						<td valign="top" class="bodytext">De informatie aangeboden op
 							deze pagina's is direct gekoppeld aan onze oproependatabase. Elke
-							oproep die wij binnenkrijgen wordt automatisch in deze database
+							oproep die wij verwerken wordt automatisch in deze database
 							bewaard. Onze medewerkers voegen extra informatie toe om u zoveel
-							mogelijk informatie voor elke oproep te verschaffen.<br> U
-							beschikt dus steeds over de allerlaatste informatie. Bovendien
-							wordt deze oproepenlijst automatisch herladen elke <%=Constants.REFRESH%>
-							seconden.<br> Om uw informatie te beschermen zal uw
-							aanmeldsessie verlopen als deze pagina's een tijdje niet gebruikt
-							worden. Deze tijdslimiet staat ingesteld op <%=Constants.CUSTOMER_SESSION_TIMEOUT / 100000%>
+							mogelijk informatie over elke oproep te verschaffen.<br> U
+							beschikt dus steeds over de allerlaatste informatie.<br> Om uw informatie te beschermen zal uw
+							aanmeldsessie verlopen als de webpagina een tijdje niet gebruikt.
+							Deze tijdslimiet staat ingesteld op <%=Constants.CUSTOMER_SESSION_TIMEOUT / 100000%>
 							minuten.</td>
 					</tr>
-				</table> <br> <span class="adminsubtitle">Symbolen:</span>
-				<table width="700" border="0" cellspacing="4" cellpadding="4">
+				</table> <br> <span class="admintitle">Symbolen:</span>
+				<table border="0" cellspacing="4" cellpadding="4">
 					<tr>
 						<td width="25"></td>
 						<td valign="top" class="adminsubsubtitle"><img
 							src="/tba/images/incall.gif" height="13">
 						</td>
-						<td valign="top" class="bodytext">wordt gebruikt om een
-							binnenkomende oproep aan te geven.</td>
+						<td valign="top" class="bodytext">geeft een
+							binnenkomende oproep weer.</td>
 					</tr>
 					<tr>
 						<td width="25"></td>
 						<td valign="top" class="adminsubsubtitle"><img
 							src="/tba/images/outcall.gif" height="13">
 						</td>
-						<td valign="top" class="bodytext">wordt gebruikt om een
-							uitgaande oproep aan te geven.</td>
+						<td valign="top" class="bodytext">geeft een
+							uitgaande oproep weer.</td>
 					</tr>
 					<tr>
 						<td width="25"></td>
@@ -95,8 +96,8 @@
 							uw aandacht te vestigen naar een oproep die dringende actie
 							vereist.</td>
 					</tr>
-				</table> <br> <span class="adminsubtitle">Oproepen opvolgen:</span> <br>
-				<table width="700" border="0" cellspacing="4" cellpadding="4">
+				</table> <br> <span class="admintitle">Oproepen opvolgen:</span> <br>
+				<table border="0" cellspacing="4" cellpadding="4">
 					<tr>
 						<td width="25"></td>
 						<td valign="top" class="bodytext">Door met de linkermuisknop
@@ -110,7 +111,19 @@
 							nakijken wat er gebeurd is naar aanleiding van een oproep. <br>
 						</td>
 					</tr>
-				</table> <br> <span class="adminsubtitle">Oproepen zoeken:</span> <br>
+                </table> <br> <span class="admintitle">Oproepen archiveren:</span> <br>
+                <table border="0" cellspacing="4" cellpadding="4">
+                    <tr>
+                        <td width="25"></td>
+                        <td valign="top" class="bodytext">U kan in de oproepenlijst oproepen selecteren 
+                            door op de lijn te klikken: de oproep zal van kleur veranderen. Er kunnen zo
+                            meerdere oproepen geselecteerd worden.<br>Door op de 'Archiveer' knop te drukken 
+                            worden deze oproepen gearchiveerd. ze zullen niet langer in uw oproepenlijst 
+                            opgenomen worden. Je kan deze nog wel raadplegen via het menu 'Gearchiveerde oproepen'.<br>
+                            De zoekfunctie zal ook de gearchiveerde oproepen doorzoeken.<br>
+                        </td>
+                    </tr>
+				</table> <br> <span class="admintitle">Oproepen zoeken:</span> <br>
 				<table width="700" border="0" cellspacing="4" cellpadding="4">
 					<tr>
 						<td width="25"></td>
@@ -123,8 +136,7 @@
 							namen, enzomeer ingeven om tot het gewenst zoekresultaat te
 							komen.<br></td>
 					</tr>
-				</table> <br> <span class="adminsubtitle">Persoonlijke
-					instellingen</span> <br>
+				</table> <br> <span class="admintitle">Persoonlijke instellingen</span> <br>
 				<table width="700" border="0" cellspacing="4" cellpadding="4">
 					<tr>
 						<td width="25"></td>
@@ -156,8 +168,7 @@
 					</tr>
 					<tr>
 						<td width="25"></td>
-						<td valign="top" class="adminsubsubtitle">Automatische
-							mailing</td>
+						<td valign="top" class="adminsubsubtitle">Automatische mailing</td>
 					</tr>
 					<tr>
 						<td width="25"></td>
@@ -165,7 +176,26 @@
 							instellen om tot maximaal 3 maal daags een e-mail te ontvangen
 							met daarin de oproepgegevens sinds de vorige mail.<br></td>
 					</tr>
-				</table> <br></td>
+                    <tr>
+                        <td width="25"></td>
+                        <td valign="top" class="adminsubsubtitle">Zend geen lege mails</td>
+                    </tr>
+                    <tr>
+                        <td width="25"></td>
+                        <td valign="top" class="bodytext">Met deze selecties kan u
+                            er voor zorgen dat er geen oproepen mail verstuurd wordt als er 
+                            sinds de vorige mail geen nieuwe oproepen werden verwerkt.<br></td>
+                    </tr>
+                    <tr>
+                        <td width="25"></td>
+                        <td valign="top" class="adminsubsubtitle">Zend geen tekst formaat</td>
+                    </tr>
+                    <tr>
+                        <td width="25"></td>
+                        <td valign="top" class="bodytext">selecteer deze optie als u verkiest om 
+                            de oproepenmail niet in html maar in tekst formaat te ontvangen.<br></td>
+                    </tr>
+				</table></td>
 		</tr>
 
 	</table>

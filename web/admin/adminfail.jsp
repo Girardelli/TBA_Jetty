@@ -20,14 +20,13 @@
 
 	<!--header 1-->
 
-	<tr>
-		<td>
-		<table width="100%" height="50" border="0" cellspacing="0"
-			cellpadding="0" bgcolor="#FFFFFF">
-			<td><img src="/tba/images/TBA-Logo.png" style="padding:10px;" height="70" alt=""></td>
-		</table>
-		</td>
-	</tr>
+  <tr>
+    <td><img src="/tba/images/TBA-Logo.png" style="padding:10px;" height="70" alt=""></td>
+  </tr>
+    <tr>
+        <td style="padding: 0px;" colspan="0" bgcolor="#F89920" height="2"></td>
+    </tr>
+   
 	<%--
 File: adminfail.jsp
 Description:  
@@ -64,12 +63,13 @@ if (vErrorMessage == null)
 
 			<!-- account list -->
 			<td valign="top" width="750" bgcolor="FFFFFF"><br>
-			<p><span class="bodysubtitle"> <%= vErrorMessage%></span></p>
-			<br>
-			<p><span class="bodytext">klik <a
-				href=<%=Constants.ADMIN_LOGIN_HTML%>>hier</a> om terug te keren naar
-			het adminstratie aanmeldpanel.</p>
-			</td>
+            <p><span class="tdborder admintitle"> <%= vErrorMessage%></span></p>
+            <br>
+            <p><span class="bodytext">klik <a href=<%=Constants.ADMIN_LOGIN_HTML%>>hier</a></span>
+            om terug te keren naar het aanmeldpanel.</p>
+            <p><a class="tbabutton" href=<%=Constants.LOGIN_HTML%>>Naar log in scherm</a>
+            </p>
+ 			</td>
 		</table>
 		</td>
 	</tr>

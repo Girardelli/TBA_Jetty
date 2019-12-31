@@ -35,7 +35,7 @@ try
 	allEntryIds = new StringBuilder("[");
 %>
 		<p><span class="admintitle"> Werknemers en Kaders</span></p>
-		<form name="adminaccform" method="GET"
+		<form name="adminaccform" method="POST"
 			action="/tba/AdminDispatch"><input type=hidden
 			name=<%=Constants.ACCOUNT_TO_DELETE%> value=""> <input type=hidden
 			name=<%=Constants.SRV_ACTION%> value=""> 

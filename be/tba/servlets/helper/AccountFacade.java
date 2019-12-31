@@ -303,6 +303,54 @@ public class AccountFacade
         return vAccount;
     }
 
+    public static void updateCustomerPrefs(WebSession session, HttpServletRequest req)
+    {
+       AccountSqlAdapter vAccountSession = new AccountSqlAdapter();
+       AccountEntityData vAccount = vAccountSession.getRow(session, AccountCache.getInstance().get(session.getFwdNumber()).getId());
+       vAccount.setEmail(req.getParameter(Constants.ACCOUNT_EMAIL));
+       vAccount.setInvoiceEmail(req.getParameter(Constants.ACCOUNT_INVOICE_EMAIL));
+       vAccount.setGsm(req.getParameter(Constants.ACCOUNT_GSM));
+       vAccount.setCountryCode(req.getParameter(Constants.ACCOUNT_COUNTRY_CODE));
+       vAccount.setIsAutoRelease(req.getParameter(Constants.ACCOUNT_AUTO_RELEASE) != null);
+
+       if (req.getParameter(Constants.ACCOUNT_MAIL_ON1) != null)
+       {
+           vAccount.setMailMinutes1(Short.parseShort((String) req.getParameter(Constants.ACCOUNT_MAIL_MINUTEN1)));
+           vAccount.setMailHour1(Short.parseShort((String) req.getParameter(Constants.ACCOUNT_MAIL_UUR1)));
+       }
+       else
+       {
+           vAccount.setMailMinutes1((short) 0);
+           vAccount.setMailHour1((short) 0);
+       }
+       if (req.getParameter(Constants.ACCOUNT_MAIL_ON2) != null)
+       {
+           vAccount.setMailMinutes2(Short.parseShort((String) req.getParameter(Constants.ACCOUNT_MAIL_MINUTEN2)));
+           vAccount.setMailHour2(Short.parseShort((String) req.getParameter(Constants.ACCOUNT_MAIL_UUR2)));
+       }
+       else
+       {
+           vAccount.setMailMinutes2((short) 0);
+           vAccount.setMailHour2((short) 0);
+       }
+       if (req.getParameter(Constants.ACCOUNT_MAIL_ON3) != null)
+       {
+           vAccount.setMailMinutes3(Short.parseShort((String) req.getParameter(Constants.ACCOUNT_MAIL_MINUTEN3)));
+           vAccount.setMailHour3(Short.parseShort((String) req.getParameter(Constants.ACCOUNT_MAIL_UUR3)));
+       }
+       else
+       {
+           vAccount.setMailMinutes3((short) 0);
+           vAccount.setMailHour3((short) 0);
+       }
+       vAccount.setNoEmptyMails(req.getParameter(Constants.ACCOUNT_NO_EMPTY_MAILS) != null);
+       vAccount.setTextMail(req.getParameter(Constants.ACCOUNT_TEXT_MAIL) != null);
+       vAccount.setIsMailInvoice(req.getParameter(Constants.ACCOUNT_IS_MAIL_INVOICE) != null);
+       vAccountSession.updateRow(session, vAccount);
+       AccountCache.getInstance().update(session);
+    }
+
+    
     private static void RecursiveArchive(WebSession session, int accountID)
     {
         AccountEntityData vRemovedAccount = AccountCache.getInstance().get(accountID);

@@ -32,15 +32,17 @@ public class CallRecordFacade
       session.setCurrentRecord(vQuerySession.getRecord(session, vKey));
    }
 
-   public static void updateShortText(HttpServletRequest req, WebSession session, boolean isCustomer)
+   public static void updateCustomerChanges(HttpServletRequest req, WebSession session, boolean isCustomer)
    {
-      // System.out.println("updateShortText()");
+      // System.out.println("updateCustomerChanges()");
       String vKey = (String) req.getParameter(Constants.RECORD_ID);
       String shortText = (String) req.getParameter(Constants.RECORD_SHORT_TEXT);
+      boolean isArchived = (req.getParameter(Constants.RECORD_ARCHIVED) != null);
+      
       if (shortText != null)
       {
          CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
-         vQuerySession.setShortText(session, Integer.parseInt(vKey), shortText, isCustomer);
+         vQuerySession.setShortText(session, Integer.parseInt(vKey), shortText, isCustomer, isArchived);
       }
    }
 
@@ -202,7 +204,7 @@ public class CallRecordFacade
 
    public static void deleteRecords(HttpServletRequest req, WebSession session)
    {
-      String vLtd = (String) req.getParameter(Constants.RECORD_TO_DELETE);
+      String vLtd = (String) req.getParameter(Constants.RECORDS_TO_HANDLE);
       System.out.println("record to delete list: " + vLtd);
       if (vLtd != null && vLtd.length() > 0)
       {
@@ -360,6 +362,33 @@ public class CallRecordFacade
       webSession.setRecordId(null);
    }
 
+
+   public static void archiveRecords(HttpServletRequest req, WebSession webSession)
+   {
+      String vLtd = (String) req.getParameter(Constants.RECORDS_TO_HANDLE);
+      System.out.println("archiveRecords()" + vLtd);
+      if (vLtd != null && vLtd.length() > 0)
+      {
+         StringTokenizer vStrTok = new StringTokenizer(vLtd, ",");
+         CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
+         boolean isFirstLoop = true;
+
+         StringBuilder strBldr = new StringBuilder();
+         while (vStrTok.hasMoreTokens())
+         {
+            if (!isFirstLoop)
+            {
+               strBldr.append(",");
+            }
+            isFirstLoop = false;
+            int key = Integer.parseInt(vStrTok.nextToken());
+            strBldr.append(key);
+         }
+         vQuerySession.archiveRecords(webSession, strBldr.toString());
+      }
+   }
+   
+   
    // 'terug' button was called on the newCall page. User want to cancel this
    // entry.
    // look for a call with this key in the WebSession NewUnmappedCalls, and remove

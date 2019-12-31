@@ -18,10 +18,11 @@
 <!--header 1-->
 
   <tr>
-    <td>
-      <img src="images\TBA-Logo.png" height="50" border="0" alt="">
-    </td>
+    <td><img src="/tba/images/TBA-Logo.png" style="padding:10px;" height="70" alt=""></td>
   </tr>
+    <tr>
+        <td style="padding: 0px;" colspan="0" bgcolor="#F89920" height="2"></td>
+    </tr>
 <!--Admin Login window-->
   <tr valign="top">
     <td>
@@ -30,14 +31,14 @@
           <td valign="top" width="60" bgcolor="FFFFFF">
           </td>
           <td valign="top" bgcolor="FFFFFF">
+            <form method="POST" action="/tba/AdminLogin">
             <br><br>
             <span class="bodytitle"> Geef uw gebruikersnaam en paswoord om de administrator te starten.</span>
             <br>
             <p>
             <span class="bodytekst">
               <!-- action name must be a URI name as it is set in the <application>.xml servlet-mapping tag.-->
-              <form method="POST" action="/tba/AdminLogin">
-                <table width="700" border="0" cellspacing="2" cellpadding="2">
+                <table border="0" cellspacing="2" cellpadding="2">
                   <tr>
                     <td width="200" valign="top" class="bodytekst">&nbsp;&nbsp;&nbsp;&nbsp;User Id</td>
                     <td width="500" valign="top">&nbsp;<input type=text name=_uid size=20></td>
@@ -52,10 +53,10 @@
                 <input class="tbabutton" type=reset value=" Reset ">
                 <input class="tbabutton" type=reset value=" Exit " onclick="window.close();return false;">
                 <input type=hidden name="_act" value="adho">
-              </form>
             </span>
             <br>
             </p>
+            </form>
           </td>
         </tr>
       </table>

@@ -7,11 +7,12 @@
 <!-- <meta HTTP-EQUIV="Refresh" content="30">-->
 <meta name="Copyright" content="Copyright © 2003 TheBusinessAssistant, All rights reserved.">
 <meta name="Distribution" content="Global">
-<link rel="shortcut icon" href="./images/favicon.png" type="image/x-icon" />
+<link rel="shortcut icon" href="/tba/images/favicon.png" type="image/x-icon" />
 <link rel="stylesheet" type="text/css" href="/tba/TheBusinessAssistant.css" title="main">
 </head>
 
-
+<style>
+</style>
 <script type="text/javascript">
 function showmenu(elmnt)
 {
@@ -42,8 +43,7 @@ if (vSession == null)
 }
 SessionManager.getInstance().getSession(vSession.getSessionId(), "clientcalls.jsp");
 %>
-
-
+<body>
 <table width='100%' cellspacing='0' cellpadding='0' border='0' bgcolor="#FFFFFF">
 	<tr>
 		<td valign='top' align='left' width='500' height='50'
@@ -51,25 +51,22 @@ SessionManager.getInstance().getSession(vSession.getSessionId(), "clientcalls.js
 			src="/tba/images/TBA-Logo.png"
 			style="padding: 10px;" height="70" alt=""></td>
 	</tr>
-	<tr>
-		<td style="padding: 5px;" colspan="2" bgcolor="#F89920" height="3"></td>
-	</tr>
+    <tr>
+        <td style="padding: 2px;" colspan="0" bgcolor="#F89920" height="0"></td>
+    </tr>
 	<tr>
 		<td valign='bottom' align='left' valign='top' bgcolor="#22205F">
-			<table class="topmenu" cellspacing='0' cellpadding='0' border='0'>
-                <tr bgcolor="#22205F" height="40">
-                    <td bgcolor="#F89920"><a class='afmeldMenu'
-                        href="/tba/CustomerDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACTION_LOGOFF%>">&nbsp;&nbsp;&nbsp;Afmelden&nbsp;&nbsp;&nbsp;</a>
-                    </td>
+			<table class="topmenu" cellspacing='0' cellpadding='5'>
+                <tr bgcolor="#488FCD" height="40">
 					<td onmouseover="showmenu('rubrieken')"
 						onmouseout="hidemenu('rubrieken')">
 						<div class="topMenu">&nbsp;&nbsp;&nbsp;Rubrieken&nbsp;&nbsp;&nbsp;</div>
-						<table class="menu" id="rubrieken" width="150">
+						<table class="menu" id="rubrieken">
 							<tr>
 								<td class="menu">
 								    <a class='norm' href="/tba/CustomerDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACTION_SHOW_CALLS%>">Oproepen bekijken</a><br> 
-								    <a class='norm' href="/tba/CustomerDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACTION_GOTO_SEARCH_PAGE%>">Oproepen zoeken</a><br> 
-								    <a class='norm' href="/tba/CustomerDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACTION_SHOW_TASKS%>">Taken bekijken</a><br>
+                                    <a class='norm' href="/tba/CustomerDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACTION_ARCHIVED_CALLS%>">Gearchiveerde oproepen</a><br> 
+								    <a class='norm' href="/tba/CustomerDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACTION_GOTO_SHOW_TASKS%>">Taken bekijken</a><br>
                                     <a class='norm' href="/tba/CustomerDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACTION_SEARCH_CALLS%>">Zoeken in oproepen</a><br>
                                 </td>
 							</tr>
@@ -78,17 +75,16 @@ SessionManager.getInstance().getSession(vSession.getSessionId(), "clientcalls.js
 					<td onmouseover="showmenu('persoonlijk')"
 						onmouseout="hidemenu('persoonlijk')">
 						<div class="topMenu">&nbsp;&nbsp;&nbsp;Persoonlijk&nbsp;&nbsp;&nbsp;</div>
-						<table class="menu" id="persoonlijk" width="150">
+						<table class="menu" id="persoonlijk">
 							<tr>
-								<td class="menu"><a class='norm'
-									href="/tba/CustomerDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.UPDATE_PREFS%>">Instellingen</a><br>
+								<td class="menu"><a class='norm' href="/tba/CustomerDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_UPDATE_PREFS%>">Instellingen</a><br>
 								</td>
 							</tr>
 						</table>
 					</td>
 					<td onmouseover="showmenu('help')" onmouseout="hidemenu('help')">
 						<div class="topMenu">&nbsp;&nbsp;&nbsp;Help&nbsp;&nbsp;&nbsp;</div>
-						<table class="menu" id="help" width="150">
+						<table class="menu" id="help">
 							<tr>
 								<td class="menu"><a class='norm'
 									href="/tba/protect/helpprot.jsp">Toelichtingen</a><br>
@@ -96,6 +92,11 @@ SessionManager.getInstance().getSession(vSession.getSessionId(), "clientcalls.js
 							</tr>
 						</table>
 					</td>
+                    <td width=100%>
+                    </td>
+                    <td><div align="right"><a class='tbabuttonorange' href="/tba/CustomerDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACTION_LOGOFF%>">Afmelden</a></div>
+                    </td>
+                    <td>&nbsp;&nbsp;</td>
 				</tr>
 
 			</table>
@@ -104,7 +105,7 @@ SessionManager.getInstance().getSession(vSession.getSessionId(), "clientcalls.js
 
 
 </table>
-</body>
+
 
 
 

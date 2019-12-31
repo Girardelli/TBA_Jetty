@@ -405,7 +405,7 @@ public class AdminDispatchServlet extends HttpServlet
                 // ==============================================================================================
                 case Constants.UPDATE_SHORT_TEXT:
                 {
-                	CallRecordFacade.updateShortText(req, vSession, false);
+                	CallRecordFacade.updateCustomerChanges(req, vSession, false);
                     //rd = sc.getRequestDispatcher(Constants.CANVAS_JSP);
                     break;
                 }
@@ -422,9 +422,9 @@ public class AdminDispatchServlet extends HttpServlet
                 }
 
                 // ==============================================================================================
-                // RECORD_UPDATE
+                // ACTION_GOTO_RECORD_UPDATE
                 // ==============================================================================================
-                case Constants.RECORD_UPDATE:
+                case Constants.ACTION_GOTO_RECORD_UPDATE:
                 {
                     CallRecordFacade.retrieveRecordForUpdate(req, vSession);
                     rd = sc.getRequestDispatcher(Constants.UPDATE_RECORD_JSP);

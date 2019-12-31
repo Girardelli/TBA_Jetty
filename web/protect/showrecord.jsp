@@ -25,7 +25,7 @@ private String mCustomerName;
 	if (vSession == null)
 		  throw new AccessDeniedException("U bent niet aangemeld bij deze administratie pagina's.");
 	
-	vSession.setCallingJsp(Constants.CLIENT_SHOW_REC_JSP);  
+//	vSession.setCallingJsp(Constants.CLIENT_SHOW_REC_JSP);  
 
   CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
 
@@ -57,70 +57,58 @@ private String mCustomerName;
   }
     
 %>
-<br>
-<span class="admintitle"> Oproep <%=vDirStr%> <%=mRecordData.getName()%>.</span>
-<br>
 <!-- action name must be a URI name as it is set in the <application>.xml servlet-mapping tag.-->
-<form name="calllistform" method="GET"
+<form name="calllistform" method="POST"
 	action="/tba/CustomerDispatch">
 
-<table  cellspacing='0' cellpadding='0' border='0'
-	bgcolor="FFFFFF">
-	<tr>
-		<td valign="top" width="30" bgcolor="FFFFFF"></td>
-		<td valign="top" bgcolor="FFFFFF"><br>
-		<table width="100%" border="0" cellspacing="1" cellpadding="1">
+<table  cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
+   <tr>
+      <td valign="middle" width="30" bgcolor="FFFFFF"></td>
+      <td valign="middle" bgcolor="FFFFFF">
+      <br><br> <span class="admintitle"> Oproep <%=vDirStr%> <%=mRecordData.getName()%>.</span> <br><br>
+		<table border="0" cellspacing="4" cellpadding="4">
 			<%                  
 if (vInfoGifs.length() > 0)
 {
-out.println("<tr>");
-out.println("  <td width=\"50\"></td>");
-out.println("  <td width=\"120\" valign=\"top\" class=\"adminsubsubtitle\"><img src=\"/tba/images/blueSphere.gif\" width=\"10\" height=\"10\">&nbsp;Extra's</td>");
-out.println("  <td width=\"580\" valign=\"top\" class=\"bodytekst\">" + vInfoGifs + "</td>");
-out.println("</tr>");
+   %>
+   <tr>
+       <td width="200" valign="middle" class="adminsubsubtitle">
+        <img src="/tba/images/blueSphere.gif" width="10" height="10">&nbsp;Bijkomende Informatie</td>
+       <td width="500" valign="middle" class="bodytekst"><%=vInfoGifs%></td>
+   </tr>
+   <%
 }                  
 %>
+            <tr>
+                <td width="200" valign="middle" class="adminsubsubtitle"><img src="/tba/images/blueSphere.gif" width="10" height="10">&nbsp;Is gearchiveerd</td>
+                <td width="500" valign="middle" class="bodytekst">
+                  <input type="checkbox" id="cbx1" style="display:none" name=<%=Constants.RECORD_ARCHIVED%><%=(mRecordData.getIsArchived() ? " checked=\"checked\"" : "")%> />
+                  <label for="cbx1" class="toggle"><span></span></label>    
+                </td>
+            </tr>
 			<tr>
-				<td width="30"></td>
-				<td width="170" valign="top" class="adminsubsubtitle"><img
-					src="/tba/images/blueSphere.gif" width="10"
-					height="10">&nbsp;Datum</td>
-				<td width="550" valign="top" class="bodytekst"><%=mRecordData.getDate()%></td>
+				<td width="200" valign="middle" class="adminsubsubtitle"><img src="/tba/images/blueSphere.gif" width="10" height="10">&nbsp;Datum</td>
+				<td width="500" valign="middle" class="bodytekst"><%=mRecordData.getDate()%></td>
 			</tr>
 			<tr>
-				<td width="30"></td>
-				<td width="170" valign="top" class="adminsubsubtitle"><img
-					src="/tba/images/blueSphere.gif" width="10"
-					height="10">&nbsp;Uur</td>
-				<td width="550" valign="top" class="bodytekst"><%=mRecordData.getTime()%></td>
+				<td width="200" valign="middle" class="adminsubsubtitle"><img src="/tba/images/blueSphere.gif" width="10" height="10">&nbsp;Uur</td>
+				<td width="500" valign="middle" class="bodytekst"><%=mRecordData.getTime()%></td>
 			</tr>
 			<tr>
-				<td width="30"></td>
-				<td width="170" valign="top" class="adminsubsubtitle"><img
-					src="/tba/images/blueSphere.gif" width="10"
-					height="10">&nbsp;<%=vDirStr%>nummer</td>
-				<td width="550" valign="top" class="bodytekst"><%=mRecordData.getNumber()%></td>
+				<td width="200" valign="middle" class="adminsubsubtitle"><img src="/tba/images/blueSphere.gif" width="10" height="10">&nbsp;<%=vDirStr%>nummer</td>
+				<td width="500" valign="middle" class="bodytekst"><%=mRecordData.getNumber()%></td>
 			</tr>
 			<tr>
-				<td width="30"></td>
-				<td width="170" valign="top" class="adminsubsubtitle"><img
-					src="/tba/images/blueSphere.gif" width="10"
-					height="10">&nbsp;Naam</td>
-				<td width="550" valign="top" class="bodytekst"><%=mRecordData.getName()%></td>
+				<td width="200" valign="middle" class="adminsubsubtitle"><img src="/tba/images/blueSphere.gif" width="10" height="10">&nbsp;Naam</td>
+				<td width="500" valign="middle" class="bodytekst"><%=mRecordData.getName()%></td>
 			</tr>
 			<tr>
-				<td width="30"></td>
-				<td width="170" valign="top" class="adminsubsubtitle"><img
-					src="/tba/images/blueSphere.gif" width="10"
-					height="10">&nbsp;Omschrijving</td>
-				<td width="550" valign="top" class="bodytekst"><%=(String) mRecordData.getShortDescription()%></td>
+				<td width="200" valign="top" class="adminsubsubtitle"><img src="/tba/images/blueSphere.gif" width="10" height="10">&nbsp;Omschrijving</td>
+				<td width="500" valign="middle" class="bodytekst"><%=(String) mRecordData.getShortDescription()%></td>
 			</tr>
 			<tr>
-				<td width="30"></td>
-				<td width="170" valign="top" class="adminsubsubtitle"><img
-					src="/tba/images/blueSphere.gif" width="10"
-					height="10">&nbsp;Opvolging</td>
-				<td width="550" valign="top"><textarea
+				<td width="200" valign="top" class="adminsubsubtitle"><img src="/tba/images/blueSphere.gif" width="10" height="10">&nbsp;Opvolging</td>
+				<td width="500" valign="middle"><textarea
 					name=<%=Constants.RECORD_SHORT_TEXT%> rows=10 cols=70></textarea></td>
 			</tr>
 			<%
@@ -128,27 +116,29 @@ out.println("</tr>");
 			{
 			%>
 			<tr>
-				<td width="30"></td>
-				<td width="170" valign="top" class="adminsubsubtitle"><img
-					src="/tba/images/blueSphere.gif" width="10"
-					height="10">&nbsp;Bijkomende Informatie</td>
-				<td width="550" valign="top" class="bodytekst"><%=(String) mRecordData.getLongDescription()%></td>
+				<td width="200" valign="top" class="adminsubsubtitle"><img src="/tba/images/blueSphere.gif" width="10" height="10">&nbsp;Bijkomende Informatie</td>
+				<td width="500" valign="middle" class="bodytekst"><%=(String) mRecordData.getLongDescription()%></td>
 			</tr>
             <%
 			}
             %>
 		</table>
+         <br>
+         <br>
 		</td>
 	</tr>
-</table>
-<br>
-<br>
-<br>
-		<input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.SAVE_RECORD%>"> 
+      <tr>
+         <td valign="middle" width="30" bgcolor="FFFFFF"></td>
+         <td valign="middle" bgcolor="FFFFFF">
+        <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.SAVE_RECORD%>"> 
         <input type=hidden name=<%=Constants.RECORD_ID%> value="<%=mRecordData.getId()%>"> 
         <input class="tbabutton" type=submit name=action value=" Bewaar "> 
-		<input class="tbabutton" type=submit value=" Terug " onclick="cancelUpdate();">
-		</form>
+        <input class="tbabutton" type=submit value=" Terug " onclick="cancelUpdate();">
+        </td>
+      </tr>
+</table>
+
+</form>
 
 <script type="text/javascript">
 function cancelUpdate()

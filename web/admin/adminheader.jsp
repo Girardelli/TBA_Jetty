@@ -58,50 +58,40 @@ private String vSessionId;
 
 
 
-<table width='100%' cellspacing='0' cellpadding='0' border='0'
-	bgcolor="#FFFFFF">
-	<tr>
-		<td valign='top' align='left' width='500' height='50' bgcolor="#FFFFFF">
-		  <img src="/tba/images/TBA-Logo.png" style="padding: 10px;" height="70" alt="">
-		</td>
-	</tr>
-	<tr>
-		<td style="padding: 5px;" colspan="2" bgcolor="#F89920" height="3"></td>
-	</tr>
-	<tr>
-		<td valign='bottom' align='left' valign='top' bgcolor="#22205F">
+<table width='100%' cellspacing='0' cellpadding='0' border='0' bgcolor="#FFFFFF">
+    <tr>
+        <td valign='top' align='left' width='500' height='50' bgcolor="#FFFFFF">
+        <img src="/tba/images/TBA-Logo.png" style="padding: 10px;" height="70" alt="">
+        </td>
+    </tr>
+    <tr>
+        <td style="padding: 2px;" colspan="0" bgcolor="#F89920" height="0"></td>
+    </tr>
+    <tr>
+        <td valign='bottom' align='left' valign='top' bgcolor="#22205F">
 			<table class="topmenu" cellspacing='0' cellpadding='0' border='0'>
-				<tr bgcolor="#22205F" height="40">
-					<td bgcolor="#F89920"><a class='afmeldMenu'
-						href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ADMIN_LOG_OFF%>">&nbsp;&nbsp;&nbsp;Afmelden&nbsp;&nbsp;&nbsp;</a>
-					</td>
-					<td onmouseover="showmenu('rubrieken')"
-						onmouseout="hidemenu('rubrieken')">
+				<tr bgcolor="#488FCD" height="40">
+					<td onmouseover="showmenu('rubrieken')" onmouseout="hidemenu('rubrieken')">
 						<div class="topMenu">&nbsp;&nbsp;&nbsp;Rubrieken&nbsp;&nbsp;&nbsp;</div>
 						<table class="menu" id="rubrieken">
 							<tr>
-								<td class="menu"><a class='norm'
-									href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_CANVAS%>"><nobr>Oproepen lijst</nobr></a>
-									<br> <a class='norm'
-									href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_ACCOUNT_ADMIN%>"><nobr>Klanten</nobr></a>
-                                    <br> <a class='norm'
-									href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_RECORD_SEARCH%>"><nobr>Zoeken</nobr></a>
-									<br> <a class='norm'
-									href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_TASK_ADMIN%>"><nobr>Taken</nobr></a>
+								<td class="menu">
+                                    <a class='norm' href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_CANVAS%>"><nobr>Oproepen lijst</nobr></a>
+									<br> <a class='norm' href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_ACCOUNT_ADMIN%>"><nobr>Klanten</nobr></a>
+                                    <br> <a class='norm' href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_RECORD_SEARCH%>"><nobr>Zoeken</nobr></a>
+									<br> <a class='norm' href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_TASK_ADMIN%>"><nobr>Taken</nobr></a>
 								</td>
 							</tr>
 						</table>
 					</td>
-					<td onmouseover="showmenu('selecteren')"
-						onmouseout="hidemenu('selecteren')">
+					<td onmouseover="showmenu('selecteren')" onmouseout="hidemenu('selecteren')">
 						<div class="topMenu">&nbsp;&nbsp;&nbsp;Selecteren&nbsp;&nbsp;&nbsp;</div>
 						<table class="menu" id="selecteren" width="150">
 							<tr>
-								<td class="menu"><a class='norm' href="#"
-									onclick="selectAll()"><nobr>Selecteer alles</nobr></a><br>
-									<a class='norm' href="#" onclick="deselectAll()"><nobr>Selecteer
-											niets</nobr></a><br> <a class='norm' href="#"
-									onclick="reverseSelection()"><nobr>Selectie omkeren</nobr></a>
+								<td class="menu">
+                                    <a class='norm' href="#" onclick="selectAll()"><nobr>Selecteer alles</nobr></a><br>
+									<a class='norm' href="#" onclick="deselectAll()"><nobr>Selecteer niets</nobr></a><br> 
+                                    <a class='norm' href="#" onclick="reverseSelection()"><nobr>Selectie omkeren</nobr></a>
 								</td>
 							</tr>
 						</table>
@@ -111,22 +101,26 @@ private String vSessionId;
         {
     %>
 
-					<td onmouseover="showmenu('tba_admin')"
-						onmouseout="hidemenu('tba_admin')">
-						<div class="topMenu">&nbsp;&nbsp;&nbsp;TBA Admin&nbsp;&nbsp;&nbsp;</div>
+					<td onmouseover="showmenu('tba_admin')"	onmouseout="hidemenu('tba_admin')">
+						<div class="topMenu">&nbsp;&nbsp;&nbsp;Administratie&nbsp;&nbsp;&nbsp;</div>
 						<table class="menu" id="tba_admin">
 							<tr>
 								<td class="menu">
-                                    <a class='norm' href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_INVOICE_ADMIN%>">Factuur lijst</a> <br> 
-                                    <a class='norm' href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_INVOICE%>">Maak Factuur</a> <br> 
-                                    <a class='norm' href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_ADD_INVOICE%>">Maak Manueel Factuur</a> <br> 
-                                    <a class='norm' href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_OPEN_INVOICE%>">Open facturen</a> <br> 
-                                    <a class='norm' href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_EMPLOYEE_ADMIN%>">Werknemers</a><br> 
-                                    <a class='norm' href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_EMPLOYEE_COST%>">Prestaties</a>
+                                    <a class='norm' href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_INVOICE_ADMIN%>">Factuur lijst</nobr></a> <br> 
+                                    <a class='norm' href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_INVOICE%>">Maak Factuur</nobr></a> <br> 
+                                    <a class='norm' href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_ADD_INVOICE%>">Maak Manueel Factuur</nobr></a> <br> 
+                                    <a class='norm' href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_OPEN_INVOICE%>">Open facturen</nobr></a> <br> 
+                                    <a class='norm' href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_EMPLOYEE_ADMIN%>">Werknemers</nobr></a><br> 
+                                    <a class='norm' href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_EMPLOYEE_COST%>">Prestaties</nobr></a>
 								</td>
 							</tr>
 						</table>
 					</td>
+                    <td width=100%>
+                    </td>
+                    <td><div align="right"><a class='tbabuttonorange' href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ADMIN_LOG_OFF%>">Afmelden</a></div>
+                    </td>
+                    <td>&nbsp;&nbsp;</td>
 					<%
         }
     %>

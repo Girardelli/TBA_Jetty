@@ -56,8 +56,7 @@ if (vCustomerFilter != null)
 if (vCustomerFilter == null) vCustomerFilter = Constants.ACCOUNT_FILTER_ALL;
 
 %>
-<table  cellspacing='0' cellpadding='0' border='0'
-    bgcolor="FFFFFF">
+<table  cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
     <tr>
 		<!-- white space -->
 		<td valign="top" width="20" bgcolor="FFFFFF"></td>
@@ -67,27 +66,34 @@ if (vCustomerFilter == null) vCustomerFilter = Constants.ACCOUNT_FILTER_ALL;
 		<p><span class="admintitle"> Oproepen zoeken</span></p>
 		<form name="searchform" method="POST" action="/tba/CustomerDispatch">
 			<input type="hidden" name="<%=Constants.SRV_ACTION%>" value="<%=Constants.ACTION_SEARCH_CALLS%>"> 
-		<table width="610" border="0" cellspacing="2" cellpadding="2">
+		<table border="0" cellspacing="2" cellpadding="2">
 			<tr>
-				<td width="100" valign="top" class="adminsubsubtitle">Zoek tekst</td>
-				<td width="10" valign="top" class="adminsubsubtitle">:</td>
-				<td width="500" valign="top"><input type="text"
-					name="<%=Constants.RECORD_SEARCH_STR%>" size="50"
-					value="<%=vSession.getSearchString()%>"></td>
+				<td width="100" valign="middle" class="adminsubsubtitle">Zoek tekst</td>
+				<td width="10" valign="middle" class="adminsubsubtitle">:</td>
+				<td width="500" valign="middle">
+                    <input type="text" name="<%=Constants.RECORD_SEARCH_STR%>" size="50" value="<%=vSession.getSearchString()%>">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input class="tbabutton" type="submit" name="action" value=" Start " onclick="startSearch()"> 
+                </td>
 			</tr>
 		</table>
 		<br>
-		<input class="tbabutton" type="submit" name="action" value="  Go  " onclick="startSearch()"> 
 		<br>
-		<input class="tbabutton" type="submit" name="action" value="Vorige Oproepen" onclick="showPrevious()">&nbsp;&nbsp;&nbsp; <%
-if (!vSession.isCurrentMonth())
+<%
+if (vSession.getSearchString() != null && !vSession.getSearchString().isEmpty())
+{
+%> 
+		<input class="tbabutton" type="submit" name="action" value="Vorige Oproepen" onclick="showPrevious()">&nbsp;&nbsp;&nbsp; 
+<%
+}
+if (!vSession.isCurrentMonth() && (vSession.getSearchString() != null && !vSession.getSearchString().isEmpty()))
 {
   out.println("<input class=\"tbabutton\" type=submit name=action value=\"Volgende Oproepen\"  onclick=\"showNext()\">");
 }
-%> <br>
+%> 
+        <br>
 		<br>
-		<table width="710" border="0" cellspacing="2" cellpadding="4">
-			<%
+		<table border="0" cellspacing="2" cellpadding="4">
+<%
 
 
 Collection<CallRecordEntityData> vRecords = null;
@@ -164,6 +170,9 @@ if (vSession.getSearchString() != null && vSession.getSearchString().length() > 
       else
         vInOut = "/tba/images/outcall.gif";
       String vInfoGifs = "";
+      String bgrncolor = "FFCC66";
+      if (vEntry.getIsArchived())
+         bgrncolor = "9fc5e6";
       if (vLongDesc.length() > 0)
       {
         vInfoGifs = vInfoGifs.concat("<img src=\"/tba/images/info.gif\" alt=\"dubbel klik om de info te bekijken\" height=\"16\" border=\"0\">&nbsp;");
@@ -190,8 +199,8 @@ if (vSession.getSearchString() != null && vSession.getSearchString().length() > 
         vImportant = vImportant.concat("<img src=\"/tba/images/important.gif\"  height=\"13\" border=\"0\">&nbsp;");
       }
   %>
-			<tr bgcolor="FFCC66" id="<%=vId%>" class="bodytekst"
-				ondblclick="changeUrl('/tba/CustomerDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.RECORD_UPDATE%>&amp;<%=Constants.RECORD_ID%>=<%=vEntry.getId()%>');">
+			<tr bgcolor="<%=bgrncolor%>" id="<%=vId%>" class="bodytekst"
+				ondblclick="changeUrl('/tba/CustomerDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACTION_GOTO_RECORD_UPDATE%>&amp;<%=Constants.RECORD_ID%>=<%=vEntry.getId()%>');">
 				<td width="20" bgcolor="FFFFFF"><img src="<%=vInOut%>"
 					height="13" border="0" alt=""></td>
 				<td width="10" valign="top"><%=vImportant%></td>

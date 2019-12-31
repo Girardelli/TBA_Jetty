@@ -45,7 +45,7 @@ if (vErrorList != null && vErrorList.size() > 0)
 		<br>
 		<span class="admintitle"> Voeg een nieuwe werknemer toe.</span> <br>
 		<span class="bodytekst"> <!-- action name must be a URI name as it is set in the <application>.xml servlet-mapping tag.-->
-		<form method="GET" action="/tba/AdminDispatch">
+		<form method="POST" action="/tba/AdminDispatch">
 		<table width="700" border="0" cellspacing="2" cellpadding="2">
 			<tr>
 				<td width="50"></td>

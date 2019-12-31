@@ -33,9 +33,9 @@ allEntryIds = new StringBuilder("[");
 
 %>
 
-<form name="calllistform" method="POST" action="/tba/CustomerDispatch">
-<input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.ACTION_SHOW_CALLS%>"> 
-<input type=hidden name=<%=Constants.RECORDS_TO_HANDLE%> value=""> 
+<form name="calllistform" method="POST"
+	action="/tba/CustomerDispatch"><input type=hidden
+	name=<%=Constants.SRV_ACTION%> value="<%=Constants.ACTION_ARCHIVED_CALLS%>"> 
 <table cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
 	<tr>
 		<!-- white space -->
@@ -43,28 +43,26 @@ allEntryIds = new StringBuilder("[");
 
 		<!-- account list -->
 		<td valign="top" bgcolor="FFFFFF"><br>
-        <p><span class="admintitle"> Huidig geregistreerde oproepen:
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="tbabutton" type=submit value="Herlaad (Vandaag)" onclick="refresh()"> 
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="archiveButton" class="tbabutton" type="submit" value="Archiveer" onclick="archive()"> 
+        <p><span class="admintitle"> Gearchiveerde oproepen:
         </span></p>
 <%
   if (vSession == null)
     throw new AccessDeniedException("U bent niet aangemeld.");
-  vSession.setCallingJsp(Constants.CLIENT_CALLS_JSP);  
+  vSession.setCallingJsp(Constants.CLIENT_ARCHIVED_CALLS_JSP);  
   if (vSession.getFwdNumber() == null)
     throw new AccessDeniedException("Account nummer not set in session.");
 
   CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
 
-  Collection<CallRecordEntityData> vRecords = vQuerySession.getxWeeksBackIncludingSubcustomer(vSession, vSession.getDaysBack(), vSession.getFwdNumber(), false);
+  Collection<CallRecordEntityData> vRecords = vQuerySession.getxWeeksBackIncludingSubcustomer(vSession, vSession.getDaysBack(), vSession.getFwdNumber(), true);
   
   AccountEntityData vAccount = AccountCache.getInstance().get(vSession.getFwdNumber());
 %>
-<input class="tbabutton" type=submit value="Vorige Oproepen" onclick="showPrevious()"> 
+<input class="tbabutton" type=submit name=action value="Vorige Oproepen" onclick="showPrevious()"> 
 <%
 if (vSession.getDaysBack() > 0)
 {
-out.println("<input class=\"tbabutton\" type=submit value=\"Volgende Oproepen\"  onclick=\"showNext()\">");
+out.println("<input class=\"tbabutton\" type=submit name=action value=\"Volgende Oproepen\"  onclick=\"showNext()\">");
 }
 
   
@@ -79,35 +77,35 @@ out.println("<input class=\"tbabutton\" type=submit value=\"Volgende Oproepen\" 
   }
   if (vRecords == null || vRecords.size() == 0)
   {
-    out.println("<span class=\"adminsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Er zijn geen nieuwe oproepgegevens beschikbaar voor deze periode.</span>");
+    out.println("<span class=\"adminsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Er zijn geen gearchiveerde oproepgegevens beschikbaar voor deze periode.</span>");
     out.println("</table>");
   }
   else
   {
     if (vRecords.size() == 1)
-      out.println("<span class=\"bodytekst\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Er is </span><span class=\"bodyredbold\">1</span><span class=\"bodytekst\">  oproep beschikbaar voor deze periode.</span>");
+      out.println("<span class=\"bodytekst\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Er is </span><span class=\"bodyredbold\">1</span><span class=\"bodytekst\">  gearchiveerde oproep beschikbaar voor deze periode.</span>");
     else
-      out.println("<span class=\"bodytekst\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Er zijn </span><span class=\"bodyredbold\">" + vRecords.size() + "</span><span class=\"bodytekst\"> oproepen beschikbaar voor deze periode.</span>");
+      out.println("<span class=\"bodytekst\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Er zijn </span><span class=\"bodyredbold\">" + vRecords.size() + "</span><span class=\"bodytekst\"> gearchiveerde oproepen beschikbaar voor deze periode.</span>");
     int vNewCnt = 0;
     long vLastLogin = vAccount.getPreviousLoginTS();
     %>
     <br><br>
     <tr>
     <td width="30" bgcolor="FFFFFF"></td>
-    <td width="65"  valign="top" class="topMenu" bgcolor="F89920">&nbsp;Datum</td>
-    <td width="45"  valign="top" class="topMenu" bgcolor="F89920">&nbsp;Uur</td>
+    <td width="65"  valign="top" class="topMenu" bgcolor="488FCD">&nbsp;Datum</td>
+    <td width="45"  valign="top" class="topMenu" bgcolor="488FCD">&nbsp;Uur</td>
 <%
 if (vAccount != null && vAccount.getHasSubCustomers())
 {
 	%>
-	<td width="200"  valign="top" class="topMenu" bgcolor="F89920">&nbsp;Medewerker</td>
+	<td width="200"  valign="top" class="topMenu" bgcolor="488FCD">&nbsp;Medewerker</td>
 	<%
 }
 %>
-    <td width="80"  valign="top" class="topMenu" bgcolor="F89920">&nbsp;Nummer</td>
-    <td width="200" valign="top" class="topMenu" bgcolor="F89920">&nbsp;Naam</td>
-    <td width="500" valign="top" class="topMenu" bgcolor="F89920">&nbsp;Omschrijving</td>
-    <td width="80"  valign="top" class="topMenu" bgcolor="F89920">&nbsp;Info</td>
+    <td width="80"  valign="top" class="topMenu" bgcolor="488FCD">&nbsp;Nummer</td>
+    <td width="200" valign="top" class="topMenu" bgcolor="488FCD">&nbsp;Naam</td>
+    <td width="500" valign="top" class="topMenu" bgcolor="488FCD">&nbsp;Omschrijving</td>
+    <td width="80"  valign="top" class="topMenu" bgcolor="488FCD">&nbsp;Info</td>
     </tr>
 <%
     int vRowInd = 0;
@@ -155,7 +153,7 @@ if (vAccount != null && vAccount.getHasSubCustomers())
       else
         vInOut = "\"/tba/images/outcall.gif\"";
 %>
-	<tr bgcolor="FFCC66" id=<%=vId%> class="bodytekst" onclick="updateArchiveFlag('<%=vId%>','<%=vEntry.getId()%>','<%=vRowInd%>')"
+	<tr bgcolor="9fc5e6" id=<%=vId%> class="bodytekst"
 		ondblclick="changeUrl('/tba/CustomerDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACTION_GOTO_RECORD_UPDATE%>&<%=Constants.RECORD_ID%>=<%=vEntry.getId()%>');">
 		<td width="30" bgcolor="FFFFFF"><img src=<%=vInOut%> height="13" border="0"></td>
 		<td width="65" valign="top"><%=vDate%></td>
@@ -211,44 +209,41 @@ catch (Exception ex)
 </html>
 
 <script>
-var allArr = <%=allEntryIds.toString()%>;
 var linesToDelete = new Array();
-var callsSelected = 0;
-document.getElementById("archiveButton").style.visibility = "hidden";
+
 
 function selectAll()
 {
+  var allArr = <%=allEntryIds.toString()%>;
   for (var i = 0; i < allArr.length; i++)
   {
     linesToDelete[i] = allArr[i].substring(2);
     var entry = document.getElementById(allArr[i]) ;
-    entry.style.backgroundColor= "FFFF99";
-    ++callsSelected;
+    entry.style.backgroundColor= "FF9966";
   }
 }
 
 function deselectAll()
 {
+  var allArr = <%=allEntryIds.toString()%>;
   for (var i = 0; i < allArr.length; i++)
   {
     linesToDelete[i] = null;
     var entry = document.getElementById(allArr[i]) ;
     entry.style.backgroundColor= "FFCC66";
-    callsSelected = 0;
   }
 }
 
 function reverseSelection()
 {
-  callsSelected = 0;
+  var allArr = <%=allEntryIds.toString()%>;
   for (var i = 0; i < allArr.length; i++)
   {
     if (linesToDelete[i] == null)
     {
       linesToDelete[i] = allArr[i].substring(2);
       var entry = document.getElementById(allArr[i]) ;
-      entry.style.backgroundColor= "FFFF99";
-      ++callsSelected;
+      entry.style.backgroundColor= "FF9966";
     }
     else
     {
@@ -257,45 +252,6 @@ function reverseSelection()
       entry.style.backgroundColor= "FFCC66";
     }
   }
-}
-
-function updateArchiveFlag(rowid, id, rowInd)
-{
-  var entry = document.getElementById(rowid) ;
-  if (linesToDelete[rowInd] == null)
-  {
-      //select entry
-    linesToDelete[rowInd] = id;
-    entry.style.backgroundColor= "FFFF99";
-    ++callsSelected;
-  }
-  else
-  {
-      // deselect entry
-    linesToDelete[rowInd] = null;
-    entry.style.backgroundColor= "FFCC66";
-    --callsSelected;
-  }
-  var row = document.getElementById('archiveButton');
-  if (callsSelected > 0)
-      row.style.visibility = "visible";
-  else
-      row.style.visibility = "hidden";
-          
-  console.log("callsSelected=" + callsSelected);
-}
-
-function archive()
-{
-    
-    var shorterArr = new Array();
-    var j = 0;
-    for (var i = 0; i < linesToDelete.length; i++)
-      if (linesToDelete[i] != null)
-        shorterArr[j++] = linesToDelete[i];
-    console.log("archive: j=" + j);
-    document.calllistform.<%=Constants.RECORDS_TO_HANDLE%>.value=shorterArr.join();
-    document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.ACTION_ARCHIVE_RECORDS%>";
 }
 
 function logoff()

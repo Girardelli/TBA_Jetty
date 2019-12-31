@@ -1,3 +1,11 @@
+/*
+#9fc5e6 light blauw
+#488FCD midden blauw
+#fbc27d light orange
+#F89920 orange
+#FF0000 rood
+#22205F donker blauw
+*/
 
 .welkom { font-family: "Harlow Solid Italic", sans-serif; font-size : 11pt; color: #FFFFFF; }
 
@@ -14,7 +22,7 @@ a.leftSubMenu:link, a.leftSubMenu:visited, a.leftSubMenu:active { color: #FFFFFF
 a.leftSubMenu:hover { color: #F89920; }
 a.topMenu:link, a.topMenu:visited, a.topMenu:active { color: #FFFFFF; 
                                              text-decoration : none;
-                                             font-size : 11pt; 
+                                             font-size : 13pt; 
                                              font-family: "Arial", sans-serif;}
 a.topMenu:hover { color: #F89920; }
 a.bottom:link, a.bottom:visited, a.bottom:active { color: #FFFFFF; 
@@ -30,7 +38,7 @@ a.bodyMenu:link, a.bodyMenu:visited, a.bodyMenu:active { color: #22205F;
 a.bodyMenu:hover { color: #F89920; }
 a.afmeldMenu:link, a.afmeldMenu:visited, a.afmeldMenu:active { color: #FFFFFF; 
                                              text-decoration : none;
-                                             font-size : 11pt; 
+                                             font-size : 13pt; 
                                              font-family: "Arial", sans-serif;}
 a.afmeldMenu:hover { color: #22205F; }
 
@@ -38,7 +46,7 @@ a.afmeldMenu:hover { color: #22205F; }
 a.bodytekst:link, a.bodytekst:visited, a.bodytekst:active { color: #000000; font-size : 8pt; font-family: "Arial"}
 a.bodytekst:hover { color: #F89920; }
 
-.bodytekst { font-family: "Arial"; color: #000000; font-size : 10pt; }
+.bodytekst { font-family: 'Source Sans Pro', sans-serif; color: #242424; font-size : 10pt; }
 .bodybold { font-family: "Arial"; color: #000000; font-weight : bold;  font-size : 10pt; }
 .bodytitle { font-family: "Times New Roman"; color: #22205F; font-size : 14pt; }
 .bodysubtitle { font-family: "Times New Roman"; font-weight : bold; color: #22205F; font-size : 12pt; }
@@ -58,30 +66,32 @@ a.bodytekst:hover { color: #F89920; }
 .mailtowhite { font-family: "Arial"; color: #FFFFFF; text-decoration : underline; font-size : 8pt; }
 .mailtoblack { font-family: "Arial"; color: #000000; text-decoration : underline; font-size : 8pt; }
 .tableheading { font-family: "Arial"; color: #000000; text-decoration : bold; font-size : 9pt; }
-.topMenu { color: #FFFFFF; text-decoration : none; font-size : 11pt; font-family: "Arial", sans-serif;}
-.afmeldMenu { color: #FFFFFF; text-decoration : none; font-size : 11pt; font-family: "Arial", sans-serif;}
+.topMenu { color: #FFFFFF; text-decoration : none; font-size : 13pt; font-family: "Arial", sans-serif;}
+.afmeldMenu { color: #FFFFFF; text-decoration : none; font-size : 13pt; font-family: "Arial", sans-serif;}
 .startingDate { color: #FF0000; text-decoration : none; font-weight : bold; font-size : 20pt; font-family: "Arial", sans-serif;}
-.topMenuFix { color: #FFFFFF; text-decoration : none; font-size : 11pt; font-family: "Arial", sans-serif;}
+.topMenuFix { color: #FFFFFF; text-decoration : none; font-size : 13pt; font-family: "Arial", sans-serif;}
 .topMenuNoLnk:link, topMenuNoLnk:visited, topMenuNoLnk:active { color: #FFFFFF; 
                                              text-decoration : none;
-                                             font-size : 11pt; 
+                                             font-size : 13pt; 
                                              font-family: "Arial", sans-serif;}
 .topMenuNoLnk:hover { color: #F89920; }
 
 body {margin:0px; width:100%;font-family:arial;}
-a.norm{color:#FFFFFF;
+a.norm{color:#22205F;
     text-decoration:none;
-    font-size : 11pt; 
-    font-family: "Arial", sans-serif;}
-a.norm:hover{color:#F89920}
-td.menu{background:#488FCD;color:#488FCD}
+    font-size : 13pt; 
+    font-family: "Arial", sans-serif;
+    padding: 5px;}
+a.norm:hover{color:#FFFFFF}
+td.menu{background:#9fc5e6;color:#9fc5e6}
 table.menu
 {
-background:#488FCD;
-color:#488FCD;
+background:#9fc5e6;
+color:#9fc5e6;
 font-size:100%;
 position:absolute;
 visibility:hidden;
+padding:5px;
 }
 
 #content{position:relative; width:100%; height:19px; background-color:#F89920;}
@@ -95,6 +105,77 @@ visibility:hidden;
 .fadesub a {color:#ffffff; font-family: "Arial"; text-decoration:none; font-size:12px;}
 .fadesub a:hover{color:#F89920; font-family: "Arial"; text-decoration:none;  font-size:12px;}
 .disfadesub {color:#777777; font-family: "Arial"; text-decoration:none; font-size:12px;}
+
+/* The tbacontainer */
+.tbacontainer {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 22px;
+  border-color: #488FCD;
+  border-width: 2px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.tbacontainer input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.tbacheckmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+}
+
+/* On mouse-over, add a grey background color */
+.tbacontainer:hover input ~ .tbacheckmark {
+  background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.tbacontainer input:checked ~ .tbacheckmark {
+  background-color: #488FCD;
+}
+
+/* Create the tbacheckmark/indicator (hidden when not checked) */
+.tbacheckmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the tbacheckmark when checked */
+.tbacontainer input:checked ~ .tbacheckmark:after {
+  display: block;
+}
+
+/* Style the tbacheckmark/indicator */
+.tbacontainer .tbacheckmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
 
 .tbabutton {
     border-radius: 10px;
@@ -247,4 +328,230 @@ z-index: 1; /* Sit on top */
   resize: none;
 }
 
+/* checkbox slider*/
+.toggle {
+  position: relative;
+  display: block;
+  width: 40px;
+  height: 20px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transform: translate3d(0, 0, 0);
+}
+.toggle:before {
+  content: "";
+  position: relative;
+  top: 3px;
+  left: 3px;
+  width: 34px;
+  height: 14px;
+  display: block;
+  background: #9A9999;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+.toggle span {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  display: block;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 3px 8px rgba(154, 153, 153, 0.5);
+  transition: all 0.2s ease;
+}
+.toggle span:before {
+  content: "";
+  position: absolute;
+  display: block;
+  margin: -18px;
+  width: 56px;
+  height: 56px;
+  background: rgba(79, 46, 220, 0.5);
+  border-radius: 50%;
+  transform: scale(0);
+  opacity: 1;
+  pointer-events: none;
+}
+
+/**********************************/
+/* I don't know to use this on multiple toogle checkboxes, so I copied them, one for each */
+#cbx1:checked + .toggle:before {
+  background: #488FCD;
+}
+#cbx1:checked + .toggle span {
+  background: #F89920;
+  transform: translateX(20px);
+  transition: all 0.2s cubic-bezier(0.8, 0.4, 0.3, 1.25), background 0.15s ease;
+  box-shadow: 0 3px 8px rgba(79, 46, 220, 0.2);
+}
+#cbx1:checked + .toggle span:before {
+  transform: scale(1);
+  opacity: 0;
+  transition: all 0.4s ease;
+}
+
+#cbx2:checked + .toggle:before {
+  background: #488FCD;
+}
+#cbx2:checked + .toggle span {
+  background: #F89920;
+  transform: translateX(20px);
+  transition: all 0.2s cubic-bezier(0.8, 0.4, 0.3, 1.25), background 0.15s ease;
+  box-shadow: 0 3px 8px rgba(79, 46, 220, 0.2);
+}
+#cbx2:checked + .toggle span:before {
+  transform: scale(1);
+  opacity: 0;
+  transition: all 0.4s ease;
+}
+
+#cbx3:checked + .toggle:before {
+  background: #488FCD;
+}
+#cbx3:checked + .toggle span {
+  background: #F89920;
+  transform: translateX(20px);
+  transition: all 0.2s cubic-bezier(0.8, 0.4, 0.3, 1.25), background 0.15s ease;
+  box-shadow: 0 3px 8px rgba(79, 46, 220, 0.2);
+}
+#cbx3:checked + .toggle span:before {
+  transform: scale(1);
+  opacity: 0;
+  transition: all 0.4s ease;
+}
+
+#cbx4:checked + .toggle:before {
+  background: #488FCD;
+}
+#cbx4:checked + .toggle span {
+  background: #F89920;
+  transform: translateX(20px);
+  transition: all 0.2s cubic-bezier(0.8, 0.4, 0.3, 1.25), background 0.15s ease;
+  box-shadow: 0 3px 8px rgba(79, 46, 220, 0.2);
+}
+#cbx4:checked + .toggle span:before {
+  transform: scale(1);
+  opacity: 0;
+  transition: all 0.4s ease;
+}
+
+#cbx5:checked + .toggle:before {
+  background: #488FCD;
+}
+#cbx5:checked + .toggle span {
+  background: #F89920;
+  transform: translateX(20px);
+  transition: all 0.2s cubic-bezier(0.8, 0.4, 0.3, 1.25), background 0.15s ease;
+  box-shadow: 0 3px 8px rgba(79, 46, 220, 0.2);
+}
+#cbx5:checked + .toggle span:before {
+  transform: scale(1);
+  opacity: 0;
+  transition: all 0.4s ease;
+}
+
+#cbx6:checked + .toggle:before {
+  background: #488FCD;
+}
+#cbx6:checked + .toggle span {
+  background: #F89920;
+  transform: translateX(20px);
+  transition: all 0.2s cubic-bezier(0.8, 0.4, 0.3, 1.25), background 0.15s ease;
+  box-shadow: 0 3px 8px rgba(79, 46, 220, 0.2);
+}
+#cbx6:checked + .toggle span:before {
+  transform: scale(1);
+  opacity: 0;
+  transition: all 0.4s ease;
+}
+
+#cbx7:checked + .toggle:before {
+  background: #488FCD;
+}
+#cbx7:checked + .toggle span {
+  background: #F89920;
+  transform: translateX(20px);
+  transition: all 0.2s cubic-bezier(0.8, 0.4, 0.3, 1.25), background 0.15s ease;
+  box-shadow: 0 3px 8px rgba(79, 46, 220, 0.2);
+}
+#cbx7:checked + .toggle span:before {
+  transform: scale(1);
+  opacity: 0;
+  transition: all 0.4s ease;
+}
+
+#cbx8:checked + .toggle:before {
+  background: #488FCD;
+}
+#cbx8:checked + .toggle span {
+  background: #F89920;
+  transform: translateX(20px);
+  transition: all 0.2s cubic-bezier(0.8, 0.4, 0.3, 1.25), background 0.15s ease;
+  box-shadow: 0 3px 8px rgba(79, 46, 220, 0.2);
+}
+#cbx8:checked + .toggle span:before {
+  transform: scale(1);
+  opacity: 0;
+  transition: all 0.4s ease;
+}
+/**********************************/
+.center {
+  position: absolute;
+  top: calc(50% - 10px);
+  left: calc(50% - 20px);
+}
+
+/* TBA combobox */
+.tbaselectdiv {
+  position: absolute;
+}
+
+/* IE11 hide native button (thanks Matt!) */
+select::-ms-expand {
+display: none;
+}
+
+.tbaselectdiv:after {
+  content: '<>';
+  font: 17px "Consolas", monospace;
+  color: #333;
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  transform: rotate(90deg);
+  right: 2px;
+  
+  /*Adjust for position however you want*/
+  
+  top: 9px;
+  padding: 0 0 2px;
+  border-bottom: 1px solid #999;
+  /*left line */
+  
+  position: absolute;
+  pointer-events: none;
+}
+
+.tbaselectdiv select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  /* Add some styling */
+  display: block;
+  height: 30px;
+  float: left;
+  margin: 5px 0px;
+  padding: 0px 30px 0px 10px;
+  font-size: 16px;
+  line-height: 1.75;
+  color: #333;
+  background-color: #ffffff;
+  background-image: none;
+  border: 1px solid #cccccc;
+  -ms-word-break: normal;
+  word-break: normal;
+}
 
