@@ -67,7 +67,7 @@ if (vErrorMessage == null)
             <br>
             <p><span class="bodytext">klik <a href=<%=Constants.ADMIN_LOGIN_HTML%>>hier</a></span>
             om terug te keren naar het aanmeldpanel.</p>
-            <p><a class="tbabutton" href=<%=Constants.LOGIN_HTML%>>Naar log in scherm</a>
+            <p><a class="tbabutton" href=<%=Constants.ADMIN_LOGIN_HTML%>>Naar log in scherm</a>
             </p>
  			</td>
 		</table>
