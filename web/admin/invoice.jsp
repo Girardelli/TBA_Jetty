@@ -257,7 +257,12 @@
             TaskSqlAdapter vTaskSession = new TaskSqlAdapter();
      		vTasks = vTaskSession.getTasksForInvoice(vSession, vInvoiceData.getId());
      	    CallRecordSqlAdapter vCallRecordSession = new CallRecordSqlAdapter();
-     	    vRecords = vCallRecordSession.getInvoiceCalls(vSession, vInvoiceData.getAccountID(), vInvoiceData.getStartTime(), vInvoiceData.getStopTime());
+            int accountId = vInvoiceData.getAccountID();
+            if (accountId < 1)
+            {
+               accountId = AccountCache.getInstance().get(vInvoiceData).getId();
+            }
+     	    vRecords = vCallRecordSession.getInvoiceCalls(vSession, accountId, vInvoiceData.getStartTime(), vInvoiceData.getStopTime());
        	}
         
         

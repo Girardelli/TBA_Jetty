@@ -618,6 +618,7 @@ final public class FintroXlsxReader
    private void fillPaymentStrBuffer(FintroPayment payment, StringBuilder strBuf)
    {
       strBuf.append("Bedrag: " + payment.amount + " (excl BTW: " + mCostFormatter.format(payment.amount / 1.21) + ")<br>");
+      strBuf.append("Van Banknummer: " + payment.accountNrCustomer + "<br>");
       strBuf.append(payment.details);
       strBuf.append("<br>FintroId: " + payment.id);
       strBuf.append("<br>ValutaDate: " + payment.valutaDate + "<br><br>");

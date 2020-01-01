@@ -8,7 +8,7 @@
 <!-- <meta HTTP-EQUIV="Refresh" content="30">-->
 <meta name="Copyright" content="Copyright © 2003 TheBusinessAssistant, All rights reserved.">
 <meta name="Distribution" content="Global">
-<link rel="shortcut icon" href="./images/favicon.png" type="image/x-icon" />
+<link rel="shortcut icon" href="/tba/images/favicon.png" type="image/x-icon" />
 <link rel="stylesheet" type="text/css"
 	href="/tba/TheBusinessAssistant.css" title="main">
 </head>
