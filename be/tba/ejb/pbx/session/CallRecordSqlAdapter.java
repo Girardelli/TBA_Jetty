@@ -653,17 +653,20 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
       if (customer.getHasSubCustomers())
       {
          Collection<AccountEntityData> vSubCustomerList = AccountCache.getInstance().getSubCustomersList(customer.getId());
-         System.out.println(customer.getFullName() + " has " + vSubCustomerList.size() + " sub customers");
-         for (Iterator<AccountEntityData> i = vSubCustomerList.iterator(); i.hasNext();)
+         if (vSubCustomerList != null)
          {
-            AccountEntityData vEntry = i.next();
+            //System.out.println(customer.getFullName() + " has " + vSubCustomerList.size() + " sub customers");
+            for (Iterator<AccountEntityData> i = vSubCustomerList.iterator(); i.hasNext();)
+            {
+               AccountEntityData vEntry = i.next();
 
-            if (vEntry.getNoInvoice())
-            {
-               collectInvoiceCalls(webSession, vEntry, callList, start, stop);
-            } else
-            {
-               System.out.println("collectInvoiceCalls: " + customer.getFullName() + " has its invoice flag set.");
+               if (vEntry.getNoInvoice())
+               {
+                  collectInvoiceCalls(webSession, vEntry, callList, start, stop);
+               } else
+               {
+                  System.out.println("collectInvoiceCalls: " + customer.getFullName() + " has its invoice flag set.");
+               }
             }
          }
       }
