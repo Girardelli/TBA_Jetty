@@ -61,7 +61,7 @@ out.println("</select>");
 				<td width="120" valign="top" class="adminsubsubtitle"><img
 					src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Uitgevoerd door</td>
 				<td width="580" valign="top"><%                  
-out.println("<select name=\"" + Constants.DONE_BY_EMPL + "\">");
+out.println("<select name=\"" + Constants.TASK_DONE_BY_EMPL + "\">");
 Collection emplList = AccountCache.getInstance().getEmployeeList();
 out.println("<option value=\"\" selected> Selecteer een werknemer");
 synchronized(emplList) 
@@ -165,8 +165,8 @@ function validate_form(thisform)
 {
 with (thisform)
   {
-  if (validate_required(<%=Constants.DONE_BY_EMPL%>,"Werknemer moet geselecteerd zijn!")==false)
-  {<%=Constants.DONE_BY_EMPL%>.focus();return false;}
+  if (validate_required(<%=Constants.TASK_DONE_BY_EMPL%>,"Werknemer moet geselecteerd zijn!")==false)
+  {<%=Constants.TASK_DONE_BY_EMPL%>.focus();return false;}
   }
 }
 

@@ -73,7 +73,7 @@ final public class MailTimerTask extends TimerTask implements TimerTaskIntf
                         {
                             try
                             {
-                                if (!MailerSessionBean.sendMail(session, vAccount.getId()))
+                                if (!MailerSessionBean.sendCallInfoMail(session, vAccount.getId()))
                                 {
                                 	throw new Exception("Mail send failed!");
                                 }

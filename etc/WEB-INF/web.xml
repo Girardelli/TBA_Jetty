@@ -74,6 +74,15 @@
   </servlet>
   
   <servlet>
+     <servlet-name>CustFileDownloadServlet</servlet-name>
+     <servlet-class>be.tba.servlets.CustFileDownloadServlet</servlet-class>
+    <init-param>
+        <param-name>dirAllowed</param-name>
+        <param-value>false</param-value>
+    </init-param>
+  </servlet>
+  
+  <servlet>
      <servlet-name>IntertelServlet</servlet-name>
      <servlet-class>be.tba.servlets.IntertelServlet</servlet-class>
 	<init-param>
@@ -121,6 +130,11 @@
   <servlet-mapping>
      <servlet-name>FileDownloadServlet</servlet-name>
      <url-pattern>/download</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+     <servlet-name>CustFileDownloadServlet</servlet-name>
+     <url-pattern>/custdownload</url-pattern>
   </servlet-mapping>
 
   <servlet-mapping>

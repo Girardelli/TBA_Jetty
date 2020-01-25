@@ -32,10 +32,8 @@ try
 allEntryIds = new StringBuilder("[");
 
 %>
-
-<form name="calllistform" method="POST"
-	action="/tba/CustomerDispatch"><input type=hidden
-	name=<%=Constants.SRV_ACTION%> value="<%=Constants.ACTION_ARCHIVED_CALLS%>"> 
+<form name="calllistform" method="POST" action="/tba/CustomerDispatch">
+<input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.ACTION_ARCHIVED_CALLS%>"> 
 <table cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
 	<tr>
 		<!-- white space -->
@@ -46,17 +44,17 @@ allEntryIds = new StringBuilder("[");
         <p><span class="admintitle"> Gearchiveerde oproepen:
         </span></p>
 <%
-  if (vSession == null)
+   if (vSession == null)
     throw new AccessDeniedException("U bent niet aangemeld.");
   vSession.setCallingJsp(Constants.CLIENT_ARCHIVED_CALLS_JSP);  
-  if (vSession.getFwdNumber() == null)
+  if (vSession.getSessionFwdNr() == null)
     throw new AccessDeniedException("Account nummer not set in session.");
 
   CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
 
-  Collection<CallRecordEntityData> vRecords = vQuerySession.getxWeeksBackIncludingSubcustomer(vSession, vSession.getDaysBack(), vSession.getFwdNumber(), true);
+  Collection<CallRecordEntityData> vRecords = vQuerySession.getxWeeksBackIncludingSubcustomer(vSession, vSession.getDaysBack(), vSession.getSessionFwdNr(), true);
   
-  AccountEntityData vAccount = AccountCache.getInstance().get(vSession.getFwdNumber());
+  AccountEntityData vAccount = AccountCache.getInstance().get(vSession.getSessionFwdNr());
 %>
 <input class="tbabutton" type=submit name=action value="Vorige Oproepen" onclick="showPrevious()"> 
 <%

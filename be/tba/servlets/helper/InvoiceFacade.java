@@ -26,19 +26,6 @@ import be.tba.util.session.AccountCache;
 
 public class InvoiceFacade
 {
-    // public static void showInvoice(HttpServletRequest req, WebSession session)
-    // throws CreateException, RemoteException, NamingException, RemoveException
-    // {
-    // String vKey = (String) req.getParameter(Constants.INVOICE_ID);
-    // InitialContext vContext = new InitialContext();
-    //
-    // InvoiceSessionHome vHome = (InvoiceSessionHome)
-    // vContext.lookup(EjbJndiNames.EJB_JNDI_INVOICE_SESSION);
-    // InvoiceSession vQuerySession = vHome.create();
-    // // session.setCurrentInvoice(vQuerySession.getInvoice(vKey));
-    // vQuerySession.remove();
-    // }
-
     public static void saveInvoice(HttpServletRequest req, WebSession session)
     {
         String vInvoiceId = req.getParameter(Constants.INVOICE_TO_SAVE);

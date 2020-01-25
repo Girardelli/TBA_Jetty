@@ -33,6 +33,7 @@ public class Constants
     public static final String INVOICE_FOOTER_TMPL = "C:\\jetty\\templates\\invoice-footer-template.htm";
     public static final String INVOICE_DIR = "C:\\TheBusinessAssistant\\TheBusinessAssistant\\facturen\\";
     public static final String FILEUPLOAD_DIR = "C:\\jetty\\tempdir";
+    public static final String WORKORDER_FILEUPLOAD_DIR = "C:\\TheBusinessAssistant\\TheBusinessAssistant\\Workorders";
     public static final String WC_KLANTEN_XML = "WoltersKluwerKlanten.xml";
     public static final String WC_VERKOPEN_XML = "WoltersKluwerVerkopen.xml";
     public static final String ADMIN_LOGIN_HTML = "/tba/admin.html";
@@ -68,6 +69,10 @@ public class Constants
     public static final String NEW_CALL_JSP = "/admin/newcall.jsp";
     public static final String ADMIN_INVOICE_JSP = "/admin/admininvoice.jsp";
     public static final String OPEN_INVOICE_JSP = "/admin/openinvoice.jsp";
+    public static final String CANVAS_JSP = "/admin/canvas.jsp";
+    public static final String ADMIN_WORK_ORDER_JSP = "/admin/adminWorkOrders.jsp";
+    public static final String WORKORDER_JSP = "/admin/updateWorkOrder.jsp";
+    // customer jsp
     public static final String LOGIN_HOME_JSP = "/protect/prothome.jsp";
     public static final String REGISTER_JSP = "/protect/register.jsp";
     public static final String LOGIN_ERROR_JSP = "/loginerror.jsp";
@@ -77,18 +82,21 @@ public class Constants
     public static final String CLIENT_PREF_JSP = "/protect/updatepref.jsp";
     public static final String CLIENT_SEARCH_JSP = "/protect/searchcust.jsp";
     public static final String CLIENT_SHOW_TASKS_JSP = "/protect/clienttasks.jsp";
+    public static final String CLIENT_WORKORDERS_JSP = "/protect/myworkorders.jsp";
+    public static final String CLIENT_UPDATE_WORKORDER_JSP = "/protect/updateworkorder.jsp";
     public static final String DICTAAT_FORM_JSP = "/dictaatform.jsp";
-    public static final String CANVAS_JSP = "/admin/canvas.jsp";
 
     // session attribute constants
+    public static final String SRV_ACTION = "_act";
+
     // error responses
     public static final String NO_ERROR = "OK";
     public static final String ADD_ACCOUNT_FAILED = "NOK";
     public static final String NO_VALUE = "NOVALUE";
     public static final String ACCOUNT_EXISTS = "Account already exists";
+    public static final String ERROR_VECTOR = "errv";
 
-    // attribute names
-    public static final String SRV_ACTION = "_act";
+    // Accounts
     public static final String ACCOUNT_SELECT = "_sel";
     public static final String ACCOUNT_PASSWORD = "_pwd";
     public static final String ACCOUNT_PASSWORD2 = "_pwd2";
@@ -156,6 +164,11 @@ public class Constants
     public static final String ACCOUNT_IS_MAIL_INVOICE = "_ami";
     public static final String ACCOUNT_COUNTRY_CODE = "_acc";
     public static final String ACCOUNT_INFO = "_aci";
+    public static final String ACCOUNT_TO_DELETE = "_atd";
+    public static final String ACCOUNT_FWDNR = "_afwd";
+    public static final String ACCOUNT_NEW_FWDNR = "_nafwd";
+
+    // Task
     public static final String TASK_ID = "_tid";
     public static final String TASK_FORWARD_NUMBER = "_tfwnr";
     public static final String TASK_DATE = "_tdate";
@@ -171,12 +184,21 @@ public class Constants
     public static final String TASK_FIXED_PRICE = "_tfxpr";
     public static final String TASK_TIME_SPEND = "_ttmsp";
     public static final String TASK_IS_PAYED = "_tispa";
-    public static final String ERROR_VECTOR = "errv";
+    public static final String TASK_DONE_BY_EMPL = "_tdbe";
+    public static final String TASK_TO_DELETE = "_ttd";
+
+    // Workorder
+    public static final String WORKORDER_ID = "_woid";
+    public static final String WORKORDER_TITLE = "_woti";
+    public static final String WORKORDER_INSTRUCTION = "_woin";
+    public static final String WORKORDER_DUEDATE = "_wodd";
+    public static final String WORKORDER_STATE = "_wost";
+    public static final String WORKORDER_FILE = "_wofi";
+    public static final String WORKORDER_FILE_ID = "_wfid";
+    
+    // invoice
     public static final String INVOICE_AMONTH = "_iam";
     public static final String INVOICE_CUSTOMER = "_icu";
-    public static final String DONE_BY_EMPL = "_dbe";
-
-    // invoice
     public static final String INVOICE_MONTH = "_imo";
     public static final String INVOICE_YEAR = "_iye";
     public static final String INVOICE_ID = "_iid";
@@ -189,11 +211,12 @@ public class Constants
     public static final String INVOICE_IS_CREDITNOTA = "_iic";
     public static final String INVOICE_NR = "_inr";
     public static final String INVOICE_DESCRIPTION = "_ide";
+    public static final String INVOICE_TO_FREEZE = "_itf";
+    public static final String INVOICE_TO_SAVE = "_its";
+    public static final String INVOICE_TO_DELETE = "_itd";
+    public static final String INVOICE_TO_SETPAYED = "_isp";
 
-    // filter
-    public static final String ACCOUNT_FILTER_CUSTOMER = "_fcus";
-    public static final String ACCOUNT_FILTER_CALL_STATE = "_fcst";
-    public static final String ACCOUNT_FILTER_CALL_DIR = "_fdir";
+    // records
     public static final String RECORD_ID = "_rid";
     public static final String RECORD_NUMBER = "_rnb";
     public static final String RECORD_CALLER_NAME = "_cna";
@@ -214,13 +237,18 @@ public class Constants
     public static final String RECORD_SEARCH_STR = "_rss";
     public static final String RECORDS_TO_HANDLE = "_rtd";
     public static final String RECORD_UPDATED = "_rud";
-    public static final String ACCOUNT_TO_DELETE = "_atd";
-    public static final String TASK_TO_DELETE = "_ttd";
-    public static final String NEW_RECORD_KEY = "_nrk";
-    public static final String INVOICE_TO_FREEZE = "_itf";
-    public static final String INVOICE_TO_SAVE = "_its";
-    public static final String INVOICE_TO_DELETE = "_itd";
-    public static final String INVOICE_TO_SETPAYED = "_isp";
+    public static final String RECORD_NEW_KEY = "_nrk";
+    
+    
+    // filter
+    public static final String ACCOUNT_FILTER_CUSTOMER = "_fcus";
+    public static final String ACCOUNT_FILTER_CALL_STATE = "_fcst";
+    public static final String ACCOUNT_FILTER_CALL_DIR = "_fdir";
+    public static final String ACCOUNT_FILTER_ALL = "_all";
+    public static final String ACCOUNT_FILTER_UNFINISHED = "_unf";
+    public static final String ACCOUNT_FILTER_FINISHED = "_fin";
+    public static final String ACCOUNT_FILTER_IN = "_f_in";
+    public static final String ACCOUNT_FILTER_OUT = "_f_out";
 
     // attribute names
     public static final String SESSION_OBJ = "_sobj";
@@ -228,8 +256,6 @@ public class Constants
     public static final String ERROR_TXT = "_errt";
     public static final String NEXT_PAGE = "_npg";
     public static final String PREVIOUS_PAGE = "_ppg";
-    public static final String ACCOUNT_FWDNR = "_afwd";
-    public static final String NEW_ACCOUNT_FWDNR = "_nafwd";
     public static final String PENDING_CALL_ID = "_pci";
     public static final String TBA_HOME = "home";
 
@@ -310,14 +336,20 @@ public class Constants
     public static final String REMOVE_PENDING_CALL = "_a85";
     public static final String SHOW_MAIL_ERROR = "_a86";
     public static final String FIX_ACCOUNT_IDS = "_a87";
-    
-
+    public static final String GOTO_ADMIN_WORKORDERS = "_a88";
+    public static final String GOTO_WORKORDER = "_a90";
+    public static final String SAVE_WORKORDER = "_a91";
+    public static final String DOWNLOAD_WORKORDER_FILE = "_a92";
+    public static final String DOWNLOAD_WORKORDER_OUTPUTFILE = "_a93";
+    public static final String UPLOAD_WORKORDER_FILE = "_a94";
+    public static final String DELETE_WORKORDER_FILE = "_a95";
+   
     // LoginServlet actions
-    public static final String ACTION_LOGIN = "_a88";
-    public static final String ACTION_REGISTER = "_a89";
-    public static final String ACTION_FIRST_REGISTER = "_a90";
-    public static final String ACTION_DICTAAT_FORM = "_a91";
-    public static final String ACTION_TELEMARKETING_FORM = "_a92";
+    public static final String ACTION_LOGIN = "_l88";
+    public static final String ACTION_REGISTER = "_l89";
+    public static final String ACTION_FIRST_REGISTER = "_l90";
+    public static final String ACTION_DICTAAT_FORM = "_l91";
+    public static final String ACTION_TELEMARKETING_FORM = "_l92";
 
     // CustomerDispatchServlet
     public static final String ACTION_LOGOFF = "_calo";
@@ -328,13 +360,12 @@ public class Constants
     public static final String ACTION_GOTO_SHOW_TASKS = "_cast";
     public static final String ACTION_ARCHIVE_RECORDS = "_caar";
     public static final String ACTION_ARCHIVED_CALLS = "_caac";
+    public static final String ACTION_GOTO_WORKORDERS = "_cagw";
+    public static final String ACTION_UPDATE_WORKORDER = "_cauw";
+    public static final String ACTION_SAVE_WORKORDER = "_casw";
+    public static final String ACTION_DELETE_WORKORDER = "_cadw";
 
     // attribute values
-    public static final String ACCOUNT_FILTER_ALL = "_all";
-    public static final String ACCOUNT_FILTER_UNFINISHED = "_unf";
-    public static final String ACCOUNT_FILTER_FINISHED = "_fin";
-    public static final String ACCOUNT_FILTER_IN = "_f_in";
-    public static final String ACCOUNT_FILTER_OUT = "_f_out";
     public static final String YES = "_y";
     public static final String NO = "_n";
     public static final String NONE = "_none";

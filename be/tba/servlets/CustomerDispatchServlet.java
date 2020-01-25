@@ -1,7 +1,14 @@
 package be.tba.servlets;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.util.Calendar;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 import javax.servlet.RequestDispatcher;
@@ -12,18 +19,27 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import com.sun.enterprise.deployment.web.NameValuePair;
+
 import be.tba.ejb.account.interfaces.AccountEntityData;
 import be.tba.ejb.account.session.AccountSqlAdapter;
 import be.tba.ejb.pbx.session.CallRecordSqlAdapter;
 import be.tba.servlets.helper.AccountFacade;
 import be.tba.servlets.helper.CallRecordFacade;
+import be.tba.servlets.helper.TaskFacade;
 import be.tba.servlets.session.SessionManager;
 import be.tba.servlets.session.WebSession;
+import be.tba.util.common.Tools;
 import be.tba.util.constants.AccountRole;
 import be.tba.util.constants.Constants;
 import be.tba.util.exceptions.AccessDeniedException;
 import be.tba.util.exceptions.LostSessionException;
 import be.tba.util.exceptions.SystemErrorException;
+import be.tba.util.file.FileUploader;
 import be.tba.util.session.AccountCache;
 
 public class CustomerDispatchServlet extends HttpServlet
@@ -32,6 +48,7 @@ public class CustomerDispatchServlet extends HttpServlet
    *
    */
    private static final long serialVersionUID = 10002L;
+   private Log log = LogFactory.getLog(CustomerDispatchServlet.class);
 
    public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
    {
@@ -41,33 +58,52 @@ public class CustomerDispatchServlet extends HttpServlet
       {
          req.setCharacterEncoding("UTF-8");
          res.setContentType("text/html");
-         String vAction = (String) req.getParameter(Constants.SRV_ACTION);
-
+         
          HttpSession httpSession = req.getSession();
          WebSession vSession = (WebSession) httpSession.getAttribute(Constants.SESSION_OBJ);
 
          if (vSession == null)
             throw new AccessDeniedException("U bent niet aangemeld.");
-         SessionManager.getInstance().getSession(vSession.getSessionId(), "AdminDispatchServlet(" + vAction + ")");
 
-         AccountEntityData customer = AccountCache.getInstance().get(vSession.getFwdNumber());
+         AccountEntityData customer = AccountCache.getInstance().get(vSession.getSessionFwdNr());
          if (customer == null)
          {
             SessionManager.getInstance().remove(vSession.getSessionId());
             throw new LostSessionException();
          }
 
+         boolean isMultiPart = false;
+         String vAction = null;
+         String uploadedFile = null;
+         FileUploader fileUploader = null;
+         if (ServletFileUpload.isMultipartContent(req))
+         {
+            fileUploader = new FileUploader(req);
+            fileUploader.setStoragePath(Constants.WORKORDER_FILEUPLOAD_DIR + File.separator + Tools.spaces2underscores(customer.getFullName()) + File.separator + "todo");
+            fileUploader.upload(req);
+            isMultiPart = true;
+            log.info("multipart content detected");
+            // getParameter cannot be used anymore. Also not further on.
+            vAction = fileUploader.getFormParameter(Constants.SRV_ACTION);
+         }
+         else
+         {
+            vAction = (String) req.getParameter(Constants.SRV_ACTION);
+         }
+         
+         SessionManager.getInstance().getSession(vSession.getSessionId(), "AdminDispatchServlet(" + vAction + ")");
+
          // String vSessionId = (String) req.getParameter(Constants.SESSION_ID);
          if (vAction == null)
          {
-            throw new SystemErrorException("Interne fout.");
+            throw new SystemErrorException("Interne fout: geen actie in de request.");
          }
          if (vAction.equals(Constants.ACTION_LOGOFF))
          {
             SessionManager.getInstance().remove(vSession.getSessionId());
             throw new LostSessionException();
          }
-
+         
          // if (vSessionId == null)
          // throw new AccessDeniedException("U bent niet aangemeld.");
          // WebSession vSession =
@@ -261,8 +297,81 @@ public class CustomerDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.SEARCH_SHOW_PREV:
             {
-               vSession.decrementMonthsBack();
                rd = sc.getRequestDispatcher(Constants.CLIENT_SEARCH_JSP);
+               break;
+            }
+
+            // ==============================================================================================
+            // GOTO WORKORDERS
+            // ==============================================================================================
+            case Constants.ACTION_GOTO_WORKORDERS:
+            {
+               rd = sc.getRequestDispatcher(Constants.CLIENT_WORKORDERS_JSP);
+               break;
+            }
+
+            // ==============================================================================================
+            // GOTO UPDATE WORKORDER
+            // ==============================================================================================
+            case Constants.ACTION_UPDATE_WORKORDER:
+            {
+               String id = (String) req.getParameter(Constants.WORKORDER_ID);
+               if (id == null || id.isEmpty())
+               {
+                  id = "0";
+               }
+               vSession.setWorkOrderId(Integer.parseInt(id));
+               rd = sc.getRequestDispatcher(Constants.CLIENT_UPDATE_WORKORDER_JSP);
+               break;
+            }
+
+            // ==============================================================================================
+            // SAVE WORKORDER
+            // ==============================================================================================
+            case Constants.ACTION_SAVE_WORKORDER:
+            {
+               TaskFacade.saveWorkOrder(req, vSession);
+               rd = sc.getRequestDispatcher(Constants.CLIENT_WORKORDERS_JSP);
+               break;
+            }
+            
+            // ==============================================================================================
+            // UPLOAD WORKORDER INPUT FILE
+            // ==============================================================================================
+            case Constants.UPLOAD_WORKORDER_FILE:
+            {
+               fileUploader.upload(req);
+               uploadedFile = fileUploader.waitTillFinished();
+               if (TaskFacade.addWorkOrderFile(req, vSession, uploadedFile))
+               {
+                  vSession.setUploadedFileName(uploadedFile);
+                  rd = sc.getRequestDispatcher(Constants.CLIENT_UPDATE_WORKORDER_JSP);
+               }
+               else
+               {
+                  // failed
+                  throw new SystemErrorException("Het bestand kon niet worden opgeladen.");
+               }
+               break;
+            }
+            
+            // ==============================================================================================
+            // DELETE WORKORDER
+            // ==============================================================================================
+            case Constants.ACTION_DELETE_WORKORDER:
+            {
+               TaskFacade.deleteWorkOrder(req, vSession);
+               rd = sc.getRequestDispatcher(Constants.CLIENT_WORKORDERS_JSP);
+               break;
+            }
+
+            // ==============================================================================================
+            // DELETE WORKORDER FILE
+            // ==============================================================================================
+            case Constants.DELETE_WORKORDER_FILE:
+            {
+               TaskFacade.deleteWorkOrderFile(req, vSession);
+               rd = sc.getRequestDispatcher(Constants.CLIENT_UPDATE_WORKORDER_JSP);
                break;
             }
 
@@ -277,6 +386,7 @@ public class CustomerDispatchServlet extends HttpServlet
 
             if (rd == null)
             {
+               log.info("rd is null: assign " + vSession.getCallingJsp());
                rd = sc.getRequestDispatcher(vSession.getCallingJsp());
             }
             rd.forward(req, res);
@@ -308,6 +418,17 @@ public class CustomerDispatchServlet extends HttpServlet
 
    public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
    {
+      
+      Enumeration<String> dataNames = req.getParameterNames();
+      StringBuffer strBuf = new StringBuffer();
+      
+      while (dataNames.hasMoreElements()) 
+      {
+        String parm = (String) dataNames.nextElement();
+        strBuf.append(parm + ":" + req.getParameter(parm) + "; ");
+      }
+      strBuf.append("---------------------------------------\r\n");
+      log.info(strBuf.toString());
       doGet(req, res);
    }
 }

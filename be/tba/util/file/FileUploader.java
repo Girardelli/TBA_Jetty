@@ -1,6 +1,9 @@
 package be.tba.util.file;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Iterator;
 import java.util.List;
 
@@ -12,132 +15,200 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
-import be.tba.util.constants.Constants;
+import be.tba.servlets.FileDownloadServlet;
 import be.tba.util.exceptions.SystemErrorException;
 
 @WebServlet("/upload")
 @MultipartConfig
 public class FileUploader
 {
-    private static final int MAX_MEMORY_SIZE = 1024 * 1024 * 200;
-    private static final int MAX_REQUEST_SIZE = 1024 * 1024 * 100;
-    
-    private String mUploadedFile;
-    private List<FileItem> mItems;
+   private static Log log = LogFactory.getLog(FileUploader.class);
+   /*
+    * This class is used for file upload: from client to server.
+    * Constructor parses the http request and makes the attributes available through
+    * the getFormParameter([attribute name]) method. This method can be used before
+    * starting the actual file transfer with the upload() method.
+    * 
+    * 
+    */
+   
+   private static final int MAX_MEMORY_SIZE = 1024 * 1024 * 200;
+   private static final int MAX_REQUEST_SIZE = 1024 * 1024 * 100;
 
-    public FileUploader(HttpServletRequest request) throws SystemErrorException
-    {
-        // Create a factory for disk-based file items
-        DiskFileItemFactory factory = new DiskFileItemFactory();
+   private String mUploadedFile;
+   private List<FileItem> mItems;
+   private UploadThread mUploadThread;
+   private String mStorePath = "c:\\temp\\TBAuploads";
 
-        // Sets the size threshold beyond which files are written directly to
-        // disk.
-        factory.setSizeThreshold(MAX_MEMORY_SIZE);
+   public FileUploader(HttpServletRequest request) throws SystemErrorException
+   {
+      // Create a factory for disk-based file items
+      DiskFileItemFactory factory = new DiskFileItemFactory();
 
-        // Sets the directory used to temporarily store files that are larger
-        // than the configured size threshold. We use temporary directory for
-        // java
-        factory.setRepository(new File("c:\\temp\\fileuploadtemp"));
-     
-        // Create a new file upload handler
-        ServletFileUpload upload = new ServletFileUpload(factory);
+      // Sets the size threshold beyond which files are written directly to
+      // disk.
+      factory.setSizeThreshold(MAX_MEMORY_SIZE);
 
-        // Set overall request size constraint
-        upload.setSizeMax(MAX_REQUEST_SIZE);
-        
-        try
-        {
-            FileItem uploadedFileItem = null;
-            // Parse the request
-            mItems = upload.parseRequest(request);
-            if (mItems == null)
-            {
-                throw new SystemErrorException("File upload parsing returned null.");
-            }
-            if (mItems.size() == 0)
-            {
-                throw new SystemErrorException("File upload parsing returned 0 file items");
-            }
+      // Sets the directory used to temporarily store files that are larger
+      // than the configured size threshold. We use temporary directory for
+      // java
+      factory.setRepository(new File("c:\\temp\\fileuploadtemp"));
 
-            System.out.println("#fileitems returned: " + mItems.size());
-            Iterator<FileItem> iter = mItems.iterator();
-            while (iter.hasNext())
-            {
-                FileItem item = (FileItem) iter.next();
-                //System.out.println("FileItem: " + item.getName());
-                //System.out.println("fieldname: " + item.getFieldName());
-                
-                if (uploadedFileItem != null)
-                {
-                    continue;
-                }
-                if (!item.isFormField())
-                {
-                    String fileName = item.getName().substring(item.getName().lastIndexOf('\\') + 1);
-                    mUploadedFile = Constants.FILEUPLOAD_DIR + File.separator + fileName;
-                    //System.out.println("File name returned for fileupload: " + mUploadedFile);
-                    File uploadedFile = new File(mUploadedFile);
-                    
-                    // saves the file to upload directory
-                    item.write(uploadedFile);
-                    uploadedFileItem = item;
-                    //System.out.println("File successful written to temp file: " + mUploadedFile);
-                }
-            }
-        }
-        catch (FileUploadException ex)
-        {
-            ex.printStackTrace();
-            throw new SystemErrorException(ex, "FileUploadException");
-        }
-        catch (SystemErrorException ex)
-        {
-            throw ex;
-        }
+      // Create a new file upload handler
+      ServletFileUpload upload = new ServletFileUpload(factory);
 
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-            throw new SystemErrorException(ex, "Exception");
-        }
+      // Set overall request size constraint
+      upload.setSizeMax(MAX_REQUEST_SIZE);
+      try
+      {
+         mItems = upload.parseRequest(request);
+      }
+      catch (FileUploadException e)
+      {
+         e.printStackTrace();
+         throw new SystemErrorException(e, "FileUploadException");
+      }
 
-    }
+   }
 
-    public String getUploadedFileName()
-    {
-        return mUploadedFile;
-    }
-    
-    public String getFormParameter(String name)
-    {
-        Iterator<FileItem> iter = mItems.iterator();
-        while (iter.hasNext())
-        {
+   public void setStoragePath(String path)
+   {
+      mStorePath = path;
+   }
+   
+   public void upload(HttpServletRequest request) throws SystemErrorException
+   {
+      // Parse the request
+      if (mItems == null)
+      {
+         throw new SystemErrorException("File upload parsing returned null.");
+      }
+      if (mItems.size() == 0)
+      {
+         throw new SystemErrorException("File upload parsing returned 0 file items");
+      }
+
+      Path path = Path.of(mStorePath);
+      if (Files.notExists(path))
+      {
+         try
+         {
+            Files.createDirectories(path);
+         }
+         catch (IOException e)
+         {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            throw new SystemErrorException("Bestand kan niet worden opgeladen.");
+         }
+      }
+      System.out.println("#fileitems returned: " + mItems.size());
+      mUploadThread = new UploadThread();
+      mUploadThread.run();
+      return;
+   }
+
+   public String getUploadedFileName()
+   {
+      return mUploadedFile;
+   }
+   
+   public String waitTillFinished()
+   {
+      try
+      {
+         mUploadThread.join();
+      }
+      catch (InterruptedException e)
+      {
+         // TODO Auto-generated catch block
+         e.printStackTrace();
+         log.error("File Upload thread join returned this exception on file: " + mUploadedFile);
+      }
+      return mUploadedFile;
+   }
+
+   public String getFormParameter(String name)
+   {
+      Iterator<FileItem> iter = mItems.iterator();
+      while (iter.hasNext())
+      {
+         FileItem item = (FileItem) iter.next();
+         if (item.isFormField() && item.getFieldName().equals(name))
+         {
+            return item.getString();
+         }
+      }
+      System.out.println("Parameter not found: " + name);
+      return null;
+   }
+
+   public void finalize()
+   {
+      if (mItems != null)
+      {
+         Iterator<FileItem> iter = mItems.iterator();
+         while (iter.hasNext())
+         {
             FileItem item = (FileItem) iter.next();
-            if (item.isFormField() && item.getFieldName().equals(name))
+            log.info("Deleting FileItem: " + item.getFieldName());
+            item.delete();
+         }
+      }
+      mItems = null;
+   }
+   
+   private class UploadThread extends Thread
+   {
+      public UploadThread()
+      {
+         
+      }
+      
+      public void run()
+      {
+         log.info("Upload thread started");
+         FileItem uploadedFileItem = null;
+         Iterator<FileItem> iter = mItems.iterator();
+         while (iter.hasNext())
+         {
+            FileItem item = (FileItem) iter.next();
+            System.out.println("FileItem: " + item.getName());
+            System.out.println("fieldname: " + item.getFieldName());
+
+            if (uploadedFileItem != null)
             {
-                return item.getString();
+               continue;
             }
-        }
-        System.out.println("Parameter not found: " + name);
-        return null;
-    }
-    
-    
-    public void finalize()
-    {
-        if (mItems != null)
-        {
-            Iterator<FileItem> iter = mItems.iterator();
-            while (iter.hasNext())
+            if (!item.isFormField())
             {
-                FileItem item = (FileItem) iter.next();
-                System.out.println("Deleting FileItem: " + item.getFieldName());
-                item.delete();
+               String fileName = item.getName().substring(item.getName().lastIndexOf('\\') + 1);
+               mUploadedFile = mStorePath + File.separator + fileName;
+               // System.out.println("File name returned for fileupload: " + mUploadedFile);
+               File uploadedFile = new File(mUploadedFile);
+
+               // saves the file to upload directory
+               try
+               {
+                  item.write(uploadedFile);
+               }
+               catch (Exception e)
+               {
+                  e.printStackTrace();
+                  log.error("File could not be stored on server: " + item.getFieldName());
+                  continue;
+               }
+               uploadedFileItem = item;
+               // System.out.println("File successful written to temp file: " + mUploadedFile);
             }
-        }
-        mItems = null;
+         }
+         
+      }
+
+      
    }
 
 }

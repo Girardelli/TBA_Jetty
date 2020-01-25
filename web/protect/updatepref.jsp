@@ -23,7 +23,7 @@ private static final int kMaxMailMinutes = 56;%>
 					throw new AccessDeniedException("U bent niet aangemeld bij deze administratie pagina's.");
 
 				vSession.setCallingJsp(Constants.CLIENT_PREF_JSP);
-				vCustomer = AccountCache.getInstance().get(vSession.getFwdNumber());
+				vCustomer = AccountCache.getInstance().get(vSession.getSessionFwdNr());
 				//System.out.println("vCustomer for " + vSession.getFwdNumber() + " is " + vCustomer);
 
 				String vEmail = vCustomer.getEmail();

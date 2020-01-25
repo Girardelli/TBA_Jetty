@@ -125,7 +125,7 @@ public class AccountFacade
         String vEmail = vAccountData.getEmail();
         if (vEmail != null && vEmail.length() > 0)
         {
-            MailerSessionBean.sendMail(session, vAccountData.getId());
+            MailerSessionBean.sendCallInfoMail(session, vAccountData.getId());
         }
     }
 
@@ -306,7 +306,7 @@ public class AccountFacade
     public static void updateCustomerPrefs(WebSession session, HttpServletRequest req)
     {
        AccountSqlAdapter vAccountSession = new AccountSqlAdapter();
-       AccountEntityData vAccount = vAccountSession.getRow(session, AccountCache.getInstance().get(session.getFwdNumber()).getId());
+       AccountEntityData vAccount = vAccountSession.getRow(session, AccountCache.getInstance().get(session.getSessionFwdNr()).getId());
        vAccount.setEmail(req.getParameter(Constants.ACCOUNT_EMAIL));
        vAccount.setInvoiceEmail(req.getParameter(Constants.ACCOUNT_INVOICE_EMAIL));
        vAccount.setGsm(req.getParameter(Constants.ACCOUNT_GSM));

@@ -54,7 +54,7 @@ try
 							<tr>
 								<td width="200" valign="top" class="adminsubsubtitle">sub-klanten</td>
 								<td width="500" valign="top">
-								<select name=<%=Constants.NEW_ACCOUNT_FWDNR%>>
+								<select name=<%=Constants.ACCOUNT_NEW_FWDNR%>>
 <%
 		out.println("<option value=\"" + vFwdNr + "\">" + vFullName);
 		if (vCustomer.getHasSubCustomers())

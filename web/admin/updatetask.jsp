@@ -136,7 +136,7 @@ else
 					src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Uitgevoerd door</td>
 				<td width="580" valign="top">
 <%                  
-	out.println("<select name=\"" + Constants.DONE_BY_EMPL + "\">");
+	out.println("<select name=\"" + Constants.TASK_DONE_BY_EMPL + "\">");
 	Collection<AccountEntityData> emplList = AccountCache.getInstance().getEmployeeList();
 	synchronized(list) 
 	{

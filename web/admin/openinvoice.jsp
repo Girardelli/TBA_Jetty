@@ -4,7 +4,7 @@
 
 <head>
 <meta HTTP-EQUIV="Refresh"
-	content="<%=Constants.REFRESH%>;URL=\tba\admin\admincalls.jsp">
+	content="<%=Constants.REFRESH%>;URL=\tba\admin\openinvoice.jsp">
 </head>
 <%@ page
 	import="java.util.*,
@@ -28,43 +28,20 @@
          try
          {
 			 vSession.setCallingJsp(Constants.OPEN_INVOICE_JSP);
-             InitialContext vContext = new InitialContext();
 %>
 <body>
-<p><span class="admintitle"> Factuurlijst bewerken<br>
-</span></p>
+<table  cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
+    <tr>
+        <!-- white space -->
+        <td valign="top" width="20" bgcolor="FFFFFF"></td>
 
-<!-- 
-
-#file-input {
-  cursor: pointer;
-  outline: none;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 0;
-  height: 0;
-  overflow: hidden;
-  filter: alpha(opacity=0); /* IE < 9 */
-  opacity: 0;
-}
-.input-label {
-  cursor: pointer;
-  position: relative;
-  display: inline-block;
-}
-<label for="file-input" class="input-label">
-  Click Me 
-  <input type="file" id="file-input">
-</label>
+        <!-- account list -->
+        <td valign="top" width="865" bgcolor="FFFFFF"><br>
+        <p><span class="admintitle">Factuurlijst bewerken<br>
+        <br>
 
 
-    <form name="loadfileform" method="POST" action="/tba/AdminDispatch" enctype="multipart/form-data">
-    <input class="tbabutton" type=file name=action value=" Fintro excel opladen " accept=".xlsx">
-    <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.GOTO_OPEN_INVOICE%>">
-    <input class="tbabutton" type=submit name=action value=" Laad de xlsx op " onclick="uploadFile()">
-    </form>
-    -->
+
 	<form name="loadfileform" method="POST" action="/tba/AdminDispatch" enctype="multipart/form-data">
 	<input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.GOTO_OPEN_INVOICE%>"> 
 	<input class="tbabutton" type=file name=<%=Constants.FINTRO_FILE%> value=" Fintro excel opladen " accept=".xlsx">
@@ -79,15 +56,16 @@
 			<td valign="top" bgcolor="FFFFFF">
 				<br>
 			<%
-			   	            // check whether a Fintro file was uploaded
-			   	            String fintroFileName = vSession.getFintroFile();
-			   	            if (fintroFileName != null)
-			   	            {
-			   	                DecimalFormat vCostFormatter = new DecimalFormat("#0.00");
-			   	                FintroXlsxReader fintroXlsxReader = new FintroXlsxReader(fintroFileName);
-			   	                vSession.setFintroFile(null);
-				   	            vSession.setFintroProcessLog(fintroXlsxReader.getOutputFileName());
-				   	         %> 
+			   // check whether a Fintro file was uploaded
+									   	            String fintroFileName = vSession.getUploadedFileName();
+									   	            if (fintroFileName != null)
+									   	            {
+                                                System.out.println("Upload file " + fintroFileName);
+									   	                DecimalFormat vCostFormatter = new DecimalFormat("#0.00");
+									   	                FintroXlsxReader fintroXlsxReader = new FintroXlsxReader(fintroFileName);
+									   	                vSession.setUploadedFileName(null);
+										   	            vSession.setFintroProcessLog(fintroXlsxReader.getOutputFileName());
+			%> 
 				             <br>				   	            
 				   	         <form name="downloadfileform" method="POST" action="/tba/download" >
 						     <input class="tbabutton" type=submit name=action value=" download de procesresultaten hieronder afgedrukt " onclick="downloadProcFile()">
@@ -103,18 +81,22 @@
 			   	            }
 			   	            else if (vSession.getFintroProcessLog() != null && !vSession.getFintroProcessLog().isEmpty())
 			   	            {
-			   	                File outputFile = new File(vSession.getFintroProcessLog());
+			   	               System.out.println("fintroFile = null 1");
+                              File outputFile = new File(vSession.getFintroProcessLog());
 			   	                outputFile.delete();
 			   	                vSession.setFintroProcessLog(null); 
 			   	            }
 			   	            else
 			   	            {
+                              System.out.println("fintroFile = null 2");
 			   	                vSession.setFintroProcessLog(null);
 			   	            }
 %>
 			   	      <form name="openinvoicelistform" method="POST" action="/tba/AdminDispatch">
 			   	      <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.GOTO_OPEN_INVOICE%>"> 
 			   	      <input type=hidden name=<%=Constants.INVOICE_TO_SETPAYED%> value="">
+                      
+                     
 <%
 			                Collection<InvoiceEntityData> vInvoices = null;
 			                InvoiceSqlAdapter vInvoiceSession = new InvoiceSqlAdapter();
@@ -139,6 +121,7 @@
 			<br>
 			<br>
 			<input class="tbabutton" type=submit name=action value=" Betaaldvlag zetten " onclick="setPayed();">
+            </form>
 			<br>
 			<br>
 			<br>
@@ -197,7 +180,9 @@ catch (Exception e)
 		</td>
 	</tr>
 </table>
-</form>
+        </td>
+    </tr>
+</table>
 <br>
 <br>
 <br>

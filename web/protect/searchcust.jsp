@@ -35,18 +35,18 @@ be.tba.util.invoice.InvoiceHelper,
 be.tba.util.session.AccountCache,
 be.tba.util.data.*"%>
 <%
-try
+   try
 {
 
 
 if (vSession == null)
   throw new AccessDeniedException("U bent niet aangemeld bij deze administratie pagina's.");
 vSession.setCallingJsp(Constants.CLIENT_SEARCH_JSP);  
-AccountEntityData vAccount = AccountCache.getInstance().get(vSession.getFwdNumber());
+AccountEntityData vAccount = AccountCache.getInstance().get(vSession.getSessionFwdNr());
 
 boolean vCustomerFilterOn = false;
 
-String vCustomerFilter = (String) vSession.getFwdNumber();//request.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER);
+String vCustomerFilter = (String) vSession.getSessionFwdNr();//request.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER);
 if (vCustomerFilter != null)
 {
   if (vCustomerFilter.equals(Constants.ACCOUNT_FILTER_ALL))
@@ -54,7 +54,6 @@ if (vCustomerFilter != null)
 }
 
 if (vCustomerFilter == null) vCustomerFilter = Constants.ACCOUNT_FILTER_ALL;
-
 %>
 <table  cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
     <tr>

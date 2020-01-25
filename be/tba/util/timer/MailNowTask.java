@@ -61,12 +61,12 @@ final public class MailNowTask
                 String vEmail = mAccountData.getEmail();
                 if (vEmail != null && vEmail.length() > 0)
                 {
-                    if (!MailerSessionBean.sendMail(session, mAccountData.getId()))
+                    if (!MailerSessionBean.sendCallInfoMail(session, mAccountData.getId()))
             		{
                     	System.out.println("MailNowThread sendmail failed: wait 5 sec and retry");
                     	// wait another 5 seconds an retry once
                     	Thread.sleep(5000);
-                        if (!MailerSessionBean.sendMail(session, mAccountData.getId()))
+                        if (!MailerSessionBean.sendCallInfoMail(session, mAccountData.getId()))
                 		{
                         	System.out.println("MailNowThread sendmail failed again");
                 		}

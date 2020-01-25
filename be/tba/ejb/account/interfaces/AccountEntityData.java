@@ -920,16 +920,6 @@ public class AccountEntityData extends be.tba.util.data.AbstractData implements 
     	this.callProcessInfo = info;
     }
     
-    public String toString()
-    {
-        StringBuffer str = new StringBuffer("{");
-
-        str.append(toNameValueString().toString());
-        str.append('}');
-
-        return (str.toString());
-    }
-
     public String toNameValueString()
     {
         StringBuffer str = new StringBuffer();

@@ -45,6 +45,8 @@ final public class WebSession implements Serializable
     private String mId = "";
 
     private long mLastAccess = 0;
+    
+    private int mWorkOrderId = 0;
 
     private String mFwdNumber = null;
 
@@ -54,7 +56,8 @@ final public class WebSession implements Serializable
 
     private TaskEntityData mCurrentTask = null;
 
-    private String mCurrentAccountId = null;
+    private int mCurrentAccountId = 0;
+    private String mCurrentAccountFwdNr = null;
 
     private AccountEntityData mNewAccount = null;
 
@@ -81,7 +84,7 @@ final public class WebSession implements Serializable
     
     private String mRecordId = null;
 
-    private String mFintroFileName = null;
+    private String mUploadedFileName = null;
     
     private String mFintroProcessLog = null;
     private long mSqlTimer = 0;
@@ -187,12 +190,12 @@ final public class WebSession implements Serializable
         return mCallFilter;
     }
 
-    public void setFwdNumber(String fwdNr)
+    public void setSessionFwdNr(String fwdNr)
     {
         mFwdNumber = fwdNr;
     }
 
-    public String getFwdNumber()
+    public String getSessionFwdNr()
     {
         return mFwdNumber;
     }
@@ -227,12 +230,12 @@ final public class WebSession implements Serializable
         return mCurrentTask;
     }
 
-    public void setCurrentAccountId(String rec)
+    public void setCurrentAccountId(int id)
     {
-        mCurrentAccountId = rec;
+        mCurrentAccountId = id;
     }
 
-    public String getCurrentAccountId()
+    public int getCurrentAccountId()
     {
         return mCurrentAccountId;
     }
@@ -241,7 +244,7 @@ final public class WebSession implements Serializable
     {
         mCurrentJsp = page;
     }
-
+    
     public String getCallingJsp()
     {
         return mCurrentJsp;
@@ -277,14 +280,14 @@ final public class WebSession implements Serializable
         return mSearchString;
     }
 
-    public void setFintroFile(String fintroFile)
+    public void setUploadedFileName(String fintroFile)
     {
-        mFintroFileName = fintroFile;
+        mUploadedFileName = fintroFile;
     }
 
-    public String getFintroFile()
+    public String getUploadedFileName()
     {
-        return mFintroFileName;
+        return mUploadedFileName;
     }
 
     public void setDaysBack(int cnt)
@@ -343,6 +346,16 @@ final public class WebSession implements Serializable
     public int getInvoiceId()
     {
         return mInvoiceId;
+    }
+
+    public void setWorkOrderId(int id)
+    {
+       mWorkOrderId = id;
+    }
+
+    public int getWorkOrderId()
+    {
+        return mWorkOrderId;
     }
 
     public int incrementMonthsBack()

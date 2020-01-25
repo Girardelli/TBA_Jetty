@@ -20,8 +20,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import be.tba.ejb.account.interfaces.AccountEntityData;
 import be.tba.ejb.account.session.AccountSqlAdapter;
+import be.tba.servlets.helper.TaskFacade;
 import be.tba.servlets.session.SessionManager;
 import be.tba.servlets.session.WebSession;
 import be.tba.util.constants.AccountRole;
@@ -37,6 +41,7 @@ public class LoginServlet extends HttpServlet
      *
      */
     private static final long serialVersionUID = 8497444764812881017L;
+    private  Log log = LogFactory.getLog(LoginServlet.class);
 
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
     {
@@ -55,8 +60,11 @@ public class LoginServlet extends HttpServlet
 
             String vAction = (String) req.getParameter(Constants.SRV_ACTION);
             if (vAction == null)
+            {
                 vAction = (String) req.getAttribute(Constants.SRV_ACTION);
-
+                log.error(Constants.SRV_ACTION + "=" + vAction);
+                throw new Exception("getAttribute called");
+            }
             //System.out.println("LoginServlet: action=" + vAction);
 
             sc = getServletContext();
@@ -110,7 +118,8 @@ public class LoginServlet extends HttpServlet
 
                     vSession.init(vUserId, vKey);
                     vSession.setRole(AccountRole.fromShort(vAccount.getRole()));
-                    vSession.setFwdNumber(vAccount.getFwdNumber());
+                    vSession.setSessionFwdNr(vAccount.getFwdNumber());
+                    vSession.setCurrentAccountId(vAccount.getId());
                     Calendar calendar = Calendar.getInstance();
                     vSession.setYear(calendar.get(Calendar.YEAR));
                     vSession.setMonthsBack(calendar.get(Calendar.MONTH));
@@ -156,8 +165,8 @@ public class LoginServlet extends HttpServlet
                         String vKey = SessionManager.getInstance().add(vSession);
                         vSession.init(vUserId, vKey);
                         vSession.setRole(AccountRole.CUSTOMER);
-                        vSession.setFwdNumber(req.getParameter(Constants.ACCOUNT_REGCODE));
-
+                        vSession.setSessionFwdNr(req.getParameter(Constants.ACCOUNT_REGCODE));
+                        vSession.setCurrentAccountId(AccountCache.getInstance().get(vSession.getSessionFwdNr()).getId());
                         // req.setAttribute(Constants.SESSION_ID, vKey);
                         // req.setAttribute(Constants.SESSION_OBJ, vSession);
                         rd = sc.getRequestDispatcher(Constants.CLIENT_CALLS_JSP);
@@ -267,7 +276,8 @@ public class LoginServlet extends HttpServlet
             else
             {
                 vAccount = vAccountSession.logIn(session, vRegData.getUserId(), vRegData.getPassword());
-                session.setFwdNumber(vAccount.getFwdNumber());
+                session.setSessionFwdNr(vAccount.getFwdNumber());
+                session.setCurrentAccountId(vAccount.getId());
                 AccountCache.getInstance().update(session);
             }
         }

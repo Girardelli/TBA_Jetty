@@ -1,16 +1,36 @@
 package be.tba.servlets.helper;
 
+import java.io.File;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Enumeration;
 import java.util.StringTokenizer;
 import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import be.tba.ejb.account.interfaces.AccountEntityData;
+import be.tba.ejb.mail.session.MailerSessionBean;
+import be.tba.ejb.task.interfaces.FileLocationData;
 import be.tba.ejb.task.interfaces.TaskEntityData;
+import be.tba.ejb.task.interfaces.WorkOrderData;
+import be.tba.ejb.task.session.FileLocationSqlAdapter;
 import be.tba.ejb.task.session.TaskSqlAdapter;
+import be.tba.ejb.task.session.WorkOrderSqlAdapter;
+import be.tba.servlets.AdminDispatchServlet;
 import be.tba.servlets.session.WebSession;
+import be.tba.util.constants.AccountRole;
 import be.tba.util.constants.Constants;
+import be.tba.util.session.AccountCache;
+import be.tba.util.timer.CallCalendar;
 
 public class TaskFacade
 {
-    public static void deleteTask(HttpServletRequest req, WebSession session)
+   private static Log log = LogFactory.getLog(TaskFacade.class);
+   private static String kMailBody = "Beste,<br><br>Wij hebben uw opdracht opgeleverd. U kan het opgeleverde werk downloaden van ons portaal na dat u u hebt aangemeld.<br><br>Vriendelijke groeten<br><br>Het TBA team";
+ 
+   public static void deleteTask(HttpServletRequest req, WebSession session)
     {
         String vLtd = (String) req.getParameter(Constants.TASK_TO_DELETE);
         StringTokenizer vStrTok = new StringTokenizer(vLtd, ",");
@@ -58,7 +78,7 @@ public class TaskFacade
             }
 
             vTask.setFwdNr((String) req.getParameter(Constants.TASK_FORWARD_NUMBER));
-            vTask.setDoneBy((String) req.getParameter(Constants.DONE_BY_EMPL));
+            vTask.setDoneBy((String) req.getParameter(Constants.TASK_DONE_BY_EMPL));
             vTask.setDate((String) req.getParameter(Constants.TASK_DATE));
             vTask.setDescription((String) req.getParameter(Constants.TASK_DESCRIPTION));
             String tmp = (String) req.getParameter(Constants.TASK_TIME_SPEND);
@@ -102,7 +122,7 @@ public class TaskFacade
     {
         TaskEntityData newTask = new TaskEntityData();
         newTask.setFwdNr((String) req.getParameter(Constants.TASK_FORWARD_NUMBER));
-        newTask.setDoneBy((String) req.getParameter(Constants.DONE_BY_EMPL));
+        newTask.setDoneBy((String) req.getParameter(Constants.TASK_DONE_BY_EMPL));
         newTask.setDate((String) req.getParameter(Constants.TASK_DATE));
         newTask.setTimeStamp(dateStr2Timestamp(newTask.getDate()));
 
@@ -146,21 +166,188 @@ public class TaskFacade
         vTaskSession.addRow(session, newTask);
     }
 
+    public static int saveWorkOrder(HttpServletRequest req, WebSession session)
+    {
+       int id = 0;
+       WorkOrderSqlAdapter vWorkOrderSession = new WorkOrderSqlAdapter();
+       String idStr = (String) req.getParameter(Constants.WORKORDER_ID);
+       String dueDate = (String) req.getParameter(Constants.WORKORDER_DUEDATE);
+       if (dueDate != null && dueDate.contains("-"))
+       {
+          dueDate = CallCalendar.calendarStrTbaStr(dueDate);
+       }
+       
+       
+       if (idStr != null && !idStr.isEmpty() && !idStr.equals("0"))       
+       {
+          // update entry
+          WorkOrderData workorder = vWorkOrderSession.getRow(session, Integer.parseInt(idStr));
+          workorder.title = (String) req.getParameter(Constants.WORKORDER_TITLE);
+          workorder.instructions = (String) req.getParameter(Constants.WORKORDER_INSTRUCTION);
+          workorder.dueDate = dueDate;
+          if (session.getRole() == AccountRole.ADMIN || session.getRole() == AccountRole.EMPLOYEE)
+          {
+             WorkOrderData.State oldState = workorder.state;
+             workorder.state = WorkOrderData.StateStr2Enum((String) req.getParameter(Constants.WORKORDER_STATE));
+             if (workorder.state == WorkOrderData.State.kDone && oldState != workorder.state)
+             {
+                MailerSessionBean.sendMail(session, workorder.accountId, "Uw opdracht is opgeleverd", kMailBody);
+             }
+          }
+          vWorkOrderSession.updateRow(session, workorder);
+          TaskFacade.log.info("old idStr=" + idStr + ", " + workorder.toString());
+          id = workorder.id;
+       }
+       else
+       {
+          // new entry
+          WorkOrderData workorder = new WorkOrderData();
+          AccountEntityData vAccountData = AccountCache.getInstance().get(session.getCurrentAccountId());
+          workorder.accountId = vAccountData.getId();
+          workorder.title = (String) req.getParameter(Constants.WORKORDER_TITLE);
+          workorder.instructions = (String) req.getParameter(Constants.WORKORDER_INSTRUCTION);
+          workorder.dueDate = dueDate;
+          id = vWorkOrderSession.addRow(session, workorder);
+          TaskFacade.log.info("new idStr=" + idStr + ", " + workorder.toString());
+          
+          MailerSessionBean.sendMail(session, 0, "Nieuwe opdracht van " + vAccountData.getFullName(), "");
+       }
+       return id;
+    }
+
+    public static void setWorkOrderState(HttpServletRequest req, WebSession session)
+    {
+       WorkOrderSqlAdapter vWorkOrderSession = new WorkOrderSqlAdapter();
+       int workorderId = Integer.parseInt((String) req.getParameter(Constants.WORKORDER_ID));
+       WorkOrderData workorder = null;
+       if (workorderId > 0)
+       {
+          workorder = vWorkOrderSession.getRow(session, workorderId);
+          workorder.state = WorkOrderData.StateStr2Enum((String) req.getParameter(Constants.WORKORDER_STATE));
+          if (workorder.state == WorkOrderData.State.kDone && workorder.taskId == 0)
+          {
+             Calendar vCalendar = Calendar.getInstance();
+             String date = String.format("%02d/%02d/%04d", vCalendar.get(Calendar.DAY_OF_MONTH), vCalendar.get(Calendar.MONTH), vCalendar.get(Calendar.YEAR));
+             TaskSqlAdapter taskSession = new TaskSqlAdapter();
+             TaskEntityData task = new TaskEntityData();
+             task.setDoneBy(session.getUserId());
+             task.setAccountId(workorder.accountId);
+             task.setDescription(workorder.title);
+             task.setDate(date);
+             task.setTimeStamp(vCalendar.getTimeInMillis());
+             workorder.taskId = taskSession.addRow(session, task);
+          }
+          vWorkOrderSession.updateRow(session, workorder);
+       }
+       else
+       {
+          log.error("setWorkOrderState failed because workorder.id = 0");
+       }
+    }
+    
+    public static void deleteWorkOrder(HttpServletRequest req, WebSession session)
+    {
+       WorkOrderSqlAdapter vWorkOrderSession = new WorkOrderSqlAdapter();
+       int workorderId = Integer.parseInt((String) req.getParameter(Constants.WORKORDER_ID));
+       WorkOrderData workorder = null;
+       if (workorderId > 0)
+       {
+          workorder = vWorkOrderSession.getRow(session, workorderId);
+          if (workorder != null)
+          {
+             FileLocationSqlAdapter fileLocationSession = new FileLocationSqlAdapter();
+             Collection<FileLocationData> inputFiles = fileLocationSession.getInputFiles(session, workorderId);
+             Collection<FileLocationData> outputFiles = fileLocationSession.getOutputFiles(session, workorderId);
+             
+             if (inputFiles.size() > 0 || outputFiles.size() > 0)
+             {
+                
+             }
+             vWorkOrderSession.deleteRow(session, workorderId);
+          }
+       }
+       else
+       {
+          log.error("setWorkOrderState failed because workorder.id = 0");
+       }
+    }
+
+    public static boolean addWorkOrderFile(HttpServletRequest req, WebSession session, String fullFilePath)
+    {
+       FileLocationSqlAdapter fileLocationSession = new FileLocationSqlAdapter();
+       int workorderId = saveWorkOrder(req, session);
+       
+       if (workorderId > 0)
+       {
+          File file = new File(fullFilePath);
+          
+          FileLocationData fileData = new FileLocationData();
+          fileData.size = (int) file.length() / 1000;
+          fullFilePath = fullFilePath.replace('\\', '/');
+          fileData.storagePath = fullFilePath;
+          fileData.name = fullFilePath.substring(fullFilePath.lastIndexOf('/') + 1);
+          fileData.workorderId = workorderId;
+          if (session.getRole() == AccountRole.ADMIN || session.getRole() == AccountRole.EMPLOYEE)
+          {
+             fileData.inOrOut = FileLocationData.kOutput;
+          }
+          else
+          {
+             fileData.inOrOut = FileLocationData.kInput;
+          }
+          return (fileLocationSession.addRow(session, fileData) > 0);
+       }
+       else
+       {
+          log.error("addWorkOrderFile failed because workorder.id = 0");
+       }
+       return false;
+     }
+    
+    public static boolean deleteWorkOrderFile(HttpServletRequest req, WebSession session)
+    {
+       FileLocationSqlAdapter fileLocationSession = new FileLocationSqlAdapter();
+       FileLocationData fileData = fileLocationSession.getRow(session, Integer.parseInt(req.getParameter(Constants.WORKORDER_FILE_ID)));
+       File file = new File(fileData.storagePath); 
+       boolean res = true;
+       if(file.delete()) 
+       { 
+          log.info(fileData.storagePath + " deleted successfully"); 
+       } 
+       else
+       { 
+          log.error(fileData.storagePath +  " could not be deleted"); 
+          res = false;
+       } 
+       
+       fileLocationSession.deleteRow(session, fileData.id);
+       return res;
+     }
+
+    /* expectes a date like this: dd/mm/yyyy */
     private static long dateStr2Timestamp(String date)
     {
-        int vIndex = date.indexOf('/');
-        String vDayString = date.substring(0, vIndex);
-        int vDay = Integer.parseInt(vDayString);
-        int vIndex_2 = date.indexOf('/', ++vIndex);
-        String vMonthString = date.substring(vIndex, vIndex_2);
-        int vMonth = Integer.parseInt(vMonthString) - 1;
-        int vYear = Integer.parseInt(date.substring(++vIndex_2));
-        if (vYear < 2000)
-        {
-            vYear += 2000;
-        }
-        Calendar vCalendar = Calendar.getInstance();
-        vCalendar.set(vYear, vMonth, vDay);
-        return vCalendar.getTimeInMillis();
+       Calendar vCalendar = Calendar.getInstance();
+       try
+       {
+          int vIndex = date.indexOf('/');
+           String vDayString = date.substring(0, vIndex);
+           int vDay = Integer.parseInt(vDayString);
+           int vIndex_2 = date.indexOf('/', ++vIndex);
+           String vMonthString = date.substring(vIndex, vIndex_2);
+           int vMonth = Integer.parseInt(vMonthString) - 1;
+           int vYear = Integer.parseInt(date.substring(++vIndex_2));
+           if (vYear < 2000)
+           {
+               vYear += 2000;
+           }
+           vCalendar.set(vYear, vMonth, vDay);
+       }
+       catch (Exception ex)
+       {
+          ex.printStackTrace();
+          // the now date shall be returned
+       }
+       return vCalendar.getTimeInMillis();
     }
 }

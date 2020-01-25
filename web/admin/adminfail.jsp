@@ -51,7 +51,7 @@ if (vErrorMessage == null && exception != null)
   vErrorMessage = exception.getMessage();
 if (vErrorMessage == null)
   vErrorMessage = "Een error werd gedetecteerd.";
-
+System.out.println("error msg: " + vErrorMessage);
 %>
 
 	<tr valign="top">

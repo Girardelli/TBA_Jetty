@@ -38,9 +38,6 @@ try
 	}
 	Map<String, GeneratedCost> performanceMap = new HashMap<String, GeneratedCost>();
     vSession.setCallingJsp(Constants.ADMIN_EMPLOYEE_COST_JSP);
-	
-	InitialContext vContext = new InitialContext();
-
 %>
 <body>
 <table  cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">

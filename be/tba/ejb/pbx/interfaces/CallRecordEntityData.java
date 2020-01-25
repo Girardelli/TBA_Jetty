@@ -357,16 +357,6 @@ public class CallRecordEntityData extends AbstractData
         this.tsEnd = tsEnd;
     }    
 
-    public String toString()
-    {
-        StringBuffer str = new StringBuffer("{");
-
-        str.append(toNameValueString().toString());
-        str.append('}');
-
-        return (str.toString());
-    }
-
     public String toNameValueString()
     {
         StringBuffer str = new StringBuffer();

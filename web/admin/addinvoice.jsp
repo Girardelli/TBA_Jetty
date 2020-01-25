@@ -66,11 +66,18 @@
         
 %>
 <body>
+<table  cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
+    <tr>
+        <!-- white space -->
+        <td valign="top" width="20" bgcolor="FFFFFF"></td>
 
-<p><span class="admintitle">&nbsp;&nbsp;&nbsp;Manueel facturen toevoegen <%=(vAccountData == null)? "Selecteer een klant en maand." : "" %><br>
-<br>
-<br>
-</span></p>
+        <!-- account list -->
+        <td valign="top" width="865" bgcolor="FFFFFF"><br>
+        <p><span class="admintitle">Manueel facturen toevoegen <%=(vAccountData == null)? "Selecteer een klant en maand." : "" %><br>
+        <br>
+        <br>
+        </span></p>
+
 <form name="invoiceform" method="POST" action="/tba/AdminDispatch">
 <table  width="100%" cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
 
@@ -167,6 +174,9 @@
     </tr>
 </table>
 </form>
+        </td>
+    </tr>
+</table>
 
 <%       
     }

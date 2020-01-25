@@ -987,7 +987,9 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
       PhoneMapManager.getInstance().updateOperatorMapping(data, webSession);
       StringBuffer sqlCmd = new StringBuffer("UPDATE CallRecordEntity SET IsAgendaCall=");
       sqlCmd.append(data.getIsAgendaCall());
-      sqlCmd.append(",IsSmsCall=" + data.getIsSmsCall());
+      sqlCmd.append(",AccountID=" + data.getAccountId());
+      sqlCmd.append(",FwdNr='" + data.getFwdNr());
+      sqlCmd.append("',IsSmsCall=" + data.getIsSmsCall());
       sqlCmd.append(",IsForwardCall=" + data.getIsForwardCall());
       sqlCmd.append(",IsImportantCall=" + data.getIsImportantCall());
       sqlCmd.append(",IsFaxCall=" + data.getIsFaxCall());

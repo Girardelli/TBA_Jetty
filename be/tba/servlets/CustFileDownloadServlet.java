@@ -32,9 +32,9 @@ import be.tba.util.exceptions.AccessDeniedException;
 import be.tba.util.exceptions.LostSessionException;
 import be.tba.util.file.FileUploader;
 
-public class FileDownloadServlet extends HttpServlet
+public class CustFileDownloadServlet extends HttpServlet
 {
-   private static Log log = LogFactory.getLog(FileDownloadServlet.class);
+   private static Log log = LogFactory.getLog(CustFileDownloadServlet.class);
    /**
     * this servlet only takes care of file downloads : hat is from server to client (browser)
     * The file uploads are taken care of by the jsp page servlets
@@ -53,14 +53,16 @@ public class FileDownloadServlet extends HttpServlet
 
          SessionManager.getInstance().getSession(vSession.getSessionId(), "FileDownloadServlet()");
 
-         System.out.println("\nFileDownloadServlet (http session: " + vSession + "): userid:" + vSession.getUserId() + ", websessionid:" + vSession.getSessionId());
-
          synchronized (vSession)
          {
             // You must tell the browser the file type you are going to send
             // for example application/pdf, text/plain, text/html, image/jpg
             response.setContentType("text/plain");
 
+            // parsing the multipart content must be done before any getXXX call on the
+            // request
+            // because such getXXX calls will implicitly call the parser which can only be
+            // called once.
             String vAction = (String) request.getParameter(Constants.SRV_ACTION);
 
             // ==============================================================================================
@@ -68,65 +70,6 @@ public class FileDownloadServlet extends HttpServlet
             // ==============================================================================================
             switch (vAction)
             {
-            case Constants.DOWNLOAD_FINTRO_PROCESS_TXT:
-            {
-               if (vSession.getRole() != AccountRole.ADMIN)
-               {
-                  throw new AccessDeniedException("access denied for " + vSession.getUserId());
-               }
-               if (vSession.getFintroProcessLog() == null)
-               {
-                  throw new AccessDeniedException("Er is geen Fintro proces log beschikbaar");
-               }
-               // Make sure to show the download dialog
-               response.setHeader("Content-disposition", "attachment; filename=" + vSession.getFintroProcessLog().substring(vSession.getFintroProcessLog().lastIndexOf('\\') + 1, vSession.getFintroProcessLog().length()));
-               downloadFile(vSession.getFintroProcessLog(), response.getOutputStream(), true);
-               break;
-            }
-            case Constants.DOWNLOAD_WK_VERKOPEN_XML:
-            {
-               if (vSession.getRole() != AccountRole.ADMIN)
-               {
-                  throw new AccessDeniedException("access denied for " + vSession.getUserId());
-               }
-               // Make sure to show the download dialog
-               File file = InvoiceFacade.generateInvoiceXml(request, vSession);
-               response.setHeader("Content-disposition", "attachment; filename=" + Constants.WC_VERKOPEN_XML);
-               downloadFile(file.getAbsolutePath(), response.getOutputStream(), true);
-               break;
-            }
-            case Constants.DOWNLOAD_WK_KLANTEN_XML:
-            {
-               if (vSession.getRole() != AccountRole.ADMIN)
-               {
-                  throw new AccessDeniedException("access denied for " + vSession.getUserId());
-               }
-               // Make sure to show the download dialog
-               File file = AccountFacade.generateKlantenXml(request, vSession);
-               response.setHeader("Content-disposition", "attachment; filename=" + Constants.WC_KLANTEN_XML);
-               downloadFile(file.getAbsolutePath(), response.getOutputStream(), true);
-               break;
-            }
-            case Constants.DOWNLOAD_FACTUUR:
-            {
-               if (vSession.getRole() != AccountRole.ADMIN)
-               {
-                  throw new AccessDeniedException("access denied for " + vSession.getUserId());
-               }
-               int vInvoiceId = vSession.getInvoiceId();
-               if (vInvoiceId > 0)
-               {
-                  InvoiceSqlAdapter vInvoiceSession = new InvoiceSqlAdapter();
-                  InvoiceEntityData vInvoiceData = vInvoiceSession.getInvoiceById(vSession, vInvoiceId);
-                  if (vInvoiceData != null)
-                  {
-                     File file = new File(vInvoiceData.getFileName());
-                     response.setHeader("Content-disposition", "attachment; filename=" + vInvoiceData.getInvoiceNr() + ".pdf");
-                     downloadFile(file.getAbsolutePath(), response.getOutputStream(), false);
-                  }
-               }
-               break;
-            }
             case Constants.DOWNLOAD_WORKORDER_FILE:
             {
                FileLocationSqlAdapter fileLocationSession = new FileLocationSqlAdapter();
@@ -156,21 +99,21 @@ public class FileDownloadServlet extends HttpServlet
       catch (AccessDeniedException e)
       {
          e.printStackTrace();
-         rd = sc.getRequestDispatcher(Constants.ADMIN_FAIL_JSP);
+         rd = sc.getRequestDispatcher(Constants.PROTECT_FAIL_JSP);
          request.setAttribute(Constants.ERROR_TXT, e.getMessage());
          rd.forward(request, response);
       }
       catch (LostSessionException e)
       {
          e.printStackTrace();
-         rd = sc.getRequestDispatcher(Constants.ADMIN_LOGIN);
+         rd = sc.getRequestDispatcher(Constants.LOGIN_HTML);
          rd.forward(request, response);
       }
       catch (Exception e)
       {
          System.out.println("URI:" + request.getRequestURI() + "?" + request.getQueryString());
          e.printStackTrace();
-         rd = sc.getRequestDispatcher(Constants.ADMIN_FAIL_JSP);
+         rd = sc.getRequestDispatcher(Constants.PROTECT_FAIL_JSP);
          request.setAttribute(Constants.ERROR_TXT, "Het bestand dat je wil downloaden is niet beschikbaar. ");
          rd.forward(request, response);
          System.out.println("forwarded to fail page");

@@ -35,8 +35,6 @@ vSession.setCallingJsp(Constants.ADMIN_TASK_JSP);
 
 String vCustomerFilter = (String) vSession.getCallFilter().getCustFilter();//request.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER);
 
-InitialContext vContext = new InitialContext();
-
 if (vCustomerFilter == null) vCustomerFilter = Constants.ACCOUNT_FILTER_ALL;
 %>
 <body>

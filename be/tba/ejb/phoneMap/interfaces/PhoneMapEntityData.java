@@ -67,11 +67,6 @@ public class PhoneMapEntityData extends be.tba.util.data.AbstractData implements
        result = 37 * result + ((this.phoneId != null) ? this.phoneId.hashCode() : 0);
        return result;
    }
-   
-   public String toString()
-   {
-       return "PhoneMapEntityData [id=" + id + ", phoneId=" + phoneId + ", userId=" + userId + "]";
-   }
 
    @Override
    public int getId()

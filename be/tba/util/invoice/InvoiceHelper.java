@@ -19,6 +19,7 @@ import be.tba.servlets.session.WebSession;
 import be.tba.util.constants.Constants;
 import be.tba.util.session.AccountCache;
 import be.tba.util.timer.CallCalendar;
+import be.tba.util.common.Tools;
 
 import java.util.Hashtable;
 
@@ -884,9 +885,9 @@ public class InvoiceHelper
     {
         AccountEntityData account = AccountCache.getInstance().get(invoiceData);
         if (account != null)
-            return new String(Constants.INVOICE_DIR + invoiceData.getYear() + "\\" + Constants.MONTHS[invoiceData.getMonth()] + "\\Fac" + getInvoiceNumber(invoiceData.getYear(), invoiceData.getMonth(), invoiceData.getYearSeqNr()) + "-" + spaces2underscores(account.getFullName()) + ".pdf");
+            return new String(Constants.INVOICE_DIR + invoiceData.getYear() + "\\" + Constants.MONTHS[invoiceData.getMonth()] + "\\Fac" + getInvoiceNumber(invoiceData.getYear(), invoiceData.getMonth(), invoiceData.getYearSeqNr()) + "-" + Tools.spaces2underscores(account.getFullName()) + ".pdf");
         else if (invoiceData.getCustomerName().length() > 0)
-            return new String(Constants.INVOICE_DIR + invoiceData.getYear() + "\\" + Constants.MONTHS[invoiceData.getMonth()] + "\\Fac" + getInvoiceNumber(invoiceData.getYear(), invoiceData.getMonth(), invoiceData.getYearSeqNr()) + "-" + spaces2underscores(invoiceData.getCustomerName()) + ".pdf");
+            return new String(Constants.INVOICE_DIR + invoiceData.getYear() + "\\" + Constants.MONTHS[invoiceData.getMonth()] + "\\Fac" + getInvoiceNumber(invoiceData.getYear(), invoiceData.getMonth(), invoiceData.getYearSeqNr()) + "-" + Tools.spaces2underscores(invoiceData.getCustomerName()) + ".pdf");
         return "";
     }
 
@@ -1077,14 +1078,6 @@ public class InvoiceHelper
         }
     }
 
-    static private String spaces2underscores(String aName)
-    {
-        String name = aName.replace(' ', '_');
-        name = name.replace(';', '_');
-        name = name.replace(':', '_');
-        name = name.replace(',', '_');
-        return name;
-    }
 
     static public long duration2Seconds(String duration)
     {

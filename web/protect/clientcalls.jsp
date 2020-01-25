@@ -48,17 +48,17 @@ allEntryIds = new StringBuilder("[");
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="archiveButton" class="tbabutton" type="submit" value="Archiveer" onclick="archive()"> 
         </span></p>
 <%
-  if (vSession == null)
+   if (vSession == null)
     throw new AccessDeniedException("U bent niet aangemeld.");
   vSession.setCallingJsp(Constants.CLIENT_CALLS_JSP);  
-  if (vSession.getFwdNumber() == null)
+  if (vSession.getSessionFwdNr() == null)
     throw new AccessDeniedException("Account nummer not set in session.");
 
   CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
 
-  Collection<CallRecordEntityData> vRecords = vQuerySession.getxWeeksBackIncludingSubcustomer(vSession, vSession.getDaysBack(), vSession.getFwdNumber(), false);
+  Collection<CallRecordEntityData> vRecords = vQuerySession.getxWeeksBackIncludingSubcustomer(vSession, vSession.getDaysBack(), vSession.getSessionFwdNr(), false);
   
-  AccountEntityData vAccount = AccountCache.getInstance().get(vSession.getFwdNumber());
+  AccountEntityData vAccount = AccountCache.getInstance().get(vSession.getSessionFwdNr());
 %>
 <input class="tbabutton" type=submit value="Vorige Oproepen" onclick="showPrevious()"> 
 <%
@@ -155,7 +155,7 @@ if (vAccount != null && vAccount.getHasSubCustomers())
       else
         vInOut = "\"/tba/images/outcall.gif\"";
 %>
-	<tr bgcolor="FFCC66" id=<%=vId%> class="bodytekst" onclick="updateArchiveFlag('<%=vId%>','<%=vEntry.getId()%>','<%=vRowInd%>')"
+	<tr bgcolor="FFCC66" id=<%=vId%> class="bodytekst" title="dubbele muisklik om de oproep te openen" onclick="updateArchiveFlag('<%=vId%>','<%=vEntry.getId()%>','<%=vRowInd%>')"
 		ondblclick="changeUrl('/tba/CustomerDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACTION_GOTO_RECORD_UPDATE%>&<%=Constants.RECORD_ID%>=<%=vEntry.getId()%>');">
 		<td width="30" bgcolor="FFFFFF"><img src=<%=vInOut%> height="13" border="0"></td>
 		<td width="65" valign="top"><%=vDate%></td>

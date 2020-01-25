@@ -32,7 +32,6 @@ Last Checked In By: $Author: Yves Willems $
 		be.tba.util.data.*,
 		java.text.*"%>
 
-<%!private String vAccountKey;%>
 <%
 	try
 	{
@@ -54,23 +53,21 @@ Last Checked In By: $Author: Yves Willems $
 			    <span class="admintitle"> Uitgevoerde taken:</span>
 			</p>			
 			 <%
- 	InitialContext vContext = new InitialContext();
+						    if (vSession == null)
+						 						  			throw new AccessDeniedException("U bent niet aangemeld.");
+						 						  		vSession.setCallingJsp(Constants.CLIENT_SHOW_TASKS_JSP);  
+						 						  		  
+						 						  		if (vSession.getSessionFwdNr() == null)
+						 						  			throw new AccessDeniedException(
+						 						  			        "Account nummer not set in session.");
 
- 		if (vSession == null)
- 			throw new AccessDeniedException("U bent niet aangemeld.");
- 		vSession.setCallingJsp(Constants.CLIENT_SHOW_TASKS_JSP);  
- 		  
- 		if (vSession.getFwdNumber() == null)
- 			throw new AccessDeniedException(
- 			        "Account nummer not set in session.");
+						 						  		Collection<TaskEntityData> vTasks = null;
+						 						  		TaskSqlAdapter vTaskSession = new TaskSqlAdapter();
 
- 		Collection<TaskEntityData> vTasks = null;
- 		TaskSqlAdapter vTaskSession = new TaskSqlAdapter();
+						 						  		vTasks = vTaskSession.getTasksForMonthforFwdNr(vSession, vSession.getSessionFwdNr(), vSession.getMonthsBack(), vSession.getYear());
 
- 		vTasks = vTaskSession.getTasksForMonthforFwdNr(vSession, vSession.getFwdNumber(), vSession.getMonthsBack(), vSession.getYear());
-
- 		AccountEntityData vAccountData = (AccountEntityData) AccountCache.getInstance().get(vSession.getFwdNumber());
- %> <input class="tbabutton" type=submit name=action value="Taken van vorige maand"
+						 						  		AccountEntityData vAccountData = (AccountEntityData) AccountCache.getInstance().get(vSession.getSessionFwdNr());
+						 %> <input class="tbabutton" type=submit name=action value="Taken van vorige maand"
 				onclick="showPrevious()"> <%
  	if (!vSession.isCurrentMonth())
  		{

@@ -24,26 +24,24 @@ be.tba.util.invoice.InvoiceHelper,
 be.tba.util.data.*"%>
 
 	<%
+	   try
+		{
+		vSession.setCallingJsp(Constants.ADMIN_SEARCH_JSP);
 
-try
-{
-vSession.setCallingJsp(Constants.ADMIN_SEARCH_JSP);
+		boolean vCustomerFilterOn = false;
+		AccountEntityData vAccount = AccountCache.getInstance().get(vSession.getCallFilter().getCustFilter());
 
-boolean vCustomerFilterOn = false;
-AccountEntityData vAccount = AccountCache.getInstance().get(vSession.getCallFilter().getCustFilter());
-
-if  (vAccount == null) System.out.println("account not found for " + vSession.getFwdNumber());
+		if  (vAccount == null) System.out.println("account not found for " + vSession.getSessionFwdNr());
 
 
-String vCustomerFilter = vSession.getCallFilter().getCustFilter();
-if (vCustomerFilter != null)
-{
-  if (vCustomerFilter.equals(Constants.ACCOUNT_FILTER_ALL))
-    vCustomerFilter = null;
-}
-if (vCustomerFilter == null) vCustomerFilter = Constants.ACCOUNT_FILTER_ALL;
-
-%>
+		String vCustomerFilter = vSession.getCallFilter().getCustFilter();
+		if (vCustomerFilter != null)
+		{
+		  if (vCustomerFilter.equals(Constants.ACCOUNT_FILTER_ALL))
+		    vCustomerFilter = null;
+		}
+		if (vCustomerFilter == null) vCustomerFilter = Constants.ACCOUNT_FILTER_ALL;
+	%>
 <body>
 <table  cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
 	<tr>

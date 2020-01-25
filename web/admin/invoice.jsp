@@ -832,7 +832,8 @@
         <!-- white space -->
         <td valign="top" width="20" bgcolor="FFFFFF"></td>
         <td valign="top" bgcolor="FFFFFF">
-        <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.DOWNLOAD_FACTUUR%>"> <input class="tbabutton" type=submit name=action value=" Download Factuur " onclick="downloadFactuur()">
+        <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.DOWNLOAD_FACTUUR%>"> 
+        <input class="tbabutton" type=submit name=action value=" Download Factuur " onclick="downloadFactuur()">
 </td></tr></table>
 </form>
 <%

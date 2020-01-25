@@ -58,14 +58,13 @@ private String mCustomerName;
     
 %>
 <!-- action name must be a URI name as it is set in the <application>.xml servlet-mapping tag.-->
-<form name="calllistform" method="POST"
-	action="/tba/CustomerDispatch">
+<form name="calllistform" method="POST"	action="/tba/CustomerDispatch">
 
 <table  cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
    <tr>
       <td valign="middle" width="30" bgcolor="FFFFFF"></td>
       <td valign="middle" bgcolor="FFFFFF">
-      <br><br> <span class="admintitle"> Oproep <%=vDirStr%> <%=mRecordData.getName()%>.</span> <br><br>
+      <br><br> <span class="admintitle"> Oproep <%=vDirStr%> <%=mRecordData.getName()%></span> <br><br>
 		<table border="0" cellspacing="4" cellpadding="4">
 			<%                  
 if (vInfoGifs.length() > 0)
@@ -81,7 +80,7 @@ if (vInfoGifs.length() > 0)
 %>
             <tr>
                 <td width="200" valign="middle" class="adminsubsubtitle"><img src="/tba/images/blueSphere.gif" width="10" height="10">&nbsp;Is gearchiveerd</td>
-                <td width="500" valign="middle" class="bodytekst">
+                <td width="500" valign="middle" class="bodytekst" title="klik om de oproep te archiveren" >
                   <input type="checkbox" id="cbx1" style="display:none" name=<%=Constants.RECORD_ARCHIVED%><%=(mRecordData.getIsArchived() ? " checked=\"checked\"" : "")%> />
                   <label for="cbx1" class="toggle"><span></span></label>    
                 </td>
