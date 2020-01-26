@@ -42,6 +42,7 @@ public class Constants
     public static final String SERVLET_LOGIN_HTML = "/login.html";
     public static final String HOME_HTML = "/index.html";
     public static final String FORM_SUBMIT_SUCCESS = "/formok.html";
+    public static final String EMPL_MAIL_ADDR = "anke.rombouts@thebusinessassistant.be;jolien.driesen@thebusinessassistant.be;nancy.olyslaegers@TheBusinessAssistant.be;emily.van.ginneken@thebusinessassistant.be";
 
     // JSP page names
     public static final String ADMIN_FAIL_JSP = "/admin/adminfail.jsp";

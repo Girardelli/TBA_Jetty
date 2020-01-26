@@ -25,6 +25,7 @@ import be.tba.util.constants.Constants;
 import be.tba.util.session.AccountCache;
 import be.tba.util.session.MailError;
 
+
 /**
  * Session Bean Template
  *
@@ -68,11 +69,12 @@ public class MailerSessionBean
       if (accountId == 0)
       {
          // send mail to all staff members
-         Collection<AccountEntityData> employees= AccountCache.getInstance().getEmployeeList();
-         for (AccountEntityData employee : employees)
-         {
-            vEmailAddresses.concat(employee.getEmail() + ";");
-        }
+//         Collection<AccountEntityData> employees= AccountCache.getInstance().getEmployeeList();
+//         for (AccountEntityData employee : employees)
+//         {
+//            vEmailAddresses.concat(employee.getEmail() + ";");
+//         }
+         vEmailAddresses = Constants.EMPL_MAIL_ADDR;
       }
       else
       {
@@ -95,12 +97,15 @@ public class MailerSessionBean
          }
       }
       vEmailAddresses = vEmailAddresses.replace(',', ';');
+      System.out.println("Mailaddressen: " + vEmailAddresses);
       StringTokenizer vMailTokens = new StringTokenizer(vEmailAddresses, ";");
       try
       {
          Date date = new Date();
          Address[] vTo;
 
+         if (vEmailAddresses.isEmpty()) throw new javax.mail.MessagingException("mail address list is empty.");
+         
          if (System.getenv("TBA_MAIL_ON") != null)
          {
             vTo = new InternetAddress[vMailTokens.countTokens()];
