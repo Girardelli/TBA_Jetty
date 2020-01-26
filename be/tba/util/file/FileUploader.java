@@ -20,10 +20,11 @@ import org.apache.commons.logging.LogFactory;
 
 import be.tba.servlets.FileDownloadServlet;
 import be.tba.util.exceptions.SystemErrorException;
+import be.tba.util.session.SessionParmsInf;
 
 @WebServlet("/upload")
 @MultipartConfig
-public class FileUploader
+public class FileUploader implements SessionParmsInf
 {
    private static Log log = LogFactory.getLog(FileUploader.class);
    /*
@@ -105,7 +106,7 @@ public class FileUploader
             throw new SystemErrorException("Bestand kan niet worden opgeladen.");
          }
       }
-      System.out.println("#fileitems returned: " + mItems.size());
+      //System.out.println("#fileitems returned: " + mItems.size());
       mUploadThread = new UploadThread();
       mUploadThread.run();
       return;
@@ -131,7 +132,7 @@ public class FileUploader
       return mUploadedFile;
    }
 
-   public String getFormParameter(String name)
+   public String getParameter(String name)
    {
       Iterator<FileItem> iter = mItems.iterator();
       while (iter.hasNext())
@@ -154,7 +155,7 @@ public class FileUploader
          while (iter.hasNext())
          {
             FileItem item = (FileItem) iter.next();
-            log.info("Deleting FileItem: " + item.getFieldName());
+            //log.info("Deleting FileItem: " + item.getFieldName());
             item.delete();
          }
       }
@@ -176,8 +177,8 @@ public class FileUploader
          while (iter.hasNext())
          {
             FileItem item = (FileItem) iter.next();
-            System.out.println("FileItem: " + item.getName());
-            System.out.println("fieldname: " + item.getFieldName());
+//            System.out.println("FileItem: " + item.getName());
+//            System.out.println("fieldname: " + item.getFieldName());
 
             if (uploadedFileItem != null)
             {
@@ -210,5 +211,4 @@ public class FileUploader
 
       
    }
-
 }

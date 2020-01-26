@@ -26,6 +26,8 @@ try
    FileLocationSqlAdapter fileLocationSession = new FileLocationSqlAdapter();
    Collection<FileLocationData> inputFiles = fileLocationSession.getInputFiles(vSession, workOrder.id);
    Collection<FileLocationData> outputFiles = fileLocationSession.getOutputFiles(vSession, workOrder.id);
+   String dueDate = workOrder.dueDate;
+   if (dueDate == null || dueDate.isEmpty() || dueDate.isBlank()) dueDate = "niet opgegeven";
 %>
 
 <body>
@@ -70,7 +72,7 @@ try
             <tr>
                <td width="30"></td>
                <td width="250" valign="top" class="adminsubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Verwachte opleverdatum</td>
-               <td width="530" valign="top"><%=(String) workOrder.dueDate%></td>
+               <td width="530" valign="top"><%=dueDate%></td>
             </tr>
 		</table>
 		<br>
@@ -137,19 +139,20 @@ else
   </form>
    <form name="loadfileform" method="POST" action="/tba/AdminDispatch" enctype="multipart/form-data">
    <input class="tbabutton" type=file name=<%=Constants.WORKORDER_FILE%> value=" Bestand opladen " accept=".*">
+   <input type=hidden name=<%=Constants.WORKORDER_STATE%> value=<%=workOrder.state%>> 
+   <input type=hidden name=<%=Constants.WORKORDER_INSTRUCTION%> value=<%=workOrder.instructions%>> 
    <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.UPLOAD_WORKORDER_FILE%>">
-   <input type=hidden name=<%=Constants.ACCOUNT_ID%> value="<%=workOrder.accountId%>">
+   <input type=hidden name=<%=Constants.ACCOUNT_ID%> value=<%=workOrder.accountId%>>
+   <input type=hidden name=<%=Constants.WORKORDER_ID%> value=<%=workOrder.id%>> 
    <input class="tbabutton" type=submit value=" Laad de file op " onclick="uploadFile()">
  </form>
 <br><br>
 <form name="workoderform2" method="POST" action="/tba/AdminDispatch">
-        <input type=hidden name=<%=Constants.WORKORDER_TITLE%> value=<%=workOrder.title%>> 
         <input type=hidden name=<%=Constants.WORKORDER_STATE%> value=<%=workOrder.state%>> 
         <input type=hidden name=<%=Constants.WORKORDER_INSTRUCTION%> value=<%=workOrder.instructions%>> 
-        <input type=hidden name=<%=Constants.WORKORDER_DUEDATE%> value=<%=workOrder.dueDate%>> 
         <input type=hidden name=<%=Constants.WORKORDER_FILE_ID%> value=""> 
         <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.ACTION_SAVE_WORKORDER%>"> 
-        <input type=hidden name=<%=Constants.WORKORDER_ID%> value="<%=workOrder.id%>"> 
+        <input type=hidden name=<%=Constants.WORKORDER_ID%> value=<%=workOrder.id%>> 
         <input class="tbabutton" type=submit value="Bewaar" onclick="save();"> 
         <input class="tbabutton" type=submit value="Cancel" onclick="cancelUpdate();">
 </form>
@@ -180,6 +183,8 @@ function downloadInFile(fileId)
 function uploadFile()
 {
   document.loadfileform.<%=Constants.SRV_ACTION%>.value="<%=Constants.UPLOAD_WORKORDER_FILE%>";
+  document.loadfileform.<%=Constants.WORKORDER_INSTRUCTION%>.value=document.workoderform1.<%=Constants.WORKORDER_INSTRUCTION%>.value;
+  document.loadfileform.<%=Constants.WORKORDER_STATE%>.value=document.workoderform1.<%=Constants.WORKORDER_STATE%>.value;
 }
 
 

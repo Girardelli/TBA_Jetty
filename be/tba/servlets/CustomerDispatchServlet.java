@@ -41,6 +41,8 @@ import be.tba.util.exceptions.LostSessionException;
 import be.tba.util.exceptions.SystemErrorException;
 import be.tba.util.file.FileUploader;
 import be.tba.util.session.AccountCache;
+import be.tba.util.session.SessionParms;
+import be.tba.util.session.SessionParmsInf;
 
 public class CustomerDispatchServlet extends HttpServlet
 {
@@ -72,28 +74,30 @@ public class CustomerDispatchServlet extends HttpServlet
             throw new LostSessionException();
          }
 
-         boolean isMultiPart = false;
          String vAction = null;
          String uploadedFile = null;
          FileUploader fileUploader = null;
+         SessionParmsInf params = null;
+         
          if (ServletFileUpload.isMultipartContent(req))
          {
             fileUploader = new FileUploader(req);
             fileUploader.setStoragePath(Constants.WORKORDER_FILEUPLOAD_DIR + File.separator + Tools.spaces2underscores(customer.getFullName()) + File.separator + "todo");
             fileUploader.upload(req);
-            isMultiPart = true;
             log.info("multipart content detected");
             // getParameter cannot be used anymore. Also not further on.
-            vAction = fileUploader.getFormParameter(Constants.SRV_ACTION);
+            
+            params = fileUploader;
          }
          else
          {
-            vAction = (String) req.getParameter(Constants.SRV_ACTION);
+            params = new SessionParms(req);
+            
          }
-         
+         vAction = params.getParameter(Constants.SRV_ACTION);
          SessionManager.getInstance().getSession(vSession.getSessionId(), "AdminDispatchServlet(" + vAction + ")");
 
-         // String vSessionId = (String) req.getParameter(Constants.SESSION_ID);
+         // String vSessionId = params.getParameter(Constants.SESSION_ID);
          if (vAction == null)
          {
             throw new SystemErrorException("Interne fout: geen actie in de request.");
@@ -211,7 +215,7 @@ public class CustomerDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.SAVE_PREFS:
             {
-               AccountFacade.updateCustomerPrefs(vSession, req);
+               AccountFacade.updateCustomerPrefs(vSession, params);
                break;
             }
 
@@ -220,7 +224,7 @@ public class CustomerDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.ACTION_GOTO_RECORD_UPDATE:
             {
-               String vKey = (String) req.getParameter(Constants.RECORD_ID);
+               String vKey = params.getParameter(Constants.RECORD_ID);
 
                CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
                vSession.setCurrentRecord(vQuerySession.getRecord(vSession, vKey));
@@ -233,7 +237,7 @@ public class CustomerDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.SAVE_RECORD:
             {
-               CallRecordFacade.updateCustomerChanges(req, vSession, true);
+               CallRecordFacade.updateCustomerChanges(params, vSession, true);
                //rd = sc.getRequestDispatcher(Constants.CLIENT_CALLS_JSP);
                break;
             }
@@ -243,7 +247,7 @@ public class CustomerDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.ACTION_ARCHIVE_RECORDS:
             {
-               CallRecordFacade.archiveRecords(req, vSession);
+               CallRecordFacade.archiveRecords(params, vSession);
                rd = sc.getRequestDispatcher(Constants.CLIENT_CALLS_JSP);
                break;
             }
@@ -273,8 +277,8 @@ public class CustomerDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.ACTION_SEARCH_CALLS:
             {
-               if (req.getParameter(Constants.RECORD_SEARCH_STR) != null)
-                  vSession.setSearchString((String) req.getParameter(Constants.RECORD_SEARCH_STR));
+               if (params.getParameter(Constants.RECORD_SEARCH_STR) != null)
+                  vSession.setSearchString(params.getParameter(Constants.RECORD_SEARCH_STR));
                rd = sc.getRequestDispatcher(Constants.CLIENT_SEARCH_JSP);
                break;
             }
@@ -315,7 +319,7 @@ public class CustomerDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.ACTION_UPDATE_WORKORDER:
             {
-               String id = (String) req.getParameter(Constants.WORKORDER_ID);
+               String id = params.getParameter(Constants.WORKORDER_ID);
                if (id == null || id.isEmpty())
                {
                   id = "0";
@@ -330,7 +334,7 @@ public class CustomerDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.ACTION_SAVE_WORKORDER:
             {
-               TaskFacade.saveWorkOrder(req, vSession);
+               TaskFacade.saveWorkOrder(params, vSession);
                rd = sc.getRequestDispatcher(Constants.CLIENT_WORKORDERS_JSP);
                break;
             }
@@ -340,9 +344,8 @@ public class CustomerDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.UPLOAD_WORKORDER_FILE:
             {
-               fileUploader.upload(req);
                uploadedFile = fileUploader.waitTillFinished();
-               if (TaskFacade.addWorkOrderFile(req, vSession, uploadedFile))
+               if (TaskFacade.addWorkOrderFile(params, vSession, uploadedFile))
                {
                   vSession.setUploadedFileName(uploadedFile);
                   rd = sc.getRequestDispatcher(Constants.CLIENT_UPDATE_WORKORDER_JSP);
@@ -360,7 +363,7 @@ public class CustomerDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.ACTION_DELETE_WORKORDER:
             {
-               TaskFacade.deleteWorkOrder(req, vSession);
+               TaskFacade.deleteWorkOrder(params, vSession);
                rd = sc.getRequestDispatcher(Constants.CLIENT_WORKORDERS_JSP);
                break;
             }
@@ -370,7 +373,7 @@ public class CustomerDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.DELETE_WORKORDER_FILE:
             {
-               TaskFacade.deleteWorkOrderFile(req, vSession);
+               TaskFacade.deleteWorkOrderFile(params, vSession);
                rd = sc.getRequestDispatcher(Constants.CLIENT_UPDATE_WORKORDER_JSP);
                break;
             }

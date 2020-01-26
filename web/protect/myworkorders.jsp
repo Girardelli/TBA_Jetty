@@ -78,7 +78,7 @@ try
                 %>
                 <tr class="bodytekst" title="dubbel muisklik om de opdracht te openen" ondblclick="changeUrl('/tba/CustomerDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACTION_UPDATE_WORKORDER%>&<%=Constants.WORKORDER_ID%>=<%=workorder.id%>');">
                     <td width="30"> 
-                      <img src="/tba/images/waste.gif" onclick="openModal(<%=workorder.id%>)" title="verwijder" >
+                      <img src="/tba/images/waste.gif" onclick="openModal(<%=workorder.id%>)" title="verwijder" onMouseOver="this.style.cursor='pointer'">
                     </td>
                     <td bgcolor=#FFCC66 width="70" valign="top"><%=WorkOrderData.getStateStr(workorder.state)%></td>
                     <td bgcolor=#FFCC66 width="70" valign="top"><%=workorder.dueDate%></td>

@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -23,14 +22,14 @@ import be.tba.ejb.task.interfaces.FileLocationData;
 import be.tba.ejb.task.session.FileLocationSqlAdapter;
 import be.tba.servlets.helper.AccountFacade;
 import be.tba.servlets.helper.InvoiceFacade;
-import be.tba.servlets.helper.TaskFacade;
 import be.tba.servlets.session.SessionManager;
 import be.tba.servlets.session.WebSession;
 import be.tba.util.constants.AccountRole;
 import be.tba.util.constants.Constants;
 import be.tba.util.exceptions.AccessDeniedException;
 import be.tba.util.exceptions.LostSessionException;
-import be.tba.util.file.FileUploader;
+import be.tba.util.session.SessionParms;
+import be.tba.util.session.SessionParmsInf;
 
 public class FileDownloadServlet extends HttpServlet
 {
@@ -50,7 +49,7 @@ public class FileDownloadServlet extends HttpServlet
       {
          HttpSession httpSession = request.getSession();
          vSession = (WebSession) httpSession.getAttribute(Constants.SESSION_OBJ);
-
+         SessionParmsInf params = new SessionParms(request);
          SessionManager.getInstance().getSession(vSession.getSessionId(), "FileDownloadServlet()");
 
          System.out.println("\nFileDownloadServlet (http session: " + vSession + "): userid:" + vSession.getUserId() + ", websessionid:" + vSession.getSessionId());
@@ -90,7 +89,7 @@ public class FileDownloadServlet extends HttpServlet
                   throw new AccessDeniedException("access denied for " + vSession.getUserId());
                }
                // Make sure to show the download dialog
-               File file = InvoiceFacade.generateInvoiceXml(request, vSession);
+               File file = InvoiceFacade.generateInvoiceXml(params, vSession);
                response.setHeader("Content-disposition", "attachment; filename=" + Constants.WC_VERKOPEN_XML);
                downloadFile(file.getAbsolutePath(), response.getOutputStream(), true);
                break;
@@ -102,7 +101,7 @@ public class FileDownloadServlet extends HttpServlet
                   throw new AccessDeniedException("access denied for " + vSession.getUserId());
                }
                // Make sure to show the download dialog
-               File file = AccountFacade.generateKlantenXml(request, vSession);
+               File file = AccountFacade.generateKlantenXml(params, vSession);
                response.setHeader("Content-disposition", "attachment; filename=" + Constants.WC_KLANTEN_XML);
                downloadFile(file.getAbsolutePath(), response.getOutputStream(), true);
                break;

@@ -64,8 +64,6 @@ vSession.setCallingJsp(Constants.ADMIN_WORK_ORDER_JSP);
                             {
             %> 
             <br>
-            <br>
-            <br>
             <table border="0" cellspacing="2" cellpadding="2">
                 <tr>
                     <td width="300" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Klant</td>

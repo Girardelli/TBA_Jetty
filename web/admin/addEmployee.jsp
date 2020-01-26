@@ -29,7 +29,7 @@ try
 {
     vSession.setCallingJsp(Constants.ADD_EMPLOYEE_JSP);
     
-Vector vErrorList = (Vector) request.getAttribute(Constants.ERROR_VECTOR);
+Collection<String> vErrorList = vSession.getErrorList();
 String vSelect = "selected";
 if (vErrorList != null) System.out.println("error list size " + vErrorList.size());
 if (vErrorList != null && vErrorList.size() > 0)

@@ -23,37 +23,38 @@ import be.tba.util.invoice.InvoiceHelper;
 import be.tba.util.invoice.TbaPdfInvoice;
 import be.tba.util.invoice.WoltersKluwenImport;
 import be.tba.util.session.AccountCache;
+import be.tba.util.session.SessionParmsInf;
 
 public class InvoiceFacade
 {
-    public static void saveInvoice(HttpServletRequest req, WebSession session)
+    public static void saveInvoice(SessionParmsInf parms, WebSession session)
     {
-        String vInvoiceId = req.getParameter(Constants.INVOICE_TO_SAVE);
+        String vInvoiceId = parms.getParameter(Constants.INVOICE_TO_SAVE);
         InvoiceSqlAdapter vInvoiceSession = new InvoiceSqlAdapter();
 
         InvoiceEntityData vInvoice = vInvoiceSession.getInvoiceById(session, Integer.valueOf(vInvoiceId).intValue());
         if (vInvoice != null)
         {
-            vInvoice.setCustomerRef((String) req.getParameter(Constants.INVOICE_CUST_REF));
+            vInvoice.setCustomerRef(parms.getParameter(Constants.INVOICE_CUST_REF));
             vInvoiceSession.updateRow(session, vInvoice);
         }
     }
 
-    public static void savePayDate(HttpServletRequest req, WebSession session)
+    public static void savePayDate(SessionParmsInf parms, WebSession session)
     {
-        String vInvoiceId = req.getParameter(Constants.INVOICE_TO_SAVE);
+        String vInvoiceId = parms.getParameter(Constants.INVOICE_TO_SAVE);
         InvoiceSqlAdapter vInvoiceSession = new InvoiceSqlAdapter();
 
         InvoiceEntityData vInvoice = vInvoiceSession.getInvoiceById(session, Integer.valueOf(vInvoiceId).intValue());
         if (vInvoice != null)
         {
-            vInvoice.setPayDate((String) req.getParameter(Constants.INVOICE_PAYDATE));
+            vInvoice.setPayDate(parms.getParameter(Constants.INVOICE_PAYDATE));
             
-            vInvoice.setFintroId((String) req.getParameter(Constants.TASK_FINTROID));
-            vInvoice.setFromBankNr((String) req.getParameter(Constants.TASK_FROM_BANK_NR));
-            vInvoice.setValutaDate((String) req.getParameter(Constants.TASK_VAL_DATE));
-            vInvoice.setPaymentDetails((String) req.getParameter(Constants.TASK_PAY_DETAILS));
-            vInvoice.setComment((String) req.getParameter(Constants.INVOICE_INFO));
+            vInvoice.setFintroId(parms.getParameter(Constants.TASK_FINTROID));
+            vInvoice.setFromBankNr(parms.getParameter(Constants.TASK_FROM_BANK_NR));
+            vInvoice.setValutaDate(parms.getParameter(Constants.TASK_VAL_DATE));
+            vInvoice.setPaymentDetails(parms.getParameter(Constants.TASK_PAY_DETAILS));
+            vInvoice.setComment(parms.getParameter(Constants.INVOICE_INFO));
 
             if (vInvoice.getPayDate() != null && vInvoice.getPayDate().length() > 0)
             {
@@ -67,9 +68,9 @@ public class InvoiceFacade
         }
     }
 
-    public static void freezeInvoices(HttpServletRequest req, WebSession session)
+    public static void freezeInvoices(SessionParmsInf parms, WebSession session)
     {
-        String vLtd = (String) req.getParameter(Constants.INVOICE_TO_FREEZE);
+        String vLtd = parms.getParameter(Constants.INVOICE_TO_FREEZE);
         // System.out.println("record to delete list: " + vLtd);
         if (vLtd != null && vLtd.length() > 0)
         {
@@ -85,9 +86,9 @@ public class InvoiceFacade
         }
     }
 
-    public static void mailInvoices(HttpServletRequest req, WebSession session)
+    public static void mailInvoices(SessionParmsInf parms, WebSession session)
     {
-        String vLtd = (String) req.getParameter(Constants.INVOICE_TO_FREEZE);
+        String vLtd = parms.getParameter(Constants.INVOICE_TO_FREEZE);
         // System.out.println("record to delete list: " + vLtd);
         if (vLtd != null && vLtd.length() > 0)
         {
@@ -103,9 +104,9 @@ public class InvoiceFacade
         }
     }
 
-    public static void deleteInvoices(HttpServletRequest req, WebSession session)
+    public static void deleteInvoices(SessionParmsInf parms, WebSession session)
     {
-        String vLtd = (String) req.getParameter(Constants.INVOICE_TO_DELETE);
+        String vLtd = parms.getParameter(Constants.INVOICE_TO_DELETE);
         // System.out.println("record to delete list: " + vLtd);
         if (vLtd != null && vLtd.length() > 0)
         {
@@ -126,9 +127,9 @@ public class InvoiceFacade
         }
     }
 
-    public static void setInvoicesPayed(HttpServletRequest req, WebSession session)
+    public static void setInvoicesPayed(SessionParmsInf parms, WebSession session)
     {
-        String vLtd = (String) req.getParameter(Constants.INVOICE_TO_SETPAYED);
+        String vLtd = parms.getParameter(Constants.INVOICE_TO_SETPAYED);
         if (vLtd != null && vLtd.length() > 0)
         {
             System.out.println("setInvoicesPayed: # entries " + vLtd);
@@ -144,9 +145,9 @@ public class InvoiceFacade
         }
     }
     
-    public static File generateInvoiceXml(HttpServletRequest req, WebSession session)
+    public static File generateInvoiceXml(SessionParmsInf parms, WebSession session)
     {
-        String vLtd = (String) req.getParameter(Constants.INVOICE_TO_SETPAYED);
+        String vLtd = parms.getParameter(Constants.INVOICE_TO_SETPAYED);
         if (vLtd != null && vLtd.length() > 0)
         {
             //System.out.println("setInvoicesPayed: # entries " + vLtd);
@@ -165,12 +166,12 @@ public class InvoiceFacade
         return null;
     }
     
-    public static void generateInvoices(HttpServletRequest req, WebSession session) throws IOException
+    public static void generateInvoices(SessionParmsInf parms, WebSession session) throws IOException
     {
-        if (req.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER) != null)
-            session.getCallFilter().setCustFilter(req.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER));
-        if (req.getParameter(Constants.INVOICE_MONTH) != null)
-            session.setMonthsBack(Integer.parseInt((String) req.getParameter(Constants.INVOICE_MONTH)));
+        if (parms.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER) != null)
+            session.getCallFilter().setCustFilter(parms.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER));
+        if (parms.getParameter(Constants.INVOICE_MONTH) != null)
+            session.setMonthsBack(Integer.parseInt(parms.getParameter(Constants.INVOICE_MONTH)));
 
         Collection<AccountEntityData> list = AccountCache.getInstance().getAccountListWithoutTbaNrs();
         synchronized (list)
@@ -187,7 +188,7 @@ public class InvoiceFacade
         }
     }
 
-    public static void addManualInvoice(HttpServletRequest req, WebSession session)
+    public static void addManualInvoice(SessionParmsInf parms, WebSession session)
     {
        System.out.println("addManualInvoice enter");
         InvoiceSqlAdapter vInvoiceSession = new InvoiceSqlAdapter();
@@ -197,24 +198,24 @@ public class InvoiceFacade
         int vMonth = vCalendar.get(Calendar.MONTH);
         int vYear = vCalendar.get(Calendar.YEAR);
         
-        newInvoice.setAccountID(Integer.parseInt((String) req.getParameter(Constants.ACCOUNT_ID)));
+        newInvoice.setAccountID(Integer.parseInt(parms.getParameter(Constants.ACCOUNT_ID)));
         AccountEntityData account = AccountCache.getInstance().get(newInvoice.getAccountID());
         newInvoice.setAccountFwdNr(account.getFwdNumber());
-        newInvoice.setTotalCost(Double.parseDouble((String) req.getParameter(Constants.INVOICE_AMONTH)));
-        newInvoice.setMonth(Integer.parseInt((String) req.getParameter(Constants.INVOICE_MONTH)));
-        newInvoice.setYear(Integer.parseInt((String) req.getParameter(Constants.INVOICE_YEAR)));
+        newInvoice.setTotalCost(Double.parseDouble(parms.getParameter(Constants.INVOICE_AMONTH)));
+        newInvoice.setMonth(Integer.parseInt(parms.getParameter(Constants.INVOICE_MONTH)));
+        newInvoice.setYear(Integer.parseInt(parms.getParameter(Constants.INVOICE_YEAR)));
         newInvoice.setFrozenFlag(true);
         newInvoice.setIsPayed(false);
         newInvoice.setStartTime(vCalendar.getTimeInMillis());
         newInvoice.setStopTime(vCalendar.getTimeInMillis());
         newInvoice.setYearSeqNr(0);
         newInvoice.setInvoiceDate(String.format("%02d/%02d/%4d", vDay, vMonth, vYear));
-        newInvoice.setDescription((String) req.getParameter(Constants.INVOICE_DESCRIPTION));
+        newInvoice.setDescription(parms.getParameter(Constants.INVOICE_DESCRIPTION));
         // -1 means regular invoice
         // 0 means this is a credit invoice
         // db id means it is a regular invoice with a credit invoice counterpart indicated by this id.
         String creditNotePrefix = "";
-        if (req.getParameter(Constants.INVOICE_IS_CREDITNOTA) != null)
+        if (parms.getParameter(Constants.INVOICE_IS_CREDITNOTA) != null)
         {
            newInvoice.setCreditId(0);
            newInvoice.setIsPayed(true);
@@ -229,8 +230,8 @@ public class InvoiceFacade
            newInvoice.setCreditId(-1);
         }
        
-        newInvoice.setCustomerName((String) req.getParameter(Constants.INVOICE_CUSTOMER));
-        //newInvoice.setAccountID(Integer.valueOf((String) req.getParameter(Constants.ACCOUNT_ID)));
+        newInvoice.setCustomerName(parms.getParameter(Constants.INVOICE_CUSTOMER));
+        //newInvoice.setAccountID(Integer.valueOf(parms.getParameter(Constants.ACCOUNT_ID)));
         int invoiceNr = vInvoiceSession.getNewInvoiceNumber(session, vYear);
         newInvoice.setYearSeqNr(invoiceNr);
         newInvoice.setInvoiceNr(creditNotePrefix + InvoiceHelper.getInvoiceNumber(newInvoice.getYear(), newInvoice.getMonth(), invoiceNr));
@@ -241,7 +242,7 @@ public class InvoiceFacade
         int id = vInvoiceSession.addRow(session, newInvoice);
         if (newInvoice.getCreditId() == 0)
         {
-           String tobeCreditedInvoiceNr = (String) req.getParameter(Constants.INVOICE_NR);
+           String tobeCreditedInvoiceNr = parms.getParameter(Constants.INVOICE_NR);
            if (tobeCreditedInvoiceNr != null &&  !tobeCreditedInvoiceNr.isEmpty())
            {
               Collection<InvoiceEntityData> invoices = vInvoiceSession.getInvoiceByNr(session, tobeCreditedInvoiceNr);
@@ -291,7 +292,7 @@ public class InvoiceFacade
     }
 
 
-    public static void generateCreditInvoice(HttpServletRequest req, WebSession session) 
+    public static void generateCreditInvoice(SessionParmsInf parms, WebSession session) 
     {
         int invoiceId = session.getInvoiceId();
         if (invoiceId != -1)

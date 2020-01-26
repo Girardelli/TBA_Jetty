@@ -23,6 +23,7 @@ import be.tba.servlets.session.WebSession;
 import be.tba.util.constants.AccountRole;
 import be.tba.util.constants.Constants;
 import be.tba.util.session.AccountCache;
+import be.tba.util.session.SessionParmsInf;
 import be.tba.util.timer.CallCalendar;
 
 public class TaskFacade
@@ -30,9 +31,9 @@ public class TaskFacade
    private static Log log = LogFactory.getLog(TaskFacade.class);
    private static String kMailBody = "Beste,<br><br>Wij hebben uw opdracht opgeleverd. U kan het opgeleverde werk downloaden van ons portaal na dat u u hebt aangemeld.<br><br>Vriendelijke groeten<br><br>Het TBA team";
  
-   public static void deleteTask(HttpServletRequest req, WebSession session)
+   public static void deleteTask(SessionParmsInf parms, WebSession session)
     {
-        String vLtd = (String) req.getParameter(Constants.TASK_TO_DELETE);
+        String vLtd = parms.getParameter(Constants.TASK_TO_DELETE);
         StringTokenizer vStrTok = new StringTokenizer(vLtd, ",");
 
         TaskSqlAdapter vTaskSession = new TaskSqlAdapter();
@@ -43,19 +44,19 @@ public class TaskFacade
         }
     }
 
-    public static void modifyTask(HttpServletRequest req, WebSession session)
+    public static void modifyTask(SessionParmsInf parms, WebSession session)
     {
-        int vKey = Integer.parseInt((String) req.getParameter(Constants.TASK_ID));
+        int vKey = Integer.parseInt(parms.getParameter(Constants.TASK_ID));
 
         TaskSqlAdapter vTaskSession = new TaskSqlAdapter();
         session.setCurrentTask(vTaskSession.getTask(session, vKey));
-        if (req.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER) != null)
+        if (parms.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER) != null)
         {
-            session.getCallFilter().setCustFilter((String) req.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER));
+            session.getCallFilter().setCustFilter(parms.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER));
         }
     }
 
-    public static void saveTask(HttpServletRequest req, WebSession session)
+    public static void saveTask(SessionParmsInf parms, WebSession session)
     {
         int vId = session.getCurrentTask().getId();
         TaskSqlAdapter vTaskSession = new TaskSqlAdapter();
@@ -63,7 +64,7 @@ public class TaskFacade
         TaskEntityData vTask = vTaskSession.getTask(session, vId);
         if (vTask != null)
         {
-            String vNewDate = (String) req.getParameter(Constants.TASK_DATE);
+            String vNewDate = parms.getParameter(Constants.TASK_DATE);
 
             if (!vTask.getDate().equals(vNewDate))
             {
@@ -77,18 +78,18 @@ public class TaskFacade
                 }
             }
 
-            vTask.setFwdNr((String) req.getParameter(Constants.TASK_FORWARD_NUMBER));
-            vTask.setDoneBy((String) req.getParameter(Constants.TASK_DONE_BY_EMPL));
-            vTask.setDate((String) req.getParameter(Constants.TASK_DATE));
-            vTask.setDescription((String) req.getParameter(Constants.TASK_DESCRIPTION));
-            String tmp = (String) req.getParameter(Constants.TASK_TIME_SPEND);
+            vTask.setFwdNr(parms.getParameter(Constants.TASK_FORWARD_NUMBER));
+            vTask.setDoneBy(parms.getParameter(Constants.TASK_DONE_BY_EMPL));
+            vTask.setDate(parms.getParameter(Constants.TASK_DATE));
+            vTask.setDescription(parms.getParameter(Constants.TASK_DESCRIPTION));
+            String tmp = parms.getParameter(Constants.TASK_TIME_SPEND);
             if (tmp == null || tmp == "")
                 tmp = "0";
             vTask.setTimeSpend(Integer.parseInt(tmp));
-            if (req.getParameter(Constants.TASK_IS_FIXED_PRICE) != null)
+            if (parms.getParameter(Constants.TASK_IS_FIXED_PRICE) != null)
             {
                 vTask.setIsFixedPrice(true);
-                String vFixedPrice = (String) req.getParameter(Constants.TASK_FIXED_PRICE);
+                String vFixedPrice = parms.getParameter(Constants.TASK_FIXED_PRICE);
                 vFixedPrice = vFixedPrice.replace(',', '.');
                 vTask.setFixedPrice(Double.parseDouble(vFixedPrice));
             }
@@ -98,13 +99,13 @@ public class TaskFacade
                 vTask.setFixedPrice(0.0);
             }
 
-            if (vTask.getIsRecuring() && req.getParameter(Constants.TASK_IS_RECURING) == null)
+            if (vTask.getIsRecuring() && parms.getParameter(Constants.TASK_IS_RECURING) == null)
             {
                 // stop recuring task
                 Calendar mCalendar = Calendar.getInstance();
                 vTask.setStopTime(mCalendar.getTimeInMillis());
             }
-            else if (!vTask.getIsRecuring() && req.getParameter(Constants.TASK_IS_RECURING) != null)
+            else if (!vTask.getIsRecuring() && parms.getParameter(Constants.TASK_IS_RECURING) != null)
             {
                 // start recuring task
                 Calendar mCalendar = Calendar.getInstance();
@@ -114,30 +115,30 @@ public class TaskFacade
             }
         }
         vTaskSession.updateRow(session, vTask);
-        if (req.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER) != null)
-            session.getCallFilter().setCustFilter((String) req.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER));
+        if (parms.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER) != null)
+            session.getCallFilter().setCustFilter(parms.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER));
     }
 
-    public static void addTask(HttpServletRequest req, WebSession session)
+    public static void addTask(SessionParmsInf parms, WebSession session)
     {
         TaskEntityData newTask = new TaskEntityData();
-        newTask.setFwdNr((String) req.getParameter(Constants.TASK_FORWARD_NUMBER));
-        newTask.setDoneBy((String) req.getParameter(Constants.TASK_DONE_BY_EMPL));
-        newTask.setDate((String) req.getParameter(Constants.TASK_DATE));
+        newTask.setFwdNr(parms.getParameter(Constants.TASK_FORWARD_NUMBER));
+        newTask.setDoneBy(parms.getParameter(Constants.TASK_DONE_BY_EMPL));
+        newTask.setDate(parms.getParameter(Constants.TASK_DATE));
         newTask.setTimeStamp(dateStr2Timestamp(newTask.getDate()));
 
-        newTask.setDescription((String) req.getParameter(Constants.TASK_DESCRIPTION));
-        String vTimeSpend = (String) req.getParameter(Constants.TASK_TIME_SPEND);
+        newTask.setDescription(parms.getParameter(Constants.TASK_DESCRIPTION));
+        String vTimeSpend = parms.getParameter(Constants.TASK_TIME_SPEND);
         if (vTimeSpend != null && vTimeSpend.length() > 0)
-            newTask.setTimeSpend(Integer.parseInt((String) req.getParameter(Constants.TASK_TIME_SPEND)));
+            newTask.setTimeSpend(Integer.parseInt(parms.getParameter(Constants.TASK_TIME_SPEND)));
         else
             newTask.setTimeSpend(0);
-        if (req.getParameter(Constants.TASK_IS_FIXED_PRICE) != null)
+        if (parms.getParameter(Constants.TASK_IS_FIXED_PRICE) != null)
         {
             newTask.setIsFixedPrice(true);
-            if (req.getParameter(Constants.TASK_FIXED_PRICE) != null)
+            if (parms.getParameter(Constants.TASK_FIXED_PRICE) != null)
             {
-                String vFixedPrice = (String) req.getParameter(Constants.TASK_FIXED_PRICE);
+                String vFixedPrice = parms.getParameter(Constants.TASK_FIXED_PRICE);
 
                 System.out.println("task price=" + vFixedPrice);
 
@@ -148,7 +149,7 @@ public class TaskFacade
             else
                 newTask.setFixedPrice(0.0);
         }
-        newTask.setIsRecuring(req.getParameter(Constants.TASK_IS_RECURING) != null);
+        newTask.setIsRecuring(parms.getParameter(Constants.TASK_IS_RECURING) != null);
         if (newTask.getIsRecuring())
         {
             Calendar mCalendar = Calendar.getInstance();
@@ -166,12 +167,14 @@ public class TaskFacade
         vTaskSession.addRow(session, newTask);
     }
 
-    public static int saveWorkOrder(HttpServletRequest req, WebSession session)
+    public static int saveWorkOrder(SessionParmsInf parms, WebSession session)
     {
        int id = 0;
        WorkOrderSqlAdapter vWorkOrderSession = new WorkOrderSqlAdapter();
-       String idStr = (String) req.getParameter(Constants.WORKORDER_ID);
-       String dueDate = (String) req.getParameter(Constants.WORKORDER_DUEDATE);
+       String idStr = parms.getParameter(Constants.WORKORDER_ID);
+       String dueDate = "";
+       if (parms.getParameter(Constants.WORKORDER_DUEDATE) != null)
+          dueDate = parms.getParameter(Constants.WORKORDER_DUEDATE);
        if (dueDate != null && dueDate.contains("-"))
        {
           dueDate = CallCalendar.calendarStrTbaStr(dueDate);
@@ -182,13 +185,16 @@ public class TaskFacade
        {
           // update entry
           WorkOrderData workorder = vWorkOrderSession.getRow(session, Integer.parseInt(idStr));
-          workorder.title = (String) req.getParameter(Constants.WORKORDER_TITLE);
-          workorder.instructions = (String) req.getParameter(Constants.WORKORDER_INSTRUCTION);
+          if (parms.getParameter(Constants.WORKORDER_TITLE) != null)
+             workorder.title = parms.getParameter(Constants.WORKORDER_TITLE);
+          if (parms.getParameter(Constants.WORKORDER_INSTRUCTION) != null)
+             workorder.instructions = parms.getParameter(Constants.WORKORDER_INSTRUCTION);
           workorder.dueDate = dueDate;
-          if (session.getRole() == AccountRole.ADMIN || session.getRole() == AccountRole.EMPLOYEE)
+          if ((session.getRole() == AccountRole.ADMIN || session.getRole() == AccountRole.EMPLOYEE) &&
+                parms.getParameter(Constants.WORKORDER_STATE) != null)
           {
              WorkOrderData.State oldState = workorder.state;
-             workorder.state = WorkOrderData.StateStr2Enum((String) req.getParameter(Constants.WORKORDER_STATE));
+             workorder.state = WorkOrderData.StateStr2Enum(parms.getParameter(Constants.WORKORDER_STATE));
              if (workorder.state == WorkOrderData.State.kDone && oldState != workorder.state)
              {
                 MailerSessionBean.sendMail(session, workorder.accountId, "Uw opdracht is opgeleverd", kMailBody);
@@ -204,26 +210,27 @@ public class TaskFacade
           WorkOrderData workorder = new WorkOrderData();
           AccountEntityData vAccountData = AccountCache.getInstance().get(session.getCurrentAccountId());
           workorder.accountId = vAccountData.getId();
-          workorder.title = (String) req.getParameter(Constants.WORKORDER_TITLE);
-          workorder.instructions = (String) req.getParameter(Constants.WORKORDER_INSTRUCTION);
+          workorder.title = parms.getParameter(Constants.WORKORDER_TITLE);
+          workorder.instructions = parms.getParameter(Constants.WORKORDER_INSTRUCTION);
           workorder.dueDate = dueDate;
           id = vWorkOrderSession.addRow(session, workorder);
           TaskFacade.log.info("new idStr=" + idStr + ", " + workorder.toString());
           
           MailerSessionBean.sendMail(session, 0, "Nieuwe opdracht van " + vAccountData.getFullName(), "");
        }
+       session.setWorkOrderId(id);
        return id;
     }
 
-    public static void setWorkOrderState(HttpServletRequest req, WebSession session)
+    public static void setWorkOrderState(SessionParmsInf parms, WebSession session)
     {
        WorkOrderSqlAdapter vWorkOrderSession = new WorkOrderSqlAdapter();
-       int workorderId = Integer.parseInt((String) req.getParameter(Constants.WORKORDER_ID));
+       int workorderId = Integer.parseInt(parms.getParameter(Constants.WORKORDER_ID));
        WorkOrderData workorder = null;
        if (workorderId > 0)
        {
           workorder = vWorkOrderSession.getRow(session, workorderId);
-          workorder.state = WorkOrderData.StateStr2Enum((String) req.getParameter(Constants.WORKORDER_STATE));
+          workorder.state = WorkOrderData.StateStr2Enum(parms.getParameter(Constants.WORKORDER_STATE));
           if (workorder.state == WorkOrderData.State.kDone && workorder.taskId == 0)
           {
              Calendar vCalendar = Calendar.getInstance();
@@ -245,10 +252,10 @@ public class TaskFacade
        }
     }
     
-    public static void deleteWorkOrder(HttpServletRequest req, WebSession session)
+    public static void deleteWorkOrder(SessionParmsInf parms, WebSession session)
     {
        WorkOrderSqlAdapter vWorkOrderSession = new WorkOrderSqlAdapter();
-       int workorderId = Integer.parseInt((String) req.getParameter(Constants.WORKORDER_ID));
+       int workorderId = Integer.parseInt(parms.getParameter(Constants.WORKORDER_ID));
        WorkOrderData workorder = null;
        if (workorderId > 0)
        {
@@ -272,10 +279,10 @@ public class TaskFacade
        }
     }
 
-    public static boolean addWorkOrderFile(HttpServletRequest req, WebSession session, String fullFilePath)
+    public static boolean addWorkOrderFile(SessionParmsInf parms, WebSession session, String fullFilePath)
     {
        FileLocationSqlAdapter fileLocationSession = new FileLocationSqlAdapter();
-       int workorderId = saveWorkOrder(req, session);
+       int workorderId = saveWorkOrder(parms, session);
        
        if (workorderId > 0)
        {
@@ -304,10 +311,10 @@ public class TaskFacade
        return false;
      }
     
-    public static boolean deleteWorkOrderFile(HttpServletRequest req, WebSession session)
+    public static boolean deleteWorkOrderFile(SessionParmsInf parms, WebSession session)
     {
        FileLocationSqlAdapter fileLocationSession = new FileLocationSqlAdapter();
-       FileLocationData fileData = fileLocationSession.getRow(session, Integer.parseInt(req.getParameter(Constants.WORKORDER_FILE_ID)));
+       FileLocationData fileData = fileLocationSession.getRow(session, Integer.parseInt(parms.getParameter(Constants.WORKORDER_FILE_ID)));
        File file = new File(fileData.storagePath); 
        boolean res = true;
        if(file.delete()) 

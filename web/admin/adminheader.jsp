@@ -76,11 +76,11 @@ private String vSessionId;
 						<table class="menu" id="rubrieken">
 							<tr>
 								<td class="menu">
-                                    <a class='norm' href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_CANVAS%>"><nobr>Oproepen lijst</a>
-									<br> <a class='norm' href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_ACCOUNT_ADMIN%>"><nobr>Klanten</a>
-                                    <br> <a class='norm' href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_RECORD_SEARCH%>"><nobr>Zoeken</a>
-                                    <br> <a class='norm' href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_ADMIN_WORKORDERS%>"><nobr>Opdrachten</a>
-									<br> <a class='norm' href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_TASK_ADMIN%>"><nobr>Taken</a>
+                                    <a class='norm' href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_CANVAS%>">Oproepen lijst</a>
+									<br> <a class='norm' href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_ACCOUNT_ADMIN%>">Klanten</a>
+                                    <br> <a class='norm' href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_RECORD_SEARCH%>">Zoeken</a>
+                                    <br> <a class='norm' href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_ADMIN_WORKORDERS%>">Opdrachten</a>
+									<br> <a class='norm' href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_TASK_ADMIN%>">Taken</a>
 								</td>
 							</tr>
 						</table>
@@ -90,9 +90,9 @@ private String vSessionId;
 						<table class="menu" id="selecteren" width="150">
 							<tr>
 								<td class="menu">
-                                    <a class='norm' href="#" onclick="selectAll()"><nobr>Selecteer alles</a><br>
-									<a class='norm' href="#" onclick="deselectAll()"><nobr>Selecteer niets</a><br> 
-                                    <a class='norm' href="#" onclick="reverseSelection()"><nobr>Selectie omkeren</a>
+                                    <a class='norm' href="#" onclick="selectAll()">Selecteer alles</a><br>
+									<a class='norm' href="#" onclick="deselectAll()">Selecteer niets</a><br> 
+                                    <a class='norm' href="#" onclick="reverseSelection()">Selectie omkeren</a>
 								</td>
 							</tr>
 						</table>

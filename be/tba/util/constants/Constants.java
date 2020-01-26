@@ -33,7 +33,7 @@ public class Constants
     public static final String INVOICE_FOOTER_TMPL = "C:\\jetty\\templates\\invoice-footer-template.htm";
     public static final String INVOICE_DIR = "C:\\TheBusinessAssistant\\TheBusinessAssistant\\facturen\\";
     public static final String FILEUPLOAD_DIR = "C:\\jetty\\tempdir";
-    public static final String WORKORDER_FILEUPLOAD_DIR = "C:\\TheBusinessAssistant\\TheBusinessAssistant\\Workorders";
+    public static final String WORKORDER_FILEUPLOAD_DIR = "C:\\Users\\yves\\Dropbox\\tbapublic\\Workorders";
     public static final String WC_KLANTEN_XML = "WoltersKluwerKlanten.xml";
     public static final String WC_VERKOPEN_XML = "WoltersKluwerVerkopen.xml";
     public static final String ADMIN_LOGIN_HTML = "/tba/admin.html";

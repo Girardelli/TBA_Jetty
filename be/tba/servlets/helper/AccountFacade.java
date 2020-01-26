@@ -20,6 +20,7 @@ import be.tba.util.exceptions.remote.AccountNotFoundException;
 import be.tba.util.invoice.InvoiceHelper;
 import be.tba.util.invoice.WoltersKluwenImport;
 import be.tba.util.session.AccountCache;
+import be.tba.util.session.SessionParmsInf;
 import be.tba.servlets.session.WebSession;
 
 public class AccountFacade
@@ -37,30 +38,30 @@ public class AccountFacade
         AccountCache.getInstance().update(session);
     }
 
-    public static void deregisterAccount(WebSession session, HttpServletRequest req) throws AccountNotFoundException
+    public static void deregisterAccount(WebSession session, SessionParmsInf parms) throws AccountNotFoundException
     {
-        String accountIdStr = (String) req.getParameter(Constants.ACCOUNT_ID);
+        String accountIdStr = (String) parms.getParameter(Constants.ACCOUNT_ID);
         int accountId = Integer.valueOf(accountIdStr);
         AccountSqlAdapter vAccountSession = new AccountSqlAdapter();
         vAccountSession.deregister(session, accountId);
         AccountCache.getInstance().update(session);
     }
 
-    public static Vector<String> addAccount(WebSession session, HttpServletRequest req) throws SystemErrorException
+    public static Vector<String> addAccount(WebSession session, HttpServletRequest req, SessionParmsInf parms) throws SystemErrorException
     {
         System.out.println("addAccount");
-        String roleStr = req.getParameter(Constants.ACCOUNT_ROLE);
-        String superCustomer = req.getParameter(Constants.ACCOUNT_SUPER_CUSTOMER);
+        String roleStr = parms.getParameter(Constants.ACCOUNT_ROLE);
+        String superCustomer = parms.getParameter(Constants.ACCOUNT_SUPER_CUSTOMER);
         AccountRole role = AccountRole.fromShort(roleStr);
         
         AccountEntityData newAccount = new AccountEntityData();
         SetDefaultCallPrices(newAccount);
-        newAccount.setFullName(req.getParameter(Constants.ACCOUNT_FULLNAME));
+        newAccount.setFullName(parms.getParameter(Constants.ACCOUNT_FULLNAME));
         newAccount.setRole(roleStr);
         
         if (role == AccountRole.ADMIN || role == AccountRole.EMPLOYEE)
         {
-            Vector<String> vErrorList = ValidateEmployeeFields(req);
+            Vector<String> vErrorList = ValidateEmployeeFields(parms);
             if (vErrorList.size() > 0)
             {
                 req.setAttribute(Constants.ERROR_VECTOR, vErrorList);
@@ -68,8 +69,8 @@ public class AccountFacade
             }
             else
             {
-                newAccount.setUserId(req.getParameter(Constants.ACCOUNT_USERID));
-                newAccount.setPassword(req.getParameter(Constants.ACCOUNT_PASSWORD));
+                newAccount.setUserId(parms.getParameter(Constants.ACCOUNT_USERID));
+                newAccount.setPassword(parms.getParameter(Constants.ACCOUNT_PASSWORD));
                 System.out.println("no error on employee add");
             }
             newAccount.setSuperCustomer("");
@@ -87,7 +88,7 @@ public class AccountFacade
             newAccount.setPassword("");
             newAccount.setSuperCustomer(superCustomer);
             newAccount.setSuperCustomerId(AccountCache.getInstance().get(superCustomer).getId());
-            newAccount.setFwdNumber(req.getParameter(Constants.ACCOUNT_FORWARD_NUMBER));
+            newAccount.setFwdNumber(parms.getParameter(Constants.ACCOUNT_FORWARD_NUMBER));
         }
         else
         {
@@ -95,7 +96,7 @@ public class AccountFacade
             newAccount.setPassword("");
             newAccount.setSuperCustomer("");
             newAccount.setSuperCustomerId(0);
-            newAccount.setFwdNumber(req.getParameter(Constants.ACCOUNT_FORWARD_NUMBER));
+            newAccount.setFwdNumber(parms.getParameter(Constants.ACCOUNT_FORWARD_NUMBER));
         }
         newAccount.setCompanyName("");
         newAccount.setAttToName("");
@@ -117,9 +118,9 @@ public class AccountFacade
         vQuerySession.changeFwdNumber(session, oldNr, newNr);
     }
 
-    public static void mailCustomer(HttpServletRequest req, WebSession session)
+    public static void mailCustomer(SessionParmsInf parms, WebSession session)
     {
-        String accountIdStr = (String) req.getParameter(Constants.ACCOUNT_ID);
+        String accountIdStr = (String) parms.getParameter(Constants.ACCOUNT_ID);
         int accountId = Integer.valueOf(accountIdStr);
         AccountEntityData vAccountData = AccountCache.getInstance().get(accountId);
         String vEmail = vAccountData.getEmail();
@@ -129,9 +130,9 @@ public class AccountFacade
         }
     }
 
-    public static File generateKlantenXml(HttpServletRequest req, WebSession session)
+    public static File generateKlantenXml(SessionParmsInf parms, WebSession session)
     {
-        String vLtd = (String) req.getParameter(Constants.ACCOUNT_TO_DELETE);
+        String vLtd = (String) parms.getParameter(Constants.ACCOUNT_TO_DELETE);
         if (vLtd != null && vLtd.length() > 0)
         {
             //System.out.println("setInvoicesPayed: # entries " + vLtd);
@@ -150,25 +151,25 @@ public class AccountFacade
         return null;
     }
 
-    public static AccountEntityData updateAccountData(WebSession session, HttpServletRequest req)
+    public static AccountEntityData updateAccountData(WebSession session, SessionParmsInf parms)
     {
-        String accountIdStr = (String) req.getParameter(Constants.ACCOUNT_ID);
+        String accountIdStr = (String) parms.getParameter(Constants.ACCOUNT_ID);
         int accountId = Integer.valueOf(accountIdStr);
         AccountEntityData vAccount = new AccountEntityData(AccountCache.getInstance().get(accountId));
-        vAccount.setFullName(req.getParameter(Constants.ACCOUNT_FULLNAME));
-        vAccount.setEmail(req.getParameter(Constants.ACCOUNT_EMAIL));
-        vAccount.setInvoiceEmail(req.getParameter(Constants.ACCOUNT_INVOICE_EMAIL));
-        vAccount.setGsm(req.getParameter(Constants.ACCOUNT_GSM));
-        vAccount.setCountryCode(req.getParameter(Constants.ACCOUNT_COUNTRY_CODE));
+        vAccount.setFullName(parms.getParameter(Constants.ACCOUNT_FULLNAME));
+        vAccount.setEmail(parms.getParameter(Constants.ACCOUNT_EMAIL));
+        vAccount.setInvoiceEmail(parms.getParameter(Constants.ACCOUNT_INVOICE_EMAIL));
+        vAccount.setGsm(parms.getParameter(Constants.ACCOUNT_GSM));
+        vAccount.setCountryCode(parms.getParameter(Constants.ACCOUNT_COUNTRY_CODE));
         
         if (session.getRole() == AccountRole.ADMIN)
         {
-           vAccount.setFwdNumber(req.getParameter(Constants.ACCOUNT_FORWARD_NUMBER));
-           vAccount.setHasSubCustomers(req.getParameter(Constants.ACCOUNT_HAS_SUB_CUSTOMERS) != null);
-           vAccount.setIsAutoRelease(req.getParameter(Constants.ACCOUNT_AUTO_RELEASE) != null);
-           vAccount.setTaskHourRate(Integer.parseInt((String) req.getParameter(Constants.ACCOUNT_TASK_HOUR_RATE)));
+           vAccount.setFwdNumber(parms.getParameter(Constants.ACCOUNT_FORWARD_NUMBER));
+           vAccount.setHasSubCustomers(parms.getParameter(Constants.ACCOUNT_HAS_SUB_CUSTOMERS) != null);
+           vAccount.setIsAutoRelease(parms.getParameter(Constants.ACCOUNT_AUTO_RELEASE) != null);
+           vAccount.setTaskHourRate(Integer.parseInt((String) parms.getParameter(Constants.ACCOUNT_TASK_HOUR_RATE)));
 
-           String vInvoiceType = (String) req.getParameter(Constants.ACCOUNT_INVOICE_TYPE);
+           String vInvoiceType = (String) parms.getParameter(Constants.ACCOUNT_INVOICE_TYPE);
 
            if (vInvoiceType.equals(Constants.INVOICE_TYPE_WEEK))
            {
@@ -194,31 +195,31 @@ public class AccountFacade
            // {
 
            // vAccount.setFacStdInCall(Integer.parseInt((String)
-           // req.getParameter(Constants.ACCOUNT_FAC_STD_IN_CALL)));
-           vAccount.setFacStdOutCall(Integer.parseInt((String) req.getParameter(Constants.ACCOUNT_FAC_STD_OUT_CALL)));
-           vAccount.setFacFaxCall(Integer.parseInt((String) req.getParameter(Constants.ACCOUNT_FAC_FAX_CALL)));
-           vAccount.setFacSms(Integer.parseInt((String) req.getParameter(Constants.ACCOUNT_FAC_SMS)));
-           vAccount.setFacCallForward(Integer.parseInt((String) req.getParameter(Constants.ACCOUNT_FAC_CALL_FORWARD)));
+           // parms.getParameter(Constants.ACCOUNT_FAC_STD_IN_CALL)));
+           vAccount.setFacStdOutCall(Integer.parseInt((String) parms.getParameter(Constants.ACCOUNT_FAC_STD_OUT_CALL)));
+           vAccount.setFacFaxCall(Integer.parseInt((String) parms.getParameter(Constants.ACCOUNT_FAC_FAX_CALL)));
+           vAccount.setFacSms(Integer.parseInt((String) parms.getParameter(Constants.ACCOUNT_FAC_SMS)));
+           vAccount.setFacCallForward(Integer.parseInt((String) parms.getParameter(Constants.ACCOUNT_FAC_CALL_FORWARD)));
 
-           vAccount.setFacTblMinCalls_I(Integer.parseInt((String) req.getParameter(Constants.ACCOUNT_FAC_TBL_MIN_CALL_I)));
-           vAccount.setFacTblStartCost_I(Double.parseDouble((String) req.getParameter(Constants.ACCOUNT_FAC_TBL_START_COST_I)));
-           vAccount.setFacTblExtraCost_I(Double.parseDouble((String) req.getParameter(Constants.ACCOUNT_FAC_TBL_EXTRA_COST_I)));
-           vAccount.setFacTblMinCalls_II(Integer.parseInt((String) req.getParameter(Constants.ACCOUNT_FAC_TBL_MIN_CALL_II)));
-           vAccount.setFacTblStartCost_II(Double.parseDouble((String) req.getParameter(Constants.ACCOUNT_FAC_TBL_START_COST_II)));
-           vAccount.setFacTblExtraCost_II(Double.parseDouble((String) req.getParameter(Constants.ACCOUNT_FAC_TBL_EXTRA_COST_II)));
-           vAccount.setFacTblMinCalls_III(Integer.parseInt((String) req.getParameter(Constants.ACCOUNT_FAC_TBL_MIN_CALL_III)));
-           vAccount.setFacTblStartCost_III(Double.parseDouble((String) req.getParameter(Constants.ACCOUNT_FAC_TBL_START_COST_III)));
-           vAccount.setFacTblExtraCost_III(Double.parseDouble((String) req.getParameter(Constants.ACCOUNT_FAC_TBL_EXTRA_COST_III)));
-           vAccount.setFacTblMinCalls_IV(Integer.parseInt((String) req.getParameter(Constants.ACCOUNT_FAC_TBL_MIN_CALL_IV)));
-           vAccount.setFacTblStartCost_IV(Double.parseDouble((String) req.getParameter(Constants.ACCOUNT_FAC_TBL_START_COST_IV)));
-           vAccount.setFacTblExtraCost_IV(Double.parseDouble((String) req.getParameter(Constants.ACCOUNT_FAC_TBL_EXTRA_COST_IV)));
-           vAccount.setFacOutLevel1(Integer.parseInt((String) req.getParameter(Constants.ACCOUNT_FAC_OUT_LEVEL1)));
-           vAccount.setFacOutLevel2(Integer.parseInt((String) req.getParameter(Constants.ACCOUNT_FAC_OUT_LEVEL2)));
-           vAccount.setFacOutLevel3(Integer.parseInt((String) req.getParameter(Constants.ACCOUNT_FAC_OUT_LEVEL3)));
-           vAccount.setCountAllLongCalls(req.getParameter(Constants.ACCOUNT_COUNT_ALL_LONG_CALLS) != null ? true : false);
-           vAccount.setCountLongFwdCalls(req.getParameter(Constants.ACCOUNT_COUNT_LONG_FWD_CALLS) != null ? true : false);
-           vAccount.setFacLong(Double.parseDouble((String) req.getParameter(Constants.ACCOUNT_FAC_LONG)));
-           vAccount.setFacLongFwd(Double.parseDouble((String) req.getParameter(Constants.ACCOUNT_FAC_LONG_FWD)));
+           vAccount.setFacTblMinCalls_I(Integer.parseInt((String) parms.getParameter(Constants.ACCOUNT_FAC_TBL_MIN_CALL_I)));
+           vAccount.setFacTblStartCost_I(Double.parseDouble((String) parms.getParameter(Constants.ACCOUNT_FAC_TBL_START_COST_I)));
+           vAccount.setFacTblExtraCost_I(Double.parseDouble((String) parms.getParameter(Constants.ACCOUNT_FAC_TBL_EXTRA_COST_I)));
+           vAccount.setFacTblMinCalls_II(Integer.parseInt((String) parms.getParameter(Constants.ACCOUNT_FAC_TBL_MIN_CALL_II)));
+           vAccount.setFacTblStartCost_II(Double.parseDouble((String) parms.getParameter(Constants.ACCOUNT_FAC_TBL_START_COST_II)));
+           vAccount.setFacTblExtraCost_II(Double.parseDouble((String) parms.getParameter(Constants.ACCOUNT_FAC_TBL_EXTRA_COST_II)));
+           vAccount.setFacTblMinCalls_III(Integer.parseInt((String) parms.getParameter(Constants.ACCOUNT_FAC_TBL_MIN_CALL_III)));
+           vAccount.setFacTblStartCost_III(Double.parseDouble((String) parms.getParameter(Constants.ACCOUNT_FAC_TBL_START_COST_III)));
+           vAccount.setFacTblExtraCost_III(Double.parseDouble((String) parms.getParameter(Constants.ACCOUNT_FAC_TBL_EXTRA_COST_III)));
+           vAccount.setFacTblMinCalls_IV(Integer.parseInt((String) parms.getParameter(Constants.ACCOUNT_FAC_TBL_MIN_CALL_IV)));
+           vAccount.setFacTblStartCost_IV(Double.parseDouble((String) parms.getParameter(Constants.ACCOUNT_FAC_TBL_START_COST_IV)));
+           vAccount.setFacTblExtraCost_IV(Double.parseDouble((String) parms.getParameter(Constants.ACCOUNT_FAC_TBL_EXTRA_COST_IV)));
+           vAccount.setFacOutLevel1(Integer.parseInt((String) parms.getParameter(Constants.ACCOUNT_FAC_OUT_LEVEL1)));
+           vAccount.setFacOutLevel2(Integer.parseInt((String) parms.getParameter(Constants.ACCOUNT_FAC_OUT_LEVEL2)));
+           vAccount.setFacOutLevel3(Integer.parseInt((String) parms.getParameter(Constants.ACCOUNT_FAC_OUT_LEVEL3)));
+           vAccount.setCountAllLongCalls(parms.getParameter(Constants.ACCOUNT_COUNT_ALL_LONG_CALLS) != null ? true : false);
+           vAccount.setCountLongFwdCalls(parms.getParameter(Constants.ACCOUNT_COUNT_LONG_FWD_CALLS) != null ? true : false);
+           vAccount.setFacLong(Double.parseDouble((String) parms.getParameter(Constants.ACCOUNT_FAC_LONG)));
+           vAccount.setFacLongFwd(Double.parseDouble((String) parms.getParameter(Constants.ACCOUNT_FAC_LONG_FWD)));
 
            // vAccount.setFacTblMinCalls_I(Constants.kFacTblMinCalls_I);
            // vAccount.setFacTblStartCost_I(Constants.kFacTblStartCost_I);
@@ -234,9 +235,9 @@ public class AccountFacade
            // vAccount.setFacTblExtraCost_IV(Constants.kFacTblExtraCost_IV);
 
            vAccount.setFacAgendaCall(Constants.kStandardAgendaCost);
-           if (req.getParameter(Constants.ACCOUNT_FAC_AGENDA_CALL) != null)
-               vAccount.setFacAgendaCall(Integer.parseInt((String) req.getParameter(Constants.ACCOUNT_FAC_AGENDA_CALL)));
-           String vAgendaPriceUnit = (String) req.getParameter(Constants.ACCOUNT_FAC_AGENDA_UNIT);
+           if (parms.getParameter(Constants.ACCOUNT_FAC_AGENDA_CALL) != null)
+               vAccount.setFacAgendaCall(Integer.parseInt((String) parms.getParameter(Constants.ACCOUNT_FAC_AGENDA_CALL)));
+           String vAgendaPriceUnit = (String) parms.getParameter(Constants.ACCOUNT_FAC_AGENDA_UNIT);
            if (vAgendaPriceUnit == null || vAgendaPriceUnit.equals(Constants.AGENDA_NO))
                vAccount.setAgendaPriceUnit(InvoiceHelper.kNoAgenda);
            else if (vAgendaPriceUnit.equals(Constants.AGENDA_STANDARD))
@@ -254,98 +255,98 @@ public class AccountFacade
 
            System.out.println("update account: setAgendaPriceUnit()=" + vAccount.getAgendaPriceUnit());
 
-           if (req.getParameter(Constants.ACCOUNT_MAIL_ON1) != null)
+           if (parms.getParameter(Constants.ACCOUNT_MAIL_ON1) != null)
            {
-               vAccount.setMailMinutes1(Short.parseShort((String) req.getParameter(Constants.ACCOUNT_MAIL_MINUTEN1)));
-               vAccount.setMailHour1(Short.parseShort((String) req.getParameter(Constants.ACCOUNT_MAIL_UUR1)));
+               vAccount.setMailMinutes1(Short.parseShort((String) parms.getParameter(Constants.ACCOUNT_MAIL_MINUTEN1)));
+               vAccount.setMailHour1(Short.parseShort((String) parms.getParameter(Constants.ACCOUNT_MAIL_UUR1)));
            }
            else
            {
                vAccount.setMailMinutes1((short) 0);
                vAccount.setMailHour1((short) 0);
            }
-           if (req.getParameter(Constants.ACCOUNT_MAIL_ON2) != null)
+           if (parms.getParameter(Constants.ACCOUNT_MAIL_ON2) != null)
            {
-               vAccount.setMailMinutes2(Short.parseShort((String) req.getParameter(Constants.ACCOUNT_MAIL_MINUTEN2)));
-               vAccount.setMailHour2(Short.parseShort((String) req.getParameter(Constants.ACCOUNT_MAIL_UUR2)));
+               vAccount.setMailMinutes2(Short.parseShort((String) parms.getParameter(Constants.ACCOUNT_MAIL_MINUTEN2)));
+               vAccount.setMailHour2(Short.parseShort((String) parms.getParameter(Constants.ACCOUNT_MAIL_UUR2)));
            }
            else
            {
                vAccount.setMailMinutes2((short) 0);
                vAccount.setMailHour2((short) 0);
            }
-           if (req.getParameter(Constants.ACCOUNT_MAIL_ON3) != null)
+           if (parms.getParameter(Constants.ACCOUNT_MAIL_ON3) != null)
            {
-               vAccount.setMailMinutes3(Short.parseShort((String) req.getParameter(Constants.ACCOUNT_MAIL_MINUTEN3)));
-               vAccount.setMailHour3(Short.parseShort((String) req.getParameter(Constants.ACCOUNT_MAIL_UUR3)));
+               vAccount.setMailMinutes3(Short.parseShort((String) parms.getParameter(Constants.ACCOUNT_MAIL_MINUTEN3)));
+               vAccount.setMailHour3(Short.parseShort((String) parms.getParameter(Constants.ACCOUNT_MAIL_UUR3)));
            }
            else
            {
                vAccount.setMailMinutes3((short) 0);
                vAccount.setMailHour3((short) 0);
            }
-           vAccount.setNoInvoice(req.getParameter(Constants.ACCOUNT_NO_INVOICE) != null);
-           vAccount.setNoBtw(req.getParameter(Constants.ACCOUNT_NO_BTW) != null);
+           vAccount.setNoInvoice(parms.getParameter(Constants.ACCOUNT_NO_INVOICE) != null);
+           vAccount.setNoBtw(parms.getParameter(Constants.ACCOUNT_NO_BTW) != null);
 
-           vAccount.setNoEmptyMails(req.getParameter(Constants.ACCOUNT_NO_EMPTY_MAILS) != null);
-           vAccount.setIsMailInvoice(req.getParameter(Constants.ACCOUNT_IS_MAIL_INVOICE) != null);
-           vAccount.setTextMail(req.getParameter(Constants.ACCOUNT_TEXT_MAIL) != null);
+           vAccount.setNoEmptyMails(parms.getParameter(Constants.ACCOUNT_NO_EMPTY_MAILS) != null);
+           vAccount.setIsMailInvoice(parms.getParameter(Constants.ACCOUNT_IS_MAIL_INVOICE) != null);
+           vAccount.setTextMail(parms.getParameter(Constants.ACCOUNT_TEXT_MAIL) != null);
         }
 
-        vAccount.setCompanyName(req.getParameter(Constants.ACCOUNT_COMPANY_NAME));
-        vAccount.setAttToName(req.getParameter(Constants.ACCOUNT_ATT_TO_NAME));
-        vAccount.setStreet(req.getParameter(Constants.ACCOUNT_STREET));
-        vAccount.setCity(req.getParameter(Constants.ACCOUNT_CITY));
-        vAccount.setBtwNumber(req.getParameter(Constants.ACCOUNT_BTW_NUMBER));
-        vAccount.setAccountNr(req.getParameter(Constants.ACCOUNT_NR));
-        vAccount.setCallProcessInfo(req.getParameter(Constants.ACCOUNT_INFO));
+        vAccount.setCompanyName(parms.getParameter(Constants.ACCOUNT_COMPANY_NAME));
+        vAccount.setAttToName(parms.getParameter(Constants.ACCOUNT_ATT_TO_NAME));
+        vAccount.setStreet(parms.getParameter(Constants.ACCOUNT_STREET));
+        vAccount.setCity(parms.getParameter(Constants.ACCOUNT_CITY));
+        vAccount.setBtwNumber(parms.getParameter(Constants.ACCOUNT_BTW_NUMBER));
+        vAccount.setAccountNr(parms.getParameter(Constants.ACCOUNT_NR));
+        vAccount.setCallProcessInfo(parms.getParameter(Constants.ACCOUNT_INFO));
 
         return vAccount;
     }
 
-    public static void updateCustomerPrefs(WebSession session, HttpServletRequest req)
+    public static void updateCustomerPrefs(WebSession session, SessionParmsInf parms)
     {
        AccountSqlAdapter vAccountSession = new AccountSqlAdapter();
        AccountEntityData vAccount = vAccountSession.getRow(session, AccountCache.getInstance().get(session.getSessionFwdNr()).getId());
-       vAccount.setEmail(req.getParameter(Constants.ACCOUNT_EMAIL));
-       vAccount.setInvoiceEmail(req.getParameter(Constants.ACCOUNT_INVOICE_EMAIL));
-       vAccount.setGsm(req.getParameter(Constants.ACCOUNT_GSM));
-       vAccount.setCountryCode(req.getParameter(Constants.ACCOUNT_COUNTRY_CODE));
-       vAccount.setIsAutoRelease(req.getParameter(Constants.ACCOUNT_AUTO_RELEASE) != null);
+       vAccount.setEmail(parms.getParameter(Constants.ACCOUNT_EMAIL));
+       vAccount.setInvoiceEmail(parms.getParameter(Constants.ACCOUNT_INVOICE_EMAIL));
+       vAccount.setGsm(parms.getParameter(Constants.ACCOUNT_GSM));
+       vAccount.setCountryCode(parms.getParameter(Constants.ACCOUNT_COUNTRY_CODE));
+       vAccount.setIsAutoRelease(parms.getParameter(Constants.ACCOUNT_AUTO_RELEASE) != null);
 
-       if (req.getParameter(Constants.ACCOUNT_MAIL_ON1) != null)
+       if (parms.getParameter(Constants.ACCOUNT_MAIL_ON1) != null)
        {
-           vAccount.setMailMinutes1(Short.parseShort((String) req.getParameter(Constants.ACCOUNT_MAIL_MINUTEN1)));
-           vAccount.setMailHour1(Short.parseShort((String) req.getParameter(Constants.ACCOUNT_MAIL_UUR1)));
+           vAccount.setMailMinutes1(Short.parseShort((String) parms.getParameter(Constants.ACCOUNT_MAIL_MINUTEN1)));
+           vAccount.setMailHour1(Short.parseShort((String) parms.getParameter(Constants.ACCOUNT_MAIL_UUR1)));
        }
        else
        {
            vAccount.setMailMinutes1((short) 0);
            vAccount.setMailHour1((short) 0);
        }
-       if (req.getParameter(Constants.ACCOUNT_MAIL_ON2) != null)
+       if (parms.getParameter(Constants.ACCOUNT_MAIL_ON2) != null)
        {
-           vAccount.setMailMinutes2(Short.parseShort((String) req.getParameter(Constants.ACCOUNT_MAIL_MINUTEN2)));
-           vAccount.setMailHour2(Short.parseShort((String) req.getParameter(Constants.ACCOUNT_MAIL_UUR2)));
+           vAccount.setMailMinutes2(Short.parseShort((String) parms.getParameter(Constants.ACCOUNT_MAIL_MINUTEN2)));
+           vAccount.setMailHour2(Short.parseShort((String) parms.getParameter(Constants.ACCOUNT_MAIL_UUR2)));
        }
        else
        {
            vAccount.setMailMinutes2((short) 0);
            vAccount.setMailHour2((short) 0);
        }
-       if (req.getParameter(Constants.ACCOUNT_MAIL_ON3) != null)
+       if (parms.getParameter(Constants.ACCOUNT_MAIL_ON3) != null)
        {
-           vAccount.setMailMinutes3(Short.parseShort((String) req.getParameter(Constants.ACCOUNT_MAIL_MINUTEN3)));
-           vAccount.setMailHour3(Short.parseShort((String) req.getParameter(Constants.ACCOUNT_MAIL_UUR3)));
+           vAccount.setMailMinutes3(Short.parseShort((String) parms.getParameter(Constants.ACCOUNT_MAIL_MINUTEN3)));
+           vAccount.setMailHour3(Short.parseShort((String) parms.getParameter(Constants.ACCOUNT_MAIL_UUR3)));
        }
        else
        {
            vAccount.setMailMinutes3((short) 0);
            vAccount.setMailHour3((short) 0);
        }
-       vAccount.setNoEmptyMails(req.getParameter(Constants.ACCOUNT_NO_EMPTY_MAILS) != null);
-       vAccount.setTextMail(req.getParameter(Constants.ACCOUNT_TEXT_MAIL) != null);
-       vAccount.setIsMailInvoice(req.getParameter(Constants.ACCOUNT_IS_MAIL_INVOICE) != null);
+       vAccount.setNoEmptyMails(parms.getParameter(Constants.ACCOUNT_NO_EMPTY_MAILS) != null);
+       vAccount.setTextMail(parms.getParameter(Constants.ACCOUNT_TEXT_MAIL) != null);
+       vAccount.setIsMailInvoice(parms.getParameter(Constants.ACCOUNT_IS_MAIL_INVOICE) != null);
        vAccountSession.updateRow(session, vAccount);
        AccountCache.getInstance().update(session);
     }
@@ -373,13 +374,13 @@ public class AccountFacade
     }
 
     
-    private static Vector<String> ValidateEmployeeFields(HttpServletRequest req)
+    private static Vector<String> ValidateEmployeeFields(SessionParmsInf parms)
     {
         Vector<String> vFormFaults = new Vector<String>();
 
-        String vUserId = req.getParameter(Constants.ACCOUNT_USERID);
-        String vPassword = req.getParameter(Constants.ACCOUNT_PASSWORD);
-        String vPassword2 = req.getParameter(Constants.ACCOUNT_PASSWORD2);
+        String vUserId = parms.getParameter(Constants.ACCOUNT_USERID);
+        String vPassword = parms.getParameter(Constants.ACCOUNT_PASSWORD);
+        String vPassword2 = parms.getParameter(Constants.ACCOUNT_PASSWORD2);
 
         if (vUserId == null)
             vFormFaults.add("Login naam niet ingevuld.");

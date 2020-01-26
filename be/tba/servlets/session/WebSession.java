@@ -7,6 +7,8 @@ package be.tba.servlets.session;
 import java.io.Serializable;
 
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Vector;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -91,6 +93,7 @@ final public class WebSession implements Serializable
     private boolean mIsWebSocketActive = false;
     private Session mWsSession = null;
     private boolean mIsAutoUpdateRecord = false;
+    private Collection<String> mErrorList = new Vector<String>();
 
     public WebSession() throws SQLException
     {
@@ -127,6 +130,16 @@ final public class WebSession implements Serializable
                 System.out.println("Error in WebSession.close(): SQL connection could not be closed.");
             }
         }
+    }
+   
+    public Collection<String> getErrorList()
+    {
+       return mErrorList;
+    }
+    
+    public void setErrorList(Collection<String> list)
+    {
+       mErrorList = list;
     }
     
     public String getRecordId()

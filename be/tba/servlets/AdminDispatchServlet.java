@@ -39,6 +39,8 @@ import be.tba.util.exceptions.LostSessionException;
 import be.tba.util.exceptions.SystemErrorException;
 import be.tba.util.file.FileUploader;
 import be.tba.util.session.AccountCache;
+import be.tba.util.session.SessionParms;
+import be.tba.util.session.SessionParmsInf;
 
 @WebServlet("/upload")
 @MultipartConfig
@@ -74,10 +76,11 @@ public class AdminDispatchServlet extends HttpServlet
          String vAction = null;
          String uploadedFile = null;
          FileUploader fileUploader = null;
+         SessionParmsInf params = null;
          if (ServletFileUpload.isMultipartContent(req))
          {
             fileUploader = new FileUploader(req);
-            String accountId = fileUploader.getFormParameter(Constants.ACCOUNT_ID);
+            String accountId = fileUploader.getParameter(Constants.ACCOUNT_ID);
             AccountEntityData custAccount = AccountCache.getInstance().get(Integer.parseInt(accountId));
             if (custAccount == null) 
             {
@@ -85,12 +88,14 @@ public class AdminDispatchServlet extends HttpServlet
             }
             fileUploader.setStoragePath(Constants.WORKORDER_FILEUPLOAD_DIR + File.separator + Tools.spaces2underscores(custAccount.getFullName()) + File.separator + "done");
             fileUploader.upload(req);
-            vAction = fileUploader.getFormParameter(Constants.SRV_ACTION);
+            params = fileUploader;
          }
          else
          {
-            vAction = (String) req.getParameter(Constants.SRV_ACTION);
+            params = new SessionParms(req);
+            
          }
+         vAction = params.getParameter(Constants.SRV_ACTION);
 
          HttpSession httpSession = req.getSession();
          vSession = (WebSession) httpSession.getAttribute(Constants.SESSION_OBJ);
@@ -319,7 +324,7 @@ public class AdminDispatchServlet extends HttpServlet
             case Constants.REMOVE_PENDING_CALL:
             {
                System.out.println("execute REMOVE_PENDING_CALL");
-               IntertelCallManager.getInstance().removeCall(vSession, Integer.parseInt(req.getParameter(Constants.PENDING_CALL_ID)));
+               IntertelCallManager.getInstance().removeCall(vSession, Integer.parseInt(params.getParameter(Constants.PENDING_CALL_ID)));
                vSession.setIsAutoUpdateRecord(false);
                break;
             }
@@ -386,7 +391,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.UPDATE_SHORT_TEXT:
             {
-               CallRecordFacade.updateCustomerChanges(req, vSession, false);
+               CallRecordFacade.updateCustomerChanges(params, vSession, false);
                // rd = sc.getRequestDispatcher(Constants.CANVAS_JSP);
                break;
             }
@@ -396,7 +401,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.AUTO_RECORD_UPDATE:
             {
-               CallRecordFacade.retrieveRecordForUpdate(req, vSession);
+               CallRecordFacade.retrieveRecordForUpdate(params, vSession);
                vSession.setIsAutoUpdateRecord(true);
                rd = sc.getRequestDispatcher(Constants.UPDATE_RECORD_JSP);
                break;
@@ -407,7 +412,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.ACTION_GOTO_RECORD_UPDATE:
             {
-               CallRecordFacade.retrieveRecordForUpdate(req, vSession);
+               CallRecordFacade.retrieveRecordForUpdate(params, vSession);
                rd = sc.getRequestDispatcher(Constants.UPDATE_RECORD_JSP);
                break;
             }
@@ -417,7 +422,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.SAVE_RECORD:
             {
-               CallRecordFacade.saveRecord(req, vSession);
+               CallRecordFacade.saveRecord(params, vSession);
                vSession.setIsAutoUpdateRecord(false);
                rd = sc.getRequestDispatcher(Constants.CANVAS_JSP);
                break;
@@ -438,7 +443,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.SAVE_MAN_RECORD:
             {
-               CallRecordFacade.saveManualRecord(req, vSession);
+               CallRecordFacade.saveManualRecord(params, vSession);
                rd = sc.getRequestDispatcher(Constants.CANVAS_JSP);
                break;
             }
@@ -448,7 +453,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.RECORD_DELETE:
             {
-               CallRecordFacade.deleteRecords(req, vSession);
+               CallRecordFacade.deleteRecords(params, vSession);
                rd = sc.getRequestDispatcher(Constants.CANVAS_JSP);
                break;
             }
@@ -458,7 +463,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.GOTO_CANVAS:
             {
-               vSession.getCallFilter().setCustFilter(req.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER));
+               vSession.getCallFilter().setCustFilter(params.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER));
                rd = sc.getRequestDispatcher(Constants.CANVAS_JSP);
                break;
             }
@@ -468,9 +473,9 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
 //                case Constants.GOTO_RECORD_ADMIN:
 //                {
-//                    vSession.getCallFilter().setCustFilter((String) req.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER));
-//                    vSession.getCallFilter().setStateFilter((String) req.getParameter(Constants.ACCOUNT_FILTER_CALL_STATE));
-//                    vSession.getCallFilter().setDirFilter((String) req.getParameter(Constants.ACCOUNT_FILTER_CALL_DIR));
+//                    vSession.getCallFilter().setCustFilter(params.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER));
+//                    vSession.getCallFilter().setStateFilter(params.getParameter(Constants.ACCOUNT_FILTER_CALL_STATE));
+//                    vSession.getCallFilter().setDirFilter(params.getParameter(Constants.ACCOUNT_FILTER_CALL_DIR));
 //                    rd = sc.getRequestDispatcher(Constants.ADMIN_CALLS_JSP);
 //                    break;
 //                }
@@ -480,7 +485,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.NEW_CALL:
             {
-               CallRecordFacade.createNewUnmappedCall(req, vSession);
+               CallRecordFacade.createNewUnmappedCall(params, vSession);
                rd = sc.getRequestDispatcher(Constants.NEW_CALL_JSP);
                break;
             }
@@ -490,7 +495,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.REFRESH_OPEN_CALLS:
             {
-               CallRecordFacade.updateNewUnmappedCall(req, vSession);
+               CallRecordFacade.updateNewUnmappedCall(params, vSession);
                rd = sc.getRequestDispatcher(Constants.NEW_CALL_JSP);
                break;
             }
@@ -500,14 +505,14 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.SAVE_NEW_CALL:
             {
-               String vKey = (String) req.getParameter(Constants.RECORD_ID);
+               String vKey = params.getParameter(Constants.RECORD_ID);
                if (vKey == null || vKey.isEmpty())
                {
                   rd = sc.getRequestDispatcher(Constants.NEW_CALL_JSP);
                }
                else
                {
-                  if (CallRecordFacade.saveNewCall(req, vSession))
+                  if (CallRecordFacade.saveNewCall(params, vSession))
                   {
                      // System.out.println("fire SELECT_SUBCUSTOMER_JSP");
                      rd = sc.getRequestDispatcher(Constants.SELECT_SUBCUSTOMER_JSP);
@@ -527,9 +532,9 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.SAVE_NEW_SUBCUSTOMER:
             {
-               // String vKey = (String) req.getParameter(Constants.RECORD_ID);
-               String vNewFwdNr = (String) req.getParameter(Constants.ACCOUNT_NEW_FWDNR);
-               String vOldFwdNr = (String) req.getParameter(Constants.ACCOUNT_FWDNR);
+               // String vKey = params.getParameter(Constants.RECORD_ID);
+               String vNewFwdNr = params.getParameter(Constants.ACCOUNT_NEW_FWDNR);
+               String vOldFwdNr = params.getParameter(Constants.ACCOUNT_FWDNR);
 
                // System.out.println("SAVE_NEW_SUBCUSTOMER " + vNewFwdNr + ", " + vOldFwdNr);
                if (vNewFwdNr == null)
@@ -542,7 +547,7 @@ public class AdminDispatchServlet extends HttpServlet
                   {
                      if (!vOldFwdNr.equals(vNewFwdNr))
                      {
-                        CallRecordFacade.saveNewSubCustomer(req, vSession, vNewFwdNr);
+                        CallRecordFacade.saveNewSubCustomer(params, vSession, vNewFwdNr);
                      }
                      rd = sc.getRequestDispatcher(Constants.CANVAS_JSP);
                   }
@@ -558,7 +563,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.REMOVE_OPEN_CALL:
             {
-               CallRecordFacade.removeNewCall(req, vSession);
+               CallRecordFacade.removeNewCall(params, vSession);
                rd = sc.getRequestDispatcher(Constants.CANVAS_JSP);
                break;
             }
@@ -568,7 +573,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.GOTO_ACCOUNT_DELETE:
             {
-               String vLtd = (String) req.getParameter(Constants.ACCOUNT_TO_DELETE);
+               String vLtd = params.getParameter(Constants.ACCOUNT_TO_DELETE);
                StringTokenizer vStrTok = new StringTokenizer(vLtd, ",");
 
                System.out.println("goto account delete vLtd=" + vLtd);
@@ -662,12 +667,12 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.GOTO_SAVE_ACCOUNT:
             {
-               String accountIdStr = (String) req.getParameter(Constants.ACCOUNT_ID);
+               String accountIdStr = params.getParameter(Constants.ACCOUNT_ID);
                int accountId = Integer.valueOf(accountIdStr);
                AccountEntityData account = AccountCache.getInstance().get(accountId);
                String vOldNr = account.getFwdNumber();
-               String vNewNr = (String) req.getParameter(Constants.ACCOUNT_FORWARD_NUMBER);
-               AccountEntityData newData = AccountFacade.updateAccountData(vSession, req);
+               String vNewNr = params.getParameter(Constants.ACCOUNT_FORWARD_NUMBER);
+               AccountEntityData newData = AccountFacade.updateAccountData(vSession, params);
                System.out.println("old nr=" + vOldNr + ", new nr=" + vNewNr);
                if (vOldNr != null && vNewNr != null && !vOldNr.equals(vNewNr))
                {
@@ -703,7 +708,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.ACCOUNT_DEREG:
             {
-               AccountFacade.deregisterAccount(vSession, req);
+               AccountFacade.deregisterAccount(vSession, params);
                rd = sc.getRequestDispatcher(Constants.UPDATE_ACCOUNT_JSP);
                break;
             }
@@ -740,8 +745,8 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.ACCOUNT_ADD:
             {
-               Vector<String> errorList = AccountFacade.addAccount(vSession, req);
-               AccountRole role = AccountRole.fromShort(req.getParameter(Constants.ACCOUNT_ROLE));
+               Vector<String> errorList = AccountFacade.addAccount(vSession, req, params);
+               AccountRole role = AccountRole.fromShort(params.getParameter(Constants.ACCOUNT_ROLE));
                if (role == AccountRole.ADMIN || role == AccountRole.EMPLOYEE)
                {
                   if (errorList != null)
@@ -765,7 +770,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.MAIL_CUSTOMER:
             {
-               AccountFacade.mailCustomer(req, vSession);
+               AccountFacade.mailCustomer(params, vSession);
                rd = sc.getRequestDispatcher(Constants.UPDATE_ACCOUNT_JSP);
                break;
             }
@@ -775,7 +780,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.GOTO_ADD_INVOICE:
             {
-               vSession.getCallFilter().setCustFilter(req.getParameter(Constants.ACCOUNT_FILTER_ALL));
+               vSession.getCallFilter().setCustFilter(params.getParameter(Constants.ACCOUNT_FILTER_ALL));
                rd = sc.getRequestDispatcher(Constants.ADD_INVOICE_JSP);
                break;
             }
@@ -785,7 +790,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.INVOICE_ADD:
             {
-               InvoiceFacade.addManualInvoice(req, vSession);
+               InvoiceFacade.addManualInvoice(params, vSession);
                rd = sc.getRequestDispatcher(Constants.CANVAS_JSP);
                break;
             }
@@ -795,16 +800,16 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.GOTO_INVOICE:
             {
-               if (req.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER) != null)
-                  vSession.getCallFilter().setCustFilter(req.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER));
-               if (req.getParameter(Constants.INVOICE_MONTH) != null)
-                  vSession.setMonthsBack(Integer.parseInt((String) req.getParameter(Constants.INVOICE_MONTH)));
-               if (req.getParameter(Constants.INVOICE_YEAR) != null)
-                  vSession.setYear(Integer.parseInt((String) req.getParameter(Constants.INVOICE_YEAR)));
-               if (req.getParameter(Constants.INVOICE_ID) != null)
+               if (params.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER) != null)
+                  vSession.getCallFilter().setCustFilter(params.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER));
+               if (params.getParameter(Constants.INVOICE_MONTH) != null)
+                  vSession.setMonthsBack(Integer.parseInt(params.getParameter(Constants.INVOICE_MONTH)));
+               if (params.getParameter(Constants.INVOICE_YEAR) != null)
+                  vSession.setYear(Integer.parseInt(params.getParameter(Constants.INVOICE_YEAR)));
+               if (params.getParameter(Constants.INVOICE_ID) != null)
                {
-                  vSession.setInvoiceId(Integer.parseInt((String) req.getParameter(Constants.INVOICE_ID)));
-                  System.out.println("admindispatch GOTO_INVOICE: INVOICE_ID = " + req.getParameter(Constants.INVOICE_ID));
+                  vSession.setInvoiceId(Integer.parseInt(params.getParameter(Constants.INVOICE_ID)));
+                  System.out.println("admindispatch GOTO_INVOICE: INVOICE_ID = " + params.getParameter(Constants.INVOICE_ID));
                }
                else
                {
@@ -820,10 +825,10 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.GOTO_INVOICE_ADMIN:
             {
-               if (req.getParameter(Constants.INVOICE_MONTH) != null)
-                  vSession.setMonthsBack(Integer.parseInt((String) req.getParameter(Constants.INVOICE_MONTH)));
-               if (req.getParameter(Constants.INVOICE_YEAR) != null)
-                  vSession.setYear(Integer.parseInt((String) req.getParameter(Constants.INVOICE_YEAR)));
+               if (params.getParameter(Constants.INVOICE_MONTH) != null)
+                  vSession.setMonthsBack(Integer.parseInt(params.getParameter(Constants.INVOICE_MONTH)));
+               if (params.getParameter(Constants.INVOICE_YEAR) != null)
+                  vSession.setYear(Integer.parseInt(params.getParameter(Constants.INVOICE_YEAR)));
                rd = sc.getRequestDispatcher(Constants.ADMIN_INVOICE_JSP);
                break;
             }
@@ -833,10 +838,10 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.GENERATE_INVOICE:
             {
-               if (req.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER) != null)
-                  vSession.getCallFilter().setCustFilter(req.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER));
-               if (req.getParameter(Constants.INVOICE_MONTH) != null)
-                  vSession.setMonthsBack(Integer.parseInt((String) req.getParameter(Constants.INVOICE_MONTH)));
+               if (params.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER) != null)
+                  vSession.getCallFilter().setCustFilter(params.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER));
+               if (params.getParameter(Constants.INVOICE_MONTH) != null)
+                  vSession.setMonthsBack(Integer.parseInt(params.getParameter(Constants.INVOICE_MONTH)));
 
                if (vSession.getInvoiceHelper().generatePdfInvoice())
                {
@@ -878,7 +883,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.GENERATE_INVOICE_XML:
             {
-               InvoiceFacade.generateInvoiceXml(req, vSession);
+               InvoiceFacade.generateInvoiceXml(params, vSession);
                rd = sc.getRequestDispatcher(Constants.ADMIN_INVOICE_JSP);
                break;
             }
@@ -888,7 +893,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.GENERATE_ALL_INVOICES:
             {
-               InvoiceFacade.generateInvoices(req, vSession);
+               InvoiceFacade.generateInvoices(params, vSession);
                rd = sc.getRequestDispatcher(Constants.ADMIN_INVOICE_JSP);
                break;
             }
@@ -898,7 +903,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.INVOICE_FREEZE:
             {
-               InvoiceFacade.freezeInvoices(req, vSession);
+               InvoiceFacade.freezeInvoices(params, vSession);
                rd = sc.getRequestDispatcher(Constants.ADMIN_INVOICE_JSP);
                break;
             }
@@ -908,7 +913,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.INVOICE_MAIL:
             {
-               InvoiceFacade.mailInvoices(req, vSession);
+               InvoiceFacade.mailInvoices(params, vSession);
                rd = sc.getRequestDispatcher(Constants.ADMIN_INVOICE_JSP);
                break;
             }
@@ -918,7 +923,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.INVOICE_SETPAYED:
             {
-               InvoiceFacade.setInvoicesPayed(req, vSession);
+               InvoiceFacade.setInvoicesPayed(params, vSession);
                rd = sc.getRequestDispatcher(Constants.OPEN_INVOICE_JSP);
                break;
             }
@@ -928,7 +933,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.INVOICE_DELETE:
             {
-               InvoiceFacade.deleteInvoices(req, vSession);
+               InvoiceFacade.deleteInvoices(params, vSession);
                rd = sc.getRequestDispatcher(Constants.ADMIN_INVOICE_JSP);
                break;
             }
@@ -938,7 +943,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.SAVE_INVOICE:
             {
-               InvoiceFacade.saveInvoice(req, vSession);
+               InvoiceFacade.saveInvoice(params, vSession);
                rd = sc.getRequestDispatcher(Constants.ADMIN_INVOICE_JSP);
                break;
             }
@@ -948,7 +953,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.SAVE_PAYDATE:
             {
-               InvoiceFacade.savePayDate(req, vSession);
+               InvoiceFacade.savePayDate(params, vSession);
                rd = sc.getRequestDispatcher(Constants.ADMIN_INVOICE_JSP);
                break;
             }
@@ -958,7 +963,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.GENERATE_CREDITNOTE:
             {
-               InvoiceFacade.generateCreditInvoice(req, vSession);
+               InvoiceFacade.generateCreditInvoice(params, vSession);
                rd = sc.getRequestDispatcher(Constants.ADMIN_INVOICE_JSP);
                break;
             }
@@ -968,10 +973,10 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.GOTO_RECORD_SEARCH:
             {
-               if (req.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER) != null)
-                  vSession.getCallFilter().setCustFilter(req.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER));
-               if (req.getParameter(Constants.RECORD_SEARCH_STR) != null)
-                  vSession.setSearchString((String) req.getParameter(Constants.RECORD_SEARCH_STR));
+               if (params.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER) != null)
+                  vSession.getCallFilter().setCustFilter(params.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER));
+               if (params.getParameter(Constants.RECORD_SEARCH_STR) != null)
+                  vSession.setSearchString(params.getParameter(Constants.RECORD_SEARCH_STR));
                Calendar calendar = Calendar.getInstance();
                vSession.setYear(calendar.get(Calendar.YEAR));
                vSession.setMonthsBack(calendar.get(Calendar.MONTH));
@@ -1007,7 +1012,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.TASK_DELETE:
             {
-               TaskFacade.deleteTask(req, vSession);
+               TaskFacade.deleteTask(params, vSession);
                rd = sc.getRequestDispatcher(Constants.ADMIN_TASK_JSP);
                break;
             }
@@ -1017,8 +1022,8 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.GOTO_TASK_ADMIN:
             {
-               if (req.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER) != null)
-                  vSession.getCallFilter().setCustFilter((String) req.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER));
+               if (params.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER) != null)
+                  vSession.getCallFilter().setCustFilter(params.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER));
                rd = sc.getRequestDispatcher(Constants.ADMIN_TASK_JSP);
                break;
             }
@@ -1028,7 +1033,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.TASK_UPDATE:
             {
-               TaskFacade.modifyTask(req, vSession);
+               TaskFacade.modifyTask(params, vSession);
                rd = sc.getRequestDispatcher(Constants.UPDATE_TASK_JSP);
                break;
             }
@@ -1038,7 +1043,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.SAVE_TASK:
             {
-               TaskFacade.saveTask(req, vSession);
+               TaskFacade.saveTask(params, vSession);
                rd = sc.getRequestDispatcher(Constants.ADMIN_TASK_JSP);
                break;
             }
@@ -1057,7 +1062,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.TASK_ADD:
             {
-               TaskFacade.addTask(req, vSession);
+               TaskFacade.addTask(params, vSession);
                rd = sc.getRequestDispatcher(Constants.ADMIN_TASK_JSP);
                break;
             }
@@ -1097,7 +1102,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.GOTO_WORKORDER:
             {
-               String id = (String) req.getParameter(Constants.WORKORDER_ID);
+               String id = params.getParameter(Constants.WORKORDER_ID);
                vSession.setWorkOrderId(Integer.parseInt(id));
                rd = sc.getRequestDispatcher(Constants.WORKORDER_JSP);
                break;
@@ -1108,7 +1113,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.ACTION_SAVE_WORKORDER:
             {
-               TaskFacade.saveWorkOrder(req, vSession);
+               TaskFacade.saveWorkOrder(params, vSession);
                rd = sc.getRequestDispatcher(Constants.ADMIN_WORK_ORDER_JSP);
                break;
             }
@@ -1120,7 +1125,7 @@ public class AdminDispatchServlet extends HttpServlet
             {
                fileUploader.upload(req);
                uploadedFile = fileUploader.waitTillFinished();
-               if (TaskFacade.addWorkOrderFile(req, vSession, uploadedFile))
+               if (TaskFacade.addWorkOrderFile(params, vSession, uploadedFile))
                {
                   vSession.setUploadedFileName(uploadedFile);
                   rd = sc.getRequestDispatcher(Constants.WORKORDER_JSP);
@@ -1138,7 +1143,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.DELETE_WORKORDER_FILE:
             {
-               TaskFacade.deleteWorkOrderFile(req, vSession);
+               TaskFacade.deleteWorkOrderFile(params, vSession);
                rd = sc.getRequestDispatcher(Constants.WORKORDER_JSP);
                break;
             }
