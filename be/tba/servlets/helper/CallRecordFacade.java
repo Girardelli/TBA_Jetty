@@ -133,6 +133,10 @@ public class CallRecordFacade
       {
          MailNowTask.send(vCallData.getAccountId());
       }
+      else if (vCallData.getIsImportantCall())
+      {
+         System.out.println("INFO: expected a mail for important call. prevIsImportant=" + prevIsImportant + ", isDocumented=" + vCallData.getIsDocumented());
+      }
    }
 
    /*

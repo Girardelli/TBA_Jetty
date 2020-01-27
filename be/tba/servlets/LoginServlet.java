@@ -70,15 +70,13 @@ public class LoginServlet extends HttpServlet
             sc = getServletContext();
             rd = sc.getRequestDispatcher(Constants.REGISTER_JSP);
 
-            if (vAction == null)
+            switch (vAction)
             {
-                throw new SystemErrorException("No action passed to LoginServlet.");
-            }
-
+            
             // ==============================================================================================
             // LOGIN
             // ==============================================================================================
-            else if (vAction.equals(Constants.ACTION_LOGIN))
+            case Constants.ACTION_LOGIN:
             {
                 if (vUserId == null || vPassword == null)
                     throw new SystemErrorException("User id or password null.");
@@ -133,12 +131,13 @@ public class LoginServlet extends HttpServlet
                     req.setAttribute(Constants.ERROR_VECTOR, vErrorList);
                     rd = sc.getRequestDispatcher(Constants.REGISTER_JSP);
                 }
+                break;
             }
 
             // ==============================================================================================
             // REGISTER
             // ==============================================================================================
-            else if (vAction.equals(Constants.ACTION_REGISTER))
+            case Constants.ACTION_REGISTER:
             {
                 Vector<String> vErrorList = ValidateRegistrationForm(req);
                 if (vErrorList.size() > 0)
@@ -172,11 +171,12 @@ public class LoginServlet extends HttpServlet
                         rd = sc.getRequestDispatcher(Constants.CLIENT_CALLS_JSP);
                     }
                 }
+                break;
             }
             // ==============================================================================================
             // DICTAAT FORM
             // ==============================================================================================
-            else if (vAction.equals(Constants.ACTION_DICTAAT_FORM))
+            case Constants.ACTION_DICTAAT_FORM:
             {
                 Vector<String> vErrorList = ValidateDictaatForm(req);
                 if (vErrorList.size() > 0)
@@ -188,18 +188,22 @@ public class LoginServlet extends HttpServlet
                 {
                     rd = sc.getRequestDispatcher(Constants.FORM_SUBMIT_SUCCESS);
                 }
+                break;
             }
-            else if (vAction.equals(Constants.TBA_HOME))
+            case Constants.TBA_HOME:
             {
                 rd = sc.getRequestDispatcher(Constants.HOME_HTML);
+                break;
             }
-            else if (vAction.equals(Constants.ACTION_FIRST_REGISTER))
+            case Constants.ACTION_FIRST_REGISTER:
             {
                 rd = sc.getRequestDispatcher(Constants.REGISTER_JSP);
+                break;
             }
-            else
+            default:
             {
                 throw new Exception("unknown action: " + vAction);
+            }
             }
         }
         catch (AccountNotFoundException e)

@@ -1,6 +1,9 @@
 package be.tba.test;
 
 import java.io.IOException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -15,13 +18,21 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.apache.commons.logging.LogFactory;
+
 import com.sun.mail.smtp.SMTPTransport;
+
+import be.tba.servlets.AdminDispatchServlet;
+import be.tba.util.invoice.InvoiceHelper;
 
 //import be.tba.util.timer.Session;
 
 public class IntertelCallInjector 
 {
-	static String[][] kCallSessions = { {
+   private static Log log = LogFactory.getLog(IntertelCallInjector.class);
+ 
+   
+   static String[][] kCallSessions = { {
 		// answered call ended by caller
 	"phone_number_to=3214402105&inout=IN&origin=start&phone_number_from=32473949777&knummer=190313&hash=891f40283a842b5e3c22e259e062290eb9a619a42fae6a1691d3b2590feeb379&call_id=**id**&timestamp=**ts**",
 	"phone_number_to=3214402105&inout=IN&origin=answer&phone_number_from=32473949777&knummer=190313&answerby=aoelsaiyiiteysvnchbe794&hash=f3f1cd2772904371e497aacface994059433768b93c1d7fdfac077c6c1cbee80&call_id=**id**&timestamp=**ts**",
@@ -108,7 +119,6 @@ public class IntertelCallInjector
 	public static void main(String[] args) 
 	{
 		// TODO Auto-generated method stub
-		
 		
         Thread t1 = new Thread(new CallTestThread(kCallSessions[0], "1111"));
         t1.start();

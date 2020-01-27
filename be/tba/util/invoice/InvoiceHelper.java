@@ -875,10 +875,7 @@ public class InvoiceHelper
 
     static public String getInvoiceNumber(int year, int month, int seqNr)
     {
-        if ((year - 2000) < 10)
-            return new String("N-0" + (year - 2000) + (((month + 1) < 10) ? "0" : "") + (month + 1) + "nr" + seqNr);
-        else
-            return new String("N-" + (year - 2000) + (((month + 1) < 10) ? "0" : "") + (month + 1) + "nr" + seqNr);
+       return String.format("%02d%02d%04d", year - 2000, month + 1, seqNr);
     }
 
     static public String makeFileName(InvoiceEntityData invoiceData)
