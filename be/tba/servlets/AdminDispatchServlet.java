@@ -604,7 +604,7 @@ public class AdminDispatchServlet extends HttpServlet
                      req.setAttribute(Constants.ERROR_TXT, "Als je doorgaat wordt dit account gearchiveerd. Je kan dit account terug actief maken via de pagina 'gearchiveerde klanten'. Wilt u hiermee verder gaan?");
                      req.setAttribute(Constants.NEXT_PAGE, Constants.ACCOUNT_DELETE);
                      req.setAttribute(Constants.PREVIOUS_PAGE, Constants.GOTO_ACCOUNT_ADMIN);
-                     vSession.setSessionFwdNr(vLtd);
+                     vSession.setAccountIdToDelete(Integer.parseInt(vLtd));
                      rd = sc.getRequestDispatcher(Constants.ARE_YOU_SURE_JSP);
                   }
                }
@@ -634,14 +634,14 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.ACCOUNT_DELETE:
             {
-               System.out.println("account delete: current id=" + vSession.getCurrentAccountId());
+               System.out.println("account delete: current id=" + vSession.getAccountIdToDelete());
                // String accountFwdNr =
                // AccountCache.getInstance().idToFwdNr(Integer.parseInt(vSession.getCurrentAccountId()));
-               AccountEntityData accountData = AccountCache.getInstance().get(vSession.getCurrentAccountId());
+               AccountEntityData accountData = AccountCache.getInstance().get(vSession.getAccountIdToDelete());
                System.out.println("account delete: key=" + vSession.getCurrentAccountId() + ", fwd nr=" + accountData.getFwdNumber());
 
                AccountRole role = AccountRole.fromShort(accountData.getRole());
-               AccountFacade.archiveAccount(vSession, vSession.getCurrentAccountId());
+               AccountFacade.archiveAccount(vSession, vSession.getAccountIdToDelete());
                if (role == AccountRole.ADMIN || role == AccountRole.EMPLOYEE)
                {
                   rd = sc.getRequestDispatcher(Constants.ADMIN_EMPLOYEE_JSP);

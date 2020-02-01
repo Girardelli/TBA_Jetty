@@ -87,7 +87,7 @@ private String vSessionId;
 					</td>
 					<td onmouseover="showmenu('selecteren')" onmouseout="hidemenu('selecteren')">
 						<div class="topMenu">&nbsp;&nbsp;&nbsp;Selecteren&nbsp;&nbsp;&nbsp;</div>
-						<table class="menu" id="selecteren" width="150">
+						<table class="menu" id="selecteren" width="200">
 							<tr>
 								<td class="menu">
                                     <a class='norm' href="#" onclick="selectAll()">Selecteer alles</a><br>
@@ -117,14 +117,14 @@ private String vSessionId;
 							</tr>
 						</table>
 					</td>
+                    <%
+        }
+    %>
                     <td width=100%>
                     </td>
                     <td><div align="right"><a class='tbabuttonorange' href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ADMIN_LOG_OFF%>">Afmelden</a></div>
                     </td>
                     <td>&nbsp;&nbsp;</td>
-					<%
-        }
-    %>
 				</tr>
 
 			</table>

@@ -227,6 +227,7 @@ final public class AccountCache
 
    private void converToHashMap(Collection<AccountEntityData> rawList)
    {
+      System.out.println("AccountCache::converToHashMap()");
       mRawUnarchivedCollection.clear();
       mCallCustomerSortedList.clear();
       mNameSortedList.clear();

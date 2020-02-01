@@ -72,6 +72,7 @@ final public class WebSession implements Serializable
     private int mYear = 0;
 
     private int mInvoiceId = -1;
+    private int accountIdToDelete = 0;
 
     private HttpServletRequest mOldRequest;
 
@@ -241,6 +242,16 @@ final public class WebSession implements Serializable
     public TaskEntityData getCurrentTask()
     {
         return mCurrentTask;
+    }
+    
+    public void setAccountIdToDelete(int id)
+    {
+       accountIdToDelete = id;
+    }
+
+    public int getAccountIdToDelete()
+    {
+        return accountIdToDelete;
     }
 
     public void setCurrentAccountId(int id)
