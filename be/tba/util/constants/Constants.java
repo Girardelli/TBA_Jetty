@@ -58,7 +58,6 @@ public class Constants
     public static final String SELECT_SUBCUSTOMER_JSP = "/admin/selectSubCustomer.jsp";
     public static final String UPDATE_RECORD_JSP = "/admin/updateRecord.jsp";
     public static final String ADD_RECORD_JSP = "/admin/addrecord.jsp";
-    public static final String ADMIN_CALLS_JSP = "/admin/admincalls.jsp";
     public static final String INVOICE_JSP = "/admin/invoice.jsp";
     public static final String ADMIN_SEARCH_JSP = "/admin/search.jsp";
     public static final String ADMIN_TASK_JSP = "/admin/admintasks.jsp";
@@ -480,7 +479,6 @@ public class Constants
     public static final long CUSTOMER_SESSION_TIMEOUT = MINUTES * 120; // 5 minuten
     public static final long ADMIN_SESSION_TIMEOUT = MINUTES * 60; // 50 minuten
     public static final long NORMAL_CALL_LENGTH = 90; // 90 seconds
-    public static final double CENT_PER_LONG_CALL_SECOND = 0.01; // 1,4 cent
     public static final String CENT_PER_LONG_CALL_SECOND_STR = "0.01"; // 0,5 cent
     public static final int kOutCost = 100; // euro cent
     public static final int kSmsCost = 100; // euro cent
@@ -493,10 +491,10 @@ public class Constants
     public static final double kFacLongFwd = 0.014;
     public static final int kFacTblMinCalls_I = 75;
     public static final double kFacTblStartCost_I = 110.0;
-    public static final double kFacTblExtraCost_I = 1.00;
+    public static final double kFacTblExtraCost_I = 1.2;
     public static final int kFacTblMinCalls_II = 40;
     public static final double kFacTblStartCost_II = 80.0;
-    public static final double kFacTblExtraCost_II = 1.0;
+    public static final double kFacTblExtraCost_II = 1.2;
     public static final int kFacTblMinCalls_III = 0;
     public static final double kFacTblStartCost_III = 80.0;
     public static final double kFacTblExtraCost_III = 0.0;

@@ -214,27 +214,13 @@ public class InvoiceHelper
 
         // System.out.println("Set new pricing for " +
         // mAccountEntityData.getFullName());
-        // mTarifs[0] = new Tarifs(1, "I", 75, 110.00, 1.0);
-        // mTarifs[1] = new Tarifs(2, "II", 40, 80.00, 1.00);
+        // mTarifs[0] = new Tarifs(1, "I", 75, 110.00, 1.2);
+        // mTarifs[1] = new Tarifs(2, "II", 40, 80.00, 1.2);
         // mTarifs[2] = new Tarifs(3, "III forfait", 0, 80.00, 0.00);
         // mTarifs[3] = new Tarifs(4, "IV", 12, 60.00, 1.45);
 
-        // mAccountEntityData.setCountAllLongCalls(false);
-        // mAccountEntityData.setCountLongFwdCalls(false);
-        // mAccountEntityData.setFacLongFwd(0.0);//Constants.CENT_PER_LONG_CALL_SECOND);
-        // mAccountEntityData.setFacLong(0.0);//Constants.CENT_PER_LONG_CALL_SECOND);
-
         InvoiceSqlAdapter vInvoiceSession = new InvoiceSqlAdapter();
         CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
-
-        // if (mAccountEntityData.getFacLongFwd() == 0.0)
-        // {
-        // mAccountEntityData.setFacLongFwd(Constants.CENT_PER_LONG_CALL_SECOND);
-        // }
-        // if (mAccountEntityData.getFacLong() == 0.0)
-        // {
-        // mAccountEntityData.setFacLong(Constants.CENT_PER_LONG_CALL_SECOND);
-        // }
 
         mCallCounts.LastInvoiceItem = vStart + 1;
 
@@ -501,8 +487,6 @@ public class InvoiceHelper
             mInvoiceData.FacLongFwdUnit = mInvoiceData.CostFormatter.format(mAccountEntityData.getFacLongFwd());
             mInvoiceData.LongFwdCost = mCallCounts.LongFwdCallSec * mAccountEntityData.getFacLongFwd();
 
-            // mTotalCost += (mCallsCost + mLongCallSec *
-            // Constants.CENT_PER_LONG_CALL_SECOND + mAgendaCost);
             mInvoiceData.TotalCost += (mInvoiceData.InCost + mInvoiceData.OutCost + mInvoiceData.FaxCost + mInvoiceData.SmsCost + mInvoiceData.FwdCost + mCallCounts.LongCallSec * mAccountEntityData.getFacLong() + mCallCounts.LongFwdCallSec * mAccountEntityData.getFacLongFwd() + mInvoiceData.AgendaCost);
         }
         if (!mAccountEntityData.getNoBtw())

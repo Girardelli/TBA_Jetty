@@ -469,18 +469,6 @@ public class AdminDispatchServlet extends HttpServlet
             }
 
             // ==============================================================================================
-            // FILTER RECORD LIST
-            // ==============================================================================================
-//                case Constants.GOTO_RECORD_ADMIN:
-//                {
-//                    vSession.getCallFilter().setCustFilter(params.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER));
-//                    vSession.getCallFilter().setStateFilter(params.getParameter(Constants.ACCOUNT_FILTER_CALL_STATE));
-//                    vSession.getCallFilter().setDirFilter(params.getParameter(Constants.ACCOUNT_FILTER_CALL_DIR));
-//                    rd = sc.getRequestDispatcher(Constants.ADMIN_CALLS_JSP);
-//                    break;
-//                }
-
-            // ==============================================================================================
             // NEW_CALL
             // ==============================================================================================
             case Constants.NEW_CALL:
