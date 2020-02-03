@@ -90,6 +90,12 @@ public final class IBANCheckDigit implements Serializable
         return (charValue > 9 ? checkDigit : "0" + checkDigit);
     }
 
+    /*
+     * 
+     * N-1911nr693
+     * 19110693
+     * +++191/1000/69307+++
+     */
     public String calculateOGM(String invoiceNr) 
     {
         // expects something like this: N-1710nr591
@@ -104,24 +110,20 @@ public final class IBANCheckDigit implements Serializable
         {
             return "";
         }
-        else if (invoiceNr.length() < 9 || invoiceNr.length() > 12)
+        else if (invoiceNr.length() != 8)
         {
-            System.out.println("Invalid Code length (must be between 9 and 12)=" + (invoiceNr == null ? "null" : invoiceNr.length()));
+            System.out.println("Invalid Code length (must be 8)=" + (invoiceNr == null ? "null" : invoiceNr.length()));
             return "";
         }
-        if (invoiceNr.startsWith("C"))
-        {
-            // credit note invoice number
-            invoiceNr = invoiceNr.substring(1);
-        }
         
-        int nr = Integer.parseInt(invoiceNr.substring(8, invoiceNr.length()));
-        String code = String.format("%1$4s%2$06d", invoiceNr.substring(2, 6), nr);
+        String code = String.format("%s00%s", invoiceNr.substring(0, 4), invoiceNr.substring(4, 8));
+        //System.out.println("Invoice nr: invoiceNr: " + invoiceNr + " --> " + code);
         int i = Integer.parseUnsignedInt(code);
         int y = i%97;
         y = (y == 97 ? 0 : y);
         DecimalFormat vCostFormatter = new DecimalFormat("#00");
-        //        +++090/9337/55493+++
+        //        +++191/1000/69307+++
+        //System.out.println("+++" + code.substring(0, 3) + "/" + code.substring(3, 7) + "/" + code.substring(7, 10) + vCostFormatter.format(y) + "+++");
         return "+++" + code.substring(0, 3) + "/" + code.substring(3, 7) + "/" + code.substring(7, 10) + vCostFormatter.format(y) + "+++";
     }
 

@@ -859,6 +859,7 @@ public class InvoiceHelper
 
     static public String getInvoiceNumber(int year, int month, int seqNr)
     {
+       System.out.println(String.format("%02d%02d%04d", year - 2000, month + 1, seqNr));
        return String.format("%02d%02d%04d", year - 2000, month + 1, seqNr);
     }
 
