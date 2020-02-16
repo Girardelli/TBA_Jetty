@@ -250,6 +250,25 @@ padding:5px;
     color: black;
 }
 
+.tbaNotify{
+    border-radius: 5px;
+    border-width: 2px;
+    background: #488FCD;
+    border: none;
+    color: white;
+    padding: 5px;
+    text-align: left;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 5px 2px;
+    cursor: pointer;
+}
+.tbaNotify:hover {
+    background: #9fc5e6;
+    color: black;
+}
+
 .tdborder {
 border-radius: 10px;
 border-width: 2px;

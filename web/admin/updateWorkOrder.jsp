@@ -38,7 +38,7 @@ try
 		<td bgcolor="FFFFFF"><br>
 		<br>
 		<span class="admintitle">Opdracht ingegeven door <%=((account == null) ? "??" : account.getFullName())%>.</span>
-        <br>
+        <br><br>
         <form name="workoderform1" method="POST" action="/tba/AdminDispatch">
         <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.ACTION_SAVE_WORKORDER%>"> 
         <input type=hidden name=<%=Constants.WORKORDER_FILE_ID%> value=""> 
@@ -76,7 +76,7 @@ try
             </tr>
 		</table>
 		<br>
-        <span class="adminsubsubtitle">Aangeleverde bestanden:</span>
+        <span class="adminsubsubtitle">Aangeleverde bestanden door klant:</span>
 		<br>
         <table border="0" cellspacing="4" cellpadding="1">
 <%

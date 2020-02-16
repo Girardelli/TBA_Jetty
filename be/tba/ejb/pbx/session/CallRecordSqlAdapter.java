@@ -17,6 +17,8 @@ import be.tba.util.data.AbstractSqlAdapter;
 import be.tba.util.data.IntertelCallData;
 import be.tba.util.session.AccountCache;
 import be.tba.util.timer.CallCalendar;
+import be.tba.util.timer.NotifyCustomerTask;
+import be.tba.websockets.WebSocketData;
 
 import java.sql.SQLException;
 import java.sql.ResultSet;
@@ -843,7 +845,8 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
          record.logRecord();
          CallRecordEntityData newRecord = new CallRecordEntityData();
          newRecord.setIsDocumented(false);
-         newRecord.setIsChanged(false);
+         newRecord.setIsChangedByCust(false);
+         newRecord.setIsCustAttentionNeeded(false);
 
          if (record.isIncomingCall())
          {
@@ -997,7 +1000,8 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
       sqlCmd.append(",IsMailed=" + data.getIsMailed());
       sqlCmd.append(",IsVirgin=" + data.getIsVirgin());
       sqlCmd.append(",IsFaxCall=" + data.getIsFaxCall());
-      sqlCmd.append(",IsChanged=" + data.getIsChanged());
+      sqlCmd.append(",IsChanged=" + data.getIsChangedByCust());
+      sqlCmd.append(",IsCustAttentionNeeded=" + data.getIsCustAttentionNeeded());
       sqlCmd.append(",Name='" + ((data.getName() != null) ? escapeQuotes(data.getName()) : ""));
       sqlCmd.append("',ShortDescription='" + ((data.getShortDescription() != null) ? escapeQuotes(data.getShortDescription()) : ""));
       sqlCmd.append("',LongDescription='" + ((data.getLongDescription() != null) ? escapeQuotes(data.getLongDescription()) : ""));
@@ -1039,26 +1043,39 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
 //        }
    }
 
-   public void setShortText(WebSession webSession, int key, String text, boolean isKlant, boolean isArchived)
+   public void setShortText(WebSession webSession, int key, String text, boolean isCustomer, boolean isArchived, boolean isCustomerAttentionNeeded)
    {
       CallRecordEntityData data = getRow(webSession, key);
-      if (data != null)
+      if (data != null && text != null)
       {
          String strippedText = text;
          while (strippedText.lastIndexOf("\r\n") >= strippedText.length())
          {
             strippedText = strippedText.substring(0, strippedText.length());
          }
-         if (isKlant)
+         if (isCustomer)
          {
-            data.setShortDescription(data.getShortDescription() + "<br>&nbsp;&nbsp;<span class=\"bodygreenbold\">" + text + "</span>");
-            data.setIsChanged(true);
+            if (!text.isBlank())
+            {
+               data.setShortDescription(data.getShortDescription() + "<br>&nbsp;&nbsp;<span class=\"bodygreenbold\">" + text + "</span>");
+               data.setIsChangedByCust(true);
+            }
             data.setIsArchived(isArchived);
+            data.setIsCustAttentionNeeded(false);
          } else
          {
-            data.setShortDescription(data.getShortDescription() + "<br>" + webSession.getUserId() + ": " + text);
-            data.setIsChanged(false);
+            data.setIsChangedByCust(false);
+            if (!text.isBlank())
+            {
+               data.setShortDescription(data.getShortDescription() + "<br>" + webSession.getUserId() + ": " + text);
+               data.setIsCustAttentionNeeded(isCustomerAttentionNeeded);
+               if (isCustomerAttentionNeeded)
+               {
+                  NotifyCustomerTask.notify(data.getAccountId(), new WebSocketData(WebSocketData.URGENT_CALL, data.getId(), data.getName(), abbrevText(data.getShortDescription()), data.getTime()), false);
+               }
+            }
          }
+         //System.out.println("setShortText: [" + text + "]");
          updateRow(webSession, data);
       }
    }
@@ -1183,6 +1200,20 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
       // System.out.println("record: " + record.toNameValueString());
    }
 
+   static public String abbrevText(String text)
+   {
+      String abbrev = text;
+      int brInd = abbrev.indexOf("<br>");
+      if (brInd != -1 && brInd < Constants.kAbbrevWidth)
+      {
+         abbrev = abbrev.substring(0, brInd) + "...";
+      }
+      else if (abbrev.length() > Constants.kAbbrevWidth)
+      {
+         abbrev = abbrev.substring(0, Constants.kAbbrevWidth - 1) + "...";
+      }
+      return abbrev;
+   }
    /**
     * Describes the instance and its content for debugging purpose
     *
@@ -1221,12 +1252,13 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
          entry.setLongDescription(null2EmpthyString(rs.getString(19)));
          entry.setIsVirgin(rs.getBoolean(20));
          entry.setIsFaxCall(rs.getBoolean(21));
-         entry.setIsChanged(rs.getBoolean(22));
+         entry.setIsChangedByCust(rs.getBoolean(22));
          entry.setIsArchived(rs.getBoolean(23));
-         entry.setDoneBy(null2EmpthyString(rs.getString(24)));
-         entry.setTsStart(rs.getLong(25));
-         entry.setTsAnswer(rs.getLong(26));
-         entry.setTsEnd(rs.getLong(27));
+         entry.setIsCustAttentionNeeded(rs.getBoolean(24));
+         entry.setDoneBy(null2EmpthyString(rs.getString(25)));
+         entry.setTsStart(rs.getLong(26));
+         entry.setTsAnswer(rs.getLong(27));
+         entry.setTsEnd(rs.getLong(28));
          vVector.add(entry);
       }
       return vVector;

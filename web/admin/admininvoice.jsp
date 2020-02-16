@@ -19,10 +19,8 @@
 	be.tba.ejb.account.interfaces.AccountEntityData,
 	be.tba.ejb.invoice.session.InvoiceSqlAdapter,
 	be.tba.util.data.*"%>
-<%!
-private StringBuilder allEntryIds;%>
-
 <%
+StringBuilder allEntryIds = new StringBuilder("[");
 
             try
             {
@@ -103,9 +101,6 @@ private StringBuilder allEntryIds;%>
             
 			<br>
 			<%
-	
-			                allEntryIds = new StringBuilder("[");
-	
 			                Collection<InvoiceEntityData> vInvoices = null;
 			                InvoiceSqlAdapter vInvoiceSession = new InvoiceSqlAdapter();
 	

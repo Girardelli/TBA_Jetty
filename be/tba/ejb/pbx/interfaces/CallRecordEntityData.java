@@ -44,6 +44,8 @@ public class CallRecordEntityData extends AbstractData
     private boolean isFaxCall;
     private boolean isChanged;
     private boolean isArchived;
+    private boolean isCustAttentionNeeded;
+    
     private java.lang.String doneBy;
     
     private long tsStart;
@@ -76,6 +78,7 @@ public class CallRecordEntityData extends AbstractData
         isFaxCall = false;
         isChanged = false;
         isArchived = false;
+        isCustAttentionNeeded = false;
         doneBy = "";
     }
 
@@ -287,12 +290,12 @@ public class CallRecordEntityData extends AbstractData
         this.isVirgin = isVirgin;
     }
 
-    public boolean getIsChanged()
+    public boolean getIsChangedByCust()
     {
         return this.isChanged;
     }
 
-    public void setIsChanged(boolean changed)
+    public void setIsChangedByCust(boolean changed)
     {
         this.isChanged = changed;
     }
@@ -317,6 +320,16 @@ public class CallRecordEntityData extends AbstractData
         this.isFaxCall = isFaxCall;
     }
 
+    public boolean getIsCustAttentionNeeded()
+    {
+        return this.isCustAttentionNeeded;
+    }
+
+    public void setIsCustAttentionNeeded(boolean isCustAttentionNeeded)
+    {
+        this.isCustAttentionNeeded = isCustAttentionNeeded;
+    }
+    
     public java.lang.String getDoneBy()
     {
         return this.doneBy;
@@ -380,8 +393,9 @@ public class CallRecordEntityData extends AbstractData
         str.append("',LongDescription='" + ((this.getLongDescription() != null) ? escapeQuotes(this.getLongDescription()) : "")); 
         str.append("',IsVirgin=" + getIsVirgin()); 
         str.append(",IsFaxCall=" + getIsFaxCall()); 
-        str.append(",IsChanged=" + getIsChanged()); 
+        str.append(",IsChanged=" + getIsChangedByCust()); 
         str.append(",IsArchived=" + getIsArchived()); 
+        str.append(",IsCustAttentionNeeded=" + getIsCustAttentionNeeded());
         str.append(",DoneBy='" + ((this.getDoneBy() != null) ? this.getDoneBy() : "")); 
         str.append("',TsStart=" + getTsStart()); 
         str.append(",TsAnswer=" + getTsAnswer()); 
@@ -413,8 +427,9 @@ public class CallRecordEntityData extends AbstractData
         str.append("','" + ((this.getLongDescription() != null) ? escapeQuotes(this.getLongDescription()) : "")); 
         str.append("'," + getIsVirgin()); 
         str.append("," + getIsFaxCall()); 
-        str.append("," + getIsChanged()); 
+        str.append("," + getIsChangedByCust()); 
         str.append("," + getIsArchived()); 
+        str.append("," + getIsCustAttentionNeeded());
         str.append(",'" + ((this.getDoneBy() != null) ? this.getDoneBy() : "")); 
         str.append("'," + getTsStart()); 
         str.append("," + getTsAnswer()); 

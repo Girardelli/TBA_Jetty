@@ -69,11 +69,6 @@ public class MailerSessionBean
       if (accountId == 0)
       {
          // send mail to all staff members
-//         Collection<AccountEntityData> employees= AccountCache.getInstance().getEmployeeList();
-//         for (AccountEntityData employee : employees)
-//         {
-//            vEmailAddresses.concat(employee.getEmail() + ";");
-//         }
          vEmailAddresses = Constants.EMPL_MAIL_ADDR;
       }
       else
@@ -156,25 +151,7 @@ public class MailerSessionBean
    {
       AccountEntityData vCustomer = null;
       boolean ret = true;
-//        try
-//        {
       vCustomer = AccountCache.getInstance().get(accountId);
-//
-//            String vEmailAddr = vCustomer.getEmail();
-//            if (vEmailAddr == null)
-//            {
-//                return false;
-//            }
-//            vEmailAddr = vEmailAddr.trim();
-//            if (vEmailAddr.length() == 0)
-//            {
-//                return false;
-//            }
-//
-//            if (vEmailAddr.endsWith(";") || vEmailAddr.endsWith(","))
-//            {
-//                vEmailAddr = vEmailAddr.substring(0, vEmailAddr.length() - 1);
-//            }
 
       CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
       CallRecordSqlAdapter vWriterSession = new CallRecordSqlAdapter();
@@ -204,72 +181,7 @@ public class MailerSessionBean
          }
          ret = sendMail(webSession, accountId, "Uw oproepenlijst tot " + DateFormat.getDateInstance(DateFormat.LONG, new Locale("nl", "BE")).format(new Date()) + " " + vCustomer.getFullName(), vBody.toString());
          flagRecordsAsMailed(webSession, vRecords, vWriterSession);
-
-//                StringTokenizer vMailTokens = new StringTokenizer(vEmailAddr, ";");
-//                try
-//                {
-//                    Date date = new Date();
-//                    Address[] vTo;
-//
-//                    if (System.getenv("TBA_MAIL_ON") != null)
-//                    {
-//                        vTo = new InternetAddress[vMailTokens.countTokens()];
-//                        int i = 0;
-//                        while (vMailTokens.hasMoreTokens())
-//                        {
-//                            String addr = vMailTokens.nextToken();
-//                            if (addr != null && addr.contains("@"))
-//                            {
-//                                vTo[i++] = new InternetAddress(addr);
-//                            }
-//                        }
-//                    }
-//                    else
-//                    {
-//                        vTo = new InternetAddress[1];
-//                        vTo[0] = new InternetAddress("yves.willems@theBusinessAssistant.be");
-//                    }
-//                    Properties prop = System.getProperties();
-//                    Session session = Session.getInstance(prop, null);
-//                    MimeMessage msg = new MimeMessage(session);
-//                    msg.setFrom(new InternetAddress("nancy.olyslaegers@thebusinessassistant.be"));
-//                    msg.setRecipients(Message.RecipientType.TO, vTo);
-//                    msg.setSubject("Uw oproepenlijst tot " + DateFormat.getDateInstance(DateFormat.LONG, new Locale("nl", "BE")).format(date) + " " + vCustomer.getFullName());
-//                    msg.setSentDate(date);
-//                    msg.setContent(vBody.toString(), "text/html");
-//                    if (isImportant.get())
-//                    {
-//                    	msg.addHeader("X-Priority", "2");
-//                    }
-//        			// Get SMTPTransport
-//                    SMTPTransport t = (SMTPTransport) session.getTransport("smtp");
-//        			
-//        			// connect
-//                    //t.setStartTLS(true);
-//                    t.connect("smtp.telenet.be", "a120569", "gzb625");
-//        			// send
-//                    t.sendMessage(msg, msg.getAllRecipients());
-//                    System.out.println("Response: " + t.getLastServerResponse());
-//                    t.close();	        
-//                    flagRecordsAsMailed(webSession, vRecords, vWriterSession);
-//                    // vAccountSession.setAccount(vCustomer);
-//                }
-//                catch (javax.mail.MessagingException e)
-//                {
-//                    if (vCustomer != null)
-//                        MailError.getInstance().setError("Mail send failed to " + vCustomer.getFullName() + "\n" + e.getMessage());
-//                    e.printStackTrace();
-//                    return false;
-//                }
       }
-//        }
-//        catch (Exception e)
-//        {
-//            if (vCustomer != null)
-//                MailError.getInstance().setError("Mail send failed to " + vCustomer.getFullName() + "\n" + e.getMessage());
-//            e.printStackTrace();
-//            return false;
-//        }
       return ret;
    }
 
@@ -310,7 +222,7 @@ public class MailerSessionBean
       // long vLastMailTime = account.getLastMailTime();
       account.setLastMailTime(vCurrentTime);
 
-      System.out.println("Mail send to " + account.getFullName() + " : " + records.size() + " records.");
+      //System.out.println("Mail send to " + account.getFullName() + " : " + records.size() + " records.");
 
       if (records == null || records.size() == 0)
       {
@@ -431,7 +343,7 @@ public class MailerSessionBean
       vBody.append("Gelieve hieronder uw oproepen te willen vinden die wij genoteerd hebben sinds de vorige mail.\n");
       vBody.append("Voor vragen kan u zich richten tot Nancy.\n");
 
-      System.out.println("Mail send to " + account.getFullName() + " : " + records.size() + " records.");
+      //System.out.println("Mail send to " + account.getFullName() + " : " + records.size() + " records.");
 
       if (records == null || records.size() == 0)
       {

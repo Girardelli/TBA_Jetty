@@ -25,30 +25,29 @@ be.tba.util.session.AccountCache,
 be.tba.util.session.MailError,
 be.tba.util.timer.UrlCheckTimerTask"%>
 
-<%!private StringBuilder allEntryIds;%>
-
 <%
-	StringBuffer modalScriptStrBuffer = new StringBuffer("<!-- \r\n//#######  My Modal scripts ######\r\n\r\n -->");
-	try {
-		vSession.setCallingJsp(Constants.CANVAS_JSP);
-		// this is the websocket page. Make sure this user is known to the WS broadcast
-		vSession.setWsActive(true);
+StringBuilder allEntryIds = new StringBuilder("[");
+StringBuffer modalScriptStrBuffer = new StringBuffer("<!-- \r\n//#######  My Modal scripts ######\r\n\r\n -->");
+try {
+	vSession.setCallingJsp(Constants.CANVAS_JSP);
+	// this is the websocket page. Make sure this user is known to the WS broadcast
+	vSession.setWsActive(true);
 
-		String vCustomerFilter = vSession.getCallFilter().getCustFilter();
-		if (vCustomerFilter == null) {
-			vSession.getCallFilter().setCustFilter(Constants.ACCOUNT_FILTER_ALL);
-			vCustomerFilter = Constants.ACCOUNT_FILTER_ALL;
-		}
+	String vCustomerFilter = vSession.getCallFilter().getCustFilter();
+	if (vCustomerFilter == null) {
+		vSession.getCallFilter().setCustFilter(Constants.ACCOUNT_FILTER_ALL);
+		vCustomerFilter = Constants.ACCOUNT_FILTER_ALL;
+	}
 
-		CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
-		//Collection<CallRecordEntityData> vRecords = vRecords = vQuerySession.getUnDocumented(vSession, null);
-		Collection<CallRecordEntityData> vRecords = null;
-		if (vCustomerFilter.equals(Constants.ACCOUNT_FILTER_ALL)) {
-			vRecords = vQuerySession.getxDaysBack(vSession, vSession.getDaysBack(), vCustomerFilter);
-		} else {
-			vRecords = vQuerySession.getDocumentedForMonth(vSession, vCustomerFilter, vSession.getMonthsBack(),
-					vSession.getYear());
-		}
+	CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
+	//Collection<CallRecordEntityData> vRecords = vRecords = vQuerySession.getUnDocumented(vSession, null);
+	Collection<CallRecordEntityData> vRecords = null;
+	if (vCustomerFilter.equals(Constants.ACCOUNT_FILTER_ALL)) {
+		vRecords = vQuerySession.getxDaysBack(vSession, vSession.getDaysBack(), vCustomerFilter);
+	} else {
+		vRecords = vQuerySession.getDocumentedForMonth(vSession, vCustomerFilter, vSession.getMonthsBack(),
+				vSession.getYear());
+	}
 %>
 <body>
    <audio id="ringRing">
@@ -56,6 +55,7 @@ be.tba.util.timer.UrlCheckTimerTask"%>
       <source src="audio/Ringing_Phone.mp3" type="audio/mp3">
    </audio>
    <form name="calllistform" method="POST" action="/tba/AdminDispatch">
+      <input type=hidden name=<%=Constants.RECORD_URGENT%> value=""> 
       <input type=hidden name=<%=Constants.RECORD_ID%> value=""> 
       <input type=hidden name=<%=Constants.RECORD_SHORT_TEXT%> value=""> 
       <input type=hidden name=<%=Constants.RECORDS_TO_HANDLE%> value=""> 
@@ -200,9 +200,12 @@ be.tba.util.timer.UrlCheckTimerTask"%>
  					modalStrBuffer.append("<p align=\"right\">\r\n");
  					//modalStrBuffer.append("<button class=\"tbabutton\" id=\"myBewaar\">Cancel</button>\r\n");
  					//modalStrBuffer.append("<button class=\"tbabutton\" id=\"myCancel\">Bewaar</button>\r\n");
+                    modalStrBuffer.append(
+                            "<input class=\"tbabuttonorange\" type=submit name=action value=\"Bewaar en verwittig\" onclick=\"updateModalText('"
+                                    + vEntry.getId() + "', '" + modalText + "', true)\">&nbsp;&nbsp;");
  					modalStrBuffer.append(
  							"<input class=\"tbabutton\" type=submit name=action value=\"Bewaar\" onclick=\"updateModalText('"
- 									+ vEntry.getId() + "', '" + modalText + "')\">");
+ 									+ vEntry.getId() + "', '" + modalText + "', false)\">");
  					modalStrBuffer.append("</p></div></div>\r\n\r\n");
 
  					// fill the script
@@ -301,7 +304,6 @@ be.tba.util.timer.UrlCheckTimerTask"%>
       <%
       	}
       		}
-      		allEntryIds = new StringBuilder("[");
       		if (vRecords != null && vRecords.size() > 0) {
       %>
       <br>
@@ -797,13 +799,10 @@ function toCallList()
 
 var newwindow = '';
 
-function newCall()
+function updateModalText(id, modalText, isUrgent)
 {
-	document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.NEW_CALL%>";
-}
-
-function updateModalText(id, modalText)
-{
+    if (isUrgent)
+        document.calllistform.<%=Constants.RECORD_URGENT%>.value="1";
 	document.calllistform.<%=Constants.RECORD_ID%>.value=id;
 	document.calllistform.<%=Constants.RECORD_SHORT_TEXT%>.value=document.getElementById(modalText).value;
 	document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.UPDATE_SHORT_TEXT%>";

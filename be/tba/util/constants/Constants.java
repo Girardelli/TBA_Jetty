@@ -42,7 +42,7 @@ public class Constants
     public static final String SERVLET_LOGIN_HTML = "/login.html";
     public static final String HOME_HTML = "/index.html";
     public static final String FORM_SUBMIT_SUCCESS = "/formok.html";
-    public static final String EMPL_MAIL_ADDR = "anke.rombouts@thebusinessassistant.be;jolien.driesen@thebusinessassistant.be;nancy.olyslaegers@TheBusinessAssistant.be;emily.van.ginneken@thebusinessassistant.be";
+    public static final String EMPL_MAIL_ADDR = "anke.rombouts@thebusinessassistant.be;jolien.driesen@thebusinessassistant.be;nancy.olyslaegers@TheBusinessAssistant.be;emily.van.ginneken@thebusinessassistant.be;jolien.soetemans@thebusinessassistant.be";
 
     // JSP page names
     public static final String ADMIN_FAIL_JSP = "/admin/adminfail.jsp";
@@ -51,11 +51,12 @@ public class Constants
     public static final String ADD_EMPLOYEE_JSP = "/admin/addEmployee.jsp";
     public static final String ADMIN_EMPLOYEE_COST_JSP = "/admin/employeecost.jsp";
     public static final String ADMIN_ACCOUNT_JSP = "/admin/adminaccount.jsp";
+    public static final String ARCHIVED_ACCOUNT_JSP = "/admin/archivedaccount.jsp";
     public static final String ADMIN_EMPLOYEE_JSP = "/admin/adminemployee.jsp";
     public static final String ADMIN_LOGIN = "/admin.html";
     public static final String SHOW_ERROR_JSP = "/admin/showMailFail.jsp";
     public static final String UPDATE_ACCOUNT_JSP = "/admin/updateAccount.jsp";
-    public static final String SELECT_SUBCUSTOMER_JSP = "/admin/selectSubCustomer.jsp";
+    //public static final String SELECT_SUBCUSTOMER_JSP = "/admin/selectSubCustomer.jsp";
     public static final String UPDATE_RECORD_JSP = "/admin/updateRecord.jsp";
     public static final String ADD_RECORD_JSP = "/admin/addrecord.jsp";
     public static final String INVOICE_JSP = "/admin/invoice.jsp";
@@ -66,7 +67,7 @@ public class Constants
     public static final String UPDATE_TASK_JSP = "/admin/updatetask.jsp";
     public static final String ANNOUNCEMENT_JSP = "/admin/announcement.jsp";
     public static final String ARE_YOU_SURE_JSP = "/admin/areyousure.jsp";
-    public static final String NEW_CALL_JSP = "/admin/newcall.jsp";
+    //public static final String NEW_CALL_JSP = "/admin/newcall.jsp";
     public static final String ADMIN_INVOICE_JSP = "/admin/admininvoice.jsp";
     public static final String OPEN_INVOICE_JSP = "/admin/openinvoice.jsp";
     public static final String CANVAS_JSP = "/admin/canvas.jsp";
@@ -215,6 +216,11 @@ public class Constants
     public static final String INVOICE_TO_SAVE = "_its";
     public static final String INVOICE_TO_DELETE = "_itd";
     public static final String INVOICE_TO_SETPAYED = "_isp";
+    public static final String INVOICE_TYPE_STD = "_itst";
+    public static final String INVOICE_TYPE_CUSTOM = "_itcu";
+    public static final String INVOICE_TYPE_TELEMARK = "_itte";
+    public static final String INVOICE_NO_CALLS = "_itnc";
+    public static final String INVOICE_TYPE_WEEK = "_itwe";
 
     // records
     public static final String RECORD_ID = "_rid";
@@ -238,6 +244,8 @@ public class Constants
     public static final String RECORDS_TO_HANDLE = "_rtd";
     public static final String RECORD_UPDATED = "_rud";
     public static final String RECORD_NEW_KEY = "_nrk";
+    public static final String RECORD_NOTIFY = "_nno";
+    public static final String RECORD_URGENT = "_rur";
     
     
     // filter
@@ -311,9 +319,9 @@ public class Constants
     public static final String GOTO_TASK_ADD = "_a60";
     public static final String SAVE_TASK = "_a61";
     public static final String MAIL_CUSTOMER = "_a62";
-    public static final String REFRESH_OPEN_CALLS = "_a63";
-    public static final String NEW_CALL = "_a64";
-    public static final String SAVE_NEW_CALL = "_a65";
+    //public static final String REFRESH_OPEN_CALLS = "_a63";
+    //public static final String NEW_CALL = "_a64";
+    //public static final String SAVE_NEW_CALL = "_a65";
     public static final String SAVE_NEW_SUBCUSTOMER = "_a66";
     public static final String REMOVE_OPEN_CALL = "_a67";
     public static final String GOTO_INVOICE_ADMIN = "_a68";
@@ -343,7 +351,8 @@ public class Constants
     public static final String DOWNLOAD_WORKORDER_OUTPUTFILE = "_a93";
     public static final String UPLOAD_WORKORDER_FILE = "_a94";
     public static final String DELETE_WORKORDER_FILE = "_a95";
-   
+    public static final String GOTO_ARCHIVED_ACCOUNTS = "_a96";
+    
     // LoginServlet actions
     public static final String ACTION_LOGIN = "_l88";
     public static final String ACTION_REGISTER = "_l89";
@@ -505,11 +514,8 @@ public class Constants
     public static final long REFRESH_LONG = 3000; // 300 seconds
     public static final String REFRESH = "3000"; // 300 seconds
     public static final short MAX_MAIL_HOUR = 23;
-    public static final String INVOICE_TYPE_STD = "_itst";
-    public static final String INVOICE_TYPE_CUSTOM = "_itcu";
-    public static final String INVOICE_TYPE_TELEMARK = "_itte";
-    public static final String INVOICE_NO_CALLS = "_itnc";
-    public static final String INVOICE_TYPE_WEEK = "_itwe";
+    public static final int kAbbrevWidth = 50;
+
 
     
     private Constants()

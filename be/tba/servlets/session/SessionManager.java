@@ -73,7 +73,7 @@ final public class SessionManager
       for (Iterator<WebSession> i = mMap.values().iterator(); i.hasNext();)
       {
          WebSession session = i.next();
-         //System.out.println("getIdForUser: " + user + "=? sessionAccountId=" + session.getCurrentAccountId());
+         //System.out.println("getIdForUser: " + user + "=? sessionAccountId=" + session.getAccountId());
          if (user.equals(session.getUserId()))
          {
             return session.getSessionId();

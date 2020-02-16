@@ -11,7 +11,7 @@ java.util.*,
 
 javax.naming.Context,
 javax.naming.InitialContext,
-
+com.google.gson.Gson,
 javax.ejb.*,
 be.tba.ejb.account.interfaces.*,
 be.tba.ejb.pbx.interfaces.CallRecordEntityData,
@@ -19,56 +19,85 @@ be.tba.ejb.pbx.session.CallRecordSqlAdapter,
 be.tba.util.constants.EjbJndiNames,
 be.tba.util.constants.Constants,
 be.tba.util.exceptions.AccessDeniedException,
+be.tba.websockets.WebSocketData,
 be.tba.servlets.session.SessionManager,
 be.tba.util.session.AccountCache,
 be.tba.util.data.*"%>
-<%!
-private String vAccountKey;
-private StringBuilder allEntryIds;
-%>
-	<%
+
+
+<%
+StringBuilder allEntryIds = new StringBuilder("[");
+Collection<CallRecordEntityData> vUrgentRecords = new Vector<CallRecordEntityData>();
 try
 {
-allEntryIds = new StringBuilder("[");
+if (vSession == null)
+ throw new AccessDeniedException("U bent niet aangemeld.");
+vSession.setCallingJsp(Constants.CLIENT_CALLS_JSP);  
+if (vSession.getSessionFwdNr() == null)
+ throw new AccessDeniedException("Account nummer not set in session.");
+// this is the websocket page. Make sure this user is known to the WS broadcast
+vSession.setWsActive(true);
 
+CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
+
+Collection<CallRecordEntityData> vRecords = vQuerySession.getxWeeksBackIncludingSubcustomer(vSession, vSession.getDaysBack(), vSession.getSessionFwdNr(), false);
+
+boolean IsCustAttentionNeeded = false;
+for (CallRecordEntityData record : vRecords)
+{
+   if (record.getIsCustAttentionNeeded())
+   {
+      vUrgentRecords.add(record);
+   }
+}
+
+AccountEntityData vAccount = AccountCache.getInstance().get(vSession.getSessionFwdNr());
 %>
 
 <form name="calllistform" method="POST" action="/tba/CustomerDispatch">
 <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.ACTION_SHOW_CALLS%>"> 
 <input type=hidden name=<%=Constants.RECORDS_TO_HANDLE%> value=""> 
 <table cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
-	<tr>
-		<!-- white space -->
-		<td valign="top" width="20" bgcolor="FFFFFF"></td>
+<%
+if (true) //vUrgentRecords.size() > 0)
+{
+%>
+    <tr>
+        <!-- white space -->
+        <td valign="top" width="20" bgcolor="FFFFFF"></td>
+        <!-- account list -->
+        <td valign="top" bgcolor="FFFFFF"><br>
+         <!-- ################ urgent calls ################ -->
+         <div id="urgentCalls"></div> 
 
-		<!-- account list -->
-		<td valign="top" bgcolor="FFFFFF"><br>
+         </td>
+    </tr>
+<%
+}
+%>         
+    
+    <tr>
+        <!-- white space -->
+        <td valign="top" width="20" bgcolor="FFFFFF"></td>
+        <!-- account list -->
+        <td valign="top" bgcolor="FFFFFF"><br>
+         <!-- ################ buttons ################ -->
         <p><span class="admintitle"> Huidig geregistreerde oproepen:
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="tbabutton" type=submit value="Herlaad (Vandaag)" onclick="refresh()"> 
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="archiveButton" class="tbabutton" type="submit" value="Archiveer" onclick="archive()"> 
         </span></p>
-<%
-   if (vSession == null)
-    throw new AccessDeniedException("U bent niet aangemeld.");
-  vSession.setCallingJsp(Constants.CLIENT_CALLS_JSP);  
-  if (vSession.getSessionFwdNr() == null)
-    throw new AccessDeniedException("Account nummer not set in session.");
 
-  CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
-
-  Collection<CallRecordEntityData> vRecords = vQuerySession.getxWeeksBackIncludingSubcustomer(vSession, vSession.getDaysBack(), vSession.getSessionFwdNr(), false);
-  
-  AccountEntityData vAccount = AccountCache.getInstance().get(vSession.getSessionFwdNr());
-%>
 <input class="tbabutton" type=submit value="Vorige Oproepen" onclick="showPrevious()"> 
 <%
 if (vSession.getDaysBack() > 0)
 {
 out.println("<input class=\"tbabutton\" type=submit value=\"Volgende Oproepen\"  onclick=\"showNext()\">");
 }
-
+%>
   
-  out.println("<br><br><table border=\"0\" cellspacing=\"2\" cellpadding=\"2\">");
+  <!-- ################ calls ################ -->
+  <br><br><table border="0" cellspacing="2" cellpadding="2">
+  <%
   if (vSession.getDaysBack() > 0)
   {
 	    out.println("<span class=\"adminsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + vSession.getDaysBack() + "&nbsp;dagen terug:</span>");
@@ -79,19 +108,18 @@ out.println("<input class=\"tbabutton\" type=submit value=\"Volgende Oproepen\" 
   }
   if (vRecords == null || vRecords.size() == 0)
   {
-    out.println("<span class=\"adminsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Er zijn geen nieuwe oproepgegevens beschikbaar voor deze periode.</span>");
+    out.println("<span class=\"adminsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Er zijn geen nieuwe oproepgegevens beschikbaar.</span>");
     out.println("</table>");
   }
   else
   {
     if (vRecords.size() == 1)
-      out.println("<span class=\"bodytekst\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Er is </span><span class=\"bodyredbold\">1</span><span class=\"bodytekst\">  oproep beschikbaar voor deze periode.</span>");
+      out.println("<span class=\"bodytekst\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Er is </span><span class=\"bodyredbold\">1</span><span class=\"bodytekst\">  oproep beschikbaar.</span>");
     else
-      out.println("<span class=\"bodytekst\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Er zijn </span><span class=\"bodyredbold\">" + vRecords.size() + "</span><span class=\"bodytekst\"> oproepen beschikbaar voor deze periode.</span>");
+      out.println("<span class=\"bodytekst\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Er zijn </span><span class=\"bodyredbold\">" + vRecords.size() + "</span><span class=\"bodytekst\"> oproepen beschikbaar.</span>");
     int vNewCnt = 0;
     long vLastLogin = vAccount.getPreviousLoginTS();
     %>
-    <br><br>
     <tr>
     <td width="30" bgcolor="FFFFFF"></td>
     <td width="65"  valign="top" class="topMenu" bgcolor="F89920">&nbsp;Datum</td>
@@ -202,19 +230,120 @@ catch (Exception ex)
 }
 %>
 </table>
+</td>
+</tr>
+</table>
 </form>
-
-
-
 </body>
 
 </html>
+
+
+
 
 <script>
 var allArr = <%=allEntryIds.toString()%>;
 var linesToDelete = new Array();
 var callsSelected = 0;
 document.getElementById("archiveButton").style.visibility = "hidden";
+
+<%
+if (System.getenv("TBA_MAIL_ON") != null)
+{
+%>
+var socket = new WebSocket("wss://thebusinessassistant.be/tba/ws");
+<%
+}
+else
+{
+%>
+var socket = new WebSocket("ws://localhost:8080/tba/ws");
+<%
+}
+%>
+
+var urgentCalls = [];
+<%
+for (CallRecordEntityData call : vUrgentRecords)
+{
+   WebSocketData wsData = new WebSocketData(0, call.getId(), call.getName(), CallRecordSqlAdapter.abbrevText(call.getShortDescription()), call.getTime());
+   String jsonStr = (new Gson()).toJson(wsData, WebSocketData.class);
+    %>
+    var json = JSON.parse('<%=jsonStr%>');
+    urgentCalls.push(json);
+    <%
+}
+%>
+
+window.onload = function() 
+{
+    updateUrgentCalls();
+}
+
+socket.onopen = function() 
+{ 
+    socket.send('<%=Constants.WS_LOGIN + vSession.getSessionId()%>');
+}
+
+socket.onerror = function() 
+{ 
+    alert("Socket error received");
+}
+
+socket.onmessage = function(msg) 
+{
+    console.log(msg);
+    var json = JSON.parse(msg.data);
+    if (json.operation == <%=WebSocketData.URGENT_CALL%>)
+    {
+        console.log("add urgent call");
+        urgentCalls.push(json);
+        updateUrgentCalls();
+        //window.location.reload( true );
+    }
+    else 
+   {
+    console.log("unknown operation:" + json.operation);
+   }
+}
+
+function timeStamp2Txt(thenTime, nowTime)
+{
+    var sec_num = nowTime-thenTime;
+    var minutes = Math.floor(sec_num  / 60);
+    var seconds = sec_num - (minutes * 60);
+
+    if (minutes < 10) {minutes = "0" + minutes;}
+    if (seconds < 10) {seconds = "0" + seconds;}
+    return minutes + ':' + seconds;
+}
+
+function updateUrgentCalls()
+{
+    var now = Math.floor(Date.now() / 1000);
+    
+    var content = "<table><tr><td class=\"tdborder\" width=\"630\"><span class=\"admintitle\">Oproepen die uw aandacht vragen:</span><table>";
+    if (urgentCalls.length == 0)
+    {
+        content += "<tr><td></td></tr>";
+    }
+    else
+    {
+        for (i = 0; i < urgentCalls.length; i++) 
+        {
+            content += "<tr class=\"tbaNotify\" onclick=\"changeUrl('/tba/CustomerDispatch?_act=_a16&_rid=" + urgentCalls[i].dbCallId + "');\">";
+            content += "<td width=\"45\">" + urgentCalls[i].timeStr + "</td>";
+            content += "<td width=\"155\">" + urgentCalls[i].customer + "</td>";
+            content += "<td width=\"400\">" + urgentCalls[i].callText + "</td></tr>";
+        }
+    }
+    content += "</table>";
+    
+    console.log("updatePendingCalls(): " + content);
+
+    document.getElementById('urgentCalls').innerHTML = content;
+}
+
 
 function selectAll()
 {
@@ -282,7 +411,7 @@ function updateArchiveFlag(rowid, id, rowInd)
   else
       row.style.visibility = "hidden";
           
-  console.log("callsSelected=" + callsSelected);
+  //console.log("callsSelected=" + callsSelected);
 }
 
 function archive()
@@ -293,7 +422,7 @@ function archive()
     for (var i = 0; i < linesToDelete.length; i++)
       if (linesToDelete[i] != null)
         shorterArr[j++] = linesToDelete[i];
-    console.log("archive: j=" + j);
+    //console.log("archive: j=" + j);
     document.calllistform.<%=Constants.RECORDS_TO_HANDLE%>.value=shorterArr.join();
     document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.ACTION_ARCHIVE_RECORDS%>";
 }
@@ -332,5 +461,6 @@ function refresh()
 {
   document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.ACTION_REFRESH_CALLS%>";
 }
+
 </script>
 

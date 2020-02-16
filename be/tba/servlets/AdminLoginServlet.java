@@ -64,7 +64,7 @@ public class AdminLoginServlet extends HttpServlet
                 vSession.init(vUserId, vKey);
                 vSession.setRole(AccountRole.fromShort(vAccount.getRole()));
                 vSession.setSessionFwdNr(vAccount.getFwdNumber());
-                vSession.setCurrentAccountId(vAccount.getId());
+                vSession.setAccountId(vAccount.getId());
                 PhoneMapManager.getInstance().mapNewLogin(vUserId, vSession.getSessionId());
                 
                 // do your thing

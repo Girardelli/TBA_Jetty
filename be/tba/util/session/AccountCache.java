@@ -32,6 +32,7 @@ final public class AccountCache
    private Map<String, AccountEntityData> mFwdKeyList;
    private Map<Integer, AccountEntityData> mIdKeyList;
    private Collection<AccountEntityData> mRawUnarchivedCollection;
+   private Collection<AccountEntityData> mArchivedCollection;
    // private SortedMap<String, AccountEntityData> mNameSortedList; // without9000,
    // 9001
    private SortedSet<AccountEntityData> mNameSortedList; // without9000, 9001
@@ -74,6 +75,7 @@ final public class AccountCache
    private AccountCache()
    {
       mRawUnarchivedCollection = new Vector<AccountEntityData>();
+      mArchivedCollection = new Vector<AccountEntityData>();
       mNameSortedList = Collections.synchronizedSortedSet(new TreeSet<AccountEntityData>());
       mNameSortedFullList = Collections.synchronizedSortedSet(new TreeSet<AccountEntityData>());
       mFwdKeyList = new HashMap<String, AccountEntityData>();
@@ -229,6 +231,7 @@ final public class AccountCache
    {
       System.out.println("AccountCache::converToHashMap()");
       mRawUnarchivedCollection.clear();
+      mArchivedCollection.clear();
       mCallCustomerSortedList.clear();
       mNameSortedList.clear();
       mFwdKeyList.clear();
@@ -299,6 +302,10 @@ final public class AccountCache
                // System.out.println("added employee " + vEntry.getFullName() + ", " +
                // vEntry.getId() + ", " + vEntry.getUserId());
             }
+         }
+         else
+         {
+            mArchivedCollection.add(vEntry);
          }
          // fill in the AccountNrList
          if (vEntry.getAccountNr() != null && !vEntry.getAccountNr().isEmpty())
@@ -485,6 +492,11 @@ final public class AccountCache
       return new Vector<Integer>();
    }
 
+   public Collection<AccountEntityData> getArchivedList()
+   {
+      return mArchivedCollection;
+   }
+   
    private void buildMailingGroups()
    {
       mMailingGroups.clear();

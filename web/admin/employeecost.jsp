@@ -35,6 +35,7 @@ try
 	{
 	    protected int calls;
 	    protected double taskCost;
+       protected long duration;
 	}
 	Map<String, GeneratedCost> performanceMap = new HashMap<String, GeneratedCost>();
     vSession.setCallingJsp(Constants.ADMIN_EMPLOYEE_COST_JSP);
@@ -48,7 +49,6 @@ try
 		<!-- account list -->
 		<td valign="top" width="865" bgcolor="FFFFFF"><br>
 		<p><span class="admintitle"> Werknemer prestaties tijdens de maand <%=vSession.getMonthsBackString()%><br>
-		<br>
 		<br>
 		</span></p>
 		<form name="taskform" method="POST"
@@ -101,7 +101,8 @@ try
 	  {
 	      GeneratedCost genCost = new GeneratedCost();
 	      genCost.calls = 0;
-	      genCost.taskCost = taskCost;
+	      genCost.duration = 0;
+         genCost.taskCost = taskCost;
 	      performanceMap.put(vEntry.getDoneBy(), genCost); 
 	      System.out.println("add entry from tasks for "+ vEntry.getDoneBy());
 	  }
@@ -114,17 +115,22 @@ try
         CallRecordEntityData vEntry = i.next();
         if (performanceMap.containsKey(vEntry.getDoneBy()))
         {
-            performanceMap.get(vEntry.getDoneBy()).calls++;
+           GeneratedCost genCost = performanceMap.get(vEntry.getDoneBy());
+           genCost.calls++;
+           genCost.duration += (vEntry.getTsEnd() - vEntry.getTsAnswer());
         }
         else
         {
             GeneratedCost genCost = new GeneratedCost();
             genCost.calls = 1;
+            genCost.duration = (vEntry.getTsEnd() - vEntry.getTsAnswer());
             genCost.taskCost = 0;
             performanceMap.put(vEntry.getDoneBy(), genCost); 
             System.out.println("add entry from records for "+ vEntry.getDoneBy());
         }
+         
     }
+    
 	
 	System.out.println("totalCallCost=" + totalCallCost + " , totalNrCalls=" + totalNrCalls + " , totalTasks=" + totalTasks);
     
@@ -133,11 +139,13 @@ try
 		</table>
 		<br>
         <p><span class="admintitle"> Gemiddelde opbrengst per oproep deze maand: <%=mCostFormatter.format(totalCallCost/totalNrCalls)%><br>
+        <p><span class="admintitle"> Totaal aantal oproepen: <%=records.size()%><br>
         </span></p>		
 		<br>
 		<table width="100%" border="0" cellspacing="2" cellpadding="2">
 			<tr>
 				<td width="300" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Uitvoerder</td>
+                <td width="100" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;oproepen (min)</td>
 				<td width="100" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;oproepen (Euro)</td>
 				<td width="100" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Taken (Euro)</td>
 				<td width="100" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Totaal (Euro)</td>
@@ -156,6 +164,7 @@ try
         %>
 		<tr bgcolor="FFCC66" class="bodytekst">
 			<td width="300" valign="top"><%=vEmployee%></td>
+            <td width="100" valign="top"><%=genCost.duration/1000/60%></td>
 			<td width="100" valign="top"><%=mCostFormatter.format(callCostContribution)%></td>
 			<td width="100" valign="top"><%=mCostFormatter.format(genCost.taskCost)%></td>
 			<td width="100" valign="top"><%=mCostFormatter.format(genCost.taskCost + callCostContribution)%></td>

@@ -469,28 +469,19 @@ public class AdminDispatchServlet extends HttpServlet
             }
 
             // ==============================================================================================
-            // NEW_CALL
-            // ==============================================================================================
-            case Constants.NEW_CALL:
-            {
-               CallRecordFacade.createNewUnmappedCall(params, vSession);
-               rd = sc.getRequestDispatcher(Constants.NEW_CALL_JSP);
-               break;
-            }
-
-            // ==============================================================================================
             // REFRESH_OPEN_CALLS
             // ==============================================================================================
-            case Constants.REFRESH_OPEN_CALLS:
-            {
-               CallRecordFacade.updateNewUnmappedCall(params, vSession);
-               rd = sc.getRequestDispatcher(Constants.NEW_CALL_JSP);
-               break;
-            }
+//            case Constants.REFRESH_OPEN_CALLS:
+//            {
+//               CallRecordFacade.updateNewUnmappedCall(params, vSession);
+//               rd = sc.getRequestDispatcher(Constants.NEW_CALL_JSP);
+//               break;
+//            }
 
             // ==============================================================================================
             // SAVE_NEW_CALL
             // ==============================================================================================
+            /*
             case Constants.SAVE_NEW_CALL:
             {
                String vKey = params.getParameter(Constants.RECORD_ID);
@@ -513,11 +504,12 @@ public class AdminDispatchServlet extends HttpServlet
                   }
                }
                break;
-            }
+            }*/
 
             // ==============================================================================================
             // SAVE_NEW_SUBCUSTOMER
             // ==============================================================================================
+            /*
             case Constants.SAVE_NEW_SUBCUSTOMER:
             {
                // String vKey = params.getParameter(Constants.RECORD_ID);
@@ -545,7 +537,7 @@ public class AdminDispatchServlet extends HttpServlet
                   }
                }
                break;
-            }
+            }*/
             // ==============================================================================================
             // REMOVE_OPEN_CALL
             // ==============================================================================================
@@ -583,7 +575,7 @@ public class AdminDispatchServlet extends HttpServlet
                   AccountRole role = AccountRole.fromShort(accountData.getRole());
                   if (role == AccountRole.ADMIN || role == AccountRole.EMPLOYEE)
                   {
-                     System.out.println("goto account delete: setCurrentAccountId=" + vLtd + ", account fwdnr=" + accountData.getFwdNumber());
+                     System.out.println("goto account delete: setAccountId=" + vLtd + ", account fwdnr=" + accountData.getFwdNumber());
                      AccountFacade.archiveAccount(vSession, Integer.parseInt(vLtd));
                      rd = sc.getRequestDispatcher(Constants.ADMIN_EMPLOYEE_JSP);
                   }
@@ -624,9 +616,9 @@ public class AdminDispatchServlet extends HttpServlet
             {
                System.out.println("account delete: current id=" + vSession.getAccountIdToDelete());
                // String accountFwdNr =
-               // AccountCache.getInstance().idToFwdNr(Integer.parseInt(vSession.getCurrentAccountId()));
+               // AccountCache.getInstance().idToFwdNr(Integer.parseInt(vSession.getAccountId()));
                AccountEntityData accountData = AccountCache.getInstance().get(vSession.getAccountIdToDelete());
-               System.out.println("account delete: key=" + vSession.getCurrentAccountId() + ", fwd nr=" + accountData.getFwdNumber());
+               System.out.println("account delete: key=" + vSession.getAccountId() + ", fwd nr=" + accountData.getFwdNumber());
 
                AccountRole role = AccountRole.fromShort(accountData.getRole());
                AccountFacade.archiveAccount(vSession, vSession.getAccountIdToDelete());
@@ -649,6 +641,15 @@ public class AdminDispatchServlet extends HttpServlet
                rd = sc.getRequestDispatcher(Constants.ADMIN_ACCOUNT_JSP);
                break;
             }
+            
+            // ==============================================================================================
+            // GOTO_ARCHIVED_ACCOUNTS
+            // ==============================================================================================
+            case Constants.GOTO_ARCHIVED_ACCOUNTS:
+            {
+               rd = sc.getRequestDispatcher(Constants.ARCHIVED_ACCOUNT_JSP);
+               break;
+            }
 
             // ==============================================================================================
             // GOTO_SAVE_ACCOUNT
@@ -668,7 +669,7 @@ public class AdminDispatchServlet extends HttpServlet
                   req.setAttribute(Constants.NEXT_PAGE, Constants.SAVE_ACCOUNT);
                   req.setAttribute(Constants.PREVIOUS_PAGE, Constants.ACCOUNT_UPDATE);
                   vSession.setNewAccount(newData);
-                  vSession.setCurrentAccountId(Integer.parseInt(vOldNr));
+                  vSession.setAccountId(Integer.parseInt(vOldNr));
                   rd = sc.getRequestDispatcher(Constants.ARE_YOU_SURE_JSP);
                }
                else

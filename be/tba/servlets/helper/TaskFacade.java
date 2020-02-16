@@ -208,7 +208,7 @@ public class TaskFacade
        {
           // new entry
           WorkOrderData workorder = new WorkOrderData();
-          AccountEntityData vAccountData = AccountCache.getInstance().get(session.getCurrentAccountId());
+          AccountEntityData vAccountData = AccountCache.getInstance().get(session.getAccountId());
           workorder.accountId = vAccountData.getId();
           workorder.title = parms.getParameter(Constants.WORKORDER_TITLE);
           workorder.instructions = parms.getParameter(Constants.WORKORDER_INSTRUCTION);

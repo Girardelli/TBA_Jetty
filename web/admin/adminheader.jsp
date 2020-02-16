@@ -42,13 +42,9 @@ be.tba.util.session.AccountCache"%>
 
 <%@ page session="false" isThreadSafe="true" isErrorPage="false"
 	errorPage="adminfail.jsp" import="be.tba.servlets.session.*"%>
-<%!
-private WebSession vSession;
-private String vSessionId;
-%>
 <%
   HttpSession httpSession = request.getSession();
-  vSession = (WebSession) httpSession.getAttribute(Constants.SESSION_OBJ);
+  WebSession vSession = (WebSession) httpSession.getAttribute(Constants.SESSION_OBJ);
   if (vSession == null)
   {
 	  throw new AccessDeniedException("U bent niet aangemeld bij deze administratie pagina's.");
@@ -112,7 +108,8 @@ private String vSessionId;
                                     <a class='norm' href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_ADD_INVOICE%>">Maak Manueel Factuur</a> <br> 
                                     <a class='norm' href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_OPEN_INVOICE%>">Open facturen</a> <br> 
                                     <a class='norm' href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_EMPLOYEE_ADMIN%>">Werknemers</a><br> 
-                                    <a class='norm' href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_EMPLOYEE_COST%>">Prestaties</a>
+                                    <a class='norm' href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_EMPLOYEE_COST%>">Prestaties</a><br>
+                                    <a class='norm' href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_ARCHIVED_ACCOUNTS%>">Gearchiveerde accounts</a>
 								</td>
 							</tr>
 						</table>

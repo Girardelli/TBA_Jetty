@@ -20,12 +20,13 @@ import be.tba.util.constants.Constants;
 import be.tba.util.invoice.InvoiceHelper;
 import be.tba.util.session.AccountCache;
 import be.tba.util.session.SessionParmsInf;
-import be.tba.util.timer.MailNowTask;
+import be.tba.util.timer.NotifyCustomerTask;
+import be.tba.websockets.WebSocketData;
 
 public class CallRecordFacade
 {
    private static Lock lock = new ReentrantLock();
-
+   
    public static void retrieveRecordForUpdate(SessionParmsInf parms, WebSession session)
    {
       String vKey = parms.getParameter(Constants.RECORD_ID);
@@ -39,12 +40,10 @@ public class CallRecordFacade
       String vKey = parms.getParameter(Constants.RECORD_ID);
       String shortText = parms.getParameter(Constants.RECORD_SHORT_TEXT);
       boolean isArchived = (parms.getParameter(Constants.RECORD_ARCHIVED) != null);
-      
-      if (shortText != null)
-      {
-         CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
-         vQuerySession.setShortText(session, Integer.parseInt(vKey), shortText, isCustomer, isArchived);
-      }
+      String urgent = parms.getParameter(Constants.RECORD_URGENT);
+      boolean isCustomerAttentionNeeded = (urgent != null && !urgent.isBlank());
+      CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
+      vQuerySession.setShortText(session, Integer.parseInt(vKey), shortText, isCustomer, isArchived, isCustomerAttentionNeeded);
    }
 
    /*
@@ -101,7 +100,12 @@ public class CallRecordFacade
       }
       vCallData.setNumber(parms.getParameter(Constants.RECORD_NUMBER));
       vCallData.setName(parms.getParameter(Constants.RECORD_CALLER_NAME));
-      vCallData.setShortDescription(parms.getParameter(Constants.RECORD_SHORT_TEXT));
+
+      String shtTxt = parms.getParameter(Constants.RECORD_SHORT_TEXT);
+      if (shtTxt != null && !shtTxt.isEmpty())
+      {
+         vCallData.setShortDescription(vCallData.getShortDescription() + "<br>" + session.getUserId() + ": " + shtTxt);
+      }
       vCallData.setLongDescription(parms.getParameter(Constants.RECORD_LONG_TEXT));
       vCallData.setIsSmsCall(parms.getParameter(Constants.RECORD_SMS) != null);
       vCallData.setIsAgendaCall(parms.getParameter(Constants.RECORD_AGENDA) != null);
@@ -123,20 +127,24 @@ public class CallRecordFacade
          } else
             vCallData.setInvoiceLevel(InvoiceHelper.kLevel1);
       }
-
+       String str = parms.getParameter(Constants.RECORD_NOTIFY);
+       boolean isNotifySet = (str != null && !str.isEmpty());
       vCallData.setIsVirgin(false);
-      vCallData.setIsChanged(false);
+      vCallData.setIsChangedByCust(false);
       vCallData.setDoneBy(session.getUserId());
-      vCallLogWriterSession.setCallData(session, vCallData);
+      CallRecordSqlAdapter.setIsDocumentedFlag(vCallData);
       printCallInsert(session, vCallData);
-      if (!prevIsImportant && vCallData.getIsImportantCall() && vCallData.getIsDocumented())
+      if ((!prevIsImportant && vCallData.getIsImportantCall() && vCallData.getIsDocumented()) || isNotifySet)
       {
-         MailNowTask.send(vCallData.getAccountId());
+         NotifyCustomerTask.notify(vCallData.getAccountId(), new WebSocketData(WebSocketData.URGENT_CALL, vCallData.getId(), vCallData.getName(), CallRecordSqlAdapter.abbrevText(vCallData.getShortDescription()), vCallData.getTime()), !vCallData.getIsMailed());
+         vCallData.setIsCustAttentionNeeded(true);
       }
       else if (vCallData.getIsImportantCall())
       {
          System.out.println("INFO: expected a mail for important call. prevIsImportant=" + prevIsImportant + ", isDocumented=" + vCallData.getIsDocumented());
       }
+      vCallLogWriterSession.setCallData(session, vCallData);
+      
    }
 
    /*
@@ -152,7 +160,7 @@ public class CallRecordFacade
       CallRecordEntityData newRecord = new CallRecordEntityData();
       Calendar vCalendar = Calendar.getInstance();
       newRecord.setIsVirgin(false);
-      newRecord.setIsChanged(false);
+      newRecord.setIsChangedByCust(false);
 
       newRecord.setIsAgendaCall(parms.getParameter(Constants.RECORD_AGENDA) != null);
       newRecord.setIsSmsCall(parms.getParameter(Constants.RECORD_SMS) != null);
@@ -171,10 +179,10 @@ public class CallRecordFacade
       newRecord.setTimeStamp(vCalendar.getTimeInMillis());
       newRecord.setDoneBy(session.getUserId());
 
-      AccountEntityData vData = AccountCache.getInstance().get(newRecord);
-      newRecord.setAccountId(vData.getId());
+      AccountEntityData account = AccountCache.getInstance().get(newRecord);
+      newRecord.setAccountId(account.getId());
 
-      if (AccountCache.getInstance().isMailEnabled(vData))
+      if (AccountCache.getInstance().isMailEnabled(account))
       {
          newRecord.setIsMailed(false);
       } else
@@ -182,7 +190,7 @@ public class CallRecordFacade
 
       if (parms.getParameter(Constants.RECORD_INVOICE_LEVEL) != null)
       {
-         if (vData.getInvoiceType() == InvoiceHelper.kTelemarketingInvoice)
+         if (account.getInvoiceType() == InvoiceHelper.kTelemarketingInvoice)
          {
             String vLevel = parms.getParameter(Constants.RECORD_INVOICE_LEVEL);
             if (vLevel.equals(Constants.RECORD_LEVEL3))
@@ -197,13 +205,17 @@ public class CallRecordFacade
       CallRecordSqlAdapter.setIsDocumentedFlag(newRecord);
       if (newRecord.getIsImportantCall())
       {
-         MailNowTask.send(vData.getId());
+         newRecord.setIsCustAttentionNeeded(true);
       }
 
       // Check the record and add it if it is a valid one.
       System.out.println("saveManualRecord: id=" + newRecord.getId() + ", cust=" + newRecord.getFwdNr() + ", number=" + newRecord.getNumber());
       CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
-      vQuerySession.addRow(session, newRecord);
+      int id = vQuerySession.addRow(session, newRecord);
+      if (newRecord.getIsImportantCall())
+      {
+         NotifyCustomerTask.notify(account.getId(), new WebSocketData(WebSocketData.URGENT_CALL, id, newRecord.getName(), CallRecordSqlAdapter.abbrevText(newRecord.getShortDescription()), newRecord.getTime()), !newRecord.getIsMailed());
+      }
       printCallInsert(session, newRecord);
    }
 
@@ -236,7 +248,7 @@ public class CallRecordFacade
     * the call log. For the time being this new 'unmapped' call is saved in the
     * session context of the operator.
     * 
-    */
+    
    public static void createNewUnmappedCall(SessionParmsInf parms, WebSession webSession)
    {
       System.out.println("createNewUnmappedCall()");
@@ -251,9 +263,13 @@ public class CallRecordFacade
       newRecord.setShortDescription(parms.getParameter(Constants.RECORD_SHORT_TEXT));
       newRecord.setLongDescription(parms.getParameter(Constants.RECORD_LONG_TEXT));
       newRecord.setDoneBy(webSession.getUserId());
-
+      if (newRecord.getIsImportantCall())
+      {
+         newRecord.setIsCustAttentionNeeded(true);
+      }
+   
       webSession.setNewUnmappedCall(newRecord);
-   }
+   }*/
 
    // this function is called:
    // - when a new not yet call is created (none existing that shal be mapped later
@@ -265,6 +281,7 @@ public class CallRecordFacade
    // temporally in the NewUnmappedCalls Map in the WebSession so that the jsp can
    // take that data
    // and show it on the refreshed jsp page.
+   /*
    public static void updateNewUnmappedCall(SessionParmsInf parms, WebSession webSession)
    {
       System.out.println("updateNewUnmappedCall()");
@@ -290,13 +307,17 @@ public class CallRecordFacade
       newRecord.setShortDescription(parms.getParameter(Constants.RECORD_SHORT_TEXT));
       newRecord.setLongDescription(parms.getParameter(Constants.RECORD_LONG_TEXT));
       newRecord.setDoneBy(webSession.getUserId());
-   }
+      if (newRecord.getIsImportantCall())
+      {
+         newRecord.setIsCustAttentionNeeded(true);
+      }
+   }*/
 
    /*
     * called from the new call page when a recorded (from PBX) call is selected.
     * Both recorded and already created new call shall be merged into the recorded
     * call in the database.
-    */
+    
    public static boolean saveNewCall(SessionParmsInf parms, WebSession webSession)
    {
       System.out.println("saveNewCall()");
@@ -329,6 +350,7 @@ public class CallRecordFacade
          }
          if (!vNewRecord.getIsImportantCall() && vNewCall.getIsImportantCall())
          {
+            vNewRecord.setIsCustAttentionNeeded(true);
             MailNowTask.send(vNewRecord.getAccountId());
          }
          vQuerySession.setCallData(webSession, vNewRecord);
@@ -356,7 +378,7 @@ public class CallRecordFacade
          }
       }
       return false;
-   }
+   }*/
 
    public static void saveNewSubCustomer(SessionParmsInf parms, WebSession webSession, String vNewFwdNr)
    {

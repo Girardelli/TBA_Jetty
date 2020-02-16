@@ -254,12 +254,12 @@ final public class WebSession implements Serializable
         return accountIdToDelete;
     }
 
-    public void setCurrentAccountId(int id)
+    public void setAccountId(int id)
     {
         mCurrentAccountId = id;
     }
 
-    public int getCurrentAccountId()
+    public int getAccountId()
     {
         return mCurrentAccountId;
     }
@@ -454,7 +454,7 @@ final public class WebSession implements Serializable
     public void setWsSession(Session session)
     {
     	mWsSession = session;
-    	mIsWebSocketActive = true;
+    	setWsActive(true);
     }
    
     public boolean isWsActive()
@@ -464,7 +464,7 @@ final public class WebSession implements Serializable
     
     public void setWsActive(boolean state)
     {
-    	mIsWebSocketActive = state;
+       mIsWebSocketActive = state;
     }
     
     public boolean isAutoUpdateRecord()

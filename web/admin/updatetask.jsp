@@ -19,12 +19,10 @@ be.tba.util.session.AccountCache,
 be.tba.util.data.*,
 be.tba.util.constants.*,
 be.tba.util.invoice.*"%>
-	<%!
-private TaskEntityData mTaskData;
-private AccountEntityData mCustomerData;
-private String vRecordId = null;
-%>
-	<%
+<%
+TaskEntityData mTaskData;
+AccountEntityData mCustomerData;
+String vRecordId = null;
 try
 {
 vSession.setCallingJsp(Constants.UPDATE_TASK_JSP);

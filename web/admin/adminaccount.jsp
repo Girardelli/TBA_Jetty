@@ -19,7 +19,6 @@ be.tba.ejb.account.interfaces.*,
 be.tba.util.constants.*,
 be.tba.util.session.*"%>
 
-<%!private StringBuilder allEntryIds;%>
 <body>
    <table cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
       <tr>
@@ -27,9 +26,11 @@ be.tba.util.session.*"%>
          <td valign="top" width="20" bgcolor="FFFFFF"></td>
 
          <!-- account list -->
-         <td valign="top" width="1300" bgcolor="FFFFFF"><br> <%
+         <td valign="top" bgcolor="FFFFFF"><br> 
+<%
+StringBuilder allEntryIds = new StringBuilder("[");
     try {
- 				allEntryIds = new StringBuilder("[");
+			vSession.setCallingJsp(Constants.ADMIN_ACCOUNT_JSP);
  %>
             <p>
                <span class="admintitle"> Geregistreerde klanten:</span>
@@ -38,17 +39,26 @@ be.tba.util.session.*"%>
  %>
             <table>
                <tr>
+               <td>
                   <form name="downloadfileform" method="POST" action="/tba/download">
-                     <input type=hidden name=<%=Constants.ACCOUNT_TO_DELETE%> value=""> <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.DOWNLOAD_WK_KLANTEN_XML%>"> <input class="tbabutton" type=submit name=action value=" Download export file "
-                        onclick="downloadExportFile()">
-                  </form>
-                  <form name="adminaccform" method="POST" action="/tba/AdminDispatch">
-                     <input type=hidden name=<%=Constants.ACCOUNT_TO_DELETE%> value=""> <input type=hidden name=<%=Constants.SRV_ACTION%> value="yves">
-                     <td width="80"><input class="tbabutton" type=submit name=action value=" Toevoegen " onclick="addAccount()"></td>
-                     <td width="80"><input class="tbabutton" type=submit name=action value=" Archiveren " onclick="deleteAccount()"></td>
-                  </form>
+                     <input type=hidden name=<%=Constants.ACCOUNT_TO_DELETE%> value=""> 
+                     <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.DOWNLOAD_WK_KLANTEN_XML%>"> 
+                     <input class="tbabutton" type=submit name=action value=" Download export file " onclick="downloadExportFile()">
+                     </form>
+                  </td>
+                  </tr>
+                  <tr>
+                     <td >
+                     <form name="adminaccform" method="POST" action="/tba/AdminDispatch">
+                     <input type=hidden name=<%=Constants.ACCOUNT_TO_DELETE%> value=""> 
+                     <input type=hidden name=<%=Constants.SRV_ACTION%> value="yves">
+                     <input class="tbabutton" type=submit name=action value=" Toevoegen " onclick="addAccount()">
+                     <input class="tbabutton" type=submit name=action value=" Archiveren " onclick="deleteAccount()">
+                    </form>
+                  </td>
                </tr>
-            </table> <%
+            </table> 
+<%
     }
  %>
             <table border="0" cellspacing="2" cellpadding="4">
@@ -57,7 +67,7 @@ be.tba.util.session.*"%>
                <col width="100">
                <col width="300">
                <col width="350">
-               <col width="120">
+               <col width="200">
                <tr>
                   <td bgcolor="FFFFFF"></td>
                   <td valign="top" class="topMenu" bgcolor="#F89920">Nummer</td>
@@ -88,7 +98,11 @@ be.tba.util.session.*"%>
                						String vEmail = vEntry.getEmail();
                						vEmail = (vEmail == null) ? "" : vEmail;
                						String vLastLogin = vEntry.getLastLogin();
-               						vLastLogin = (vLastLogin == null) ? "" : vLastLogin;
+               						
+                                    if (!vEntry.getIsRegistered())
+                                       vLastLogin = "Niet geregistreerd";
+                                    else
+                                       vLastLogin = (vLastLogin == null) ? "" : vLastLogin;
                						String vRegImg;
                						//          if (vEntry.getIsRegistered())
                						if (vEntry.getNoInvoice())
@@ -136,7 +150,7 @@ be.tba.util.session.*"%>
                <col width="100">
                <col width="300">
                <col width="350">
-               <col width="120">
+               <col width="200">
                <tr>
                   <td bgcolor="FFFFFF"></td>
                   <td valign="top" class="topMenu" bgcolor="#F89920">Nummer</td>
@@ -163,6 +177,10 @@ be.tba.util.session.*"%>
                								vEmail = (vEmail == null) ? "" : vEmail;
                								String vLastLogin = vSubEntry.getLastLogin();
                								vLastLogin = (vLastLogin == null) ? "" : vLastLogin;
+                                             if (!vEntry.getIsRegistered())
+                                                vLastLogin = "Niet geregistreerd";
+                                             else
+                                                vLastLogin = (vLastLogin == null) ? "" : vLastLogin;
                								String vRegImg;
                								//			          if (vSubEntry.getIsRegistered())
                								//			            vRegImg = "\"/tba/images/greenVink.gif\"";
@@ -204,6 +222,8 @@ be.tba.util.session.*"%>
  			}
  %></td>
       </tr>
+   </table>
+
 
       <script type="text/javascript">
 var linesToDelete = new Array();
@@ -323,8 +343,6 @@ function downloadExportFile()
       document.downloadfileform.<%=Constants.SRV_ACTION%>.value="<%=Constants.DOWNLOAD_WK_KLANTEN_XML%>";
 }
                         </script>
-   </table>
-
 </body>
 
 </html>

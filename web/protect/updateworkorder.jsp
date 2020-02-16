@@ -24,7 +24,7 @@ try
    vSession.setCallingJsp(Constants.WORKORDER_JSP);
    WorkOrderSqlAdapter vWorkOrderSession = new WorkOrderSqlAdapter();
    FileLocationSqlAdapter fileLocationSession = new FileLocationSqlAdapter();
-   AccountEntityData vAccountData = AccountCache.getInstance().get(vSession.getCurrentAccountId());
+   AccountEntityData vAccountData = AccountCache.getInstance().get(vSession.getAccountId());
    WorkOrderData workOrder = null;
    Collection<FileLocationData> inputFiles = null;
    Collection<FileLocationData> outputFiles = null;

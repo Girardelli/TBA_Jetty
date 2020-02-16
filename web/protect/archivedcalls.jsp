@@ -22,15 +22,10 @@ be.tba.util.exceptions.AccessDeniedException,
 be.tba.servlets.session.SessionManager,
 be.tba.util.session.AccountCache,
 be.tba.util.data.*"%>
-<%!
-private String vAccountKey;
-private StringBuilder allEntryIds;
-%>
-	<%
+<%
+StringBuilder allEntryIds = new StringBuilder("[");
 try
 {
-allEntryIds = new StringBuilder("[");
-
 %>
 <form name="calllistform" method="POST" action="/tba/CustomerDispatch">
 <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.ACTION_ARCHIVED_CALLS%>"> 

@@ -17,10 +17,6 @@ be.tba.ejb.account.interfaces.*,
 be.tba.util.constants.*,
 be.tba.util.session.*"%>
 
-	<%!
-private StringBuilder allEntryIds;
-
-%>
 <body>
 <table  cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
 	<tr>
@@ -29,10 +25,11 @@ private StringBuilder allEntryIds;
 
 		<!-- account list -->
 		<td valign="top" width="750" bgcolor="FFFFFF"><br>
-		<%
+<%
+StringBuilder allEntryIds = new StringBuilder("[");
 try
 {
-	allEntryIds = new StringBuilder("[");
+	
 %>
 		<p><span class="admintitle"> Werknemers en Kaders</span></p>
 		<form name="adminaccform" method="POST"

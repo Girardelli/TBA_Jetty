@@ -24,12 +24,8 @@ be.tba.util.invoice.InvoiceHelper,
 be.tba.util.data.*,
 java.text.*" %>
 
-<%!
-private StringBuilder allEntryIds;
-%>
-
-	<%
-
+<%
+StringBuilder allEntryIds = new StringBuilder("[");
 try {
 vSession.setCallingJsp(Constants.ADMIN_TASK_JSP);
 
@@ -104,9 +100,6 @@ if (!vSession.isCurrentMonth())
 		<br>
 		<br>
 		<%
-allEntryIds = new StringBuilder("[");
-
-
 Collection<TaskEntityData> vTasks = null;
 TaskSqlAdapter vTaskSession = new TaskSqlAdapter();
 

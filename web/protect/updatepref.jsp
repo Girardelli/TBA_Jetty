@@ -12,12 +12,12 @@ be.tba.util.constants.*,
 be.tba.util.exceptions.*,
 be.tba.util.session.*"%>
 <%!
-private AccountEntityData vCustomer;
 private static final String kSelected = "selected";
 private static final String kChecked = "checked";
 private static final int kMaxMailHour = 23;
 private static final int kMaxMailMinutes = 56;%>
 <%
+AccountEntityData vCustomer;
    try {
 				if (vSession == null)
 					throw new AccessDeniedException("U bent niet aangemeld bij deze administratie pagina's.");

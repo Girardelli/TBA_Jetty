@@ -116,6 +116,7 @@ public class CustomerDispatchServlet extends HttpServlet
 
          synchronized (vSession)
          {
+            vSession.setWsActive(false);
             if (!vSession.getRole().getShort().equals(AccountRole.ADMIN.getShort()) && !vSession.getRole().getShort().equals(AccountRole.CUSTOMER.getShort()) && !vSession.getRole().getShort().equals(AccountRole.SUBCUSTOMER.getShort()))
                throw new AccessDeniedException("access denied for " + vSession.getUserId() + " with role " + vSession.getRole().getShort());
             System.out.println("\nCustomerDispatchServlet: userid:" + vSession.getUserId() + ", websessionid:" + vSession.getSessionId() + " action=" + vAction);
@@ -239,6 +240,8 @@ public class CustomerDispatchServlet extends HttpServlet
             {
                CallRecordFacade.updateCustomerChanges(params, vSession, true);
                //rd = sc.getRequestDispatcher(Constants.CLIENT_CALLS_JSP);
+               
+               
                break;
             }
 
@@ -389,7 +392,7 @@ public class CustomerDispatchServlet extends HttpServlet
 
             if (rd == null)
             {
-               log.info("rd is null: assign " + vSession.getCallingJsp());
+               //log.info("rd is null: assign " + vSession.getCallingJsp());
                rd = sc.getRequestDispatcher(vSession.getCallingJsp());
             }
             rd.forward(req, res);

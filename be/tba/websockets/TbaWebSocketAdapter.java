@@ -94,6 +94,27 @@ public class TbaWebSocketAdapter extends WebSocketAdapter
             } catch (Exception e)
             {
                // TODO Auto-generated catch block
+               System.out.println("WebSocket broadcast to client with sessionId=" + session.getSessionId() + ", user=" + session.getUserId() + " failed");
+               e.printStackTrace();
+            }
+         }
+      }
+   }
+
+   public static void sendToCustomer(WebSocketData data, int accountId)
+   {
+      Collection<WebSession> activeSessions = SessionManager.getInstance().getActiveWebSockets();
+      for (WebSession session : activeSessions)
+      {
+         if (session.getAccountId() == accountId)
+         {
+            try
+            {
+               //System.out.println("----------------------------------\r\nsend websocket event: " + data.toString());
+               session.getWsSession().getRemote().sendString(sGson.toJson(data, WebSocketData.class));
+            } catch (Exception e)
+            {
+               // TODO Auto-generated catch block
                System.out.println("WebSocket send to client with sessionId=" + session.getSessionId() + ", user=" + session.getUserId() + " failed");
                e.printStackTrace();
             }

@@ -17,9 +17,7 @@ be.tba.util.invoice.*,
 be.tba.util.constants.*,
 be.tba.util.exceptions.*,
 be.tba.util.session.*"%>
-<%!
 
-%>
 <%
 
 try 

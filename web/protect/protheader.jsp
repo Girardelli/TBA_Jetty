@@ -30,13 +30,9 @@ document.getElementById(elmnt).style.visibility="hidden";
 be.tba.servlets.session.*,
 be.tba.servlets.helper.*,
 be.tba.util.exceptions.*"%>
-<%!
-private WebSession vSession;
-private String vSessionId;
-%>
 <%
 HttpSession httpSession = request.getSession();
-vSession = (WebSession) httpSession.getAttribute(Constants.SESSION_OBJ);
+WebSession vSession = (WebSession) httpSession.getAttribute(Constants.SESSION_OBJ);
 if (vSession == null)
 {
       throw new AccessDeniedException("U bent niet aangemeld.");

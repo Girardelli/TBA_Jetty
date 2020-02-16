@@ -19,16 +19,17 @@ be.tba.util.session.AccountCache,
 be.tba.util.constants.Constants,
 be.tba.util.data.*,
 be.tba.util.invoice.*"%>
-<%!private CallRecordEntityData mRecordData;
-	private AccountEntityData mCustomerData;
-	private String vRecordId = null;%>
 <%
-   try {
-				vSession.setCallingJsp(Constants.UPDATE_RECORD_JSP);
-				boolean isAutoUpdateRecord = vSession.isAutoUpdateRecord();
-
-				mRecordData = vSession.getCurrentRecord();
-				if (mRecordData == null) {
+CallRecordEntityData mRecordData;
+AccountEntityData mCustomerData;
+String vRecordId = null;
+try {
+   vSession.setCallingJsp(Constants.UPDATE_RECORD_JSP);
+   boolean isAutoUpdateRecord = vSession.isAutoUpdateRecord();
+   
+   mRecordData = vSession.getCurrentRecord();
+   if (mRecordData == null) 
+   {
 %>
 <body>
    <table cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
@@ -44,28 +45,28 @@ be.tba.util.invoice.*"%>
    </table>
 </body>
 <%
-   return;
-				}
+       return;
+	}
 
-				IntertelCallData intertelCall = null;
-				if (isAutoUpdateRecord) {
-					intertelCall = IntertelCallManager.getInstance().getByDbId(mRecordData.getId());
-				}
+	IntertelCallData intertelCall = null;
+	if (isAutoUpdateRecord) {
+		intertelCall = IntertelCallManager.getInstance().getByDbId(mRecordData.getId());
+	}
 
-				mCustomerData = AccountCache.getInstance().get(mRecordData); // yves: to be changed in .getId() in de herfst van 2020
+	mCustomerData = AccountCache.getInstance().get(mRecordData); // yves: to be changed in .getId() in de herfst van 2020
 
-				String vDirStr = mRecordData.getIsIncomingCall() ? "Van Nummer" : "Naar Nummer";
-				String vNumberHtml;
-				if (isAutoUpdateRecord && intertelCall != null) {
-					vNumberHtml = intertelCall.callingNr;
-				} else {
-					if (mRecordData.getNumber().length() == 0)
-						vNumberHtml = new String(
-								"<input type=text size=20 name=" + Constants.RECORD_NUMBER + " value=\"\">");
-					else
-						vNumberHtml = new String("<input type=text size=20 name=" + Constants.RECORD_NUMBER
-								+ " value=\"" + mRecordData.getNumber() + "\">");
-				}
+	String vDirStr = mRecordData.getIsIncomingCall() ? "Van Nummer" : "Naar Nummer";
+	String vNumberHtml;
+	if (isAutoUpdateRecord && intertelCall != null) {
+		vNumberHtml = intertelCall.callingNr;
+	} else {
+		if (mRecordData.getNumber().length() == 0)
+			vNumberHtml = new String(
+					"<input type=text size=20 name=" + Constants.RECORD_NUMBER + " value=\"\">");
+		else
+			vNumberHtml = new String("<input type=text size=20 name=" + Constants.RECORD_NUMBER
+					+ " value=\"" + mRecordData.getNumber() + "\">");
+	}
 %>
 
 <body>
@@ -176,11 +177,25 @@ be.tba.util.invoice.*"%>
                         <td width="170" valign="top" class="adminsubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Naam</td>
                         <td width="530" valign="top"><input type=text size=30 name=<%=Constants.RECORD_CALLER_NAME%> value="<%=mRecordData.getName()%>"></td>
                      </tr>
+
+
+                     <tr>
+                        <td width="50"></td>
+                         <td width="170" valign="top" class="adminsubsubtitle"><img src="/tba/images/blueSphere.gif" width="10" height="10">&nbsp;Omschrijving</td>
+                         <td width="530" valign="middle" class="bodytekst"><%=(String) mRecordData.getShortDescription()%></td>
+                     </tr>
+                     <tr>
+                        <td width="50"></td>
+                         <td width="170" valign="top" class="adminsubsubtitle"><img src="/tba/images/blueSphere.gif" width="10" height="10">&nbsp;Opvolging</td>
+                         <td width="530" valign="middle"><textarea name=<%=Constants.RECORD_SHORT_TEXT%> rows=10 cols=70></textarea></td>
+                     </tr>
+
+<!-- 
                      <tr>
                         <td width="50"></td>
                         <td width="170" valign="top" class="adminsubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Omschrijving</td>
                         <td width="530" valign="top"><textarea name=<%=Constants.RECORD_SHORT_TEXT%> rows=10 cols=70><%=(String) mRecordData.getShortDescription()%></textarea></td>
-                     </tr>
+                     </tr> -->
                      <tr>
                         <td width="50"></td>
                         <td width="170" valign="top" class="adminsubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Extra Informatie</td>
@@ -217,7 +232,12 @@ be.tba.util.invoice.*"%>
     {
  %> <input type=hidden name=<%=Constants.RECORD_NUMBER%> value="<%=intertelCall.calledNr%>"> <%
     }
- %> <input class="tbabutton" type=submit name=action value="Bewaar"> <input class="tbabutton" type=reset> <input class="tbabutton" type=submit value="Cancel" onclick="cancelUpdate();">
+ %> 
+ 
+ <input type=hidden name=<%=Constants.RECORD_NOTIFY%> value="">
+ <input class="tbabuttonorange" type=submit name=action value="Bewaar en verwittig" onclick="saveAndNotify();"> 
+ <input class="tbabutton" type=submit name=action value="Bewaar"> 
+ <input class="tbabutton" type=submit value="Cancel" onclick="cancelUpdate();">
             </span> <br></td>
             <%
                if (mCustomerData != null && mCustomerData.getCallProcessInfo() != null
@@ -253,6 +273,12 @@ function cancelUpdate()
 {
   document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.GOTO_CANVAS%>";
 }
+
+function saveAndNotify()
+{
+  document.calllistform.<%=Constants.RECORD_NOTIFY%>.value="true";
+}
+
 </script>
 
 

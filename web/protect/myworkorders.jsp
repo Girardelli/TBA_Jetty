@@ -25,7 +25,7 @@ try
     if (vSession == null)
         throw new AccessDeniedException("U bent niet aangemeld.");
     vSession.setCallingJsp(Constants.CLIENT_WORKORDERS_JSP);
-    AccountEntityData vAccountData = AccountCache.getInstance().get(vSession.getCurrentAccountId());
+    AccountEntityData vAccountData = AccountCache.getInstance().get(vSession.getAccountId());
     //System.out.println("myworkorders: account:" + vAccountData);
     WorkOrderSqlAdapter workorderSession = new WorkOrderSqlAdapter();
     Collection<WorkOrderData> workOrders = workorderSession.getListForAccount(vSession, vAccountData.getId(), false);

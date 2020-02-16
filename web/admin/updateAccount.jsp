@@ -18,15 +18,12 @@ be.tba.util.constants.*,
 be.tba.util.exceptions.*,
 be.tba.util.session.*"%>
 <%!
-private AccountEntityData vCustomer;
-
 private static final String kSelected = " selected";
 private static final String kChecked = " checked";
 private static final int kMaxMailMinutes = 56;
-
-
 %>
 <%
+AccountEntityData vCustomer;
 
 try {
 vSession.setCallingJsp(Constants.UPDATE_ACCOUNT_JSP);
@@ -121,7 +118,7 @@ double vFacLongFwd = vCustomer.getFacLongFwd();
 						<input class="tbabutton" type=submit name=action value="De-registreren" onclick="Deregister()">&nbsp;&nbsp;
 						<input class="tbabutton" type=submit name=action value=" Terug " onclick="cancelUpdate()">&nbsp;&nbsp; 
 						<input class="tbabutton" type=submit name=action value=" Verstuur Mail " onclick="mailCustomer()"> 
-                        <input class="tbabutton" type=submit name=action value=" Archiveer " onclick="archive()"> 
+                        <input class="tbabutton" type=submit name=action value=<%=(vCustomer.getIsArchived()?" Dearchiveer ":" Archiveer ")%> onclick="archive()"> 
 						<br>
 						<p class="adminsubtitle">
 							<img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Algemene informatie:

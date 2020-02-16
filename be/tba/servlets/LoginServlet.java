@@ -117,7 +117,7 @@ public class LoginServlet extends HttpServlet
                     vSession.init(vUserId, vKey);
                     vSession.setRole(AccountRole.fromShort(vAccount.getRole()));
                     vSession.setSessionFwdNr(vAccount.getFwdNumber());
-                    vSession.setCurrentAccountId(vAccount.getId());
+                    vSession.setAccountId(vAccount.getId());
                     Calendar calendar = Calendar.getInstance();
                     vSession.setYear(calendar.get(Calendar.YEAR));
                     vSession.setMonthsBack(calendar.get(Calendar.MONTH));
@@ -165,7 +165,7 @@ public class LoginServlet extends HttpServlet
                         vSession.init(vUserId, vKey);
                         vSession.setRole(AccountRole.CUSTOMER);
                         vSession.setSessionFwdNr(req.getParameter(Constants.ACCOUNT_REGCODE));
-                        vSession.setCurrentAccountId(AccountCache.getInstance().get(vSession.getSessionFwdNr()).getId());
+                        vSession.setAccountId(AccountCache.getInstance().get(vSession.getSessionFwdNr()).getId());
                         // req.setAttribute(Constants.SESSION_ID, vKey);
                         // req.setAttribute(Constants.SESSION_OBJ, vSession);
                         rd = sc.getRequestDispatcher(Constants.CLIENT_CALLS_JSP);
@@ -281,7 +281,7 @@ public class LoginServlet extends HttpServlet
             {
                 vAccount = vAccountSession.logIn(session, vRegData.getUserId(), vRegData.getPassword());
                 session.setSessionFwdNr(vAccount.getFwdNumber());
-                session.setCurrentAccountId(vAccount.getId());
+                session.setAccountId(vAccount.getId());
                 AccountCache.getInstance().update(session);
             }
         }

@@ -17,12 +17,11 @@ be.tba.ejb.pbx.interfaces.*,
 be.tba.ejb.pbx.session.CallRecordSqlAdapter,
 be.tba.util.constants.*,
 be.tba.util.session.*"%>
-	<%!
-private CallRecordEntityData mRecordData;
-private String mCustomerName;
-%>
-	<%
-	if (vSession == null)
+<%
+CallRecordEntityData mRecordData;
+String mCustomerName;
+
+if (vSession == null)
 		  throw new AccessDeniedException("U bent niet aangemeld bij deze administratie pagina's.");
 	
 //	vSession.setCallingJsp(Constants.CLIENT_SHOW_REC_JSP);  
