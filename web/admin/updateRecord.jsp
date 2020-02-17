@@ -216,7 +216,7 @@ try {
                   </table> <br> <br> <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.SAVE_RECORD%>"> <%
     if (isAutoUpdateRecord && intertelCall != null) 
     {
- %> <input type=hidden name=<%=Constants.RECORD_NUMBER%> value="<%=intertelCall.calledNr%>"> <%
+ %> <input type=hidden name=<%=Constants.RECORD_NUMBER%> value="<%=intertelCall.callingNr%>"> <%
     }
  %> 
  
