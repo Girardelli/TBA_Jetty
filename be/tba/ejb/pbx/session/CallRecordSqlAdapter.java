@@ -1137,7 +1137,8 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
       String shortDescr = "";
       if (data.tsAnswer == 0)
       {
-         shortDescr = "ShortDescription='Niet opgenomen', ";
+         //shortDescr = "ShortDescription='Niet opgenomen', ";
+         shortDescr = "ShortDescription='', ";
       }
       if (!data.isIncoming)
       {
