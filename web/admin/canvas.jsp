@@ -555,7 +555,7 @@ socket.onmessage = function(msg)
     var json = JSON.parse(msg.data);
     if (json.operation == <%=WebSocketData.NEW_CALL%>)
     {
-        console.log("add pending call");
+        //console.log("add pending call");
         pendingCalls.push(json);
     	playRing();
     }
@@ -569,8 +569,8 @@ socket.onmessage = function(msg)
    	        console.log("removed pending call. answeredBySession=" + json.answeredBySession + ", I am session=<%=vSession.getSessionId()%>");
             if (json.answeredBySession == '<%=vSession.getSessionId()%>')
             {
-                console.log("change URL");
-                changeUrl("/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.AUTO_RECORD_UPDATE%>&<%=Constants.RECORD_ID%>=" + pendingCalls[i].dbId);
+                //console.log("change URL");
+                changeUrl("/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.AUTO_RECORD_UPDATE%>&<%=Constants.RECORD_ID%>=" + pendingCalls[i].dbCallId);
             }
             else
             {
