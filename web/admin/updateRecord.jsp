@@ -177,25 +177,11 @@ try {
                         <td width="170" valign="top" class="adminsubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Naam</td>
                         <td width="530" valign="top"><input type=text size=30 name=<%=Constants.RECORD_CALLER_NAME%> value="<%=mRecordData.getName()%>"></td>
                      </tr>
-
-
-                     <tr>
-                        <td width="50"></td>
-                         <td width="170" valign="top" class="adminsubsubtitle"><img src="/tba/images/blueSphere.gif" width="10" height="10">&nbsp;Omschrijving</td>
-                         <td width="530" valign="middle" class="bodytekst"><%=(String) mRecordData.getShortDescription()%></td>
-                     </tr>
-                     <tr>
-                        <td width="50"></td>
-                         <td width="170" valign="top" class="adminsubsubtitle"><img src="/tba/images/blueSphere.gif" width="10" height="10">&nbsp;Opvolging</td>
-                         <td width="530" valign="middle"><textarea name=<%=Constants.RECORD_SHORT_TEXT%> rows=10 cols=70></textarea></td>
-                     </tr>
-
-<!-- 
                      <tr>
                         <td width="50"></td>
                         <td width="170" valign="top" class="adminsubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Omschrijving</td>
                         <td width="530" valign="top"><textarea name=<%=Constants.RECORD_SHORT_TEXT%> rows=10 cols=70><%=(String) mRecordData.getShortDescription()%></textarea></td>
-                     </tr> -->
+                     </tr>
                      <tr>
                         <td width="50"></td>
                         <td width="170" valign="top" class="adminsubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Extra Informatie</td>

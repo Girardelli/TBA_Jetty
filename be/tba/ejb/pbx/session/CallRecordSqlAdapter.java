@@ -467,32 +467,36 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
       {
          AccountEntityData customer = AccountCache.getInstance().get(fwdNr);
 
-         String customerIdsIN = "'" + fwdNr + "'";
-         if (customer.getHasSubCustomers())
+         if (customer != null)
          {
-            Collection<AccountEntityData> subCustomers = AccountCache.getInstance().getSubCustomersList(customer.getId());
-            if (subCustomers != null)
+            String customerIdsIN = "'" + fwdNr + "'";
+            if (customer.getHasSubCustomers())
             {
-               for (Iterator<AccountEntityData> i = subCustomers.iterator(); i.hasNext();)
+               Collection<AccountEntityData> subCustomers = AccountCache.getInstance().getSubCustomersList(customer.getId());
+               if (subCustomers != null)
                {
-                  AccountEntityData vEntry = i.next();
-                  customerIdsIN = customerIdsIN.concat(",'" + vEntry.getFwdNumber() + "'");
+                  for (Iterator<AccountEntityData> i = subCustomers.iterator(); i.hasNext();)
+                  {
+                     AccountEntityData vEntry = i.next();
+                     customerIdsIN = customerIdsIN.concat(",'" + vEntry.getFwdNumber() + "'");
+                  }
                }
             }
+            CallCalendar vCalendar = new CallCalendar();
+            long vStartTime = vCalendar.getStartOfMonth(month, year);
+            long vEndTime = vCalendar.getEndOfMonth(month, year);
+
+            Vector<CallRecordEntityData> vOutList = new Vector<CallRecordEntityData>();
+            Collection<CallRecordEntityData> vCollection = executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE TimeStamp>" + vStartTime + " AND TimeStamp<=" + vEndTime + " AND IsDocumented=TRUE AND FwdNr IN (" + customerIdsIN + ") ORDER BY TimeStamp DESC");
+
+            SortAndFilterOnString(vOutList, vCollection, str2find);
+
+            System.out.println("getSearchCalls for " + fwdNr + " during month " + month + " (string=" + str2find + "): " + vOutList.size() + " entries. Org list size " + vCollection.size());
+            return vOutList;
          }
-         CallCalendar vCalendar = new CallCalendar();
-         long vStartTime = vCalendar.getStartOfMonth(month, year);
-         long vEndTime = vCalendar.getEndOfMonth(month, year);
-
-         Vector<CallRecordEntityData> vOutList = new Vector<CallRecordEntityData>();
-         Collection<CallRecordEntityData> vCollection = executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE TimeStamp>" + vStartTime + " AND TimeStamp<=" + vEndTime + " AND IsDocumented=TRUE AND FwdNr IN (" + customerIdsIN + ") ORDER BY TimeStamp DESC");
-
-         SortAndFilterOnString(vOutList, vCollection, str2find);
-
-         System.out.println("getSearchCalls for " + fwdNr + " during month " + month + " (string=" + str2find + "): " + vOutList.size() + " entries. Org list size " + vCollection.size());
-         return vOutList;
       } catch (Exception e)
       {
+         System.out.println("getSearchCalls failed for fwdNr=" + fwdNr+ " , str2find=" + str2find);
          e.printStackTrace();
       }
       return new Vector<CallRecordEntityData>();
@@ -1137,8 +1141,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
       String shortDescr = "";
       if (data.tsAnswer == 0)
       {
-         //shortDescr = "ShortDescription='Niet opgenomen', ";
-         shortDescr = "ShortDescription='', ";
+         shortDescr = "ShortDescription='Niet opgenomen', ";
       }
       if (!data.isIncoming)
       {

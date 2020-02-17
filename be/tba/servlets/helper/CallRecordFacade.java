@@ -100,12 +100,7 @@ public class CallRecordFacade
       }
       vCallData.setNumber(parms.getParameter(Constants.RECORD_NUMBER));
       vCallData.setName(parms.getParameter(Constants.RECORD_CALLER_NAME));
-
-      String shtTxt = parms.getParameter(Constants.RECORD_SHORT_TEXT);
-      if (shtTxt != null && !shtTxt.isEmpty())
-      {
-         vCallData.setShortDescription(vCallData.getShortDescription() + "<br>" + session.getUserId() + ": " + shtTxt);
-      }
+      vCallData.setShortDescription(parms.getParameter(Constants.RECORD_SHORT_TEXT));
       vCallData.setLongDescription(parms.getParameter(Constants.RECORD_LONG_TEXT));
       vCallData.setIsSmsCall(parms.getParameter(Constants.RECORD_SMS) != null);
       vCallData.setIsAgendaCall(parms.getParameter(Constants.RECORD_AGENDA) != null);
@@ -212,7 +207,7 @@ public class CallRecordFacade
       System.out.println("saveManualRecord: id=" + newRecord.getId() + ", cust=" + newRecord.getFwdNr() + ", number=" + newRecord.getNumber());
       CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
       int id = vQuerySession.addRow(session, newRecord);
-      if (newRecord.getIsImportantCall())
+      if (newRecord.getIsImportantCall() && newRecord.getIsDocumented())
       {
          NotifyCustomerTask.notify(account.getId(), new WebSocketData(WebSocketData.URGENT_CALL, id, newRecord.getName(), CallRecordSqlAdapter.abbrevText(newRecord.getShortDescription()), newRecord.getTime()), !newRecord.getIsMailed());
       }

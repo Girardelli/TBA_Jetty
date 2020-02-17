@@ -564,7 +564,7 @@ socket.onmessage = function(msg)
        console.log("check for remove");
    	   for (i = 0; i < pendingCalls.length; i++) 
    	   {
-   	      if (pendingCalls[i].callId == json.callId)
+   	      if (pendingCalls[i].intertelCallId == json.intertelCallId)
    	      {
    	        console.log("removed pending call. answeredBySession=" + json.answeredBySession + ", I am session=<%=vSession.getSessionId()%>");
             if (json.answeredBySession == '<%=vSession.getSessionId()%>')
@@ -603,7 +603,7 @@ function updatePendingCalls()
         for (i = 0; i < pendingCalls.length; i++) 
         {
             content += "<tr>";
-            content += "<td><img src='/tba/images/deleteCross.gif' width='16' height='16' border='0' onclick=\"changeUrl('/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.REMOVE_PENDING_CALL%>&<%=Constants.PENDING_CALL_ID%>=" + pendingCalls[i].dbId + "');\"></td><td><table width=100% class='trBlock' onclick=\"changeUrl('/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACTION_GOTO_RECORD_UPDATE%>&<%=Constants.RECORD_ID%>=" + pendingCalls[i].dbId + "');\"><tr><td>" + 
+            content += "<td><img src='/tba/images/deleteCross.gif' width='16' height='16' border='0' onclick=\"changeUrl('/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.REMOVE_PENDING_CALL%>&<%=Constants.PENDING_CALL_ID%>=" + pendingCalls[i].dbCallId + "');\"></td><td><table width=100% class='trBlock' onclick=\"changeUrl('/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACTION_GOTO_RECORD_UPDATE%>&<%=Constants.RECORD_ID%>=" + pendingCalls[i].dbCallId + "');\"><tr><td>" + 
               timeStamp2Txt(pendingCalls[i].timeStamp, now) + "</td><td width=20px></td><td>" + 
               pendingCalls[i].customer + "</td></tr></table></td></tr>";
         }

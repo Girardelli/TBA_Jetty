@@ -32,11 +32,6 @@ if (vSession == null)
 
   String vDirStr = mRecordData.getIsIncomingCall() ? "Van " : "Naar ";
 
-  String vNumberHtml;
-  if (mRecordData.getNumber().length() == 0)
-    vNumberHtml = new String("><input type=text size=20 name=" + Constants.RECORD_NUMBER + " value=\"\">");
-  else
-    vNumberHtml = new String("><input type=text size=20 name=" + Constants.RECORD_NUMBER + " value=" + mRecordData.getNumber() + ">");
   String vInfoGifs = "";
   if (mRecordData.getIsAgendaCall())
   {

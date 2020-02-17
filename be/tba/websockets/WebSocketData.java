@@ -46,7 +46,7 @@ public class WebSocketData
 
 	public String toString()
 	{
-		return "WebSocketData: callId=" +  intertelCallId + ", customer=" + customer + ", dbId=" + dbCallId + ", PhoneId=" + answeredByPhoneId + ", session=" + answeredBySession + ", text=" + callText;
+		return "WebSocketData: intertelCallId=" +  intertelCallId + ", customer=" + customer + ", dbCallId=" + dbCallId + ", PhoneId=" + answeredByPhoneId + ", session=" + answeredBySession + ", text=" + callText;
 	}
 
 }
