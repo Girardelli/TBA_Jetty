@@ -1218,7 +1218,7 @@ public class AdminDispatchServlet extends HttpServlet
          System.out.println("admin dispatch failed. URI:" + req.getRequestURI() + "?" + req.getQueryString());
          e.printStackTrace();
          rd = sc.getRequestDispatcher(Constants.ADMIN_FAIL_JSP);
-         req.setAttribute(Constants.ERROR_TXT, "de pagina kan niet worden getoont.");
+         req.setAttribute(Constants.ERROR_TXT, "de pagina kan niet worden getoond.");
          rd.forward(req, res);
       }
 //        if (vSession != null)

@@ -32,7 +32,7 @@ String accountIdStr = (String) request.getParameter(Constants.ACCOUNT_ID);
 if (accountIdStr == null)
   throw new SystemErrorException("Interne fout: Account key null.");
 int accountId = Integer.valueOf(accountIdStr);
-AccountEntityData vCustomer = AccountCache.getInstance().get(accountId);
+vCustomer = AccountCache.getInstance().get(accountId);
 
 String vFullName = vCustomer.getFullName();
 vFullName = (vFullName == null) ? "" : vFullName;
