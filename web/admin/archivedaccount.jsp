@@ -34,7 +34,7 @@ try
             vSession.setCallingJsp(Constants.ARCHIVED_ACCOUNT_JSP);
  %>
             <p>
-               <span class="admintitle"> Gearchiveerde klanten:</span>
+               <span class="bodytitle"> Gearchiveerde klanten:</span>
             </p>
             <table border="0" cellspacing="2" cellpadding="4">
                <col width="25">

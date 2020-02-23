@@ -69,109 +69,110 @@ AccountEntityData vCustomer;
    <!--Update account jsp-->
    <tr>
       <td valign="middle" width="30" bgcolor="FFFFFF"></td>
-      <td valign="middle" bgcolor="FFFFFF"><br> <br> <span class="admintitle">Stel uw voorkeuren in.</span> <br> <span class="bodytekst"> <!-- action name must be a URI name as it is set in the <application>.xml servlet-mapping tag.-->
-               <table border="0" cellspacing="4" cellpadding="4">
-                  <tr>
-                     <td width="200" valign="middle" class="adminsubsubtitle"><img src="/tba/images/blueSphere.gif" width="10" height="10">&nbsp;Facturatie e-mail adres</td>
-                     <td width="500" valign="middle"><input type=text name=<%=Constants.ACCOUNT_INVOICE_EMAIL%> size=50 value="<%=vInvoiceEmail%>"></td>
-                  </tr>
-                  <tr>
-                     <td width="200" valign="middle" class="adminsubsubtitle"><img src="/tba/images/blueSphere.gif" width="10" height="10">&nbsp;GSM nummer (SMS)</td>
-                     <td width="500" valign="middle"><input type=text name=<%=Constants.ACCOUNT_GSM%> size=13 value="<%=vGsm%>"></td>
-                  </tr>
-               </table>
-               <p>&nbsp;&nbsp;&nbsp;&nbsp;Stuur mij een mail met daarin de laatste oproepgegevens naar e-mail adres:</p>
-               <table border="0" cellspacing="4" cellpadding="4">
-                  <tr>
-                     <td width="200" valign="middle" class="adminsubsubtitle"><img src="/tba/images/blueSphere.gif" width="10" height="10">&nbsp;naar e-mail adres</td>
-                     <td width="500" valign="middle"><input type=text name=<%=Constants.ACCOUNT_EMAIL%> size=50 value="<%=vEmail%>"></td>
-                  </tr>
-                  <tr>
-                     <td width="200" valign="middle" class="adminsubsubtitle"><img src="/tba/images/blueSphere.gif" width="10" height="10">&nbsp;op tijdstip 1</td>
-                     <td width="500" valign="middle">
-                     <table><tr><td width="30">
-                        <input type="checkbox" id="cbx1" style="display:none" name=<%=Constants.ACCOUNT_MAIL_ON1%><%=(vIsMailOn1 ? " checked=\"checked\"" : "")%> />
-                        <label for="cbx1" class="toggle"><span></span></label>    
-                     </td><td>
-                        <select name=<%=Constants.ACCOUNT_MAIL_UUR1%>>
-                                 <%
-                                    for (int i = 5; i <= kMaxMailHour; ++i)
-                                 					out.println("<option value=\"" + i + "\" " + ((vMailHour1 == i) ? kSelected : "") + ">" + i);
-                                 %>
-                              </select> 
-                        uur 
-                     <select name=<%=Constants.ACCOUNT_MAIL_MINUTEN1%>>
-                           <%
-                              for (int i = 0; i < kMaxMailMinutes; i += 5)
-                           					out.println("<option value=\"" + i + "\" " + ((vMailMinutes1 == i) ? kSelected : "") + ">"
-                           							+ ((i < 10) ? "0" : "") + i);
-                           %>
-                     </select> minuten
-                     </td></tr></table>
-                     </td>
-                  </tr>
-                  <tr>
-                     <td width="200" valign="middle" class="adminsubsubtitle"><img src="/tba/images/blueSphere.gif" width="10" height="10">&nbsp;op tijdstip 2</td>
-                     <td width="500" valign="middle" class="bodytekst">
-                     <table><tr><td width="30">
-                        <input type="checkbox" id="cbx2" style="display:none" name=<%=Constants.ACCOUNT_MAIL_ON2%><%=(vIsMailOn2 ? " checked=\"checked\"" : "")%> />
-                        <label for="cbx2" class="toggle"><span></span></label>    
-                     </td><td>
-                        <select name=<%=Constants.ACCOUNT_MAIL_UUR2%>>
-                           <%
-                              for (int i = 5; i <= kMaxMailHour; ++i)
-                           					out.println("<option value=\"" + i + "\" " + ((vMailHour2 == i) ? kSelected : "") + ">" + i);
-                           %>
-                     </select> uur <select name=<%=Constants.ACCOUNT_MAIL_MINUTEN2%>>
-                           <%
-                              for (int i = 0; i < kMaxMailMinutes; i += 5)
-                           					out.println("<option value=\"" + i + "\" " + ((vMailMinutes2 == i) ? kSelected : "") + ">"
-                           							+ ((i < 10) ? "0" : "") + i);
-                           %>
-                     </select> minuten
-                     </td></tr></table>
-                     </td>
-                  </tr>
-                  <tr>
-                     <td width="200" valign="middle" class="adminsubsubtitle"><img src="/tba/images/blueSphere.gif" width="10" height="10">&nbsp;op tijdstip 3</td>
-                     <td width="500" valign="middle">
-                     <table><tr><td width="30">
-                        <input type="checkbox" id="cbx3" style="display:none" name=<%=Constants.ACCOUNT_MAIL_ON3%><%=(vIsMailOn3 ? " checked=\"checked\"" : "")%> />
-                        <label for="cbx3" class="toggle"><span></span></label>    
-                     </td><td>
-                        <select name=<%=Constants.ACCOUNT_MAIL_UUR3%>>
-                           <%
-                              for (int i = 5; i <= kMaxMailHour; ++i)
-                           					out.println("<option value=\"" + i + "\" " + ((vMailHour3 == i) ? kSelected : "") + ">" + i);
-                           %>
-                     </select> uur <select name=<%=Constants.ACCOUNT_MAIL_MINUTEN3%>>
-                           <%
-                              for (int i = 0; i < kMaxMailMinutes; i += 5)
-                           					out.println("<option value=\"" + i + "\" " + ((vMailMinutes3 == i) ? kSelected : "") + ">"
-                           							+ ((i < 10) ? "0" : "") + i);
-                           %>
-                     </select> minuten
-                     </td></tr></table>
-                     </td>
-                  </tr>
-                  <tr>
-                     <td width="200" valign="middle" class="adminsubsubtitle"><img src="/tba/images/blueSphere.gif" width="10" height="10">&nbsp;Zend geen lege mails</td>
-                     <td width="500" valign="middle">
-                        <input type="checkbox" id="cbx4" style="display:none" name=<%=Constants.ACCOUNT_NO_EMPTY_MAILS%><%=(vNoEmptyMails ? " checked=\"checked\"" : "")%> />
-                        <label for="cbx4" class="toggle"><span></span></label>    
-                     </td>
-                  </tr>
-                  <tr>
-                     <td width="200" valign="middle" class="adminsubsubtitle"><img src="/tba/images/blueSphere.gif" width="10" height="10">&nbsp;Zend in text format</td>
-                     <td width="500" valign="middle">
-                        <input type="checkbox" id="cbx5" style="display:none" name=<%=Constants.ACCOUNT_TEXT_MAIL%><%=(vTextMail ? " checked=\"checked\"" : "")%> />
-                        <label for="cbx5" class="toggle"><span></span></label>    
-                     </td>
-                  </tr>
-               </table>
-               <br><input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.SAVE_PREFS%>"> 
-               <input class="tbabutton" type=submit name=action value="Bewaar" onclick="Bewaar()">
-      </span></td>
+      <td valign="middle" bgcolor="FFFFFF"><br> <br> 
+      <span class="bodytitle">Stel uw voorkeuren in.</span> <br> 
+      <table border="0" cellspacing="4" cellpadding="4">
+         <tr>
+            <td width="200" valign="middle" class="bodysubsubtitle"><img src="/tba/images/blueSphere.gif" width="10" height="10">&nbsp;Facturatie e-mail adres</td>
+            <td width="500" valign="middle"><input type=text name=<%=Constants.ACCOUNT_INVOICE_EMAIL%> size=50 value="<%=vInvoiceEmail%>"></td>
+         </tr>
+         <tr>
+            <td width="200" valign="middle" class="bodysubsubtitle"><img src="/tba/images/blueSphere.gif" width="10" height="10">&nbsp;GSM nummer (SMS)</td>
+            <td width="500" valign="middle"><input type=text name=<%=Constants.ACCOUNT_GSM%> size=13 value="<%=vGsm%>"></td>
+         </tr>
+      </table>
+      <br><p class="bodysubsubtitle">&nbsp;&nbsp;&nbsp;&nbsp;Stuur mij een mail met daarin de laatste oproepgegevens:</p>
+      <table border="0" cellspacing="4" cellpadding="4">
+         <tr>
+            <td width="200" valign="middle" class="bodysubsubtitle"><img src="/tba/images/blueSphere.gif" width="10" height="10">&nbsp;naar e-mail adres</td>
+            <td width="500" valign="middle"><input type=text name=<%=Constants.ACCOUNT_EMAIL%> size=50 value="<%=vEmail%>"></td>
+         </tr>
+         <tr>
+            <td width="200" valign="middle" class="bodysubsubtitle"><img src="/tba/images/blueSphere.gif" width="10" height="10">&nbsp;op tijdstip 1</td>
+            <td width="500" valign="middle">
+            <table><tr><td width="30">
+               <input type="checkbox" id="cbx1" style="display:none" name=<%=Constants.ACCOUNT_MAIL_ON1%><%=(vIsMailOn1 ? " checked=\"checked\"" : "")%> />
+               <label for="cbx1" class="toggle"><span></span></label>    
+            </td><td>
+               <select name=<%=Constants.ACCOUNT_MAIL_UUR1%>>
+                        <%
+                           for (int i = 5; i <= kMaxMailHour; ++i)
+                        					out.println("<option value=\"" + i + "\" " + ((vMailHour1 == i) ? kSelected : "") + ">" + i);
+                        %>
+                     </select> 
+               uur 
+            <select name=<%=Constants.ACCOUNT_MAIL_MINUTEN1%>>
+                  <%
+                     for (int i = 0; i < kMaxMailMinutes; i += 5)
+                  					out.println("<option value=\"" + i + "\" " + ((vMailMinutes1 == i) ? kSelected : "") + ">"
+                  							+ ((i < 10) ? "0" : "") + i);
+                  %>
+            </select> minuten
+            </td></tr></table>
+            </td>
+         </tr>
+         <tr>
+            <td width="200" valign="middle" class="bodysubsubtitle"><img src="/tba/images/blueSphere.gif" width="10" height="10">&nbsp;op tijdstip 2</td>
+            <td width="500" valign="middle" class="bodytekst">
+            <table><tr><td width="30">
+               <input type="checkbox" id="cbx2" style="display:none" name=<%=Constants.ACCOUNT_MAIL_ON2%><%=(vIsMailOn2 ? " checked=\"checked\"" : "")%> />
+               <label for="cbx2" class="toggle"><span></span></label>    
+            </td><td>
+               <select name=<%=Constants.ACCOUNT_MAIL_UUR2%>>
+                  <%
+                     for (int i = 5; i <= kMaxMailHour; ++i)
+                  					out.println("<option value=\"" + i + "\" " + ((vMailHour2 == i) ? kSelected : "") + ">" + i);
+                  %>
+            </select> uur <select name=<%=Constants.ACCOUNT_MAIL_MINUTEN2%>>
+                  <%
+                     for (int i = 0; i < kMaxMailMinutes; i += 5)
+                  					out.println("<option value=\"" + i + "\" " + ((vMailMinutes2 == i) ? kSelected : "") + ">"
+                  							+ ((i < 10) ? "0" : "") + i);
+                  %>
+            </select> minuten
+            </td></tr></table>
+            </td>
+         </tr>
+         <tr>
+            <td width="200" valign="middle" class="bodysubsubtitle"><img src="/tba/images/blueSphere.gif" width="10" height="10">&nbsp;op tijdstip 3</td>
+            <td width="500" valign="middle">
+            <table><tr><td width="30">
+               <input type="checkbox" id="cbx3" style="display:none" name=<%=Constants.ACCOUNT_MAIL_ON3%><%=(vIsMailOn3 ? " checked=\"checked\"" : "")%> />
+               <label for="cbx3" class="toggle"><span></span></label>    
+            </td><td>
+               <select name=<%=Constants.ACCOUNT_MAIL_UUR3%>>
+                  <%
+                     for (int i = 5; i <= kMaxMailHour; ++i)
+                  					out.println("<option value=\"" + i + "\" " + ((vMailHour3 == i) ? kSelected : "") + ">" + i);
+                  %>
+            </select> uur <select name=<%=Constants.ACCOUNT_MAIL_MINUTEN3%>>
+                  <%
+                     for (int i = 0; i < kMaxMailMinutes; i += 5)
+                  					out.println("<option value=\"" + i + "\" " + ((vMailMinutes3 == i) ? kSelected : "") + ">"
+                  							+ ((i < 10) ? "0" : "") + i);
+                  %>
+            </select> minuten
+            </td></tr></table>
+            </td>
+         </tr>
+         <tr>
+            <td width="200" valign="middle" class="bodysubsubtitle"><img src="/tba/images/blueSphere.gif" width="10" height="10">&nbsp;Zend geen lege mails</td>
+            <td width="500" valign="middle">
+               <input type="checkbox" id="cbx4" style="display:none" name=<%=Constants.ACCOUNT_NO_EMPTY_MAILS%><%=(vNoEmptyMails ? " checked=\"checked\"" : "")%> />
+               <label for="cbx4" class="toggle"><span></span></label>    
+            </td>
+         </tr>
+         <tr>
+            <td width="200" valign="middle" class="bodysubsubtitle"><img src="/tba/images/blueSphere.gif" width="10" height="10">&nbsp;Zend in text format</td>
+            <td width="500" valign="middle">
+               <input type="checkbox" id="cbx5" style="display:none" name=<%=Constants.ACCOUNT_TEXT_MAIL%><%=(vTextMail ? " checked=\"checked\"" : "")%> />
+               <label for="cbx5" class="toggle"><span></span></label>    
+            </td>
+         </tr>
+      </table>
+      <br><input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.SAVE_PREFS%>"> 
+      <input class="tbabutton" type=submit name=action value="Bewaar" onclick="Bewaar()">
+     </td>
    </tr>
    <%
       } catch (Exception e) {

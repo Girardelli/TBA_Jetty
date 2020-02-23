@@ -97,7 +97,7 @@ try {
                                     <tr>
 
 
-                                       <td width="50" valign="top" class="adminsubtitle">&nbsp;Klant</td>
+                                       <td width="50" valign="top" class="bodysubtitle">&nbsp;Klant</td>
                                        <td width="10" valign="top">:</td>
                                        <td valign="top"><select name="<%=Constants.ACCOUNT_FILTER_CUSTOMER%>" onchange="submit()">
                                              <%
@@ -163,7 +163,7 @@ try {
                         <!-- ################ chats ################ -->
                         <table>
                            <tr>
-                              <td class="tdborder" width="300px"><span class="admintitle">Mijn chats</span> <br> <br> <%
+                              <td class="tdborder" width="300px"><span class="bodytitle">Mijn chats</span> <br> <br> <%
  	Collection<CallRecordEntityData> chatRecords = vQuerySession.getChatRecords(vSession);
  		int cnt = 0;
  		StringBuffer modalStrBuffer = new StringBuffer("<!-- \r\n#######  My Modals ######-->\r\n\r\n");
@@ -222,7 +222,7 @@ try {
  %></td>
                            </tr>
                            <tr>
-                              <td class="tdborder" width="300px"><span class="admintitle">Andere chats</span> <br> <br> <%
+                              <td class="tdborder" width="300px"><span class="bodytitle">Andere chats</span> <br> <br> <%
  	cnt = 0;
  		if (!chatRecords.isEmpty()) {
  			for (Iterator<CallRecordEntityData> i = chatRecords.iterator(); i.hasNext();) {
@@ -275,31 +275,31 @@ try {
                   </tr>
                </table>
       <p>
-         <span class="admintitle"> Oproepenlijst: <%=vRecords.size()%> oproepen</span>
+         <span class="bodytitle"> Oproepenlijst: <%=vRecords.size()%> oproepen</span>
 <!--          <button id="onOffButton" onclick="alterAudioOnOff()" type="button"><img src="/tba/images/soundOff.jpg" alt="zet geluid aan / af" width='30' height='30' border='0'></button> --> 
       </p>
       <%
       	if (vRecords == null || vRecords.size() == 0) {
       			if (vCustomerFilter.equals(Constants.ACCOUNT_FILTER_ALL)) {
       %>
-      <br> <span class="adminsubtitle">Er zijn geen oproepgegevens beschikbaar (<%=vSession.getDaysBack()%> dagen terug).
+      <br> <span class="bodysubtitle">Er zijn geen oproepgegevens beschikbaar (<%=vSession.getDaysBack()%> dagen terug).
       </span>
       <%
       	} else {
       %>
-      <br> <span class="adminsubtitle">Er zijn geen oproepgegevens beschikbaar voor maand (<%=Constants.MONTHS[vSession.getMonthsBack()]%>).
+      <br> <span class="bodysubtitle">Er zijn geen oproepgegevens beschikbaar voor maand (<%=Constants.MONTHS[vSession.getMonthsBack()]%>).
       </span>
       <%
       	}
       		} else {
       			if (vCustomerFilter.equals(Constants.ACCOUNT_FILTER_ALL)) {
       %>
-      <span class="adminsubtitle">Oproepen van <%=vSession.getDaysBack()%> dagen terug.
+      <span class="bodysubtitle">Oproepen van <%=vSession.getDaysBack()%> dagen terug.
       </span>
       <%
       	} else {
       %>
-      <span class="adminsubtitle">Oproepen tijdens de maand <%=Constants.MONTHS[vSession.getMonthsBack()]%>.
+      <span class="bodysubtitle">Oproepen tijdens de maand <%=Constants.MONTHS[vSession.getMonthsBack()]%>.
       </span>
       <%
       	}

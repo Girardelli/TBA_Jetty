@@ -50,7 +50,7 @@ Last Checked In By: $Author: Yves Willems $
 			<!-- account list -->
 			<td valign="top" bgcolor="FFFFFF"><br>
 			<p>
-			    <span class="admintitle"> Uitgevoerde taken:</span>
+			    <span class="bodytitle"> Uitgevoerde taken:</span>
 			</p>			
 			 <%
 						    if (vSession == null)
@@ -77,7 +77,7 @@ Last Checked In By: $Author: Yves Willems $
  		out.println("<br><br><table border=\"0\" cellspacing=\"2\" cellpadding=\"2\">");
  		if (vTasks == null || vTasks.size() == 0)
  		{
- 			out.println("<span class=\"adminsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Er zijn geen taken uitgevoerd tijdens de maand "
+ 			out.println("<span class=\"bodysubsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Er zijn geen taken uitgevoerd tijdens de maand "
  			        + Constants.MONTHS[vSession.getMonthsBack()]
  			        + ".</span>");
  			out.println("</table>");
@@ -89,7 +89,7 @@ Last Checked In By: $Author: Yves Willems $
  			{
  				if (!vSession.isCurrentMonth())
  				{
- 					out.println("<span class=\"adminsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+ 					out.println("<span class=\"bodysubsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
  					        + vTasks.size()
  					        + " taken uitgevoerd tijdens de maand "
  					        + Constants.MONTHS[vSession.getMonthsBack()]
@@ -97,7 +97,7 @@ Last Checked In By: $Author: Yves Willems $
  				}
  				else
  				{
- 					out.println("<span class=\"adminsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+ 					out.println("<span class=\"bodysubsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
  					        + vTasks.size()
  					        + " taken uitgevoerd deze maand.</span><br>");
  				}
@@ -167,20 +167,20 @@ Last Checked In By: $Author: Yves Willems $
 					</tr>
 					<%
 						}
-								}
-								else
-								{
-									out.println("<br><span class=\"adminsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Er zijn geen taken uitgevoerd voor deze klant tijdens de maand "
-									        + Constants.MONTHS[vSession.getMonthsBack()]
-									        + ".</span>");
-								}
+					}
+					else
+					{
+						out.println("<br><span class=\"bodysubsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Er zijn geen taken uitgevoerd voor deze klant tijdens de maand "
+						        + Constants.MONTHS[vSession.getMonthsBack()]
+						        + ".</span>");
+					}
 
-							}
-						}
-						catch (Exception ex)
-						{
-							ex.printStackTrace();
-						}
+				}
+			}
+			catch (Exception ex)
+			{
+				ex.printStackTrace();
+			}
 					%>
 
 				</table></td>

@@ -44,7 +44,7 @@ try
    <tr>
 	<td>
     <form name="loginform" method="POST" action="/tba/Login"><br>
-	<table border="0" cellpadding="0" cellspacing="0" width="580">
+	<table border="0" cellpadding="0" cellspacing="0" width="100%">
 		<tr>
 			<td valign="top" width="60" bgcolor="FFFFFF"></td>
 			<td valign="top" bgcolor="FFFFFF"><br>
@@ -60,14 +60,14 @@ try
       }
       else
       {
-        out.println("<br><span class=\"adminsubtitle\"> Om te registreren hebt u een registratiecode nodig. Contacteer ons voor meer informatie.</span>");
+        out.println("<br><span class=\"bodysubtitle\"> Om te registreren hebt u een registratiecode nodig. Contacteer ons voor meer informatie.</span>");
       }
 %> <br>
 			<p><span class="bodytekst"> <!-- action name must be a URI name as it is set in the <application>.xml servlet-mapping tag.-->
 			Vul hier uw registratiecode in die je van The Business Assistant bekomen hebt.<br>
 			<table border="0" cellspacing="2" cellpadding="2">
 				<tr>
-					<td width="120" valign="top" class="bodyredbold">registratiecode</td>
+					<td width="160" valign="top" class="bodyredbold">registratiecode</td>
 					<td width="350" valign="top"><input type=text
 						name=<%=Constants.ACCOUNT_REGCODE%> size=10></td>
 				</tr>
@@ -76,24 +76,24 @@ try
 			Uw login naam moet tussen de 5 en 10 karakters bevatten.<br>
 			<table border="0" cellspacing="2" cellpadding="2">
 				<tr>
-					<td width="120" valign="top" class="bodysubsubtitle">login naam</td>
+					<td width="160" valign="top" class="bodysubsubtitle">login naam</td>
 					<td width="350" valign="top"><input type=text
-						name=<%=Constants.ACCOUNT_USERID%> size=10></td>
+						name=<%=Constants.ACCOUNT_USERID%> size=15></td>
 				</tr>
 			</table>
 			<br>
-			Uw paswoord moet tussen de 6 en 10 karakters bevatten.<br>
+			Uw paswoord moet minstens de 6 karakters bevatten.<br>
 			<table border="0" cellspacing="2" cellpadding="2">
 				<tr>
-					<td width="120" valign="top" class="bodysubsubtitle">paswoord</td>
+					<td width="160" valign="top" class="bodysubsubtitle">paswoord</td>
 					<td width="350" valign="top"><input type=password
-						name=<%=Constants.ACCOUNT_PASSWORD%> size=8></td>
+						name=<%=Constants.ACCOUNT_PASSWORD%> size=15></td>
 				</tr>
 				<tr>
-					<td width="120" valign="top" class="bodysubsubtitle">herhaal uw
+					<td width="160" valign="top" class="bodysubsubtitle">herhaal uw
 					paswoord</td>
 					<td width="350" valign="top"><input type=password
-						name=<%=Constants.ACCOUNT_PASSWORD2%> size=8></td>
+						name=<%=Constants.ACCOUNT_PASSWORD2%> size=15></td>
 				</tr>
 			</table>
 			<br>

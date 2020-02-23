@@ -10,13 +10,13 @@
 
 	<tr>
 		<td valign="top" width="30" bgcolor="FFFFFF"></td>
-		<td class="bodytext" valign="top" bgcolor="FFFFFF"><br><br>
-		<span class="admintitle">Technologie</span> <br>
+		<td class="bodytekst" valign="top" bgcolor="FFFFFF"><br><br>
+		<span class="bodytitle">Technologie</span> <br>
 		<br>
 		<table width="600" border="0" cellspacing="4" cellpadding="4">
 			<tr>
 				<td width="40"></td>
-				<td valign="top" class="bodytext"><a
+				<td valign="top" class="bodytekst"><a
 					href="http://jakarta.apache.org"><img
 					src="/tba/images/jakarta-logo.gif"
 					alt="The Apache Software Foundation"></a><br>

@@ -55,27 +55,27 @@ mCustomerData = AccountCache.getInstance().get(mTaskData);
 %>		
             <tr>
                 <td width="50"></td>
-                <td width="250" valign="top" class="adminsubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;klant</td>
+                <td width="250" valign="top" class="bodysubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;klant</td>
                 <td width="580" valign="top"><%=mCustomerData.getFullName()%></td>
             </tr>
             <tr>
                 <td width="50"></td>
-                <td width="250" valign="top" class="adminsubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Uitgevoerd door</td>
+                <td width="250" valign="top" class="bodysubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Uitgevoerd door</td>
                 <td width="580" valign="top"><%=mTaskData.getDoneBy() %></td>
             </tr>
             <tr>
                 <td width="50"></td>
-                <td width="250" valign="top" class="adminsubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Datum</td>
+                <td width="250" valign="top" class="bodysubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Datum</td>
                 <td width="580" valign="top"><%=mTaskData.getDate() %></td>
             </tr>
             <tr>
                 <td width="50"></td>
-                <td width="250" valign="top" class="adminsubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Vaste prijs (in euro)</td>
+                <td width="250" valign="top" class="bodysubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Vaste prijs (in euro)</td>
                 <td width="580" valign="top"><%=mTaskData.getIsFixedPrice()?mTaskData.getFixedPrice():"-"%></td>
             </tr>
             <tr>
                 <td width="50"></td>
-                <td width="250" valign="top" class="adminsubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Minuten gewerkt</td>
+                <td width="250" valign="top" class="bodysubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Minuten gewerkt</td>
                 <td width="580" valign="top"><%=mTaskData.getIsFixedPrice()?"-":mTaskData.getTimeSpend()%></td>
             </tr>
 <%
@@ -84,7 +84,7 @@ if (mTaskData.getIsRecuring())
 %>            
             <tr>
                 <td width="50"></td>
-                <td width="250" valign="top" class="adminsubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Maandelijks terugkerend</td>
+                <td width="250" valign="top" class="bodysubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Maandelijks terugkerend</td>
                 <td width="580" valign="top">from: <%=mTaskData.getStartTime()%> till <%=mTaskData.getStopTime()%></td>
             </tr>
 <%
@@ -92,7 +92,7 @@ if (mTaskData.getIsRecuring())
 %> 
             <tr>
                 <td width="50"></td>
-                <td width="250" valign="top" class="adminsubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Omschrijving</td>
+                <td width="250" valign="top" class="bodysubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Omschrijving</td>
                 <td width="580" valign="top"><%=mTaskData.getDescription()%></td>
             </tr>
 		
@@ -103,7 +103,7 @@ else
 %>		
 			<tr>
 				<td width="50"></td>
-				<td width="250" valign="top" class="adminsubsubtitle"><img
+				<td width="250" valign="top" class="bodysubsubtitle"><img
 					src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Andere klant</td>
 				<td width="580" valign="top">
 <%                  
@@ -130,7 +130,7 @@ else
 
 			<tr>
 				<td width="50"></td>
-				<td width="250" valign="top" class="adminsubsubtitle"><img
+				<td width="250" valign="top" class="bodysubsubtitle"><img
 					src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Uitgevoerd door</td>
 				<td width="580" valign="top">
 <%                  
@@ -150,7 +150,7 @@ else
 			</tr>
 			<tr valign="top">
 				<td width="50"></td>
-				<td width="250" valign="top" class="adminsubsubtitle">
+				<td width="250" valign="top" class="bodysubsubtitle">
 					<img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Datum
 				</td>
 				<td width="580" valign="top">
@@ -159,32 +159,32 @@ else
 			</tr>
 			<tr>
 				<td width="50"></td>
-				<td width="250" valign="top" class="adminsubsubtitle">
+				<td width="250" valign="top" class="bodysubsubtitle">
 					<img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Vaste prijs (in euro)
 				</td>
-				<td width="580" valign="top" class="adminsubsubtitle">
+				<td width="580" valign="top" class="bodysubsubtitle">
 					<input type=checkbox name=<%=Constants.TASK_IS_FIXED_PRICE%> value="<%=mTaskData.getIsFixedPrice()?Constants.YES:Constants.NO%>" <%=mTaskData.getIsFixedPrice()?" checked":""%>>&nbsp;&nbsp;&nbsp;&nbsp;
 					<input type=text size=20 name=<%=Constants.TASK_FIXED_PRICE%> value="<%=mTaskData.getFixedPrice()%>">
 				</td>
 			</tr>
 			<tr>
 				<td width="50"></td>
-				<td width="250" valign="top" class="adminsubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Minuten gewerkt</td>
-				<td width="580" valign="top" class="adminsubsubtitle">
+				<td width="250" valign="top" class="bodysubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Minuten gewerkt</td>
+				<td width="580" valign="top" class="bodysubsubtitle">
 				    <input type=text size=20 name=<%=Constants.TASK_TIME_SPEND%> value="<%=mTaskData.getTimeSpend()%>">
 				</td>
 			</tr>
 			<tr>
 				<td width="50"></td>
-				<td width="250" valign="top" class="adminsubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Maandelijks terugkerend</td>
-				<td width="580" valign="top" class="adminsubsubtitle">
+				<td width="250" valign="top" class="bodysubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Maandelijks terugkerend</td>
+				<td width="580" valign="top" class="bodysubsubtitle">
 					<input type=checkbox name=<%=Constants.TASK_IS_RECURING%> value="<%=mTaskData.getIsRecuring()?Constants.YES:Constants.NO%>" <%=mTaskData.getIsRecuring()?" checked":""%>>
 					<%=mTaskData.getIsRecuring()?"&nbsp; verwijder selectie om deze wederkerende taak te stoppen vanaf nu.":""%>
 				</td>
 			</tr>
 			<tr>
 				<td width="50"></td>
-				<td width="250" valign="top" class="adminsubsubtitle">Omschrijving</td>
+				<td width="250" valign="top" class="bodysubsubtitle">Omschrijving</td>
 				<td width="580" valign="top">
 				    <textarea name=<%=Constants.TASK_DESCRIPTION%> rows=10 cols=70><%=mTaskData.getDescription()%></textarea>
 				</td>
@@ -208,7 +208,7 @@ else
 else
 {
 %>
-        <span class="adminsubsubtitle">Deze taak is opgenomen in een bevrozen factuur en kan daardoor niet meer worden aangepast.</span><br>
+        <span class="bodysubsubtitle">Deze taak is opgenomen in een bevrozen factuur en kan daardoor niet meer worden aangepast.</span><br>
 <%
 }
 %>

@@ -1071,7 +1071,10 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
             data.setIsChangedByCust(false);
             if (!text.isBlank())
             {
-               data.setShortDescription(data.getShortDescription() + "<br>" + webSession.getUserId() + ": " + text);
+               if (data.getShortDescription().isBlank())
+                  data.setShortDescription(data.getShortDescription() + webSession.getUserId() + ": " + text);
+               else
+                  data.setShortDescription(data.getShortDescription() + "<br>" + webSession.getUserId() + ": " + text);
                data.setIsCustAttentionNeeded(isCustomerAttentionNeeded);
                if (isCustomerAttentionNeeded)
                {

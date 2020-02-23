@@ -111,7 +111,7 @@ double vFacLongFwd = vCustomer.getFacLongFwd();
 		<tr>
 			<td valign="top" width="60" bgcolor="FFFFFF"></td>
 			<td valign="top" bgcolor="FFFFFF"><br> <br> <span
-				class="admintitle"> Instellingen voor <%=vFullName%>.
+				class="bodytitle"> Instellingen voor <%=vFullName%>.
 			</span> <br> <span class="bodytekst"> <!-- action name must be a URI name as it is set in the <application>.xml servlet-mapping tag.-->
 					<form name="updateForm" method="POST" action="/tba/AdminDispatch">
 						<input class="tbabutton" type=submit name=action value="Bewaar"	onclick="Bewaar()"> 
@@ -120,20 +120,20 @@ double vFacLongFwd = vCustomer.getFacLongFwd();
 						<input class="tbabutton" type=submit name=action value=" Verstuur Mail " onclick="mailCustomer()"> 
                         <input class="tbabutton" type=submit name=action value=<%=(vCustomer.getIsArchived()?" Dearchiveer ":" Archiveer ")%> onclick="archive()"> 
 						<br>
-						<p class="adminsubtitle">
+						<p class="bodysubtitle">
 							<img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Algemene informatie:
 						</p>
 						<table width="700" border="0" cellspacing="2" cellpadding="2">
 							<tr>
-								<td width="200" valign="top" class="adminsubsubtitle">login	naam</td>
+								<td width="200" valign="top" class="bodysubsubtitle">login	naam</td>
 								<td width="500" valign="top" class="bodybold"><%=(vCustomer.getUserId() == null ? "" : vCustomer.getUserId())%></td>
 							</tr>
 							<tr>
-								<td width="200" valign="top" class="adminsubsubtitle">rol</td>
+								<td width="200" valign="top" class="bodysubsubtitle">rol</td>
 								<td width="500" valign="top" class="bodybold"><%=AccountRole.fromShort(vCustomer.getRole()).getText()%></td>
 							</tr>
                             <tr>
-                                <td width="200" valign="top" class="adminsubsubtitle">mijn super klant</td>
+                                <td width="200" valign="top" class="bodysubsubtitle">mijn super klant</td>
                                 <td width="500" valign="top" class="bodybold"> <%=(vCustomer.getSuperCustomer() != null ? vCustomer.getSuperCustomer() : "-") %> </td>
 <!--                             </tr>
 
@@ -174,11 +174,11 @@ if (vCustomer.getRole().equals(AccountRole._vSubCustomer))
 								</td>
 							</tr> -->
 							<tr>
-								<td width="200" valign="top" class="adminsubsubtitle">volledige	naam</td>
+								<td width="200" valign="top" class="bodysubsubtitle">volledige	naam</td>
 								<td width="500" valign="top"><input type=text name=<%=Constants.ACCOUNT_FULLNAME%> size=50 value="<%=vFullName%>"></td>
 							</tr>
 							<tr>
-								<td width="200" valign="top" class="adminsubsubtitle">afleidnummer</td>
+								<td width="200" valign="top" class="bodysubsubtitle">afleidnummer</td>
                         <%
         if (vSession.getRole() == AccountRole.ADMIN)
         {
@@ -206,23 +206,23 @@ for (Iterator<String> n = vFreeNumbers.iterator(); n.hasNext();)
     %>
 							</tr>
 							<tr>
-								<td width="200" valign="top" class="adminsubsubtitle">e-mail</td>
+								<td width="200" valign="top" class="bodysubsubtitle">e-mail</td>
 								<td width="500" valign="top"><input type=text name=<%=Constants.ACCOUNT_EMAIL%> size=50 value="<%=vEmail%>"></td>
 							</tr>
 							<tr>
-								<td width="200" valign="top" class="adminsubsubtitle">Facturatie
+								<td width="200" valign="top" class="bodysubsubtitle">Facturatie
 									e-mail</td>
 								<td width="500" valign="top"><input type=text
 									name=<%=Constants.ACCOUNT_INVOICE_EMAIL%> size=50
 									value="<%=vInvoiceEmail%>"></td>
 							</tr>
 							<tr>
-								<td width="200" valign="top" class="adminsubsubtitle">GSM nummer (SMS)</td>
+								<td width="200" valign="top" class="bodysubsubtitle">GSM nummer (SMS)</td>
 								<td width="500" valign="top"><input type=text
 									name=<%=Constants.ACCOUNT_GSM%> size=13 value="<%=vGsm%>"></td>
 							</tr>
                             <tr>
-                                <td width="200" valign="top" class="adminsubsubtitle">Land code</td>
+                                <td width="200" valign="top" class="bodysubsubtitle">Land code</td>
                                 <td width="500" valign="top">
                                 <select name=<%=Constants.ACCOUNT_COUNTRY_CODE%>>
 <%
@@ -238,7 +238,7 @@ for (int i = 0; i < Constants.COUNTRY_CODES[0].length; i++)
         {
     %>
 							<tr>
-								<td width="200" valign="top" class="adminsubsubtitle">Dit is een super klant</td>
+								<td width="200" valign="top" class="bodysubsubtitle">Dit is een super klant</td>
 								<td width="500" valign="top" class="bodytekst"><input
 									type=checkbox name=<%=Constants.ACCOUNT_HAS_SUB_CUSTOMERS%>
 									value="<%=Constants.YES%>"
@@ -248,7 +248,7 @@ for (int i = 0; i < Constants.COUNTRY_CODES[0].length; i++)
         }
     %>
                             <tr>
-                                <td width="200" valign="top" class="adminsubsubtitle">Info</td>
+                                <td width="200" valign="top" class="bodysubsubtitle">Info</td>
                                 <td width="500" valign="top" class="bodytekst">Gebruik volgende html code om deze tekst te stylen:<br>
                                     &ltb&gt<b>bold tekst</b>&lt/b&gt<br>
                                     &lti&gt<i>italic tekst</i>&lt/i&gt<br>
@@ -262,13 +262,13 @@ for (int i = 0; i < Constants.COUNTRY_CODES[0].length; i++)
         {
     %>
 
-						<p class="adminsubtitle">
+						<p class="bodysubtitle">
 							<img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Dagelijkse
 							mails met de laatste oproepgegevens om:
 						</p>
 						<table width="700" border="0" cellspacing="2" cellpadding="2">
 							<tr>
-								<td width="300" valign="top" class="adminsubsubtitle">mail
+								<td width="300" valign="top" class="bodysubsubtitle">mail
 									1</td>
 								<td width="40" valign="top" class="bodytekst"><input
 									type=checkbox name=<%=Constants.ACCOUNT_MAIL_ON1%>
@@ -287,7 +287,7 @@ for (int i = 0; i < kMaxMailMinutes; i += 5)
 								</select> minuten</td>
 							</tr>
 							<tr>
-								<td width="300" valign="top" class="adminsubsubtitle">mail
+								<td width="300" valign="top" class="bodysubsubtitle">mail
 									2</td>
 								<td width="40" valign="top" class="bodytekst"><input
 									type=checkbox name=<%=Constants.ACCOUNT_MAIL_ON2%>
@@ -306,7 +306,7 @@ for (int i = 0; i < kMaxMailMinutes; i += 5)
 								</select> minuten</td>
 							</tr>
 							<tr>
-								<td width="300" valign="top" class="adminsubsubtitle">mail
+								<td width="300" valign="top" class="bodysubsubtitle">mail
 									3</td>
 								<td width="40" valign="top" class="bodytekst"><input
 									type=checkbox name=<%=Constants.ACCOUNT_MAIL_ON3%>
@@ -326,7 +326,7 @@ for (int i = 0; i < kMaxMailMinutes; i += 5)
 							</tr>
 							<br>
 							<tr>
-								<td width="300" valign="top" class="adminsubsubtitle">Zend
+								<td width="300" valign="top" class="bodysubsubtitle">Zend
 									geen lege mails</td>
 								<td width="40" valign="top" class="bodytekst"><input
 									type=checkbox name=<%=Constants.ACCOUNT_NO_EMPTY_MAILS%>
@@ -335,7 +335,7 @@ for (int i = 0; i < kMaxMailMinutes; i += 5)
 							</tr>
 							<br>
 							<tr>
-								<td width="300" valign="top" class="adminsubsubtitle">Zend
+								<td width="300" valign="top" class="bodysubsubtitle">Zend
 									in text format</td>
 								<td width="40" valign="top" class="bodytekst"><input
 									type=checkbox name=<%=Constants.ACCOUNT_TEXT_MAIL%>
@@ -343,40 +343,40 @@ for (int i = 0; i < kMaxMailMinutes; i += 5)
 								</td>
 							</tr>
 		</table>
-		<p class="adminsubtitle"><img src=".\images\blueSphere.gif" width="10"
+		<p class="bodysubtitle"><img src=".\images\blueSphere.gif" width="10"
 			height="10">&nbsp;Facturatiegegevens:</p>
 		<table name="mainTbl" width="700" border="0" cellspacing="2" cellpadding="2">
 			<tr>
 				<td width="50" valign="top"></td>
-				<td width="250" valign="top" class="adminsubsubtitle">Maak GEEN	factuur</td>
+				<td width="250" valign="top" class="bodysubsubtitle">Maak GEEN	factuur</td>
 				<td width="400" valign="top" class="bodytekst"><input type=checkbox
 					name=<%=Constants.ACCOUNT_NO_INVOICE%> value="<%=Constants.YES%>"
 					<%=(vCustomer.getNoInvoice()?kChecked:"")%>></td>
 			</tr>
 			<tr>
 				<td width="50" valign="top"></td>
-				<td width="250" valign="top" class="adminsubsubtitle">Reken geen BTW</td>
+				<td width="250" valign="top" class="bodysubsubtitle">Reken geen BTW</td>
 				<td width="400" valign="top" class="bodytekst"><input type=checkbox
 					name=<%=Constants.ACCOUNT_NO_BTW%> value="<%=Constants.YES%>"
 					<%=(vCustomer.getNoBtw()?kChecked:"")%>></td>
 			</tr>
 			<tr>
 				<td width="50" valign="top"></td>
-				<td width="250" valign="top" class="adminsubsubtitle">Opdrachten uur tarrief</td>
+				<td width="250" valign="top" class="bodysubsubtitle">Opdrachten uur tarrief</td>
 				<td width="400" valign="top" class="bodytekst"><input type=text
 					name=<%=Constants.ACCOUNT_TASK_HOUR_RATE%> size=3
 					value="<%=vTaskHourRate%>">Euro cent</td>
 			</tr>
             <tr>
                 <td width="50" valign="top"></td>
-                <td width="250" valign="top" class="adminsubsubtitle">Factuur per mail</td>
+                <td width="250" valign="top" class="bodysubsubtitle">Factuur per mail</td>
                 <td width="400" valign="top" class="bodytekst"><input type=checkbox
                     name=<%=Constants.ACCOUNT_IS_MAIL_INVOICE%> value="<%=Constants.YES%>"
                     <%=(vCustomer.getIsMailInvoice()?kChecked:"")%>></td>
             </tr>
 			<tr>
 				<td width="50" valign="top"></td>
-				<td width="250" valign="top" class="adminsubsubtitle">Oproepen facturatie mode</td>
+				<td width="250" valign="top" class="bodysubsubtitle">Oproepen facturatie mode</td>
 				<td width="400" valign="top" class="bodytekst">
 					<input type=radio name=<%=Constants.ACCOUNT_INVOICE_TYPE%>
 						value=<%=Constants.INVOICE_TYPE_STD%>
@@ -393,12 +393,12 @@ for (int i = 0; i < kMaxMailMinutes; i += 5)
 				</td>
 			</tr>
 		</table>
-		<p class="adminsubtitle"><img src=".\images\blueSphere.gif" width="10"
+		<p class="bodysubtitle"><img src=".\images\blueSphere.gif" width="10"
 			height="10">&nbsp;&nbsp;&nbsp;Agenda beheer:</p>
 		<table width="700" border="0" cellspacing="2" cellpadding="2">
 			<tr>
 				<td width="50" valign="top"></td>
-				<td width="250" valign="top" class="adminsubsubtitle">prijs en type	agenda beheer</td>
+				<td width="250" valign="top" class="bodysubsubtitle">prijs en type	agenda beheer</td>
 				<td width="400" valign="top" class="bodytekst"><input type=text
 					name=<%=Constants.ACCOUNT_FAC_AGENDA_CALL%> size=3
 					value="<%=vFacAgendaCall%>"> 
@@ -413,19 +413,19 @@ for (int i = 0; i < kMaxMailMinutes; i += 5)
 				</td>
 			</tr>
 		</table>
-		<p class="adminsubtitle"><img src=".\images\blueSphere.gif" width="10"
+		<p class="bodysubtitle"><img src=".\images\blueSphere.gif" width="10"
 			height="10">&nbsp;&nbsp;&nbsp;Settings speciale prijzen:</p>
 		<table width="700" border="0" cellspacing="2" cellpadding="2" >
 			<tr>
 				<td width="50" valign="top"></td>
-				<td width="250" valign="top" class="adminsubsubtitle"></td>
-				<td width="130" valign="top" class="adminsubsubtitle">Minimum Calls</td>
-                <td width="135" valign="top" class="adminsubsubtitle">Start Kost</td>
-                <td width="135" valign="top" class="adminsubsubtitle">Extra Kost per call boven Min Calls</td>
+				<td width="250" valign="top" class="bodysubsubtitle"></td>
+				<td width="130" valign="top" class="bodysubsubtitle">Minimum Calls</td>
+                <td width="135" valign="top" class="bodysubsubtitle">Start Kost</td>
+                <td width="135" valign="top" class="bodysubsubtitle">Extra Kost per call boven Min Calls</td>
 			</tr>
             <tr>
                 <td width="50" valign="top"></td>
-                <td width="250" valign="top" class="adminsubsubtitle">Groep tarief I</td>
+                <td width="250" valign="top" class="bodysubsubtitle">Groep tarief I</td>
                 <td width="130" valign="top" class="bodytekst">
                     <input type=text name=<%=Constants.ACCOUNT_FAC_TBL_MIN_CALL_I%> size=3 value="<%=vCustomer.getFacTblMinCalls_I()%>">
                 </td>
@@ -438,7 +438,7 @@ for (int i = 0; i < kMaxMailMinutes; i += 5)
             </tr>
             <tr>
                 <td width="50" valign="top"></td>
-                <td width="250" valign="top" class="adminsubsubtitle">Groep tarief II</td>
+                <td width="250" valign="top" class="bodysubsubtitle">Groep tarief II</td>
                 <td width="130" valign="top" class="bodytekst">
                     <input type=text name=<%=Constants.ACCOUNT_FAC_TBL_MIN_CALL_II%> size=3 value="<%=vCustomer.getFacTblMinCalls_II()%>">
                 </td>
@@ -451,7 +451,7 @@ for (int i = 0; i < kMaxMailMinutes; i += 5)
             </tr>
             <tr>
                 <td width="50" valign="top"></td>
-                <td width="250" valign="top" class="adminsubsubtitle">Groep tarief III</td>
+                <td width="250" valign="top" class="bodysubsubtitle">Groep tarief III</td>
                 <td width="130" valign="top" class="bodytekst">
                     <input type=text name=<%=Constants.ACCOUNT_FAC_TBL_MIN_CALL_III%> size=3 value="<%=vCustomer.getFacTblMinCalls_III()%>">
                 </td>
@@ -464,7 +464,7 @@ for (int i = 0; i < kMaxMailMinutes; i += 5)
             </tr>
             <tr>
                 <td width="50" valign="top"></td>
-                <td width="250" valign="top" class="adminsubsubtitle">Groep tarief IV (week tarrief)</td>
+                <td width="250" valign="top" class="bodysubsubtitle">Groep tarief IV (week tarrief)</td>
                 <td width="130" valign="top" class="bodytekst">
                     <input type=text name=<%=Constants.ACCOUNT_FAC_TBL_MIN_CALL_IV%> size=3 value="<%=vCustomer.getFacTblMinCalls_IV()%>">
                 </td>
@@ -478,34 +478,34 @@ for (int i = 0; i < kMaxMailMinutes; i += 5)
             <br>
 			<tr>
 				<td width="50" valign="top"></td>
-				<td width="250" valign="top" class="adminsubsubtitle">uitgaande	oproep</td>
+				<td width="250" valign="top" class="bodysubsubtitle">uitgaande	oproep</td>
 				<td width="400" valign="top" class="bodytekst">
 				    <input type=text name=<%=Constants.ACCOUNT_FAC_STD_OUT_CALL%> size=3 value="<%=vFacStdOutCall%>">&nbsp;&nbsp;Euro cent</td>
 			</tr>
 			<tr>
 				<td width="50" valign="top"></td>
-				<td width="250" valign="top" class="adminsubsubtitle">Fax</td>
+				<td width="250" valign="top" class="bodysubsubtitle">Fax</td>
 				<td width="400" valign="top" class="bodytekst"><input type=text
 					name=<%=Constants.ACCOUNT_FAC_FAX_CALL%> size=3
 					value="<%=vFacFaxCall%>">&nbsp;&nbsp;Euro cent</td>
 			</tr>
 			<tr>
 				<td width="50" valign="top"></td>
-				<td width="250" valign="top" class="adminsubsubtitle">SMS verzenden</td>
+				<td width="250" valign="top" class="bodysubsubtitle">SMS verzenden</td>
 				<td width="400" valign="top" class="bodytekst">
 				    <input type=text name=<%=Constants.ACCOUNT_FAC_SMS%> size=3 value="<%=vFacSms%>">&nbsp;&nbsp;Euro cent
 				</td>
 			</tr>
 			<tr>
 				<td width="50" valign="top"></td>
-				<td width="250" valign="top" class="adminsubsubtitle">Oproepdoorschakelen</td>
+				<td width="250" valign="top" class="bodysubsubtitle">Oproepdoorschakelen</td>
 				<td width="400" valign="top" class="bodytekst"><input type=text
 					name=<%=Constants.ACCOUNT_FAC_CALL_FORWARD%> size=3
 					value="<%=vFacCallForward%>">&nbsp;&nbsp;Euro cent (dit wordt niet meer aangerekend omdat automatisch buitengaande oproepen worden gemaakt.)</td>
 			</tr>
             <tr>
                 <td width="50" valign="top"></td>
-                <td width="250" valign="top" class="adminsubsubtitle">Tel alle lange oproepen</td>
+                <td width="250" valign="top" class="bodysubsubtitle">Tel alle lange oproepen</td>
                 <td width="100" valign="top" class="bodytekst"><input type=checkbox
                     name=<%=Constants.ACCOUNT_COUNT_ALL_LONG_CALLS%> value="<%=Constants.YES%>"
                     <%=(vCustomer.getCountAllLongCalls()?kChecked:"")%>></td>
@@ -515,7 +515,7 @@ for (int i = 0; i < kMaxMailMinutes; i += 5)
             </tr>
             <tr>
                 <td width="50" valign="top"></td>
-                <td width="250" valign="top" class="adminsubsubtitle">Tel lange doorgeschakelde oproepen</td>
+                <td width="250" valign="top" class="bodysubsubtitle">Tel lange doorgeschakelde oproepen</td>
                 <td width="100" valign="top" class="bodytekst"><input type=checkbox
                     name=<%=Constants.ACCOUNT_COUNT_LONG_FWD_CALLS%> value="<%=Constants.YES%>"
                     <%=(vCustomer.getCountLongFwdCalls()?kChecked:"")%>></td>
@@ -524,12 +524,12 @@ for (int i = 0; i < kMaxMailMinutes; i += 5)
                     value="<%=vFacLongFwd%>">&nbsp;&nbsp;Euro</td>
             </tr>
 		</table>
-		<p class="adminsubtitle"><img src=".\images\blueSphere.gif" width="10"
+		<p class="bodysubtitle"><img src=".\images\blueSphere.gif" width="10"
 			height="10">&nbsp;&nbsp;&nbsp;Settings Telemarketing:</p>
 		<table width="700" border="0" cellspacing="2" cellpadding="2">
 			<tr>
 				<td width="50" valign="top"></td>
-				<td width="250" valign="top" class="adminsubsubtitle">Level 1 (geen
+				<td width="250" valign="top" class="bodysubsubtitle">Level 1 (geen
 				succes)</td>
 				<td width="400" valign="top" class="bodytekst"><input type=text
 					name=<%=Constants.ACCOUNT_FAC_OUT_LEVEL1%> size=3
@@ -537,7 +537,7 @@ for (int i = 0; i < kMaxMailMinutes; i += 5)
 			</tr>
 			<tr>
 				<td width="50" valign="top"></td>
-				<td width="250" valign="top" class="adminsubsubtitle">Level 2
+				<td width="250" valign="top" class="bodysubsubtitle">Level 2
 				(contact)</td>
 				<td width="400" valign="top" class="bodytekst"><input type=text
 					name=<%=Constants.ACCOUNT_FAC_OUT_LEVEL2%> size=3
@@ -545,7 +545,7 @@ for (int i = 0; i < kMaxMailMinutes; i += 5)
 			</tr>
 			<tr>
 				<td width="50" valign="top"></td>
-				<td width="250" valign="top" class="adminsubsubtitle">Level 3
+				<td width="250" valign="top" class="bodysubsubtitle">Level 3
 				(afspraak)</td>
 				<td width="400" valign="top" class="bodytekst"><input type=text
 					name=<%=Constants.ACCOUNT_FAC_OUT_LEVEL3%> size=3
@@ -555,42 +555,42 @@ for (int i = 0; i < kMaxMailMinutes; i += 5)
     <%
         }
     %>
-		<p class="adminsubtitle"><img src=".\images\blueSphere.gif" width="10"
+		<p class="bodysubtitle"><img src=".\images\blueSphere.gif" width="10"
 			height="10">&nbsp;Facturatie adres:</p>
 		<table width="700" border="0" cellspacing="2" cellpadding="2">
 			<tr>
-				<td width="200" valign="top" class="adminsubsubtitle">Bedrijfsnaam</td>
+				<td width="200" valign="top" class="bodysubsubtitle">Bedrijfsnaam</td>
 				<td width="500" valign="top"><input type=text
 					name=<%=Constants.ACCOUNT_COMPANY_NAME%> size=50
 					value="<%=vCompanyName%>"></td>
 			</tr>
 			<tr>
-				<td width="200" valign="top" class="adminsubsubtitle">Ter attentie
+				<td width="200" valign="top" class="bodysubsubtitle">Ter attentie
 				van</td>
 				<td width="500" valign="top"><input type=text
 					name=<%=Constants.ACCOUNT_ATT_TO_NAME%> size=50
 					value="<%=vAttToName%>"></td>
 			</tr>
 			<tr>
-				<td width="200" valign="top" class="adminsubsubtitle">Straat en
+				<td width="200" valign="top" class="bodysubsubtitle">Straat en
 				nummer</td>
 				<td width="500" valign="top"><input type=text
 					name=<%=Constants.ACCOUNT_STREET%> size=50 value="<%=vStreet%>"></td>
 			</tr>
 			<tr>
-				<td width="200" valign="top" class="adminsubsubtitle">Postcode en
+				<td width="200" valign="top" class="bodysubsubtitle">Postcode en
 				Plaats</td>
 				<td width="500" valign="top"><input type=text
 					name=<%=Constants.ACCOUNT_CITY%> size=50 value="<%=vCity%>"></td>
 			</tr>
 			<tr>
-				<td width="200" valign="top" class="adminsubsubtitle">BTW Number</td>
+				<td width="200" valign="top" class="bodysubsubtitle">BTW Number</td>
 				<td width="500" valign="top">
                     <input type=text name=<%=Constants.ACCOUNT_BTW_NUMBER%> size=50	value="<%=vBtwNumber%>">
                 </td>
 			</tr>
             <tr>
-                <td width="200" valign="top" class="adminsubsubtitle">Rekeningnummers (',' separated)</td>
+                <td width="200" valign="top" class="bodysubsubtitle">Rekeningnummers (',' separated)</td>
                 <td width="500" valign="top">
                     <input type=text name=<%=Constants.ACCOUNT_NR%> size=50 value="<%=vAccountNr%>">
                 </td>

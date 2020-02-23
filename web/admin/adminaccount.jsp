@@ -33,7 +33,7 @@ StringBuilder allEntryIds = new StringBuilder("[");
 			vSession.setCallingJsp(Constants.ADMIN_ACCOUNT_JSP);
  %>
             <p>
-               <span class="admintitle"> Geregistreerde klanten:</span>
+               <span class="bodytitle"> Geregistreerde klanten:</span>
             </p> <%
     if (vSession.getRole() == AccountRole.ADMIN) {
  %>
@@ -131,7 +131,7 @@ StringBuilder allEntryIds = new StringBuilder("[");
                %>
             </table>
             <p>
-               <span class="admintitle">Sub-Klant lijst</span>
+               <span class="bodytitle">Sub-Klant lijst</span>
             </p> <%
     synchronized (list) {
  					for (Iterator<AccountEntityData> vIter = list.iterator(); vIter.hasNext();) {
@@ -142,7 +142,7 @@ StringBuilder allEntryIds = new StringBuilder("[");
  							//System.out.print("sublist for " + vEntry.getFwdNumber() + " has " + subList.size() + " members");
  %>
             <p>
-               <span class="admintitle"> <%=vEntry.getFullName()%></span>
+               <span class="bodytitle"> <%=vEntry.getFullName()%></span>
             </p>
             <table border="0" cellspacing="2" cellpadding="4">
                <col width="25">

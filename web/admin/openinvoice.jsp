@@ -37,7 +37,7 @@
 
         <!-- account list -->
         <td valign="top" width="865" bgcolor="FFFFFF"><br>
-        <p><span class="admintitle">Factuurlijst bewerken<br>
+        <p><span class="bodytitle">Factuurlijst bewerken<br>
         <br>
 
 
@@ -72,7 +72,7 @@
 						     <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.DOWNLOAD_FINTRO_PROCESS_TXT%>"> 
 							 <input type=hidden name=<%=Constants.FINTRO_PROCESS_FILE%> value="<%=fintroXlsxReader.getOutputFileName()%>"> 
                              </form>
-				   	         <p><span class="adminsubtitle"> Resultaten van de Fintro upload:  
+				   	         <p><span class="bodysubtitle"> Resultaten van de Fintro upload:  
                              </span></p>
 				   	         <p><span class="bodytekst" >
 				   	         <%=fintroXlsxReader.getHtmlProcessLog()%>
@@ -105,7 +105,7 @@
 	
 			                if (vInvoices == null || vInvoices.size() == 0)
 			                {
-			                    out.println("<p><span class=\"adminsubtitle\"> Geen openstaande facturen</span></p>");
+			                    out.println("<p><span class=\"bodysubtitle\"> Geen openstaande facturen</span></p>");
 			                }
 			                else
 			                {
@@ -116,7 +116,7 @@
 			                        InvoiceEntityData vEntry = i.next();
 			                        vTotalInvoice += vEntry.getTotalCost();
 			                    }
-			                    out.println("<p><span class=\"adminsubtitle\"> Totaal openstaande facturen : " + vCostFormatter.format(vTotalInvoice) + " (Excl BTW)</span></p>");
+			                    out.println("<p><span class=\"bodysubtitle\"> Totaal openstaande facturen : " + vCostFormatter.format(vTotalInvoice) + " (Excl BTW)</span></p>");
 			%> 
 			<br>
 			<br>

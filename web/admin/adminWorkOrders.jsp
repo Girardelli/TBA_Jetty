@@ -41,7 +41,7 @@ vSession.setCallingJsp(Constants.ADMIN_WORK_ORDER_JSP);
 
         <!-- account list -->
         <td valign="top" width="865" bgcolor="FFFFFF"><br>
-        <p><span class="admintitle">Opdrachtenlijst</span>
+        <p><span class="bodytitle">Opdrachtenlijst</span>
        <table cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
            <tr>
             <!-- white space -->
@@ -58,7 +58,7 @@ vSession.setCallingJsp(Constants.ADMIN_WORK_ORDER_JSP);
     
                             if (workOrders == null || workOrders.isEmpty())
                             {
-                                out.println("<p><span class=\"adminsubtitle\"> Geen openstaande opdrachten</span></p>");
+                                out.println("<p><span class=\"bodysubtitle\"> Geen openstaande opdrachten</span></p>");
                             }
                             else
                             {

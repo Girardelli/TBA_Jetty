@@ -42,7 +42,7 @@ try
 
         <!-- account list -->
         <td valign="top" width="865" bgcolor="FFFFFF"><br>
-        <p><span class="admintitle">Mijn opdrachten</span><br>
+        <p><span class="bodytitle">Mijn opdrachten</span><br>
         <br>
         <input class="tbabutton" type=submit value=" Maak nieuwe opdracht " onclick="addWorkOrder();"> 
         <br>
@@ -57,7 +57,7 @@ try
 <%
     if (workOrders.isEmpty())
     {
-        out.println("<p><span class=\"adminsubtitle\">Er zijn geen openstaande opdrachten.</span></p>");
+        out.println("<p><span class=\"bodysubsubtitle\">Er zijn geen openstaande opdrachten.</span></p>");
     }
     else
     {

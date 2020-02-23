@@ -43,13 +43,13 @@ if (vErrorList != null && vErrorList.size() > 0)
 }
 %> 
 		<br>
-		<span class="admintitle"> Voeg een nieuwe werknemer toe.</span> <br>
+		<span class="bodytitle"> Voeg een nieuwe werknemer toe.</span> <br>
 		<span class="bodytekst"> <!-- action name must be a URI name as it is set in the <application>.xml servlet-mapping tag.-->
 		<form method="POST" action="/tba/AdminDispatch">
 		<table width="700" border="0" cellspacing="2" cellpadding="2">
 			<tr>
 				<td width="50"></td>
-				<td width="120" valign="top" class="adminsubsubtitle"><img
+				<td width="120" valign="top" class="bodysubsubtitle"><img
 					src=".\images\blueSphere.gif" width="10" height="10">&nbsp;rol</td>
 				<td width="580" valign="top"><select
 					name=<%=Constants.ACCOUNT_ROLE%>>
@@ -70,7 +70,7 @@ for (Iterator n = AccountRole.iterator(); n.hasNext();)
 			</tr>
 			<tr>
 				<td width="50"></td>
-				<td width="120" valign="top" class="adminsubsubtitle">
+				<td width="120" valign="top" class="bodysubsubtitle">
 					<img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;volledige naam
 				</td>
 				<td width="580" valign="top">
@@ -79,7 +79,7 @@ for (Iterator n = AccountRole.iterator(); n.hasNext();)
 			</tr>
 			<tr>
 				<td width="50"></td>
-				<td width="120" valign="top" class="adminsubsubtitle">
+				<td width="120" valign="top" class="bodysubsubtitle">
 					<img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;werknemersnummer
 				</td>
 				<td width="580" valign="top">
@@ -93,7 +93,7 @@ for (Iterator n = AccountRole.iterator(); n.hasNext();)
 		<table width="700" border="0" cellspacing="2" cellpadding="2">
 			<tr>
 				<td width="50"></td>
-				<td width="120" valign="top" class="adminsubsubtitle">
+				<td width="120" valign="top" class="bodysubsubtitle">
 					<img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;login naam
 				</td>
 				<td width="580" valign="top">
@@ -107,7 +107,7 @@ for (Iterator n = AccountRole.iterator(); n.hasNext();)
 		<table width="700" border="0" cellspacing="2" cellpadding="2">
 			<tr>
 				<td width="50"></td>
-				<td width="120" valign="top" class="adminsubsubtitle">
+				<td width="120" valign="top" class="bodysubsubtitle">
 					<img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;paswoord
 				</td>
 				<td width="580" valign="top">
@@ -116,7 +116,7 @@ for (Iterator n = AccountRole.iterator(); n.hasNext();)
 			</tr>
 			<tr>
 				<td width="50"></td>
-				<td width="120" valign="top" class="adminsubsubtitle">
+				<td width="120" valign="top" class="bodysubsubtitle">
 					<img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;herhaal uw paswoord
 				</td>
 				<td width="580" valign="top">

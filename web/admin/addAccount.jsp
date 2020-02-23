@@ -22,13 +22,13 @@
 		<td valign="top" width="60" bgcolor="FFFFFF"></td>
 		<td valign="top" bgcolor="FFFFFF"><br>
 		<br>
-		<span class="admintitle"> Voeg een nieuwe klant toe.</span> <br>
+		<span class="bodytitle"> Voeg een nieuwe klant toe.</span> <br>
 		<span class="bodytekst"> <!-- action name must be a URI name as it is set in the <application>.xml servlet-mapping tag.-->
 		<form name="addaccountform" method="POST" action="/tba/AdminDispatch">
 		<table width="700" border="0" cellspacing="2" cellpadding="2">
 			<tr>
 				<td width="50"></td>
-				<td width="120" valign="top" class="adminsubsubtitle"><img
+				<td width="120" valign="top" class="bodysubsubtitle"><img
 					src=".\images\blueSphere.gif" width="10" height="10">&nbsp;rol</td>
 				<td width="580" valign="top"><select
 					name=<%=Constants.ACCOUNT_ROLE%>>
@@ -53,14 +53,14 @@
 			</tr>
 			<tr>
 				<td width="50"></td>
-				<td width="120" valign="top" class="adminsubsubtitle"><img
+				<td width="120" valign="top" class="bodysubsubtitle"><img
 					src=".\images\blueSphere.gif" width="10" height="10">&nbsp;volledige naam</td>
 				<td width="580" valign="top"><input type=text
 					name=<%=Constants.ACCOUNT_FULLNAME%> size=50></td>
 			</tr>
 			<tr>
 				<td width="50"></td>
-				<td width="120" valign="top" class="adminsubsubtitle"><img
+				<td width="120" valign="top" class="bodysubsubtitle"><img
 					src=".\images\blueSphere.gif" width="10" height="10">&nbsp;afleidnummer</td>
 				<td width="580" valign="top" class="bodytekst">014/<select
 					name=<%=Constants.ACCOUNT_FORWARD_NUMBER%>>
@@ -75,7 +75,7 @@
 			</tr>
 			<tr>
 				<td width="50"></td>
-				<td width="120" valign="top" class="adminsubsubtitle"><img
+				<td width="120" valign="top" class="bodysubsubtitle"><img
 					src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Super klant</td>
 				<td width="580" valign="top">
 <%                  

@@ -61,14 +61,14 @@ if (vCustomerFilter == null) vCustomerFilter = Constants.ACCOUNT_FILTER_ALL;
 		<td valign="top" width="20" bgcolor="FFFFFF"></td>
 
 		<!-- account list -->
-		<td valign="top" width="710" bgcolor="FFFFFF"><br>
-		<p><span class="admintitle"> Oproepen zoeken</span></p>
+		<td valign="top" bgcolor="FFFFFF"><br>
+		<p><span class="bodytitle"> Oproepen zoeken</span></p>
 		<form name="searchform" method="POST" action="/tba/CustomerDispatch">
 			<input type="hidden" name="<%=Constants.SRV_ACTION%>" value="<%=Constants.ACTION_SEARCH_CALLS%>"> 
 		<table border="0" cellspacing="2" cellpadding="2">
 			<tr>
-				<td width="100" valign="middle" class="adminsubsubtitle">Zoek tekst</td>
-				<td width="10" valign="middle" class="adminsubsubtitle">:</td>
+				<td width="100" valign="middle" class="bodysubsubtitle">Zoek tekst</td>
+				<td width="10" valign="middle" class="bodysubsubtitle">:</td>
 				<td width="500" valign="middle">
                     <input type="text" name="<%=Constants.RECORD_SEARCH_STR%>" size="50" value="<%=vSession.getSearchString()%>">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <input class="tbabutton" type="submit" name="action" value=" Start " onclick="startSearch()"> 
@@ -102,31 +102,31 @@ if (vSession.getSearchString() != null && vSession.getSearchString().length() > 
 
   vRecords = vQuerySession.getSearchCalls(vSession, vCustomerFilter, vSession.getSearchString(), vSession.getMonthsBack(), vSession.getYear());
 
-  out.println("<p><span class=\"adminsubsubtitle\"> Zoekresultaat voor tekst \"" + vSession.getSearchString() + "\" : </span>");
+  out.println("<p><span class=\"bodysubsubtitle\"> Zoekresultaat voor tekst \"" + vSession.getSearchString() + "\" : </span>");
 
   if (vRecords == null || vRecords.size() == 0)
   {
       if (vSession.isCurrentMonth())
       {
-          out.println("<span class=\"adminsubsubtitle\">Geen oproepen gevonden voor deze maand.</span><br>");
+          out.println("<span class=\"bodysubsubtitle\">Geen oproepen gevonden voor deze maand.</span><br>");
       }
       else
       {
-          out.println("<span class=\"adminsubsubtitle\">Geen oproepen gevonden voor maand " + Constants.MONTHS[vSession.getMonthsBack()] + ", " + vSession.getYear() + ".</span><br>");
+          out.println("<span class=\"bodysubsubtitle\">Geen oproepen gevonden voor maand " + Constants.MONTHS[vSession.getMonthsBack()] + ", " + vSession.getYear() + ".</span><br>");
       }
   }
   else
   {
       if (!vSession.isCurrentMonth())
       {
-         out.println("<span class=\"adminsubsubtitle\">" + vRecords.size() + " zoekresultaten voor de maand " + Constants.MONTHS[vSession.getMonthsBack()] + ", " + vSession.getYear() + ".</span><br>");
+         out.println("<span class=\"bodysubsubtitle\">" + vRecords.size() + " zoekresultaten voor de maand " + Constants.MONTHS[vSession.getMonthsBack()] + ", " + vSession.getYear() + ".</span><br>");
       }
       else
       {
-         out.println("<span class=\"adminsubsubtitle\">" + vRecords.size() + " zoekresultaten voor deze maand.</span><br>");
+         out.println("<span class=\"bodysubsubtitle\">" + vRecords.size() + " zoekresultaten voor deze maand.</span><br>");
       }
       %>
-    <br><tr>
+    <tr>
     <td width="20" bgcolor="FFFFFF"></td>
     <td width="10" valign="top" class="topMenu" bgcolor="F89920"></td>
     <td width="55" valign="top" class="topMenu" bgcolor="F89920">&nbsp;Datum</td>
@@ -141,7 +141,7 @@ if (vSession.getSearchString() != null && vSession.getSearchString().length() > 
     %>
     <td width="85" valign="top" class="topMenu" bgcolor="F89920">&nbsp;Nummer</td>
     <td width="140" valign="top" class="topMenu" bgcolor="F89920">&nbsp;Naam</td>
-    <td width="280" valign="top" class="topMenu" bgcolor="F89920">&nbsp;Omschrijving</td>
+    <td width="380" valign="top" class="topMenu" bgcolor="F89920">&nbsp;Omschrijving</td>
     <td width="100" valign="top" class="topMenu" bgcolor="F89920">&nbsp;Infos</td>
     </tr>
 <%
@@ -200,8 +200,7 @@ if (vSession.getSearchString() != null && vSession.getSearchString().length() > 
   %>
 			<tr bgcolor="<%=bgrncolor%>" id="<%=vId%>" class="bodytekst"
 				ondblclick="changeUrl('/tba/CustomerDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACTION_GOTO_RECORD_UPDATE%>&amp;<%=Constants.RECORD_ID%>=<%=vEntry.getId()%>');">
-				<td width="20" bgcolor="FFFFFF"><img src="<%=vInOut%>"
-					height="13" border="0" alt=""></td>
+				<td width="20" bgcolor="FFFFFF"><img src="<%=vInOut%>" height="13" border="0" alt=""></td>
 				<td width="10" valign="top"><%=vImportant%></td>
 				<td width="55" valign="top"><%=vDate%></td>
 				<td width="35" valign="top"><%=vTime%></td>
@@ -224,7 +223,7 @@ if (vAccount != null && vAccount.getHasSubCustomers())
 %>
 				<td width="85" valign="top"><%=vNumber%></td>
 				<td width="140" valign="top"><%=vName%></td>
-				<td width="280" valign="top"><%=vShortDesc%></td>
+				<td width="380" valign="top"><%=vShortDesc%></td>
 				<td width="100" valign="top"><%=vInfoGifs%></td>
 			</tr>
 			<%

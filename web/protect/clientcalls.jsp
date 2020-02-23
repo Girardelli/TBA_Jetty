@@ -82,7 +82,7 @@ if (true) //vUrgentRecords.size() > 0)
         <!-- account list -->
         <td valign="top" bgcolor="FFFFFF"><br>
          <!-- ################ buttons ################ -->
-        <p><span class="admintitle"> Huidig geregistreerde oproepen:
+        <p><span class="bodysubtitle"> Huidig geregistreerde oproepen:
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="tbabutton" type=submit value="Herlaad (Vandaag)" onclick="refresh()"> 
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="archiveButton" class="tbabutton" type="submit" value="Archiveer" onclick="archive()"> 
         </span></p>
@@ -100,23 +100,23 @@ out.println("<input class=\"tbabutton\" type=submit value=\"Volgende Oproepen\" 
   <%
   if (vSession.getDaysBack() > 0)
   {
-	    out.println("<span class=\"adminsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + vSession.getDaysBack() + "&nbsp;dagen terug:</span>");
+	    out.println("<span class=\"bodysubsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + vSession.getDaysBack() + "&nbsp;dagen terug:</span>");
   }
   else 
   {
-      out.println("<span class=\"adminsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vandaag:</span>");
+      out.println("<span class=\"bodysubsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vandaag:</span>");
   }
   if (vRecords == null || vRecords.size() == 0)
   {
-    out.println("<span class=\"adminsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Er zijn geen nieuwe oproepgegevens beschikbaar.</span>");
+    out.println("<span class=\"bodysubsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Er zijn geen nieuwe oproepgegevens beschikbaar.</span>");
     out.println("</table>");
   }
   else
   {
     if (vRecords.size() == 1)
-      out.println("<span class=\"bodytekst\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Er is </span><span class=\"bodyredbold\">1</span><span class=\"bodytekst\">  oproep beschikbaar.</span>");
+      out.println("<span class=\"bodysubsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Er is </span><span class=\"bodysubsubredtitle\">1</span><span class=\"bodysubsubtitle\">  oproep beschikbaar.</span>");
     else
-      out.println("<span class=\"bodytekst\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Er zijn </span><span class=\"bodyredbold\">" + vRecords.size() + "</span><span class=\"bodytekst\"> oproepen beschikbaar.</span>");
+      out.println("<span class=\"bodysubsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Er zijn </span><span class=\"bodysubsubredtitle\">" + vRecords.size() + "</span><span class=\"bodysubsubtitle\"> oproepen beschikbaar.</span>");
     int vNewCnt = 0;
     long vLastLogin = vAccount.getPreviousLoginTS();
     %>
@@ -322,13 +322,14 @@ function updateUrgentCalls()
 {
     var now = Math.floor(Date.now() / 1000);
     
-    var content = "<table><tr><td class=\"tdborder\" width=\"630\"><span class=\"admintitle\">Oproepen die uw aandacht vragen:</span><table>";
+    var content = "";
     if (urgentCalls.length == 0)
     {
-        content += "<tr><td></td></tr>";
+        content += "<table><tr><td></td></tr></table>";
     }
     else
     {
+        content += "<table><tr><td class=\"tdborder\" width=\"630\"><span class=\"bodysubtitle\">Oproepen die uw aandacht vragen:</span><table>";
         for (i = 0; i < urgentCalls.length; i++) 
         {
             content += "<tr class=\"tbaNotify\" onclick=\"changeUrl('/tba/CustomerDispatch?_act=_a16&_rid=" + urgentCalls[i].dbCallId + "');\">";
@@ -336,8 +337,9 @@ function updateUrgentCalls()
             content += "<td width=\"155\">" + urgentCalls[i].customer + "</td>";
             content += "<td width=\"400\">" + urgentCalls[i].callText + "</td></tr>";
         }
+        content += "</table></td></tr></table>";
     }
-    content += "</table>";
+    
     
     console.log("updatePendingCalls(): " + content);
 

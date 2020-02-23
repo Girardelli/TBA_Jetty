@@ -388,10 +388,8 @@ public class AccountFacade
             vFormFaults.add("Paswoord veld 1 niet ingevuld.");
         if (vPassword2 == null)
             vFormFaults.add("Paswoord veld 2 niet ingevuld.");
-        if (vUserId.length() < 4 || vUserId.length() > 10)
-            vFormFaults.add("login naam moet minstens 4 en maximaal 10 karakters bevatten.");
-        if (vPassword.length() > 10)
-            vFormFaults.add("Paswoord mag maximaal 10 karakters bevatten.");
+        if (vUserId.length() < 5 || vUserId.length() > 10)
+            vFormFaults.add("login naam moet minstens 5 en maximaal 10 karakters bevatten.");
         if (vPassword.length() < 6)
             vFormFaults.add("Paswoord moet minimaal 6 karakters bevatten.");
         if (!vPassword.equals(vPassword2))

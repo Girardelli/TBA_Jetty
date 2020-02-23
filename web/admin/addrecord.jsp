@@ -33,9 +33,9 @@ be.tba.util.invoice.*"%>
 		<table width="100%" border="0" cellspacing="1" cellpadding="1">
 			<tr>
 				<td width="50"></td>
-				<td width="120" valign="top" class="adminsubsubtitle"><img
+				<td width="120" valign="top" class="bodysubsubtitle"><img
 					src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Inkomende/uitgaand</td>
-				<td width="580" valign="top" class="adminsubsubtitle"><input
+				<td width="580" valign="top" class="bodysubsubtitle"><input
 					type=radio name=<%=Constants.RECORD_DIR%>
 					value="<%=Constants.RECORD_DIR_IN%>" checked>Inkomende oproep
 				&nbsp;&nbsp;&nbsp; <input type=radio name=<%=Constants.RECORD_DIR%>
@@ -44,9 +44,9 @@ be.tba.util.invoice.*"%>
 			</tr>
 			<tr>
 				<td width="50"></td>
-				<td width="120" valign="top" class="adminsubsubtitle"><img
+				<td width="120" valign="top" class="bodysubsubtitle"><img
 					src=".\images\blueSphere.gif" width="10" height="10">&nbsp;belangrijk</td>
-				<td width="580" valign="top" class="adminsubsubtitle"><input
+				<td width="580" valign="top" class="bodysubsubtitle"><input
 					type=checkbox name=<%=Constants.RECORD_IMPORTANT%>
 					value="<%=Constants.YES%>">&nbsp;&nbsp;<img
 					src="/tba/images/important.gif"
@@ -54,9 +54,9 @@ be.tba.util.invoice.*"%>
 			</tr>
 			<tr>
 				<td width="50"></td>
-				<td width="120" valign="top" class="adminsubsubtitle"><img
+				<td width="120" valign="top" class="bodysubsubtitle"><img
 					src=".\images\blueSphere.gif" width="10" height="10">&nbsp;SMS verstuurd</td>
-				<td width="580" valign="top" class="adminsubsubtitle"><input
+				<td width="580" valign="top" class="bodysubsubtitle"><input
 					type=checkbox name=<%=Constants.RECORD_SMS%>
 					value="<%=Constants.YES%>">&nbsp;&nbsp;<img
 					src="/tba/images/sms.gif"
@@ -65,9 +65,9 @@ be.tba.util.invoice.*"%>
 			</tr>
 			<tr>
 				<td width="50"></td>
-				<td width="120" valign="top" class="adminsubsubtitle"><img
+				<td width="120" valign="top" class="bodysubsubtitle"><img
 					src=".\images\blueSphere.gif" width="10" height="10">&nbsp;afspraak</td>
-				<td width="580" valign="top" class="adminsubsubtitle"><input
+				<td width="580" valign="top" class="bodysubsubtitle"><input
 					type=checkbox name=<%=Constants.RECORD_AGENDA%>
 					value="<%=Constants.YES%>">&nbsp;&nbsp;<img
 					src="/tba/images/agenda.gif"
@@ -75,9 +75,9 @@ be.tba.util.invoice.*"%>
 			</tr>
 			<tr>
 				<td width="50"></td>
-				<td width="120" valign="top" class="adminsubsubtitle"><img
+				<td width="120" valign="top" class="bodysubsubtitle"><img
 					src=".\images\blueSphere.gif" width="10" height="10">&nbsp;doorgeschakeld</td>
-				<td width="580" valign="top" class="adminsubsubtitle"><input
+				<td width="580" valign="top" class="bodysubsubtitle"><input
 					type=checkbox name=<%=Constants.RECORD_FORWARD%>
 					value="<%=Constants.YES%>">&nbsp;&nbsp;<img
 					src="/tba/images/telefoon.gif"
@@ -85,9 +85,9 @@ be.tba.util.invoice.*"%>
 			</tr>
 			<tr>
 				<td width="50"></td>
-				<td width="120" valign="top" class="adminsubsubtitle"><img
+				<td width="120" valign="top" class="bodysubsubtitle"><img
 					src=".\images\blueSphere.gif" width="10" height="10">&nbsp;fax</td>
-				<td width="580" valign="top" class="adminsubsubtitle"><input
+				<td width="580" valign="top" class="bodysubsubtitle"><input
 					type=checkbox name=<%=Constants.RECORD_FAX%>
 					value="<%=Constants.YES%>">&nbsp;&nbsp;<img
 					src="/tba/images/fax.gif"
@@ -95,7 +95,7 @@ be.tba.util.invoice.*"%>
 			</tr>
 			<tr>
 				<td width="50"></td>
-				<td width="120" valign="top" class="adminsubsubtitle"><img
+				<td width="120" valign="top" class="bodysubsubtitle"><img
 					src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Klant</td>
 				<td width="580" valign="top"><%                  
 try
@@ -117,9 +117,9 @@ out.println("</select>");
 			</tr>
 			<tr>
 				<td width="50"></td>
-				<td width="170" valign="top" class="adminsubsubtitle"><img
+				<td width="170" valign="top" class="bodysubsubtitle"><img
 					src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Oproep doorgeschakeld</td>
-				<td width="530" valign="top" class="adminsubsubtitle"><input
+				<td width="530" valign="top" class="bodysubsubtitle"><input
 					type=radio name="<%=Constants.RECORD_INVOICE_LEVEL%>"
 					value="<%=Constants.RECORD_LEVEL1%>">prijs 1<br>
 				<input type=radio name="<%=Constants.RECORD_INVOICE_LEVEL%>"
@@ -140,37 +140,37 @@ String vTime = new String(vHour + ":" + ((vMinutes < 10) ? "0" : "") + vMinutes)
 %>
 			<tr valign="top">
 				<td width="50"></td>
-				<td width="120" valign="top" class="adminsubsubtitle">Datum</td>
+				<td width="120" valign="top" class="bodysubsubtitle">Datum</td>
 				<td width="580" valign="top"><input type=text size=20
 					name=<%=Constants.RECORD_DATE%> value="<%=vDate%>"></td>
 			</tr>
 			<tr>
 				<td width="50"></td>
-				<td width="120" valign="top" class="adminsubsubtitle">Uur</td>
+				<td width="120" valign="top" class="bodysubsubtitle">Uur</td>
 				<td width="580" valign="top"><input type=text size=20
 					name=<%=Constants.RECORD_TIME%> value="<%=vTime%>"></td>
 			</tr>
 			<tr>
 				<td width="50"></td>
-				<td width="120" valign="top" class="adminsubsubtitle">Nummer</td>
+				<td width="120" valign="top" class="bodysubsubtitle">Nummer</td>
 				<td width="580" valign="top"><input type=text size=20
 					name=<%=Constants.RECORD_NUMBER%> value=""></td>
 			</tr>
 			<tr>
 				<td width="50"></td>
-				<td width="120" valign="top" class="adminsubsubtitle">Naam</td>
+				<td width="120" valign="top" class="bodysubsubtitle">Naam</td>
 				<td width="580" valign="top"><input type=text size=30
 					name=<%=Constants.RECORD_CALLER_NAME%> value=""></td>
 			</tr>
 			<tr>
 				<td width="50"></td>
-				<td width="120" valign="top" class="adminsubsubtitle">Omschrijving</td>
+				<td width="120" valign="top" class="bodysubsubtitle">Omschrijving</td>
 				<td width="580" valign="top"><textarea
 					name=<%=Constants.RECORD_SHORT_TEXT%> rows=10 cols=70></textarea></td>
 			</tr>
 			<tr>
 				<td width="50"></td>
-				<td width="120" valign="top" class="adminsubsubtitle">Extra
+				<td width="120" valign="top" class="bodysubsubtitle">Extra
 				Informatie</td>
 				<td width="580" valign="top"><textarea
 					name=<%=Constants.RECORD_LONG_TEXT%> rows=10 cols=70></textarea></td>

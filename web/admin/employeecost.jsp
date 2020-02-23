@@ -48,7 +48,7 @@ try
 
 		<!-- account list -->
 		<td valign="top" width="865" bgcolor="FFFFFF"><br>
-		<p><span class="admintitle"> Werknemer prestaties tijdens de maand <%=vSession.getMonthsBackString()%><br>
+		<p><span class="bodytitle"> Werknemer prestaties tijdens de maand <%=vSession.getMonthsBackString()%><br>
 		<br>
 		</span></p>
 		<form name="taskform" method="POST"
@@ -138,8 +138,8 @@ try
 			</tr>
 		</table>
 		<br>
-        <p><span class="admintitle"> Gemiddelde opbrengst per oproep deze maand: <%=mCostFormatter.format(totalCallCost/totalNrCalls)%><br>
-        <p><span class="admintitle"> Totaal aantal oproepen: <%=records.size()%><br>
+        <p><span class="bodytitle"> Gemiddelde opbrengst per oproep deze maand: <%=mCostFormatter.format(totalCallCost/totalNrCalls)%><br>
+        <p><span class="bodytitle"> Totaal aantal oproepen: <%=records.size()%><br>
         </span></p>		
 		<br>
 		<table width="100%" border="0" cellspacing="2" cellpadding="2">

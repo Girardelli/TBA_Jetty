@@ -63,7 +63,7 @@ SessionManager.getInstance().getSession(vSession.getSessionId(), "clientcalls.js
 								    <a class='norm' href="/tba/CustomerDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACTION_SHOW_CALLS%>">Oproepen bekijken</a><br> 
                                     <a class='norm' href="/tba/CustomerDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACTION_ARCHIVED_CALLS%>">Gearchiveerde oproepen</a><br> 
 								    <a class='norm' href="/tba/CustomerDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACTION_GOTO_SHOW_TASKS%>">Taken bekijken</a><br>
-                                    <a class='norm' href="/tba/CustomerDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACTION_GOTO_WORKORDERS%>">Opdrachten opmaken</a><br>
+                                    <a class='norm' href="/tba/CustomerDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACTION_GOTO_WORKORDERS%>">Opdrachten doorgeven</a><br>
                                     <a class='norm' href="/tba/CustomerDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACTION_SEARCH_CALLS%>">Zoeken in oproepen</a><br>
                                 </td>
 							</tr>

@@ -32,7 +32,7 @@ StringBuilder allEntryIds = new StringBuilder("[");
                 int vCurYear = vToday.get(Calendar.YEAR);
 %>
 <body>
-<p><span class="admintitle"> Factuurlijst bewerken<br>
+<p><span class="bodytitle"> Factuurlijst bewerken<br>
 </span></p>
 <form name="invoicelistform" method="POST" action="/tba/AdminDispatch">
 	<input type=hidden name=<%=Constants.INVOICE_TO_FREEZE%> value=""> 
@@ -50,7 +50,7 @@ StringBuilder allEntryIds = new StringBuilder("[");
 			<td valign="top" width="865" bgcolor="FFFFFF"><br>
 			<table>
 				<tr>
-					<td width="100" valign="top" class="adminsubtitle">&nbsp;Maand</td>
+					<td width="100" valign="top" class="bodysubtitle">&nbsp;Maand</td>
 					<td width="10" valign="top">:</td>
 					<td width="170" valign="top">
 						<select	name="<%=Constants.INVOICE_MONTH%>" onchange="submit()">
@@ -63,7 +63,7 @@ StringBuilder allEntryIds = new StringBuilder("[");
 %>
 						</select>
 					</td>
-					<td width="100" valign="top" class="adminsubtitle">&nbsp;Jaar</td>
+					<td width="100" valign="top" class="bodysubtitle">&nbsp;Jaar</td>
 					<td width="10" valign="top">:</td>
 					<td width="170" valign="top">
 						<select
@@ -108,7 +108,7 @@ StringBuilder allEntryIds = new StringBuilder("[");
 	
 			                if (vInvoices == null || vInvoices.size() == 0)
 			                {
-			                    out.println("<p><span class=\"adminsubtitle\"> Geen facturen gevonden voor deze " + Constants.MONTHS[vMonth] + "/" + vYear + ".</span></p>");
+			                    out.println("<p><span class=\"bodysubtitle\"> Geen facturen gevonden voor deze " + Constants.MONTHS[vMonth] + "/" + vYear + ".</span></p>");
 			                }
 			                else
 			                {
@@ -120,7 +120,7 @@ StringBuilder allEntryIds = new StringBuilder("[");
 			                        InvoiceEntityData vEntry = ((InvoiceEntityData) i.next());
 			                        vTotalInvoice += vEntry.getTotalCost();
 			                    }
-			                    out.println("<p><span class=\"adminsubtitle\"> Totaal gefactureerd voor " + Constants.MONTHS[vMonth] + "/" + vYear + ": " + vCostFormatter.format(vTotalInvoice) + " (Excl BTW)</span></p>");
+			                    out.println("<p><span class=\"bodysubtitle\"> Totaal gefactureerd voor " + Constants.MONTHS[vMonth] + "/" + vYear + ": " + vCostFormatter.format(vTotalInvoice) + " (Excl BTW)</span></p>");
 			%> <br>
 			<table border="0" cellspacing="2" cellpadding="2">
 				<tr>

@@ -57,7 +57,7 @@ HttpSession vHttpSession = request.getSession();
 %>
 			<table width="100%" border="0" cellspacing="1" cellpadding="1">
 				<tr><td>
-					<span class="adminsubtitle">Selecteer 1 van onderstaande oproepen.</span>
+					<span class="bodysubtitle">Selecteer 1 van onderstaande oproepen.</span>
 				</td></tr>
 				<tr>
 					<td>
@@ -119,7 +119,7 @@ HttpSession vHttpSession = request.getSession();
 					</td>
 				</tr>
 				<tr><td>
-					<span class="adminsubtitle"></span>
+					<span class="bodysubtitle"></span>
 				</td></tr>
 			</table>
 			<%
@@ -129,7 +129,7 @@ HttpSession vHttpSession = request.getSession();
 %>
 			<table width="100%" border="0" cellspacing="1" cellpadding="1">
 				<tr><td>
-					<span class="adminsubtitle">Er zijn geen nieuwe oproepen beschikbaar.</span>
+					<span class="bodysubtitle">Er zijn geen nieuwe oproepen beschikbaar.</span>
 					<br>
 					<br>
 				</td></tr>
@@ -188,20 +188,20 @@ else
 			<table width="100%" border="0" cellspacing="1" cellpadding="1">
 				<tr>
 					<td width="50"></td>
-					<td width="170" valign="top" class="adminsubsubtitle">
+					<td width="170" valign="top" class="bodysubsubtitle">
 					   <img src="/tba/images/blueSphere.gif" width="10" height="10">&nbsp;Belangrijke oproep
 					</td>
-					<td width="530" valign="top" class="adminsubsubtitle">
+					<td width="530" valign="top" class="bodysubsubtitle">
 					   <input type=checkbox name=<%=Constants.RECORD_IMPORTANT%> value="<%=Constants.YES%>" <%=(vNewRecord.getIsImportantCall() ? " checked" : "")%>>&nbsp;&nbsp;
 					   <img	src="/tba/images/important.gif" alt="belangrijke oproep!" height="13" border="0">
 					</td>
 				</tr>
 				<tr>
 					<td width="50"></td>
-					<td width="170" valign="top" class="adminsubsubtitle"><img
+					<td width="170" valign="top" class="bodysubsubtitle"><img
 						src="/tba/images/blueSphere.gif" width="10"
 						height="10">&nbsp;SMS verstuurd</td>
-					<td width="530" valign="top" class="adminsubsubtitle"><input
+					<td width="530" valign="top" class="bodysubsubtitle"><input
 						type=checkbox name=<%=Constants.RECORD_SMS%>
 						value="<%=Constants.YES%>"
 						<%=(vNewRecord.getIsSmsCall() ? "checked=\"checked\"" : "")%>>&nbsp;&nbsp;<img
@@ -211,10 +211,10 @@ else
 				</tr>
 				<tr>
 					<td width="50"></td>
-					<td width="170" valign="top" class="adminsubsubtitle"><img
+					<td width="170" valign="top" class="bodysubsubtitle"><img
 						src="/tba/images/blueSphere.gif" width="10"
 						height="10">&nbsp;Afspraak toegevoegd</td>
-					<td width="530" valign="top" class="adminsubsubtitle"><input
+					<td width="530" valign="top" class="bodysubsubtitle"><input
 						type=checkbox name=<%=Constants.RECORD_AGENDA%>
 						value="<%=Constants.YES%>"
 						<%=(vNewRecord.getIsAgendaCall() ? "checked=\"checked\"" : "")%>>&nbsp;&nbsp;<img
@@ -223,10 +223,10 @@ else
 				</tr>
 				<tr>
 					<td width="50"></td>
-					<td width="170" valign="top" class="adminsubsubtitle"><img
+					<td width="170" valign="top" class="bodysubsubtitle"><img
 						src="/tba/images/blueSphere.gif" width="10"
 						height="10">&nbsp;Oproep doorgeschakeld</td>
-					<td width="530" valign="top" class="adminsubsubtitle"><input
+					<td width="530" valign="top" class="bodysubsubtitle"><input
 						type=checkbox name=<%=Constants.RECORD_FORWARD%>
 						value="<%=Constants.YES%>"
 						<%=(vNewRecord.getIsForwardCall() ? "checked=\"checked\"" : "")%>>&nbsp;&nbsp;<img
@@ -235,10 +235,10 @@ else
 				</tr>
 				<tr>
 					<td width="50"></td>
-					<td width="170" valign="top" class="adminsubsubtitle"><img
+					<td width="170" valign="top" class="bodysubsubtitle"><img
 						src="/tba/images/blueSphere.gif" width="10"
 						height="10">&nbsp;Fax</td>
-					<td width="530" valign="top" class="adminsubsubtitle"><input
+					<td width="530" valign="top" class="bodysubsubtitle"><input
 						type=checkbox name=<%=Constants.RECORD_FAX%>
 						value="<%=Constants.YES%>"
 						<%=(vNewRecord.getIsFaxCall() ? "checked=\"checked\"" : "")%>>&nbsp;&nbsp;<img
@@ -247,7 +247,7 @@ else
 				</tr>
                 <tr>
 					<td width="50"></td>
-					<td width="170" valign="top" class="adminsubsubtitle"><img
+					<td width="170" valign="top" class="bodysubsubtitle"><img
 						src="/tba/images/blueSphere.gif" width="10"
 						height="10">&nbsp;Naam</td>
 					<td width="530" valign="top"><input type=text size=30
@@ -256,7 +256,7 @@ else
 				</tr>
 				<tr>
 					<td width="50"></td>
-					<td width="170" valign="top" class="adminsubsubtitle"><img
+					<td width="170" valign="top" class="bodysubsubtitle"><img
 						src="/tba/images/blueSphere.gif" width="10"
 						height="10">&nbsp;Omschrijving</td>
 					<td width="530" valign="top"><textarea
@@ -264,7 +264,7 @@ else
 				</tr>
 				<tr>
 					<td width="50"></td>
-					<td width="170" valign="top" class="adminsubsubtitle"><img
+					<td width="170" valign="top" class="bodysubsubtitle"><img
 						src="/tba/images/blueSphere.gif" width="10"
 						height="10">&nbsp;Extra Informatie</td>
 					<td width="530" valign="top"><textarea

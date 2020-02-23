@@ -43,14 +43,14 @@ try
 			<td valign="top" width="60" bgcolor="FFFFFF"></td>
 			<td valign="top" bgcolor="FFFFFF">
 			    <br><br> 
-				<span class="admintitle"> Selecteer sub-klant voor de oproep voor <%=vFullName%>.</span>
+				<span class="bodytitle"> Selecteer sub-klant voor de oproep voor <%=vFullName%>.</span>
 				<br> 
 				<span class="bodytekst"> <!-- action name must be a URI name as it is set in the <application>.xml servlet-mapping tag.-->
 					<form name="updateForm" method="POST" action="/tba/AdminDispatch">
 						<br>
 						<table width="700" border="0" cellspacing="2" cellpadding="2">
 							<tr>
-								<td width="200" valign="top" class="adminsubsubtitle">sub-klanten</td>
+								<td width="200" valign="top" class="bodysubsubtitle">sub-klanten</td>
 								<td width="500" valign="top">
 								<select name=<%=Constants.ACCOUNT_NEW_FWDNR%>>
 <%

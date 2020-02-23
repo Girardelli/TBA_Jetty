@@ -41,7 +41,7 @@ if (vCustomerFilter == null) vCustomerFilter = Constants.ACCOUNT_FILTER_ALL;
 
 		<!-- account list -->
 		<td valign="top" width="865" bgcolor="FFFFFF"><br>
-		<p><span class="admintitle"> Taken bewerken<br>
+		<p><span class="bodytitle"> Taken bewerken<br>
 		<br>
 		<br>
 		</span></p>
@@ -51,7 +51,7 @@ if (vCustomerFilter == null) vCustomerFilter = Constants.ACCOUNT_FILTER_ALL;
 			name=<%=Constants.SRV_ACTION%> value="<%=Constants.GOTO_TASK_ADMIN%>">
 		<table width="330" border="0" cellspacing="0" cellpadding="0">
 			<tr>
-				<td width="150" valign="top" class="adminsubtitle">&nbsp;Klant</td>
+				<td width="150" valign="top" class="bodysubtitle">&nbsp;Klant</td>
 				<td width="10" valign="top">:</td>
 				<td width="170" valign="top"><select
 					name="<%=Constants.ACCOUNT_FILTER_CUSTOMER%>" onchange="submit()">
@@ -111,11 +111,11 @@ if (vTasks != null && vTasks.size() > 0)
 {
   if (!vSession.isCurrentMonth())
   {
-    out.println("<span class=\"adminsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + vTasks.size() + " taken uitgevoerd tijdens de maand " + vSession.getMonthsBackString() + ".</span><br>");
+    out.println("<span class=\"bodysubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + vTasks.size() + " taken uitgevoerd tijdens de maand " + vSession.getMonthsBackString() + ".</span><br>");
   }
   else
   {
-    out.println("<span class=\"adminsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + vTasks.size() + " taken uitgevoerd deze maand.</span><br>");
+    out.println("<span class=\"bodysubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + vTasks.size() + " taken uitgevoerd deze maand.</span><br>");
   }
   
 
@@ -205,7 +205,7 @@ if (vTasks != null && vTasks.size() > 0)
 }
 else
 {
-  out.println("<br><span class=\"adminsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Er zijn geen taken uitgevoerd voor deze klant tijdens de maand " + vSession.getMonthsBackString() + ".</span>");
+  out.println("<br><span class=\"bodysubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Er zijn geen taken uitgevoerd voor deze klant tijdens de maand " + vSession.getMonthsBackString() + ".</span>");
 }
 
 allEntryIds.append("]");

@@ -58,14 +58,14 @@ if (vSession == null)
    <tr>
       <td valign="middle" width="30" bgcolor="FFFFFF"></td>
       <td valign="middle" bgcolor="FFFFFF">
-      <br><br> <span class="admintitle"> Oproep <%=vDirStr%> <%=mRecordData.getName()%></span> <br><br>
+      <br><br> <span class="bodytitle"> Oproep <%=vDirStr%> <%=mRecordData.getName()%></span> <br><br>
 		<table border="0" cellspacing="4" cellpadding="4">
 			<%                  
 if (vInfoGifs.length() > 0)
 {
    %>
    <tr>
-       <td width="200" valign="middle" class="adminsubsubtitle">
+       <td width="200" valign="middle" class="bodysubsubtitle">
         <img src="/tba/images/blueSphere.gif" width="10" height="10">&nbsp;Bijkomende Informatie</td>
        <td width="500" valign="middle" class="bodytekst"><%=vInfoGifs%></td>
    </tr>
@@ -73,34 +73,34 @@ if (vInfoGifs.length() > 0)
 }                  
 %>
             <tr>
-                <td width="200" valign="middle" class="adminsubsubtitle"><img src="/tba/images/blueSphere.gif" width="10" height="10">&nbsp;Is gearchiveerd</td>
+                <td width="200" valign="middle" class="bodysubsubtitle"><img src="/tba/images/blueSphere.gif" width="10" height="10">&nbsp;Is gearchiveerd</td>
                 <td width="500" valign="middle" class="bodytekst" title="klik om de oproep te archiveren" >
                   <input type="checkbox" id="cbx1" style="display:none" name=<%=Constants.RECORD_ARCHIVED%><%=(mRecordData.getIsArchived() ? " checked=\"checked\"" : "")%> />
                   <label for="cbx1" class="toggle"><span></span></label>    
                 </td>
             </tr>
 			<tr>
-				<td width="200" valign="middle" class="adminsubsubtitle"><img src="/tba/images/blueSphere.gif" width="10" height="10">&nbsp;Datum</td>
+				<td width="200" valign="middle" class="bodysubsubtitle"><img src="/tba/images/blueSphere.gif" width="10" height="10">&nbsp;Datum</td>
 				<td width="500" valign="middle" class="bodytekst"><%=mRecordData.getDate()%></td>
 			</tr>
 			<tr>
-				<td width="200" valign="middle" class="adminsubsubtitle"><img src="/tba/images/blueSphere.gif" width="10" height="10">&nbsp;Uur</td>
+				<td width="200" valign="middle" class="bodysubsubtitle"><img src="/tba/images/blueSphere.gif" width="10" height="10">&nbsp;Uur</td>
 				<td width="500" valign="middle" class="bodytekst"><%=mRecordData.getTime()%></td>
 			</tr>
 			<tr>
-				<td width="200" valign="middle" class="adminsubsubtitle"><img src="/tba/images/blueSphere.gif" width="10" height="10">&nbsp;<%=vDirStr%>nummer</td>
+				<td width="200" valign="middle" class="bodysubsubtitle"><img src="/tba/images/blueSphere.gif" width="10" height="10">&nbsp;<%=vDirStr%>nummer</td>
 				<td width="500" valign="middle" class="bodytekst"><%=mRecordData.getNumber()%></td>
 			</tr>
 			<tr>
-				<td width="200" valign="middle" class="adminsubsubtitle"><img src="/tba/images/blueSphere.gif" width="10" height="10">&nbsp;Naam</td>
+				<td width="200" valign="middle" class="bodysubsubtitle"><img src="/tba/images/blueSphere.gif" width="10" height="10">&nbsp;Naam</td>
 				<td width="500" valign="middle" class="bodytekst"><%=mRecordData.getName()%></td>
 			</tr>
 			<tr>
-				<td width="200" valign="top" class="adminsubsubtitle"><img src="/tba/images/blueSphere.gif" width="10" height="10">&nbsp;Omschrijving</td>
+				<td width="200" valign="top" class="bodysubsubtitle"><img src="/tba/images/blueSphere.gif" width="10" height="10">&nbsp;Omschrijving</td>
 				<td width="500" valign="middle" class="bodytekst"><%=(String) mRecordData.getShortDescription()%></td>
 			</tr>
 			<tr>
-				<td width="200" valign="top" class="adminsubsubtitle"><img src="/tba/images/blueSphere.gif" width="10" height="10">&nbsp;Opvolging</td>
+				<td width="200" valign="top" class="bodysubsubtitle"><img src="/tba/images/blueSphere.gif" width="10" height="10">&nbsp;Opvolging</td>
 				<td width="500" valign="middle"><textarea
 					name=<%=Constants.RECORD_SHORT_TEXT%> rows=10 cols=70></textarea></td>
 			</tr>
@@ -109,7 +109,7 @@ if (vInfoGifs.length() > 0)
 			{
 			%>
 			<tr>
-				<td width="200" valign="top" class="adminsubsubtitle"><img src="/tba/images/blueSphere.gif" width="10" height="10">&nbsp;Bijkomende Informatie</td>
+				<td width="200" valign="top" class="bodysubsubtitle"><img src="/tba/images/blueSphere.gif" width="10" height="10">&nbsp;Bijkomende Informatie</td>
 				<td width="500" valign="middle" class="bodytekst"><%=(String) mRecordData.getLongDescription()%></td>
 			</tr>
             <%

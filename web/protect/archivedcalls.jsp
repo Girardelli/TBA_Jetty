@@ -36,7 +36,7 @@ try
 
 		<!-- account list -->
 		<td valign="top" bgcolor="FFFFFF"><br>
-        <p><span class="admintitle"> Gearchiveerde oproepen:
+        <p><span class="bodytitle"> Gearchiveerde oproepen:
         </span></p>
 <%
    if (vSession == null)
@@ -62,23 +62,23 @@ out.println("<input class=\"tbabutton\" type=submit name=action value=\"Volgende
   out.println("<br><br><table border=\"0\" cellspacing=\"2\" cellpadding=\"2\">");
   if (vSession.getDaysBack() > 0)
   {
-	    out.println("<span class=\"adminsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + vSession.getDaysBack() + "&nbsp;dagen terug:</span>");
+	    out.println("<span class=\"bodysubsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + vSession.getDaysBack() + "&nbsp;dagen terug:</span>");
   }
   else 
   {
-      out.println("<span class=\"adminsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vandaag:</span>");
+      out.println("<span class=\"bodysubsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vandaag:</span>");
   }
   if (vRecords == null || vRecords.size() == 0)
   {
-    out.println("<span class=\"adminsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Er zijn geen gearchiveerde oproepgegevens beschikbaar voor deze periode.</span>");
+    out.println("<span class=\"bodysubsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Er zijn geen gearchiveerde oproepgegevens beschikbaar voor deze periode.</span>");
     out.println("</table>");
   }
   else
   {
     if (vRecords.size() == 1)
-      out.println("<span class=\"bodytekst\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Er is </span><span class=\"bodyredbold\">1</span><span class=\"bodytekst\">  gearchiveerde oproep beschikbaar voor deze periode.</span>");
+      out.println("<span class=\"bodysubsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Er is </span><span class=\"bodysubsubredtitle\">1</span><span class=\"bodysubsubtitle\">  gearchiveerde oproep beschikbaar voor deze periode.</span>");
     else
-      out.println("<span class=\"bodytekst\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Er zijn </span><span class=\"bodyredbold\">" + vRecords.size() + "</span><span class=\"bodytekst\"> gearchiveerde oproepen beschikbaar voor deze periode.</span>");
+      out.println("<span class=\"bodysubsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Er zijn </span><span class=\"bodysubsubredtitle\">" + vRecords.size() + "</span><span class=\"bodysubsubtitle\"> gearchiveerde oproepen beschikbaar voor deze periode.</span>");
     int vNewCnt = 0;
     long vLastLogin = vAccount.getPreviousLoginTS();
     %>

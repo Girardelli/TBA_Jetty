@@ -73,7 +73,7 @@
 
         <!-- account list -->
         <td valign="top" width="865" bgcolor="FFFFFF"><br>
-        <p><span class="admintitle">Manueel facturen toevoegen <%=(vAccountData == null)? "Selecteer een klant en maand." : "" %><br>
+        <p><span class="bodytitle">Manueel facturen toevoegen <%=(vAccountData == null)? "Selecteer een klant en maand." : "" %><br>
         <br>
         <br>
         </span></p>
@@ -91,7 +91,7 @@
         
         <table  border="0" cellspacing="2" cellpadding="2">
             <tr>
-                <td width="250" valign="top" class="adminsubtitle">&nbsp;Klant</td>
+                <td width="250" valign="top" class="bodysubtitle">&nbsp;Klant</td>
                 <td width="10" valign="top">:</td>
                 <td valign="top">
                 <select
@@ -111,7 +111,7 @@
                 </td>
             </tr>
             <tr>
-                <td width="250" valign="top" class="adminsubtitle">&nbsp;Maand</td>
+                <td width="250" valign="top" class="bodysubtitle">&nbsp;Maand</td>
                 <td width="10" valign="top">:</td>
                 <td valign="top">
                 <select
@@ -127,7 +127,7 @@
                 </td>
             </tr>
             <tr>
-                <td width="250" valign="top" class="adminsubtitle">&nbsp;Jaar</td>
+                <td width="250" valign="top" class="bodysubtitle">&nbsp;Jaar</td>
                 <td width="10" valign="top">:</td>
                 <td valign="top">
                 <select
@@ -143,23 +143,23 @@
                 </td>
             </tr>
             <tr>
-                <td width="250" valign="top" class="adminsubtitle">&nbsp;Bedrag (zonder BTW)</td>
+                <td width="250" valign="top" class="bodysubtitle">&nbsp;Bedrag (zonder BTW)</td>
                 <td width="10" valign="top">:</td>
-                <td valign="top" class="adminsubsubtitle">
+                <td valign="top" class="bodysubsubtitle">
                     <input type=text size=20 name=<%=Constants.INVOICE_AMONTH%> value="">
                 </td>
             </tr>
             <tr>
-                <td width="250" valign="top" class="adminsubtitle">&nbsp;Beschrijving</td>
+                <td width="250" valign="top" class="bodysubtitle">&nbsp;Beschrijving</td>
                 <td width="10" valign="top">:</td>
-                <td valign="top" class="adminsubsubtitle">
+                <td valign="top" class="bodysubsubtitle">
                    <textarea name=<%=Constants.INVOICE_DESCRIPTION%> rows=12 cols=70></textarea>
                 </td>
             </tr>
             <tr>
-                <td width="250" valign="top" class="adminsubtitle">&nbsp;Is Credit Nota</td>
+                <td width="250" valign="top" class="bodysubtitle">&nbsp;Is Credit Nota</td>
                 <td width="10" valign="top">:</td>
-                <td valign="top" class="adminsubsubtitle">
+                <td valign="top" class="bodysubsubtitle">
                     <input type=checkbox name=<%=Constants.INVOICE_IS_CREDITNOTA%> value="">&nbsp;&nbsp;&nbsp;Voor Factuur nummer:&nbsp;&nbsp;
                     <input type=text size=20 name=<%=Constants.INVOICE_NR%> value="">
                 </td>

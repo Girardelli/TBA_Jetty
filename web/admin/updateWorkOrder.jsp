@@ -37,7 +37,7 @@ try
 		<td width="30" bgcolor="FFFFFF"></td>
 		<td bgcolor="FFFFFF"><br>
 		<br>
-		<span class="admintitle">Opdracht ingegeven door <%=((account == null) ? "??" : account.getFullName())%>.</span>
+		<span class="bodytitle">Opdracht ingegeven door <%=((account == null) ? "??" : account.getFullName())%>.</span>
         <br><br>
         <form name="workoderform1" method="POST" action="/tba/AdminDispatch">
         <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.ACTION_SAVE_WORKORDER%>"> 
@@ -45,12 +45,12 @@ try
 		<table border="0" cellspacing="1" cellpadding="1">
             <tr>
                <td width="30"></td>
-               <td width="250" valign="top" class="adminsubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Opdracht</td>
+               <td width="250" valign="top" class="bodysubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Opdracht</td>
                <td width="530" valign="top"><%=workOrder.title%></td>
             </tr>
             <tr>
                <td width="30"></td>
-               <td width="250" valign="top" class="adminsubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Status</td>
+               <td width="250" valign="top" class="bodysubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Status</td>
                <td width="530" valign="top">
                
                 <select
@@ -66,17 +66,17 @@ try
             </tr>
             <tr>
                <td width="30"></td>
-               <td width="250" valign="top" class="adminsubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Instructies</td>
+               <td width="250" valign="top" class="bodysubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Instructies</td>
                <td width="530" valign="top"><textarea name=<%=Constants.WORKORDER_INSTRUCTION%> rows=10 cols=70><%=(String) workOrder.instructions%></textarea></td>
             </tr>
             <tr>
                <td width="30"></td>
-               <td width="250" valign="top" class="adminsubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Verwachte opleverdatum</td>
+               <td width="250" valign="top" class="bodysubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Verwachte opleverdatum</td>
                <td width="530" valign="top"><%=dueDate%></td>
             </tr>
 		</table>
 		<br>
-        <span class="adminsubsubtitle">Aangeleverde bestanden door klant:</span>
+        <span class="bodysubsubtitle">Aangeleverde bestanden door klant:</span>
 		<br>
         <table border="0" cellspacing="4" cellpadding="1">
 <%
@@ -107,7 +107,7 @@ else
   </table>
   <br>
   <br>
-  <span class="adminsubsubtitle">Opgeleverde bestanden door ons:</span>
+  <span class="bodysubsubtitle">Opgeleverde bestanden door ons:</span>
   <br>
    <table border="0" cellspacing="4" cellpadding="1">
 <%

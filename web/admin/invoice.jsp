@@ -62,7 +62,7 @@
 
 %>
 <body>
-<p><span class="admintitle">&nbsp;&nbsp;&nbsp;Facturen maken <%=(vAccountData == null)? "Selecteer een klant en maand." : "" %><br>
+<p><span class="bodytitle">&nbsp;&nbsp;&nbsp;Facturen maken <%=(vAccountData == null)? "Selecteer een klant en maand." : "" %><br>
 <br>
 <br>
 </span></p>
@@ -80,7 +80,7 @@
 		
 		<table  border="0" cellspacing="2" cellpadding="2">
 			<tr>
-				<td width="250" valign="top" class="adminsubtitle">&nbsp;Klant</td>
+				<td width="250" valign="top" class="bodysubtitle">&nbsp;Klant</td>
 				<td width="10" valign="top">:</td>
 				<td width="270" valign="top">
 				<select
@@ -104,7 +104,7 @@
 				</td>
 			</tr>
 			<tr>
-				<td width="250" valign="top" class="adminsubtitle">&nbsp;Maand</td>
+				<td width="250" valign="top" class="bodysubtitle">&nbsp;Maand</td>
 				<td width="10" valign="top">:</td>
 				<td width="270" valign="top">
 				<select
@@ -120,7 +120,7 @@
 				</td>
             </tr>
             <tr>
-				<td width="250" valign="top" class="adminsubtitle">&nbsp;Jaar</td>
+				<td width="250" valign="top" class="bodysubtitle">&nbsp;Jaar</td>
 				<td width="10" valign="top">:</td>
 				<td width="270" valign="top">
 				<select
@@ -179,75 +179,75 @@
         <br><br>Het factuurnummer is bevrozen en kan niet meer aangepast worden.<br>
         <table  border="0" cellspacing="2" cellpadding="2">
             <tr>
-                <td width="250" valign="top" class="adminsubtitle">&nbsp;Factuur nummer</td>
+                <td width="250" valign="top" class="bodysubtitle">&nbsp;Factuur nummer</td>
                 <td width="10" valign="top">:</td>
                 <td width="400" valign="top"> <%=vInvoiceData.getInvoiceNr()%>
                 </td>
             </tr>
             <br>
             <tr>
-                <td width="250" valign="top" class="adminsubtitle">&nbsp;FintroID</td>
+                <td width="250" valign="top" class="bodysubtitle">&nbsp;FintroID</td>
                 <td width="10" valign="top">:</td>
                 <td width="400" valign="top"> <%=fintroId%>
                 </td>
             </tr>
             <tr>
-                <td width="250" valign="top" class="adminsubtitle">&nbsp;Valuta Datum</td>
+                <td width="250" valign="top" class="bodysubtitle">&nbsp;Valuta Datum</td>
                 <td width="10" valign="top">:</td>
                 <td width="400" valign="top"> <%=valutaDate%>
                 </td>
             </tr>
             <tr>
-                <td width="250" valign="top" class="adminsubtitle">&nbsp;Betaald op</td>
+                <td width="250" valign="top" class="bodysubtitle">&nbsp;Betaald op</td>
                 <td width="10" valign="top">:</td>
                 <td width="400" valign="top"> <%=payDate%>
                 </td>
             </tr>
             <tr>
-                <td width="250" valign="top" class="adminsubtitle">&nbsp;Mededeling</td>
+                <td width="250" valign="top" class="bodysubtitle">&nbsp;Mededeling</td>
                 <td width="10" valign="top">:</td>
                 <td width="400" valign="top"> <%=message%>
                 </td>
             </tr>
             <tr>
-                <td width="250" valign="top" class="adminsubtitle">&nbsp;Van Banknummer</td>
+                <td width="250" valign="top" class="bodysubtitle">&nbsp;Van Banknummer</td>
                 <td width="10" valign="top">:</td>
                 <td width="400" valign="top"> <%=fromBankNr%>
                 </td>
             </tr>
             <tr>
-                <td width="250" valign="top" class="adminsubtitle">&nbsp;Bedrag (excl BTW)</td>
+                <td width="250" valign="top" class="bodysubtitle">&nbsp;Bedrag (excl BTW)</td>
                 <td width="10" valign="top">:</td>
                 <td width="400" valign="top"><b> <%=costFormatter.format(vInvoiceData.getTotalCost())%></b>
                 </td>
             </tr>
             <tr>
-                <td width="250" valign="top" class="adminsubtitle">&nbsp;Gestructureerde mededeling</td>
+                <td width="250" valign="top" class="bodysubtitle">&nbsp;Gestructureerde mededeling</td>
                 <td width="10" valign="top">:</td>
                 <td width="400" valign="top"> <%=vInvoiceData.getStructuredId()%>
                 </td>
             </tr>
             <tr>
-                <td width="250" valign="top" class="adminsubtitle">&nbsp;PDF bestand</td>
+                <td width="250" valign="top" class="bodysubtitle">&nbsp;PDF bestand</td>
                 <td width="10" valign="top">:</td>
                 <td width="400" valign="top"> <%=vInvoiceData.getFileName()%>
                 </td>
             </tr>
             <tr>
-                <td width="250" valign="top" class="adminsubtitle">&nbsp;Klant referencie</td>
+                <td width="250" valign="top" class="bodysubtitle">&nbsp;Klant referencie</td>
                 <td width="10" valign="top">:</td>
                 <td width="400" valign="top"> <%=vInvoiceData.getCustomerRef().isEmpty()?"-":vInvoiceData.getCustomerRef()%>
                 </td>
             </tr>
              <tr>
-                <td width="250" valign="top" class="adminsubtitle">&nbsp;Informatie</td>
+                <td width="250" valign="top" class="bodysubtitle">&nbsp;Informatie</td>
                 <td width="10" valign="top">:</td>
                <td width="400" valign="top" class="bodytekst">                                      
                    <textarea name=<%=Constants.INVOICE_INFO%> rows=12 cols=70><%=(String) vInvoiceData.getComment()%></textarea>
                </td>
              </tr>
         </table>
-        <p><span class=\"adminsubtitle\"> 
+        <p><span class=\"bodysubtitle\"> 
         <input class="tbabutton" type=submit name=action value=" Bewaar " onclick="savePayDate()" > 
         <input class="tbabutton" type=submit name=action value=" Maak Credit Nota " onclick="createCreditNote()" > 
         </span></p>
@@ -267,7 +267,7 @@
         
         
         %>
-        <p><span class=\"adminsubtitle\"> 
+        <p><span class=\"bodysubtitle\"> 
         <input class="tbabutton" type=submit name=action value=" Terug naar lijst " onclick="backToList()" > 
         </span></p>
         <%
@@ -312,7 +312,7 @@
              }
        	 }
 %>
-          <p><span class="adminsubtitle"><br>
+          <p><span class="bodysubtitle"><br>
           Facturatiegegevens voor de maand <%=vSession.getMonthsBackString() + ", " + vSession.getYear()%> :<br><br>
           </span></p>
 <%
@@ -332,28 +332,28 @@
                 {
                     if (vRecords == null || vRecords.size() == 0)
                     {
-                        out.println("<p><span class=\"adminsubtitle\"> Geen oproepen voor de geselecteerde maand.</span></p>");
+                        out.println("<p><span class=\"bodysubtitle\"> Geen oproepen voor de geselecteerde maand.</span></p>");
                     }
                 
                     if (vAccountData.getInvoiceType() == InvoiceHelper.kStandardInvoice)
                     {
-                        out.println("<p><span class=\"adminsubtitle\"> Standaard facturatie. (Group " + vInvoiceHelper.getInvoiceGroupStr() + ")</span></p>");
+                        out.println("<p><span class=\"bodysubtitle\"> Standaard facturatie. (Group " + vInvoiceHelper.getInvoiceGroupStr() + ")</span></p>");
                     }
                     else if (vAccountData.getInvoiceType() == InvoiceHelper.kWeekInvoice)
                     {
-                        out.println("<p><span class=\"adminsubtitle\"> Week facturatie. (Group " + vInvoiceHelper.getInvoiceGroupStr() + ")</span></p>");
+                        out.println("<p><span class=\"bodysubtitle\"> Week facturatie. (Group " + vInvoiceHelper.getInvoiceGroupStr() + ")</span></p>");
                     }
                 %>
 
                     <tr>
                         <td width="20"></td>
-                        <td width="200" valign="top" class="adminsubtitle">&nbsp;&nbsp;Kosten rubriek</td>
+                        <td width="200" valign="top" class="bodysubtitle">&nbsp;&nbsp;Kosten rubriek</td>
                         <td width="1" bgcolor="#000000"></td>
-                        <td width="50" valign="top" class="adminsubtitle">&nbsp;&nbsp;Aantal</td>
+                        <td width="50" valign="top" class="bodysubtitle">&nbsp;&nbsp;Aantal</td>
                         <td width="1" bgcolor="#000000"></td>
-                        <td width="270" valign="top" class="adminsubtitle">&nbsp;&nbsp;Eenheidsprijs (Euro)</td>
+                        <td width="270" valign="top" class="bodysubtitle">&nbsp;&nbsp;Eenheidsprijs (Euro)</td>
                         <td width="1" bgcolor="#000000"></td>
-                        <td width="100" valign="top" class="adminsubtitle">&nbsp;&nbsp;Kost (Euro)</td>
+                        <td width="100" valign="top" class="bodysubtitle">&nbsp;&nbsp;Kost (Euro)</td>
                     </tr>
                     <tr>
                         <td width="20"></td>
@@ -367,7 +367,7 @@
                     </tr>
                     <tr>
                         <td width="20"></td>
-                        <td width="200" valign="top" class="adminsubsubtitle">&nbsp;&nbsp;binnenkomende oproepen</td>
+                        <td width="200" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;binnenkomende oproepen</td>
                         <td width="1" bgcolor="#000000"></td>
                         <td width="50" valign="top" class="bodytekst">&nbsp;&nbsp;<%=vInvoiceHelper.getInCalls()%></td>
                         <td width="1" bgcolor="#000000"></td>
@@ -377,7 +377,7 @@
                     </tr>
                     <tr>
                         <td width="20"></td>
-                        <td width="200" valign="top" class="adminsubsubtitle">&nbsp;&nbsp;uitgaande oproepen</td>
+                        <td width="200" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;uitgaande oproepen</td>
                         <td width="1" bgcolor="#000000"></td>
                         <td width="50" valign="top" class="bodytekst">&nbsp;&nbsp;<%=vInvoiceHelper.getOutCalls()%></td>
                         <td width="1" bgcolor="#000000"></td>
@@ -397,7 +397,7 @@
                     </tr>
                     <tr>
                         <td width="20"></td>
-                        <td width="200" valign="top" class="adminsubsubtitle">&nbsp;&nbsp;Totaal oproepen</td>
+                        <td width="200" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;Totaal oproepen</td>
                         <td width="1" bgcolor="#000000"></td>
                         <td width="50" valign="top" class="bodytekst">&nbsp;&nbsp;<%=vInvoiceHelper.getTotalCalls()%></td>
                         <td width="1" bgcolor="#000000"></td>
@@ -417,7 +417,7 @@
                     </tr>
                     <tr>
                         <td width="20"></td>
-                        <td width="200" valign="top" class="adminsubsubtitle">&nbsp;&nbsp;doorgeschakelde oproepen</td>
+                        <td width="200" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;doorgeschakelde oproepen</td>
                         <td width="1" bgcolor="#000000"></td>
                         <td width="50" valign="top" class="bodytekst">&nbsp;&nbsp;<%=vInvoiceHelper.getForwardCalls()%></td>
                         <td width="1" bgcolor="#000000"></td>
@@ -427,7 +427,7 @@
                     </tr>
                     <tr>
                         <td width="20"></td>
-                        <td width="200" valign="top" class="adminsubsubtitle">&nbsp;&nbsp;Sms berichten</td>
+                        <td width="200" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;Sms berichten</td>
                         <td width="1" bgcolor="#000000"></td>
                         <td width="50" valign="top" class="bodytekst">&nbsp;&nbsp;<%=vInvoiceHelper.getSmsCalls()%></td>
                         <td width="1" bgcolor="#000000"></td>
@@ -437,7 +437,7 @@
                     </tr>
                     <tr>
                         <td width="20"></td>
-                        <td width="200" valign="top" class="adminsubsubtitle">&nbsp;&nbsp;FAX</td>
+                        <td width="200" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;FAX</td>
                         <td width="1" bgcolor="#000000"></td>
                         <td width="50" valign="top" class="bodytekst">&nbsp;&nbsp;<%=vInvoiceHelper.getFaxCalls()%></td>
                         <td width="1" bgcolor="#000000"></td>
@@ -447,7 +447,7 @@
                     </tr>
                     <tr>
                         <td width="20"></td>
-                        <td width="200" valign="top" class="adminsubsubtitle">&nbsp;&nbsp;toeslag lange oproepen</td>
+                        <td width="200" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;toeslag lange oproepen</td>
                         <td width="1" bgcolor="#000000"></td>
                         <td width="50" valign="top" class="bodytekst">&nbsp;&nbsp;<%=vInvoiceHelper.getLongCalls()%></td>
                         <td width="1" bgcolor="#000000"></td>
@@ -457,7 +457,7 @@
                     </tr>
                     <tr>
                         <td width="20"></td>
-                        <td width="200" valign="top" class="adminsubsubtitle">&nbsp;&nbsp;toeslag lange doorgeschakelde oproepen</td>
+                        <td width="200" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;toeslag lange doorgeschakelde oproepen</td>
                         <td width="1" bgcolor="#000000"></td>
                         <td width="50" valign="top" class="bodytekst">&nbsp;&nbsp;<%=vInvoiceHelper.getLongFwdCalls()%></td>
                         <td width="1" bgcolor="#000000"></td>
@@ -477,7 +477,7 @@
                     </tr>
                     <tr>
                         <td width="20"></td>
-                        <td width="200" valign="top" class="adminsubsubtitle">&nbsp;&nbsp;Agenda beheer</td>
+                        <td width="200" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;Agenda beheer</td>
                         <td width="1" bgcolor="#000000"></td>
                         <td width="50" valign="top" class="bodytekst">&nbsp;&nbsp;<%=vInvoiceHelper.getAgendaCalls()%></td>
                         <td width="1" bgcolor="#000000"></td>
@@ -487,7 +487,7 @@
                     </tr>
                     <tr>
                         <td width="20"></td>
-                        <td width="200" valign="top" class="adminsubsubtitle">&nbsp;&nbsp;Taken</td>
+                        <td width="200" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;Taken</td>
                         <td width="1" bgcolor="#000000"></td>
                         <td width="50" valign="top" class="bodytekst">&nbsp;&nbsp;<%=vInvoiceHelper.getNrOfTasks()%></td>
                         <td width="1" bgcolor="#000000"></td>
@@ -502,17 +502,17 @@
                               {
                     %>
 	                <tr><td>
-	                <p><span class="adminsubtitle"> Telemarketing facturatie.</span></p>
+	                <p><span class="bodysubtitle"> Telemarketing facturatie.</span></p>
 	                </td></tr>
                     <tr>
                         <td width="20"></td>
-                        <td width="200" valign="top" class="adminsubtitle">&nbsp;&nbsp;Kosten rubriek</td>
+                        <td width="200" valign="top" class="bodysubtitle">&nbsp;&nbsp;Kosten rubriek</td>
                         <td width="1" bgcolor="#000000"></td>
-                        <td width="50" valign="top" class="adminsubtitle">&nbsp;&nbsp;Aantal</td>
+                        <td width="50" valign="top" class="bodysubtitle">&nbsp;&nbsp;Aantal</td>
                         <td width="1" bgcolor="#000000"></td>
-                        <td width="270" valign="top" class="adminsubtitle">&nbsp;&nbsp;Eenheidsprijs</td>
+                        <td width="270" valign="top" class="bodysubtitle">&nbsp;&nbsp;Eenheidsprijs</td>
                         <td width="1" bgcolor="#000000"></td>
-                        <td width="100" valign="top" class="adminsubtitle">&nbsp;&nbsp;Kost</td>
+                        <td width="100" valign="top" class="bodysubtitle">&nbsp;&nbsp;Kost</td>
                     </tr>
                     <tr>
                         <td width="20"></td>
@@ -526,7 +526,7 @@
                     </tr>
                     <tr>
                         <td width="20"></td>
-                        <td width="200" valign="top" class="adminsubsubtitle">&nbsp;&nbsp;Taken</td>
+                        <td width="200" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;Taken</td>
                         <td width="1" bgcolor="#000000"></td>
                         <td width="50" valign="top" class="bodytekst">&nbsp;&nbsp;<%=vInvoiceHelper.getNrOfTasks()%></td>
                         <td width="1" bgcolor="#000000"></td>
@@ -536,7 +536,7 @@
                     </tr>
                     <tr>
                         <td width="20"></td>
-                        <td width="200" valign="top" class="adminsubsubtitle">&nbsp;&nbsp;Level 1 (geen succes)</td>
+                        <td width="200" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;Level 1 (geen succes)</td>
                         <td width="1" bgcolor="#000000"></td>
                         <td width="50" valign="top" class="bodytekst">&nbsp;&nbsp;<%=vInvoiceHelper.getLevel1Calls()%></td>
                         <td width="1" bgcolor="#000000"></td>
@@ -546,7 +546,7 @@
                     </tr>
                     <tr>
                         <td width="20"></td>
-                        <td width="200" valign="top" class="adminsubsubtitle">&nbsp;&nbsp;Level 2 (contact)</td>
+                        <td width="200" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;Level 2 (contact)</td>
                         <td width="1" bgcolor="#000000"></td>
                         <td width="50" valign="top" class="bodytekst">&nbsp;&nbsp;<%=vInvoiceHelper.getLevel2Calls()%></td>
                         <td width="1" bgcolor="#000000"></td>
@@ -556,7 +556,7 @@
                     </tr>
                     <tr>
                         <td width="20"></td>
-                        <td width="200" valign="top" class="adminsubsubtitle">&nbsp;&nbsp;Level 3 (afspraak)</td>
+                        <td width="200" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;Level 3 (afspraak)</td>
                         <td width="1" bgcolor="#000000"></td>
                         <td width="50" valign="top" class="bodytekst">&nbsp;&nbsp;<%=vInvoiceHelper.getLevel3Calls()%></td>
                         <td width="1" bgcolor="#000000"></td>
@@ -571,17 +571,17 @@
                                 {
         %>
                     <tr><td>
-                    <p><span class="adminsubtitle"> Facturatie zonder oproepen.</span></p>
+                    <p><span class="bodysubtitle"> Facturatie zonder oproepen.</span></p>
                     </td></tr>
                     <tr>
                         <td width="20"></td>
-                        <td width="200" valign="top" class="adminsubtitle">&nbsp;&nbsp;Kosten rubriek</td>
+                        <td width="200" valign="top" class="bodysubtitle">&nbsp;&nbsp;Kosten rubriek</td>
                         <td width="1" bgcolor="#000000"></td>
-                        <td width="50" valign="top" class="adminsubtitle">&nbsp;&nbsp;Aantal</td>
+                        <td width="50" valign="top" class="bodysubtitle">&nbsp;&nbsp;Aantal</td>
                         <td width="1" bgcolor="#000000"></td>
-                        <td width="270" valign="top" class="adminsubtitle">&nbsp;&nbsp;Eenheidsprijs</td>
+                        <td width="270" valign="top" class="bodysubtitle">&nbsp;&nbsp;Eenheidsprijs</td>
                         <td width="1" bgcolor="#000000"></td>
-                        <td width="100" valign="top" class="adminsubtitle">&nbsp;&nbsp;Kost</td>
+                        <td width="100" valign="top" class="bodysubtitle">&nbsp;&nbsp;Kost</td>
                     </tr>
                     <tr>
                         <td width="20"></td>
@@ -595,7 +595,7 @@
                     </tr>
                     <tr>
                         <td width="20"></td>
-                        <td width="200" valign="top" class="adminsubsubtitle">&nbsp;&nbsp;Taken</td>
+                        <td width="200" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;Taken</td>
                         <td width="1" bgcolor="#000000"></td>
                         <td width="50" valign="top" class="bodytekst">&nbsp;&nbsp;<%=vInvoiceHelper.getNrOfTasks()%></td>
                         <td width="1" bgcolor="#000000"></td>
@@ -619,7 +619,7 @@
                     </tr>
                     <tr>
                         <td width="20"></td>
-                        <td width="200" valign="top" class="adminsubtitle">&nbsp;&nbsp;Totaal</td>
+                        <td width="200" valign="top" class="bodysubtitle">&nbsp;&nbsp;Totaal</td>
                         <td width="1" bgcolor="#000000"></td>
                         <td width="50"></td>
                         <td width="1" bgcolor="#000000"></td>
@@ -636,33 +636,33 @@
            <table>
               <tr>
                   <td width="20"></td>
-                  <td width="120" valign="top" class="adminsubtitle">&nbsp;&nbsp;Factuurnummer</td>
+                  <td width="120" valign="top" class="bodysubtitle">&nbsp;&nbsp;Factuurnummer</td>
                   <td width="1">:</td>
-                  <td width="200" valign="top" class="adminsubtitle">&nbsp;&nbsp;<%=vInvoiceData.getInvoiceNr()%></td>
+                  <td width="200" valign="top" class="bodysubtitle">&nbsp;&nbsp;<%=vInvoiceData.getInvoiceNr()%></td>
               </tr>
               <tr>
                   <td width="20"></td>
-                  <td width="120" valign="top" class="adminsubtitle">&nbsp;&nbsp;Factuurdatum</td>
+                  <td width="120" valign="top" class="bodysubtitle">&nbsp;&nbsp;Factuurdatum</td>
                   <td width="1">:</td>
-                  <td width="200" valign="top" class="adminsubtitle">&nbsp;&nbsp;<%=vInvoiceData.getInvoiceDate()%></td>
+                  <td width="200" valign="top" class="bodysubtitle">&nbsp;&nbsp;<%=vInvoiceData.getInvoiceDate()%></td>
               </tr>
               <tr>
                   <td width="20"></td>
-                  <td width="120" valign="top" class="adminsubtitle">&nbsp;&nbsp;Aantal oproepen</td>
+                  <td width="120" valign="top" class="bodysubtitle">&nbsp;&nbsp;Aantal oproepen</td>
                   <td width="1">:</td>
-                  <td width="200" valign="top" class="adminsubtitle">&nbsp;&nbsp;<%=(vRecords != null? vRecords.size():0)%></td>
+                  <td width="200" valign="top" class="bodysubtitle">&nbsp;&nbsp;<%=(vRecords != null? vRecords.size():0)%></td>
               </tr>
               <tr>
                   <td width="20"></td>
-                  <td width="120" valign="top" class="adminsubtitle">&nbsp;&nbsp;Aantal taken</td>
+                  <td width="120" valign="top" class="bodysubtitle">&nbsp;&nbsp;Aantal taken</td>
                   <td width="1">:</td>
-                  <td width="200" valign="top" class="adminsubtitle">&nbsp;&nbsp;<%=(vTasks != null? vTasks.size():0)%></td>
+                  <td width="200" valign="top" class="bodysubtitle">&nbsp;&nbsp;<%=(vTasks != null? vTasks.size():0)%></td>
               </tr>
               <tr>
                   <td width="20"></td>
-                  <td width="120" valign="top" class="adminsubtitle">&nbsp;&nbsp;Totaal</td>
+                  <td width="120" valign="top" class="bodysubtitle">&nbsp;&nbsp;Totaal</td>
                   <td width="1">:</td>
-                  <td width="200" valign="top" class="adminsubtitle">&nbsp;&nbsp;<%=costFormatter.format(vInvoiceData.getTotalCost())%>&nbsp;&nbsp;(excl BTW)</td>
+                  <td width="200" valign="top" class="bodysubtitle">&nbsp;&nbsp;<%=costFormatter.format(vInvoiceData.getTotalCost())%>&nbsp;&nbsp;(excl BTW)</td>
               </tr>
           </table>
            
@@ -675,7 +675,7 @@
 	    %>
         <br>
         <br>
-		<p class="adminsubtitle"><img src=".\images\blueSphere.gif"
+		<p class="bodysubtitle"><img src=".\images\blueSphere.gif"
 			width="10" height="10">&nbsp;&nbsp;&nbsp;Takenlijst voor deze maand:</p>
 		<table border="0" cellspacing="2" cellpadding="2">
 			<tr>
@@ -729,7 +729,7 @@
 		%>
         <br>
         <br>
-		<p class="adminsubtitle"><img src=".\images\blueSphere.gif"
+		<p class="bodysubtitle"><img src=".\images\blueSphere.gif"
 			width="10" height="10">&nbsp;&nbsp;&nbsp;Oproepenlijst:</p>
 		<table border="0" cellspacing="2" cellpadding="2">
 			<tr>

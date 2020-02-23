@@ -304,6 +304,7 @@ public class CustomerDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.SEARCH_SHOW_PREV:
             {
+               vSession.decrementMonthsBack();
                rd = sc.getRequestDispatcher(Constants.CLIENT_SEARCH_JSP);
                break;
             }

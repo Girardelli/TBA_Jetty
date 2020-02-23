@@ -58,7 +58,7 @@ try
 		<td width="30" bgcolor="FFFFFF"></td>
 		<td bgcolor="FFFFFF"><br>
 		<br>
-		<span class="admintitle">Specifieer uw opdracht naar het The Business Assistant Team:</span>
+		<span class="bodytitle">Specifieer uw opdracht naar het The Business Assistant Team:</span>
 		<br><br>
         <form name="workoderform1" method="POST" action="/tba/CustomerDispatch">
         <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.ACTION_SAVE_WORKORDER%>"> 
@@ -66,12 +66,12 @@ try
         <table border="0" cellspacing="4" cellpadding="1">
             <tr>
                <td width="10"></td>
-               <td width="210" valign="middle" class="adminsubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Opdracht</td>
-               <td width="530" valign="middle"><input type=text size=30 name=<%=Constants.WORKORDER_TITLE%> value="<%=workOrder.title%>"></td>
+               <td width="210" valign="middle" class="bodysubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Titel</td>
+               <td width="530" valign="middle"><input type=text size=70 name=<%=Constants.WORKORDER_TITLE%> value="<%=workOrder.title%>"></td>
             </tr>
             <tr>
                <td width="10"></td>
-               <td width="210" valign="middle" class="adminsubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Status</td>
+               <td width="210" valign="middle" class="bodysubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Status</td>
                <td width="530" valign="middle"><%=WorkOrderData.getStateStr(workOrder.state)%>
 <%
 if (workOrder.state == WorkOrderData.State.kDone)
@@ -87,12 +87,12 @@ if (workOrder.state == WorkOrderData.State.kDone)
             </tr>
             <tr>
                <td width="10"></td>
-               <td width="210" valign="top" class="adminsubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Instructies</td>
+               <td width="210" valign="top" class="bodysubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Instructies</td>
                <td width="530" valign="top"><textarea name=<%=Constants.WORKORDER_INSTRUCTION%> rows=10 cols=70><%=workOrder.instructions%></textarea></td>
             </tr>
             <tr>
                <td width="10"></td>
-               <td width="210" valign="middle" class="adminsubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Gewenste opleverdatum</td>
+               <td width="210" valign="middle" class="bodysubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Gewenste opleverdatum</td>
                <td width="530" valign="middle">
                <div id="position">
                     <input class="date-input-native" id="dateTba" type="date" name="<%=Constants.WORKORDER_DUEDATE%>" min="<%=today%>" max="<%=endDate%>" title="klik om de datum te wijzigen">
@@ -103,7 +103,7 @@ if (workOrder.state == WorkOrderData.State.kDone)
             </tr>
 		</table>
         <br>
-        <span class="adminsubsubtitle">Te verwerken bestanden:</span>
+        <span class="bodysubtitle">Te verwerken bestanden:</span>
         <br>
         <table border="0" cellspacing="4" cellpadding="1">
 <%
@@ -145,7 +145,7 @@ else
    </form>
   <br>
   <br>
-  <span class="adminsubsubtitle">Opgeleverde bestanden door The Business Assistant:</span>
+  <span class="bodysubtitle">Opgeleverde bestanden door The Business Assistant:</span>
   <br>
   <form name="workoderform3" method="POST" action="/tba/CustomerDispatch">
   <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.ACTION_SAVE_WORKORDER%>"> 

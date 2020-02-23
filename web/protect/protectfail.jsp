@@ -65,9 +65,9 @@ else if (vErrorMessage == null)
 
 			<!-- account list -->
 			<td valign="top" width="750" bgcolor="FFFFFF"><br>
-			<p><span class="tdborder admintitle"> <%= vErrorMessage%></span></p>
+			<p><span class="tdborder bodytitle"> <%= vErrorMessage%></span></p>
 			<br>
-			<p><span class="bodytext">klik <a href=<%=Constants.LOGIN_HTML%>>hier</a></span>
+			<p><span class="bodytekst">klik <a href=<%=Constants.LOGIN_HTML%>>hier</a></span>
 			om terug te keren naar het aanmeldpanel.</p>
             <p><a class="tbabutton" href=<%=Constants.LOGIN_HTML%>>Naar log in scherm</a>
             </p>

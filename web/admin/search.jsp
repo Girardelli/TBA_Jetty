@@ -50,12 +50,12 @@ be.tba.util.data.*"%>
 
 		<!-- account list -->
 		<td valign="top" width="825" bgcolor="FFFFFF"><br>
-		<p><span class="admintitle"> Oproepen zoeken</span></p>
+		<p><span class="bodytitle"> Oproepen zoeken</span></p>
 		<form name="searchform" method="POST" action="/tba/AdminDispatch">
         <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.GOTO_RECORD_SEARCH%>"> 
 		<table width="825" border="0" cellspacing="2" cellpadding="2">
 			<tr>
-				<td width="225" valign="top" class="adminsubtitle">Klant</td>
+				<td width="225" valign="top" class="bodysubtitle">Klant</td>
 				<td width="10" valign="top">:</td>
 				<td width="590" valign="top"><select
 					name="<%=Constants.ACCOUNT_FILTER_CUSTOMER%>">
@@ -74,7 +74,7 @@ out.println("<option value=\"" + Constants.ACCOUNT_FILTER_ALL + (vCustomerFilter
 				</select></td>
 			</tr>
 			<tr>
-				<td width="225" valign="top" class="adminsubtitle">Zoek tekst</td>
+				<td width="225" valign="top" class="bodysubtitle">Zoek tekst</td>
 				<td width="10" valign="top">:</td>
 				<td width="590" valign="top"><input type=text size=50
 					name=<%=Constants.RECORD_SEARCH_STR%>
@@ -107,22 +107,22 @@ if (vSession.getSearchString() != null && vSession.getSearchString().length() > 
   {
       if (vSession.isCurrentMonth())
       {
-          out.println("<br><span class=\"adminsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Geen oproepen gevonden voor deze maand.</span><br>");
+          out.println("<br><span class=\"bodysubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Geen oproepen gevonden voor deze maand.</span><br>");
       }
       else
       {
-          out.println("<br><span class=\"adminsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Geen oproepen gevonden voor maand " + vSession.getMonthsBackString() + ", " + vSession.getYear() + ".</span><br>");
+          out.println("<br><span class=\"bodysubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Geen oproepen gevonden voor maand " + vSession.getMonthsBackString() + ", " + vSession.getYear() + ".</span><br>");
       }
   }
   else
   {
       if (!vSession.isCurrentMonth())
       {
-         out.println("<br><span class=\"adminsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + vRecords.size() + " zoekresultaten voor de maand " + vSession.getMonthsBackString() + ", " + vSession.getYear() + ".</span><br>");
+         out.println("<br><span class=\"bodysubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + vRecords.size() + " zoekresultaten voor de maand " + vSession.getMonthsBackString() + ", " + vSession.getYear() + ".</span><br>");
       }
       else
       {
-         out.println("<br><span class=\"adminsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + vRecords.size() + " zoekresultaten voor deze maand.</span><br>");
+         out.println("<br><span class=\"bodysubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + vRecords.size() + " zoekresultaten voor deze maand.</span><br>");
       }
       %>
     <br><tr>
