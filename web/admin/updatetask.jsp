@@ -48,7 +48,7 @@ mCustomerData = AccountCache.getInstance().get(mTaskData);
 		<br>
 		<table width="100%" border="0" cellspacing="1" cellpadding="1">
 		
-<% if (mTaskData.getInvoiceId() > 0 ||
+<% if ((!mTaskData.getIsRecuring() && mTaskData.getInvoiceId() > 0) ||
 		//or a recuring task that has been stopped
 		(mTaskData.getIsRecuring() && mTaskData.getStopTime() < Long.MAX_VALUE))
 {
@@ -196,7 +196,7 @@ else
 		<br>
 		<br>
 		<input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.SAVE_TASK%>"> 
-<% if (mTaskData.getInvoiceId() == 0 ||
+<% if ((!mTaskData.getIsRecuring() && mTaskData.getInvoiceId() == 0) ||
         //or a recuring task that has not been stopped
         (mTaskData.getIsRecuring() && mTaskData.getStopTime() == Long.MAX_VALUE))
 {

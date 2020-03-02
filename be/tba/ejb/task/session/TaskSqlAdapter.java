@@ -262,9 +262,9 @@ public class TaskSqlAdapter extends AbstractSqlAdapter<TaskEntityData>
 
     private Collection<TaskEntityData> queryAllTasksForFwdNr(WebSession webSession, String fwdNr, long start, long stop)
     {
-        Collection<TaskEntityData> vCollection = executeSqlQuery(webSession, "SELECT * FROM TaskEntity WHERE FwdNr='" + fwdNr + "' AND TimeStamp>" + start + " AND TimeStamp<=" + stop + " AND IsRecuring=FALSE ORDER BY TimeStamp DESC");
-        Collection<TaskEntityData> vRecuringCollection = executeSqlQuery(webSession, "SELECT * FROM TaskEntity WHERE FwdNr='" + fwdNr + "' AND StartTime<" + stop + " AND IsRecuring=TRUE ORDER BY TimeStamp DESC");
-        if (vCollection != null)
+       Collection<TaskEntityData> vCollection = executeSqlQuery(webSession, "SELECT * FROM TaskEntity WHERE FwdNr='" + fwdNr + "' AND TimeStamp>" + start + " AND TimeStamp<=" + stop + " AND IsRecuring=FALSE ORDER BY TimeStamp DESC");
+       Collection<TaskEntityData> vRecuringCollection = executeSqlQuery(webSession, "SELECT * FROM TaskEntity WHERE FwdNr='" + fwdNr + "' AND StartTime<" + start + " AND StopTime>" + stop + " AND IsRecuring=TRUE ORDER BY TimeStamp DESC");
+       if (vCollection != null)
         {
             vCollection.addAll(vRecuringCollection);
         }
