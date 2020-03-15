@@ -41,7 +41,7 @@ try
         <td valign="top" width="20" bgcolor="FFFFFF"></td>
 
         <!-- account list -->
-        <td valign="top" width="100%" bgcolor="FFFFFF"><br>
+        <td valign="top" bgcolor="FFFFFF"><br>
         <p><span class="bodytitle">Mijn opdrachten</span><br>
         <br>
         <input class="tbabutton" type=submit value=" Maak nieuwe opdracht " onclick="addWorkOrder();"> 
