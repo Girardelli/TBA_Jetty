@@ -196,6 +196,7 @@ public class Constants
     public static final String WORKORDER_STATE = "_wost";
     public static final String WORKORDER_FILE = "_wofi";
     public static final String WORKORDER_FILE_ID = "_wfid";
+    public static final String WORKORDER_URGENT = "_wiur";
     
     // invoice
     public static final String INVOICE_AMONTH = "_iam";
@@ -516,7 +517,10 @@ public class Constants
     public static final short MAX_MAIL_HOUR = 23;
     public static final int kAbbrevWidth = 50;
 
-
+    public static final String kRed = "FF9797";
+    public static final String kOrange = "FFCC66";
+    public static final String kGreen = "97FF97";
+    public static final String kGrey = "AEAEAE";
     
     private Constants()
     {

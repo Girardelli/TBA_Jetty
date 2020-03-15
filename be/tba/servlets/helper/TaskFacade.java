@@ -102,12 +102,15 @@ public class TaskFacade
             if (vTask.getIsRecuring() && parms.getParameter(Constants.TASK_IS_RECURING) == null)
             {
                 // stop recuring task
+               log.info("stop recuring task");
+               
                 Calendar mCalendar = Calendar.getInstance();
                 vTask.setStopTime(mCalendar.getTimeInMillis());
             }
             else if (!vTask.getIsRecuring() && parms.getParameter(Constants.TASK_IS_RECURING) != null)
             {
                 // start recuring task
+               log.info("start recuring task");
                 Calendar mCalendar = Calendar.getInstance();
 
                 vTask.setStartTime(mCalendar.getTimeInMillis());
@@ -172,7 +175,7 @@ public class TaskFacade
        int id = 0;
        WorkOrderSqlAdapter vWorkOrderSession = new WorkOrderSqlAdapter();
        String idStr = parms.getParameter(Constants.WORKORDER_ID);
-       String dueDate = "";
+       String dueDate = null;
        if (parms.getParameter(Constants.WORKORDER_DUEDATE) != null)
           dueDate = parms.getParameter(Constants.WORKORDER_DUEDATE);
        if (dueDate != null && dueDate.contains("-"))
@@ -189,7 +192,8 @@ public class TaskFacade
              workorder.title = parms.getParameter(Constants.WORKORDER_TITLE);
           if (parms.getParameter(Constants.WORKORDER_INSTRUCTION) != null)
              workorder.instructions = parms.getParameter(Constants.WORKORDER_INSTRUCTION);
-          workorder.dueDate = dueDate;
+          workorder.isUrgent = (parms.getParameter(Constants.WORKORDER_URGENT) != null);
+          if (dueDate != null) workorder.dueDate = dueDate;
           if ((session.getRole() == AccountRole.ADMIN || session.getRole() == AccountRole.EMPLOYEE) &&
                 parms.getParameter(Constants.WORKORDER_STATE) != null)
           {
@@ -213,6 +217,7 @@ public class TaskFacade
           workorder.title = parms.getParameter(Constants.WORKORDER_TITLE);
           workorder.instructions = parms.getParameter(Constants.WORKORDER_INSTRUCTION);
           workorder.dueDate = dueDate;
+          workorder.isUrgent = (parms.getParameter(Constants.WORKORDER_URGENT) != null);
           id = vWorkOrderSession.addRow(session, workorder);
           TaskFacade.log.info("new idStr=" + idStr + ", " + workorder.toString());
           

@@ -1,5 +1,9 @@
 package be.tba.ejb.task.interfaces;
 
+import java.util.Calendar;
+
+import be.tba.util.constants.Constants;
+
 public class WorkOrderData extends be.tba.util.data.AbstractData
 {
    /**
@@ -7,7 +11,7 @@ public class WorkOrderData extends be.tba.util.data.AbstractData
     */
    private static final long serialVersionUID = -7869155937316442608L;
    
-   public enum State { kSubmitted, kBusy, kDone, kArchived };
+   static public enum State { kSubmitted, kBusy, kDone, kArchived };
    
    static public State StateStr2Enum(String str)
    {
@@ -42,18 +46,23 @@ public class WorkOrderData extends be.tba.util.data.AbstractData
    public int taskId;
    public String title;
    public String instructions;
+   public String startDate;
    public String dueDate;
    public State state;
+   public boolean isUrgent;
    
    public WorkOrderData()
    {
+      Calendar vToday = Calendar.getInstance();
       id = 0;
       accountId = 0;
       taskId = 0;
       title = "";
       instructions = "";
+      startDate = new String(vToday.get(Calendar.DAY_OF_MONTH) + " " + Constants.MONTHS[vToday.get(Calendar.MONTH)] + " " + vToday.get(Calendar.YEAR));
       dueDate = "";
       state = State.kSubmitted;
+      isUrgent = false;
    }
   
    public WorkOrderData(WorkOrderData otherData) 
@@ -63,8 +72,10 @@ public class WorkOrderData extends be.tba.util.data.AbstractData
       taskId = otherData.taskId;
       title = otherData.title;
       instructions = otherData.instructions;
+      startDate = otherData.startDate;
       dueDate = otherData.dueDate;
       state = otherData.state;
+      isUrgent = otherData.isUrgent;
    }
 
    public int getId()
@@ -84,11 +95,14 @@ public class WorkOrderData extends be.tba.util.data.AbstractData
        str.append((this.title != null) ? escapeQuotes(this.title) : "");
        str.append("',Instructions='");
        str.append((this.instructions != null) ? escapeQuotes(this.instructions) : "");
+       str.append("',StartDate='");
+       str.append((this.startDate != null) ? this.startDate : "");
        str.append("',DueDate='");
        str.append((this.dueDate != null) ? this.dueDate : "");
        str.append("',State='");
        str.append(state.name());
-       str.append("'");
+       str.append("',IsUrgent=");
+       str.append(isUrgent);
        return (str.toString());
    }
 
@@ -106,10 +120,13 @@ public class WorkOrderData extends be.tba.util.data.AbstractData
        str.append("','");
        str.append((this.instructions != null) ? escapeQuotes(this.instructions) : "");
        str.append("','");
+       str.append((this.startDate != null) ? this.startDate : "");
+       str.append("','");
        str.append((this.dueDate != null) ? this.dueDate : "");
        str.append("','");
        str.append(state.name());
-       str.append("'");
+       str.append("',");
+       str.append(isUrgent);
        return (str.toString());
    }
 

@@ -117,6 +117,13 @@ final public class WebSession implements Serializable
         mConnection = DriverManager.getConnection(mysqlURL);
     }
 
+    
+    public void userInit(String userId, String key)
+    {
+        mUserId = userId;
+        mId = key;
+    }
+    
     public void Close()
     {
         if (mConnection != null)
@@ -192,6 +199,11 @@ final public class WebSession implements Serializable
     public String getSessionId()
     {
         return mId;
+    }
+
+    public void setSessionId(String sessionId)
+    {
+        mId = sessionId;
     }
 
     public void setCallFilter(CallFilter filter)
@@ -391,6 +403,7 @@ final public class WebSession implements Serializable
         }
         else
             ++mMonthsBack;
+        System.out.println("incrementMonthsBack() returns " + mMonthsBack);
         return mMonthsBack;
     }
 
@@ -403,6 +416,7 @@ final public class WebSession implements Serializable
         }
         else
             --mMonthsBack;
+        System.out.println("decrementMonthsBack() returns " + mMonthsBack);
         return mMonthsBack;
     }
 
@@ -430,20 +444,6 @@ final public class WebSession implements Serializable
     public void setFintroProcessLog(String fileName)
     {
         mFintroProcessLog = fileName;
-    }
-    
-    public void init(String userid, String sessionId)
-    {
-        mId = sessionId;
-        mRole = AccountRole.CUSTOMER;
-        mUserId = userid;
-        mCallFilter.init();
-        Calendar calendar = Calendar.getInstance();
-        mLastAccess = calendar.getTimeInMillis();
-        mMonthsBack = calendar.get(Calendar.MONTH);
-        mYear = calendar.get(Calendar.YEAR);
-        mInvoiceId = -1;
-        mDaysBack = 0;
     }
     
     public Session getWsSession()
@@ -512,17 +512,18 @@ final public class WebSession implements Serializable
     {
     	mSqlTimer += cnt;
     }
-    
 
     private void init()
     {
         mCallFilter = new CallFilter();
+        mCallFilter.init();
         Calendar calendar = Calendar.getInstance();
         mLastAccess = calendar.getTimeInMillis();
         mMonthsBack = calendar.get(Calendar.MONTH);
         mDaysBack = 0;
         mYear = calendar.get(Calendar.YEAR);
-
+        mRole = AccountRole.CUSTOMER;
+        mInvoiceId = -1;
     }
 
 }

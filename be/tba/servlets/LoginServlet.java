@@ -25,7 +25,6 @@ import org.apache.commons.logging.LogFactory;
 
 import be.tba.ejb.account.interfaces.AccountEntityData;
 import be.tba.ejb.account.session.AccountSqlAdapter;
-import be.tba.servlets.helper.TaskFacade;
 import be.tba.servlets.session.SessionManager;
 import be.tba.servlets.session.WebSession;
 import be.tba.util.constants.AccountRole;
@@ -82,19 +81,10 @@ public class LoginServlet extends HttpServlet
                     throw new SystemErrorException("User id or password null.");
 
                 AccountEntityData vAccount = null;
-                if (vUserId.equals(Constants.MASTER_LOGIN_NAME))
-                {
-                    vAccount = new AccountEntityData();
-                    vAccount.setRole(AccountRole.ADMIN.getShort());
-                   // System.out.println("LoginServlet: Master logged in");
-                }
-                else
-                {
-                    vSession = new WebSession();
-                    vAccountSession = new AccountSqlAdapter();
-                    vAccount = vAccountSession.logIn(vSession, vUserId, vPassword);
-                    System.out.println("LoginServlet: " + vAccount.getFullName() + " logged in.");
-                }
+                 vSession = new WebSession();
+                 vAccountSession = new AccountSqlAdapter();
+                 vAccount = vAccountSession.logIn(vSession, vUserId, vPassword);
+                 System.out.println("LoginServlet: " + vAccount.getFullName() + " logged in.");
 
                 if (!vAccount.getIsRegistered())
                 {
@@ -103,18 +93,12 @@ public class LoginServlet extends HttpServlet
                     req.setAttribute(Constants.ERROR_VECTOR, vErrorList);
                     rd = sc.getRequestDispatcher(Constants.REGISTER_JSP);
                 }
-                else if (vAccount.getRole().equals(AccountRole.ADMIN.getShort()) || vAccount.getRole().equals(AccountRole.CUSTOMER.getShort()) || vAccount.getRole().equals(AccountRole.SUBCUSTOMER.getShort()))
+                else if (vAccount.getRole().equals(AccountRole.CUSTOMER.getShort()) || vAccount.getRole().equals(AccountRole.SUBCUSTOMER.getShort()))
                 {
                     // Customer with access has logged in.
                     HttpSession httpSession = req.getSession();
-                    if (vSession == null)
-                    {
-                        vSession = new WebSession();
-                    }
                     httpSession.setAttribute(Constants.SESSION_OBJ, vSession);
-                    String vKey = SessionManager.getInstance().add(vSession);
-
-                    vSession.init(vUserId, vKey);
+                    SessionManager.getInstance().add(vSession, vUserId);
                     vSession.setRole(AccountRole.fromShort(vAccount.getRole()));
                     vSession.setSessionFwdNr(vAccount.getFwdNumber());
                     vSession.setAccountId(vAccount.getId());
@@ -161,8 +145,7 @@ public class LoginServlet extends HttpServlet
                     }
                     else
                     {
-                        String vKey = SessionManager.getInstance().add(vSession);
-                        vSession.init(vUserId, vKey);
+                        SessionManager.getInstance().add(vSession, vUserId);
                         vSession.setRole(AccountRole.CUSTOMER);
                         vSession.setSessionFwdNr(req.getParameter(Constants.ACCOUNT_REGCODE));
                         vSession.setAccountId(AccountCache.getInstance().get(vSession.getSessionFwdNr()).getId());
@@ -220,7 +203,7 @@ public class LoginServlet extends HttpServlet
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            //e.printStackTrace();
             req.setAttribute(Constants.ERROR_TXT, "Onbekende error! Meldt deze error bij <a href=\"mailto:webmaster@thebusinessassistant.be\">webmaster@thebusinessassistant.be</a>.");
             rd = sc.getRequestDispatcher(Constants.PROTECT_FAIL_JSP);
         }

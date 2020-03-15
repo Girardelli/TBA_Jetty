@@ -35,24 +35,26 @@ final public class SessionManager
       return mInstance;
    }
 
-   public String add(WebSession session)
+   synchronized public void add(WebSession session, String userId)
    {
-      String vKey = generateId();
-      mMap.put(vKey, session);
-      System.out.println("New session added with id " + vKey);
-      return vKey;
+      WebSession ses = getSessionForUser(userId);
+      if (ses != null)
+      {
+         removeAndClose(ses.getSessionId());
+      }
+      session.userInit(userId, generateId());
+      mMap.put(session.getSessionId(), session);
+      System.out.println("New session added with id " + session.getSessionId());
    }
 
-   public WebSession remove(String sessionId)
+   synchronized public WebSession remove(String sessionId)
    {
       if (sessionId == null)
          return null;
-      WebSession vSession = (WebSession) mMap.get(sessionId);
-      vSession.Close();
-      return (WebSession) mMap.remove(sessionId);
+      return removeAndClose(sessionId);
    }
 
-   public WebSession getSession(String sessionId, String caller) throws AccessDeniedException, LostSessionException
+   synchronized public WebSession getSession(String sessionId, String caller) throws AccessDeniedException, LostSessionException
    {
       if (sessionId == null)
          throw new AccessDeniedException("Error: geen session id in de request.");
@@ -68,22 +70,8 @@ final public class SessionManager
       return vState;
    }
 
-   public String getIdForUser(String user)
-   {
-      for (Iterator<WebSession> i = mMap.values().iterator(); i.hasNext();)
-      {
-         WebSession session = i.next();
-         //System.out.println("getIdForUser: " + user + "=? sessionAccountId=" + session.getAccountId());
-         if (user.equals(session.getUserId()))
-         {
-            return session.getSessionId();
-         }
-      }
-      return "";
 
-   }
-
-   public Collection<WebSession> getActiveWebSockets()
+   synchronized public Collection<WebSession> getActiveWebSockets()
    {
       Collection<WebSession> vValuesList = mMap.values();
       Collection<WebSession> result = new Vector<WebSession>();
@@ -98,7 +86,7 @@ final public class SessionManager
       return result;
    }
 
-   public void clean()
+   synchronized public void clean()
    {
       int cnt = 0;
       Set<String> vKeySet = mMap.keySet();
@@ -135,5 +123,28 @@ final public class SessionManager
       } while (mMap.containsKey(vKeyStr));
       return vKeyStr;
    }
+
+   private WebSession getSessionForUser(String user)
+   {
+      for (Iterator<WebSession> i = mMap.values().iterator(); i.hasNext();)
+      {
+         WebSession session = i.next();
+         //System.out.println("getIdForUser: " + user + "=? sessionAccountId=" + session.getAccountId());
+         if (user.equals(session.getUserId()))
+         {
+            return session;
+         }
+      }
+      return null;
+   }
+   
+   private WebSession removeAndClose(String sessionId)
+   {
+      WebSession vSession = (WebSession) mMap.get(sessionId);
+      vSession.Close();
+      return (WebSession) mMap.remove(sessionId);
+   }
+
+
 
 }

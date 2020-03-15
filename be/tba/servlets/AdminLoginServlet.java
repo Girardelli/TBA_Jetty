@@ -60,8 +60,7 @@ public class AdminLoginServlet extends HttpServlet
             {
                 if (vSession == null)
                     vSession = new WebSession();
-                String vKey = SessionManager.getInstance().add(vSession);
-                vSession.init(vUserId, vKey);
+                SessionManager.getInstance().add(vSession, vUserId);
                 vSession.setRole(AccountRole.fromShort(vAccount.getRole()));
                 vSession.setSessionFwdNr(vAccount.getFwdNumber());
                 vSession.setAccountId(vAccount.getId());
@@ -99,7 +98,7 @@ public class AdminLoginServlet extends HttpServlet
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            //e.printStackTrace();
             System.out.println("AdminLoginServlet: Mallicious admin access attempt. userid:" + vUserId + ", password:" + vPassword);
             // print error page!!
             String vMsg = e.getMessage();

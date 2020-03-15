@@ -3,10 +3,8 @@ package be.tba.servlets;
 import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
-import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.Vector;
-import java.util.Collection;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -80,20 +78,12 @@ public class AdminDispatchServlet extends HttpServlet
          if (ServletFileUpload.isMultipartContent(req))
          {
             fileUploader = new FileUploader(req);
-            String accountId = fileUploader.getParameter(Constants.ACCOUNT_ID);
-            AccountEntityData custAccount = AccountCache.getInstance().get(Integer.parseInt(accountId));
-            if (custAccount == null) 
-            {
-               throw new Exception("Klant niet bekend voor deze file upload.");
-            }
-            fileUploader.setStoragePath(Constants.WORKORDER_FILEUPLOAD_DIR + File.separator + Tools.spaces2underscores(custAccount.getFullName()) + File.separator + "done");
             fileUploader.upload(req);
             params = fileUploader;
          }
          else
          {
             params = new SessionParms(req);
-            
          }
          vAction = params.getParameter(Constants.SRV_ACTION);
 
@@ -105,7 +95,7 @@ public class AdminDispatchServlet extends HttpServlet
          vSession.resetSqlTimer();
          SessionManager.getInstance().getSession(vSession.getSessionId(), "AdminDispatchServlet(" + vAction + ")");
 
-         System.out.println("\nAdminDispatchServlet: userid:" + vSession.getUserId() + ", websessionid:" + vSession.getSessionId() + " action=" + vAction);
+         log.info("\nAdminDispatchServlet: userid:" + vSession.getUserId() + ", websessionid:" + vSession.getSessionId() + " action=" + vAction);
 
          synchronized (vSession)
          {
@@ -859,7 +849,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.PROCESS_FINTRO_XLSX:
             {
-               fileUploader.upload(req);
+               // default storage path is used
                uploadedFile = fileUploader.waitTillFinished();
                vSession.setUploadedFileName(uploadedFile);
                System.out.println("PROCESS_FINTRO_XLSX: file ready for parsing: " + vSession.getUploadedFileName());
@@ -1112,7 +1102,13 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.UPLOAD_WORKORDER_FILE:
             {
-               fileUploader.upload(req);
+               String accountId = params.getParameter(Constants.ACCOUNT_ID);
+               AccountEntityData custAccount = AccountCache.getInstance().get(Integer.parseInt(accountId));
+               if (custAccount == null)
+               {
+                  throw new Exception("Klant niet bekend voor deze file upload.");
+               }
+               fileUploader.setStoragePath(Constants.WORKORDER_FILEUPLOAD_DIR + File.separator + Tools.spaces2underscores(custAccount.getFullName()) + File.separator + "done");
                uploadedFile = fileUploader.waitTillFinished();
                if (TaskFacade.addWorkOrderFile(params, vSession, uploadedFile))
                {

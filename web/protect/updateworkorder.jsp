@@ -49,6 +49,7 @@ try
    
    Calendar dueData = CallCalendar.str2Calendar(workOrder.dueDate);
    String curDueDate = String.format("%04d-%02d-%02d", dueData.get(Calendar.YEAR), dueData.get(Calendar.MONTH)+1, dueData.get(Calendar.DAY_OF_MONTH));
+   System.out.println("endDate=" + endDate + ", curDueDate=" + curDueDate);
 %>
 
 <body>
@@ -62,12 +63,22 @@ try
 		<br><br>
         <form name="workoderform1" method="POST" action="/tba/CustomerDispatch">
         <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.ACTION_SAVE_WORKORDER%>"> 
-		<input type=hidden name=<%=Constants.WORKORDER_FILE_ID%> value=""> 
+		<input type=hidden name=<%=Constants.WORKORDER_FILE_ID%> value=null> 
+        <input type=hidden name=<%=Constants.WORKORDER_ID%> value="<%=workOrder.id%>"> 
         <table border="0" cellspacing="4" cellpadding="1">
             <tr>
                <td width="10"></td>
                <td width="210" valign="middle" class="bodysubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Titel</td>
-               <td width="530" valign="middle"><input type=text size=70 name=<%=Constants.WORKORDER_TITLE%> value="<%=workOrder.title%>"></td>
+               <td width="530" valign="middle"><input type=text size=65 name=<%=Constants.WORKORDER_TITLE%> value="<%=workOrder.title%>">
+               </td>
+            </tr>
+            <tr>
+               <td width="10"></td>
+               <td width="210" valign="middle" class="bodysubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Dringend actie nemen</td>
+               <td width="530" valign="middle">
+               <input type="checkbox" id="cbx1" style="display:none" name=<%=Constants.WORKORDER_URGENT%><%=(workOrder.isUrgent ? " checked=\"checked\"" : "")%> />
+               <label for="cbx1" class="toggle"><span></span></label>
+               </td>
             </tr>
             <tr>
                <td width="10"></td>
@@ -95,7 +106,7 @@ if (workOrder.state == WorkOrderData.State.kDone)
                <td width="210" valign="middle" class="bodysubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Gewenste opleverdatum</td>
                <td width="530" valign="middle">
                <div id="position">
-                    <input class="date-input-native" id="dateTba" type="date" name="<%=Constants.WORKORDER_DUEDATE%>" min="<%=today%>" max="<%=endDate%>" title="klik om de datum te wijzigen">
+                    <input class="date-input-native" id="dateTba" type="date" name="<%=Constants.WORKORDER_DUEDATE%>" min="<%=today%>" max="<%=endDate%>" value="<%=curDueDate%>" title="klik om de datum te wijzigen">
                     <input class="date-input-fallback" id="alt" type="text" placeholder="<%=curDueDate%>">
                     <div id="picker" hidden></div>
                </div>     
@@ -133,24 +144,13 @@ else
 }
 %>
   </table>
-  </form>
-   <form name="loadfileform" method="POST" action="/tba/CustomerDispatch" enctype="multipart/form-data">
-   <input class="tbabutton" type=file name=<%=Constants.WORKORDER_FILE%> value="" accept=".*">
-   <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.UPLOAD_WORKORDER_FILE%>">
-  <input type=hidden name=<%=Constants.WORKORDER_TITLE%> value=""> 
-  <input type=hidden name=<%=Constants.WORKORDER_INSTRUCTION%> value=""> 
-  <input type=hidden name=<%=Constants.WORKORDER_DUEDATE%> value=""> 
-  <input type=hidden name=<%=Constants.WORKORDER_ID%> value="<%=workOrder.id%>"> 
-   <input class="tbabutton" type=submit value=" Laad de file op " onclick="uploadFile()">
-   </form>
+     <input class="tbabutton" type=file name=<%=Constants.WORKORDER_FILE%> value=null accept=".*">
+     <input class="tbabutton" type=submit value=" Laad de file op " onclick="uploadFile()">
   <br>
   <br>
   <span class="bodysubtitle">Opgeleverde bestanden door The Business Assistant:</span>
   <br>
-  <form name="workoderform3" method="POST" action="/tba/CustomerDispatch">
-  <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.ACTION_SAVE_WORKORDER%>"> 
-  <input type=hidden name=<%=Constants.WORKORDER_FILE_ID%> value=""> 
-   <table border="0" cellspacing="4" cellpadding="1">
+     <table border="0" cellspacing="4" cellpadding="1">
 <%
 if (outputFiles.isEmpty())
 {
@@ -176,19 +176,11 @@ else
    }
 }
 %>
-</table>
-</form>
-<form name="workoderform2" method="POST" action="/tba/CustomerDispatch">
-<br><br>
-        <input type=hidden name=<%=Constants.WORKORDER_TITLE%> value=""> 
-        <input type=hidden name=<%=Constants.WORKORDER_INSTRUCTION%> value=""> 
-        <input type=hidden name=<%=Constants.WORKORDER_DUEDATE%> value=""> 
-        <input type=hidden name=<%=Constants.WORKORDER_FILE_ID%> value=""> 
-		<input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.ACTION_SAVE_WORKORDER%>"> 
-        <input type=hidden name=<%=Constants.WORKORDER_ID%> value="<%=workOrder.id%>"> 
+    </table>
+   <br><br>
 		<input class="tbabutton" type=submit value="Bewaar" onclick="save();"> 
 		<input class="tbabutton" type=submit value="Cancel" onclick="cancelUpdate();">
-</form>
+   </form>
 </td></tr>
  </table>
 </body>
@@ -204,14 +196,12 @@ catch (Exception ex)
 
 function cancelUpdate()
 {
-  document.workoderform2.<%=Constants.SRV_ACTION%>.value="<%=Constants.ACTION_GOTO_WORKORDERS%>";
+  document.workoderform1.<%=Constants.SRV_ACTION%>.value="<%=Constants.ACTION_GOTO_WORKORDERS%>";
 }
 
 function save()
 {
-    document.workoderform2.<%=Constants.WORKORDER_TITLE%>.value=document.workoderform1.<%=Constants.WORKORDER_TITLE%>.value;
-    document.workoderform2.<%=Constants.WORKORDER_INSTRUCTION%>.value=document.workoderform1.<%=Constants.WORKORDER_INSTRUCTION%>.value;
-    document.workoderform2.<%=Constants.WORKORDER_DUEDATE%>.value=document.workoderform1.<%=Constants.WORKORDER_DUEDATE%>.value;
+    document.workoderform1.<%=Constants.SRV_ACTION%>.value="<%=Constants.ACTION_SAVE_WORKORDER%>";
 }
 
 function removeFile(fileId)
@@ -220,30 +210,22 @@ function removeFile(fileId)
     document.workoderform1.<%=Constants.WORKORDER_FILE_ID%>.value=fileId;
 }
 
-function removeOutFile(fileId)
-{
-    document.workoderform3.<%=Constants.SRV_ACTION%>.value="<%=Constants.DELETE_WORKORDER_FILE%>";
-    document.workoderform3.<%=Constants.WORKORDER_FILE_ID%>.value=fileId;
-}
-
 function downloadOutFile(fileId)
 {
-    document.workoderform3.<%=Constants.SRV_ACTION%>.value="<%=Constants.DOWNLOAD_WORKORDER_FILE%>";
-    document.workoderform3.<%=Constants.WORKORDER_FILE_ID%>.value=fileId;
-    document.workoderform3.action="/tba/custdownload";
+    document.workoderform1.<%=Constants.SRV_ACTION%>.value="<%=Constants.DOWNLOAD_WORKORDER_FILE%>";
+    document.workoderform1.<%=Constants.WORKORDER_FILE_ID%>.value=fileId;
+    document.workoderform1.action="/tba/custdownload";
 }
 
 function uploadFile()
 {
-  document.loadfileform.<%=Constants.SRV_ACTION%>.value="<%=Constants.UPLOAD_WORKORDER_FILE%>";
-  document.loadfileform.<%=Constants.WORKORDER_TITLE%>.value=document.workoderform1.<%=Constants.WORKORDER_TITLE%>.value;
-  document.loadfileform.<%=Constants.WORKORDER_INSTRUCTION%>.value=document.workoderform1.<%=Constants.WORKORDER_INSTRUCTION%>.value;
-  document.loadfileform.<%=Constants.WORKORDER_DUEDATE%>.value=document.workoderform1.<%=Constants.WORKORDER_DUEDATE%>.value;
+    document.workoderform1.enctype="multipart/form-data";
+    document.workoderform1.<%=Constants.SRV_ACTION%>.value="<%=Constants.UPLOAD_WORKORDER_FILE%>";
 }
 
 function archive(state)
 {
-    document.workoderform2.<%=Constants.WORKORDER_STATE%>.value=state;
+    document.workoderform1.<%=Constants.WORKORDER_STATE%>.value=state;
     save();
 }
 

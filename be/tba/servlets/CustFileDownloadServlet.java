@@ -13,24 +13,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import be.tba.ejb.invoice.interfaces.InvoiceEntityData;
-import be.tba.ejb.invoice.session.InvoiceSqlAdapter;
 import be.tba.ejb.task.interfaces.FileLocationData;
 import be.tba.ejb.task.session.FileLocationSqlAdapter;
-import be.tba.servlets.helper.AccountFacade;
-import be.tba.servlets.helper.InvoiceFacade;
-import be.tba.servlets.helper.TaskFacade;
 import be.tba.servlets.session.SessionManager;
 import be.tba.servlets.session.WebSession;
-import be.tba.util.constants.AccountRole;
 import be.tba.util.constants.Constants;
 import be.tba.util.exceptions.AccessDeniedException;
 import be.tba.util.exceptions.LostSessionException;
-import be.tba.util.file.FileUploader;
+import be.tba.util.session.SessionParms;
+import be.tba.util.session.SessionParmsInf;
 
 public class CustFileDownloadServlet extends HttpServlet
 {
@@ -50,7 +44,7 @@ public class CustFileDownloadServlet extends HttpServlet
       {
          HttpSession httpSession = request.getSession();
          vSession = (WebSession) httpSession.getAttribute(Constants.SESSION_OBJ);
-
+         SessionParmsInf params = new SessionParms(request);
          SessionManager.getInstance().getSession(vSession.getSessionId(), "FileDownloadServlet()");
 
          synchronized (vSession)
@@ -63,7 +57,8 @@ public class CustFileDownloadServlet extends HttpServlet
             // request
             // because such getXXX calls will implicitly call the parser which can only be
             // called once.
-            String vAction = (String) request.getParameter(Constants.SRV_ACTION);
+            String vAction = params.getParameter(Constants.SRV_ACTION);
+            log.info("Cust File Dowload, action=" + vAction);
 
             // ==============================================================================================
             // Download Fintro process log
@@ -73,7 +68,7 @@ public class CustFileDownloadServlet extends HttpServlet
             case Constants.DOWNLOAD_WORKORDER_FILE:
             {
                FileLocationSqlAdapter fileLocationSession = new FileLocationSqlAdapter();
-               FileLocationData fileData = fileLocationSession.getRow(vSession, Integer.parseInt((String) request.getParameter(Constants.WORKORDER_FILE_ID)));
+               FileLocationData fileData = fileLocationSession.getRow(vSession, Integer.parseInt((String) params.getParameter(Constants.WORKORDER_FILE_ID)));
                log.info(fileData.toString());
                if (fileData != null)
                {

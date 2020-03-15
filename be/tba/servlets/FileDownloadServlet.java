@@ -60,7 +60,7 @@ public class FileDownloadServlet extends HttpServlet
             // for example application/pdf, text/plain, text/html, image/jpg
             response.setContentType("text/plain");
 
-            String vAction = (String) request.getParameter(Constants.SRV_ACTION);
+            String vAction = (String) params.getParameter(Constants.SRV_ACTION);
 
             // ==============================================================================================
             // Download Fintro process log

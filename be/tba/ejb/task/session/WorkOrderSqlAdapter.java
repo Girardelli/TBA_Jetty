@@ -51,9 +51,11 @@ public class WorkOrderSqlAdapter  extends AbstractSqlAdapter<WorkOrderData>
          entry.taskId = rs.getInt(3);
          entry.title = null2EmpthyString(rs.getString(4));
          entry.instructions = null2EmpthyString(rs.getString(5));
-         entry.dueDate = null2EmpthyString(rs.getString(6));
-         entry.state = WorkOrderData.StateStr2Enum(null2EmpthyString(rs.getString(7)));
-          vVector.add(entry);
+         entry.startDate = null2EmpthyString(rs.getString(6));
+         entry.dueDate = null2EmpthyString(rs.getString(7));
+         entry.state = WorkOrderData.StateStr2Enum(null2EmpthyString(rs.getString(8)));
+         entry.isUrgent = rs.getBoolean(9);
+         vVector.add(entry);
       }
       return vVector;
    }

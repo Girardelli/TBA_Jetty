@@ -41,7 +41,7 @@ try
         <td valign="top" width="20" bgcolor="FFFFFF"></td>
 
         <!-- account list -->
-        <td valign="top" width="865" bgcolor="FFFFFF"><br>
+        <td valign="top" width="100%" bgcolor="FFFFFF"><br>
         <p><span class="bodytitle">Mijn opdrachten</span><br>
         <br>
         <input class="tbabutton" type=submit value=" Maak nieuwe opdracht " onclick="addWorkOrder();"> 
@@ -65,8 +65,9 @@ try
             <br>
             <table border="0" cellspacing="2" cellpadding="2">
                 <tr>
-                    <td width="30"></td> 
+                    <td width="50"></td> 
                     <td width="70" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Status</td>
+                    <td width="120" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Ingegeven op</td>
                     <td width="70" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Opleverdatum</td>
                     <td width="400" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Beschrijving</td>
                 </tr>
@@ -75,14 +76,36 @@ try
     
        for (WorkOrderData workorder :  workOrders)
        {
+          String bgColor = Constants.kGrey; // kArchived
+          if (workorder.state == WorkOrderData.State.kSubmitted)
+          {
+             bgColor = Constants.kRed;
+          }
+          else if (workorder.state == WorkOrderData.State.kBusy)
+          {
+             bgColor = Constants.kOrange;
+          }
+          else if (workorder.state == WorkOrderData.State.kDone)
+          {
+             bgColor = Constants.kGreen;
+          }
                 %>
                 <tr class="bodytekst" title="dubbel muisklik om de opdracht te openen" ondblclick="changeUrl('/tba/CustomerDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACTION_UPDATE_WORKORDER%>&<%=Constants.WORKORDER_ID%>=<%=workorder.id%>');">
-                    <td width="30"> 
+                    <td width="50"> 
                       <img src="/tba/images/waste.gif" onclick="openModal(<%=workorder.id%>)" title="verwijder" onMouseOver="this.style.cursor='pointer'">
+                    <%
+                    if (workorder.isUrgent)
+                    {
+                    %>
+                      &nbsp;<img src="/tba/images/important.gif" >
+                    <%
+                    }
+                    %>
                     </td>
-                    <td bgcolor=#FFCC66 width="70" valign="top"><%=WorkOrderData.getStateStr(workorder.state)%></td>
-                    <td bgcolor=#FFCC66 width="70" valign="top"><%=workorder.dueDate%></td>
-                    <td bgcolor=#FFCC66 width="400" valign="top"><%=workorder.title%></td>
+                    <td bgcolor=<%=bgColor%> width="70" valign="top"><%=WorkOrderData.getStateStr(workorder.state)%></td>
+                    <td bgcolor=<%=bgColor%> width="120" valign="top"><%=workorder.startDate%></td>
+                    <td bgcolor=<%=bgColor%> width="70" valign="top"><%=workorder.dueDate%></td>
+                    <td bgcolor=<%=bgColor%> width="400" valign="top"><%=workorder.title%></td>
                 </tr>
                 <%
         }
