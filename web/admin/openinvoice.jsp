@@ -54,7 +54,6 @@
 	
 			<!-- account list -->
 			<td valign="top" bgcolor="FFFFFF">
-				<br>
 			<%
 			   // check whether a Fintro file was uploaded
 									   	            String fintroFileName = vSession.getUploadedFileName();
@@ -119,11 +118,8 @@
 			                    out.println("<p><span class=\"bodysubtitle\"> Totaal openstaande facturen : " + vCostFormatter.format(vTotalInvoice) + " (Excl BTW)</span></p>");
 			%> 
 			<br>
-			<br>
 			<input class="tbabutton" type=submit name=action value=" Betaaldvlag zetten " onclick="setPayed();">
             </form>
-			<br>
-			<br>
 			<br>
 			<table border="0" cellspacing="2" cellpadding="2">
 				<tr>

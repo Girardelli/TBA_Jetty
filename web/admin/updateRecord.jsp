@@ -37,7 +37,7 @@ try {
       <!--Update Record jsp-->
       <tr>
          <td valign="top" width="30" bgcolor="FFFFFF"></td>
-         <td valign="top" bgcolor="FFFFFF"><br> <br> <span class="bodytitle"> Deze oproep is niet meer gekend in de database.</span> <br>
+         <td valign="top" bgcolor="FFFFFF"><br> <br> <span class="bodysubtitle"> Deze oproep is niet meer gekend in de database.</span> <br>
             <form name="calllistform1" method="POST" action="/tba/AdminDispatch">
                <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.GOTO_CANVAS%>"> <input class="tbabutton" type=submit value="Cancel" onclick="cancelUpdate();">
             </form></td>
@@ -76,15 +76,15 @@ try {
          <!--Update Record jsp-->
          <tr valign="top">
             <td width="30" bgcolor="FFFFFF"></td>
-            <td bgcolor="FFFFFF"><br> <br> <span class="bodytitle"> Voeg extra informatie toe aan oproep voor <%=((mCustomerData == null) ? "" : mCustomerData.getFullName())%>.
+            <td bgcolor="FFFFFF"><br> <br> <span class="bodysubtitle"> Voeg extra informatie toe aan oproep voor <%=((mCustomerData == null) ? "" : mCustomerData.getFullName())%>.
             </span> <br> <span class="bodytekst">
                   <table border="0" cellspacing="1" cellpadding="1">
                      <%
                         if (mCustomerData != null && mCustomerData.getHasSubCustomers()) {
                      %>
                      <tr>
-                        <td width="50"></td>
-                        <td width="170" valign="top" class="bodysubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Oproep voor</td>
+                        <td width="30"></td>
+                        <td width="250" valign="top" class="bodysubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Oproep voor</td>
                         <td width="530" valign="top"><select name="<%=Constants.ACCOUNT_SUB_CUSTOMER%>">
                               <option value="<%=mCustomerData.getFwdNumber()%>" selected>
                                  <%=mCustomerData.getFullName()%></option>
@@ -106,32 +106,32 @@ try {
                         }
                      %>
                      <tr>
-                        <td width="50"></td>
-                        <td width="170" valign="top" class="bodysubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Belangrijke oproep</td>
+                        <td width="30"></td>
+                        <td width="250" valign="top" class="bodysubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Belangrijke oproep</td>
                         <td width="530" valign="top" class="bodysubsubtitle"><input type=checkbox name=<%=Constants.RECORD_IMPORTANT%> value="<%=Constants.YES%>" <%=(mRecordData.getIsImportantCall() ? " checked" : "")%>>&nbsp;&nbsp;<img src="/tba/images/important.gif"
                            alt="belangrijke oproep!" height="13" border="0"></td>
                      </tr>
                      <tr>
-                        <td width="50"></td>
-                        <td width="170" valign="top" class="bodysubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;SMS verstuurd</td>
+                        <td width="30"></td>
+                        <td width="250" valign="top" class="bodysubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;SMS verstuurd</td>
                         <td width="530" valign="top" class="bodysubsubtitle"><input type=checkbox name=<%=Constants.RECORD_SMS%> value="<%=Constants.YES%>" <%=(mRecordData.getIsSmsCall() ? "checked=\"checked\"" : "")%>>&nbsp;&nbsp;<img src="/tba/images/sms.gif"
                            alt="wij hebben een SMS bericht gestuurd betreffende deze oproep" height="13" border="0"></td>
                      </tr>
                      <tr>
-                        <td width="50"></td>
-                        <td width="170" valign="top" class="bodysubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Afspraak toegevoegd</td>
+                        <td width="30"></td>
+                        <td width="250" valign="top" class="bodysubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Afspraak toegevoegd</td>
                         <td width="530" valign="top" class="bodysubsubtitle"><input type=checkbox name=<%=Constants.RECORD_AGENDA%> value="<%=Constants.YES%>" <%=(mRecordData.getIsAgendaCall() ? "checked=\"checked\"" : "")%>>&nbsp;&nbsp;<img src="/tba/images/agenda.gif"
                            alt="afspraak toegevoegd in uw agenda" height="13" border="0"></td>
                      </tr>
                      <tr>
-                        <td width="50"></td>
-                        <td width="170" valign="top" class="bodysubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Oproep doorgeschakeld</td>
+                        <td width="30"></td>
+                        <td width="250" valign="top" class="bodysubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Oproep doorgeschakeld</td>
                         <td width="530" valign="top" class="bodysubsubtitle"><input type=checkbox name=<%=Constants.RECORD_FORWARD%> value="<%=Constants.YES%>" <%=(mRecordData.getIsForwardCall() ? "checked=\"checked\"" : "")%>>&nbsp;&nbsp;<img src="/tba/images/telefoon.gif"
                            alt="oproep doorgeschakeld naar u" height="13" border="0"></td>
                      </tr>
                      <tr>
-                        <td width="50"></td>
-                        <td width="170" valign="top" class="bodysubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Fax</td>
+                        <td width="30"></td>
+                        <td width="250" valign="top" class="bodysubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Fax</td>
                         <td width="530" valign="top" class="bodysubsubtitle"><input type=checkbox name=<%=Constants.RECORD_FAX%> value="<%=Constants.YES%>" <%=(mRecordData.getIsFaxCall() ? "checked=\"checked\"" : "")%>>&nbsp;&nbsp;<img src="/tba/images/fax.gif"
                            alt="binnenkomende fax voor u verwerkt" height="13" border="0"></td>
                      </tr>
@@ -158,33 +158,33 @@ try {
                      				}
                      %>
                      <tr>
-                        <td width="50"></td>
-                        <td width="170" valign="top" class="bodysubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Datum</td>
+                        <td width="30"></td>
+                        <td width="250" valign="top" class="bodysubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Datum</td>
                         <td width="530" valign="top" class="bodytekst"><%=mRecordData.getDate()%></td>
                      </tr>
                      <tr>
-                        <td width="50"></td>
-                        <td width="170" valign="top" class="bodysubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Uur</td>
+                        <td width="30"></td>
+                        <td width="250" valign="top" class="bodysubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Uur</td>
                         <td width="530" valign="top" class="bodytekst"><%=mRecordData.getTime()%></td>
                      </tr>
                      <tr>
-                        <td width="50"></td>
-                        <td width="170" valign="top" class="bodysubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;<%=vDirStr%></td>
+                        <td width="30"></td>
+                        <td width="250" valign="top" class="bodysubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;<%=vDirStr%></td>
                         <td width="530" valign="top"><%=vNumberHtml%></td>
                      </tr>
                      <tr>
-                        <td width="50"></td>
-                        <td width="170" valign="top" class="bodysubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Naam</td>
+                        <td width="30"></td>
+                        <td width="250" valign="top" class="bodysubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Naam</td>
                         <td width="530" valign="top"><input type=text size=30 name=<%=Constants.RECORD_CALLER_NAME%> value="<%=mRecordData.getName()%>"></td>
                      </tr>
                      <tr>
-                        <td width="50"></td>
-                        <td width="170" valign="top" class="bodysubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Omschrijving</td>
+                        <td width="30"></td>
+                        <td width="250" valign="top" class="bodysubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Omschrijving</td>
                         <td width="530" valign="top"><textarea name=<%=Constants.RECORD_SHORT_TEXT%> rows=10 cols=70><%=(String) mRecordData.getShortDescription()%></textarea></td>
                      </tr>
                      <tr>
-                        <td width="50"></td>
-                        <td width="170" valign="top" class="bodysubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Extra Informatie</td>
+                        <td width="30"></td>
+                        <td width="250" valign="top" class="bodysubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Extra Informatie</td>
                         <td width="530" valign="top"><textarea name=<%=Constants.RECORD_LONG_TEXT%> rows=10 cols=70><%=(String) mRecordData.getLongDescription()%></textarea></td>
                      </tr>
                      <%
@@ -192,8 +192,8 @@ try {
                      				{
                      %>
                      <tr>
-                        <td width="50"></td>
-                        <td width="170" valign="top" class="bodysubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Andere klant</td>
+                        <td width="30"></td>
+                        <td width="250" valign="top" class="bodysubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Andere klant</td>
                         <td width="530" valign="top">
                            <%
                               out.println("<select name=\"" + Constants.ACCOUNT_FORWARD_NUMBER + "\">");
@@ -233,7 +233,7 @@ try {
             <td>
                <table>
                   <tr>
-                     <td bgcolor="FFFFFF"><br> <br> <span class="bodytitle">Informatie die u moet weten voor deze klant.</span> <br></td>
+                     <td bgcolor="FFFFFF"><br> <br> <span class="bodysubtitle">Informatie die u moet weten voor deze klant.</span> <br></td>
                   </tr>
                   <tr>
                      <td class="tdborder" valign="top" width="400"><%=mCustomerData.getCallProcessInfo()%></td>

@@ -505,7 +505,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
    /**
     * @ejb:interface-method view-type="remote"
     */
-   public Collection<CallRecordEntityData> getIncomingCallsForMonth(WebSession webSession, int month, int year)
+   public Collection<CallRecordEntityData> getMailedCallsForMonth(WebSession webSession, int month, int year)
    {
       try
       {
@@ -513,7 +513,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
          long vStartTime = vCalendar.getStartOfMonth(month, year);
          long vEndTime = vCalendar.getEndOfMonth(month, year);
 
-         Collection<CallRecordEntityData> vCollection = executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE TimeStamp>" + vStartTime + " AND TimeStamp<=" + vEndTime + " AND IsMailed=TRUE AND isIncomingCall=TRUE");
+         Collection<CallRecordEntityData> vCollection = executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE TimeStamp>" + vStartTime + " AND TimeStamp<=" + vEndTime + " AND IsMailed=TRUE ORDER BY TimeStamp ASC");
          return vCollection;
       } catch (Exception e)
       {

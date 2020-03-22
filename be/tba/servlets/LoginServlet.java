@@ -56,7 +56,7 @@ public class LoginServlet extends HttpServlet
 
         try
         {
-
+           sc = getServletContext();
             String vAction = (String) req.getParameter(Constants.SRV_ACTION);
             if (vAction == null)
             {
@@ -66,7 +66,6 @@ public class LoginServlet extends HttpServlet
             }
             //System.out.println("LoginServlet: action=" + vAction);
 
-            sc = getServletContext();
             rd = sc.getRequestDispatcher(Constants.REGISTER_JSP);
 
             switch (vAction)

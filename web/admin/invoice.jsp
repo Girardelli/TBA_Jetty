@@ -179,68 +179,68 @@
         <br><br>Het factuurnummer is bevrozen en kan niet meer aangepast worden.<br>
         <table  border="0" cellspacing="2" cellpadding="2">
             <tr>
-                <td width="250" valign="top" class="bodysubtitle">&nbsp;Factuur nummer</td>
+                <td width="250" valign="top" class="bodysubsubtitle">&nbsp;Factuur nummer</td>
                 <td width="10" valign="top">:</td>
                 <td width="400" valign="top"> <%=vInvoiceData.getInvoiceNr()%>
                 </td>
             </tr>
             <br>
             <tr>
-                <td width="250" valign="top" class="bodysubtitle">&nbsp;FintroID</td>
+                <td width="250" valign="top" class="bodysubsubtitle">&nbsp;FintroID</td>
                 <td width="10" valign="top">:</td>
                 <td width="400" valign="top"> <%=fintroId%>
                 </td>
             </tr>
             <tr>
-                <td width="250" valign="top" class="bodysubtitle">&nbsp;Valuta Datum</td>
+                <td width="250" valign="top" class="bodysubsubtitle">&nbsp;Valuta Datum</td>
                 <td width="10" valign="top">:</td>
                 <td width="400" valign="top"> <%=valutaDate%>
                 </td>
             </tr>
             <tr>
-                <td width="250" valign="top" class="bodysubtitle">&nbsp;Betaald op</td>
+                <td width="250" valign="top" class="bodysubsubtitle">&nbsp;Betaald op</td>
                 <td width="10" valign="top">:</td>
                 <td width="400" valign="top"> <%=payDate%>
                 </td>
             </tr>
             <tr>
-                <td width="250" valign="top" class="bodysubtitle">&nbsp;Mededeling</td>
+                <td width="250" valign="top" class="bodysubsubtitle">&nbsp;Mededeling</td>
                 <td width="10" valign="top">:</td>
                 <td width="400" valign="top"> <%=message%>
                 </td>
             </tr>
             <tr>
-                <td width="250" valign="top" class="bodysubtitle">&nbsp;Van Banknummer</td>
+                <td width="250" valign="top" class="bodysubsubtitle">&nbsp;Van Banknummer</td>
                 <td width="10" valign="top">:</td>
                 <td width="400" valign="top"> <%=fromBankNr%>
                 </td>
             </tr>
             <tr>
-                <td width="250" valign="top" class="bodysubtitle">&nbsp;Bedrag (excl BTW)</td>
+                <td width="250" valign="top" class="bodysubsubtitle">&nbsp;Bedrag (excl BTW)</td>
                 <td width="10" valign="top">:</td>
                 <td width="400" valign="top"><b> <%=costFormatter.format(vInvoiceData.getTotalCost())%></b>
                 </td>
             </tr>
             <tr>
-                <td width="250" valign="top" class="bodysubtitle">&nbsp;Gestructureerde mededeling</td>
+                <td width="250" valign="top" class="bodysubsubtitle">&nbsp;Gestructureerde mededeling</td>
                 <td width="10" valign="top">:</td>
                 <td width="400" valign="top"> <%=vInvoiceData.getStructuredId()%>
                 </td>
             </tr>
             <tr>
-                <td width="250" valign="top" class="bodysubtitle">&nbsp;PDF bestand</td>
+                <td width="250" valign="top" class="bodysubsubtitle">&nbsp;PDF bestand</td>
                 <td width="10" valign="top">:</td>
                 <td width="400" valign="top"> <%=vInvoiceData.getFileName()%>
                 </td>
             </tr>
             <tr>
-                <td width="250" valign="top" class="bodysubtitle">&nbsp;Klant referencie</td>
+                <td width="250" valign="top" class="bodysubsubtitle">&nbsp;Klant referencie</td>
                 <td width="10" valign="top">:</td>
                 <td width="400" valign="top"> <%=vInvoiceData.getCustomerRef().isEmpty()?"-":vInvoiceData.getCustomerRef()%>
                 </td>
             </tr>
              <tr>
-                <td width="250" valign="top" class="bodysubtitle">&nbsp;Informatie</td>
+                <td width="250" valign="top" class="bodysubsubtitle">&nbsp;Informatie</td>
                 <td width="10" valign="top">:</td>
                <td width="400" valign="top" class="bodytekst">                                      
                    <textarea name=<%=Constants.INVOICE_INFO%> rows=12 cols=70><%=(String) vInvoiceData.getComment()%></textarea>
@@ -332,28 +332,28 @@
                 {
                     if (vRecords == null || vRecords.size() == 0)
                     {
-                        out.println("<p><span class=\"bodysubtitle\"> Geen oproepen voor de geselecteerde maand.</span></p>");
+                        out.println("<p><span class=\"bodysubsubtitle\"> Geen oproepen voor de geselecteerde maand.</span></p>");
                     }
                 
                     if (vAccountData.getInvoiceType() == InvoiceHelper.kStandardInvoice)
                     {
-                        out.println("<p><span class=\"bodysubtitle\"> Standaard facturatie. (Group " + vInvoiceHelper.getInvoiceGroupStr() + ")</span></p>");
+                        out.println("<p><span class=\"bodysubsubtitle\"> Standaard facturatie. (Group " + vInvoiceHelper.getInvoiceGroupStr() + ")</span></p>");
                     }
                     else if (vAccountData.getInvoiceType() == InvoiceHelper.kWeekInvoice)
                     {
-                        out.println("<p><span class=\"bodysubtitle\"> Week facturatie. (Group " + vInvoiceHelper.getInvoiceGroupStr() + ")</span></p>");
+                        out.println("<p><span class=\"bodysubsubtitle\"> Week facturatie. (Group " + vInvoiceHelper.getInvoiceGroupStr() + ")</span></p>");
                     }
                 %>
 
                     <tr>
                         <td width="20"></td>
-                        <td width="200" valign="top" class="bodysubtitle">&nbsp;&nbsp;Kosten rubriek</td>
+                        <td width="200" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;Kosten rubriek</td>
                         <td width="1" bgcolor="#000000"></td>
-                        <td width="50" valign="top" class="bodysubtitle">&nbsp;&nbsp;Aantal</td>
+                        <td width="50" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;Aantal</td>
                         <td width="1" bgcolor="#000000"></td>
-                        <td width="270" valign="top" class="bodysubtitle">&nbsp;&nbsp;Eenheidsprijs (Euro)</td>
+                        <td width="270" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;Eenheidsprijs (Euro)</td>
                         <td width="1" bgcolor="#000000"></td>
-                        <td width="100" valign="top" class="bodysubtitle">&nbsp;&nbsp;Kost (Euro)</td>
+                        <td width="100" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;Kost (Euro)</td>
                     </tr>
                     <tr>
                         <td width="20"></td>
@@ -506,13 +506,13 @@
 	                </td></tr>
                     <tr>
                         <td width="20"></td>
-                        <td width="200" valign="top" class="bodysubtitle">&nbsp;&nbsp;Kosten rubriek</td>
+                        <td width="200" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;Kosten rubriek</td>
                         <td width="1" bgcolor="#000000"></td>
-                        <td width="50" valign="top" class="bodysubtitle">&nbsp;&nbsp;Aantal</td>
+                        <td width="50" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;Aantal</td>
                         <td width="1" bgcolor="#000000"></td>
-                        <td width="270" valign="top" class="bodysubtitle">&nbsp;&nbsp;Eenheidsprijs</td>
+                        <td width="270" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;Eenheidsprijs</td>
                         <td width="1" bgcolor="#000000"></td>
-                        <td width="100" valign="top" class="bodysubtitle">&nbsp;&nbsp;Kost</td>
+                        <td width="100" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;Kost</td>
                     </tr>
                     <tr>
                         <td width="20"></td>
@@ -575,13 +575,13 @@
                     </td></tr>
                     <tr>
                         <td width="20"></td>
-                        <td width="200" valign="top" class="bodysubtitle">&nbsp;&nbsp;Kosten rubriek</td>
+                        <td width="200" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;Kosten rubriek</td>
                         <td width="1" bgcolor="#000000"></td>
-                        <td width="50" valign="top" class="bodysubtitle">&nbsp;&nbsp;Aantal</td>
+                        <td width="50" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;Aantal</td>
                         <td width="1" bgcolor="#000000"></td>
-                        <td width="270" valign="top" class="bodysubtitle">&nbsp;&nbsp;Eenheidsprijs</td>
+                        <td width="270" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;Eenheidsprijs</td>
                         <td width="1" bgcolor="#000000"></td>
-                        <td width="100" valign="top" class="bodysubtitle">&nbsp;&nbsp;Kost</td>
+                        <td width="100" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;Kost</td>
                     </tr>
                     <tr>
                         <td width="20"></td>
@@ -619,7 +619,7 @@
                     </tr>
                     <tr>
                         <td width="20"></td>
-                        <td width="200" valign="top" class="bodysubtitle">&nbsp;&nbsp;Totaal</td>
+                        <td width="200" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;Totaal</td>
                         <td width="1" bgcolor="#000000"></td>
                         <td width="50"></td>
                         <td width="1" bgcolor="#000000"></td>
@@ -636,33 +636,33 @@
            <table>
               <tr>
                   <td width="20"></td>
-                  <td width="120" valign="top" class="bodysubtitle">&nbsp;&nbsp;Factuurnummer</td>
+                  <td width="120" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;Factuurnummer</td>
                   <td width="1">:</td>
-                  <td width="200" valign="top" class="bodysubtitle">&nbsp;&nbsp;<%=vInvoiceData.getInvoiceNr()%></td>
+                  <td width="200" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;<%=vInvoiceData.getInvoiceNr()%></td>
               </tr>
               <tr>
                   <td width="20"></td>
-                  <td width="120" valign="top" class="bodysubtitle">&nbsp;&nbsp;Factuurdatum</td>
+                  <td width="120" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;Factuurdatum</td>
                   <td width="1">:</td>
-                  <td width="200" valign="top" class="bodysubtitle">&nbsp;&nbsp;<%=vInvoiceData.getInvoiceDate()%></td>
+                  <td width="200" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;<%=vInvoiceData.getInvoiceDate()%></td>
               </tr>
               <tr>
                   <td width="20"></td>
-                  <td width="120" valign="top" class="bodysubtitle">&nbsp;&nbsp;Aantal oproepen</td>
+                  <td width="120" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;Aantal oproepen</td>
                   <td width="1">:</td>
-                  <td width="200" valign="top" class="bodysubtitle">&nbsp;&nbsp;<%=(vRecords != null? vRecords.size():0)%></td>
+                  <td width="200" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;<%=(vRecords != null? vRecords.size():0)%></td>
               </tr>
               <tr>
                   <td width="20"></td>
-                  <td width="120" valign="top" class="bodysubtitle">&nbsp;&nbsp;Aantal taken</td>
+                  <td width="120" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;Aantal taken</td>
                   <td width="1">:</td>
-                  <td width="200" valign="top" class="bodysubtitle">&nbsp;&nbsp;<%=(vTasks != null? vTasks.size():0)%></td>
+                  <td width="200" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;<%=(vTasks != null? vTasks.size():0)%></td>
               </tr>
               <tr>
                   <td width="20"></td>
-                  <td width="120" valign="top" class="bodysubtitle">&nbsp;&nbsp;Totaal</td>
+                  <td width="120" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;Totaal</td>
                   <td width="1">:</td>
-                  <td width="200" valign="top" class="bodysubtitle">&nbsp;&nbsp;<%=costFormatter.format(vInvoiceData.getTotalCost())%>&nbsp;&nbsp;(excl BTW)</td>
+                  <td width="200" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;<%=costFormatter.format(vInvoiceData.getTotalCost())%>&nbsp;&nbsp;(excl BTW)</td>
               </tr>
           </table>
            

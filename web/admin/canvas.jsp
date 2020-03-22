@@ -14,6 +14,8 @@
 javax.naming.InitialContext,
 be.tba.ejb.account.interfaces.*,
 be.tba.ejb.pbx.interfaces.*,
+be.tba.ejb.task.session.WorkOrderSqlAdapter,
+be.tba.ejb.task.interfaces.*,
 be.tba.util.constants.EjbJndiNames,
 be.tba.ejb.pbx.session.CallRecordSqlAdapter,
 be.tba.util.constants.Constants,
@@ -271,6 +273,36 @@ try {
  %></td>
                            </tr>
                         </table>
+                     </td>
+                     <td width="10"></td>
+                     <td class="tdborder">
+      <%
+      WorkOrderSqlAdapter vWorkOrderSession = new WorkOrderSqlAdapter();
+  
+      Collection<WorkOrderData> woList = vWorkOrderSession.getOpenList(vSession);
+      int newOnes = 0;
+      int busyOnes = 0;
+      int doneOnes = 0;
+      for (WorkOrderData woEntry : woList)
+      {
+         if (woEntry.state == WorkOrderData.State.kSubmitted)
+         {
+            ++newOnes;
+         }
+         else if (woEntry.state == WorkOrderData.State.kBusy)
+         {
+            ++busyOnes;
+         }
+         else if (woEntry.state == WorkOrderData.State.kDone)
+         {
+            ++doneOnes;
+         }
+      }
+      %>
+                      <span class="bodysubtitle">Opdrachten</span><br><br>
+                     <span class="bodyredbold"><%=newOnes%> nieuwe</span><br>
+                     <span class="bodyorangebold"><%=busyOnes%> bezig</span><br>
+                     <span class="bodygreenbold"><%=doneOnes%> gedaan</span><br>
                      </td>
                   </tr>
                </table>

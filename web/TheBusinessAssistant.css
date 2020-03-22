@@ -21,10 +21,11 @@ a.bodytekst:hover { color: #F89920; }
 .bodysubtitle { font-family: 'Source Sans Pro', sans-serif; color: #22205F; font-size : 21px; font-weight: 500; }
 .bodysubsubtitle { font-family: 'Source Sans Pro', sans-serif; color: #22205F; font-size : 17px; font-weight: 500; }
 .bodysubsubredtitle { font-family: 'Source Sans Pro', sans-serif; color: #FF0000; font-size : 17px; font-weight: 500; }
-.bodyredbold { font-family: 'Source Sans Pro', sans-serif; color: #FF0000; font-size : 15px; font-weight: 400; }
 .bodytekst { font-family: 'Source Sans Pro', sans-serif; color: #242424; font-size : 15px; line-height: 20px; font-weight: 400}
 .bodybold { font-family: 'Source Sans Pro', sans-serif; color: #000000; font-weight : bold;  font-size : 15px; line-height: 20px; }
+.bodyredbold { font-family: 'Source Sans Pro', sans-serif; font-weight : bold; color: #FF0000; font-size : 15px; line-height: 20px; }
 .bodygreenbold { font-family: 'Source Sans Pro', sans-serif; font-weight : bold; color: #48771E; font-size : 15px; line-height: 20px; }
+.bodyorangebold { font-family: 'Source Sans Pro', sans-serif; font-weight : bold; color: #F89920; font-size : 15px; line-height: 20px; }
 .findtekst { font-family: 'Source Sans Pro', sans-serif; color: #000000; font-weight : bold; text-decoration : underline; font-size : 15px; line-height: 20px;}
 
 
