@@ -150,7 +150,7 @@
 		}
         if (vInvoiceData != null)
  		{
-   			if (vInvoiceData.getIsInvoiceMailed())
+   			if (vInvoiceData.getIsInvoiceMailed() || vInvoiceData.getCreditId() == 0)
    			{
                String fintroId;
                String valutaDate;
@@ -636,31 +636,31 @@
            <table>
               <tr>
                   <td width="20"></td>
-                  <td width="120" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;Factuurnummer</td>
+                  <td width="180" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;Factuurnummer</td>
                   <td width="1">:</td>
                   <td width="200" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;<%=vInvoiceData.getInvoiceNr()%></td>
               </tr>
               <tr>
                   <td width="20"></td>
-                  <td width="120" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;Factuurdatum</td>
+                  <td width="180" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;Factuurdatum</td>
                   <td width="1">:</td>
                   <td width="200" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;<%=vInvoiceData.getInvoiceDate()%></td>
               </tr>
               <tr>
                   <td width="20"></td>
-                  <td width="120" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;Aantal oproepen</td>
+                  <td width="180" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;Aantal oproepen</td>
                   <td width="1">:</td>
                   <td width="200" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;<%=(vRecords != null? vRecords.size():0)%></td>
               </tr>
               <tr>
                   <td width="20"></td>
-                  <td width="120" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;Aantal taken</td>
+                  <td width="180" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;Aantal taken</td>
                   <td width="1">:</td>
                   <td width="200" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;<%=(vTasks != null? vTasks.size():0)%></td>
               </tr>
               <tr>
                   <td width="20"></td>
-                  <td width="120" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;Totaal</td>
+                  <td width="180" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;Totaal</td>
                   <td width="1">:</td>
                   <td width="200" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;<%=costFormatter.format(vInvoiceData.getTotalCost())%>&nbsp;&nbsp;(excl BTW)</td>
               </tr>
@@ -822,7 +822,7 @@
 <input type=hidden name=<%=Constants.INVOICE_TO_SAVE%> value="<%=vInvoiceId%>"> 
 </form>
 <%
-        if (vInvoiceData != null && vInvoiceData.getFrozenFlag())
+        if (vInvoiceData != null && (vInvoiceData.getFrozenFlag() || vInvoiceData.getCreditId() == 0))
         {
 %>
 <form name="downloadfileform" method="POST" action="/tba/download">

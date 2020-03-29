@@ -218,6 +218,16 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
         return executeSqlQuery(webSession, "SELECT * FROM InvoiceEntity WHERE IsPayed=FALSE AND FrozenFlag=TRUE ORDER BY InvoiceNr DESC");
     }
 
+    public Collection<InvoiceEntityData> getCreditedInvoice(WebSession webSession, int creditNoteId)
+    {
+        return executeSqlQuery(webSession, "SELECT * FROM InvoiceEntity WHERE CreditId=" + creditNoteId);
+    }
+
+    public void clearCreditId(WebSession webSession, int key)
+    {
+        executeSqlQuery(webSession, "UPDATE InvoiceEntity SET CreditId=-1, IsPayed=FALSE WHERE Id=" + key);
+    }
+
     /**
      * @ejb:interface-method view-type="remote"
      */

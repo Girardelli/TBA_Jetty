@@ -27,6 +27,7 @@ public class TbaPdfInvoice
     private CallCounts mCallCounts = null;
     private Collection<TaskEntityData> mTaskList = null;
     private Collection<SubcustomerCost> mSubcustomers = null;
+    private String creditedInvoiceNr = null;
 
     DecimalFormat mCostFormatter = new DecimalFormat("#0.00");
 
@@ -118,9 +119,11 @@ public class TbaPdfInvoice
        }
     }
     
-    public void createCreditNote()
+    public void createCreditNote(String creditedInvoiceNr)
     {
-        if (mCustomerData == null)
+       System.out.println("createCreditNote for " + creditedInvoiceNr);
+       this.creditedInvoiceNr = creditedInvoiceNr;
+       if (mCustomerData == null)
         {
             throw new IllegalArgumentException("data objects are not set.");
         }
@@ -247,9 +250,14 @@ public class TbaPdfInvoice
 
     private void fillDescription(boolean isCreditNote) throws IOException
     {
+       String invoiceNrText = mInvoiceData.InvoiceNr;
+       if (isCreditNote)
+        {
+          invoiceNrText = invoiceNrText + " (Credit nota)";
+        }
         writeText(mPage1, mInvoiceData.StructuredId, PDType1Font.TIMES_ROMAN, 12, 205, 527);
         writeText(mPage1, String.format("%08d", mCustomerData.getId()), PDType1Font.TIMES_ROMAN, 11, 185, 497);
-        writeText(mPage1, mInvoiceData.InvoiceNr, PDType1Font.TIMES_ROMAN, 11, 185, 484);
+        writeText(mPage1, invoiceNrText, PDType1Font.TIMES_ROMAN, 11, 185, 484);
         writeText(mPage1, mInvoiceData.Date, PDType1Font.TIMES_ROMAN, 11, 185, 470);
 
         if (!mInvoiceData.Description.isEmpty())
@@ -280,7 +288,7 @@ public class TbaPdfInvoice
         }
         else if (isCreditNote)
         {
-            writeText(mPage1, "Credit nota", PDType1Font.TIMES_ITALIC, 11, 100, 420);
+           writeText(mPage1, "Credit nota voor factuur " + creditedInvoiceNr, PDType1Font.TIMES_ITALIC, 11, 100, 420);
         }
         else
         {
