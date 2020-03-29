@@ -441,7 +441,7 @@ public class InvoiceHelper
         for (Iterator<TaskEntityData> i = mTasks.iterator(); i.hasNext();)
         {
             TaskEntityData vEntry = i.next();
-            if (vEntry.getIsFixedPrice())
+            if (vEntry.getIsFixedPrice() || vEntry.getFixedPrice() > 0)
             {
                 mInvoiceData.TaskCost += vEntry.getFixedPrice();
                 // System.out.println("add fixed amonth: " +
@@ -449,7 +449,7 @@ public class InvoiceHelper
             }
             else
             {
-                mInvoiceData.TaskCost += ((double) vEntry.getTimeSpend() / 60.00) * ((double) mAccountEntityData.getTaskHourRate() / 100.00);
+               mInvoiceData.TaskCost += ((double) vEntry.getTimeSpend() / 60.00) * ((double) mAccountEntityData.getTaskHourRate() / 100.00);
                 // System.out.println("getTimeSpend=" + vEntry.getTimeSpend() +
                 // ", getTaskHourRate=" + mAccountEntityData.getTaskHourRate());
                 // System.out.println("add calc amonth: " + ((double)

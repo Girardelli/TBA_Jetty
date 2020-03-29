@@ -41,6 +41,7 @@ try
         protected long activeCurrent; 
         protected int daysWorked;
         protected long dayStart; 
+        protected Collection<Integer> daysInMonth;
         
         protected GeneratedCost()
         {
@@ -52,6 +53,7 @@ try
            activeCurrent = 0;
            daysWorked = 1;
            dayStart = 0;
+           daysInMonth = new Vector<Integer>();
         }
 	}
 	Map<String, GeneratedCost> performanceMap = new HashMap<String, GeneratedCost>();
@@ -86,6 +88,7 @@ try
 	TaskSqlAdapter vTaskSession = new TaskSqlAdapter();
 	InvoiceSqlAdapter vInvoiceSession = new InvoiceSqlAdapter();
 	CallRecordSqlAdapter  vQuerySession = new CallRecordSqlAdapter();
+	Calendar calendar = Calendar.getInstance();
 
 	Collection<InvoiceEntityData> vInvoices = vInvoiceSession.getInvoiceList(vSession, vSession.getMonthsBack(), vSession.getYear());
 	double totalInvoiced = 0;
@@ -97,42 +100,60 @@ try
 	    totalInvoiced += entry.getTotalCost();
 	}
 	Collection<TaskEntityData> tasks = vTaskSession.getTasksForMonth(vSession, vSession.getMonthsBack(), vSession.getYear());
-	for (Iterator<TaskEntityData> i = tasks.iterator(); i.hasNext();)
+	for (TaskEntityData task : tasks)
 	{
-	  TaskEntityData vEntry = i.next();
 	  double taskCost = 0;
-	  if (vEntry.getIsFixedPrice())
+      if (task.getIsFixedPrice() || task.getFixedPrice() > 0)
 	  {
-	      taskCost = vEntry.getFixedPrice();
+	      taskCost = task.getFixedPrice();
 	  }
 	  else
 	  {
-	      taskCost = (vEntry.getTimeSpend() / 60) * (AccountCache.getInstance().get(vEntry.getAccountId()).getTaskHourRate() / 100);
+	     AccountEntityData account = AccountCache.getInstance().get(task);
+         if (account != null)
+         {
+            taskCost = (task.getTimeSpend() / 60) * (account.getTaskHourRate() / 100);
+         }
 	  }
 	  totalTaskCost += taskCost;
-	  if (performanceMap.containsKey(vEntry.getDoneBy()))
+	  GeneratedCost genCost = null;
+	  if (performanceMap.containsKey(task.getDoneBy()))
 	  {
-	      performanceMap.get(vEntry.getDoneBy()).taskCost += taskCost;
+	      genCost = performanceMap.get(task.getDoneBy());
+	      genCost.taskCost += taskCost;
 	  }
 	  else
 	  {
-	      GeneratedCost genCost = new GeneratedCost();
+	      genCost = new GeneratedCost();
           genCost.taskCost = taskCost;
-	      performanceMap.put(vEntry.getDoneBy(), genCost); 
-	      System.out.println("add entry from tasks for "+ vEntry.getDoneBy());
+	      performanceMap.put(task.getDoneBy(), genCost); 
 	  }
+     if (!task.getIsRecuring())
+     {
+        calendar.setTimeInMillis(task.getTimeStamp());
+        if (!genCost.daysInMonth.contains(calendar.get(Calendar.DAY_OF_MONTH)))
+        {
+           genCost.daysInMonth.add(Integer.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
+        }
+     }
 	}
 	totalCallCost = totalInvoiced - totalTaskCost;
 	Collection<CallRecordEntityData> records = vQuerySession.getMailedCallsForMonth(vSession, vSession.getMonthsBack(), vSession.getYear());
 	int totalNrCalls = records.size() == 0 ? 1 : records.size();
     for (CallRecordEntityData record : records)
     {
+       if (InvoiceHelper.duration2Seconds(record.getCost()) == 0)
+       {
+          continue;
+       }
+       GeneratedCost genCost = null;
         if (performanceMap.containsKey(record.getDoneBy()))
         {
-           GeneratedCost genCost = performanceMap.get(record.getDoneBy());
+           genCost = performanceMap.get(record.getDoneBy());
            genCost.calls++;
-           genCost.duration += (record.getTsEnd() - record.getTsAnswer());
            
+           genCost.duration +=  InvoiceHelper.duration2Seconds(record.getCost());
+           //genCost.duration += (record.getTsEnd() - record.getTsAnswer());
            if (genCost.activeCurrent < record.getTimeStamp())
            {
               if ((record.getTimeStamp() - genCost.activeCurrent) > 15*60*1000) 
@@ -143,17 +164,19 @@ try
               }
               if ((record.getTimeStamp() - genCost.activeCurrent) > 11*60*60*1000) 
               {
-                //meer dan 10 uur geen activiteit. Dus er is een dag voorbij
+                //meer dan 11 uur geen activiteit. Dus er is een dag voorbij
                  ++genCost.daysWorked;
                  genCost.dayStart = record.getTimeStamp();
+                 genCost.activeCurrent = genCost.dayStart;
               }
               genCost.activeCurrent = record.getTimeStamp();
            }
         }
         else
         {
-            GeneratedCost genCost = new GeneratedCost();
-            genCost.duration = (record.getTsEnd() - record.getTsAnswer());
+            genCost = new GeneratedCost();
+            genCost.duration = InvoiceHelper.duration2Seconds(record.getCost());
+            //genCost.duration = (record.getTsEnd() - record.getTsAnswer());
             genCost.calls = 1;
             genCost.activeStart = record.getTimeStamp() - 120000; //assume 2 minutes acive before first call
             genCost.activeCurrent = record.getTimeStamp();
@@ -161,7 +184,11 @@ try
             performanceMap.put(record.getDoneBy(), genCost); 
             System.out.println("add entry from records for "+ record.getDoneBy());
         }
-         
+        calendar.setTimeInMillis(record.getTimeStamp());
+        if (!genCost.daysInMonth.contains(calendar.get(Calendar.DAY_OF_MONTH)))
+        {
+           genCost.daysInMonth.add(Integer.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
+        }
     }
 	
 	System.out.println("totalCallCost=" + totalCallCost + " , totalNrCalls=" + totalNrCalls + " , totalTaskCost=" + totalTaskCost);
@@ -180,12 +207,12 @@ try
 			<tr>
 				<td width="70" valign="top" align="right" class="topMenu" bgcolor="#F89920">&nbsp;Uitvoerder</td>
                 <td width="70" valign="top" align="right" class="topMenu" bgcolor="#F89920">&nbsp;#oproepen</td>
-                <td width="70" valign="top" align="right" class="topMenu" bgcolor="#F89920">&nbsp;oproepen (hours)</td>
+                <td width="70" valign="top" align="right" class="topMenu" bgcolor="#F89920">&nbsp;oproepen (min)</td>
 				<td width="70" valign="top" align="right" class="topMenu" bgcolor="#F89920">&nbsp;oproepen (Euro)</td>
                 <td width="70" valign="top" align="right" class="topMenu" bgcolor="#F89920">&nbsp;actief telefoon (hours)</td>
                 <td width="70" valign="top" align="right" class="topMenu" bgcolor="#F89920">&nbsp;oproepen per uur</td>
                 <td width="70" valign="top" align="right" class="topMenu" bgcolor="#F89920">&nbsp;Taken (Euro)</td>
-                <td width="70" valign="top" align="right" class="topMenu" bgcolor="#F89920">&nbsp;Totaal (Euro)</td>
+                <td width="70" valign="top" align="right" class="topMenu" bgcolor="#F89920">&nbsp;Omzet per maand (Euro)</td>
                 <td width="70" valign="top" align="right" class="topMenu" bgcolor="#F89920">&nbsp;Dagen gewerkt</td>
                 <td width="70" valign="top" align="right" class="topMenu" bgcolor="#F89920">&nbsp;Omzet per dag (Euro)</td>
 			</tr>
@@ -196,19 +223,21 @@ try
         String vEmployee = vIter.next();
         GeneratedCost genCost = performanceMap.get(vEmployee);
         double callCostContribution = genCost.calls * totalCallCost/totalNrCalls;
+        int daysWorked = genCost.daysInMonth.size();
+        if (daysWorked == 0) ++daysWorked;
         if (genCost.hoursActiveOnPhone == 0) genCost.hoursActiveOnPhone = 1;
         %>
 		<tr bgcolor="FFCC66" class="bodytekst">
 			<td width="70" align="right" valign="top"><%=vEmployee%></td>
             <td width="70" align="right" valign="top"><%=genCost.calls%></td>
-            <td width="70" align="right" valign="top"><%=genCost.duration/(1000*60*60)%></td>
+            <td width="70" align="right" valign="top"><%=genCost.duration/60%></td>
 			<td width="70" align="right" valign="top"><%=mCostFormatter.format(callCostContribution)%></td>
             <td width="70" align="right" valign="top"><%=mCostFormatter.format(genCost.hoursActiveOnPhone)%></td>
             <td width="70" align="right" valign="top"><%=mCostFormatter.format(genCost.calls/genCost.hoursActiveOnPhone)%></td>
             <td width="70" align="right" valign="top"><%=mCostFormatter.format(genCost.taskCost)%></td>
             <td width="70" align="right" valign="top"><%=mCostFormatter.format(genCost.taskCost + callCostContribution)%></td>
-            <td width="70" align="right" valign="top"><%=genCost.daysWorked%></td>
-            <td width="70" align="right" valign="top"><%=mCostFormatter.format((genCost.taskCost + callCostContribution)/genCost.daysWorked)%></td>
+            <td width="70" align="right" valign="top"><%=daysWorked%></td>
+            <td width="70" align="right" valign="top"><%=mCostFormatter.format((genCost.taskCost + callCostContribution)/daysWorked)%></td>
 		</tr>
 		<%
 	}

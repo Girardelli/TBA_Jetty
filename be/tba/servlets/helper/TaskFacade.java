@@ -3,9 +3,7 @@ package be.tba.servlets.helper;
 import java.io.File;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Enumeration;
 import java.util.StringTokenizer;
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -18,7 +16,6 @@ import be.tba.ejb.task.interfaces.WorkOrderData;
 import be.tba.ejb.task.session.FileLocationSqlAdapter;
 import be.tba.ejb.task.session.TaskSqlAdapter;
 import be.tba.ejb.task.session.WorkOrderSqlAdapter;
-import be.tba.servlets.AdminDispatchServlet;
 import be.tba.servlets.session.WebSession;
 import be.tba.util.constants.AccountRole;
 import be.tba.util.constants.Constants;
@@ -77,28 +74,42 @@ public class TaskFacade
                     vTask.setTimeStamp(dateStr2Timestamp(vNewDate));
                 }
             }
-
-            vTask.setFwdNr(parms.getParameter(Constants.TASK_FORWARD_NUMBER));
+            String newFwdNr = parms.getParameter(Constants.TASK_FORWARD_NUMBER);
+            if (newFwdNr != null && !newFwdNr.equals(vTask.getFwdNr()))
+            {
+               vTask.setFwdNr(newFwdNr);
+               vTask.setAccountId(AccountCache.getInstance().get(newFwdNr).getId());
+            }
+            AccountEntityData account = AccountCache.getInstance().get(vTask.getFwdNr());
             vTask.setDoneBy(parms.getParameter(Constants.TASK_DONE_BY_EMPL));
             vTask.setDate(parms.getParameter(Constants.TASK_DATE));
             vTask.setDescription(parms.getParameter(Constants.TASK_DESCRIPTION));
             String tmp = parms.getParameter(Constants.TASK_TIME_SPEND);
-            if (tmp == null || tmp == "")
+            if (tmp == null || tmp.isBlank())
+            {
                 tmp = "0";
+            }
             vTask.setTimeSpend(Integer.parseInt(tmp));
             if (parms.getParameter(Constants.TASK_IS_FIXED_PRICE) != null)
             {
-                vTask.setIsFixedPrice(true);
-                String vFixedPrice = parms.getParameter(Constants.TASK_FIXED_PRICE);
-                vFixedPrice = vFixedPrice.replace(',', '.');
-                vTask.setFixedPrice(Double.parseDouble(vFixedPrice));
+               vTask.setIsFixedPrice(true);
+                if (parms.getParameter(Constants.TASK_FIXED_PRICE) != null)
+                {
+                    String vFixedPrice = parms.getParameter(Constants.TASK_FIXED_PRICE);
+                    vFixedPrice = vFixedPrice.replace(',', '.');
+                    vTask.setFixedPrice(Double.parseDouble(vFixedPrice));
+//                    System.out.println("task price after set=" + newTask.getFixedPrice());
+                }
+                else
+                {
+                   vTask.setFixedPrice(0.0);
+                }
             }
             else
             {
-                vTask.setIsFixedPrice(false);
-                vTask.setFixedPrice(0.0);
+               vTask.setIsFixedPrice(false);
+               vTask.setFixedPrice(((double) vTask.getTimeSpend() / 60.00) * ((double) account.getTaskHourRate() / 100.00));
             }
-
             if (vTask.getIsRecuring() && parms.getParameter(Constants.TASK_IS_RECURING) == null)
             {
                 // stop recuring task
@@ -126,6 +137,8 @@ public class TaskFacade
     {
         TaskEntityData newTask = new TaskEntityData();
         newTask.setFwdNr(parms.getParameter(Constants.TASK_FORWARD_NUMBER));
+        AccountEntityData account = AccountCache.getInstance().get(newTask.getFwdNr());
+        newTask.setAccountId(account.getId());
         newTask.setDoneBy(parms.getParameter(Constants.TASK_DONE_BY_EMPL));
         newTask.setDate(parms.getParameter(Constants.TASK_DATE));
         newTask.setTimeStamp(dateStr2Timestamp(newTask.getDate()));
@@ -142,15 +155,19 @@ public class TaskFacade
             if (parms.getParameter(Constants.TASK_FIXED_PRICE) != null)
             {
                 String vFixedPrice = parms.getParameter(Constants.TASK_FIXED_PRICE);
-
-                System.out.println("task price=" + vFixedPrice);
-
                 vFixedPrice = vFixedPrice.replace(',', '.');
                 newTask.setFixedPrice(Double.parseDouble(vFixedPrice));
-                System.out.println("task price after set=" + newTask.getFixedPrice());
+//                System.out.println("task price after set=" + newTask.getFixedPrice());
             }
             else
+            {
                 newTask.setFixedPrice(0.0);
+            }
+        }
+        else
+        {
+           newTask.setIsFixedPrice(false);
+           newTask.setFixedPrice(((double) newTask.getTimeSpend() / 60.00) * ((double) account.getTaskHourRate() / 100.00));
         }
         newTask.setIsRecuring(parms.getParameter(Constants.TASK_IS_RECURING) != null);
         if (newTask.getIsRecuring())
