@@ -873,17 +873,6 @@ public class InvoiceHelper
         return "";
     }
 
-    static public String makeCreditInvoiceFileName(InvoiceEntityData invoiceData)
-    {
-        if (invoiceData != null)
-        {
-            CharSequence target = invoiceData.getInvoiceNr();
-            CharSequence replacer = "C" + invoiceData.getInvoiceNr();
-            return invoiceData.getFileName().replace(target, replacer);
-        }
-        return "";
-    }
-    
     static public String extractCustomerNameFromInvoiceFileName(String fileName)
     {
 		if (fileName == null || fileName.isEmpty())

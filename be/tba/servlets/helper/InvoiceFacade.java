@@ -324,7 +324,6 @@ public class InvoiceFacade
                InvoiceEntityData vCreditInvoiceData = new InvoiceEntityData(vInvoiceData);
                 vCreditInvoiceData.setId(0);
                 vCreditInvoiceData.setTotalCost(-vInvoiceData.getTotalCost());
-                vCreditInvoiceData.setFileName(InvoiceHelper.makeCreditInvoiceFileName(vInvoiceData));
                 vCreditInvoiceData.setIsInvoiceMailed(true);
                 vCreditInvoiceData.setIsPayed(true);
                 vCreditInvoiceData.setFrozenFlag(true);
@@ -338,6 +337,8 @@ public class InvoiceFacade
                 vCreditInvoiceData.setYear(vInvoiceData.getYear());
                 vCreditInvoiceData.setYearSeqNr(yearSeqNr);
                 vCreditInvoiceData.setPayDate("Credit nota");
+                vCreditInvoiceData.setFileName(makeCreditInvoiceFileName(vCreditInvoiceData, vInvoiceData));
+                
                 // write credit note to the DB
                 int id = vInvoiceSession.addInvoice(session, vCreditInvoiceData);
                 // link the original to the credit note
@@ -385,4 +386,17 @@ public class InvoiceFacade
             }
         }
     }
+    
+    static private String makeCreditInvoiceFileName(InvoiceEntityData  creditInvoice, InvoiceEntityData invoiceData)
+    {
+        if (invoiceData != null)
+        {
+            CharSequence target = invoiceData.getInvoiceNr();
+            CharSequence replacer = "CreditNota-" + creditInvoice.getInvoiceNr();
+            return invoiceData.getFileName().replace(target, replacer);
+        }
+        return "";
+    }
+    
+
 }
