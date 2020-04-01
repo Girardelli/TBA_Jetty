@@ -320,6 +320,7 @@ public class InvoiceFacade
             
             if (vInvoiceData != null)
             {
+               int yearSeqNr = vInvoiceSession.getNewInvoiceNumber(session, vInvoiceData.getYear());
                InvoiceEntityData vCreditInvoiceData = new InvoiceEntityData(vInvoiceData);
                 vCreditInvoiceData.setId(0);
                 vCreditInvoiceData.setTotalCost(-vInvoiceData.getTotalCost());
@@ -328,21 +329,23 @@ public class InvoiceFacade
                 vCreditInvoiceData.setIsPayed(true);
                 vCreditInvoiceData.setFrozenFlag(true);
                 vCreditInvoiceData.setCreditId(0);
-                vCreditInvoiceData.setInvoiceNr(InvoiceHelper.getInvoiceNumber(vInvoiceData.getYear(), vInvoiceData.getMonth(), vInvoiceSession.getNewInvoiceNumber(session, vInvoiceData.getYear())));
+                vCreditInvoiceData.setInvoiceNr(InvoiceHelper.getInvoiceNumber(vInvoiceData.getYear(), vInvoiceData.getMonth(), yearSeqNr));
                 vCreditInvoiceData.setStructuredId(IBANCheckDigit.IBAN_CHECK_DIGIT.calculateOGM(vCreditInvoiceData.getInvoiceNr()));
                 vCreditInvoiceData.setCustomerRef(vInvoiceData.getCustomerRef());
                 vCreditInvoiceData.setMonth(vInvoiceData.getMonth());
                 vCreditInvoiceData.setStartTime(vInvoiceData.getStartTime());
                 vCreditInvoiceData.setStopTime(vInvoiceData.getStopTime());
                 vCreditInvoiceData.setYear(vInvoiceData.getYear());
-                vCreditInvoiceData.setYearSeqNr(vInvoiceData.getYearSeqNr());
+                vCreditInvoiceData.setYearSeqNr(yearSeqNr);
                 vCreditInvoiceData.setPayDate("Credit nota");
                 // write credit note to the DB
                 int id = vInvoiceSession.addInvoice(session, vCreditInvoiceData);
                 // link the original to the credit note
                 vInvoiceData.setCreditId(id);
                 vInvoiceData.setIsPayed(true);
+                vInvoiceData.setFrozenFlag(true);
                 vInvoiceData.setPaymentDetails("Gecrediteerd");
+                vInvoiceData.setPayDate("Gecrediteerd");
                 // clear the content of this invoice by setting stop = start time.
                 // NO!, this messes up the InvoiceHelper logic. This is solved over there
                 //vInvoiceData.setStopTime(vInvoiceData.getStartTime());

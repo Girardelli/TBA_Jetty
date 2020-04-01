@@ -247,9 +247,16 @@
                </td>
              </tr>
         </table>
-        <p><span class=\"bodysubtitle\"> 
+        <p><span class="bodysubtitle"> 
         <input class="tbabutton" type=submit name=action value=" Bewaar " onclick="savePayDate()" > 
+        <%
+        if (vInvoiceData.getFrozenFlag())
+        {
+        %>
         <input class="tbabutton" type=submit name=action value=" Maak Credit Nota " onclick="createCreditNote()" > 
+        <%
+        }
+        %>
         </span></p>
 <%
             }
@@ -267,7 +274,7 @@
         
         
         %>
-        <p><span class=\"bodysubtitle\"> 
+        <p><span class="bodysubtitle"> 
         <input class="tbabutton" type=submit name=action value=" Terug naar lijst " onclick="backToList()" > 
         </span></p>
         <%
