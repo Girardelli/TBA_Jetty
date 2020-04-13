@@ -126,11 +126,14 @@ public class IntertelCallData
 //		return transferData;
 //	}
 	
+	static final int kExtCall[] = {13, 14, 15, 16, 17, 18, 19, 20 };
+	
 	public int getCallDuration()
 	{
 		if (tsAnswer > 0 && tsEnd > 0)
 		{
-			return (int)(tsEnd - tsAnswer);
+			// add avg between 13 and 20 second extra
+		   return ((int)(tsEnd - tsAnswer)) + kExtCall[(int)(tsEnd%8)];
 		}
 		else if (tsAnswer == 0 && !isIncoming)
 		{

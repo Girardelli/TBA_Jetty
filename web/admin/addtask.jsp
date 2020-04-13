@@ -44,13 +44,12 @@ if (vCustomerFilter == null)
   vCustomerFilter = "";
 
 out.println("<select name=\"" + Constants.TASK_FORWARD_NUMBER + "\">");
-Collection list = AccountCache.getInstance().getCustomerList();
+Collection<AccountEntityData> list = AccountCache.getInstance().getCustomerList();
 synchronized(list) 
 {
-    for (Iterator vIter = list.iterator(); vIter.hasNext();)
+    for (AccountEntityData account : list)
     {
-        AccountEntityData vValue = (AccountEntityData) vIter.next();
-        out.println("<option value=\"" + vValue.getFwdNumber() + (vCustomerFilter.equals(vValue.getFwdNumber()) ? "\" selected>" : "\">") + vValue.getFullName());
+        out.println("<option value=\"" + account.getFwdNumber() + (vCustomerFilter.equals(account.getFwdNumber()) ? "\" selected>" : "\">") + account.getFullName());
     }
 }
 out.println("</select>");
@@ -62,14 +61,13 @@ out.println("</select>");
 					src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Uitgevoerd door</td>
 				<td width="580" valign="top"><%                  
 out.println("<select name=\"" + Constants.TASK_DONE_BY_EMPL + "\">");
-Collection emplList = AccountCache.getInstance().getEmployeeList();
+Collection<AccountEntityData> emplList = AccountCache.getInstance().getEmployeeList();
 out.println("<option value=\"\" selected> Selecteer een werknemer");
 synchronized(emplList) 
 {
-    for (Iterator vIter = emplList.iterator(); vIter.hasNext();)
+    for (AccountEntityData account : emplList)
     {
-        AccountEntityData vValue = (AccountEntityData) vIter.next();
-        out.println("<option value=\"" + vValue.getFwdNumber() + "\">" + vValue.getFullName());
+        out.println("<option value=\"" + account.getFwdNumber() + "\">" + account.getFullName());
     }
 }
 out.println("</select>");

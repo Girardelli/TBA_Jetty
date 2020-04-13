@@ -70,10 +70,10 @@ public class WoltersKluwenImport
       {
          InvoiceEntityData vEntry = i.next();
          AccountEntityData account = AccountCache.getInstance().get(vEntry);
-
-         String exclStr = costFormatter.format(vEntry.getTotalCost());
-         String vatStr = costFormatter.format(vEntry.getTotalCost() * 0.21);
-         String inclStr = costFormatter.format(Double.parseDouble(exclStr.replace(',', '.')) + Double.parseDouble(vatStr.replace(',', '.')));
+         
+         String exclStr = costFormatter.format(Math.abs(vEntry.getTotalCost()));
+         String vatStr = costFormatter.format(Math.abs(vEntry.getTotalCost() * 0.21));
+         String inclStr = costFormatter.format(Math.abs(Double.parseDouble(exclStr.replace(',', '.')) + Double.parseDouble(vatStr.replace(',', '.'))));
          if (account != null && account.getNoBtw())
          {
             vatStr = "0.00";
