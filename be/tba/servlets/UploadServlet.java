@@ -19,7 +19,12 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 */
 
-public class UploadServlet extends HttpServlet {
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+public class UploadServlet extends HttpServlet 
+{
+   private  Log log = LogFactory.getLog(UploadServlet.class);
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
@@ -177,5 +182,10 @@ public class UploadServlet extends HttpServlet {
 		return suffix;
 	}
 	*/
+   public void destroy()
+   {
+       log.info("UploadServlet destroyed.");
+   }
+
 }
 

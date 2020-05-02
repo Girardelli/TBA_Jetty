@@ -101,4 +101,12 @@ final public class DbCleanTimerTask extends TimerTask implements TimerTaskIntf
             }
         }
     }
+
+    @Override
+    public void cleanUp()
+    {
+       // TODO Auto-generated method stub
+       System.out.println("Cancel DbCleanTimerTask");
+       this.cancel();
+    }
 }

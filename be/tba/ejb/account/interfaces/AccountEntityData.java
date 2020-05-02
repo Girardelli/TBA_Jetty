@@ -3,6 +3,9 @@
  */
 package be.tba.ejb.account.interfaces;
 
+import be.tba.util.constants.Constants;
+import be.tba.util.invoice.InvoiceHelper;
+
 /**
  * Data object for AccountEntity.
  *
@@ -93,6 +96,40 @@ public class AccountEntityData extends be.tba.util.data.AbstractData implements 
 
     public AccountEntityData()
     {
+       isRegistered = false; 
+       isXmlMail = false;
+       invoiceType = InvoiceHelper.kStandardInvoice;
+       isMailInvoice = true;
+       noEmptyMails = true;
+       noInvoice = false;
+       textMail = false;
+       facLong = 1.2;
+       facLongFwd = 0;
+       countryCode = Constants.COUNTRY_CODES[0][0];
+       isArchived = false;
+       taskHourRate = Constants.kHourTarifCost;
+             
+       facTblMinCalls_I = Constants.kFacTblMinCalls_I;
+        facTblStartCost_I = Constants.kFacTblStartCost_I;
+        facTblExtraCost_I = Constants.kFacTblExtraCost_I;
+        facTblMinCalls_II = Constants.kFacTblMinCalls_II;
+        facTblStartCost_II = Constants.kFacTblStartCost_II;
+        facTblExtraCost_II = Constants.kFacTblExtraCost_II;
+        facTblMinCalls_III = Constants.kFacTblMinCalls_III;
+        facTblStartCost_III = Constants.kFacTblStartCost_III;
+        facTblExtraCost_III = Constants.kFacTblExtraCost_III;
+        facTblMinCalls_IV = Constants.kFacTblMinCalls_IV;
+        facTblStartCost_IV = Constants.kFacTblStartCost_IV;
+        facTblExtraCost_IV = Constants.kFacTblExtraCost_IV;
+
+        countAllLongCalls = true;
+        countLongFwdCalls = true;
+        facLong = Constants.kFacLong;
+        facLongFwd = Constants.kFacLongFwd;
+        facStdOutCall = Constants.kOutCost;
+        facFaxCall = Constants.kFaxCost;
+        facSms = Constants.kSmsCost;
+        facCallForward = Constants.kForwardCost;
     }
 
 

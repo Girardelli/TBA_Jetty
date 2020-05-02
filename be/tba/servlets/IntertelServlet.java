@@ -13,7 +13,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import be.tba.ejb.pbx.interfaces.CallRecordEntityData;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import be.tba.ejb.pbx.session.CallRecordSqlAdapter;
 import be.tba.servlets.helper.IntertelCallManager;
 import be.tba.servlets.session.WebSession;
@@ -26,6 +28,7 @@ import be.tba.websockets.WebSocketData;
 public class IntertelServlet extends HttpServlet
 {
 	//final static Logger sLogger = LoggerFactory.getLogger(IntertelServlet.class);
+   private static Log log = LogFactory.getLog(IntertelServlet.class);
 	
 	private WebSession mSession;
 	private IntertelCallManager mIntertelCallManager;
@@ -347,7 +350,12 @@ public class IntertelServlet extends HttpServlet
 		}
     	return false;
     }
-    
+
+    public void destroy()
+    {
+        log.info("IntertelServlet destroyed.");
+    }
+
 }
 
 /**********************************************************************

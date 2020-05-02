@@ -117,4 +117,12 @@ final public class MailTimerTask extends TimerTask implements TimerTaskIntf
         return vCalendar.getTime().toString();
 
     }
+
+    @Override
+    public void cleanUp()
+    {
+       // TODO Auto-generated method stub
+       System.out.println("Cancel MailTimerTask");
+       this.cancel();
+    }
 }

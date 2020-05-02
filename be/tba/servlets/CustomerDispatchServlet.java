@@ -437,4 +437,10 @@ public class CustomerDispatchServlet extends HttpServlet
 //      log.info(strBuf.toString());
       doGet(req, res);
    }
+
+   public void destroy()
+   {
+       log.info("CustomerDispatchServlet destroyed.");
+   }
+
 }

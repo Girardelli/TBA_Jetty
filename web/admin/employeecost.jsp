@@ -25,6 +25,8 @@ be.tba.util.data.*,
 be.tba.ejb.pbx.session.CallRecordSqlAdapter,
 be.tba.ejb.invoice.session.InvoiceSqlAdapter,
 be.tba.ejb.task.session.TaskSqlAdapter,
+be.tba.ejb.phoneMap.session.UrlCheckerSqlAdapter,
+be.tba.ejb.phoneMap.interfaces.UrlCheckerEntityData,
 java.text.*"%>
 
 	<%
@@ -88,9 +90,11 @@ try
 	TaskSqlAdapter vTaskSession = new TaskSqlAdapter();
 	InvoiceSqlAdapter vInvoiceSession = new InvoiceSqlAdapter();
 	CallRecordSqlAdapter  vQuerySession = new CallRecordSqlAdapter();
-	Calendar calendar = Calendar.getInstance();
+	UrlCheckerSqlAdapter vUrlCheckerSession = new UrlCheckerSqlAdapter();
+    Calendar calendar = Calendar.getInstance();
 
-	Collection<InvoiceEntityData> vInvoices = vInvoiceSession.getInvoiceList(vSession, vSession.getMonthsBack(), vSession.getYear());
+    UrlCheckerEntityData urlCheckerData = vUrlCheckerSession.getForMonth(vSession.getYear(), vSession.getMonthsBack());
+    Collection<InvoiceEntityData> vInvoices = vInvoiceSession.getInvoiceList(vSession, vSession.getMonthsBack(), vSession.getYear());
 	double totalInvoiced = 0;
     double totalCallCost = 0;
 	double totalTaskCost = 0;
@@ -197,24 +201,33 @@ try
 			</tr>
 		</table>
 		<br>
-        <p><span class="bodysubsubtitle"> Totaal gefactureerd: <%=mCostFormatter.format(totalInvoiced)%>Euro<br>
-        <p><span class="bodysubsubtitle"> Totaal taken: <%=mCostFormatter.format(totalTaskCost)%>Euro<br>
-        <p><span class="bodysubsubtitle"> Totaal aantal oproepen: <%=totalNrCalls%><br>
-        <p><span class="bodysubsubtitle"> Gemiddelde opbrengst per oproep deze maand: <%=mCostFormatter.format(totalCallCost/totalNrCalls)%>Euro<br>
-        </span></p>		
+<%
+if (urlCheckerData != null)
+{
+%>
+        <p><span class="bodysubsubtitle"> #Telenet hick-ups: <%=urlCheckerData.hickUps%></span></p>
+        <p><span class="bodysubsubtitle"> Totaal Telenet down: <%=urlCheckerData.secondsOut%> seconden</span></p>
+<%   
+}
+%>      
+        <br>
+        <p><span class="bodysubsubtitle"> Totaal gefactureerd: <%=mCostFormatter.format(totalInvoiced)%>Euro</span></p>
+        <p><span class="bodysubsubtitle"> Totaal taken: <%=mCostFormatter.format(totalTaskCost)%>Euro</span></p>
+        <p><span class="bodysubsubtitle"> Totaal aantal oproepen: <%=totalNrCalls%></span></p>
+        <p><span class="bodysubsubtitle"> Gemiddelde opbrengst per oproep deze maand: <%=mCostFormatter.format(totalCallCost/totalNrCalls)%>Euro</span></p>
 		<br>
-		<table width="100%" border="0" cellspacing="2" cellpadding="2">
+		<table border="0" cellspacing="2" cellpadding="2">
 			<tr>
-				<td width="70" valign="top" align="right" class="topMenu" bgcolor="#F89920">&nbsp;Uitvoerder</td>
-                <td width="70" valign="top" align="right" class="topMenu" bgcolor="#F89920">&nbsp;#oproepen</td>
-                <td width="70" valign="top" align="right" class="topMenu" bgcolor="#F89920">&nbsp;oproepen (min)</td>
-				<td width="70" valign="top" align="right" class="topMenu" bgcolor="#F89920">&nbsp;oproepen (Euro)</td>
-                <td width="70" valign="top" align="right" class="topMenu" bgcolor="#F89920">&nbsp;actief telefoon (hours)</td>
-                <td width="70" valign="top" align="right" class="topMenu" bgcolor="#F89920">&nbsp;oproepen per uur</td>
-                <td width="70" valign="top" align="right" class="topMenu" bgcolor="#F89920">&nbsp;Taken (Euro)</td>
-                <td width="70" valign="top" align="right" class="topMenu" bgcolor="#F89920">&nbsp;Omzet per maand (Euro)</td>
-                <td width="70" valign="top" align="right" class="topMenu" bgcolor="#F89920">&nbsp;Dagen gewerkt</td>
-                <td width="70" valign="top" align="right" class="topMenu" bgcolor="#F89920">&nbsp;Omzet per dag (Euro)</td>
+				<td width="90" valign="top" align="right" class="topMenu" bgcolor="#F89920">&nbsp;Uitvoerder</td>
+                <td width="90" valign="top" align="right" class="topMenu" bgcolor="#F89920">&nbsp;#oproepen</td>
+                <td width="90" valign="top" align="right" class="topMenu" bgcolor="#F89920">&nbsp;oproepen (min)</td>
+				<td width="90" valign="top" align="right" class="topMenu" bgcolor="#F89920">&nbsp;oproepen (Euro)</td>
+                <td width="90" valign="top" align="right" class="topMenu" bgcolor="#F89920">&nbsp;actief telefoon (hours)</td>
+                <td width="90" valign="top" align="right" class="topMenu" bgcolor="#F89920">&nbsp;oproepen per uur</td>
+                <td width="90" valign="top" align="right" class="topMenu" bgcolor="#F89920">&nbsp;Taken (Euro)</td>
+                <td width="90" valign="top" align="right" class="topMenu" bgcolor="#F89920">&nbsp;Omzet per maand (Euro)</td>
+                <td width="90" valign="top" align="right" class="topMenu" bgcolor="#F89920">&nbsp;Dagen gewerkt</td>
+                <td width="90" valign="top" align="right" class="topMenu" bgcolor="#F89920">&nbsp;Omzet per dag (Euro)</td>
 			</tr>
 <%
 
@@ -228,16 +241,16 @@ try
         if (genCost.hoursActiveOnPhone == 0) genCost.hoursActiveOnPhone = 1;
         %>
 		<tr bgcolor="FFCC66" class="bodytekst">
-			<td width="70" align="right" valign="top"><%=vEmployee%></td>
-            <td width="70" align="right" valign="top"><%=genCost.calls%></td>
-            <td width="70" align="right" valign="top"><%=genCost.duration/60%></td>
-			<td width="70" align="right" valign="top"><%=mCostFormatter.format(callCostContribution)%></td>
-            <td width="70" align="right" valign="top"><%=mCostFormatter.format(genCost.hoursActiveOnPhone)%></td>
-            <td width="70" align="right" valign="top"><%=mCostFormatter.format(genCost.calls/genCost.hoursActiveOnPhone)%></td>
-            <td width="70" align="right" valign="top"><%=mCostFormatter.format(genCost.taskCost)%></td>
-            <td width="70" align="right" valign="top"><%=mCostFormatter.format(genCost.taskCost + callCostContribution)%></td>
-            <td width="70" align="right" valign="top"><%=daysWorked%></td>
-            <td width="70" align="right" valign="top"><%=mCostFormatter.format((genCost.taskCost + callCostContribution)/daysWorked)%></td>
+			<td width="90" align="right" valign="top"><%=vEmployee%></td>
+            <td width="90" align="right" valign="top"><%=genCost.calls%></td>
+            <td width="90" align="right" valign="top"><%=genCost.duration/60%></td>
+			<td width="90" align="right" valign="top"><%=mCostFormatter.format(callCostContribution)%></td>
+            <td width="90" align="right" valign="top"><%=mCostFormatter.format(genCost.hoursActiveOnPhone)%></td>
+            <td width="90" align="right" valign="top"><%=mCostFormatter.format(genCost.calls/genCost.hoursActiveOnPhone)%></td>
+            <td width="90" align="right" valign="top"><%=mCostFormatter.format(genCost.taskCost)%></td>
+            <td width="90" align="right" valign="top"><%=mCostFormatter.format(genCost.taskCost + callCostContribution)%></td>
+            <td width="90" align="right" valign="top"><%=daysWorked%></td>
+            <td width="90" align="right" valign="top"><%=mCostFormatter.format((genCost.taskCost + callCostContribution)/daysWorked)%></td>
 		</tr>
 		<%
 	}
@@ -253,8 +266,9 @@ e.printStackTrace();
 		</td>
 	</tr>
 
+</table>
 
-	<script type="text/javascript">
+<script type="text/javascript">
 
 function selectAll()
 {
@@ -284,7 +298,6 @@ function showNext()
 }
 
 </script>
-</table>
 
 </body>
 

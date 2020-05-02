@@ -354,4 +354,9 @@ public class LoginServlet extends HttpServlet
         return vFormFaults;
     }
 
+    public void destroy()
+    {
+        log.info("LoginServlet destroyed.");
+    }
+
 }

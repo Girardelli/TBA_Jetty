@@ -43,4 +43,12 @@ public class CallManagerCleanupTimerTask extends TimerTask implements TimerTaskI
       
    }
 
+   @Override
+   public void cleanUp()
+   {
+      // TODO Auto-generated method stub
+      System.out.println("Cancel CallManagerCleanupTimerTask");
+      this.cancel();
+   }
+
 }

@@ -136,4 +136,9 @@ public class CustFileDownloadServlet extends HttpServlet
          file.delete();
       }
    }
+
+   public void destroy()
+   {
+       log.info("CustFileDownloadServlet destroyed.");
+   }
 }

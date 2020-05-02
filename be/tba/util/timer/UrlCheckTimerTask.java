@@ -2,14 +2,21 @@ package be.tba.util.timer;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.TimerTask;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import be.tba.ejb.phoneMap.session.UrlCheckerSqlAdapter;
 import be.tba.util.constants.Constants;
 
 public class UrlCheckTimerTask extends TimerTask implements TimerTaskIntf 
 {
-	private static boolean isUrlUp = true;
+   private static Log log = LogFactory.getLog(UrlCheckTimerTask.class);
+   private static boolean isUrlUp = true;
+	private static long deadStart = 0;
 	
 	public static boolean getIsWebsiteUp()
 	{
@@ -19,7 +26,7 @@ public class UrlCheckTimerTask extends TimerTask implements TimerTaskIntf
 	public UrlCheckTimerTask()
 	{
 		super();
-		System.out.println("UrlCheckTimerTask created");
+		log.info("UrlCheckTimerTask created");
 	}
 	
 	@Override
@@ -68,8 +75,11 @@ public class UrlCheckTimerTask extends TimerTask implements TimerTaskIntf
 		} 
 		catch (Exception e) 
 		{
-			urlIsUp = false;
-			System.out.println("UrlCheckTimerTask returned: " + e.getClass().getName());
+		   urlIsUp = false;
+		   if (UrlCheckTimerTask.isUrlUp)
+		   {
+		      log.info("UrlCheckTimerTask returned: " + e.getClass().getName());
+		   }
 			//e.printStackTrace();
 			if (con != null)
 			{
@@ -79,7 +89,29 @@ public class UrlCheckTimerTask extends TimerTask implements TimerTaskIntf
 		if (urlIsUp != UrlCheckTimerTask.isUrlUp)
 		{
 			UrlCheckTimerTask.isUrlUp = urlIsUp;
+			if (urlIsUp)
+			{
+			   // again OK
+			   Calendar calendar = Calendar.getInstance();
+			   long deadTime = (calendar.getTimeInMillis() - deadStart) / 1000; 
+            log.info("UrlCheckTimerTask stopped counting link down: " + deadTime + " seconds down");
+            UrlCheckerSqlAdapter checker = new UrlCheckerSqlAdapter();
+            checker.update(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), deadTime);
+			}
+			else
+			{
+			   // it went down
+			   deadStart = Calendar.getInstance().getTimeInMillis();
+			   log.info("UrlCheckTimerTask starts counting link down");
+			}
 		}
 	}
 
+   @Override
+   public void cleanUp()
+   {
+      // TODO Auto-generated method stub
+      System.out.println("Cancel UrlCheckTimerTask");
+      this.cancel();
+   }
 }

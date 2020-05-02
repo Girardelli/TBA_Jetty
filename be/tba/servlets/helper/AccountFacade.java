@@ -55,7 +55,6 @@ public class AccountFacade
         AccountRole role = AccountRole.fromShort(roleStr);
         
         AccountEntityData newAccount = new AccountEntityData();
-        SetDefaultCallPrices(newAccount);
         newAccount.setFullName(parms.getParameter(Constants.ACCOUNT_FULLNAME));
         newAccount.setRole(roleStr);
         
@@ -397,30 +396,4 @@ public class AccountFacade
         return vFormFaults;
     }
 
-    private static void SetDefaultCallPrices(AccountEntityData account)
-    {
-        account.setFacTblMinCalls_I(Constants.kFacTblMinCalls_I);
-        account.setFacTblStartCost_I(Constants.kFacTblStartCost_I);
-        account.setFacTblExtraCost_I(Constants.kFacTblExtraCost_I);
-        account.setFacTblMinCalls_II(Constants.kFacTblMinCalls_II);
-        account.setFacTblStartCost_II(Constants.kFacTblStartCost_II);
-        account.setFacTblExtraCost_II(Constants.kFacTblExtraCost_II);
-        account.setFacTblMinCalls_III(Constants.kFacTblMinCalls_III);
-        account.setFacTblStartCost_III(Constants.kFacTblStartCost_III);
-        account.setFacTblExtraCost_III(Constants.kFacTblExtraCost_III);
-        account.setFacTblMinCalls_IV(Constants.kFacTblMinCalls_IV);
-        account.setFacTblStartCost_IV(Constants.kFacTblStartCost_IV);
-        account.setFacTblExtraCost_IV(Constants.kFacTblExtraCost_IV);
-
-        account.setCountAllLongCalls(false);
-        account.setCountLongFwdCalls(false);
-        account.setFacLong(Constants.kFacLong);
-        account.setFacLongFwd(Constants.kFacLongFwd);
-        account.setFacStdOutCall(Constants.kOutCost);
-        account.setFacFaxCall(Constants.kFaxCost);
-        account.setFacSms(Constants.kSmsCost);
-        account.setFacCallForward(Constants.kForwardCost);
-        account.setIsMailInvoice(true);
-
-    }
 }

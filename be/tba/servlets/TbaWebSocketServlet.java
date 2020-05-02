@@ -1,5 +1,7 @@
 package be.tba.servlets;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.jetty.websocket.servlet.WebSocketServlet;
 import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 
@@ -9,6 +11,7 @@ import be.tba.websockets.TbaWebSocketAdapter;
 
 public class TbaWebSocketServlet extends WebSocketServlet 
 {
+   private  Log log = LogFactory.getLog(TbaWebSocketServlet.class);
     /**
 	 * 
 	 */
@@ -23,5 +26,9 @@ public class TbaWebSocketServlet extends WebSocketServlet
     }
 
 
+   public void destroy()
+   {
+       log.info("TbaWebSocketServlet destroyed.");
+   }
     
 }

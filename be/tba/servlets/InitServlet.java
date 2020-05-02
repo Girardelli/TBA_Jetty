@@ -52,7 +52,9 @@ public class InitServlet extends GenericServlet
 
     public void destroy()
     {
-        System.out.println("init servlet destroyed.");
+       TimerManager vTimerManager = TimerManager.getInstance();
+       vTimerManager.destroy();
+       System.out.println("InitServlet destroyed.");
     }
 
     public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException

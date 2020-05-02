@@ -489,14 +489,12 @@ public class Constants
     public static final long CUSTOMER_SESSION_TIMEOUT = MINUTES * 120; // 5 minuten
     public static final long ADMIN_SESSION_TIMEOUT = MINUTES * 60; // 50 minuten
     public static final long NORMAL_CALL_LENGTH = 90; // 90 seconds
-    public static final String CENT_PER_LONG_CALL_SECOND_STR = "0.01"; // 0,5 cent
-    public static final int kOutCost = 100; // euro cent
+    public static final int kOutCost = 120; // euro cent
     public static final int kSmsCost = 100; // euro cent
     public static final int kForwardCost = 100; // euro cent
     public static final int kFaxCost = 100; // euro cent
     public static final int kStandardAgendaCost = 45; // euro
-    public static final boolean kCountAllLongCalls = false;
-    public static final boolean kCountLongFwdCalls = false;
+    public static final int kHourTarifCost = 4500; // euro cent
     public static final double kFacLong = 0.014;
     public static final double kFacLongFwd = 0.014;
     public static final int kFacTblMinCalls_I = 75;

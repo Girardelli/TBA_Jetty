@@ -8,4 +8,5 @@ public interface TimerTaskIntf
 	public Date getStartTime();
 	public long getPeriod();
 	public TimerTask getTimerTask();
+	public void cleanUp();
 }

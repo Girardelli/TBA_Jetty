@@ -197,4 +197,11 @@ public class FileDownloadServlet extends HttpServlet
          file.delete();
       }
    }
+
+   public void destroy()
+   {
+       log.info("FileDownloadServlet destroyed.");
+   }
+
+
 }

@@ -114,4 +114,9 @@ public class AdminLoginServlet extends HttpServlet
         doGet(req, res);
     }
 
+    public void destroy()
+    {
+        System.out.println("AdminLoginServlet destroyed.");
+    }
+
 }

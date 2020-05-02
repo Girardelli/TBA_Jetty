@@ -1227,4 +1227,9 @@ public class AdminDispatchServlet extends HttpServlet
       doGet(req, res);
    }
 
+   public void destroy()
+   {
+       System.out.println("AdminDispatchServlet destroyed.");
+   }
+
 }
