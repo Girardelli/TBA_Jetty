@@ -514,6 +514,8 @@ public class Constants
     public static final String REFRESH = "3000"; // 300 seconds
     public static final short MAX_MAIL_HOUR = 23;
     public static final int kAbbrevWidth = 50;
+    
+    public static final String kNullCost = "00:00:00";
 
     public static final String kRed = "FF9797";
     public static final String kOrange = "FFCC66";

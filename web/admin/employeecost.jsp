@@ -131,6 +131,7 @@ try
 	      genCost = new GeneratedCost();
           genCost.taskCost = taskCost;
 	      performanceMap.put(task.getDoneBy(), genCost); 
+	      System.out.println("add entry from tasks for '"+ task.getDoneBy() + "'");
 	  }
      if (!task.getIsRecuring())
      {
@@ -178,7 +179,7 @@ try
         }
         else
         {
-            genCost = new GeneratedCost();
+           genCost = new GeneratedCost();
             genCost.duration = InvoiceHelper.duration2Seconds(record.getCost());
             //genCost.duration = (record.getTsEnd() - record.getTsAnswer());
             genCost.calls = 1;
@@ -186,7 +187,7 @@ try
             genCost.activeCurrent = record.getTimeStamp();
             genCost.dayStart = record.getTimeStamp();
             performanceMap.put(record.getDoneBy(), genCost); 
-            System.out.println("add entry from records for "+ record.getDoneBy());
+            System.out.println("add entry from records for '"+ record.getDoneBy() + "'");
         }
         calendar.setTimeInMillis(record.getTimeStamp());
         if (!genCost.daysInMonth.contains(calendar.get(Calendar.DAY_OF_MONTH)))

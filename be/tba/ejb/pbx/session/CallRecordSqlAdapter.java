@@ -866,7 +866,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
                // || record.mInitialUser.endsWith(Constants.NUMBER_BLOCK[i][4]))
                {
                   newRecord.setFwdNr(Constants.NUMBER_BLOCK[i][0]);
-                  if (record.mDuration.equals("00:00:00"))
+                  if (record.mDuration.equals(Constants.kNullCost))
                   {
                      System.out.println("missed call from " + record.mExtCorrNumber + "!!");
                      break;
@@ -977,7 +977,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
    {
       setIsDocumentedFlag(data);
       PhoneMapManager.getInstance().updateOperatorMapping(data, webSession);
-      if (data.getTsAnswer() > 0)
+      if (data.getCost().equals(Constants.kNullCost))
       {
          setOperatorLogging(webSession, data);
          return;
@@ -1114,7 +1114,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
       Calendar vToday = Calendar.getInstance();
       newRecord.setDate(String.format("%02d/%02d/%02d", vToday.get(Calendar.DAY_OF_MONTH), vToday.get(Calendar.MONTH) + 1, vToday.get(Calendar.YEAR) - 2000));
       newRecord.setTime(String.format("%02d:%02d", vToday.get(Calendar.HOUR_OF_DAY), vToday.get(Calendar.MINUTE)));
-      newRecord.setCost("0:00:00");
+      newRecord.setCost(Constants.kNullCost);
       int dbId = 0;
 
       if (vAccount != null)
@@ -1186,7 +1186,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
 
    public void setNotAnswered(WebSession webSession, IntertelCallData data)
    {
-      executeSqlQuery(webSession, "UPDATE CallRecordEntity SET Cost='00:00:00', ShortDescription='verloren oproep' WHERE Id=" + data.dbRecordId);
+      executeSqlQuery(webSession, "UPDATE CallRecordEntity SET Cost='" + Constants.kNullCost + "', ShortDescription='verloren oproep' WHERE Id=" + data.dbRecordId);
    }
    
    public void archiveRecords(WebSession webSession, String inStrOfKeys)

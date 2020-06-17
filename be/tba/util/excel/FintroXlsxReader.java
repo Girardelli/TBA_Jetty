@@ -199,7 +199,10 @@ final public class FintroXlsxReader
             // just store the first payment of this payment list made via the unknown
             // accountNr.
             System.out.println("no customer found for bank account " + accountNrCustomer + ". " + paymentsDoneByAccount.size() + " payments not processed");
-            mUnknownAccountNrs.add((FintroPayment) paymentsDoneByAccount.toArray()[0]);
+            for (FintroPayment payment : paymentsDoneByAccount)
+            {
+               mUnknownAccountNrs.add(payment);
+            }
             continue;
          }
 
@@ -407,7 +410,7 @@ final public class FintroXlsxReader
             mConfirmedPayedInvoices.add((InvoiceEntityData) alreadyUsedFintroIdInvoices.toArray()[0]);
             if (dbInvoice.getId() != invoice.getId())
             {
-               mLog.append("INFO: payment " + payment.id  + ": match found on open invoice " + invoice.getInvoiceNr() + " (id=" + invoice.getId() + "), but this payment was already linked in DB to "+ dbInvoice.getInvoiceNr() + " (id=" + dbInvoice.getId() + ")<br>");
+               mLog.append("ERROR: payment " + payment.id  + ": match found on open invoice " + invoice.getInvoiceNr() + " (id=" + invoice.getId() + "), but this payment was already linked in DB to "+ dbInvoice.getInvoiceNr() + " (id=" + dbInvoice.getId() + ")<br>");
             }
          }
          else
