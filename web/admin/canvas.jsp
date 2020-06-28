@@ -126,7 +126,6 @@ try {
                               <input class="tbabuttonorange" type=submit name=action value="Refresh"> 
                               <input class="tbabutton" type=submit name=action value="Verwijderen" onclick="deleteCalls()">
                               <input class="tbabutton" type=submit name=action value="Toevoegen" onclick="addRecord()"> 
-                              <input class="tbabutton" type=submit name=action value="fix DB" onclick="fixDB()"> 
                               <input class="tbabutton" type=submit name=action value="verzend mail" onclick="testMail()"> <%
  	if (vSession.getUserId().equals("esosrv") && false) { // hidden
  %> <input class="tbabutton" type=submit name=action value="add intertel call" onclick="fixAccountIds()"> <%
@@ -827,11 +826,6 @@ function mailError()
 function toCallList()
 {
   document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.GOTO_CANVAS%>";
-}
-
-function fixDB()
-{
-    document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.FIX_ACCOUNT_IDS%>";
 }
 
 var newwindow = '';
