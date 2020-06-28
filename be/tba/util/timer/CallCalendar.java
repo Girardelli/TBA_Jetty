@@ -76,7 +76,7 @@ public class CallCalendar
       return vEndCalendar.getTimeInMillis();
    }
 
-   public long getDaysBack(int daysBack)
+   public Calendar getDaysBack(int daysBack)
    {
       int vCurrentYear = mCalendar.get(Calendar.YEAR);
       int vDay = mCalendar.get(Calendar.DATE);
@@ -126,7 +126,8 @@ public class CallCalendar
       // System.out.println("getDaysBack(" + daysBack + "): vCurrentYear = " +
       // vCurrentYear + "; vDay = " + vDay + "; vMonth = " + vMonth +
       // ", miliseconds=" + vStartCalendar.getTimeInMillis());
-      return vStartCalendar.getTimeInMillis();
+      //return vStartCalendar.getTimeInMillis();
+      return vStartCalendar;
    }
 
    /*

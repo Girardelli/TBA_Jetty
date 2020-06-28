@@ -103,8 +103,6 @@ public class AccountEntityData extends be.tba.util.data.AbstractData implements 
        noEmptyMails = true;
        noInvoice = false;
        textMail = false;
-       facLong = 1.2;
-       facLongFwd = 0;
        countryCode = Constants.COUNTRY_CODES[0][0];
        isArchived = false;
        taskHourRate = Constants.kHourTarifCost;

@@ -173,6 +173,8 @@ public class CallRecordFacade
       newRecord.setCost("00:01:10");
       newRecord.setTimeStamp(vCalendar.getTimeInMillis());
       newRecord.setDoneBy(session.getUserId());
+      newRecord.setMonthInt(vCalendar.get(Calendar.YEAR)*100 + vCalendar.get(Calendar.MONTH));
+      newRecord.setDayInt(vCalendar.get(Calendar.YEAR)*10000 + vCalendar.get(Calendar.MONTH)*100 + vCalendar.get(Calendar.DAY_OF_MONTH));
 
       AccountEntityData account = AccountCache.getInstance().get(newRecord);
       newRecord.setAccountId(account.getId());

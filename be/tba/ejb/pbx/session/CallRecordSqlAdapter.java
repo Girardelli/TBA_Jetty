@@ -117,23 +117,40 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
       try
       {
          CallCalendar vCallCalendar = new CallCalendar();
-         long vFromTimeStamp = vCallCalendar.getDaysBack(daysBack);
-         long vToTimeStamp = 0;
-         if (daysBack > 0)
-         {
-            vToTimeStamp = vCallCalendar.getDaysBack(daysBack - 1);
-         } else
-         {
-            vToTimeStamp = vCallCalendar.getCurrentTimestamp();
-         }
+
+         
+         Calendar targetCal = vCallCalendar.getDaysBack(daysBack);
          Collection<CallRecordEntityData> vCollection = executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsDocumented=FALSE ORDER BY TimeStamp DESC");
+//         int monthInt = targetCal.get(Calendar.YEAR)*100 + targetCal.get(Calendar.MONTH);
+         int dayInt = targetCal.get(Calendar.YEAR)*10000 + targetCal.get(Calendar.MONTH)*100 + targetCal.get(Calendar.DAY_OF_MONTH);
+         
          if (fwdNr == null || fwdNr.equals(Constants.ACCOUNT_FILTER_ALL))
          {
-            vCollection.addAll(executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsDocumented=TRUE AND TimeStamp>" + vFromTimeStamp + " AND TimeStamp<=" + vToTimeStamp + " ORDER BY TimeStamp DESC"));
+            vCollection.addAll(executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsDocumented=TRUE AND DayInt=" + dayInt + " ORDER BY TimeStamp DESC"));
          } else
          {
-            vCollection.addAll(executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsDocumented=TRUE AND FwdNr='" + fwdNr + "' AND TimeStamp>" + vFromTimeStamp + " AND TimeStamp<=" + vToTimeStamp + " ORDER BY TimeStamp DESC"));
+            vCollection.addAll(executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsDocumented=TRUE AND FwdNr='" + fwdNr + "' AND DayInt=" + dayInt + " ORDER BY TimeStamp DESC"));
          }
+         
+         
+         
+//         long vFromTimeStamp = vCallCalendar.getDaysBack(daysBack);
+//         long vToTimeStamp = 0;
+//         if (daysBack > 0)
+//         {
+//            vToTimeStamp = vCallCalendar.getDaysBack(daysBack - 1);
+//         } else
+//         {
+//            vToTimeStamp = vCallCalendar.getCurrentTimestamp();
+//         }
+//         Collection<CallRecordEntityData> vCollection = executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsDocumented=FALSE ORDER BY TimeStamp DESC");
+//         if (fwdNr == null || fwdNr.equals(Constants.ACCOUNT_FILTER_ALL))
+//         {
+//            vCollection.addAll(executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsDocumented=TRUE AND TimeStamp>" + vFromTimeStamp + " AND TimeStamp<=" + vToTimeStamp + " ORDER BY TimeStamp DESC"));
+//         } else
+//         {
+//            vCollection.addAll(executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsDocumented=TRUE AND FwdNr='" + fwdNr + "' AND TimeStamp>" + vFromTimeStamp + " AND TimeStamp<=" + vToTimeStamp + " ORDER BY TimeStamp DESC"));
+//         }
          return vCollection;
       } catch (Exception e)
       {
@@ -166,16 +183,36 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
          }
 
          CallCalendar vCallCalendar = new CallCalendar();
-         long vFromTimeStamp = vCallCalendar.getDaysBack(daysBack);
-         long vToTimeStamp = 0;
+
+         
+         Calendar targetCal = vCallCalendar.getDaysBack(daysBack);
+//       int monthInt = targetCal.get(Calendar.YEAR)*100 + targetCal.get(Calendar.MONTH);
+         int fromDayInt = targetCal.get(Calendar.YEAR)*10000 + targetCal.get(Calendar.MONTH)*100 + targetCal.get(Calendar.DAY_OF_MONTH);
+
+         
+         
          if (daysBack >= 7)
          {
-            vToTimeStamp = vCallCalendar.getDaysBack(daysBack - 7);
+            targetCal = vCallCalendar.getDaysBack(daysBack - 7);
          } else
          {
-            vToTimeStamp = vCallCalendar.getCurrentTimestamp() + 60000; // add 1 minute in teh future
+            targetCal = vCallCalendar.getDaysBack(0);
          }
-         return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsDocumented=TRUE AND IsArchived=" + (includeArchived?"TRUE":"FALSE") + " AND TimeStamp>" + vFromTimeStamp + " AND TimeStamp<=" + vToTimeStamp + " AND FwdNr IN (" + customerIdsIN + ") ORDER BY TimeStamp DESC");
+         int toDayInt = targetCal.get(Calendar.YEAR)*10000 + targetCal.get(Calendar.MONTH)*100 + targetCal.get(Calendar.DAY_OF_MONTH);
+         return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsDocumented=TRUE AND IsArchived=" + (includeArchived?"TRUE":"FALSE") + " AND DayInt>" + fromDayInt + " AND DayInt<=" + toDayInt + " AND FwdNr IN (" + customerIdsIN + ") ORDER BY TimeStamp DESC");
+
+         
+         
+//         long vFromTimeStamp = vCallCalendar.getDaysBack(daysBack);
+//         long vToTimeStamp = 0;
+//         if (daysBack >= 7)
+//         {
+//            vToTimeStamp = vCallCalendar.getDaysBack(daysBack - 7);
+//         } else
+//         {
+//            vToTimeStamp = vCallCalendar.getCurrentTimestamp() + 60000; // add 1 minute in teh future
+//         }
+//         return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsDocumented=TRUE AND IsArchived=" + (includeArchived?"TRUE":"FALSE") + " AND TimeStamp>" + vFromTimeStamp + " AND TimeStamp<=" + vToTimeStamp + " AND FwdNr IN (" + customerIdsIN + ") ORDER BY TimeStamp DESC");
       } catch (Exception e)
       {
          e.printStackTrace();
@@ -373,16 +410,30 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
    {
       try
       {
-         CallCalendar vCalendar = new CallCalendar();
-         long vStart = vCalendar.getStartOfMonth(month, year);
-         long vEnd = vCalendar.getEndOfMonth(month, year);
-         if (fwdNr == null)
-         {
-            return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE TimeStamp>" + vStart + " AND TimeStamp<=" + vEnd + " AND IsDocumented=TRUE ORDER BY TimeStamp DESC");
-         } else
-         {
-            return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE FwdNr='" + fwdNr + "' AND TimeStamp>" + vStart + " AND TimeStamp<=" + vEnd + " AND IsDocumented=TRUE ORDER BY TimeStamp DESC");
-         }
+         
+         
+          int monthInt = year*100 + month;
+   //       int dayInt = targetCal.get(Calendar.YEAR)*10000 + targetCal.get(Calendar.MONTH)*100 + targetCal.get(Calendar.DAY_OF_MONTH);
+          if (fwdNr == null)
+          {
+             return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE MonthInt=" + monthInt + " AND IsDocumented=TRUE ORDER BY TimeStamp DESC");
+          } else
+          {
+             return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE FwdNr='" + fwdNr + "' AND MonthInt=" + monthInt + " AND IsDocumented=TRUE ORDER BY TimeStamp DESC");
+          }
+
+         
+         
+//          CallCalendar vCalendar = new CallCalendar();
+//         long vStart = vCalendar.getStartOfMonth(month, year);
+//         long vEnd = vCalendar.getEndOfMonth(month, year);
+//         if (fwdNr == null)
+//         {
+//            return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE TimeStamp>" + vStart + " AND TimeStamp<=" + vEnd + " AND IsDocumented=TRUE ORDER BY TimeStamp DESC");
+//         } else
+//         {
+//            return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE FwdNr='" + fwdNr + "' AND TimeStamp>" + vStart + " AND TimeStamp<=" + vEnd + " AND IsDocumented=TRUE ORDER BY TimeStamp DESC");
+//         }
       } catch (Exception e)
       {
          e.printStackTrace();
@@ -397,16 +448,30 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
    {
       try
       {
-         CallCalendar vCalendar = new CallCalendar();
-         long vStart = vCalendar.getStartOfToday();
+         Calendar vCalendar = Calendar.getInstance();
 
+//         int monthInt = year*100 + month;
+         int dayInt = vCalendar.get(Calendar.YEAR)*10000 + vCalendar.get(Calendar.MONTH)*100 + vCalendar.get(Calendar.DAY_OF_MONTH);
          if (fwdNr == null)
          {
-            return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE TimeStamp>" + vStart + " AND TimeStamp<=" + vCalendar.getCurrentTimestamp() + " AND IsDocumented=TRUE ORDER BY TimeStamp DESC");
+            return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE DayInt=" + dayInt + " AND IsDocumented=TRUE ORDER BY TimeStamp DESC");
          } else
          {
-            return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE FwdNr='" + fwdNr + "' AND TimeStamp>" + vStart + " AND TimeStamp<=" + vCalendar.getCurrentTimestamp() + " AND IsDocumented=TRUE ORDER BY TimeStamp DESC");
+            return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE FwdNr='" + fwdNr + "' AND DayInt=" + dayInt + " AND IsDocumented=TRUE ORDER BY TimeStamp DESC");
          }
+         
+         
+         
+//         CallCalendar vCalendar = new CallCalendar();
+//         long vStart = vCalendar.getStartOfToday();
+//
+//         if (fwdNr == null)
+//         {
+//            return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE TimeStamp>" + vStart + " AND TimeStamp<=" + vCalendar.getCurrentTimestamp() + " AND IsDocumented=TRUE ORDER BY TimeStamp DESC");
+//         } else
+//         {
+//            return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE FwdNr='" + fwdNr + "' AND TimeStamp>" + vStart + " AND TimeStamp<=" + vCalendar.getCurrentTimestamp() + " AND IsDocumented=TRUE ORDER BY TimeStamp DESC");
+//         }
       } catch (Exception e)
       {
          e.printStackTrace();
@@ -414,37 +479,14 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
       return new Vector<CallRecordEntityData>();
    }
 
-   /**
-    * @ejb:interface-method view-type="remote"
-    */
-   public Collection<CallRecordEntityData> getDocumentedLastWeek(WebSession webSession, String fwdNr)
-   {
-      try
-      {
-         CallCalendar vCalendar = new CallCalendar();
-         long vStart = vCalendar.getStartOfToday() - 7 * 24 * 60 * 1000;
-
-         if (fwdNr == null)
-         {
-            return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE TimeStamp>" + vStart + " AND IsDocumented=TRUE ORDER BY TimeStamp DESC");
-         } else
-         {
-            return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE FwdNr='" + fwdNr + "' AND TimeStamp>" + vStart + " AND IsDocumented=TRUE ORDER BY TimeStamp DESC");
-         }
-      } catch (Exception e)
-      {
-         e.printStackTrace();
-      }
-      return new Vector<CallRecordEntityData>();
-   }
 
    /**
     * @ejb:interface-method view-type="remote"
     */
-   public Collection<CallRecordEntityData> getInvoiceCalls(WebSession webSession, int accountId, long start, long stop)
+   public Collection<CallRecordEntityData> getInvoiceCalls(WebSession webSession, int accountId, int year, int month, long start, long stop)
    {
       Collection<CallRecordEntityData> vCallList = new Vector<CallRecordEntityData>();
-      collectInvoiceCalls(webSession, AccountCache.getInstance().get(accountId), vCallList, start, stop);
+      collectInvoiceCalls(webSession, AccountCache.getInstance().get(accountId), vCallList, year, month, start, stop);
       return vCallList;
    }
 
@@ -482,12 +524,19 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
                   }
                }
             }
-            CallCalendar vCalendar = new CallCalendar();
-            long vStartTime = vCalendar.getStartOfMonth(month, year);
-            long vEndTime = vCalendar.getEndOfMonth(month, year);
 
+            int monthInt = year*100 + month;
             Vector<CallRecordEntityData> vOutList = new Vector<CallRecordEntityData>();
-            Collection<CallRecordEntityData> vCollection = executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE TimeStamp>" + vStartTime + " AND TimeStamp<=" + vEndTime + " AND IsDocumented=TRUE AND FwdNr IN (" + customerIdsIN + ") ORDER BY TimeStamp DESC");
+            Collection<CallRecordEntityData> vCollection = executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE MonthInt=" + monthInt + " AND IsDocumented=TRUE AND FwdNr IN (" + customerIdsIN + ") ORDER BY TimeStamp DESC");
+            
+            
+            
+//            CallCalendar vCalendar = new CallCalendar();
+//            long vStartTime = vCalendar.getStartOfMonth(month, year);
+//            long vEndTime = vCalendar.getEndOfMonth(month, year);
+//
+//            Vector<CallRecordEntityData> vOutList = new Vector<CallRecordEntityData>();
+//            Collection<CallRecordEntityData> vCollection = executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE TimeStamp>" + vStartTime + " AND TimeStamp<=" + vEndTime + " AND IsDocumented=TRUE AND FwdNr IN (" + customerIdsIN + ") ORDER BY TimeStamp DESC");
 
             SortAndFilterOnString(vOutList, vCollection, str2find);
 
@@ -509,12 +558,16 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
    {
       try
       {
-         CallCalendar vCalendar = new CallCalendar();
-         long vStartTime = vCalendar.getStartOfMonth(month, year);
-         long vEndTime = vCalendar.getEndOfMonth(month, year);
+         int monthInt = year*100 + month;
+        return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE MonthInt=" + monthInt + " AND IsMailed=TRUE ORDER BY TimeStamp ASC");
 
-         Collection<CallRecordEntityData> vCollection = executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE TimeStamp>" + vStartTime + " AND TimeStamp<=" + vEndTime + " AND IsMailed=TRUE ORDER BY TimeStamp ASC");
-         return vCollection;
+         
+//         CallCalendar vCalendar = new CallCalendar();
+//         long vStartTime = vCalendar.getStartOfMonth(month, year);
+//         long vEndTime = vCalendar.getEndOfMonth(month, year);
+//
+//         Collection<CallRecordEntityData> vCollection = executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE TimeStamp>" + vStartTime + " AND TimeStamp<=" + vEndTime + " AND IsMailed=TRUE ORDER BY TimeStamp ASC");
+//         return vCollection;
       } catch (Exception e)
       {
          e.printStackTrace();
@@ -529,16 +582,14 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
    {
       try
       {
-         CallCalendar vCalendar = new CallCalendar();
-         long vStartTime = vCalendar.getStartOfMonth(month, year);
-         long vEndTime = vCalendar.getEndOfMonth(month, year);
+         int monthInt = year*100 + month;
+         return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE DoneBy='" + empl + "' AND MonthInt=" + monthInt + " AND IsDocumented=TRUE AND IsMailed=TRUE ORDER BY TimeStamp DESC");
 
-         // CallRecordEntityHome callRecordHome = getEntityBean();
-         return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE DoneBy='" + empl + "' AND TimeStamp>" + vStartTime + " AND TimeStamp<=" + vEndTime + " AND IsDocumented=TRUE AND IsMailed=TRUE ORDER BY TimeStamp DESC");
-
-         // Collection vCollection = callRecordHome.findDoneBy(empl, vStartTime,
-         // vEndTime);
-         // return translateToValueObjects(vCollection);
+         
+//         CallCalendar vCalendar = new CallCalendar();
+//         long vStartTime = vCalendar.getStartOfMonth(month, year);
+//         long vEndTime = vCalendar.getEndOfMonth(month, year);
+//         return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE DoneBy='" + empl + "' AND TimeStamp>" + vStartTime + " AND TimeStamp<=" + vEndTime + " AND IsDocumented=TRUE AND IsMailed=TRUE ORDER BY TimeStamp DESC");
       } catch (Exception e)
       {
          e.printStackTrace();
@@ -646,11 +697,11 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
       executeSqlQuery(webSession, "DELETE FROM CallRecordEntity WHERE FwdNr='" + accountID + "'");
    }
 
-   private void collectInvoiceCalls(WebSession webSession, AccountEntityData customer, Collection<CallRecordEntityData> callList, long start, long stop)
+   private void collectInvoiceCalls(WebSession webSession, AccountEntityData customer, Collection<CallRecordEntityData> callList, int year, int month, long start, long stop)
    {
       // CallRecordEntityHome callRecordHome = getEntityBean();
-
-      Collection<CallRecordEntityData> vCollection = executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE FwdNr='" + customer.getFwdNumber() + "' AND TimeStamp>" + start + " AND TimeStamp<=" + stop + " AND IsDocumented=TRUE AND IsMailed=TRUE ORDER BY TimeStamp DESC");
+      int monthInt = year*100 + month;
+      Collection<CallRecordEntityData> vCollection = executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE monthInt=" + monthInt + " AND FwdNr='" + customer.getFwdNumber() + "' AND TimeStamp>" + start + " AND TimeStamp<=" + stop + " AND IsDocumented=TRUE AND IsMailed=TRUE ORDER BY TimeStamp DESC");
 
       if (vCollection != null)
       {
@@ -668,7 +719,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
 
                if (vEntry.getNoInvoice())
                {
-                  collectInvoiceCalls(webSession, vEntry, callList, start, stop);
+                  collectInvoiceCalls(webSession, vEntry, callList, year, month, start, stop);
                } else
                {
                   System.out.println("collectInvoiceCalls: " + customer.getFullName() + " has its invoice flag set.");
@@ -1112,6 +1163,8 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
       newRecord.setTsStart(data.tsStart);
       newRecord.setIsIncomingCall(data.isIncoming);
       Calendar vToday = Calendar.getInstance();
+      newRecord.setMonthInt(vToday.get(Calendar.YEAR)*100 + vToday.get(Calendar.MONTH));
+      newRecord.setDayInt(vToday.get(Calendar.YEAR)*10000 + vToday.get(Calendar.MONTH)*100 + vToday.get(Calendar.DAY_OF_MONTH));
       newRecord.setDate(String.format("%02d/%02d/%02d", vToday.get(Calendar.DAY_OF_MONTH), vToday.get(Calendar.MONTH) + 1, vToday.get(Calendar.YEAR) - 2000));
       newRecord.setTime(String.format("%02d:%02d", vToday.get(Calendar.HOUR_OF_DAY), vToday.get(Calendar.MINUTE)));
       newRecord.setCost(Constants.kNullCost);
@@ -1194,6 +1247,11 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
       executeSqlQuery(webSession, "UPDATE CallRecordEntity SET IsArchived=true WHERE Id IN (" + inStrOfKeys + ")");
    }
 
+   public void setIndexes(WebSession webSession, int monthInt, int dayInt, int id)
+   {
+      executeSqlQuery(webSession, "UPDATE CallRecordEntity SET MonthInt=" + monthInt + ", DayInt=" + dayInt + " WHERE Id=" + id);
+   }
+
    static public void setIsDocumentedFlag(CallRecordEntityData record)
    {
       if (record.getNumber() != null && record.getNumber().length() != 0 && record.getName() != null && record.getName().length() != 0 && (record.getShortDescription() != null && record.getShortDescription().length() != 0))
@@ -1266,6 +1324,8 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
          entry.setTsStart(rs.getLong(26));
          entry.setTsAnswer(rs.getLong(27));
          entry.setTsEnd(rs.getLong(28));
+         entry.setMonthInt(rs.getInt(29));
+         entry.setDayInt(rs.getInt(30));
          vVector.add(entry);
       }
       return vVector;

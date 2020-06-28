@@ -329,7 +329,7 @@ public class InvoiceHelper
         }
         else
         {
-            mRecords = vQuerySession.getInvoiceCalls(webSession, mAccountEntityData.getId(), vStart, vEnd);
+            mRecords = vQuerySession.getInvoiceCalls(webSession, mAccountEntityData.getId(), mInvoiceData.Year, mInvoiceData.Month, vStart, vEnd);
         }
 
         // System.out.println(mAccountEntityData.getFwdNumber() + " : has " +

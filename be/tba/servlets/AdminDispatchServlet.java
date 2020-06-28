@@ -3,6 +3,7 @@ package be.tba.servlets;
 import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
@@ -22,6 +23,8 @@ import org.apache.commons.logging.LogFactory;
 
 import be.tba.ejb.account.interfaces.AccountEntityData;
 import be.tba.ejb.mail.session.MailerSessionBean;
+import be.tba.ejb.pbx.interfaces.CallRecordEntityData;
+import be.tba.ejb.pbx.session.CallRecordSqlAdapter;
 import be.tba.servlets.helper.AccountFacade;
 import be.tba.servlets.helper.CallRecordFacade;
 import be.tba.servlets.helper.IntertelCallManager;
@@ -125,6 +128,21 @@ public class AdminDispatchServlet extends HttpServlet
             {
             case Constants.FIX_ACCOUNT_IDS:
             {
+               CallRecordSqlAdapter vCallLogWriterSession = new CallRecordSqlAdapter();
+               Collection<CallRecordEntityData> calls = vCallLogWriterSession.getAllRows(vSession);
+               Calendar timestamp = Calendar.getInstance();
+               int i =0;
+               for (CallRecordEntityData call : calls)
+               {
+                  timestamp.setTimeInMillis(call.getTimeStamp());
+                  int monthInt = timestamp.get(Calendar.YEAR)*100 + timestamp.get(Calendar.MONTH);
+                  int dayInt = timestamp.get(Calendar.YEAR)*10000 + timestamp.get(Calendar.MONTH)*100 + timestamp.get(Calendar.DAY_OF_MONTH);
+                  log.info("index " + ++i + ", Id: " + call.getId() + ", monthInt=" + monthInt + ", dayInt=" + dayInt);
+                  
+                  vCallLogWriterSession.setIndexes(vSession, monthInt, dayInt, call.getId());
+               }
+               log.info("#records=" + calls.size());
+               
                /*
                 * //Set<Integer> vTaskList = new HashSet<Integer>();
                 * 
@@ -1217,8 +1235,8 @@ public class AdminDispatchServlet extends HttpServlet
          req.setAttribute(Constants.ERROR_TXT, "de pagina kan niet worden getoond.");
          rd.forward(req, res);
       }
-//        if (vSession != null)
-//        	System.out.println("httprequest done: SQL timer=" + vSession.getSqlTimer());
+        if (vSession != null)
+        	System.out.println("httprequest done: SQL timer=" + vSession.getSqlTimer());
 
    }
 

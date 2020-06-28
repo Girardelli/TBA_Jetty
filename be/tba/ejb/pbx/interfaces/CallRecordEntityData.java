@@ -51,6 +51,8 @@ public class CallRecordEntityData extends AbstractData
     private long tsStart;
     private long tsAnswer;
     private long tsEnd;
+    private int monthInt;
+    private int dayInt;
      
 
     public CallRecordEntityData()
@@ -80,6 +82,8 @@ public class CallRecordEntityData extends AbstractData
         isArchived = false;
         isCustAttentionNeeded = false;
         doneBy = "";
+        monthInt = 0;
+        dayInt = 0;
     }
 
     public int getId()
@@ -370,6 +374,27 @@ public class CallRecordEntityData extends AbstractData
         this.tsEnd = tsEnd;
     }    
 
+    public int getMonthInt()
+    {
+        return this.monthInt;
+    }
+    
+    public void setMonthInt(int monthInt)
+    {
+        this.monthInt = monthInt;
+    }    
+
+    public int getDayInt()
+    {
+        return this.dayInt;
+    }
+    
+    public void setDayInt(int dayInt)
+    {
+        this.dayInt = dayInt;
+    }    
+
+
     public String toNameValueString()
     {
         StringBuffer str = new StringBuffer();
@@ -400,7 +425,8 @@ public class CallRecordEntityData extends AbstractData
         str.append("',TsStart=" + getTsStart()); 
         str.append(",TsAnswer=" + getTsAnswer()); 
         str.append(",TsEnd=" + getTsEnd()); 
-
+        str.append(",MonthInt=" + getMonthInt()); 
+        str.append(",DayInt=" + getDayInt()); 
         return (str.toString());
     }
 
@@ -434,6 +460,8 @@ public class CallRecordEntityData extends AbstractData
         str.append("'," + getTsStart()); 
         str.append("," + getTsAnswer()); 
         str.append("," + getTsEnd()); 
+        str.append("," + getMonthInt()); 
+        str.append("," + getDayInt()); 
         return (str.toString());
     }
 

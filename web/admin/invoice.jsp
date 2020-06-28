@@ -269,7 +269,7 @@
             {
                accountId = AccountCache.getInstance().get(vInvoiceData).getId();
             }
-     	    vRecords = vCallRecordSession.getInvoiceCalls(vSession, accountId, vInvoiceData.getStartTime(), vInvoiceData.getStopTime());
+     	    vRecords = vCallRecordSession.getInvoiceCalls(vSession, accountId, vYear, vMonth, vInvoiceData.getStartTime(), vInvoiceData.getStopTime());
        	}
         
         
