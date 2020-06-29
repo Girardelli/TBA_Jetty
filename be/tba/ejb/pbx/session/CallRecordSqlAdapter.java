@@ -199,7 +199,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
             targetCal = vCallCalendar.getDaysBack(0);
          }
          int toDayInt = targetCal.get(Calendar.YEAR)*10000 + targetCal.get(Calendar.MONTH)*100 + targetCal.get(Calendar.DAY_OF_MONTH);
-         return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsDocumented=TRUE AND IsArchived=" + (includeArchived?"TRUE":"FALSE") + " AND DayInt>" + fromDayInt + " AND DayInt<=" + toDayInt + " AND FwdNr IN (" + customerIdsIN + ") ORDER BY TimeStamp DESC");
+         return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsDocumented=TRUE AND IsArchived=" + (includeArchived?"TRUE":"FALSE") + " AND DayInt>=" + fromDayInt + " AND DayInt<=" + toDayInt + " AND FwdNr IN (" + customerIdsIN + ") ORDER BY TimeStamp DESC");
 
          
          
