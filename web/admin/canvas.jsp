@@ -502,7 +502,7 @@ var ring = document.getElementById("ringRing");
 
 window.onload = function() 
 {
-    setOnOffText();
+//    setOnOffText();
     updatePendingCalls();
     setInterval(updatePendingCalls, 5000);
 };
