@@ -132,7 +132,7 @@ public class MailerSessionBean
 
          // connect
          // t.setStartTLS(true);
-         t.connect("smtp.telenet.be", "a120569", "gzb625");
+         t.connect("smtp.telenet.be", "a120569", "h7YUG6anja6Ak98u");
          // send
          t.sendMessage(msg, msg.getAllRecipients());
          t.close();
