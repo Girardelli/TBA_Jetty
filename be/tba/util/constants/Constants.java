@@ -168,6 +168,7 @@ public class Constants
     public static final String ACCOUNT_TO_DELETE = "_atd";
     public static final String ACCOUNT_FWDNR = "_afwd";
     public static final String ACCOUNT_NEW_FWDNR = "_nafwd";
+    public static final String ACCOUNT_REDIRECT_ACCOUNT_ID = "_rdaid";
 
     // Task
     public static final String TASK_ID = "_tid";

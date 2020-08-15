@@ -35,7 +35,10 @@ public class AccountFacade
     {
         AccountSqlAdapter vAccountSession = new AccountSqlAdapter();
         vAccountSession.updateRow(session, newData);
-        AccountCache.getInstance().update(session);
+        
+        AccountEntityData account = AccountCache.getInstance().get(newData.getId());
+        account.set(newData);
+        //AccountCache.getInstance().update(session);
     }
 
     public static void deregisterAccount(WebSession session, SessionParmsInf parms) throws AccountNotFoundException
@@ -299,7 +302,8 @@ public class AccountFacade
         vAccount.setBtwNumber(parms.getParameter(Constants.ACCOUNT_BTW_NUMBER));
         vAccount.setAccountNr(parms.getParameter(Constants.ACCOUNT_NR));
         vAccount.setCallProcessInfo(parms.getParameter(Constants.ACCOUNT_INFO));
-
+        if (parms.getParameter(Constants.ACCOUNT_REDIRECT_ACCOUNT_ID) != null)
+           vAccount.setRedirectAccountId(Integer.parseInt((String) parms.getParameter(Constants.ACCOUNT_REDIRECT_ACCOUNT_ID)));
         return vAccount;
     }
 

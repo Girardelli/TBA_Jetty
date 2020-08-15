@@ -178,6 +178,12 @@ final public class AccountCache
       return (AccountEntityData) mFwdKeyList.get(fwdNumber);
    }
 
+   public void set(AccountEntityData data)
+   {
+      
+   }
+   
+   
    public Collection<AccountEntityData> getEmployeeList()
    {
       return mEmployeeLists.values();

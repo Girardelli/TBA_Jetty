@@ -314,6 +314,8 @@ public class AccountSqlAdapter extends AbstractSqlAdapter<AccountEntityData>
             entry.setCountryCode(null2EmpthyString(rs.getString(72)));
             entry.setIsArchived(rs.getBoolean(73));
             entry.setCallProcessInfo(null2EmpthyString(rs.getString(74)));
+            entry.setRedirectAccountId(rs.getInt(75));
+
             vVector.add(entry);
             // System.out.println("read from DB:" + entry.toNameValueString());
         }

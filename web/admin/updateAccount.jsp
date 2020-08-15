@@ -101,6 +101,8 @@ boolean vNoEmptyMails = vCustomer.getNoEmptyMails();
 boolean vTextMail = vCustomer.getTextMail();
 double vFacLong = vCustomer.getFacLong();
 double vFacLongFwd = vCustomer.getFacLongFwd();
+int redirectId = vCustomer.getRedirectAccountId();
+System.out.println("redirectId=" + redirectId);
 
 %>
 <body>
@@ -125,15 +127,15 @@ double vFacLongFwd = vCustomer.getFacLongFwd();
 						</p>
 						<table border="0" cellspacing="2" cellpadding="2">
 							<tr>
-								<td width="200" valign="top" class="bodysubsubtitle">login	naam</td>
+								<td width="300" valign="top" class="bodysubsubtitle">login	naam</td>
 								<td width="700" valign="top" class="bodybold"><%=(vCustomer.getUserId() == null ? "" : vCustomer.getUserId())%></td>
 							</tr>
 							<tr>
-								<td width="200" valign="top" class="bodysubsubtitle">rol</td>
+								<td width="300" valign="top" class="bodysubsubtitle">rol</td>
 								<td width="700" valign="top" class="bodybold"><%=AccountRole.fromShort(vCustomer.getRole()).getText()%></td>
 							</tr>
                             <tr>
-                                <td width="200" valign="top" class="bodysubsubtitle">mijn super klant</td>
+                                <td width="300" valign="top" class="bodysubsubtitle">mijn super klant</td>
                                 <td width="700" valign="top" class="bodybold"> <%=(vCustomer.getSuperCustomer() != null ? vCustomer.getSuperCustomer() : "-") %> </td>
 <!--                             </tr>
 
@@ -174,11 +176,11 @@ if (vCustomer.getRole().equals(AccountRole._vSubCustomer))
 								</td>
 							</tr> -->
 							<tr>
-								<td width="200" valign="top" class="bodysubsubtitle">volledige	naam</td>
+								<td width="300" valign="top" class="bodysubsubtitle">volledige	naam</td>
 								<td width="700" valign="top"><input type=text name=<%=Constants.ACCOUNT_FULLNAME%> size=50 value="<%=vFullName%>"></td>
 							</tr>
 							<tr>
-								<td width="200" valign="top" class="bodysubsubtitle">afleidnummer</td>
+								<td width="300" valign="top" class="bodysubsubtitle">afleidnummer</td>
                         <%
         if (vSession.getRole() == AccountRole.ADMIN)
         {
@@ -206,23 +208,23 @@ for (Iterator<String> n = vFreeNumbers.iterator(); n.hasNext();)
     %>
 							</tr>
 							<tr>
-								<td width="200" valign="top" class="bodysubsubtitle">e-mail</td>
+								<td width="300" valign="top" class="bodysubsubtitle">e-mail</td>
 								<td width="700" valign="top"><input type=text name=<%=Constants.ACCOUNT_EMAIL%> size=50 value="<%=vEmail%>"></td>
 							</tr>
 							<tr>
-								<td width="200" valign="top" class="bodysubsubtitle">Facturatie
+								<td width="300" valign="top" class="bodysubsubtitle">Facturatie
 									e-mail</td>
 								<td width="700" valign="top"><input type=text
 									name=<%=Constants.ACCOUNT_INVOICE_EMAIL%> size=50
 									value="<%=vInvoiceEmail%>"></td>
 							</tr>
 							<tr>
-								<td width="200" valign="top" class="bodysubsubtitle">GSM nummer (SMS)</td>
+								<td width="300" valign="top" class="bodysubsubtitle">GSM nummer (SMS)</td>
 								<td width="700" valign="top"><input type=text
 									name=<%=Constants.ACCOUNT_GSM%> size=13 value="<%=vGsm%>"></td>
 							</tr>
                             <tr>
-                                <td width="200" valign="top" class="bodysubsubtitle">Land code</td>
+                                <td width="300" valign="top" class="bodysubsubtitle">Land code</td>
                                 <td width="700" valign="top">
                                 <select name=<%=Constants.ACCOUNT_COUNTRY_CODE%>>
 <%
@@ -238,17 +240,35 @@ for (int i = 0; i < Constants.COUNTRY_CODES[0].length; i++)
         {
     %>
 							<tr>
-								<td width="200" valign="top" class="bodysubsubtitle">Dit is een super klant</td>
+								<td width="300" valign="top" class="bodysubsubtitle">Dit is een super klant</td>
 								<td width="700" valign="top" class="bodytekst"><input
 									type=checkbox name=<%=Constants.ACCOUNT_HAS_SUB_CUSTOMERS%>
 									value="<%=Constants.YES%>"
 									<%=(vCustomer.getHasSubCustomers()?kChecked:"")%>></td>
 							</tr>
+                            <tr>
+                                <td width="300" valign="top" class="bodysubsubtitle">Verplaats alle oproepen naar</td>
+                                <td width="700" valign="top" class="bodytekst">
+                                
+                           <%
+                              out.println("<select name=\"" + Constants.ACCOUNT_REDIRECT_ACCOUNT_ID + "\">");
+                              out.println("<option value=\"0\"" + (redirectId == 0?kSelected:"")  + "> functie staat af");
+                              Collection<AccountEntityData> list = AccountCache.getInstance().getCustomerList();
+                              synchronized (list) {
+                                  for (Iterator<AccountEntityData> vIter = list.iterator(); vIter.hasNext();) {
+                                      AccountEntityData vValue = vIter.next();
+                                      out.println("<option value=\"" + vValue.getId() + "\"" + (redirectId == vValue.getId()?kSelected:"")  + ">" + vValue.getFullName());
+                                  }
+                              }
+                              out.println("</select>");
+                           %>
+</td>
+                            </tr>
     <%
         }
     %>
                             <tr>
-                                <td width="200" valign="top" class="bodysubsubtitle">Info</td>
+                                <td width="300" valign="top" class="bodysubsubtitle">Info</td>
                                 <td width="700" valign="top" class="bodytekst">Gebruik volgende html code om deze tekst te stylen:<br>
                                     &ltb&gt<b>bold tekst</b>&lt/b&gt<br>
                                     &lti&gt<i>italic tekst</i>&lt/i&gt<br>

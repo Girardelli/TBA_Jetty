@@ -93,6 +93,7 @@ public class AccountEntityData extends be.tba.util.data.AbstractData implements 
     private String countryCode;
     private boolean isArchived;
     private String callProcessInfo;
+    private int redirectAccountId;
 
     public AccountEntityData()
     {
@@ -106,6 +107,7 @@ public class AccountEntityData extends be.tba.util.data.AbstractData implements 
        countryCode = Constants.COUNTRY_CODES[0][0];
        isArchived = false;
        taskHourRate = Constants.kHourTarifCost;
+       redirectAccountId = 0;
              
        facTblMinCalls_I = Constants.kFacTblMinCalls_I;
         facTblStartCost_I = Constants.kFacTblStartCost_I;
@@ -133,82 +135,88 @@ public class AccountEntityData extends be.tba.util.data.AbstractData implements 
 
     public AccountEntityData(AccountEntityData otherData)
     {
-        setId(otherData.getId());
-        setWcPrime(otherData.getWcPrime());
-        setWcAlfa(otherData.getWcAlfa());
-        setUserId(otherData.getUserId());
-        setPassword(otherData.getPassword());
-        setFwdNumber(otherData.getFwdNumber());
-        setRole(otherData.getRole());
-        setFullName(otherData.getFullName());
-        setCustFilter(otherData.getCustFilter());
-        setStateFilter(otherData.getStateFilter());
-        setDirFilter(otherData.getDirFilter());
-        setLastLogin(otherData.getLastLogin());
-        setLastLoginTS(otherData.getLastLoginTS());
-        setPreviousLoginTS(otherData.getPreviousLoginTS());
-        setIsRegistered(otherData.getIsRegistered());
-        setIsAutoRelease(otherData.getIsAutoRelease());
-        setIsXmlMail(otherData.getIsXmlMail());
-        setEmail(otherData.getEmail());
-        setInvoiceEmail(otherData.getInvoiceEmail());
-        setGsm(otherData.getGsm());
-        setInvoiceType(otherData.getInvoiceType());
-        setLastInvoiceTime(otherData.getLastInvoiceTime());
-        setLastMailTime(otherData.getLastMailTime());
-        setMailHour1(otherData.getMailHour1());
-        setMailMinutes1(otherData.getMailMinutes1());
-        setMailHour2(otherData.getMailHour2());
-        setMailMinutes2(otherData.getMailMinutes2());
-        setMailHour3(otherData.getMailHour3());
-        setMailMinutes3(otherData.getMailMinutes3());
-        setFacStdInCall(otherData.getFacStdInCall());
-        setFacStdOutCall(otherData.getFacStdOutCall());
-        setFacOutLevel1(otherData.getFacOutLevel1());
-        setFacOutLevel2(otherData.getFacOutLevel2());
-        setFacOutLevel3(otherData.getFacOutLevel3());
-        setIsPriceAgendaFixed(otherData.getIsPriceAgendaFixed());
-        setFacAgendaCall(otherData.getFacAgendaCall());
-        setFacFaxCall(otherData.getFacFaxCall());
-        setAgendaPriceUnit(otherData.getAgendaPriceUnit());
-        setFacSms(otherData.getFacSms());
-        setFacCallForward(otherData.getFacCallForward());
-        setTaskHourRate(otherData.getTaskHourRate());
-        setCompanyName(otherData.getCompanyName());
-        setAttToName(otherData.getAttToName());
-        setStreet(otherData.getStreet());
-        setCity(otherData.getCity());
-        setBtwNumber(otherData.getBtwNumber());
-        setNoInvoice(otherData.getNoInvoice());
-        setHasSubCustomers(otherData.getHasSubCustomers());
-        setSuperCustomer(otherData.getSuperCustomer());
-        setSuperCustomerId(otherData.getSuperCustomerId());
-        setCountAllLongCalls(otherData.getCountAllLongCalls());
-        setCountLongFwdCalls(otherData.getCountLongFwdCalls());
-        setNoBtw(otherData.getNoBtw());
-        setNoEmptyMails(otherData.getNoEmptyMails());
-        setTextMail(otherData.getTextMail());
-        setFacLong(otherData.getFacLong());
-        setFacLongFwd(otherData.getFacLongFwd());
-        setFacTblMinCalls_I(otherData.getFacTblMinCalls_I());
-        setFacTblStartCost_I(otherData.getFacTblStartCost_I());
-        setFacTblExtraCost_I(otherData.getFacTblExtraCost_I());
-        setFacTblMinCalls_II(otherData.getFacTblMinCalls_II());
-        setFacTblStartCost_II(otherData.getFacTblStartCost_II());
-        setFacTblExtraCost_II(otherData.getFacTblExtraCost_II());
-        setFacTblMinCalls_III(otherData.getFacTblMinCalls_III());
-        setFacTblStartCost_III(otherData.getFacTblStartCost_III());
-        setFacTblExtraCost_III(otherData.getFacTblExtraCost_III());
-        setFacTblMinCalls_IV(otherData.getFacTblMinCalls_IV());
-        setFacTblStartCost_IV(otherData.getFacTblStartCost_IV());
-        setFacTblExtraCost_IV(otherData.getFacTblExtraCost_IV());
-        setIsMailInvoice(otherData.getIsMailInvoice());
-        setAccountNr(otherData.getAccountNr());
-        setCountryCode(otherData.getCountryCode());
-        setIsArchived(otherData.getIsArchived());
-        setCallProcessInfo(otherData.getCallProcessInfo());
-
+       set(otherData);
     }
+    
+    public void set(AccountEntityData otherData)
+    {
+       setId(otherData.getId());
+       setWcPrime(otherData.getWcPrime());
+       setWcAlfa(otherData.getWcAlfa());
+       setUserId(otherData.getUserId());
+       setPassword(otherData.getPassword());
+       setFwdNumber(otherData.getFwdNumber());
+       setRole(otherData.getRole());
+       setFullName(otherData.getFullName());
+       setCustFilter(otherData.getCustFilter());
+       setStateFilter(otherData.getStateFilter());
+       setDirFilter(otherData.getDirFilter());
+       setLastLogin(otherData.getLastLogin());
+       setLastLoginTS(otherData.getLastLoginTS());
+       setPreviousLoginTS(otherData.getPreviousLoginTS());
+       setIsRegistered(otherData.getIsRegistered());
+       setIsAutoRelease(otherData.getIsAutoRelease());
+       setIsXmlMail(otherData.getIsXmlMail());
+       setEmail(otherData.getEmail());
+       setInvoiceEmail(otherData.getInvoiceEmail());
+       setGsm(otherData.getGsm());
+       setInvoiceType(otherData.getInvoiceType());
+       setLastInvoiceTime(otherData.getLastInvoiceTime());
+       setLastMailTime(otherData.getLastMailTime());
+       setMailHour1(otherData.getMailHour1());
+       setMailMinutes1(otherData.getMailMinutes1());
+       setMailHour2(otherData.getMailHour2());
+       setMailMinutes2(otherData.getMailMinutes2());
+       setMailHour3(otherData.getMailHour3());
+       setMailMinutes3(otherData.getMailMinutes3());
+       setFacStdInCall(otherData.getFacStdInCall());
+       setFacStdOutCall(otherData.getFacStdOutCall());
+       setFacOutLevel1(otherData.getFacOutLevel1());
+       setFacOutLevel2(otherData.getFacOutLevel2());
+       setFacOutLevel3(otherData.getFacOutLevel3());
+       setIsPriceAgendaFixed(otherData.getIsPriceAgendaFixed());
+       setFacAgendaCall(otherData.getFacAgendaCall());
+       setFacFaxCall(otherData.getFacFaxCall());
+       setAgendaPriceUnit(otherData.getAgendaPriceUnit());
+       setFacSms(otherData.getFacSms());
+       setFacCallForward(otherData.getFacCallForward());
+       setTaskHourRate(otherData.getTaskHourRate());
+       setCompanyName(otherData.getCompanyName());
+       setAttToName(otherData.getAttToName());
+       setStreet(otherData.getStreet());
+       setCity(otherData.getCity());
+       setBtwNumber(otherData.getBtwNumber());
+       setNoInvoice(otherData.getNoInvoice());
+       setHasSubCustomers(otherData.getHasSubCustomers());
+       setSuperCustomer(otherData.getSuperCustomer());
+       setSuperCustomerId(otherData.getSuperCustomerId());
+       setCountAllLongCalls(otherData.getCountAllLongCalls());
+       setCountLongFwdCalls(otherData.getCountLongFwdCalls());
+       setNoBtw(otherData.getNoBtw());
+       setNoEmptyMails(otherData.getNoEmptyMails());
+       setTextMail(otherData.getTextMail());
+       setFacLong(otherData.getFacLong());
+       setFacLongFwd(otherData.getFacLongFwd());
+       setFacTblMinCalls_I(otherData.getFacTblMinCalls_I());
+       setFacTblStartCost_I(otherData.getFacTblStartCost_I());
+       setFacTblExtraCost_I(otherData.getFacTblExtraCost_I());
+       setFacTblMinCalls_II(otherData.getFacTblMinCalls_II());
+       setFacTblStartCost_II(otherData.getFacTblStartCost_II());
+       setFacTblExtraCost_II(otherData.getFacTblExtraCost_II());
+       setFacTblMinCalls_III(otherData.getFacTblMinCalls_III());
+       setFacTblStartCost_III(otherData.getFacTblStartCost_III());
+       setFacTblExtraCost_III(otherData.getFacTblExtraCost_III());
+       setFacTblMinCalls_IV(otherData.getFacTblMinCalls_IV());
+       setFacTblStartCost_IV(otherData.getFacTblStartCost_IV());
+       setFacTblExtraCost_IV(otherData.getFacTblExtraCost_IV());
+       setIsMailInvoice(otherData.getIsMailInvoice());
+       setAccountNr(otherData.getAccountNr());
+       setCountryCode(otherData.getCountryCode());
+       setIsArchived(otherData.getIsArchived());
+       setCallProcessInfo(otherData.getCallProcessInfo());
+       setRedirectAccountId(otherData.getRedirectAccountId());
+    }
+
 
     public AccountEntityPK getPrimaryKey()
     {
@@ -885,14 +893,14 @@ public class AccountEntityData extends be.tba.util.data.AbstractData implements 
         this.facTblExtraCost_III = facTblExtraCost_III;
     }
 
-    public int getFacTblMinCalls_IV()
+    public int getRedirectAccountId()
     {
-        return this.facTblMinCalls_IV;
+        return this.redirectAccountId;
     }
 
-    public void setFacTblMinCalls_IV(int facTblMinCalls_IV)
+    public void setRedirectAccountId(int redirectAccountId)
     {
-        this.facTblMinCalls_IV = facTblMinCalls_IV;
+        this.redirectAccountId = redirectAccountId;
     }
 
     public double getFacTblStartCost_IV()
@@ -954,7 +962,18 @@ public class AccountEntityData extends be.tba.util.data.AbstractData implements 
     {
     	this.callProcessInfo = info;
     }
-    
+
+    public int getFacTblMinCalls_IV()
+    {
+        return this.facTblMinCalls_IV;
+    }
+
+    public void setFacTblMinCalls_IV(int facTblMinCalls_IV)
+    {
+        this.facTblMinCalls_IV = facTblMinCalls_IV;
+    }
+
+
     public String toNameValueString()
     {
         StringBuffer str = new StringBuffer();
@@ -1105,7 +1124,8 @@ public class AccountEntityData extends be.tba.util.data.AbstractData implements 
         str.append(getIsArchived());
         str.append(",CallProcessInfo='");
         str.append(((this.callProcessInfo != null) ? this.callProcessInfo : ""));
-        str.append("'");
+        str.append("',RedirectAccountId=");
+        str.append(this.redirectAccountId);
         return (str.toString());
 
     }
@@ -1262,7 +1282,8 @@ public class AccountEntityData extends be.tba.util.data.AbstractData implements 
         str.append(getIsArchived());
         str.append(",'");
         str.append(((this.callProcessInfo != null) ? this.callProcessInfo : ""));
-        str.append("'");
+        str.append("',");
+        str.append(this.redirectAccountId);
         return (str.toString());
     }
 

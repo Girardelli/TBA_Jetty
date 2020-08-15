@@ -65,19 +65,38 @@ public class CallRecordFacade
       AccountEntityData vNewCustomer = null;
       CallRecordSqlAdapter vCallLogWriterSession = new CallRecordSqlAdapter();
       AccountEntityData vOldCustomer = AccountCache.getInstance().get(vCallData);
+      
+      
       if (vOldCustomer != null && vOldCustomer.getHasSubCustomers() && parms.getParameter(Constants.ACCOUNT_SUB_CUSTOMER) != null)
       {
+         // subcustomer has been selected to assign this call to
          vCallData.setFwdNr(parms.getParameter(Constants.ACCOUNT_SUB_CUSTOMER));
          AccountEntityData newCustomer = AccountCache.getInstance().get(vCallData.getFwdNr()); // take FwdNr because vCallDatat still has the previous accountId and shall make
                                                                                                // that new FwdNr shall be skipped.
          vCallData.setAccountId(newCustomer.getId());
          System.out.println("Super customer call: set fwd number to " + vCallData.getFwdNr() + ", new account ID=" + newCustomer.getId());
+         
+         // redirect function can only be applied for subcustomers
+         if (newCustomer.getRedirectAccountId() != 0)
+         {
+            // move this call to the redirect customer
+            AccountEntityData redirectAccount = AccountCache.getInstance().get(newCustomer.getRedirectAccountId());
+            vCallData.setFwdNr(redirectAccount.getFwdNumber());
+            vCallData.setAccountId(redirectAccount.getRedirectAccountId());
+            vCallData.setShortDescription("<b>" + vOldCustomer.getFullName() + "</b><br>" + parms.getParameter(Constants.RECORD_SHORT_TEXT));
+         }
+         else
+         {
+            vCallData.setShortDescription(parms.getParameter(Constants.RECORD_SHORT_TEXT));
+         }
       } else
       {
+         vCallData.setShortDescription(parms.getParameter(Constants.RECORD_SHORT_TEXT));
          String newFwdNr = parms.getParameter(Constants.ACCOUNT_FORWARD_NUMBER);
          System.out.println("ACCOUNT_FORWARD_NUMBER=" + newFwdNr + ", vCallData.getFwdNr=" + vCallData.getFwdNr());
          if (newFwdNr != null)
          {
+            // main customer has changed
             if (!vCallData.getFwdNr().equals(newFwdNr))
             {
                // customer changed!! Check the isMailed flag.
@@ -92,15 +111,14 @@ public class CallRecordFacade
             }
          }
       }
+      AccountEntityData customer = AccountCache.getInstance().get(vCallData);
       if (vCallData.getAccountId() == 0)
       {
-         AccountEntityData customer = AccountCache.getInstance().get(vCallData);
          if (customer != null)
             vCallData.setAccountId(customer.getId());
       }
       vCallData.setNumber(parms.getParameter(Constants.RECORD_NUMBER));
       vCallData.setName(parms.getParameter(Constants.RECORD_CALLER_NAME));
-      vCallData.setShortDescription(parms.getParameter(Constants.RECORD_SHORT_TEXT));
       vCallData.setLongDescription(parms.getParameter(Constants.RECORD_LONG_TEXT));
       vCallData.setIsSmsCall(parms.getParameter(Constants.RECORD_SMS) != null);
       vCallData.setIsAgendaCall(parms.getParameter(Constants.RECORD_AGENDA) != null);

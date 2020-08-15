@@ -124,11 +124,11 @@ public class IntertelCallInjector
         Thread t1 = new Thread(new CallTestThread(kCallSessions[0], "1111"));
         t1.start();
 
-//       Thread t2 = new Thread(new CallTestThread(kCallSessions[1], "2222"));
-//        t2.start();
+       Thread t2 = new Thread(new CallTestThread(kCallSessions[1], "2222"));
+        t2.start();
 		
-//        Thread t3 = new Thread(new CallTestThread(kCallSessions[2], "3333"));
-//        t3.start();
+        Thread t3 = new Thread(new CallTestThread(kCallSessions[2], "3333"));
+        t3.start();
         
 		
 	}
