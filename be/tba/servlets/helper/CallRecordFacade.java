@@ -83,7 +83,7 @@ public class CallRecordFacade
             AccountEntityData redirectAccount = AccountCache.getInstance().get(newCustomer.getRedirectAccountId());
             vCallData.setFwdNr(redirectAccount.getFwdNumber());
             vCallData.setAccountId(redirectAccount.getRedirectAccountId());
-            vCallData.setShortDescription("<b>" + vOldCustomer.getFullName() + "</b><br>" + parms.getParameter(Constants.RECORD_SHORT_TEXT));
+            vCallData.setShortDescription("<p style=\"color:red\"><b><u>" + vOldCustomer.getFullName() + "</u></b></p>" + parms.getParameter(Constants.RECORD_SHORT_TEXT));
          }
          else
          {
