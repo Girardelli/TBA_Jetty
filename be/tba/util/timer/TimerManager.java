@@ -9,8 +9,12 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.Vector;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 final public class TimerManager
 {
+	private static Logger log = LoggerFactory.getLogger(TimerManager.class);
    private final Collection<TimerTaskIntf> mTimerList;
 
    private static TimerManager mInstance;
@@ -38,7 +42,7 @@ final public class TimerManager
       }
 
       taskTimer.schedule(task.getTimerTask(), startTime, task.getPeriod());
-      System.out.println("TimerManager() added: " + task.getClass().getName());
+      log.info("TimerManager() added: " + task.getClass().getName());
       mTimerList.add(task);
    }
    

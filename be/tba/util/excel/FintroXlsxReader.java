@@ -27,6 +27,7 @@ import be.tba.ejb.invoice.interfaces.InvoiceEntityData;
 import be.tba.ejb.invoice.session.InvoiceSqlAdapter;
 import be.tba.servlets.session.WebSession;
 import be.tba.util.constants.Constants;
+import be.tba.util.data.AbstractSqlAdapter;
 import be.tba.util.data.FintroPayment;
 import be.tba.util.session.AccountCache;
 
@@ -44,7 +45,7 @@ final class InvoicePaymentStr
 
 final public class FintroXlsxReader
 {
-   final static Logger sLogger = LoggerFactory.getLogger(FintroXlsxReader.class);
+	private static Logger log = LoggerFactory.getLogger(FintroXlsxReader.class);
 
    // Fintro excel sheet collumns
    private static int ID = 0;
@@ -87,7 +88,7 @@ final public class FintroXlsxReader
 
       try
       {
-         sLogger.info("FintroXlsxReader constructor for file: " + input);
+         log.info("FintroXlsxReader constructor for file: " + input);
          mWebSession = new WebSession();
          mInvoiceSession = new InvoiceSqlAdapter();
 
@@ -100,7 +101,7 @@ final public class FintroXlsxReader
          // Decide which rows to process
          int rowStart = 1;
          int rowEnd = Math.min(1500, sheet.getLastRowNum()) + 1;
-         sLogger.info("last collumn: " + rowEnd);
+         log.info("last collumn: " + rowEnd);
          int i;
          int cnt = 0;
          for (i = rowStart; i < rowEnd; i++)
@@ -132,10 +133,10 @@ final public class FintroXlsxReader
             }
             catch (Exception ex1)
             {
-               sLogger.error("date cell cannot be read as text. unknown cell format");
+               log.error("date cell cannot be read as text. unknown cell format");
                entry.payDate = row.getCell(EXEC_DATE).toString();
             }
-//            sLogger.info(entry.payDate);
+//            log.info(entry.payDate);
             entry.valutaDate = row.getCell(VALUTA_DATE).toString();
             entry.amount = row.getCell(AMOUNT).getNumericCellValue();
             entry.accountNrCustomer = row.getCell(CUST_ACCOUNT).toString();
@@ -153,10 +154,10 @@ final public class FintroXlsxReader
                }
                customerPaymentList.add(entry);
                ++cnt;
-               System.out.println("entry added: size=" + cnt + " ##" + entry.toString());
+               log.info("entry added: size=" + cnt + " ##" + entry.toString());
             }
          }
-         sLogger.info("--------------------------------------------------------");
+         log.info("--------------------------------------------------------");
          processPaymentsMap();
          createProcessLogs();
       }
@@ -194,11 +195,11 @@ final public class FintroXlsxReader
          Collection<Integer> accountIds = AccountCache.getInstance().getAccountIdsForBankAccountNr(accountNrCustomer);
          if (accountIds.isEmpty())
          {
-            System.out.println("-----------------------------");
+            log.info("-----------------------------");
             // no TBA customer found with this bank account number
             // just store the first payment of this payment list made via the unknown
             // accountNr.
-            System.out.println("no customer found for bank account " + accountNrCustomer + ". " + paymentsDoneByAccount.size() + " payments not processed");
+            log.info("no customer found for bank account " + accountNrCustomer + ". " + paymentsDoneByAccount.size() + " payments not processed");
             for (FintroPayment payment : paymentsDoneByAccount)
             {
                mUnknownAccountNrs.add(payment);
@@ -208,10 +209,10 @@ final public class FintroXlsxReader
 
          for (Iterator<FintroPayment> vPayIter = paymentsDoneByAccount.iterator(); vPayIter.hasNext();)
          {
-            System.out.println("-----------------------------");
+            log.info("-----------------------------");
             // for all payments done via the bank account number accountNrCustomer
             FintroPayment payment = vPayIter.next();
-            // System.out.println(payment.details);
+            // log.info(payment.details);
             // check for a structured message like: 'MEDEDELING : 181200070764'
             String structuredId = getStructuredId(payment);
             // ------------------------------------------
@@ -219,11 +220,11 @@ final public class FintroXlsxReader
             boolean isMatchFound = false;
             if (!structuredId.isEmpty())
             {
-               System.out.println("Structured ID found: " + structuredId);
+               log.info("Structured ID found: " + structuredId);
                Collection<InvoiceEntityData> vInvoices = mInvoiceSession.getInvoiceByStructuredId(mWebSession, structuredId);
                if (vInvoices.size() == 1)
                {
-                  // System.out.println("structid found in db");
+                  // log.info("structid found in db");
                   InvoiceEntityData invoice = (InvoiceEntityData) vInvoices.toArray()[0];
                   AccountEntityData account = AccountCache.getInstance().get(invoice);
                   double inclBtw = (account.getNoBtw() ? invoice.getTotalCost() : invoice.getTotalCost() * 1.21);
@@ -242,12 +243,12 @@ final public class FintroXlsxReader
                else
                {
                   mLog.append("ERROR: structid " + structuredId + " in payment " + payment.id  + " not found in db<br>");
-                  System.out.println("ERROR: structid not found in db. Id=" + structuredId);
+                  log.info("ERROR: structid not found in db. Id=" + structuredId);
                }
             }
             else
             {
-               // System.out.println("NO structid");
+               // log.info("NO structid");
 
             }
 
@@ -258,7 +259,7 @@ final public class FintroXlsxReader
                if (vInvoices.size() == 1)
                {
                   InvoiceEntityData invoice = (InvoiceEntityData) vInvoices.toArray()[0];
-                  // sLogger.info("1 matching invoice found." + " Payment=" + payment.id + " [" +
+                  // log.info("1 matching invoice found." + " Payment=" + payment.id + " [" +
                   // payment.amount + "], " + invoice.getAccountFwdNr() + ", " + payment.details);
                   FillInvoiceWithPaymentInfo(invoice, payment);
                   isMatchFound = true;
@@ -283,7 +284,7 @@ final public class FintroXlsxReader
                         }
                         if (isInvoiceNrFoundInDetail(invoice.getInvoiceNr(), payment.details))
                         {
-                           // sLogger.info("matching invoice found on factuur nummer in details." + "
+                           // log.info("matching invoice found on factuur nummer in details." + "
                            // Payment=" + payment.id + " [" + payment.amount + "], " + ", " +
                            // invoice.getAccountFwdNr() + ", " + payment.details);
                            FillInvoiceWithPaymentInfo(invoice, payment);
@@ -311,14 +312,14 @@ final public class FintroXlsxReader
                            // multiple
                            if (oldestMatchingInvoice != null)
                            {
-                              System.out.println("Confirmed " + oldestMatchingInvoice.getInvoiceNr() + " with \"" + payment.details + "\"");
+                              log.info("Confirmed " + oldestMatchingInvoice.getInvoiceNr() + " with \"" + payment.details + "\"");
                               mConfirmedPayedInvoices.add(oldestMatchingInvoice);
                               isMatchFound = true;
                            }
                         }
                      }
                      // do it again but this time loop over the already paid invoices
-                     // System.out.println("do it again and try to find it in the paid invoices");
+                     // log.info("do it again and try to find it in the paid invoices");
                      isPaid = true;
                   }
                }
@@ -347,14 +348,14 @@ final public class FintroXlsxReader
                }
                if (isInvoiceNrFound)
                {
-                  // System.out.println("Wrong payment." + " Payment=" + payment.id + " [" +
+                  // log.info("Wrong payment." + " Payment=" + payment.id + " [" +
                   // payment.amount/1.21 + "], " + " account=" + payment.accountNrCustomer + ", "+
                   // payment.details);
                   mWrongValuePayments.add(new InvoicePaymentStr(openInvoice, payment));
                }
                else
                {
-                  // System.out.println("no matching invoice found." + " Payment=" + payment.id +
+                  // log.info("no matching invoice found." + " Payment=" + payment.id +
                   // " [" + payment.amount/1.21 + "], " + " account=" + payment.accountNrCustomer
                   // + ", "+ payment.details);
                   mNotMatchingPayments.add(payment);
@@ -458,7 +459,7 @@ final public class FintroXlsxReader
          strBuf.append(invoice.getInvoiceNr());
          strBuf.append(',');
       }
-      // System.out.println("\r\nConfirmed payed invoices: \r\n" + strBuf.toString());
+      // log.info("\r\nConfirmed payed invoices: \r\n" + strBuf.toString());
       String confirmedPayments = strBuf.toString();
       strBuf = new StringBuilder();
       for (Iterator<InvoiceEntityData> vPayIter = mNewPayedInvoices.iterator(); vPayIter.hasNext();)
@@ -468,7 +469,7 @@ final public class FintroXlsxReader
          strBuf.append(',');
       }
       String newPayedInvoices = strBuf.toString();
-      // System.out.println("\r\nNew payed invoices: \r\n" + strBuf.toString());
+      // log.info("\r\nNew payed invoices: \r\n" + strBuf.toString());
       strBuf = new StringBuilder();
       for (Iterator<FintroPayment> vPayIter = mNotMatchingPayments.iterator(); vPayIter.hasNext();)
       {
@@ -476,7 +477,7 @@ final public class FintroXlsxReader
          fillPaymentStrBuffer(payment, strBuf);
       }
       String notMatchingPayments = strBuf.toString();
-      // System.out.println("\r\nNot matching payments: \r\n" + strBuf.toString());
+      // log.info("\r\nNot matching payments: \r\n" + strBuf.toString());
       strBuf = new StringBuilder();
       for (Iterator<FintroPayment> vPayIter = mUnknownAccountNrs.iterator(); vPayIter.hasNext();)
       {
@@ -570,7 +571,7 @@ final public class FintroXlsxReader
       {
          y += 13;
          String flatId = payment.details.substring(y, y + 12);
-         // System.out.println("Flat Structured ID found: " + flatId);
+         // log.info("Flat Structured ID found: " + flatId);
          if (flatId.length() == 12)
          {
             byte[] numberArr = flatId.getBytes();
@@ -585,7 +586,7 @@ final public class FintroXlsxReader
             }
             else
             {
-               // System.out.println("x = " + x);
+               // log.info("x = " + x);
             }
          }
       }
@@ -604,7 +605,7 @@ final public class FintroXlsxReader
    
    private boolean isInvoiceNrFoundInDetail(String invoiceNr, String detail)
    {
-      // System.out.println("isInvoiceNrFoundInDetail(invoiceNr=" + invoiceNr + ",
+      // log.info("isInvoiceNrFoundInDetail(invoiceNr=" + invoiceNr + ",
       // detail=" + detail + ")");
       if (invoiceNr.length() < 9)
       {
@@ -613,7 +614,7 @@ final public class FintroXlsxReader
       // subtract the 2 number parts from e.g. 'N-1801nr57'
       String month = invoiceNr.substring(2, 6);
       String seqnr = invoiceNr.substring(8, invoiceNr.length());
-      // System.out.println("month=" + month + ", seqnr=" + seqnr );
+      // log.info("month=" + month + ", seqnr=" + seqnr );
 
       return (detail.indexOf(month) != -1 && detail.indexOf(seqnr) != -1);
    }

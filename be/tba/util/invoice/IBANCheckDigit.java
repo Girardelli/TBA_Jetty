@@ -3,6 +3,11 @@ package be.tba.util.invoice;
 import java.io.Serializable;
 import java.text.DecimalFormat;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import be.tba.util.excel.FintroXlsxReader;
+
 /**
  * <b>IBAN</b> (International Bank Account Number) Check Digit
  * calculation/validation.
@@ -27,6 +32,7 @@ import java.text.DecimalFormat;
  */
 public final class IBANCheckDigit implements Serializable
 {
+	private static Logger log = LoggerFactory.getLogger(IBANCheckDigit.class);
 
     private static final long serialVersionUID = -3600191725934382801L;
 
@@ -79,7 +85,7 @@ public final class IBANCheckDigit implements Serializable
     {
         if (code == null || code.length() < 5)
         {
-            System.out.println("Invalid Code length=" + (code == null ? 0 : code.length()));
+            log.info("Invalid Code length=" + (code == null ? 0 : code.length()));
             return null;
         }
         String reformattedCode = code.substring(4) + code.substring(0, 4);
@@ -102,7 +108,7 @@ public final class IBANCheckDigit implements Serializable
         
         if (invoiceNr == null)
         {
-            System.out.println("input parm = null");
+            log.info("input parm = null");
             return null;
         }
         
@@ -112,18 +118,18 @@ public final class IBANCheckDigit implements Serializable
         }
         else if (invoiceNr.length() != 8)
         {
-            System.out.println("Invalid Code length (must be 8)=" + (invoiceNr == null ? "null" : invoiceNr.length()));
+            log.info("Invalid Code length (must be 8)=" + (invoiceNr == null ? "null" : invoiceNr.length()));
             return "";
         }
         
         String code = String.format("%s00%s", invoiceNr.substring(0, 4), invoiceNr.substring(4, 8));
-        //System.out.println("Invoice nr: invoiceNr: " + invoiceNr + " --> " + code);
+        //log.info("Invoice nr: invoiceNr: " + invoiceNr + " --> " + code);
         int i = Integer.parseUnsignedInt(code);
         int y = i%97;
         y = (y == 97 ? 0 : y);
         DecimalFormat vCostFormatter = new DecimalFormat("#00");
         //        +++191/1000/69307+++
-        //System.out.println("+++" + code.substring(0, 3) + "/" + code.substring(3, 7) + "/" + code.substring(7, 10) + vCostFormatter.format(y) + "+++");
+        //log.info("+++" + code.substring(0, 3) + "/" + code.substring(3, 7) + "/" + code.substring(7, 10) + vCostFormatter.format(y) + "+++");
         return "+++" + code.substring(0, 3) + "/" + code.substring(3, 7) + "/" + code.substring(7, 10) + vCostFormatter.format(y) + "+++";
     }
 
@@ -145,7 +151,7 @@ public final class IBANCheckDigit implements Serializable
             int charValue = CharacterGetNumericValue.getNumericValue(code.charAt(i));
             if (charValue < 0 || charValue > 35)
             {
-                System.out.println("Invalid Character[" + i + "] = '" + charValue + "'");
+                log.info("Invalid Character[" + i + "] = '" + charValue + "'");
                 return 0;
             }
             total = (charValue > 9 ? total * 100 : total * 10) + charValue;

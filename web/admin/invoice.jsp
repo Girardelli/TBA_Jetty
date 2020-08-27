@@ -3,9 +3,9 @@
 <%@ include file="adminheader.jsp" %>
 
 <%@ page
-	import="javax.ejb.*,java.util.*,
+	import="java.util.*,
     java.text.DecimalFormat,
-	javax.ejb.*,
+	
 	be.tba.ejb.account.interfaces.*,
 	be.tba.ejb.pbx.interfaces.*,
 	be.tba.ejb.task.interfaces.*,
@@ -309,12 +309,10 @@
                  }
                  if (vInvoiceHelper != null)
                  {
-                 	System.out.println("invoiceHelper created: run it!");
                      vInvoiceHelper.storeOrUpdate(vSession);
                      vSession.setInvoiceHelper(vInvoiceHelper);
                      vRecords = vInvoiceHelper.getCallRecords();
                      vTasks = vInvoiceHelper.getTasks();
-                     System.out.println("invoiceHelper loaded: tasks=" + (vTasks==null?"null":vTasks.size()) + ", records=" + (vRecords==null?"null":vRecords.size()));
                  }
              }
        	 }

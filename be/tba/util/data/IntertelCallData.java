@@ -47,7 +47,7 @@ public class IntertelCallData
 		if (isIncoming)
 		{
 			AccountEntityData account = AccountCache.getInstance().get(last6Numbers(this.calledNr));
-			//System.out.println("AccountCache.getInstance().get(" + last6Numbers(this.calledNr) + ") returned " + account);
+			//log.info("AccountCache.getInstance().get(" + last6Numbers(this.calledNr) + ") returned " + account);
 			if (account != null)
 			{
 				this.customer = new String(account.getFullName());
@@ -56,7 +56,7 @@ public class IntertelCallData
 		else
 		{
          AccountEntityData account = AccountCache.getInstance().get(last6Numbers(this.callingNr));
-         //System.out.println("AccountCache.getInstance().get(" + last6Numbers(this.calledNr) + ") returned " + account);
+         //log.info("AccountCache.getInstance().get(" + last6Numbers(this.calledNr) + ") returned " + account);
          if (account != null)
          {
             this.customer = new String(account.getFullName());
@@ -143,7 +143,7 @@ public class IntertelCallData
 		// to be removed!!!!! --> bug in new Intertel webhook logging, missing answer event
 		else if (tsStart > 0 && tsEnd > 0)
 		{
-			//System.out.println("No tsAnswer timestamp logged: return full length=" + (int)(tsEnd - tsStart));
+			//log.info("No tsAnswer timestamp logged: return full length=" + (int)(tsEnd - tsStart));
 			return (int)(tsEnd - tsStart);
 		}
 		return 0;

@@ -3,14 +3,14 @@
 <%@ include file="adminheader.jsp"%>
 
 <%@ page
-	import="javax.ejb.*,
+	import="
 java.util.*,
 
 
 javax.naming.Context,
 javax.naming.InitialContext,
 
-javax.ejb.*,
+
 be.tba.ejb.account.interfaces.*,
 be.tba.util.data.*,
 be.tba.util.invoice.*,
@@ -102,7 +102,7 @@ boolean vTextMail = vCustomer.getTextMail();
 double vFacLong = vCustomer.getFacLong();
 double vFacLongFwd = vCustomer.getFacLongFwd();
 int redirectId = vCustomer.getRedirectAccountId();
-System.out.println("redirectId=" + redirectId);
+
 
 %>
 <body>

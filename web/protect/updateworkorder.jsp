@@ -4,11 +4,11 @@
 <link href="/tba/css/picker.css" rel="stylesheet">
 
 <%@ page
-import="javax.ejb.*,
+import="
 java.util.*,
 javax.naming.Context,
 javax.naming.InitialContext,
-javax.ejb.*,
+
 be.tba.ejb.account.interfaces.*,
 be.tba.ejb.task.interfaces.*,
 be.tba.ejb.task.session.*,
@@ -49,7 +49,6 @@ try
    
    Calendar dueData = CallCalendar.str2Calendar(workOrder.dueDate);
    String curDueDate = String.format("%04d-%02d-%02d", dueData.get(Calendar.YEAR), dueData.get(Calendar.MONTH)+1, dueData.get(Calendar.DAY_OF_MONTH));
-   System.out.println("endDate=" + endDate + ", curDueDate=" + curDueDate);
 %>
 
 <body>

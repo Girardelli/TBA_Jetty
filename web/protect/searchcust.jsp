@@ -16,14 +16,14 @@ Last Checked In: $Date: 2003/06/18 04:11:35 $
 Last Checked In By: $Author: Yves Willems $
 --%>
 <%@ page
-import="javax.ejb.*,
+import="
 java.util.*,
 
 
 javax.naming.Context,
 javax.naming.InitialContext,
 
-javax.ejb.*,
+
 be.tba.ejb.account.interfaces.*,
 be.tba.ejb.pbx.interfaces.*,
 be.tba.ejb.pbx.session.CallRecordSqlAdapter,

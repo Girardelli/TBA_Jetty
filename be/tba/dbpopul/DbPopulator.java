@@ -5,7 +5,11 @@ import java.io.FileReader;
 import java.util.Calendar;
 import java.util.StringTokenizer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import be.tba.ejb.pbx.interfaces.CallRecordEntityData;
+import be.tba.test.IntertelCallInjector;
 
 /* run it as follows:
  *
@@ -17,19 +21,21 @@ import be.tba.ejb.pbx.interfaces.CallRecordEntityData;
  */
 public class DbPopulator
 {
+	private static Logger log = LoggerFactory.getLogger(DbPopulator.class);
+	
     static public void main(String[] argv)
     {
         try
         {
             if (argv.length != 1)
             {
-                System.out.println("Only one argument can be used.");
+                log.info("Only one argument can be used.");
                 return;
             }
-            System.out.println("Opening file " + argv[0] + " for parsing");
+            log.info("Opening file " + argv[0] + " for parsing");
             BufferedReader vBuffer = new BufferedReader(new FileReader(argv[0]));
 
-            // System.out.println("Opening file " + argv[1] + " for writing");
+            // log.info("Opening file " + argv[1] + " for writing");
             // PrintWriter vWriter = new PrintWriter(new FileWriter(argv[1]));
 
             // InitialContext vContext = new InitialContext();
@@ -63,7 +69,7 @@ public class DbPopulator
                 {
                     vTokenArr[vTokCnt] = vTokenizer.nextToken();
                     vTokenArr[vTokCnt] = vTokenArr[vTokCnt].trim();
-                    // System.out.println(vTokenArr[vTokCnt] + "**");
+                    // log.info(vTokenArr[vTokCnt] + "**");
                     vTokCnt++;
                 }
 
@@ -96,9 +102,9 @@ public class DbPopulator
                 // vCalendar.set(Calendar.MINUTE, Integer.parseInt(vToken));
                 vCalendar.set(vYear, vMonth, vDay, vHour, vMinute);
 
-                System.out.println(vCalendar.toString());
+                log.info(vCalendar.toString());
 
-                System.out.println("---------------------------");
+                log.info("---------------------------");
 
                 if (vTokenArr[0].equals("in"))
                     vRecord.setIsIncomingCall(true);
@@ -132,9 +138,9 @@ public class DbPopulator
                 vRecord.setIsMailed(true);
                 vRecord.setInvoiceLevel((short) 0);
 
-                System.out.println(vRecord.toString());
+                log.info(vRecord.toString());
                 // vWriterSession.createCallRecord(vRecord);
-                // System.out.println();
+                // log.info();
                 /*
                  * vWriter.print(vTokenArr[0] + "`"); vWriter.print(vTokenArr[8] + "`");
                  * vWriter.print(vTokenArr[1] + "`"); vWriter.print(vTokenArr[2] + "`");
@@ -143,7 +149,7 @@ public class DbPopulator
                  * vWriter.println(vTokenArr[5]);
                  */
             }
-            System.out.println("Finished parsing. " + vCnt + " entries added");
+            log.info("Finished parsing. " + vCnt + " entries added");
             // vWriter.close();
             vBuffer.close();
             // vWriterSession.remove();

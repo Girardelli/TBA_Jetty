@@ -10,6 +10,10 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.TimerTask;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import be.tba.ejb.account.interfaces.AccountEntityData;
 import be.tba.ejb.mail.session.MailerSessionBean;
 import be.tba.servlets.session.WebSession;
@@ -19,7 +23,9 @@ import be.tba.util.session.MailError;
 
 final public class MailTimerTask extends TimerTask implements TimerTaskIntf
 {
-    public MailTimerTask()
+	private static Logger log = LoggerFactory.getLogger(MailTimerTask.class);
+    
+	public MailTimerTask()
     {
     }
 
@@ -45,7 +51,7 @@ final public class MailTimerTask extends TimerTask implements TimerTaskIntf
 
     public void run()
     {
-        // System.out.println("Mail send for " + mAccountNr + ". Schedule time "
+        // log.info("Mail send for " + mAccountNr + ". Schedule time "
         // + long2String(scheduledExecutionTime()));
         // return;
         if (System.getenv("TBA_MAIL_ON") == null)
@@ -53,7 +59,7 @@ final public class MailTimerTask extends TimerTask implements TimerTaskIntf
             return;
         }
         WebSession session = null;
-        //System.out.println("MailTimerTask run");
+        //log.info("MailTimerTask run");
 
         GregorianCalendar vCalendar = new GregorianCalendar();
         if (vCalendar.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY && vCalendar.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY)
@@ -81,21 +87,21 @@ final public class MailTimerTask extends TimerTask implements TimerTaskIntf
                             }
                             catch (Exception e)
                             {
-                                System.out.println("Mail send failed to " + vAccount.getFullName());
+                                log.info("Mail send failed to " + vAccount.getFullName());
                                 MailError.getInstance().setError("Mail send failed to " + vAccount.getFullName() + "\n" + e.getMessage());
                                 e.printStackTrace();
                             }
                         }
                         else
                         {
-                            System.out.println("Mail supposed to be send but disabled to " + vAccount.getFullName());
+                            log.info("Mail supposed to be send but disabled to " + vAccount.getFullName());
                         }
                     }
                 }
             }
             catch (Exception e)
             {
-                System.out.println("MailTimerTask exception");
+                log.info("MailTimerTask exception");
                 MailError.getInstance().setError("Mail send failed\n" + e.getMessage());
                 e.printStackTrace();
             }
@@ -122,7 +128,7 @@ final public class MailTimerTask extends TimerTask implements TimerTaskIntf
     public void cleanUp()
     {
        // TODO Auto-generated method stub
-       System.out.println("Cancel MailTimerTask");
+       log.info("Cancel MailTimerTask");
        this.cancel();
     }
 }

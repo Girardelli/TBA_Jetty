@@ -15,9 +15,14 @@ import javax.mail.Message;
 import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.sun.mail.smtp.SMTPTransport;
 
 import be.tba.ejb.account.interfaces.AccountEntityData;
+import be.tba.ejb.invoice.session.InvoiceSqlAdapter;
 import be.tba.ejb.pbx.interfaces.CallRecordEntityData;
 import be.tba.ejb.pbx.session.CallRecordSqlAdapter;
 import be.tba.servlets.session.WebSession;
@@ -43,6 +48,7 @@ import be.tba.util.session.MailError;
  */
 public class MailerSessionBean
 {
+	private static Logger log = LoggerFactory.getLogger(MailerSessionBean.class);
 
    // -------------------------------------------------------------------------
    // Static
@@ -92,7 +98,7 @@ public class MailerSessionBean
          }
       }
       vEmailAddresses = vEmailAddresses.replace(',', ';');
-      System.out.println("Mailaddressen: " + vEmailAddresses);
+      log.info("Mailaddressen: " + vEmailAddresses);
       StringTokenizer vMailTokens = new StringTokenizer(vEmailAddresses, ";");
       try
       {
@@ -161,7 +167,7 @@ public class MailerSessionBean
       AtomicBoolean isImportant = new AtomicBoolean(false);
       if (!vRecords.isEmpty() || !vCustomer.getNoEmptyMails())
       {
-         System.out.println("sendMail start for:" + vCustomer.getFullName());
+         log.info("sendMail start for:" + vCustomer.getFullName());
          StringBuffer vBody;
          if (vCustomer.getIsXmlMail())
          {
@@ -222,7 +228,7 @@ public class MailerSessionBean
       // long vLastMailTime = account.getLastMailTime();
       account.setLastMailTime(vCurrentTime);
 
-      //System.out.println("Mail send to " + account.getFullName() + " : " + records.size() + " records.");
+      //log.info("Mail send to " + account.getFullName() + " : " + records.size() + " records.");
 
       if (records == null || records.size() == 0)
       {
@@ -343,7 +349,7 @@ public class MailerSessionBean
       vBody.append("Gelieve hieronder uw oproepen te willen vinden die wij genoteerd hebben sinds de vorige mail.\n");
       vBody.append("Voor vragen kan u zich richten tot Nancy.\n");
 
-      //System.out.println("Mail send to " + account.getFullName() + " : " + records.size() + " records.");
+      //log.info("Mail send to " + account.getFullName() + " : " + records.size() + " records.");
 
       if (records == null || records.size() == 0)
       {

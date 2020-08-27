@@ -2,14 +2,7 @@ package be.tba.servlets;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.util.Calendar;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -20,13 +13,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.sun.enterprise.deployment.web.NameValuePair;
+//import com.sun.enterprise.deployment.web.NameValuePair;
 
 import be.tba.ejb.account.interfaces.AccountEntityData;
-import be.tba.ejb.account.session.AccountSqlAdapter;
 import be.tba.ejb.pbx.session.CallRecordSqlAdapter;
 import be.tba.servlets.helper.AccountFacade;
 import be.tba.servlets.helper.CallRecordFacade;
@@ -50,7 +42,7 @@ public class CustomerDispatchServlet extends HttpServlet
    *
    */
    private static final long serialVersionUID = 10002L;
-   private Log log = LogFactory.getLog(CustomerDispatchServlet.class);
+	private static Logger log = LoggerFactory.getLogger(CustomerDispatchServlet.class);
 
    public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
    {
@@ -119,7 +111,7 @@ public class CustomerDispatchServlet extends HttpServlet
             vSession.setWsActive(false);
             if (!vSession.getRole().getShort().equals(AccountRole.ADMIN.getShort()) && !vSession.getRole().getShort().equals(AccountRole.CUSTOMER.getShort()) && !vSession.getRole().getShort().equals(AccountRole.SUBCUSTOMER.getShort()))
                throw new AccessDeniedException("access denied for " + vSession.getUserId() + " with role " + vSession.getRole().getShort());
-            System.out.println("\nCustomerDispatchServlet: userid:" + vSession.getUserId() + ", websessionid:" + vSession.getSessionId() + " action=" + vAction);
+            log.info("\nCustomerDispatchServlet: userid:" + vSession.getUserId() + ", websessionid:" + vSession.getSessionId() + " action=" + vAction);
 
             switch (vAction)
             {
@@ -291,7 +283,7 @@ public class CustomerDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.SEARCH_SHOW_NEXT:
             {
-               // System.out.println("AdminDispatchServlet: SEARCH_SHOW_NEXT");
+               // log.info("AdminDispatchServlet: SEARCH_SHOW_NEXT");
 
                if (!vSession.isCurrentMonth())
                   vSession.incrementMonthsBack();

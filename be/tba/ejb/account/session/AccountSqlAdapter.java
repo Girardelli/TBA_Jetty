@@ -6,9 +6,14 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Vector;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.SQLException;
 import java.sql.ResultSet;
 
+import be.tba.dbpopul.DbPopulator;
 import be.tba.ejb.account.interfaces.AccountEntityData;
 import be.tba.servlets.session.WebSession;
 import be.tba.util.constants.Constants;
@@ -33,6 +38,7 @@ import be.tba.util.exceptions.remote.AccountNotFoundException;
  */
 public class AccountSqlAdapter extends AbstractSqlAdapter<AccountEntityData>
 {
+	private static Logger log = LoggerFactory.getLogger(AccountSqlAdapter.class);
 
     // -------------------------------------------------------------------------
     // Static
@@ -70,10 +76,10 @@ public class AccountSqlAdapter extends AbstractSqlAdapter<AccountEntityData>
             account.setLastLoginTS(vCalendar.getTimeInMillis());
             account.setLastLogin(vLoginTime);
             executeSqlQuery(webSession, "UPDATE AccountEntity SET LastLogin='" + vLoginTime + "' WHERE Id='" + account.getId() + "'");
-            System.out.println("Login: userid=" + userid + " (" + account.getFullName() + ")");
+            log.info("Login: userid=" + userid + " (" + account.getFullName() + ")");
             return account;
         }
-        System.out.println("Login FAILED: userid=" + userid + ", Password=" + password);
+        log.info("Login FAILED: userid=" + userid + ", Password=" + password);
         throw new AccountNotFoundException("De user id/paswoord combinatie is foutief.");
     }
 
@@ -90,7 +96,7 @@ public class AccountSqlAdapter extends AbstractSqlAdapter<AccountEntityData>
         {
             return collection.iterator().next();
         }
-        System.out.println("Unexpected number of account (" + collection.size() + ") found for FwdNumber=" + fwdNr);
+        log.info("Unexpected number of account (" + collection.size() + ") found for FwdNumber=" + fwdNr);
         throw new AccountNotFoundException("De user id/paswoord combinatie is foutief.");
     }
 */
@@ -115,7 +121,7 @@ public class AccountSqlAdapter extends AbstractSqlAdapter<AccountEntityData>
         {
             return collection.iterator().next();
         }
-        System.out.println("FAILED getUnregistered(" + regCode + ")");
+        log.info("FAILED getUnregistered(" + regCode + ")");
         throw new AccountNotFoundException("De registratie code is niet correct.");
     }
 
@@ -317,7 +323,7 @@ public class AccountSqlAdapter extends AbstractSqlAdapter<AccountEntityData>
             entry.setRedirectAccountId(rs.getInt(75));
 
             vVector.add(entry);
-            // System.out.println("read from DB:" + entry.toNameValueString());
+            // log.info("read from DB:" + entry.toNameValueString());
         }
         return vVector;
     }

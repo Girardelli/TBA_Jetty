@@ -15,9 +15,9 @@ import be.tba.servlets.session.WebSession;
 
 public abstract class AbstractSqlAdapter<T>
 {
-    // private static Log log = LogFactory.getLog(AbstractSqlAdapter.class);
+    // private static Logger log = LoggerFactory.getLogger(AbstractSqlAdapter.class);
 
-    final static Logger sLogger = LoggerFactory.getLogger(AbstractSqlAdapter.class);
+	private static Logger log = LoggerFactory.getLogger(AbstractSqlAdapter.class);
 
     public AbstractSqlAdapter(String tableName)
     {
@@ -85,7 +85,7 @@ public abstract class AbstractSqlAdapter<T>
     {
         if (str == null || str.equals("null"))
         {
-            // System.out.println("converted 'null' string to empty one");
+            // log.info("converted 'null' string to empty one");
             return "";
         }
         return str;
@@ -103,31 +103,31 @@ public abstract class AbstractSqlAdapter<T>
             	long startTime = Calendar.getInstance().getTimeInMillis();
             	int cnt = stmt.executeUpdate(queryStr, Statement.RETURN_GENERATED_KEYS);
                 session.addSqlTimer(Calendar.getInstance().getTimeInMillis() - startTime);
-                System.out.println(cnt + " new entry: SQL query: " + queryStr);
+                log.info(cnt + " new entry: SQL query: " + queryStr);
                 rs = stmt.getGeneratedKeys();
                 if(cnt == 1 && rs.next())
                 {
     				return rs.getInt(1);
     			}
-                //sLogger.info("{} entries: SQL querry: {}", col.size(), queryStr);
+                //log.info("{} entries: SQL querry: {}", col.size(), queryStr);
             }
             else
             {
-                System.out.println("Error: expected INSERT statement: " + queryStr);
-                //sLogger.info("{} entries: SQL querry: {}", cnt, queryStr);
+                log.error("Error: expected INSERT statement: " + queryStr);
+                //log.info("{} entries: SQL querry: {}", cnt, queryStr);
             }
             return 0;
         }
         catch (SQLException ex)
         {
             // handle any errors
-            System.out.println("FAILED SQL statement: " + queryStr);
-            System.out.println("SQLException: " + ex.getMessage());
-            System.out.println("SQLState: " + ex.getSQLState());
-            System.out.println("VendorError: " + ex.getErrorCode());
+            log.error("FAILED SQL statement: " + queryStr);
+            log.error("SQLException: " + ex.getMessage());
+            log.error("SQLState: " + ex.getSQLState());
+            log.error("VendorError: " + ex.getErrorCode());
 
-            sLogger.error("FAILED SQL statement: {}", queryStr);
-            sLogger.error("", ex);
+            log.error("FAILED SQL statement: {}", queryStr);
+            log.error("", ex);
         }
         finally
         {
@@ -180,9 +180,9 @@ public abstract class AbstractSqlAdapter<T>
             	rs = stmt.executeQuery(queryStr);
             	session.addSqlTimer(Calendar.getInstance().getTimeInMillis() - startTime);
             	Collection<T> col = translateRsToValueObjects(rs);
-                //System.out.println(col.size() + " entries: SQL query: " + queryStr);
+                //log.info(col.size() + " entries: SQL query: " + queryStr);
                 
-                sLogger.info("{} entries: SQL query: {}", col.size(), queryStr);
+                log.info("{} entries: SQL query: {}", col.size(), queryStr);
                 return col;
             }
             else
@@ -190,21 +190,21 @@ public abstract class AbstractSqlAdapter<T>
             	long startTime = Calendar.getInstance().getTimeInMillis();
             	int cnt = stmt.executeUpdate(queryStr);
             	session.addSqlTimer(Calendar.getInstance().getTimeInMillis() - startTime);
-                System.out.println(cnt + " entries: SQL query: " + queryStr);
-                //sLogger.info("{} entries: SQL querry: {}", cnt, queryStr);
+                log.info(cnt + " entries: SQL query: " + queryStr);
+                //log.info("{} entries: SQL querry: {}", cnt, queryStr);
                 return new Vector<T>(cnt);
             }
         }
         catch (SQLException ex)
         {
             // handle any errors
-            System.out.println("FAILED SQL statement: " + queryStr);
-            System.out.println("SQLException: " + ex.getMessage());
-            System.out.println("SQLState: " + ex.getSQLState());
-            System.out.println("VendorError: " + ex.getErrorCode());
+            log.error("FAILED SQL statement: " + queryStr);
+            log.error("SQLException: " + ex.getMessage());
+            log.error("SQLState: " + ex.getSQLState());
+            log.error("VendorError: " + ex.getErrorCode());
 
-            sLogger.error("FAILED SQL statement: {}", queryStr);
-            sLogger.error("", ex);
+            log.error("FAILED SQL statement: {}", queryStr);
+            log.error("", ex);
         }
         finally
         {

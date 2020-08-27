@@ -4,14 +4,9 @@
 
 <%@ page 
 contentType="text/html;charset=UTF-8" language="java"
-		import="javax.ejb.*,
-java.util.*,
-
-
+		import="java.util.*,
 javax.naming.Context,
 javax.naming.InitialContext,
-
-javax.ejb.*,
 be.tba.ejb.account.interfaces.*,
 be.tba.ejb.pbx.interfaces.*,
 be.tba.util.constants.*,
@@ -102,7 +97,7 @@ try
 {
 vSession.setCallingJsp(Constants.ADD_RECORD_JSP);
 out.println("<select name=\"" + Constants.ACCOUNT_FORWARD_NUMBER + "\">");
-Collection list = AccountCache.getInstance().getCustomerList();
+Collection list = AccountCache.getInstance().getCallCustomerList();
 synchronized(list) 
 {
     for (Iterator vIter = list.iterator(); vIter.hasNext();)
@@ -118,7 +113,7 @@ out.println("</select>");
 			<tr>
 				<td width="50"></td>
 				<td width="170" valign="top" class="bodysubsubtitle"><img
-					src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Oproep doorgeschakeld</td>
+					src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Telemarketing</td>
 				<td width="530" valign="top" class="bodysubsubtitle"><input
 					type=radio name="<%=Constants.RECORD_INVOICE_LEVEL%>"
 					value="<%=Constants.RECORD_LEVEL1%>">prijs 1<br>

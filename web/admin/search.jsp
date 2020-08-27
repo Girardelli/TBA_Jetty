@@ -4,14 +4,14 @@
 
 
 	<%@ page
-		import="javax.ejb.*,
+		import="
 java.util.*,
 
 
 javax.naming.Context,
 javax.naming.InitialContext,
 
-javax.ejb.*,
+
 be.tba.ejb.account.interfaces.*,
 be.tba.ejb.pbx.interfaces.*,
 be.tba.ejb.pbx.session.CallRecordSqlAdapter,
@@ -30,10 +30,6 @@ be.tba.util.data.*"%>
 
 		boolean vCustomerFilterOn = false;
 		AccountEntityData vAccount = AccountCache.getInstance().get(vSession.getCallFilter().getCustFilter());
-
-		if  (vAccount == null) System.out.println("account not found for " + vSession.getSessionFwdNr());
-
-
 		String vCustomerFilter = vSession.getCallFilter().getCustFilter();
 		if (vCustomerFilter != null)
 		{

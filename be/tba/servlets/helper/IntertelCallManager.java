@@ -36,19 +36,19 @@ public class IntertelCallManager
 
    public synchronized void newCall(IntertelCallData data)
    {
-//      System.out.println("IntertelCallManager.newCall: " + data.toString());
+//      log.info("IntertelCallManager.newCall: " + data.toString());
       mCallMap.put(data.intertelCallId, data);
 //      if (++mCallCnt > kCallCleaner)
 //      {
 //         mCallCnt = 0;
 //         cleanUpMaps();
 //      }
-      // System.out.println(data.intertelCallId + "-created in manager");
+      // log.info(data.intertelCallId + "-created in manager");
    }
 
    public synchronized void removeCall(WebSession session, int callDbId)
    {
-      //System.out.println("IntertelCallManager.removeCall with id:" + callDbId);
+      //log.info("IntertelCallManager.removeCall with id:" + callDbId);
       removeCall(session, getByDbId(callDbId));
    }
 
@@ -57,7 +57,7 @@ public class IntertelCallManager
       if (data != null)
       {
          mCallMap.remove(data.intertelCallId);
-         //System.out.println("IntertelCallManager.removeCall done: " + removedCall.toString());
+         //log.info("IntertelCallManager.removeCall done: " + removedCall.toString());
          if (data.tsAnswer == 0 || data.tsEnd == 0)
          {
             CallRecordSqlAdapter vCallLogWriterSession = new CallRecordSqlAdapter();
@@ -74,17 +74,17 @@ public class IntertelCallManager
    public synchronized IntertelCallData getByDbId(int id)
    {
       Collection<IntertelCallData> calls = mCallMap.values();
-      //System.out.println("getByDbId(" + id + "): list size=" + calls.size());
+      //log.info("getByDbId(" + id + "): list size=" + calls.size());
       for (Iterator<IntertelCallData> itr = calls.iterator(); itr.hasNext();)
       {
          IntertelCallData call = itr.next();
-         //System.out.println("    check call.dbRecordId=" + call.dbRecordId + ", id=" + id);
+         //log.info("    check call.dbRecordId=" + call.dbRecordId + ", id=" + id);
          if (call.dbRecordId == id)
          {
             return call;
          }
       }
-      //System.out.println("getByDbId(" + id + ") not found");
+      //log.info("getByDbId(" + id + ") not found");
       return null;
    }
 
@@ -100,7 +100,7 @@ public class IntertelCallManager
          String key = i.next();
          IntertelCallData data = mCallMap.get(key);
 
-         // System.out.println("getransferCall: " + transferCalledNr + "==" +
+         // log.info("getransferCall: " + transferCalledNr + "==" +
          // data.calledNr + " && " + transferCallingNr + "==" + data.callingNr + " && " +
          // transferedCallId + " != " + data.intertelCallId);
 
@@ -122,15 +122,15 @@ public class IntertelCallManager
       for (Iterator<IntertelCallData> i = mCallMap.values().iterator(); i.hasNext();)
       {
          IntertelCallData call = i.next();
-//         System.out.println("getTransferCall_CallParkBugs " + y++);
-//         System.out.println(transferedCall);
-//         System.out.println(call);
+//         log.info("getTransferCall_CallParkBugs " + y++);
+//         log.info(transferedCall);
+//         log.info(call);
          if (call != transferedCall && call.isIncoming && call.tsEnd == 0 && transferedCall.callingNr.equals(call.answeredBy))
          {
             return call;
          }
       }
-//      System.out.println("getTransferCall_CallParkBugs returns null");
+//      log.info("getTransferCall_CallParkBugs returns null");
       return null;
    }
    
@@ -147,7 +147,7 @@ public class IntertelCallManager
       for (Iterator<IntertelCallData> i = mCallMap.values().iterator(); i.hasNext();)
       {
          IntertelCallData call = i.next();
-         //System.out.println("getPendingCallList " + call.toString());
+         //log.info("getPendingCallList " + call.toString());
          if (call.phase.equals("start"))
          {
             WebSocketData data = new WebSocketData(WebSocketData.NEW_CALL, call.tsStart, call);
@@ -161,7 +161,7 @@ public class IntertelCallManager
    public synchronized void cleanUpMap()
    {
       long tsNow = System.currentTimeMillis() / 1000l;
-      //System.out.println(this + ". mCallMap.size()=" + mCallMap.size() + ", mOperatorPhoneMap=" + mOperatorPhoneMap.size());
+      //log.info(this + ". mCallMap.size()=" + mCallMap.size() + ", mOperatorPhoneMap=" + mOperatorPhoneMap.size());
 
       for (Iterator<String> i = mCallMap.keySet().iterator(); i.hasNext();)
       {
@@ -170,7 +170,7 @@ public class IntertelCallManager
          if ((data.tsEnd != 0 &&  data.tsEnd < (tsNow - 1000)) ||
                (data.tsStart < (tsNow - 60*30))) // 0.5 hours
          {
-            //System.out.println("Cleanup: IntertelCallManager.removeCall (tsNow=" + tsNow + "): " + data.toString());
+            //log.info("Cleanup: IntertelCallManager.removeCall (tsNow=" + tsNow + "): " + data.toString());
             i.remove();
          }
       }

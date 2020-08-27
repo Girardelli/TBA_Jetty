@@ -73,7 +73,7 @@ public class CustomerData
     public void setBtwNr(String btwNr)
     {
         this.mBtwNr = btwNr;
-        //System.out.println("CustomerData.setBtwNr(" + btwNr + ")");
+        //log.info("CustomerData.setBtwNr(" + btwNr + ")");
     }
 
     public int getTaskHourRate()

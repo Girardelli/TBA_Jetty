@@ -1,36 +1,17 @@
 package be.tba.test;
 
 import java.io.IOException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.text.DateFormat;
-import java.util.Date;
-import java.util.Locale;
-import java.util.Properties;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
-
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-
-import org.apache.commons.logging.LogFactory;
-
-import com.sun.mail.smtp.SMTPTransport;
-
-import be.tba.servlets.AdminDispatchServlet;
-import be.tba.util.invoice.IBANCheckDigit;
-import be.tba.util.invoice.InvoiceHelper;
 
 //import be.tba.util.timer.Session;
 
 public class IntertelCallInjector 
 {
-   private static Log log = LogFactory.getLog(IntertelCallInjector.class);
+   private static Logger log = LoggerFactory.getLogger(IntertelCallInjector.class);
  
    
    static String[][] kCallSessions = { {
@@ -96,7 +77,7 @@ public class IntertelCallInjector
 						Process proc = Runtime.getRuntime().exec(cmd);
 						int ind = cmd.indexOf("origin=");
 						String phase = cmd.substring(ind + 7, ind + 13);
-						System.out.println(mIdPrefix + "-" + i + "-" + phase);
+						log.info(mIdPrefix + "-" + i + "-" + phase);
 						int exitCode = proc.waitFor();
 			            if (exitCode != 0) 
 			            {

@@ -4,6 +4,9 @@
  */
 package be.tba.util.timer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import be.tba.ejb.account.interfaces.AccountEntityData;
 import be.tba.ejb.mail.session.MailerSessionBean;
 import be.tba.servlets.session.WebSession;
@@ -19,7 +22,9 @@ import be.tba.websockets.WebSocketData;
  */
 final public class NotifyCustomerTask
 {
-   static public void notify(int accountId, WebSocketData wsData, boolean alsoMail)
+	private static Logger log = LoggerFactory.getLogger(NotifyCustomerTask.class);
+   
+	static public void notify(int accountId, WebSocketData wsData, boolean alsoMail)
    {
       Thread t = new Thread(new NotifyCustomerThread(accountId, wsData, alsoMail));
       t.start();
@@ -40,12 +45,12 @@ final public class NotifyCustomerTask
          mAccountEntityData = AccountCache.getInstance().get(mAccountId);
          if (mAccountEntityData == null)
          {
-            System.out.println("ERROR: MailNowThread.send with null account");
+            log.info("ERROR: MailNowThread.send with null account");
             return;
          }
          if (System.getenv("TBA_MAIL_ON") == null)
          {
-            System.out.println("Dev mode: in production mail would be send to account " + mAccountEntityData.getEmail());
+            log.info("Dev mode: in production mail would be send to account " + mAccountEntityData.getEmail());
             return;
          }
       }
@@ -69,12 +74,12 @@ final public class NotifyCustomerTask
             {
                if (!MailerSessionBean.sendCallInfoMail(session, mAccountId))
                {
-                  System.out.println("NotifyCustomerThread sendmail failed: wait 5 sec and retry");
+                  log.info("NotifyCustomerThread sendmail failed: wait 5 sec and retry");
                   // wait another 5 seconds an retry once
                   Thread.sleep(5000);
                   if (!MailerSessionBean.sendCallInfoMail(session, mAccountId))
                   {
-                     System.out.println("NotifyCustomerThread sendmail failed again");
+                     log.info("NotifyCustomerThread sendmail failed again");
                   }
                }
             }
@@ -82,12 +87,12 @@ final public class NotifyCustomerTask
          }
          catch (InterruptedException e1)
          {
-            System.out.println("NotifyCustomerThread exception");
+            log.info("NotifyCustomerThread exception");
             e1.printStackTrace();
          }
          catch (Exception e)
          {
-            System.out.println("NotifyCustomerThread exception");
+            log.info("NotifyCustomerThread exception");
             e.printStackTrace();
          }
          finally

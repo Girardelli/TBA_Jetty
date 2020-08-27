@@ -10,8 +10,8 @@ import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import be.tba.ejb.account.interfaces.AccountEntityData;
 import be.tba.ejb.invoice.interfaces.InvoiceEntityData;
@@ -30,7 +30,7 @@ import be.tba.util.session.SessionParmsInf;
 
 public class InvoiceFacade
 {
-   private static Log log = LogFactory.getLog(InvoiceFacade.class);
+   private static Logger log = LoggerFactory.getLogger(InvoiceFacade.class);
    
     public static void saveInvoice(SessionParmsInf parms, WebSession session)
     {
@@ -76,7 +76,7 @@ public class InvoiceFacade
     public static void freezeInvoices(SessionParmsInf parms, WebSession session)
     {
         String vLtd = parms.getParameter(Constants.INVOICE_TO_FREEZE);
-        // System.out.println("record to delete list: " + vLtd);
+        // log.info("record to delete list: " + vLtd);
         if (vLtd != null && vLtd.length() > 0)
         {
             StringTokenizer vStrTok = new StringTokenizer(vLtd, ",");
@@ -94,7 +94,7 @@ public class InvoiceFacade
     public static void mailInvoices(SessionParmsInf parms, WebSession session)
     {
         String vLtd = parms.getParameter(Constants.INVOICE_TO_FREEZE);
-        // System.out.println("record to delete list: " + vLtd);
+        // log.info("record to delete list: " + vLtd);
         if (vLtd != null && vLtd.length() > 0)
         {
             StringTokenizer vStrTok = new StringTokenizer(vLtd, ",");
@@ -112,7 +112,7 @@ public class InvoiceFacade
     public static void deleteInvoices(SessionParmsInf parms, WebSession session)
     {
         String vLtd = parms.getParameter(Constants.INVOICE_TO_DELETE);
-        // System.out.println("record to delete list: " + vLtd);
+        // log.info("record to delete list: " + vLtd);
         if (vLtd != null && vLtd.length() > 0)
         {
             StringTokenizer vStrTok = new StringTokenizer(vLtd, ",");
@@ -152,7 +152,7 @@ public class InvoiceFacade
         String vLtd = parms.getParameter(Constants.INVOICE_TO_SETPAYED);
         if (vLtd != null && vLtd.length() > 0)
         {
-            System.out.println("setInvoicesPayed: # entries " + vLtd);
+            log.info("setInvoicesPayed: # entries " + vLtd);
             StringTokenizer vStrTok = new StringTokenizer(vLtd, ",");
 
             Vector<Integer> vList = new Vector<Integer>();
@@ -170,7 +170,7 @@ public class InvoiceFacade
         String vLtd = parms.getParameter(Constants.INVOICE_TO_SETPAYED);
         if (vLtd != null && vLtd.length() > 0)
         {
-            //System.out.println("setInvoicesPayed: # entries " + vLtd);
+            //log.info("setInvoicesPayed: # entries " + vLtd);
             StringTokenizer vStrTok = new StringTokenizer(vLtd, ",");
 
             Vector<Integer> vList = new Vector<Integer>();
@@ -182,7 +182,7 @@ public class InvoiceFacade
             Collection<InvoiceEntityData> invoiceList = vInvoiceSession.getInvoiceListByIdList(session, (Collection<Integer>) vList);
             return WoltersKluwenImport.generateVerkopenXml(invoiceList);
         }
-        System.out.println("generateInvoiceXml: no invoices selected");
+        log.info("generateInvoiceXml: no invoices selected");
         return null;
     }
     
@@ -210,7 +210,7 @@ public class InvoiceFacade
 
     public static void addManualInvoice(SessionParmsInf parms, WebSession session)
     {
-       System.out.println("addManualInvoice enter");
+       log.info("addManualInvoice enter");
         InvoiceSqlAdapter vInvoiceSession = new InvoiceSqlAdapter();
         InvoiceEntityData newInvoice = new InvoiceEntityData();
         Calendar vCalendar = Calendar.getInstance();
@@ -270,7 +270,7 @@ public class InvoiceFacade
               }
            }
         }
-        System.out.println("created manual invoice " + newInvoice.getInvoiceNr() + " with id=" + id);
+        log.info("created manual invoice " + newInvoice.getInvoiceNr() + " with id=" + id);
         File vTemplate = new File(Constants.INVOICE_HEAD_TMPL);
         File vTarget = new File(newInvoice.getFileName());
 

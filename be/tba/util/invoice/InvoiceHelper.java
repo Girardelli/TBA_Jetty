@@ -8,6 +8,9 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import be.tba.ejb.account.interfaces.AccountEntityData;
 import be.tba.ejb.invoice.interfaces.InvoiceEntityData;
 import be.tba.ejb.invoice.session.InvoiceSqlAdapter;
@@ -50,6 +53,7 @@ class Tarifs
  */
 public class InvoiceHelper
 {
+	private static Logger log = LoggerFactory.getLogger(InvoiceHelper.class);
     // -------------------------------------------------------------------------
     // Static
     // -------------------------------------------------------------------------
@@ -130,7 +134,7 @@ public class InvoiceHelper
     {
         try
         {
-            System.out.println("InvoiceHelper(Account, month, year)");
+            log.info("InvoiceHelper(Account, month, year)");
             mAccountEntityData = AccountCache.getInstance().get(accountId);
             if (mAccountEntityData == null)
             {
@@ -159,7 +163,7 @@ public class InvoiceHelper
             {
                 throw (new Exception("InvoiceHelper called with invoiceData=null"));
             }
-            System.out.println("InvoiceHelper(InvoiceData; id=" + invoiceData.getId() + ", accountId=" + invoiceData.getAccountID() + ". accountFwdNr=" + invoiceData.getAccountFwdNr());
+            log.info("InvoiceHelper(InvoiceData; id=" + invoiceData.getId() + ", accountId=" + invoiceData.getAccountID() + ". accountFwdNr=" + invoiceData.getAccountFwdNr());
             mInvoiceEntityData = invoiceData;
             mAccountEntityData = AccountCache.getInstance().get(mInvoiceEntityData);
             if (mAccountEntityData == null)
@@ -212,7 +216,7 @@ public class InvoiceHelper
         mTarifs[2] = new Tarifs(3, "III forfait", mAccountEntityData.getFacTblMinCalls_III(), mAccountEntityData.getFacTblStartCost_III(), mAccountEntityData.getFacTblExtraCost_III());
         mTarifs[3] = new Tarifs(4, "IV", mAccountEntityData.getFacTblMinCalls_IV(), mAccountEntityData.getFacTblStartCost_IV(), mAccountEntityData.getFacTblExtraCost_IV());
 
-        // System.out.println("Set new pricing for " +
+        // log.info("Set new pricing for " +
         // mAccountEntityData.getFullName());
         // mTarifs[0] = new Tarifs(1, "I", 75, 110.00, 1.2);
         // mTarifs[1] = new Tarifs(2, "II", 40, 80.00, 1.2);
@@ -224,7 +228,7 @@ public class InvoiceHelper
 
         mCallCounts.LastInvoiceItem = vStart + 1;
 
-        System.out.println("generate invoice for " + mAccountEntityData.getFullName());
+        log.info("generate invoice for " + mAccountEntityData.getFullName());
         if (mInvoiceEntityData == null)
         {
             mInvoiceEntityData = vInvoiceSession.getLastInvoice(webSession, mAccountEntityData.getId(), mInvoiceData.Month, mInvoiceData.Year);
@@ -236,7 +240,7 @@ public class InvoiceHelper
                 {
                     // start counting again at the old start point.
                     vStart = mInvoiceEntityData.getStartTime();
-                    //System.out.println(mAccountEntityData.getFwdNumber() + ": Last invoice was a credit note: make new on for this months");
+                    //log.info(mAccountEntityData.getFwdNumber() + ": Last invoice was a credit note: make new on for this months");
                     mInvoiceEntityData = null;
                 }
                 else if (mInvoiceEntityData.getFrozenFlag())
@@ -246,21 +250,21 @@ public class InvoiceHelper
                     // starting from the stopTime of this last one.
                     vStart = mInvoiceEntityData.getStopTime() + 1;
                     mInvoiceEntityData = null;
-                    //System.out.println(mAccountEntityData.getFwdNumber() + " : Last invoice was frozen: make a new one");
+                    //log.info(mAccountEntityData.getFwdNumber() + " : Last invoice was frozen: make a new one");
                 }
                 else
                 {
                     // the last invoice is not frozen: update this invoice with the
                     // figures till now.
                     vStart = mInvoiceEntityData.getStartTime();
-                    //System.out.println(mAccountEntityData.getFwdNumber() + ": Last invoice was not frozen: update this one");
+                    //log.info(mAccountEntityData.getFwdNumber() + ": Last invoice was not frozen: update this one");
                 }
                 // mRecords = vQuerySession.getInvoiceCalls(vSession,
                 // mAccountEntityData.getFwdNumber(), mMonth, mYear);
             }
             else
             {
-                //System.out.println(mAccountEntityData.getFwdNumber() + " : no invoices yet for this number for this month. Make one.");
+                //log.info(mAccountEntityData.getFwdNumber() + " : no invoices yet for this number for this month. Make one.");
 
                 // first invoice for this month: get all calls from the beginning of the month
             }
@@ -270,7 +274,7 @@ public class InvoiceHelper
             // There is already an invoice for this period
             if (mInvoiceEntityData.getCreditId() >= 0)
             {
-                //System.out.println(mAccountEntityData.getFwdNumber() + ": credit note or original invoice was provided: show the frozen data.\r\nnew Start: " + vStart + " ==> " + mInvoiceEntityData.getStartTime() + "\r\nnew Stop:  " + vEnd + " ==> " + mInvoiceEntityData.getStopTime());
+                //log.info(mAccountEntityData.getFwdNumber() + ": credit note or original invoice was provided: show the frozen data.\r\nnew Start: " + vStart + " ==> " + mInvoiceEntityData.getStartTime() + "\r\nnew Stop:  " + vEnd + " ==> " + mInvoiceEntityData.getStopTime());
                 vStart = mInvoiceEntityData.getStartTime();
                 vEnd = mInvoiceEntityData.getStopTime();
             }
@@ -278,7 +282,7 @@ public class InvoiceHelper
             {
                 // the last invoice for this month was frozen: make a new one
                 // starting from the stopTime of this last one.
-                //System.out.println(mAccountEntityData.getFwdNumber() + " : frozen invoice data, not related to credit note, provided by caller: show the frozen data.\r\nnew Start: " + vStart + " ==> " + mInvoiceEntityData.getStartTime() + "\r\nnew Stop:  " + vEnd + " ==> " + mInvoiceEntityData.getStopTime());
+                //log.info(mAccountEntityData.getFwdNumber() + " : frozen invoice data, not related to credit note, provided by caller: show the frozen data.\r\nnew Start: " + vStart + " ==> " + mInvoiceEntityData.getStartTime() + "\r\nnew Stop:  " + vEnd + " ==> " + mInvoiceEntityData.getStopTime());
                 vStart = mInvoiceEntityData.getStartTime();
                 vEnd = mInvoiceEntityData.getStopTime();
             }
@@ -286,11 +290,11 @@ public class InvoiceHelper
             {
                 // the last invoice is not frozen: update this invoice with the
                 // figures till now.
-                //System.out.println(mAccountEntityData.getFwdNumber() + " : NOT frozen invoice data provided by caller: update this one.\r\nnew Start: " + vStart + " ==> " + mInvoiceEntityData.getStartTime());
+                //log.info(mAccountEntityData.getFwdNumber() + " : NOT frozen invoice data provided by caller: update this one.\r\nnew Start: " + vStart + " ==> " + mInvoiceEntityData.getStartTime());
                 vStart = mInvoiceEntityData.getStartTime();
             }
         }
-        // System.out.println("Calls from " + vStart + ", " + vEnd);
+        // log.info("Calls from " + vStart + ", " + vEnd);
 
         /*
          * create one big list of call record. The getInvoiceCallsHashTable returns a
@@ -302,7 +306,7 @@ public class InvoiceHelper
         if (mAccountEntityData.getHasSubCustomers())
         {
             mRecordsHashTable = vQuerySession.getInvoiceCallsHashTable(webSession, mAccountEntityData.getId(), vStart, vEnd);
-            // System.out.println("subcust for " +
+            // log.info("subcust for " +
             // mAccountEntityData.getFwdNumber() + ": " +
             // mRecordsHashTable.size());
             if (mRecords == null)
@@ -314,7 +318,7 @@ public class InvoiceHelper
                 Collection<CallRecordEntityData> vSubCalls = i.next();
                 // CallCounts subCallsCount = new CallCounts();
                 // setCounters(subCallsCount, vSubCalls, null);
-                // System.out.println("Calls for " + nr + ": " +
+                // log.info("Calls for " + nr + ": " +
                 // subCallsCount.mTotalCalls);
                 // if (mRecords == null)
                 // {
@@ -332,7 +336,7 @@ public class InvoiceHelper
             mRecords = vQuerySession.getInvoiceCalls(webSession, mAccountEntityData.getId(), mInvoiceData.Year, mInvoiceData.Month, vStart, vEnd);
         }
 
-        // System.out.println(mAccountEntityData.getFwdNumber() + " : has " +
+        // log.info(mAccountEntityData.getFwdNumber() + " : has " +
         // mRecords.size() + " calls");
 
         setCounters(mCallCounts, mRecords, mAccountEntityData);
@@ -341,7 +345,7 @@ public class InvoiceHelper
         mInvoiceData.AgendaCost = 0;
         mInvoiceData.CallsCost = 0.0;
         boolean vNewInvoiceRequired = false;
-        //System.out.println("invoice type = " + mInvoiceData.Type);
+        //log.info("invoice type = " + mInvoiceData.Type);
         if (mInvoiceData.Type == kStandardInvoice || (mInvoiceData.Type == kWeekInvoice && (mCallCounts.TotalCalls > 0 || mCallCounts.SmsCalls > 0 || mCallCounts.FwdCalls > 0 || mCallCounts.FaxCalls > 0)))
         {
             vNewInvoiceRequired = true;
@@ -436,7 +440,7 @@ public class InvoiceHelper
             mTasks = vTaskSession.getTasksFromTillTimestamp(webSession, mAccountEntityData.getId(), vStart, vEnd);
         }
         mInvoiceData.NrOfTasks = mTasks.size();
-        //System.out.println(mInvoiceData.NrOfTasks + " Tasks found!!!");
+        //log.info(mInvoiceData.NrOfTasks + " Tasks found!!!");
         
         for (Iterator<TaskEntityData> i = mTasks.iterator(); i.hasNext();)
         {
@@ -444,15 +448,15 @@ public class InvoiceHelper
             if (vEntry.getIsFixedPrice() || vEntry.getFixedPrice() > 0)
             {
                 mInvoiceData.TaskCost += vEntry.getFixedPrice();
-                // System.out.println("add fixed amonth: " +
+                // log.info("add fixed amonth: " +
                 // vEntry.getFixedPrice() + ". total task is now " + mTaskCost);
             }
             else
             {
                mInvoiceData.TaskCost += ((double) vEntry.getTimeSpend() / 60.00) * ((double) mAccountEntityData.getTaskHourRate() / 100.00);
-                // System.out.println("getTimeSpend=" + vEntry.getTimeSpend() +
+                // log.info("getTimeSpend=" + vEntry.getTimeSpend() +
                 // ", getTaskHourRate=" + mAccountEntityData.getTaskHourRate());
-                // System.out.println("add calc amonth: " + ((double)
+                // log.info("add calc amonth: " + ((double)
                 // vEntry.getTimeSpend() / 60.00) * ((double)
                 // mAccountEntityData.getTaskHourRate() / 100.00) + ". total task is
                 // now " + mTaskCost);
@@ -522,9 +526,9 @@ public class InvoiceHelper
         {
             if (!mInvoiceEntityData.getFrozenFlag() && mInvoiceEntityData.getCreditId() < 0 && mInvoiceEntityData.getTotalCost() != mInvoiceData.TotalCost)
             {
-                //System.out.println("new total cost " + mInvoiceData.TotalCost + " is not equal to old cost " + mInvoiceEntityData.getTotalCost());
+                //log.info("new total cost " + mInvoiceData.TotalCost + " is not equal to old cost " + mInvoiceEntityData.getTotalCost());
                 mInvoiceEntityData.setTotalCost(mInvoiceData.TotalCost);
-                //System.out.println("invoice not frozen: update start-stop: start: " + mInvoiceEntityData.getStartTime() + "-->" + vStart + ", stop: " + mInvoiceEntityData.getStopTime() + "-->" + mCallCounts.LastInvoiceItem);
+                //log.info("invoice not frozen: update start-stop: start: " + mInvoiceEntityData.getStartTime() + "-->" + vStart + ", stop: " + mInvoiceEntityData.getStopTime() + "-->" + mCallCounts.LastInvoiceItem);
                 mInvoiceEntityData.setStartTime(vStart);
                 mInvoiceEntityData.setStopTime(mCallCounts.LastInvoiceItem);
                 vInvoiceSession.updateRow(webSession, mInvoiceEntityData);
@@ -538,24 +542,24 @@ public class InvoiceHelper
     {
         if (!mIsInitialized)
         {
-            System.out.println("InvoiceHelper not initialized");
+            log.info("InvoiceHelper not initialized");
             throw new RuntimeException();
         }
         // if (mAccountEntityData.getNoInvoice() || mNoValidCustomer ||
         // !mInvoiceEntityData.getFrozenFlag())
         if (mNoValidCustomer ||  mAccountEntityData.getNoInvoice())
         {
-            //System.out.println("No invoice doc generated for " + mAccountEntityData.getFullName() + ": getNoInvoice()=" + mAccountEntityData.getNoInvoice() + ", getFrozenFlag()=" + mInvoiceEntityData.getFrozenFlag());
+            //log.info("No invoice doc generated for " + mAccountEntityData.getFullName() + ": getNoInvoice()=" + mAccountEntityData.getNoInvoice() + ", getFrozenFlag()=" + mInvoiceEntityData.getFrozenFlag());
             return true;
         }
         if (mInvoiceEntityData == null)
         {
-            //System.out.println("No invoice data found in DB for " + mAccountEntityData.getFullName());
+            //log.info("No invoice data found in DB for " + mAccountEntityData.getFullName());
             return true;
         }
         if (mInvoiceEntityData.getFileName() == null || mInvoiceEntityData.getFileName().length() == 0)
         {
-            //System.out.println("No invoice doc generated for " + mAccountEntityData.getFullName() + " because file name was not set");
+            //log.info("No invoice doc generated for " + mAccountEntityData.getFullName() + " because file name was not set");
             return true;
         }
         // Calendar vToday = Calendar.getInstance();
@@ -586,7 +590,7 @@ public class InvoiceHelper
     {
         if (!mIsInitialized)
         {
-            System.out.println("InvoiceHelper not initialized");
+            log.info("InvoiceHelper not initialized");
             throw new RuntimeException();
         }
         if (mInvoiceData.Type == kWeekInvoice)
@@ -859,7 +863,7 @@ public class InvoiceHelper
 
     static public String getInvoiceNumber(int year, int month, int seqNr)
     {
-       System.out.println(String.format("%02d%02d%04d", year - 2000, month + 1, seqNr));
+       log.info(String.format("%02d%02d%04d", year - 2000, month + 1, seqNr));
        return String.format("%02d%02d%04d", year - 2000, month + 1, seqNr);
     }
 
@@ -921,7 +925,7 @@ public class InvoiceHelper
                         {
                             ++callCounts.LongCalls;
                             callCounts.LongCallSec += (seconds - Constants.NORMAL_CALL_LENGTH);
-                            // System.out.println("total long seconds=" +
+                            // log.info("total long seconds=" +
                             // mLongCallSec);
                         }
                     }
@@ -932,7 +936,7 @@ public class InvoiceHelper
                         {
                             ++callCounts.LongFwdCalls;
                             callCounts.LongFwdCallSec += (seconds - Constants.NORMAL_CALL_LENGTH);
-                            // System.out.println("total long seconds=" +
+                            // log.info("total long seconds=" +
                             // mLongCallSec);
                         }
                     }
@@ -951,9 +955,9 @@ public class InvoiceHelper
                                                                              // +
                                                                              // mFaxCalls;
             //if (customerData != null)
-                //System.out.println("setCounters for " + customerData.getFullName() + ": " + callList.size() + "(in), " + callCounts.TotalCalls + "(total); " + callCounts.LongFwdCallSec + "sec (" + callCounts.LongFwdCalls + " calls)");
+                //log.info("setCounters for " + customerData.getFullName() + ": " + callList.size() + "(in), " + callCounts.TotalCalls + "(total); " + callCounts.LongFwdCallSec + "sec (" + callCounts.LongFwdCalls + " calls)");
             //else
-                //System.out.println("setCounters for unknown: " + callList.size() + "(in), " + callCounts.TotalCalls + "(total); " + callCounts.LongFwdCallSec + "sec (" + callCounts.LongFwdCalls + " calls)");
+                //log.info("setCounters for unknown: " + callList.size() + "(in), " + callCounts.TotalCalls + "(total); " + callCounts.LongFwdCallSec + "sec (" + callCounts.LongFwdCalls + " calls)");
         }
         return callCounts.TotalCalls;
     }
@@ -1022,7 +1026,7 @@ public class InvoiceHelper
             }
             else
             {
-                System.out.println("No calls for " + accountData.getFullName());
+                log.info("No calls for " + accountData.getFullName());
             }
 
             Collection<TaskEntityData> vTaskList = (Collection<TaskEntityData>) mTasksHashTable.get(id);
@@ -1035,7 +1039,7 @@ public class InvoiceHelper
                     if (vTask.getIsFixedPrice())
                     {
                         vTaskCost += vTask.getFixedPrice();
-                        // System.out.println("add fixed amonth: " +
+                        // log.info("add fixed amonth: " +
                         // vEntry.getFixedPrice() + ". total task is now " +
                         // mTaskCost);
                     }
@@ -1061,20 +1065,20 @@ public class InvoiceHelper
             if (hrs < 5)
             {
                 seconds = hrs * 3600;
-                // System.out.println("hours=" + hours + " ;seconds=" + seconds);
+                // log.info("hours=" + hours + " ;seconds=" + seconds);
             }
         }
         if (vTokenizer.hasMoreTokens())
         {
             String minutes = vTokenizer.nextToken();
             seconds += Integer.parseInt(minutes) * 60;
-            // System.out.println("minutes=" + minutes + " ;seconds=" + seconds);
+            // log.info("minutes=" + minutes + " ;seconds=" + seconds);
         }
         if (vTokenizer.hasMoreTokens())
         {
             String secs = vTokenizer.nextToken();
             seconds += Integer.parseInt(secs);
-            // System.out.println("seconds=" + secs + " ;seconds=" + seconds);
+            // log.info("seconds=" + secs + " ;seconds=" + seconds);
         }
         return seconds;
     }

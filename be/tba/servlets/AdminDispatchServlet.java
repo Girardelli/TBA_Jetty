@@ -18,8 +18,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import be.tba.ejb.account.interfaces.AccountEntityData;
 import be.tba.ejb.mail.session.MailerSessionBean;
@@ -51,11 +51,11 @@ public class AdminDispatchServlet extends HttpServlet
     *
     */
    private static final long serialVersionUID = 1L;
-   private static Log log = LogFactory.getLog(AdminDispatchServlet.class);
+   private static Logger log = LoggerFactory.getLogger(AdminDispatchServlet.class);
 
    public AdminDispatchServlet()
    {
-      System.out.println("AdminDispatchServlet created");
+      log.info("AdminDispatchServlet created");
    }
 
    public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
@@ -165,16 +165,16 @@ public class AdminDispatchServlet extends HttpServlet
                 * (Iterator<InvoiceEntityData> vIter = vInvoiceList.iterator();
                 * vIter.hasNext();) { InvoiceEntityData invoice = vIter.next();
                 * 
-                * // set account DB ID ipv fwdNumber //System.out.println("\t*** " +
+                * // set account DB ID ipv fwdNumber //log.info("\t*** " +
                 * invoice.getFileName()); if (invoice.getFileName() == null ||
-                * invoice.getFileName().isEmpty()) { System.out.println(invoice.getInvoiceNr()
+                * invoice.getFileName().isEmpty()) { log.info(invoice.getInvoiceNr()
                 * + " NOK: null or empty file name"); continue; } AccountEntityData account =
                 * AccountCache.getInstance().get(invoice); if (account != null) { String
                 * invoiceName =
                 * invoice.getFileName().substring(invoice.getFileName().indexOf("FacN-") + 6);
                 * int stopIndex = invoiceName.indexOf(".doc"); if (stopIndex == -1) { stopIndex
                 * = invoiceName.indexOf(".pdf"); } if (stopIndex == -1) {
-                * System.out.println(invoice.getInvoiceNr() +
+                * log.info(invoice.getInvoiceNr() +
                 * " NOK: 'doc' or 'pdf' not found in file name"); continue; } invoiceName =
                 * invoiceName.substring(invoiceName.indexOf('-') + 1, stopIndex); String
                 * accountName = account.getFullName().replace(' ','_'); accountName =
@@ -182,11 +182,11 @@ public class AdminDispatchServlet extends HttpServlet
                 * accountName = accountName.replace(';','_');
                 * 
                 * if (accountName.equals(invoiceName)) {
-                * System.out.println(invoice.getInvoiceNr() + " OK: " + accountName);
+                * log.info(invoice.getInvoiceNr() + " OK: " + accountName);
                 * vInvoiceSession.setAccountId(vSession, invoice.getId(), account.getId(),
-                * account.getFullName()); } else { System.out.println(invoice.getInvoiceNr() +
+                * account.getFullName()); } else { log.info(invoice.getInvoiceNr() +
                 * " NOK: invoice klant '" + invoiceName + "' != reffed account '" + accountName
-                * + "'"); } } else { System.out.println(invoice.getInvoiceNr() + " NOK: '" +
+                * + "'"); } } else { log.info(invoice.getInvoiceNr() + " NOK: '" +
                 * invoice.getAccountFwdNr() + "' niet gevonden in account lijst");
                 * //vInvoiceSession.setAccountId(vSession, invoice.getId(), 0); }
                 * 
@@ -194,16 +194,16 @@ public class AdminDispatchServlet extends HttpServlet
                 * TaskSqlAdapter vTaskSession = new TaskSqlAdapter(); AccountEntityData
                 * account2 = AccountCache.getInstance().get(invoice); if
                 * (invoice.getAccountFwdNr() == null || account2 == null) {
-                * System.out.println("invoice with FwdNumber=null or does not exist anymore");
+                * log.info("invoice with FwdNumber=null or does not exist anymore");
                 * continue; }
                 * 
                 * Collection<TaskEntityData> taskList =
                 * vTaskSession.getTasksFromTillTimestamp(vSession, invoice.getAccountID(),
                 * invoice.getStartTime(), invoice.getStopTime());
-                * //System.out.println(invoice.getInvoiceNr() + ": process " + taskList.size()
+                * //log.info(invoice.getInvoiceNr() + ": process " + taskList.size()
                 * + " tasks"); for (Iterator<TaskEntityData> i = taskList.iterator();
                 * i.hasNext();) { TaskEntityData task = i.next(); if (task.getInvoiceId() > 0)
-                * { System.out.println("###Task already assigned to invoice.");// list size=" +
+                * { log.info("###Task already assigned to invoice.");// list size=" +
                 * vTaskList.size()); } else { vTaskSession.fixDbIds(vSession, task.getId(),
                 * invoice.getId(), account2.getId()); }
                 * 
@@ -224,7 +224,7 @@ public class AdminDispatchServlet extends HttpServlet
 //                        {
 //                        	Integer accountId = vIter.next();
 //                            AccountEntityData accountData = AccountCache.getInstance().get(accountId);
-//                            System.out.println("addAccount: accountdata for vValue=" + accountId + " is " + (accountData == null ? "null" : accountData.getFullName()));
+//                            log.info("addAccount: accountdata for vValue=" + accountId + " is " + (accountData == null ? "null" : accountData.getFullName()));
 //                        }
 //                    }
 
@@ -246,7 +246,7 @@ public class AdminDispatchServlet extends HttpServlet
                   }
                   catch (Exception e)
                   {
-                     System.out.println("MailTimerTask exception");
+                     log.info("MailTimerTask exception");
                      e.printStackTrace();
                   }
                   finally
@@ -256,7 +256,7 @@ public class AdminDispatchServlet extends HttpServlet
 
                // DbCleanTimerTask task = new DbCleanTimerTask();
                // task.run();
-               // System.out.println("DB Clean done");
+               // log.info("DB Clean done");
 
                // CallLogWriterSessionHome vWrHome = (CallLogWriterSessionHome)
                // vContext.lookup(EjbJndiNames.EJB_JNDI_CALL_LOG_WRITER_SESSION);
@@ -308,7 +308,7 @@ public class AdminDispatchServlet extends HttpServlet
                 * vMailSession.sendMail(con, vAccountData.getFwdNumber()); } // Check the
                 * record and add it if it is a valid one. // //vMailSession.sendMail(5);
                 * vMailSession.remove(); } catch (Exception e) {
-                * System.out.println("MailTimerTask exception"); e.printStackTrace(); } finally
+                * log.info("MailTimerTask exception"); e.printStackTrace(); } finally
                 * { if (con == null) { try { con.close(); con = null; } catch (SQLException ex)
                 * { System.out .println("Error in Mailer: SQL connection could not be closed."
                 * ); } } }
@@ -331,7 +331,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.REMOVE_PENDING_CALL:
             {
-               System.out.println("execute REMOVE_PENDING_CALL");
+               log.info("execute REMOVE_PENDING_CALL");
                IntertelCallManager.getInstance().removeCall(vSession, Integer.parseInt(params.getParameter(Constants.PENDING_CALL_ID)));
                vSession.setIsAutoUpdateRecord(false);
                break;
@@ -442,7 +442,7 @@ public class AdminDispatchServlet extends HttpServlet
             case Constants.GOTO_ADD_RECORD:
             {
                rd = sc.getRequestDispatcher(Constants.ADD_RECORD_JSP);
-               System.out.println("AdminDispatchServlet ready to ADD_RECORD_JSP: " + Constants.ADD_RECORD_JSP);
+               log.info("AdminDispatchServlet ready to ADD_RECORD_JSP: " + Constants.ADD_RECORD_JSP);
                break;
             }
 
@@ -501,13 +501,13 @@ public class AdminDispatchServlet extends HttpServlet
                {
                   if (CallRecordFacade.saveNewCall(params, vSession))
                   {
-                     // System.out.println("fire SELECT_SUBCUSTOMER_JSP");
+                     // log.info("fire SELECT_SUBCUSTOMER_JSP");
                      rd = sc.getRequestDispatcher(Constants.SELECT_SUBCUSTOMER_JSP);
-                     // System.out.println("getRequestDispatcher done");
+                     // log.info("getRequestDispatcher done");
                   }
                   else
                   {
-                     // System.out.println("fire CANVAS_JSP");
+                     // log.info("fire CANVAS_JSP");
                      rd = sc.getRequestDispatcher(Constants.CANVAS_JSP);
                   }
                }
@@ -524,7 +524,7 @@ public class AdminDispatchServlet extends HttpServlet
                String vNewFwdNr = params.getParameter(Constants.ACCOUNT_NEW_FWDNR);
                String vOldFwdNr = params.getParameter(Constants.ACCOUNT_FWDNR);
 
-               // System.out.println("SAVE_NEW_SUBCUSTOMER " + vNewFwdNr + ", " + vOldFwdNr);
+               // log.info("SAVE_NEW_SUBCUSTOMER " + vNewFwdNr + ", " + vOldFwdNr);
                if (vNewFwdNr == null)
                {
                   rd = sc.getRequestDispatcher(Constants.NEW_CALL_JSP);
@@ -564,7 +564,7 @@ public class AdminDispatchServlet extends HttpServlet
                String vLtd = params.getParameter(Constants.ACCOUNT_TO_DELETE);
                StringTokenizer vStrTok = new StringTokenizer(vLtd, ",");
 
-               System.out.println("goto account delete vLtd=" + vLtd);
+               log.info("goto account delete vLtd=" + vLtd);
                if (vStrTok.countTokens() > 1)
                {
                   req.setAttribute(Constants.ERROR_TXT, "Je kan maar 1 klant of werknemer per keer verwijderen!");
@@ -583,7 +583,7 @@ public class AdminDispatchServlet extends HttpServlet
                   AccountRole role = AccountRole.fromShort(accountData.getRole());
                   if (role == AccountRole.ADMIN || role == AccountRole.EMPLOYEE)
                   {
-                     System.out.println("goto account delete: setAccountId=" + vLtd + ", account fwdnr=" + accountData.getFwdNumber());
+                     log.info("goto account delete: setAccountId=" + vLtd + ", account fwdnr=" + accountData.getFwdNumber());
                      AccountFacade.archiveAccount(vSession, Integer.parseInt(vLtd));
                      rd = sc.getRequestDispatcher(Constants.ADMIN_EMPLOYEE_JSP);
                   }
@@ -622,11 +622,11 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.ACCOUNT_DELETE:
             {
-               System.out.println("account delete: current id=" + vSession.getAccountIdToDelete());
+               log.info("account delete: current id=" + vSession.getAccountIdToDelete());
                // String accountFwdNr =
                // AccountCache.getInstance().idToFwdNr(Integer.parseInt(vSession.getAccountId()));
                AccountEntityData accountData = AccountCache.getInstance().get(vSession.getAccountIdToDelete());
-               System.out.println("account delete: key=" + vSession.getAccountId() + ", fwd nr=" + accountData.getFwdNumber());
+               log.info("account delete: key=" + vSession.getAccountId() + ", fwd nr=" + accountData.getFwdNumber());
 
                AccountRole role = AccountRole.fromShort(accountData.getRole());
                AccountFacade.archiveAccount(vSession, vSession.getAccountIdToDelete());
@@ -670,7 +670,7 @@ public class AdminDispatchServlet extends HttpServlet
                String vOldNr = account.getFwdNumber();
                String vNewNr = params.getParameter(Constants.ACCOUNT_FORWARD_NUMBER);
                AccountEntityData newData = AccountFacade.updateAccountData(vSession, params);
-               System.out.println("old nr=" + vOldNr + ", new nr=" + vNewNr);
+               log.info("old nr=" + vOldNr + ", new nr=" + vNewNr);
                if (vOldNr != null && vNewNr != null && !vOldNr.equals(vNewNr))
                {
                   req.setAttribute(Constants.ERROR_TXT, "U hebt de doorschakelnummer van deze klant gewijzigd.\nWilt u hiermee verder gaan?");
@@ -806,12 +806,12 @@ public class AdminDispatchServlet extends HttpServlet
                if (params.getParameter(Constants.INVOICE_ID) != null)
                {
                   vSession.setInvoiceId(Integer.parseInt(params.getParameter(Constants.INVOICE_ID)));
-                  System.out.println("admindispatch GOTO_INVOICE: INVOICE_ID = " + params.getParameter(Constants.INVOICE_ID));
+                  log.info("admindispatch GOTO_INVOICE: INVOICE_ID = " + params.getParameter(Constants.INVOICE_ID));
                }
                else
                {
                   vSession.setInvoiceId(0);
-                  System.out.println("admindispatch GOTO_INVOICE: INVOICE_ID = null");
+                  log.info("admindispatch GOTO_INVOICE: INVOICE_ID = null");
                }
                rd = sc.getRequestDispatcher(Constants.INVOICE_JSP);
                break;
@@ -870,7 +870,7 @@ public class AdminDispatchServlet extends HttpServlet
                // default storage path is used
                uploadedFile = fileUploader.waitTillFinished();
                vSession.setUploadedFileName(uploadedFile);
-               System.out.println("PROCESS_FINTRO_XLSX: file ready for parsing: " + vSession.getUploadedFileName());
+               log.info("PROCESS_FINTRO_XLSX: file ready for parsing: " + vSession.getUploadedFileName());
                rd = sc.getRequestDispatcher(Constants.OPEN_INVOICE_JSP);
                break;
             }
@@ -986,7 +986,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.SEARCH_SHOW_NEXT:
             {
-               System.out.println("AdminDispatchServlet: SEARCH_SHOW_NEXT");
+               log.info("AdminDispatchServlet: SEARCH_SHOW_NEXT");
 
                if (!vSession.isCurrentMonth())
                   vSession.incrementMonthsBack();
@@ -1221,7 +1221,7 @@ public class AdminDispatchServlet extends HttpServlet
       }
       catch (SystemErrorException e)
       {
-         System.out.println("SystemErrorException caught");
+         log.info("SystemErrorException caught");
          e.printStackTrace();
          rd = sc.getRequestDispatcher(Constants.ADMIN_FAIL_JSP);
          req.setAttribute(Constants.ERROR_TXT, e.getMessage());
@@ -1229,14 +1229,14 @@ public class AdminDispatchServlet extends HttpServlet
       }
       catch (Exception e)
       {
-         System.out.println("admin dispatch failed. URI:" + req.getRequestURI() + "?" + req.getQueryString());
+         log.info("admin dispatch failed. URI:" + req.getRequestURI() + "?" + req.getQueryString());
          e.printStackTrace();
          rd = sc.getRequestDispatcher(Constants.ADMIN_FAIL_JSP);
          req.setAttribute(Constants.ERROR_TXT, "de pagina kan niet worden getoond.");
          rd.forward(req, res);
       }
 //        if (vSession != null)
-//        	System.out.println("httprequest done: SQL timer=" + vSession.getSqlTimer());
+//        	log.info("httprequest done: SQL timer=" + vSession.getSqlTimer());
 
    }
 
@@ -1247,7 +1247,7 @@ public class AdminDispatchServlet extends HttpServlet
 
    public void destroy()
    {
-       System.out.println("AdminDispatchServlet destroyed.");
+       log.info("AdminDispatchServlet destroyed.");
    }
 
 }

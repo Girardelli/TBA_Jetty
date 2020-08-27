@@ -29,7 +29,11 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.naming.InitialContext;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import be.tba.ejb.account.interfaces.AccountEntityData;
+import be.tba.ejb.account.session.AccountSqlAdapter;
 import be.tba.ejb.invoice.interfaces.InvoiceEntityData;
 import be.tba.ejb.task.interfaces.TaskEntityData;
 import be.tba.ejb.task.session.TaskSqlAdapter;
@@ -62,6 +66,7 @@ import java.sql.ResultSet;
  */
 public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
 {
+	private static Logger log = LoggerFactory.getLogger(InvoiceSqlAdapter.class);
 
     // -------------------------------------------------------------------------
     // Static
@@ -137,7 +142,7 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
         }
         else
         {
-            System.out.println("getInvoicesByValueAndFwdNrs: accountID's null or empty");
+            log.info("getInvoicesByValueAndFwdNrs: accountID's null or empty");
         }
         return new Vector<InvoiceEntityData>();
     }
@@ -161,7 +166,7 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
         }
         else
         {
-            System.out.println("getUnpayedInvoicesByFwdNr: FwdNrs nulll or empty");
+            log.info("getUnpayedInvoicesByFwdNr: FwdNrs nulll or empty");
         }
         return new Vector<InvoiceEntityData>();
     }
@@ -246,8 +251,8 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
                 InvoiceEntityData vInvoice = vIter.next();
                 int size = vInvoice.getYearSeqNr() + 1;
 
-                // System.out.println("getNewInvoiceNumber init size = " + size);
-                // System.out.println("getNewInvoiceNumber invoicelist size = " +
+                // log.info("getNewInvoiceNumber init size = " + size);
+                // log.info("getNewInvoiceNumber invoicelist size = " +
                 // vInvoiceList.size());
                 int arr[] = new int[size + 10];
                 Arrays.fill(arr, 0, size + 10, 0);
@@ -255,7 +260,7 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
                 {
                     vInvoice = i.next();
                     // vInvoice = ((InvoiceEntity) i.next()).getValueObject();
-                    // System.out.println("getNewInvoiceNumber nr " +
+                    // log.info("getNewInvoiceNumber nr " +
                     // vInvoice.getYearSeqNr());
                     if (vInvoice.getYearSeqNr() >= size)
                     {
@@ -268,11 +273,11 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
                 {
                     if (arr[i] == 0)
                     {
-                        System.out.println("getNewInvoiceNumber found gap in sequence: returns " + i);
+                        log.info("getNewInvoiceNumber found gap in sequence: returns " + i);
                         return i;
                     }
                 }
-                System.out.println("getNewInvoiceNumber returns next sequence: " + size);
+                log.info("getNewInvoiceNumber returns next sequence: " + size);
                 return size;
             }
             // first invoice of the year
@@ -280,7 +285,7 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
         }
         catch (Exception e)
         {
-            System.out.println("Failed to getNewInvoiceNumber");
+            log.info("Failed to getNewInvoiceNumber");
             e.printStackTrace();
         }
         return -1;
@@ -294,12 +299,12 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
         try
         {
             Collection<InvoiceEntityData> vInvoiceList = executeSqlQuery(webSession, "SELECT * FROM InvoiceEntity WHERE AccountID=" + accountId + " AND Month=" + month + " AND Year=" + year + " ORDER BY AccountID DESC");
-            // System.out.println("getInvoiceList for month " + month + ", year " +
+            // log.info("getInvoiceList for month " + month + ", year " +
             // year);
             // InvoiceEntityHome vInvoiceHome = getEntityBean();
             // Collection vInvoiceList =
             // vInvoiceHome.findByFwdNrMonthAndYear(fwdNr, month, year);
-            // System.out.println("getLastInvoice returns list of " +
+            // log.info("getLastInvoice returns list of " +
             // vInvoiceList.size() + " entries for month " +
             // Constants.MONTHS[month] + ", " + year);
 
@@ -317,15 +322,15 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
                 }
             }
             if (vLastInvoice != null)
-                System.out.println("LastInvoice has id " + vLastInvoice.getId());
+                log.info("LastInvoice has id " + vLastInvoice.getId());
             return vLastInvoice;
         }
         catch (Exception e)
         {
-            System.out.println("Failed to getInvoiceList");
+            log.info("Failed to getInvoiceList");
             e.printStackTrace();
         }
-        // System.out.println("getInvoiceList for month " + month + ", year " +
+        // log.info("getInvoiceList for month " + month + ", year " +
         // year);
         return null;
     }
@@ -343,13 +348,13 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
                 int vNr = getNewInvoiceNumber(webSession, year);
                 if (vNr < 1 || !freezeInvoice(webSession, vKey, vNr))
                 {
-                	System.out.println("Failed to freeze invoice with key=" + vKey + " and number " + vNr);
+                	log.info("Failed to freeze invoice with key=" + vKey + " and number " + vNr);
                 }
             }
         }
         catch (Exception e)
         {
-            System.out.println("Failed to freezeList");
+            log.info("Failed to freezeList");
             e.printStackTrace();
         }
     }
@@ -425,7 +430,7 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
         InvoiceEntityData vInvoiceData = getRow(webSession, key);
         if (vInvoiceData != null && vInvoiceData.getFrozenFlag() == false)
         {
-            //System.out.println("freezeInvoice: current year seq nr:" + vInvoiceData.getYearSeqNr());
+            //log.info("freezeInvoice: current year seq nr:" + vInvoiceData.getYearSeqNr());
             if (vInvoiceData.getYearSeqNr() < 1)
             {
                 Calendar vCalendar = Calendar.getInstance();
@@ -439,7 +444,7 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
                 vInvoiceData.setStructuredId(IBANCheckDigit.IBAN_CHECK_DIGIT.calculateOGM(vInvoiceData.getInvoiceNr()));
                 vInvoiceData.setFileName(InvoiceHelper.makeFileName(vInvoiceData));
                 vInvoiceData.setPayDate("");
-                System.out.println("freezeInvoice: new frozen number:" + invoiceNr);
+                log.info("freezeInvoice: new frozen number:" + invoiceNr);
             }
             InvoiceHelper vHelper = new InvoiceHelper(vInvoiceData, webSession);
             vHelper.storeOrUpdate(webSession);
@@ -468,7 +473,7 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
     {
         if (invoiceData == null || invoiceData.getFileName() == null || invoiceData.getFileName().length() == 0)
         {
-            //System.out.println("Invoice not froozen for " + invoiceData.getAccountId());
+            //log.info("Invoice not froozen for " + invoiceData.getAccountId());
             return false;
         }
 
@@ -503,7 +508,7 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
                     vEmailAddr = vCustomer.getEmail();
                     if (vEmailAddr == null || vEmailAddr.length() == 0)
                     {
-                        System.out.println("Invoice mail can not be send to " + vCustomer.getFullName() + " (no email address specified)");
+                        log.info("Invoice mail can not be send to " + vCustomer.getFullName() + " (no email address specified)");
 
                         return false;
                     }
@@ -527,7 +532,7 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
             //vSession = (Session) PortableRemoteObject.narrow(vContext.lookup("java:comp/env/mail/Session"), Session.class);
             vSession = (Session) vContext.lookup("java:comp/env/mail/Session");
             
-            System.out.println("mail session=" + vSession);
+            log.info("mail session=" + vSession);
             
             MimeMessage m = new MimeMessage(vSession);
             m.setFrom();
@@ -562,14 +567,14 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
             m.setContent(multipart);
             Transport.send(m);
 
-            System.out.println("Invoice mailed to " + vCustomer.getFullName() + " (" + vTo[0] + ")");
+            log.info("Invoice mailed to " + vCustomer.getFullName() + " (" + vTo[0] + ")");
             return true;
         }
         catch (Exception e)
         {
             if (vCustomer != null)
             {
-                System.out.println("Invoice mail can not be send to " + vCustomer.getFullName() + " (" + vTo[0] + ")");
+                log.info("Invoice mail can not be send to " + vCustomer.getFullName() + " (" + vTo[0] + ")");
             }
             e.printStackTrace();
         }
@@ -582,7 +587,7 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
         while (rs.next())
         {
             vVector.add(getFields(rs));
-            // System.out.println("InvoiceEntityData: " + entry.toNameValueString());
+            // log.info("InvoiceEntityData: " + entry.toNameValueString());
         }
         return vVector;
     }
@@ -593,7 +598,7 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
         while (rs.next())
         {
            sortedList.add(getFields(rs));
-            // System.out.println("InvoiceEntityData: " + entry.toNameValueString());
+            // log.info("InvoiceEntityData: " + entry.toNameValueString());
         }
         return sortedList;
     }

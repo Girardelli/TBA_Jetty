@@ -5,8 +5,8 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.StringTokenizer;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import be.tba.ejb.account.interfaces.AccountEntityData;
 import be.tba.ejb.mail.session.MailerSessionBean;
@@ -25,7 +25,7 @@ import be.tba.util.timer.CallCalendar;
 
 public class TaskFacade
 {
-   private static Log log = LogFactory.getLog(TaskFacade.class);
+   private static Logger log = LoggerFactory.getLogger(TaskFacade.class);
    private static String kMailBody = "Beste,<br><br>Wij hebben uw opdracht opgeleverd. U kan het opgeleverde werk downloaden van ons portaal na dat u u hebt aangemeld.<br><br>Vriendelijke groeten<br><br>Het TBA team";
  
    public static void deleteTask(SessionParmsInf parms, WebSession session)
@@ -98,7 +98,7 @@ public class TaskFacade
                     String vFixedPrice = parms.getParameter(Constants.TASK_FIXED_PRICE);
                     vFixedPrice = vFixedPrice.replace(',', '.');
                     vTask.setFixedPrice(Double.parseDouble(vFixedPrice));
-//                    System.out.println("task price after set=" + newTask.getFixedPrice());
+//                    log.info("task price after set=" + newTask.getFixedPrice());
                 }
                 else
                 {
@@ -157,7 +157,7 @@ public class TaskFacade
                 String vFixedPrice = parms.getParameter(Constants.TASK_FIXED_PRICE);
                 vFixedPrice = vFixedPrice.replace(',', '.');
                 newTask.setFixedPrice(Double.parseDouble(vFixedPrice));
-//                System.out.println("task price after set=" + newTask.getFixedPrice());
+//                log.info("task price after set=" + newTask.getFixedPrice());
             }
             else
             {

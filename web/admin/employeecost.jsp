@@ -3,14 +3,14 @@
 <%@ include file="adminheader.jsp" %>
 
 	<%@ page
-		import="javax.ejb.*,
+		import="
 java.util.*,
 
 
 javax.naming.Context,
 javax.naming.InitialContext,
 
-javax.ejb.*,
+
 be.tba.ejb.account.interfaces.*,
 be.tba.ejb.pbx.interfaces.*,
 be.tba.ejb.invoice.interfaces.*,
@@ -131,7 +131,6 @@ try
 	      genCost = new GeneratedCost();
           genCost.taskCost = taskCost;
 	      performanceMap.put(task.getDoneBy(), genCost); 
-	      System.out.println("add entry from tasks for '"+ task.getDoneBy() + "'");
 	  }
      if (!task.getIsRecuring())
      {
@@ -187,7 +186,6 @@ try
             genCost.activeCurrent = record.getTimeStamp();
             genCost.dayStart = record.getTimeStamp();
             performanceMap.put(record.getDoneBy(), genCost); 
-            System.out.println("add entry from records for '"+ record.getDoneBy() + "'");
         }
         calendar.setTimeInMillis(record.getTimeStamp());
         if (!genCost.daysInMonth.contains(calendar.get(Calendar.DAY_OF_MONTH)))
@@ -195,9 +193,6 @@ try
            genCost.daysInMonth.add(Integer.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
         }
     }
-	
-	System.out.println("totalCallCost=" + totalCallCost + " , totalNrCalls=" + totalNrCalls + " , totalTaskCost=" + totalTaskCost);
-    
 %>
 			</tr>
 		</table>

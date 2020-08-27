@@ -7,7 +7,7 @@
 </head>
 
 	<%@ page
-		import="javax.ejb.*,
+		import="
 
 javax.naming.Context,
 java.util.Iterator,

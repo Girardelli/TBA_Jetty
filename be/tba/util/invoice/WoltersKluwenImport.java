@@ -304,11 +304,11 @@ public class WoltersKluwenImport
             return rawStr;
 
          }
-         // System.out.println(rawStr + " converted to " + formattedStr.toString());
+         // log.info(rawStr + " converted to " + formattedStr.toString());
       }
       else
       {
-         // System.out.println(rawStr + " not the right size: " + rawStr.length());
+         // log.info(rawStr + " not the right size: " + rawStr.length());
          return rawStr;
       }
       return formattedStr.toString();

@@ -4,17 +4,18 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.StringTokenizer;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import javax.servlet.http.HttpServletRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import be.tba.ejb.account.interfaces.AccountEntityData;
 import be.tba.ejb.pbx.interfaces.CallRecordEntityData;
 import be.tba.ejb.pbx.session.CallRecordSqlAdapter;
 import be.tba.servlets.session.WebSession;
+import be.tba.test.IntertelCallInjector;
 import be.tba.util.constants.AccountRole;
 import be.tba.util.constants.Constants;
 import be.tba.util.invoice.InvoiceHelper;
@@ -25,6 +26,7 @@ import be.tba.websockets.WebSocketData;
 
 public class CallRecordFacade
 {
+	   private static Logger log = LoggerFactory.getLogger(CallRecordFacade.class);
    private static Lock lock = new ReentrantLock();
    
    public static void retrieveRecordForUpdate(SessionParmsInf parms, WebSession session)
@@ -36,7 +38,7 @@ public class CallRecordFacade
 
    public static void updateCustomerChanges(SessionParmsInf parms, WebSession session, boolean isCustomer)
    {
-      // System.out.println("updateCustomerChanges()");
+      // log.info("updateCustomerChanges()");
       String vKey = parms.getParameter(Constants.RECORD_ID);
       String shortText = parms.getParameter(Constants.RECORD_SHORT_TEXT);
       boolean isArchived = (parms.getParameter(Constants.RECORD_ARCHIVED) != null);
@@ -52,14 +54,14 @@ public class CallRecordFacade
     */
    public static void saveRecord(SessionParmsInf parms, WebSession session)
    {
-      System.out.println("saveRecord()");
+      log.info("saveRecord()");
 
       // Check the record and add it if it is a valid one.
 
       CallRecordEntityData vCallData = session.getCurrentRecord();
       if (vCallData == null)
       {
-         System.out.println("AdminDispatchServlet: no call record in session context (SAVE RECORD), vCallData=" + vCallData);
+         log.info("AdminDispatchServlet: no call record in session context (SAVE RECORD), vCallData=" + vCallData);
          return;
       }
       AccountEntityData vNewCustomer = null;
@@ -74,7 +76,7 @@ public class CallRecordFacade
          AccountEntityData newCustomer = AccountCache.getInstance().get(vCallData.getFwdNr()); // take FwdNr because vCallDatat still has the previous accountId and shall make
                                                                                                // that new FwdNr shall be skipped.
          vCallData.setAccountId(newCustomer.getId());
-         System.out.println("Super customer call: set fwd number to " + vCallData.getFwdNr() + ", new account ID=" + newCustomer.getId());
+         log.info("Super customer call: set fwd number to " + vCallData.getFwdNr() + ", new account ID=" + newCustomer.getId());
          
          // redirect function can only be applied for subcustomers
          if (newCustomer.getRedirectAccountId() != 0)
@@ -93,7 +95,7 @@ public class CallRecordFacade
       {
          vCallData.setShortDescription(parms.getParameter(Constants.RECORD_SHORT_TEXT));
          String newFwdNr = parms.getParameter(Constants.ACCOUNT_FORWARD_NUMBER);
-         System.out.println("ACCOUNT_FORWARD_NUMBER=" + newFwdNr + ", vCallData.getFwdNr=" + vCallData.getFwdNr());
+         log.info("ACCOUNT_FORWARD_NUMBER=" + newFwdNr + ", vCallData.getFwdNr=" + vCallData.getFwdNr());
          if (newFwdNr != null)
          {
             // main customer has changed
@@ -154,7 +156,7 @@ public class CallRecordFacade
       }
       else if (vCallData.getIsImportantCall())
       {
-         System.out.println("INFO: expected a mail for important call. prevIsImportant=" + prevIsImportant + ", isDocumented=" + vCallData.getIsDocumented());
+         log.info("INFO: expected a mail for important call. prevIsImportant=" + prevIsImportant + ", isDocumented=" + vCallData.getIsDocumented());
       }
       vCallLogWriterSession.setCallData(session, vCallData);
       
@@ -169,7 +171,7 @@ public class CallRecordFacade
     */
    public static void saveManualRecord(SessionParmsInf parms, WebSession session)
    {
-      System.out.println("saveManualRecord()");
+      log.info("saveManualRecord()");
       CallRecordEntityData newRecord = new CallRecordEntityData();
       Calendar vCalendar = Calendar.getInstance();
       newRecord.setIsVirgin(false);
@@ -224,7 +226,7 @@ public class CallRecordFacade
       }
 
       // Check the record and add it if it is a valid one.
-      System.out.println("saveManualRecord: id=" + newRecord.getId() + ", cust=" + newRecord.getFwdNr() + ", number=" + newRecord.getNumber());
+      log.info("saveManualRecord: id=" + newRecord.getId() + ", cust=" + newRecord.getFwdNr() + ", number=" + newRecord.getNumber());
       CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
       int id = vQuerySession.addRow(session, newRecord);
       if (newRecord.getIsImportantCall() && newRecord.getIsDocumented())
@@ -237,7 +239,7 @@ public class CallRecordFacade
    public static void deleteRecords(SessionParmsInf parms, WebSession session)
    {
       String vLtd = parms.getParameter(Constants.RECORDS_TO_HANDLE);
-      System.out.println("record to delete list: " + vLtd);
+      log.info("record to delete list: " + vLtd);
       if (vLtd != null && vLtd.length() > 0)
       {
          StringTokenizer vStrTok = new StringTokenizer(vLtd, ",");
@@ -260,7 +262,7 @@ public class CallRecordFacade
 
    public static void saveNewSubCustomer(SessionParmsInf parms, WebSession webSession, String vNewFwdNr)
    {
-      System.out.println("saveNewSubCustomer()");
+      log.info("saveNewSubCustomer()");
       CallRecordSqlAdapter vCallLogWriterSession = new CallRecordSqlAdapter();
       vCallLogWriterSession.changeFwdNumber(webSession, webSession.getRecordId(), vNewFwdNr);
       webSession.setNewUnmappedCall(null);
@@ -271,7 +273,7 @@ public class CallRecordFacade
    public static void archiveRecords(SessionParmsInf parms, WebSession webSession)
    {
       String vLtd = parms.getParameter(Constants.RECORDS_TO_HANDLE);
-      System.out.println("archiveRecords()" + vLtd);
+      log.info("archiveRecords()" + vLtd);
       if (vLtd != null && vLtd.length() > 0)
       {
          StringTokenizer vStrTok = new StringTokenizer(vLtd, ",");
@@ -300,7 +302,7 @@ public class CallRecordFacade
    // it.
    public static void removeNewCall(SessionParmsInf parms, WebSession webSession)
    {
-      System.out.println("removeNewCall()");
+      log.info("removeNewCall()");
       webSession.setNewUnmappedCall(null);
       webSession.setRecordId(null);
    }

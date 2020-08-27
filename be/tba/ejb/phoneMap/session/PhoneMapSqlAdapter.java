@@ -25,7 +25,7 @@ public class PhoneMapSqlAdapter extends AbstractSqlAdapter<PhoneMapEntityData>
            entry.phoneId = null2EmpthyString(rs.getString(2));
            entry.userId = null2EmpthyString(rs.getString(3));
            vVector.add(entry);
-           // System.out.println("InvoiceEntityData: " + entry.toNameValueString());
+           // log.info("InvoiceEntityData: " + entry.toNameValueString());
        }
        return vVector;
    }

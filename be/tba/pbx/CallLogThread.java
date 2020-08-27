@@ -124,7 +124,7 @@ public class CallLogThread extends Thread implements SerialPortEventListener, Co
                         /*
                          * while (!mStopThread) { if (i++ > 100) { i = 0; cleanDB(); }
                          * Thread.sleep(SLEEP_TIME); } mSerialPort.close(); mIsOpen = false;
-                         * System.out.println("CallLogThread stopped!!");
+                         * log.info("CallLogThread stopped!!");
                          */
                     }
                     /*

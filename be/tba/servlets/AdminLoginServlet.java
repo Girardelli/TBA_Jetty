@@ -10,8 +10,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import be.tba.ejb.account.interfaces.AccountEntityData;
 import be.tba.ejb.account.session.AccountSqlAdapter;
+import be.tba.ejb.task.session.TaskSqlAdapter;
 import be.tba.servlets.helper.PhoneMapManager;
 import be.tba.servlets.session.SessionManager;
 import be.tba.servlets.session.WebSession;
@@ -22,6 +26,7 @@ import be.tba.util.exceptions.TbaException;
 
 public class AdminLoginServlet extends HttpServlet
 {
+	private static Logger log = LoggerFactory.getLogger(AdminLoginServlet.class);
     /**
     *
     */
@@ -53,7 +58,7 @@ public class AdminLoginServlet extends HttpServlet
                 vSession = new WebSession();
                 AccountSqlAdapter vAccountSession = new AccountSqlAdapter();
                 vAccount = vAccountSession.logIn(vSession, vUserId, vPassword);
-                //System.out.println("LoginServlet: " + vAccount.getFullName() + " logged in.");
+                //log.info("LoginServlet: " + vAccount.getFullName() + " logged in.");
             }
 
             if (vAccount.getRole().equals(AccountRole.ADMIN.getShort()) || vAccount.getRole().equals(AccountRole.EMPLOYEE.getShort()))
@@ -75,7 +80,7 @@ public class AdminLoginServlet extends HttpServlet
                 ServletContext sc = getServletContext();
                 RequestDispatcher rd = sc.getRequestDispatcher(Constants.CANVAS_JSP);
                 rd.forward(req, res);
-                //System.out.println("LoginServlet: " + vAccount.getUserId() + " got session id " + vSession.getSessionId());
+                //log.info("LoginServlet: " + vAccount.getUserId() + " got session id " + vSession.getSessionId());
             }
             else
             {
@@ -88,7 +93,7 @@ public class AdminLoginServlet extends HttpServlet
         }
         catch (TbaException e)
         {
-           System.out.println("AdminLoginServlet: Mallicious admin access attempt. userid:" + vUserId + ", password:" + vPassword);
+           log.info("AdminLoginServlet: Mallicious admin access attempt. userid:" + vUserId + ", password:" + vPassword);
            // print error page!!
            String vMsg = e.getMessage();
            req.setAttribute(Constants.ERROR_TXT, vMsg == null ? "Onbekende error." : vMsg);
@@ -99,7 +104,7 @@ public class AdminLoginServlet extends HttpServlet
         catch (Exception e)
         {
             //e.printStackTrace();
-            System.out.println("AdminLoginServlet: Mallicious admin access attempt. userid:" + vUserId + ", password:" + vPassword);
+            log.info("AdminLoginServlet: Mallicious admin access attempt. userid:" + vUserId + ", password:" + vPassword);
             // print error page!!
             String vMsg = e.getMessage();
             req.setAttribute(Constants.ERROR_TXT, vMsg == null ? "Onbekende error." : vMsg);
@@ -116,7 +121,7 @@ public class AdminLoginServlet extends HttpServlet
 
     public void destroy()
     {
-        System.out.println("AdminLoginServlet destroyed.");
+        log.info("AdminLoginServlet destroyed.");
     }
 
 }

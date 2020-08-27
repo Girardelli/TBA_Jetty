@@ -3,16 +3,21 @@ package be.tba.util.timer;
 import java.util.Date;
 import java.util.TimerTask;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import be.tba.servlets.helper.IntertelCallManager;
 import be.tba.servlets.helper.PhoneMapManager;
 import be.tba.util.constants.Constants;
+import be.tba.util.session.AccountCache;
 
 public class CallManagerCleanupTimerTask extends TimerTask implements TimerTaskIntf 
 {
+	private static Logger log = LoggerFactory.getLogger(CallManagerCleanupTimerTask.class);
    public CallManagerCleanupTimerTask()
    {
       super();
-      System.out.println("CallManagerCleanupTimerTask created");
+      log.info("CallManagerCleanupTimerTask created");
    }
 
    @Override
@@ -47,7 +52,7 @@ public class CallManagerCleanupTimerTask extends TimerTask implements TimerTaskI
    public void cleanUp()
    {
       // TODO Auto-generated method stub
-      System.out.println("Cancel CallManagerCleanupTimerTask");
+      log.info("Cancel CallManagerCleanupTimerTask");
       this.cancel();
    }
 

@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import be.tba.ejb.pbx.interfaces.CallRecordEntityData;
 import be.tba.ejb.phoneMap.interfaces.PhoneMapEntityData;
 import be.tba.ejb.phoneMap.session.PhoneMapSqlAdapter;
@@ -15,6 +18,7 @@ import be.tba.util.data.IntertelCallData;
 
 public class PhoneMapManager
 {
+	private static Logger log = LoggerFactory.getLogger(PhoneMapManager.class);
    class PhoneMapData
    {
       public PhoneMapEntityData phoneUserMap;
@@ -67,7 +71,7 @@ public class PhoneMapManager
          PhoneMapEntityData phone = i.next();
          mOperatorPhoneMap.put(phone.phoneId, new PhoneMapData(phone));
       }
-      System.out.println("PhoneMapManager() size=" + mOperatorPhoneMap.size());
+      log.info("PhoneMapManager() size=" + mOperatorPhoneMap.size());
    }
 
    public static PhoneMapManager getInstance()
@@ -83,7 +87,7 @@ public class PhoneMapManager
    {
       IntertelCallData call = IntertelCallManager.getInstance().getByDbId(data.getId());
       PhoneMapSqlAdapter sqlAdapter = null;
-      //System.out.println("updateOperatorMapping: data.getId()=" + data.getId() + ", sessionId=" + session.getSessionId() + ", call" + call);
+      //log.info("updateOperatorMapping: data.getId()=" + data.getId() + ", sessionId=" + session.getSessionId() + ", call" + call);
       if (call == null || call.answeredBy.isEmpty())
       {
          return; // to be removed once we have switched to Intertel
@@ -95,13 +99,13 @@ public class PhoneMapManager
          if (phoneMapData.phoneUserMap.phoneId.equals(call.answeredBy))
          {
             // already mapped: update timestamp
-            //System.out.println("updateOperatorMapping : match");
+            //log.info("updateOperatorMapping : match");
             phoneMapData.lastUsed = System.currentTimeMillis() / 1000l;
             phoneMapData.sessionId = session.getSessionId();
          } 
          else
          {
-            //System.out.println("updateOperatorMapping : no match. remove " + phoneMapData.toString());
+            //log.info("updateOperatorMapping : no match. remove " + phoneMapData.toString());
             mOperatorPhoneMap.remove(phoneMapData.phoneUserMap.phoneId);
             sqlAdapter = new PhoneMapSqlAdapter();
             sqlAdapter.deleteRow(session, phoneMapData.phoneUserMap.id);
@@ -118,7 +122,7 @@ public class PhoneMapManager
          phoneMapData.phoneUserMap.userId = data.getDoneBy();
          phoneMapData.sessionId = session.getSessionId();
          phoneMapData.lastUsed = System.currentTimeMillis() / 1000l;
-         System.out.println("mOperatorPhoneMap.put: " + phoneMapData.toString());
+         log.info("mOperatorPhoneMap.put: " + phoneMapData.toString());
          mOperatorPhoneMap.put(phoneMapData.phoneUserMap.phoneId, phoneMapData);
          if (sqlAdapter == null)
             sqlAdapter = new PhoneMapSqlAdapter();
@@ -133,7 +137,7 @@ public class PhoneMapManager
       {
          return phoneMapData.sessionId;
       }
-      System.out.println("getSessionIdForPhoneId: " + phoneId + " not found");
+      log.info("getSessionIdForPhoneId: " + phoneId + " not found");
       return "";
    }
 
@@ -155,7 +159,7 @@ public class PhoneMapManager
       long tsNow = System.currentTimeMillis() / 1000l;
       PhoneMapSqlAdapter sqlAdapter = null;
       WebSession session = null;
-      //System.out.println(this + ". mCallMap.size()=" + mCallMap.size() + ", mOperatorPhoneMap=" + mOperatorPhoneMap.size());
+      //log.info(this + ". mCallMap.size()=" + mCallMap.size() + ", mOperatorPhoneMap=" + mOperatorPhoneMap.size());
 
       for (Iterator<String> i = mOperatorPhoneMap.keySet().iterator(); i.hasNext();)
       {
@@ -163,7 +167,7 @@ public class PhoneMapManager
          PhoneMapData phoneMapEntityData = mOperatorPhoneMap.get(key);
          if ((tsNow - phoneMapEntityData.lastUsed) > 3600) // 1 hour
          {
-            System.out.println("CleanUP: PhoneMapManager.removeOperator: " + phoneMapEntityData.toString());
+            log.info("CleanUP: PhoneMapManager.removeOperator: " + phoneMapEntityData.toString());
             if (sqlAdapter == null)
             {
                sqlAdapter = new PhoneMapSqlAdapter();
@@ -178,7 +182,7 @@ public class PhoneMapManager
             }
             sqlAdapter.deleteRow(session, phoneMapEntityData.phoneUserMap.id);
             i.remove();
-            // System.out.println("PhoneMapManager: removed from mOperatorPhoneMap: " +
+            // log.info("PhoneMapManager: removed from mOperatorPhoneMap: " +
             // key);
          }
       }

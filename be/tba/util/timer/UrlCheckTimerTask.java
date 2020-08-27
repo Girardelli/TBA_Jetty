@@ -6,15 +6,15 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimerTask;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import be.tba.ejb.phoneMap.session.UrlCheckerSqlAdapter;
 import be.tba.util.constants.Constants;
 
 public class UrlCheckTimerTask extends TimerTask implements TimerTaskIntf 
 {
-   private static Log log = LogFactory.getLog(UrlCheckTimerTask.class);
+   private static Logger log = LoggerFactory.getLogger(UrlCheckTimerTask.class);
    private static boolean isUrlUp = true;
 	private static long deadStart = 0;
 	
@@ -71,7 +71,7 @@ public class UrlCheckTimerTask extends TimerTask implements TimerTaskIntf
 				urlIsUp = false;
 			}
 			
-			//System.out.println(" returns: " + resp);
+			//log.info(" returns: " + resp);
 		} 
 		catch (Exception e) 
 		{
@@ -111,7 +111,7 @@ public class UrlCheckTimerTask extends TimerTask implements TimerTaskIntf
    public void cleanUp()
    {
       // TODO Auto-generated method stub
-      System.out.println("Cancel UrlCheckTimerTask");
+      log.info("Cancel UrlCheckTimerTask");
       this.cancel();
    }
 }

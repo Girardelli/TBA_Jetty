@@ -11,6 +11,8 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import be.tba.ejb.task.interfaces.TaskEntityData;
 import be.tba.util.constants.Constants;
@@ -18,6 +20,8 @@ import java.io.File;
 
 public class TbaPdfInvoice
 {
+	private static Logger log = LoggerFactory.getLogger(TbaPdfInvoice.class);
+	
     private PDDocument mDocument;
     private PDPage mPage1;
     private PDPage mPage2;
@@ -60,7 +64,7 @@ public class TbaPdfInvoice
         }
         catch (Exception ex)
         {
-            System.out.println("TbaPdfInvoice failed");
+            log.info("TbaPdfInvoice failed");
             System.err.println(ex.getStackTrace().toString());
         }
     }
@@ -121,7 +125,7 @@ public class TbaPdfInvoice
     
     public void createCreditNote(String creditedInvoiceNr)
     {
-       System.out.println("createCreditNote for " + creditedInvoiceNr);
+       log.info("createCreditNote for " + creditedInvoiceNr);
        this.creditedInvoiceNr = creditedInvoiceNr;
        if (mCustomerData == null)
         {
@@ -185,7 +189,7 @@ public class TbaPdfInvoice
             {
                 mDocument.save(mFileName.getAbsolutePath());
                 mDocument.close();
-                System.out.println("doc printed at : " + mFileName);
+                log.info("doc printed at : " + mFileName);
             }
             catch (Exception ex)
             {
@@ -535,7 +539,7 @@ public class TbaPdfInvoice
     {
         if (text == null)
         {
-            System.out.println("TbaPdfInvoice.writeText: '" + text + "' is null!");
+            log.info("TbaPdfInvoice.writeText: '" + text + "' is null!");
             return;
         }
         text = text.replaceAll("\t", " ");

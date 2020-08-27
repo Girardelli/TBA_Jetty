@@ -6,8 +6,8 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Vector;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import be.tba.ejb.phoneMap.interfaces.UrlCheckerEntityData;
 import be.tba.servlets.session.WebSession;
@@ -16,7 +16,7 @@ import be.tba.util.data.AbstractSqlAdapter;
 
 public class UrlCheckerSqlAdapter extends AbstractSqlAdapter<UrlCheckerEntityData>
 {
-   private static Log log = LogFactory.getLog(UrlCheckerSqlAdapter.class);
+   private static Logger log = LoggerFactory.getLogger(UrlCheckerSqlAdapter.class);
    private WebSession mWebSession = null;
 
    public UrlCheckerSqlAdapter()

@@ -15,8 +15,8 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import be.tba.servlets.FileDownloadServlet;
 import be.tba.util.exceptions.SystemErrorException;
@@ -26,7 +26,7 @@ import be.tba.util.session.SessionParmsInf;
 @MultipartConfig
 public class FileUploader implements SessionParmsInf
 {
-   private static Log log = LogFactory.getLog(FileUploader.class);
+   private static Logger log = LoggerFactory.getLogger(FileUploader.class);
    /*
     * This class is used for file upload: from client to server.
     * Constructor parses the http request and makes the attributes available through
@@ -106,7 +106,7 @@ public class FileUploader implements SessionParmsInf
             throw new SystemErrorException("Bestand kan niet worden opgeladen.");
          }
       }
-      //System.out.println("#fileitems returned: " + mItems.size());
+      //log.info("#fileitems returned: " + mItems.size());
       mUploadThread = new UploadThread();
       mUploadThread.run();
       return;
@@ -143,7 +143,7 @@ public class FileUploader implements SessionParmsInf
             return item.getString();
          }
       }
-      System.out.println("Parameter not found: " + name);
+      log.info("Parameter not found: " + name);
       return null;
    }
 
@@ -177,8 +177,8 @@ public class FileUploader implements SessionParmsInf
          while (iter.hasNext())
          {
             FileItem item = (FileItem) iter.next();
-//            System.out.println("FileItem: " + item.getName());
-//            System.out.println("fieldname: " + item.getFieldName());
+//            log.info("FileItem: " + item.getName());
+//            log.info("fieldname: " + item.getFieldName());
 
             if (uploadedFileItem != null)
             {
@@ -188,7 +188,7 @@ public class FileUploader implements SessionParmsInf
             {
                String fileName = item.getName().substring(item.getName().lastIndexOf('\\') + 1);
                mUploadedFile = mStorePath + File.separator + fileName;
-               // System.out.println("File name returned for fileupload: " + mUploadedFile);
+               // log.info("File name returned for fileupload: " + mUploadedFile);
                File uploadedFile = new File(mUploadedFile);
 
                // saves the file to upload directory
@@ -203,7 +203,7 @@ public class FileUploader implements SessionParmsInf
                   continue;
                }
                uploadedFileItem = item;
-               // System.out.println("File successful written to temp file: " + mUploadedFile);
+               // log.info("File successful written to temp file: " + mUploadedFile);
             }
          }
          

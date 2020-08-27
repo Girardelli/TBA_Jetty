@@ -6,10 +6,14 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Vector;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import be.tba.ejb.account.interfaces.AccountEntityData;
 import be.tba.ejb.invoice.interfaces.InvoiceEntityData;
 import be.tba.ejb.invoice.session.InvoiceSqlAdapter;
 import be.tba.ejb.task.interfaces.TaskEntityData;
+import be.tba.servlets.helper.CallRecordFacade;
 import be.tba.servlets.session.WebSession;
 import be.tba.util.data.AbstractSqlAdapter;
 import be.tba.util.session.AccountCache;
@@ -25,6 +29,7 @@ import java.sql.ResultSet;
  */
 public class TaskSqlAdapter extends AbstractSqlAdapter<TaskEntityData>
 {
+	private static Logger log = LoggerFactory.getLogger(TaskSqlAdapter.class);
 
     public TaskSqlAdapter()
     {
@@ -129,7 +134,7 @@ public class TaskSqlAdapter extends AbstractSqlAdapter<TaskEntityData>
             Hashtable<Integer, Collection<TaskEntityData>> vTaskList = new Hashtable<Integer, Collection<TaskEntityData>>();
             collectInvoiceTasksHashTable(webSession, AccountCache.getInstance().get(accountId), vTaskList, start, stop);
 
-            //System.out.println("getTasksFromTillTimestamp for " + fwdNr + ": " + vTaskList.size() + " entries.");
+            //log.info("getTasksFromTillTimestamp for " + fwdNr + ": " + vTaskList.size() + " entries.");
             return vTaskList;
         }
         catch (Exception e)
@@ -168,7 +173,7 @@ public class TaskSqlAdapter extends AbstractSqlAdapter<TaskEntityData>
     	}
     	else
     	{
-    		System.out.println("task cannot be removed because it belongs to an invoice");
+    		log.info("task cannot be removed because it belongs to an invoice");
     	}
     }
 
@@ -203,7 +208,7 @@ public class TaskSqlAdapter extends AbstractSqlAdapter<TaskEntityData>
     {
         if (customer == null)
         {
-        	System.out.println("collectInvoiceTasks() with customer=null");
+        	log.info("collectInvoiceTasks() with customer=null");
     		return;
         }
     	Collection<TaskEntityData> vCollection =  queryAllTasksForFwdNr(webSession, customer.getFwdNumber(), start, stop);
@@ -215,7 +220,7 @@ public class TaskSqlAdapter extends AbstractSqlAdapter<TaskEntityData>
         if (customer.getHasSubCustomers())
         {
             Collection<AccountEntityData> vSubCustomerList = AccountCache.getInstance().getSubCustomersList(customer.getId());
-            //System.out.println(customer.getFullName() + "has " + vSubCustomerList.size() + " sub customers");
+            //log.info(customer.getFullName() + "has " + vSubCustomerList.size() + " sub customers");
             for (Iterator<AccountEntityData> i = vSubCustomerList.iterator(); i.hasNext();)
             {
                 AccountEntityData vEntry = i.next();
@@ -243,7 +248,7 @@ public class TaskSqlAdapter extends AbstractSqlAdapter<TaskEntityData>
         if (customer.getHasSubCustomers())
         {
             Collection<AccountEntityData> vSubCustomerList = AccountCache.getInstance().getSubCustomersList(customer.getId());
-            //System.out.println(customer.getFullName() + "has " + vSubCustomerList.size() + " sub customers");
+            //log.info(customer.getFullName() + "has " + vSubCustomerList.size() + " sub customers");
             for (Iterator<AccountEntityData> i = vSubCustomerList.iterator(); i.hasNext();)
             {
                 AccountEntityData vEntry = i.next();

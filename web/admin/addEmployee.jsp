@@ -3,14 +3,12 @@
 <%@ include file="adminheader.jsp" %>
 
 <%@ page
-import="javax.ejb.*,
-java.util.*,
+import="java.util.*,
 
 
 javax.naming.Context,
 javax.naming.InitialContext,
 
-javax.ejb.*,
 be.tba.ejb.account.interfaces.*,
 be.tba.util.constants.EjbJndiNames,
 be.tba.util.constants.Constants,
@@ -31,7 +29,6 @@ try
     
 Collection<String> vErrorList = vSession.getErrorList();
 String vSelect = "selected";
-if (vErrorList != null) System.out.println("error list size " + vErrorList.size());
 if (vErrorList != null && vErrorList.size() > 0)
 {
   out.println("<br><span class=\"bodyredbold\">");

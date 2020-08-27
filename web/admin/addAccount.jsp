@@ -3,7 +3,7 @@
 <%@ include file="adminheader.jsp"%>
 
 <%@ page
-	import="javax.ejb.*,java.util.*,javax.naming.Context,javax.naming.InitialContext,javax.ejb.*,be.tba.ejb.account.interfaces.*,be.tba.util.constants.EjbJndiNames,be.tba.util.constants.Constants,be.tba.util.constants.AccountRole,be.tba.util.session.AccountCache"%>
+	import="java.util.*,javax.naming.Context,javax.naming.InitialContext,be.tba.ejb.account.interfaces.*,be.tba.util.constants.EjbJndiNames,be.tba.util.constants.Constants,be.tba.util.constants.AccountRole,be.tba.util.session.AccountCache"%>
 
 <%
 
@@ -88,7 +88,6 @@ synchronized(list)
     {
     	Integer vValue = vIter.next();
         AccountEntityData accountData = AccountCache.getInstance().get(vValue);
-        System.out.println("addAccount: accountdata for vValue=" + vValue + " is " + (accountData == null ? "null" : accountData.getFullName()));
         out.println("<option value=\"" + accountData.getFwdNumber() + "\">" + accountData.getFullName());
     }
 }

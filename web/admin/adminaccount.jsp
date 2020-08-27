@@ -7,14 +7,14 @@
 <meta HTTP-EQUIV="Refresh" content="<%=Constants.REFRESH%>;URL=\tba\admin\adminaccount.jsp>">
 </head>
 
-<%@ page import="javax.ejb.*,
+<%@ page import="
 java.util.*,
 
 
 javax.naming.Context,
 javax.naming.InitialContext,
 
-javax.ejb.*,
+
 be.tba.ejb.account.interfaces.*,
 be.tba.util.constants.*,
 be.tba.util.session.*"%>

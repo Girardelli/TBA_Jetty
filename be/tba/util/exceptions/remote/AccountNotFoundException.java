@@ -5,13 +5,13 @@
 
 package be.tba.util.exceptions.remote;
 
-import java.rmi.RemoteException;
+//import java.rmi.RemoteException;
 
 /**
  * @author Yves Willems
  * @version $Revision: 1.1 $
  */
-public class AccountNotFoundException extends RemoteException
+public class AccountNotFoundException extends Exception
 {
 
     // -------------------------------------------------------------------------

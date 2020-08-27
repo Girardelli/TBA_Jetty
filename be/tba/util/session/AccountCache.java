@@ -16,6 +16,9 @@ import java.util.StringTokenizer;
 import java.util.TreeSet;
 import java.util.Vector;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import be.tba.ejb.account.interfaces.AccountEntityData;
 import be.tba.ejb.account.session.AccountSqlAdapter;
 import be.tba.ejb.invoice.interfaces.InvoiceEntityData;
@@ -25,10 +28,13 @@ import be.tba.servlets.session.WebSession;
 import be.tba.util.constants.AccountRole;
 import be.tba.util.constants.Constants;
 import be.tba.util.data.MailTriggerData;
+import be.tba.util.invoice.TbaPdfInvoice;
 
 final public class AccountCache
 {
-   private AccountSqlAdapter mAccountAdapter = new AccountSqlAdapter();
+	private static Logger log = LoggerFactory.getLogger(AccountCache.class);
+
+	private AccountSqlAdapter mAccountAdapter = new AccountSqlAdapter();
    private Map<String, AccountEntityData> mFwdKeyList;
    private Map<Integer, AccountEntityData> mIdKeyList;
    private Collection<AccountEntityData> mRawUnarchivedCollection;
@@ -121,10 +127,10 @@ final public class AccountCache
             } catch (SQLException ex)
             {
                // TODO Auto-generated catch block
-               System.out.println("FAILED update AccountCash");
-               System.out.println("SQLException: " + ex.getMessage());
-               System.out.println("SQLState: " + ex.getSQLState());
-               System.out.println("VendorError: " + ex.getErrorCode());
+               log.info("FAILED update AccountCash");
+               log.info("SQLException: " + ex.getMessage());
+               log.info("SQLState: " + ex.getSQLState());
+               log.info("VendorError: " + ex.getErrorCode());
                ex.printStackTrace();
             }
          }
@@ -235,7 +241,7 @@ final public class AccountCache
 
    private void converToHashMap(Collection<AccountEntityData> rawList)
    {
-      System.out.println("AccountCache::converToHashMap()");
+      log.info("AccountCache::converToHashMap()");
       mRawUnarchivedCollection.clear();
       mArchivedCollection.clear();
       mCallCustomerSortedList.clear();
@@ -252,9 +258,9 @@ final public class AccountCache
       for (Iterator<AccountEntityData> i = rawList.iterator(); i.hasNext();)
       {
          vEntry = i.next();
-         // System.out.println("check " + y++ + ": " + vEntry.getFwdNumber());
+         // log.info("check " + y++ + ": " + vEntry.getFwdNumber());
          mIdKeyList.put(Integer.valueOf(vEntry.getId()), vEntry);
-         // System.out.println("mIdKeyList " + ++y + " (size=" +mIdKeyList.size() + "):
+         // log.info("mIdKeyList " + ++y + " (size=" +mIdKeyList.size() + "):
          // added " + vEntry.getFwdNumber() + ", with ID=" + vEntry.getId());
          if (!vEntry.getIsArchived())
          {
@@ -268,7 +274,7 @@ final public class AccountCache
 
                // vMap.put(vEntry.getFwdNumber(), vEntry);
                mNameSortedList.add(vEntry);
-               // System.out.println("add to mNameSortedList: " + vEntry.getFwdNumber() + (out
+               // log.info("add to mNameSortedList: " + vEntry.getFwdNumber() + (out
                // ? " Pass" : " Failed"));
                mFwdKeyList.put(vEntry.getFwdNumber(), vEntry);
                mNameSortedFullList.add(vEntry);
@@ -279,7 +285,7 @@ final public class AccountCache
                   {
                      vSubCustomerList = new Vector<AccountEntityData>();
                      mSubCustomersLists.put(vEntry.getId(), vSubCustomerList);
-                     // System.out.println(++y +" added first lege sub klanten lijst voor " +
+                     // log.info(++y +" added first lege sub klanten lijst voor " +
                      // vEntry.getFullName() + ", ID=" + vEntry.getId());
                   }
                }
@@ -293,11 +299,11 @@ final public class AccountCache
                      vSubCustomerList = new Vector<AccountEntityData>();
                      mSubCustomersLists.put(vEntry.getSuperCustomerId(), vSubCustomerList);
                      vSuperCustomers.add(vEntry.getSuperCustomer());
-                     // System.out.println(++y +"added first sub klanten lijst voor " +
+                     // log.info(++y +"added first sub klanten lijst voor " +
                      // vEntry.getSuperCustomer() + ", ID=" + vEntry.getSuperCustomerId());
                   }
                   vSubCustomerList.add(vEntry);
-                  // System.out.println(" add sub customer " + vEntry.getFullName() + " to list
+                  // log.info(" add sub customer " + vEntry.getFullName() + " to list
                   // for id=" + vEntry.getSuperCustomerId());
                }
             } else if (vEntry.getRole().equals(AccountRole._vAdminstrator) || vEntry.getRole().equals(AccountRole._vEmployee))
@@ -305,7 +311,7 @@ final public class AccountCache
                // add to mEmployeeLists
                mFwdKeyList.put(vEntry.getFwdNumber(), vEntry);
                mEmployeeLists.put(vEntry.getFwdNumber(), vEntry);
-               // System.out.println("added employee " + vEntry.getFullName() + ", " +
+               // log.info("added employee " + vEntry.getFullName() + ", " +
                // vEntry.getId() + ", " + vEntry.getUserId());
             }
          }
@@ -333,7 +339,7 @@ final public class AccountCache
                   mBankAccountNr2AccountIdsMap.put(bankAccountNr, ids);
                }
 
-               // System.out.println("matching FWD (" + vEntry.getFwdNumber() + ") nr to
+               // log.info("matching FWD (" + vEntry.getFwdNumber() + ") nr to
                // account Number: " + accountNr);
             }
          }
@@ -345,7 +351,7 @@ final public class AccountCache
       {
          Integer vSuperCustId = i.next();
          AccountEntityData vSuperCust = get(vSuperCustId);
-//        	System.out.println(++y + ": " + vSuperCustId + " returns " + (vSuperCust == null ? "null": vSuperCust.getFwdNumber()));
+//        	log.info(++y + ": " + vSuperCustId + " returns " + (vSuperCust == null ? "null": vSuperCust.getFwdNumber()));
          if (vSuperCust != null)
          {
             vSuperCust.setHasSubCustomers(true);
@@ -361,19 +367,19 @@ final public class AccountCache
             }
          } else
          {
-            System.out.println("######## strange error for id=" + vSuperCustId);
+            log.info("######## strange error for id=" + vSuperCustId);
             continue;
          }
 
       }
-      // System.out.println("Before new mNameSortedList");
+      // log.info("Before new mNameSortedList");
       // mNameSortedList = new TreeMap(new AccountNamesComparator());
 
       /*
        * Collection<AccountEntityData> list = getAccountListWithoutTbaNrs();
        * synchronized (list) { for (Iterator<AccountEntityData> vIter =
        * list.iterator(); vIter.hasNext();) { AccountEntityData vEntry =
-       * (AccountEntityData) vIter.next(); //System.out.println(vEntry.getFullName());
+       * (AccountEntityData) vIter.next(); //log.info(vEntry.getFullName());
        * } }
        */
 
@@ -417,11 +423,11 @@ final public class AccountCache
       for (Iterator<AccountEntityData> i = mRawUnarchivedCollection.iterator(); i.hasNext();)
       {
          AccountEntityData entry = i.next();
-         // System.out.println("idToFwdNr: id=" + id + "entry.getId()=" +
+         // log.info("idToFwdNr: id=" + id + "entry.getId()=" +
          // entry.getId());
          if (id == entry.getId())
          {
-            // System.out.println("idToFwdNr: found!! fwdnr=" +
+            // log.info("idToFwdNr: found!! fwdnr=" +
             // entry.getFwdNumber());
             return entry.getFwdNumber();
          }
@@ -551,10 +557,10 @@ final public class AccountCache
        * Set<Integer> vMailGroupKeys = mMailingGroups.keySet(); for (Iterator<Integer>
        * i = vMailGroupKeys.iterator(); i.hasNext();) { Integer vKey = (Integer)
        * i.next(); Collection<AccountEntityData> vMailGroup =
-       * mMailingGroups.get(vKey); System.out.println("Mail group for key " + vKey +
+       * mMailingGroups.get(vKey); log.info("Mail group for key " + vKey +
        * " has " + vMailGroup.size() + " entries:"); for (Iterator<AccountEntityData>
        * j = vMailGroup.iterator(); j.hasNext();) { AccountEntityData vAccount =
-       * (AccountEntityData) j.next(); System.out.println("\t" +
+       * (AccountEntityData) j.next(); log.info("\t" +
        * vAccount.getFullName()); } }
        */
    }

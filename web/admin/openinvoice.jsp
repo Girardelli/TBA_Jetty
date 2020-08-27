@@ -59,7 +59,6 @@
 									   	            String fintroFileName = vSession.getUploadedFileName();
 									   	            if (fintroFileName != null)
 									   	            {
-                                                System.out.println("Upload file " + fintroFileName);
 									   	                DecimalFormat vCostFormatter = new DecimalFormat("#0.00");
 									   	                FintroXlsxReader fintroXlsxReader = new FintroXlsxReader(fintroFileName);
 									   	                vSession.setUploadedFileName(null);
@@ -80,14 +79,12 @@
 			   	            }
 			   	            else if (vSession.getFintroProcessLog() != null && !vSession.getFintroProcessLog().isEmpty())
 			   	            {
-			   	               System.out.println("fintroFile = null 1");
                               File outputFile = new File(vSession.getFintroProcessLog());
 			   	                outputFile.delete();
 			   	                vSession.setFintroProcessLog(null); 
 			   	            }
 			   	            else
 			   	            {
-                              System.out.println("fintroFile = null 2");
 			   	                vSession.setFintroProcessLog(null);
 			   	            }
 %>
@@ -155,10 +152,6 @@
 				</tr>
 				<%
 	            
-				                            }
-				                            else
-				                            {
-				                                System.out.println("AccountCache returned NULL for account number " + vEntry.getAccountFwdNr());
 				                            }
 				                        }
 				                    }

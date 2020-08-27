@@ -13,8 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import be.tba.ejb.task.interfaces.FileLocationData;
 import be.tba.ejb.task.session.FileLocationSqlAdapter;
@@ -28,7 +28,7 @@ import be.tba.util.session.SessionParmsInf;
 
 public class CustFileDownloadServlet extends HttpServlet
 {
-   private static Log log = LogFactory.getLog(CustFileDownloadServlet.class);
+   private static Logger log = LoggerFactory.getLogger(CustFileDownloadServlet.class);
    /**
     * this servlet only takes care of file downloads : hat is from server to client (browser)
     * The file uploads are taken care of by the jsp page servlets
@@ -106,12 +106,12 @@ public class CustFileDownloadServlet extends HttpServlet
       }
       catch (Exception e)
       {
-         System.out.println("URI:" + request.getRequestURI() + "?" + request.getQueryString());
+         log.info("URI:" + request.getRequestURI() + "?" + request.getQueryString());
          e.printStackTrace();
          rd = sc.getRequestDispatcher(Constants.PROTECT_FAIL_JSP);
          request.setAttribute(Constants.ERROR_TXT, "Het bestand dat je wil downloaden is niet beschikbaar. ");
          rd.forward(request, response);
-         System.out.println("forwarded to fail page");
+         log.info("forwarded to fail page");
 
       }
 

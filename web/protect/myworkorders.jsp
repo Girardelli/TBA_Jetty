@@ -4,14 +4,14 @@
 <head>
 </head>
 
-<%@ page import="javax.ejb.*,
+<%@ page import="
 java.util.*,
 
 
 javax.naming.Context,
 javax.naming.InitialContext,
 
-javax.ejb.*,
+
 be.tba.ejb.pbx.interfaces.*,
 be.tba.ejb.pbx.session.CallRecordSqlAdapter,
 be.tba.ejb.account.interfaces.*,
@@ -26,7 +26,6 @@ try
         throw new AccessDeniedException("U bent niet aangemeld.");
     vSession.setCallingJsp(Constants.CLIENT_WORKORDERS_JSP);
     AccountEntityData vAccountData = AccountCache.getInstance().get(vSession.getAccountId());
-    //System.out.println("myworkorders: account:" + vAccountData);
     WorkOrderSqlAdapter workorderSession = new WorkOrderSqlAdapter();
     Collection<WorkOrderData> workOrders = workorderSession.getListForAccount(vSession, vAccountData.getId(), false);
     

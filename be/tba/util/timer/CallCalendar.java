@@ -6,21 +6,21 @@ package be.tba.util.timer;
 
 import java.util.Calendar;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import be.tba.servlets.FileDownloadServlet;
 
 public class CallCalendar
 {
-   private static Log log = LogFactory.getLog(CallCalendar.class);
+   private static Logger log = LoggerFactory.getLogger(CallCalendar.class);
 
    private Calendar mCalendar;
 
    public CallCalendar()
    {
       mCalendar = Calendar.getInstance();
-      // System.out.println("CallCalendar: current time=" +
+      // log.info("CallCalendar: current time=" +
       // mCalendar.getTimeInMillis());
    }
 
@@ -36,7 +36,7 @@ public class CallCalendar
 
    public long getStartOfToday()
    {
-      // System.out.println("getStartOfMonth: month " + month);
+      // log.info("getStartOfMonth: month " + month);
 
       Calendar vStartCalendar = Calendar.getInstance();
       int year = vStartCalendar.get(Calendar.YEAR);
@@ -44,18 +44,18 @@ public class CallCalendar
       int day = vStartCalendar.get(Calendar.DAY_OF_MONTH);
       vStartCalendar.clear();
       vStartCalendar.set(year, month, day);
-      // System.out.println("getStartOfMonth end : year " + year);
+      // log.info("getStartOfMonth end : year " + year);
       return vStartCalendar.getTimeInMillis();
    }
 
    public long getStartOfMonth(int month, int year)
    {
-      // System.out.println("getStartOfMonth: month " + month);
+      // log.info("getStartOfMonth: month " + month);
 
       Calendar vStartCalendar = Calendar.getInstance();
       vStartCalendar.clear();
       vStartCalendar.set(year, month, 1);
-      // System.out.println("getStartOfMonth end : year " + year);
+      // log.info("getStartOfMonth end : year " + year);
       return vStartCalendar.getTimeInMillis();
    }
 
@@ -123,7 +123,7 @@ public class CallCalendar
       Calendar vStartCalendar = Calendar.getInstance();
       vStartCalendar.clear();
       vStartCalendar.set(vCurrentYear, vMonth, vDay);
-      // System.out.println("getDaysBack(" + daysBack + "): vCurrentYear = " +
+      // log.info("getDaysBack(" + daysBack + "): vCurrentYear = " +
       // vCurrentYear + "; vDay = " + vDay + "; vMonth = " + vMonth +
       // ", miliseconds=" + vStartCalendar.getTimeInMillis());
       //return vStartCalendar.getTimeInMillis();

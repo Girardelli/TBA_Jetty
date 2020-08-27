@@ -3,11 +3,11 @@
 <%@ include file="adminheader.jsp" %>
 
 	<%@ page
-		import="javax.ejb.*,
+		import="
 java.util.*,
 javax.naming.Context,
 javax.naming.InitialContext,
-javax.ejb.*,
+
 be.tba.ejb.task.interfaces.*,
 be.tba.ejb.task.session.*,
 be.tba.ejb.account.session.*,

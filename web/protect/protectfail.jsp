@@ -42,10 +42,6 @@ Last Checked In By: $Author: Yves Willems $
 be.tba.util.session.*"%>
 
 	<%
-if (exception != null)
-  System.out.println("protectfail.jsp: " + exception.toString());
-else
-  System.out.println("protectfail.jsp: no exception included.");
 String vErrorMessage = (String) request.getAttribute(Constants.ERROR_TXT);
 if (vErrorMessage == null && exception != null)
   vErrorMessage = exception.getMessage();

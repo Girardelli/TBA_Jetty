@@ -7,14 +7,14 @@
 </head>
 
 	<%@ page
-		import="javax.ejb.*,
+		import="
 java.util.*,
 
 
 javax.naming.Context,
 javax.naming.InitialContext,
 
-javax.ejb.*,
+
 be.tba.ejb.account.interfaces.*,
 be.tba.ejb.pbx.interfaces.*,
 be.tba.ejb.task.interfaces.*,
@@ -82,8 +82,6 @@ HttpSession vHttpSession = request.getSession();
           if (vAccountEntityData == null)
           {
               name = vEntry.getFwdNr() + "  is onbekend!";
-        	  System.out.println("Oproepen database refereert naar een klantnummer " + vEntry.getFwdNr() +
-                                            " die niet gekend is. Maak een klant aan met deze klantnummer om deze oproepen zichtbaar te maken.");
           }
           else
           {

@@ -13,8 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import be.tba.ejb.invoice.interfaces.InvoiceEntityData;
 import be.tba.ejb.invoice.session.InvoiceSqlAdapter;
@@ -33,7 +33,7 @@ import be.tba.util.session.SessionParmsInf;
 
 public class FileDownloadServlet extends HttpServlet
 {
-   private static Log log = LogFactory.getLog(FileDownloadServlet.class);
+   private static Logger log = LoggerFactory.getLogger(FileDownloadServlet.class);
    /**
     * this servlet only takes care of file downloads : hat is from server to client (browser)
     * The file uploads are taken care of by the jsp page servlets
@@ -52,7 +52,7 @@ public class FileDownloadServlet extends HttpServlet
          SessionParmsInf params = new SessionParms(request);
          SessionManager.getInstance().getSession(vSession.getSessionId(), "FileDownloadServlet()");
 
-         System.out.println("\nFileDownloadServlet (http session: " + vSession + "): userid:" + vSession.getUserId() + ", websessionid:" + vSession.getSessionId());
+         log.info("\nFileDownloadServlet (http session: " + vSession + "): userid:" + vSession.getUserId() + ", websessionid:" + vSession.getSessionId());
 
          synchronized (vSession)
          {
@@ -167,12 +167,12 @@ public class FileDownloadServlet extends HttpServlet
       }
       catch (Exception e)
       {
-         System.out.println("URI:" + request.getRequestURI() + "?" + request.getQueryString());
+         log.info("URI:" + request.getRequestURI() + "?" + request.getQueryString());
          e.printStackTrace();
          rd = sc.getRequestDispatcher(Constants.ADMIN_FAIL_JSP);
          request.setAttribute(Constants.ERROR_TXT, "Het bestand dat je wil downloaden is niet beschikbaar. ");
          rd.forward(request, response);
-         System.out.println("forwarded to fail page");
+         log.info("forwarded to fail page");
 
       }
 

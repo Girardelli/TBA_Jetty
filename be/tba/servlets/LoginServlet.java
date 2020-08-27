@@ -20,8 +20,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import be.tba.ejb.account.interfaces.AccountEntityData;
 import be.tba.ejb.account.session.AccountSqlAdapter;
@@ -40,7 +40,7 @@ public class LoginServlet extends HttpServlet
      *
      */
     private static final long serialVersionUID = 8497444764812881017L;
-    private  Log log = LogFactory.getLog(LoginServlet.class);
+	private static Logger log = LoggerFactory.getLogger(LoginServlet.class);
 
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
     {
@@ -64,7 +64,7 @@ public class LoginServlet extends HttpServlet
                 log.error(Constants.SRV_ACTION + "=" + vAction);
                 throw new Exception("getAttribute called");
             }
-            //System.out.println("LoginServlet: action=" + vAction);
+            //log.info("LoginServlet: action=" + vAction);
 
             rd = sc.getRequestDispatcher(Constants.REGISTER_JSP);
 
@@ -83,7 +83,7 @@ public class LoginServlet extends HttpServlet
                  vSession = new WebSession();
                  vAccountSession = new AccountSqlAdapter();
                  vAccount = vAccountSession.logIn(vSession, vUserId, vPassword);
-                 System.out.println("LoginServlet: " + vAccount.getFullName() + " logged in.");
+                 log.info("LoginServlet: " + vAccount.getFullName() + " logged in.");
 
                 if (!vAccount.getIsRegistered())
                 {
@@ -105,7 +105,7 @@ public class LoginServlet extends HttpServlet
                     vSession.setYear(calendar.get(Calendar.YEAR));
                     vSession.setMonthsBack(calendar.get(Calendar.MONTH));
                     rd = sc.getRequestDispatcher(Constants.CLIENT_CALLS_JSP);
-                    System.out.println("LoginServlet: " + vAccount.getUserId() + " got session id " + vSession.getSessionId());
+                    log.info("LoginServlet: " + vAccount.getUserId() + " got session id " + vSession.getSessionId());
                 }
                 else
                 {
@@ -190,7 +190,7 @@ public class LoginServlet extends HttpServlet
         }
         catch (AccountNotFoundException e)
         {
-            System.out.println("Mallicious admin access attempt. userid:" + vUserId + ", password:" + vPassword);
+            log.info("Mallicious admin access attempt. userid:" + vUserId + ", password:" + vPassword);
             req.setAttribute(Constants.ERROR_TXT, e.getMessage());
             rd = sc.getRequestDispatcher(Constants.PROTECT_FAIL_JSP);
         }

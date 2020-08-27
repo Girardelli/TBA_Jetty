@@ -13,11 +13,16 @@ import java.util.Random;
 import java.util.Set;
 import java.util.Vector;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import be.tba.servlets.helper.PhoneMapManager;
 import be.tba.util.exceptions.AccessDeniedException;
 import be.tba.util.exceptions.LostSessionException;
 
 final public class SessionManager
 {
+	private static Logger log = LoggerFactory.getLogger(SessionManager.class);
    private Map<String, WebSession> mMap;
 
    private Random mRand;
@@ -44,7 +49,7 @@ final public class SessionManager
       }
       session.userInit(userId, generateId());
       mMap.put(session.getSessionId(), session);
-      System.out.println("New session added with id " + session.getSessionId());
+      log.info("New session added with id " + session.getSessionId());
    }
 
    synchronized public WebSession remove(String sessionId)
@@ -102,14 +107,14 @@ final public class SessionManager
          }
       }
       if (cnt > 0)
-         System.out.println("SessionManager.clean: " + cnt + " sessionId's removed.");
+         log.info("SessionManager.clean: " + cnt + " sessionId's removed.");
    }
 
    private SessionManager()
    {
       mMap = Collections.synchronizedMap(new HashMap<String, WebSession>());
       mRand = new Random();
-      System.out.println("SessionManager created");
+      log.info("SessionManager created");
 
    }
 
@@ -129,7 +134,7 @@ final public class SessionManager
       for (Iterator<WebSession> i = mMap.values().iterator(); i.hasNext();)
       {
          WebSession session = i.next();
-         //System.out.println("getIdForUser: " + user + "=? sessionAccountId=" + session.getAccountId());
+         //log.info("getIdForUser: " + user + "=? sessionAccountId=" + session.getAccountId());
          if (user.equals(session.getUserId()))
          {
             return session;

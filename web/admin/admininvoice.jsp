@@ -162,17 +162,14 @@ StringBuilder allEntryIds = new StringBuilder("[");
                  
                  if (vAccount != null)
                  {
-                	 //System.out.println("name from AccountId");
                 	 vCompanyName = vAccount.getFullName();
                  }
                  else if (vEntry.getCustomerName() != null && vEntry.getCustomerName().length() > 0)
 			 	 {
-                     //System.out.println("name from invoice customer name");
                 	 vCompanyName = vEntry.getCustomerName();
 				 }
                  else
                  {
-                     //System.out.println("name from filename");
                 	 vCompanyName = InvoiceHelper.extractCustomerNameFromInvoiceFileName(vEntry.getFileName());
                  }
 				if (vEntry.getIsPayed())

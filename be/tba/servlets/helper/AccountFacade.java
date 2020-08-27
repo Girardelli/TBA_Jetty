@@ -8,6 +8,9 @@ import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import be.tba.ejb.account.interfaces.AccountEntityData;
 import be.tba.ejb.account.session.AccountSqlAdapter;
 import be.tba.ejb.mail.session.MailerSessionBean;
@@ -21,10 +24,12 @@ import be.tba.util.invoice.InvoiceHelper;
 import be.tba.util.invoice.WoltersKluwenImport;
 import be.tba.util.session.AccountCache;
 import be.tba.util.session.SessionParmsInf;
+import be.tba.servlets.UploadServlet;
 import be.tba.servlets.session.WebSession;
 
 public class AccountFacade
 {
+	private static Logger log = LoggerFactory.getLogger(AccountFacade.class);
     public static void archiveAccount(WebSession session, int accountID)
     {
     	  RecursiveArchive(session, accountID);
@@ -52,7 +57,7 @@ public class AccountFacade
 
     public static Vector<String> addAccount(WebSession session, HttpServletRequest req, SessionParmsInf parms) throws SystemErrorException
     {
-        System.out.println("addAccount");
+        log.info("addAccount");
         String roleStr = parms.getParameter(Constants.ACCOUNT_ROLE);
         String superCustomer = parms.getParameter(Constants.ACCOUNT_SUPER_CUSTOMER);
         AccountRole role = AccountRole.fromShort(roleStr);
@@ -73,7 +78,7 @@ public class AccountFacade
             {
                 newAccount.setUserId(parms.getParameter(Constants.ACCOUNT_USERID));
                 newAccount.setPassword(parms.getParameter(Constants.ACCOUNT_PASSWORD));
-                System.out.println("no error on employee add");
+                log.info("no error on employee add");
             }
             newAccount.setSuperCustomer("");
             newAccount.setSuperCustomerId(0);
@@ -83,7 +88,7 @@ public class AccountFacade
         {
             if (superCustomer == null || superCustomer.isEmpty() || superCustomer.equals("NO_VALUE")) 
             {
-            	System.out.println("SystemErrorException()");
+            	log.info("SystemErrorException()");
             	throw new SystemErrorException("je bent vergeten een superklant te selecteren");
             }
         	newAccount.setUserId("");
@@ -114,7 +119,7 @@ public class AccountFacade
 
     public static void changeFwdNumber(WebSession session, String oldNr, String newNr)
     {
-        System.out.println("changeFwdNumber: old nr=" + oldNr + ", new nr=" + newNr);
+        log.info("changeFwdNumber: old nr=" + oldNr + ", new nr=" + newNr);
         // AccountEntityData vOldData = AccountCache.getInstance().get(oldNr);
         CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
         vQuerySession.changeFwdNumber(session, oldNr, newNr);
@@ -137,7 +142,7 @@ public class AccountFacade
         String vLtd = (String) parms.getParameter(Constants.ACCOUNT_TO_DELETE);
         if (vLtd != null && vLtd.length() > 0)
         {
-            //System.out.println("setInvoicesPayed: # entries " + vLtd);
+            //log.info("setInvoicesPayed: # entries " + vLtd);
             StringTokenizer vStrTok = new StringTokenizer(vLtd, ",");
 
             Vector<Integer> vList = new Vector<Integer>();
@@ -149,7 +154,7 @@ public class AccountFacade
             Collection<AccountEntityData> accountList = vAccountSession.getAccountListByIdList(session, (Collection<Integer>) vList);
             return WoltersKluwenImport.generateKlantenXml(accountList);
         }
-        System.out.println("generateKlantenXml: no invoices selected");
+        log.info("generateKlantenXml: no invoices selected");
         return null;
     }
 
@@ -255,7 +260,7 @@ public class AccountFacade
            else
                vAccount.setAgendaPriceUnit(InvoiceHelper.kNoAgenda);
 
-           System.out.println("update account: setAgendaPriceUnit()=" + vAccount.getAgendaPriceUnit());
+           log.info("update account: setAgendaPriceUnit()=" + vAccount.getAgendaPriceUnit());
 
            if (parms.getParameter(Constants.ACCOUNT_MAIL_ON1) != null)
            {
@@ -368,7 +373,7 @@ public class AccountFacade
                 {
                     AccountEntityData vValue = vIter.next();
                     RecursiveArchive(session, vValue.getId());
-                    System.out.println("deleteAccount: also deleted subcustomer " + vValue.getFullName());
+                    log.info("deleteAccount: also deleted subcustomer " + vValue.getFullName());
                 }
             }
         }

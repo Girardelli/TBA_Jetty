@@ -3,14 +3,11 @@
 <%@ include file="adminheader.jsp"%>
 
 <%@ page
-   import="javax.ejb.*,
-java.util.*,
+   import="java.util.*,
 
 
 javax.naming.Context,
 javax.naming.InitialContext,
-
-javax.ejb.*,
 be.tba.servlets.helper.IntertelCallManager,
 be.tba.ejb.pbx.interfaces.*,
 be.tba.ejb.account.interfaces.*,

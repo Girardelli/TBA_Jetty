@@ -42,16 +42,11 @@ Last Checked In By: $Author: Yves Willems $
 be.tba.util.session.*"%>
 
 	<%
-if (exception == null)
-  System.out.println("adminfail.jsp: no exception included.");
-else
-  System.out.println("adminfail.jsp: " + exception.toString());
 String vErrorMessage = (String) request.getAttribute(Constants.ERROR_TXT);
 if (vErrorMessage == null && exception != null)
   vErrorMessage = exception.getMessage();
 if (vErrorMessage == null)
   vErrorMessage = "Een error werd gedetecteerd.";
-System.out.println("error msg: " + vErrorMessage);
 %>
 
 	<tr valign="top">

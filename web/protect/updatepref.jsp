@@ -2,11 +2,11 @@
 <%@ include file="protheader.jsp"%>
 
 
-<%@ page import="javax.ejb.*,
+<%@ page import="
 java.util.*,
 javax.naming.Context,
 javax.naming.InitialContext,
-javax.ejb.*,
+
 be.tba.ejb.account.interfaces.*,
 be.tba.util.constants.*,
 be.tba.util.exceptions.*,
@@ -24,7 +24,6 @@ AccountEntityData vCustomer;
 
 				vSession.setCallingJsp(Constants.CLIENT_PREF_JSP);
 				vCustomer = AccountCache.getInstance().get(vSession.getSessionFwdNr());
-				//System.out.println("vCustomer for " + vSession.getFwdNumber() + " is " + vCustomer);
 
 				String vEmail = vCustomer.getEmail();
 				vEmail = (vEmail == null) ? "" : vEmail;

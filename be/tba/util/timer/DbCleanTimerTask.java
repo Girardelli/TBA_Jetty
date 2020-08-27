@@ -9,6 +9,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.TimerTask;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.SQLException;
 import be.tba.ejb.pbx.session.CallRecordSqlAdapter;
 import be.tba.servlets.session.WebSession;
@@ -16,6 +20,7 @@ import be.tba.util.constants.Constants;
 
 final public class DbCleanTimerTask extends TimerTask implements TimerTaskIntf
 {
+	private static Logger log = LoggerFactory.getLogger(DbCleanTimerTask.class);
     // private static final int kCleanPerSession = 50;
 
     public DbCleanTimerTask()
@@ -31,7 +36,7 @@ final public class DbCleanTimerTask extends TimerTask implements TimerTaskIntf
         {
             vCalendar.add(Calendar.DAY_OF_MONTH, 1);
         }
-        System.out.println("getScheduleTime() returned " + vCalendar.getTime().toString());
+        log.info("getScheduleTime() returned " + vCalendar.getTime().toString());
         return vCalendar.getTime();
     }
 
@@ -81,11 +86,11 @@ final public class DbCleanTimerTask extends TimerTask implements TimerTaskIntf
             // cnt += kCleanPerSession;
             // Thread.sleep(10000);
             // }
-            System.out.println("DB clean deleted " + deleted + " call records.");
+            log.info("DB clean deleted " + deleted + " call records.");
         }
         catch (Exception e)
         {
-            System.out.println("DbCleanTimerTask ; lookup failed: " + obj);
+            log.info("DbCleanTimerTask ; lookup failed: " + obj);
             e.printStackTrace();
         }
         finally
@@ -97,7 +102,7 @@ final public class DbCleanTimerTask extends TimerTask implements TimerTaskIntf
             }
             catch (SQLException ex)
             {
-                System.out.println("Error in Mailer: SQL connection could not be closed.");
+                log.info("Error in Mailer: SQL connection could not be closed.");
             }
         }
     }
@@ -106,7 +111,7 @@ final public class DbCleanTimerTask extends TimerTask implements TimerTaskIntf
     public void cleanUp()
     {
        // TODO Auto-generated method stub
-       System.out.println("Cancel DbCleanTimerTask");
+       log.info("Cancel DbCleanTimerTask");
        this.cancel();
     }
 }

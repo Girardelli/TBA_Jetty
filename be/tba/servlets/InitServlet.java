@@ -8,6 +8,9 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import be.tba.util.session.AccountCache;
 import be.tba.util.timer.CallManagerCleanupTimerTask;
 import be.tba.util.timer.DbCleanTimerTask;
@@ -20,6 +23,7 @@ import be.tba.util.timer.UrlCheckTimerTask;
 
 public class InitServlet extends GenericServlet
 {
+	private static Logger log = LoggerFactory.getLogger(InitServlet.class);
     /**
     * 
     */
@@ -29,13 +33,13 @@ public class InitServlet extends GenericServlet
     @SuppressWarnings("unused")
     public void init(ServletConfig config) throws ServletException
     {
-        System.out.println("init servlet called.");
+        log.info("init servlet called.");
         // sLogger.info("CallLogThread.run()");
         try
         {
             TimerManager vTimerManager = TimerManager.getInstance();
             AccountCache vAccountCache = AccountCache.getInstance();
-            System.out.println("AccountCache initialized");
+            log.info("AccountCache initialized");
             
             vTimerManager.add(new DbCleanTimerTask());
             vTimerManager.add(new MailTimerTask());
@@ -47,14 +51,14 @@ public class InitServlet extends GenericServlet
             e.printStackTrace();
             throw new ServletException("AccountCache init failed: " + e.getMessage());
         }
-        System.out.println("Servlets initialized");
+        log.info("Servlets initialized");
     }
 
     public void destroy()
     {
        TimerManager vTimerManager = TimerManager.getInstance();
        vTimerManager.destroy();
-       System.out.println("InitServlet destroyed.");
+       log.info("InitServlet destroyed.");
     }
 
     public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException

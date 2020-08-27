@@ -175,7 +175,6 @@ try {
  				CallRecordEntityData vEntry = i.next();
 
  				if (vEntry.getDoneBy().equalsIgnoreCase(vSession.getUserId())) {
- 					//System.out.println(vEntry.getDoneBy() + " == " + vSession.getUserId());
  					++cnt;
  					String modalBtnId = "modalBtn" + cnt;
  					String modalId = "modal" + cnt;
@@ -230,7 +229,6 @@ try {
  			for (Iterator<CallRecordEntityData> i = chatRecords.iterator(); i.hasNext();) {
  				CallRecordEntityData vEntry = i.next();
  				if (!vEntry.getDoneBy().equalsIgnoreCase(vSession.getUserId())) {
- 					//System.out.println(vEntry.getDoneBy() + " == " + vSession.getUserId());
  					++cnt;
  					String modalBtnId = "modalBtn_" + cnt;
  					String modalId = "modal_" + cnt;

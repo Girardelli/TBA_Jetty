@@ -16,6 +16,8 @@ import java.sql.SQLException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.eclipse.jetty.websocket.api.Session;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import be.tba.ejb.account.interfaces.AccountEntityData;
 import be.tba.ejb.pbx.interfaces.CallRecordEntityData;
@@ -33,6 +35,7 @@ import be.tba.util.invoice.InvoiceHelper;
  */
 final public class WebSession implements Serializable
 {
+	private static Logger log = LoggerFactory.getLogger(WebSession.class);
     /**
      *
      */
@@ -100,14 +103,14 @@ final public class WebSession implements Serializable
     {
         try
         {
-            //System.out.println("Create WebSession without DataSource");
+            //log.info("Create WebSession without DataSource");
             init();
             mConnection = DriverManager.getConnection(Constants.MYSQL_URL);
         }
         catch (Exception ex)
         {
             ex.printStackTrace();
-            System.out.println("Error in WebSession. Can not create DB Connection.");
+            log.info("Error in WebSession. Can not create DB Connection.");
         }
     }
 
@@ -135,7 +138,7 @@ final public class WebSession implements Serializable
             }
             catch (SQLException ex)
             {
-                System.out.println("Error in WebSession.close(): SQL connection could not be closed.");
+                log.info("Error in WebSession.close(): SQL connection could not be closed.");
             }
         }
     }
@@ -403,7 +406,7 @@ final public class WebSession implements Serializable
         }
         else
             ++mMonthsBack;
-        System.out.println("incrementMonthsBack() returns " + mMonthsBack);
+        log.info("incrementMonthsBack() returns " + mMonthsBack);
         return mMonthsBack;
     }
 
@@ -416,7 +419,7 @@ final public class WebSession implements Serializable
         }
         else
             --mMonthsBack;
-        System.out.println("decrementMonthsBack() returns " + mMonthsBack);
+        log.info("decrementMonthsBack() returns " + mMonthsBack);
         return mMonthsBack;
     }
 
@@ -494,7 +497,7 @@ final public class WebSession implements Serializable
         {
             return false;
         }
-        System.out.println(caller + "(" + mUserId + ")WebSession.isExpired since " + (vCurrTime - vTimeout) / 1000 + " seconds.");
+        log.info(caller + "(" + mUserId + ")WebSession.isExpired since " + (vCurrTime - vTimeout) / 1000 + " seconds.");
         return true;
     }
     

@@ -19,12 +19,12 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 */
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class UploadServlet extends HttpServlet 
 {
-   private  Log log = LogFactory.getLog(UploadServlet.class);
+	private static Logger log = LoggerFactory.getLogger(UploadServlet.class);
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
@@ -69,7 +69,7 @@ public class UploadServlet extends HttpServlet
 			File file = new File(
 					request.getServletContext().getRealPath("/") + "imgs/" + request.getParameter("getthumb"));
 			if (file.exists()) {
-				System.out.println(file.getAbsolutePath());
+				log.info(file.getAbsolutePath());
 				String mimetype = getMimeType(file);
 				if (mimetype.endsWith("png") || mimetype.endsWith("jpeg") || mimetype.endsWith("jpg")
 						|| mimetype.endsWith("gif")) {
@@ -140,7 +140,7 @@ public class UploadServlet extends HttpServlet
 					jsono.put("delete_url", "UploadServlet?delfile=" + item.getName());
 					jsono.put("delete_type", "GET");
 					json.put(jsono);
-					System.out.println(json.toString());
+					log.info(json.toString());
 				}
 			}
 		} catch (FileUploadException e) {

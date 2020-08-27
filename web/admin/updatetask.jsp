@@ -3,14 +3,11 @@
 <%@ include file="adminheader.jsp" %>
 
 	<%@ page
-		import="javax.ejb.*,
-java.util.*,
+		import="java.util.*,
 
 
 javax.naming.Context,
 javax.naming.InitialContext,
-
-javax.ejb.*,
 be.tba.ejb.pbx.interfaces.*,
 be.tba.ejb.account.interfaces.*,
 be.tba.ejb.account.session.*,
@@ -32,7 +29,6 @@ if (mTaskData == null)
   out.println("no call Task set in session context when entering updaterecord.jsp");
   return;
 }
-System.out.println("task.invoiceId=" + mTaskData.getInvoiceId() );
 mCustomerData = AccountCache.getInstance().get(mTaskData);
 %>
 

@@ -14,13 +14,13 @@ Last Checked In By: $Author: Yves Willems $
 --%>
 
 	<%@ page
-		import="javax.ejb.*,
+		import="
 		java.util.*,
 		
 		javax.naming.Context,
 		javax.naming.InitialContext,
 		
-		javax.ejb.*,
+		
 		be.tba.ejb.account.interfaces.*,
 		be.tba.ejb.task.interfaces.*,
 		be.tba.ejb.task.session.TaskSqlAdapter,
@@ -122,8 +122,6 @@ Last Checked In By: $Author: Yves Willems $
 										String vKost;
 										if (vEntry.getIsFixedPrice())
 										{
-											System.out.println("fixed price double:"
-											        + vEntry.getFixedPrice());
 											vKost = new String(vCostFormatter.format(vEntry
 											        .getFixedPrice())
 											        + "Euro (fixed)");
@@ -154,9 +152,6 @@ Last Checked In By: $Author: Yves Willems $
 											vInfoGifs = vInfoGifs
 											        .concat("<img src=\"/tba/images/recurintask.gif\" height=\"13\" border=\"0\">&nbsp;");
 										}
-
-										System.out.println("task: "
-										        + vEntry.getDescription());
 					%>
 					<tr bgcolor="FFCC66" id=<%=vId%> class="bodytekst">
 						<td width="65" valign="top"><%=vEntry.getDate()%></td>

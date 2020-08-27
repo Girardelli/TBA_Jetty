@@ -3,14 +3,12 @@
 <%@ include file="adminheader.jsp"%>
 
 <%@ page
-	import="javax.ejb.*,
-java.util.*,
+	import="java.util.*,
 
 
 javax.naming.Context,
 javax.naming.InitialContext,
 
-javax.ejb.*,
 be.tba.ejb.account.interfaces.*,
 be.tba.util.data.*,
 be.tba.util.invoice.*,
@@ -22,7 +20,6 @@ be.tba.util.session.*"%>
 
 try 
 {
-    System.out.println("enter SELECT_SUBCUSTOMER_JSP");
     vSession.setCallingJsp(Constants.SELECT_SUBCUSTOMER_JSP);
 	
 	String vFwdNr = vSession.getNewUnmappedCall().getFwdNr();
@@ -32,7 +29,6 @@ try
 	
 	AccountEntityData vCustomer = AccountCache.getInstance().get(vFwdNr);
 	String vFullName = vCustomer.getFullName();
-	System.out.println("building SELECT_SUBCUSTOMER_JSP");
 %>
 <body>
 	<table  cellspacing='0' cellpadding='0' border='0'
@@ -86,7 +82,6 @@ try
 </table>
 
 	<%
-	System.out.println("end SELECT_SUBCUSTOMER_JSP");
     }
 }
 catch (Exception e)

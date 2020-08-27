@@ -1,7 +1,7 @@
 package be.tba.servlets;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.eclipse.jetty.websocket.servlet.WebSocketServlet;
 import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 
@@ -11,7 +11,7 @@ import be.tba.websockets.TbaWebSocketAdapter;
 
 public class TbaWebSocketServlet extends WebSocketServlet 
 {
-   private  Log log = LogFactory.getLog(TbaWebSocketServlet.class);
+	private static Logger log = LoggerFactory.getLogger(TbaWebSocketServlet.class);
     /**
 	 * 
 	 */
@@ -22,7 +22,7 @@ public class TbaWebSocketServlet extends WebSocketServlet
 	{
         factory.register(TbaWebSocketAdapter.class);
         factory.getPolicy().setIdleTimeout((Constants.ADMIN_SESSION_TIMEOUT + 5) * 1000);
-        System.out.println("TbaWebSocketServlet configured");
+        log.info("TbaWebSocketServlet configured");
     }
 
 
