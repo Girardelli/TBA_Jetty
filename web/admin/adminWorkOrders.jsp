@@ -119,7 +119,7 @@ vSession.setCallingJsp(Constants.ADMIN_WORK_ORDER_JSP);
 }
 catch (Exception e)
 {
-    e.printStackTrace();
+    log.error(e.getMessage(), e);
 }
         %>
         </td>

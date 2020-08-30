@@ -69,7 +69,7 @@ public class FileUploader implements SessionParmsInf
       }
       catch (FileUploadException e)
       {
-         e.printStackTrace();
+         log.error(e.getMessage(), e);
          throw new SystemErrorException(e, "FileUploadException");
       }
 
@@ -102,7 +102,7 @@ public class FileUploader implements SessionParmsInf
          catch (IOException e)
          {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             throw new SystemErrorException("Bestand kan niet worden opgeladen.");
          }
       }
@@ -126,7 +126,7 @@ public class FileUploader implements SessionParmsInf
       catch (InterruptedException e)
       {
          // TODO Auto-generated catch block
-         e.printStackTrace();
+         log.error(e.getMessage(), e);
          log.error("File Upload thread join returned this exception on file: " + mUploadedFile);
       }
       return mUploadedFile;
@@ -198,7 +198,7 @@ public class FileUploader implements SessionParmsInf
                }
                catch (Exception e)
                {
-                  e.printStackTrace();
+                  log.error(e.getMessage(), e);
                   log.error("File could not be stored on server: " + item.getFieldName());
                   continue;
                }

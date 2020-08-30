@@ -128,7 +128,7 @@ public class CallLogThread extends Thread implements SerialPortEventListener, Co
                          */
                     }
                     /*
-                     * catch(InterruptedException e) { e.printStackTrace(); }
+                     * catch(InterruptedException e) { log.error(e.getMessage(), e); }
                      */
                 }
                 catch (Exception e)

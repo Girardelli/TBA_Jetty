@@ -48,7 +48,7 @@ public class InitServlet extends GenericServlet
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             throw new ServletException("AccountCache init failed: " + e.getMessage());
         }
         log.info("Servlets initialized");

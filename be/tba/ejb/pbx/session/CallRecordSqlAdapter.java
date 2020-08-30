@@ -8,7 +8,6 @@ import java.util.Iterator;
 import java.util.Vector;
 
 import be.tba.ejb.account.interfaces.AccountEntityData;
-import be.tba.ejb.mail.session.MailerSessionBean;
 import be.tba.ejb.pbx.interfaces.CallRecordEntityData;
 import be.tba.pbx.Forum700CallRecord;
 import be.tba.servlets.helper.PhoneMapManager;
@@ -78,7 +77,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
 			// log.info( "getAllForDummy: " + vCollection.size() + entries." );
 			return vVector;
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e.getMessage(), e);
 		}
 		return new Vector<CallRecordEntityData>();
 	}
@@ -102,7 +101,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
 	 *
 	 *                       return translateToValueObjects(vCollection); // return
 	 *                       sortRecordList(vCollection, fwdNr); } catch (Exception
-	 *                       e) { e.printStackTrace(); } return new Vector(); }
+	 *                       e) { log.error(e.getMessage(), e); } return new Vector(); }
 	 */
 	/**
 	 * @ejb:interface-method view-type="remote"
@@ -147,7 +146,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
 //         }
 			return vCollection;
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e.getMessage(), e);
 		}
 		return new Vector<CallRecordEntityData>();
 	}
@@ -202,7 +201,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
 //         }
 //         return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsDocumented=TRUE AND IsArchived=" + (includeArchived?"TRUE":"FALSE") + " AND TimeStamp>" + vFromTimeStamp + " AND TimeStamp<=" + vToTimeStamp + " AND FwdNr IN (" + customerIdsIN + ") ORDER BY TimeStamp DESC");
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e.getMessage(), e);
 		}
 		return new Vector<CallRecordEntityData>();
 	}
@@ -221,7 +220,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
 								+ "' ORDER BY TimeStamp DESC");
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e.getMessage(), e);
 		}
 		return new Vector<CallRecordEntityData>();
 	}
@@ -241,7 +240,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
 								+ "' ORDER BY TimeStamp DESC");
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e.getMessage(), e);
 		}
 		return new Vector<CallRecordEntityData>();
 	}
@@ -255,7 +254,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
 			return executeSqlQuery(webSession,
 					"SELECT * FROM CallRecordEntity WHERE IsVirgin=TRUE ORDER BY TimeStamp DESC");
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e.getMessage(), e);
 		}
 		return new Vector<CallRecordEntityData>();
 	}
@@ -276,7 +275,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
 								+ fwdNr + "' ORDER BY TimeStamp DESC");
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e.getMessage(), e);
 		}
 		return new Vector<CallRecordEntityData>();
 	}
@@ -295,7 +294,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
 								+ fwdNr + "' ORDER BY TimeStamp DESC");
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e.getMessage(), e);
 		}
 		return new Vector<CallRecordEntityData>();
 	}
@@ -313,7 +312,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
 						+ fwdNr + "' ORDER BY TimeStamp DESC");
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e.getMessage(), e);
 		}
 		return new Vector<CallRecordEntityData>();
 	}
@@ -332,7 +331,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
 								+ fwdNr + "' ORDER BY TimeStamp DESC");
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e.getMessage(), e);
 		}
 		return new Vector<CallRecordEntityData>();
 	}
@@ -351,7 +350,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
 								+ fwdNr + "' ORDER BY TimeStamp DESC");
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e.getMessage(), e);
 		}
 		return new Vector<CallRecordEntityData>();
 	}
@@ -369,7 +368,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
 						+ "' AND IsDocumented=TRUE ORDER BY TimeStamp DESC");
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e.getMessage(), e);
 		}
 		return new Vector<CallRecordEntityData>();
 	}
@@ -403,7 +402,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
 //            return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE FwdNr='" + fwdNr + "' AND TimeStamp>" + vStart + " AND TimeStamp<=" + vEnd + " AND IsDocumented=TRUE ORDER BY TimeStamp DESC");
 //         }
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e.getMessage(), e);
 		}
 		return new Vector<CallRecordEntityData>();
 	}
@@ -437,7 +436,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
 //            return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE FwdNr='" + fwdNr + "' AND TimeStamp>" + vStart + " AND TimeStamp<=" + vCalendar.getCurrentTimestamp() + " AND IsDocumented=TRUE ORDER BY TimeStamp DESC");
 //         }
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e.getMessage(), e);
 		}
 		return new Vector<CallRecordEntityData>();
 	}
@@ -505,7 +504,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
 			}
 		} catch (Exception e) {
 			log.info("getSearchCalls failed for fwdNr=" + fwdNr + " , str2find=" + str2find);
-			e.printStackTrace();
+			log.error(e.getMessage(), e);
 		}
 		return new Vector<CallRecordEntityData>();
 	}
@@ -526,7 +525,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
 //         Collection<CallRecordEntityData> vCollection = executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE TimeStamp>" + vStartTime + " AND TimeStamp<=" + vEndTime + " AND IsMailed=TRUE ORDER BY TimeStamp ASC");
 //         return vCollection;
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e.getMessage(), e);
 		}
 		return new Vector<CallRecordEntityData>();
 	}
@@ -546,7 +545,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
 //         long vEndTime = vCalendar.getEndOfMonth(month, year);
 //         return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE DoneBy='" + empl + "' AND TimeStamp>" + vStartTime + " AND TimeStamp<=" + vEndTime + " AND IsDocumented=TRUE AND IsMailed=TRUE ORDER BY TimeStamp DESC");
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e.getMessage(), e);
 		}
 		return new Vector<CallRecordEntityData>();
 	}
@@ -582,7 +581,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
 								+ CustomerIdsIN + ") ORDER BY TimeStamp DESC");
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e.getMessage(), e);
 		}
 		return new Vector<CallRecordEntityData>();
 	}
@@ -595,7 +594,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
 			return executeSqlQuery(webSession,
 					"SELECT * FROM CallRecordEntity WHERE IsDocumented=TRUE AND IsChanged=TRUE AND IsArchived=FALSE ORDER BY TimeStamp DESC");
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e.getMessage(), e);
 		}
 		return new Vector<CallRecordEntityData>();
 	}
@@ -617,7 +616,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
 			log.info("cleanDb removed " + vDummyVec.size() + " call records");
 			return vDummyVec.size();
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e.getMessage(), e);
 		}
 		return 0;
 	}
@@ -864,10 +863,10 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
 
 					if (record.mInitialUser.equals(record.mChargedUser)) {
 						// probably lost call due to forwarding
-						log.info("Probably lost forwarded call : " + record.mInitialUser);
+						log.warn("Probably lost forwarded call : " + record.mInitialUser);
 						newRecord.setFwdNr(Constants.NUMBER_BLOCK[0][0]);
 					} else {
-						log.info("Not identified call arrived on " + record.mExtCorrNumber);
+						log.warn("Not identified call arrived on " + record.mExtCorrNumber);
 						return;
 					}
 				}
@@ -922,7 +921,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
 				// newRecord.getId(), newRecord.getFwdNr(), newRecord.getIsMailed());
 
 			} else {
-				log.info("addCallRecord failed: no account found for {}", newRecord.getFwdNr());
+				log.error("addCallRecord failed: no account found for {}", newRecord.getFwdNr());
 			}
 
 			// log.info("Call logged: " + newRecord.getFwdNr() +
@@ -931,9 +930,9 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
 			// (newRecord.getIsIncomingCall() ? "<--" : "-->") + newRecord.getNumber());
 			return;
 		} catch (Exception e) {
-			log.info("Failed to store the following call record:");
-			log.info(record.getFileRecord());
-			e.printStackTrace();
+			log.error("Failed to store the following call record:");
+			log.error(record.getFileRecord());
+			log.error(e.getMessage(), e);
 			log.error("addCallRecord failed");
 			log.error("", e);
 		}

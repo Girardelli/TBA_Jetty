@@ -89,7 +89,7 @@ final public class MailTimerTask extends TimerTask implements TimerTaskIntf
                             {
                                 log.info("Mail send failed to " + vAccount.getFullName());
                                 MailError.getInstance().setError("Mail send failed to " + vAccount.getFullName() + "\n" + e.getMessage());
-                                e.printStackTrace();
+                                log.error(e.getMessage(), e);
                             }
                         }
                         else
@@ -103,7 +103,7 @@ final public class MailTimerTask extends TimerTask implements TimerTaskIntf
             {
                 log.info("MailTimerTask exception");
                 MailError.getInstance().setError("Mail send failed\n" + e.getMessage());
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
             }
             finally
             {

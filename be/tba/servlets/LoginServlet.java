@@ -196,13 +196,13 @@ public class LoginServlet extends HttpServlet
         }
         catch (SystemErrorException e)
         {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             rd = sc.getRequestDispatcher(Constants.SERVLET_LOGIN_HTML);
             rd.forward(req, res);
         }
         catch (Exception e)
         {
-            //e.printStackTrace();
+            //log.error(e.getMessage(), e);
             req.setAttribute(Constants.ERROR_TXT, "Onbekende error! Meldt deze error bij <a href=\"mailto:webmaster@thebusinessassistant.be\">webmaster@thebusinessassistant.be</a>.");
             rd = sc.getRequestDispatcher(Constants.PROTECT_FAIL_JSP);
         }
@@ -267,7 +267,7 @@ public class LoginServlet extends HttpServlet
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             vFormFaults.add("Fout: " + e.getMessage());
         }
         return vFormFaults;
@@ -347,7 +347,7 @@ public class LoginServlet extends HttpServlet
             }
             catch (Exception e)
             {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
                 vFormFaults.add("Uw aanvraag kon niet verstuurd worden. Probeer ons te contacteren via onze contact gegevens.");
             }
         }

@@ -114,7 +114,7 @@ try
 }
 catch (Exception ex)
 {
-  ex.printStackTrace();
+  log.error(ex.getMessage(), ex);
 }
 %>
 

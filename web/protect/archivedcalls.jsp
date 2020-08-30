@@ -189,7 +189,7 @@ if (vAccount != null && vAccount.getHasSubCustomers())
 }
 catch (Exception ex)
 {
-  ex.printStackTrace();
+  log.error(ex.getMessage(), ex);
 }
 %>
 </table>

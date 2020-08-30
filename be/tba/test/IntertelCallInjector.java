@@ -65,7 +65,7 @@ public class IntertelCallInjector
 					} catch (InterruptedException e) 
 					{
 						// TODO Auto-generated catch block
-						e.printStackTrace();
+						log.error(e.getMessage(), e);
 					}
 					
 					try {
@@ -85,10 +85,10 @@ public class IntertelCallInjector
 			            }
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
-						e.printStackTrace();
+						log.error(e.getMessage(), e);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
-						e.printStackTrace();
+						log.error(e.getMessage(), e);
 					}
 					++y;
 				}

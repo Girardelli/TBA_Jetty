@@ -50,7 +50,7 @@ public class IntertelServlet extends HttpServlet
 		{
 			// TODO Auto-generated catch block
 			log.info(e.getMessage());
-			e.printStackTrace();
+			log.error(e.getMessage(), e);
 		}
 	}
     
@@ -84,7 +84,7 @@ public class IntertelServlet extends HttpServlet
     		catch (Exception e) 
     		{
     			log.info("no connection available and could not be recovered");
-    			e.printStackTrace();
+    			log.error(e.getMessage(), e);
     			return;
     		}
     	}
@@ -346,7 +346,7 @@ public class IntertelServlet extends HttpServlet
 		} 
     	catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(e.getMessage(), e);
 		}
     	return false;
     }

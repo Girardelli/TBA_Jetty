@@ -374,7 +374,7 @@ public class TaskFacade
        }
        catch (Exception ex)
        {
-          ex.printStackTrace();
+          log.error(ex.getMessage(), ex);
           // the now date shall be returned
        }
        return vCalendar.getTimeInMillis();

@@ -109,7 +109,7 @@ final public class WebSession implements Serializable
         }
         catch (Exception ex)
         {
-            ex.printStackTrace();
+            log.error(ex.getMessage(), ex);
             log.info("Error in WebSession. Can not create DB Connection.");
         }
     }

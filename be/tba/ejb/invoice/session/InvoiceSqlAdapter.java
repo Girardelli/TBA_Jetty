@@ -286,7 +286,7 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
         catch (Exception e)
         {
             log.info("Failed to getNewInvoiceNumber");
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return -1;
     }
@@ -328,7 +328,7 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
         catch (Exception e)
         {
             log.info("Failed to getInvoiceList");
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         // log.info("getInvoiceList for month " + month + ", year " +
         // year);
@@ -355,7 +355,7 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
         catch (Exception e)
         {
             log.info("Failed to freezeList");
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
     }
 
@@ -576,7 +576,7 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
             {
                 log.info("Invoice mail can not be send to " + vCustomer.getFullName() + " (" + vTo[0] + ")");
             }
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return false;
     }

@@ -112,11 +112,11 @@ final public class AccountCache
       } catch (SQLException e)
       {
          // TODO Auto-generated catch block
-         e.printStackTrace();
+         log.error(e.getMessage(), e);
       } catch (Exception e)
       {
          // TODO Auto-generated catch block
-         e.printStackTrace();
+         log.error(e.getMessage(), e);
       } finally
       {
          if (session != null && session.getConnection() != null)
@@ -131,7 +131,7 @@ final public class AccountCache
                log.info("SQLException: " + ex.getMessage());
                log.info("SQLState: " + ex.getSQLState());
                log.info("VendorError: " + ex.getErrorCode());
-               ex.printStackTrace();
+               log.error(ex.getMessage(), ex);
             }
          }
 
@@ -413,7 +413,7 @@ final public class AccountCache
          return vFreeNumbers;
       } catch (Exception e)
       {
-         e.printStackTrace();
+         log.error(e.getMessage(), e);
       }
       return new Vector<String>();
    }
@@ -456,7 +456,7 @@ final public class AccountCache
          return vTriggerList;
       } catch (Exception e)
       {
-         e.printStackTrace();
+         log.error(e.getMessage(), e);
       }
       return new Vector<MailTriggerData>();
    }

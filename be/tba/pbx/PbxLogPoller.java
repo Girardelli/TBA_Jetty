@@ -24,13 +24,13 @@ import org.slf4j.LoggerFactory;
 public class PbxLogPoller
 {
     static private CallLogDbWriter mLogWriter = null;
-    final static Logger sLogger = LoggerFactory.getLogger(PbxLogPoller.class);
+    final static Logger log = LoggerFactory.getLogger(PbxLogPoller.class);
 
     static private CallLogDbWriter getWriter() throws NamingException
     {
         if (mLogWriter == null)
         {
-            sLogger.info("PbxLogPoller.getWriter(): set properties");
+            log.info("PbxLogPoller.getWriter(): set properties");
             // yves System.setProperty(Context.INITIAL_CONTEXT_FACTORY,
             // "com.mysql.jdbc.jdbc2.optional.MysqlDataSource");
             // create the cash without the container support
@@ -44,15 +44,15 @@ public class PbxLogPoller
     {
         try
         {
-            sLogger.info("");
-            sLogger.info("########## new start ############");
+            log.info("");
+            log.info("########## new start ############");
 
             //FintroXlsxReader fintroXlsxReader = new FintroXlsxReader("C:\\Users\\ywillems\\Downloads\\BE71143070729269-20180629.xlsx");
                         
             //Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
             CallLogDbWriter vLogWriter = getWriter();
             vLogWriter.start();
-            sLogger.info("from PbxLogPoller: CallLogDbWriter started!");
+            log.info("from PbxLogPoller: CallLogDbWriter started!");
 //            WebSession session  = new WebSession(Constants.MYSQL_URL);
 //            InvoiceHelper vHelper = new InvoiceHelper(null, "409003", 10, 2017);
 //            vHelper.storeOrUpdate(session);
@@ -65,55 +65,55 @@ public class PbxLogPoller
         }
         catch (InterruptedException e)
         {
-            // e.printStackTrace();
-            sLogger.error("InterruptedException when creating calllog thread", e);
+            // log.error(e.getMessage(), e);
+            log.error("InterruptedException when creating calllog thread", e);
         }
         catch (NoClassDefFoundError e)
         {
-            // e.printStackTrace();
-            sLogger.error("NoClassDefFoundError when creating calllog thread", e);
+            // log.error(e.getMessage(), e);
+            log.error("NoClassDefFoundError when creating calllog thread", e);
         }
         catch (NamingException e)
         {
-            // e.printStackTrace();
-            sLogger.error("NamingException when getting InitialContext", e);
+            // log.error(e.getMessage(), e);
+            log.error("NamingException when getting InitialContext", e);
         }
 /*        catch (InstantiationException e)
         {
             // TODO Auto-generated catch block
-            // e.printStackTrace();
-            sLogger.error("InstantiationException when getting InitialContext", e);
+            // log.error(e.getMessage(), e);
+            log.error("InstantiationException when getting InitialContext", e);
         }
         catch (IllegalAccessException e)
         {
             // TODO Auto-generated catch block
-            // e.printStackTrace();
-            sLogger.error("IllegalAccessException when getting InitialContext", e);
+            // log.error(e.getMessage(), e);
+            log.error("IllegalAccessException when getting InitialContext", e);
         }
         catch (ClassNotFoundException e)
         {
             // TODO Auto-generated catch block
-            // e.printStackTrace();
-            sLogger.error("ClassNotFoundException when getting InitialContext", e);
+            // log.error(e.getMessage(), e);
+            log.error("ClassNotFoundException when getting InitialContext", e);
         }
 //        catch (SQLException e)
 //        {
             // TODO Auto-generated catch block
-            // e.printStackTrace();
-//            sLogger.error("SQLExeption when getting InitialContext", e);
+            // log.error(e.getMessage(), e);
+//            log.error("SQLExeption when getting InitialContext", e);
 //        }
         catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(e.getMessage(), e);
 		} catch (InvocationTargetException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(e.getMessage(), e);
 		} catch (NoSuchMethodException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(e.getMessage(), e);
 		} catch (SecurityException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(e.getMessage(), e);
 		}*/
     }
 
@@ -121,7 +121,7 @@ public class PbxLogPoller
     {
         try
         {
-            sLogger.info("Destroy CallLogDbWriter");
+            log.info("Destroy CallLogDbWriter");
             CallLogDbWriter vLogWriter = getWriter();
             vLogWriter.stopLogging();
             Thread.sleep(vLogWriter.getSleepTime()); // give callLogThread
@@ -130,8 +130,8 @@ public class PbxLogPoller
         }
         catch (Exception e)
         {
-            e.printStackTrace();
-            sLogger.error("Error during CallLogServlet destroy.");
+            log.error(e.getMessage(), e);
+            log.error("Error during CallLogServlet destroy.");
         }
     }
 }

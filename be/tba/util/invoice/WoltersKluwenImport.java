@@ -149,7 +149,7 @@ public class WoltersKluwenImport
       catch (IOException e)
       {
          // TODO Auto-generated catch block
-         e.printStackTrace();
+         log.error(e.getMessage(), e);
       }
       return xml;
 
@@ -228,7 +228,7 @@ public class WoltersKluwenImport
       catch (IOException e)
       {
          // TODO Auto-generated catch block
-         e.printStackTrace();
+         log.error(e.getMessage(), e);
       }
       return xml;
 

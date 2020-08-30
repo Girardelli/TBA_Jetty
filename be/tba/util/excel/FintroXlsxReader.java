@@ -163,7 +163,7 @@ final public class FintroXlsxReader
       }
       catch (IOException | InvalidFormatException | SQLException e)
       {
-         e.printStackTrace();
+         log.error(e.getMessage(), e);
       }
       finally
       {
@@ -174,7 +174,7 @@ final public class FintroXlsxReader
          }
          catch (IOException e)
          {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
          }
       }
 

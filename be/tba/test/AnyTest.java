@@ -1,5 +1,9 @@
 package be.tba.test;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.Writer;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,21 +76,39 @@ public class AnyTest
       long f = 6372544342288L;
       long g = 6372544342289L;
 
-      log.info("76372544342283L=" + (int)(a%6));
-      log.info("76372544342284L=" + (int)(b%6));
-      log.info("76372544342285L=" + (int) c%6);
-      log.info("76372544342286L=" + (int) d%6);
-      log.info("76372544342287L=" + (int) e%6);
-      log.info("76372544342288L=" + (int) f%6);
-      log.info("76372544342289L=" + (int) g%6);
+//      log.info("76372544342283L=" + (int)(a%6));
+//      log.info("76372544342284L=" + (int)(b%6));
+//      log.info("76372544342285L=" + (int) c%6);
+//      log.info("76372544342286L=" + (int) d%6);
+//      log.info("76372544342287L=" + (int) e%6);
+//      log.info("76372544342288L=" + (int) f%6);
+//      log.info("76372544342289L=" + (int) g%6);
+//      
+//      log.info("76372544342283L=" + kExtCall[(int)(a%6)]);
+//      log.info("76372544342284L=" + kExtCall[(int)(b%6)]);
+//      log.info("76372544342285L=" + kExtCall[(int) c%6]);
+//      log.info("76372544342286L=" + kExtCall[(int) d%6]);
+//      log.info("76372544342287L=" + kExtCall[(int) e%6]);
+//      log.info("76372544342288L=" + kExtCall[(int) f%6]);
+//      log.info("76372544342289L=" + kExtCall[(int) g%6]);
       
-      log.info("76372544342283L=" + kExtCall[(int)(a%6)]);
-      log.info("76372544342284L=" + kExtCall[(int)(b%6)]);
-      log.info("76372544342285L=" + kExtCall[(int) c%6]);
-      log.info("76372544342286L=" + kExtCall[(int) d%6]);
-      log.info("76372544342287L=" + kExtCall[(int) e%6]);
-      log.info("76372544342288L=" + kExtCall[(int) f%6]);
-      log.info("76372544342289L=" + kExtCall[(int) g%6]);
+      try
+      {
+    	  throw new Exception("dit is mijn exception");
+      }
+      catch (Exception ex)
+      {
+    	  log.info("\\r\\n\\r\\n----------------------------------------------");
+    	  log.error(ex.getMessage(), ex);
+    	  log.info("\\r\\n\\r\\n----------------------------------------------");
+    	  log.error(ex.getMessage(), ex);
+    	  log.info("\\r\\n\\r\\n----------------------------------------------");
+    	  Writer buffer = new StringWriter();
+    	  PrintWriter pw = new PrintWriter(buffer);
+    	  ex.printStackTrace(pw);
+    	  log.error(buffer.toString());
+     }
+      
       
    }
    

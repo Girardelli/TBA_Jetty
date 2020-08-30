@@ -232,7 +232,7 @@ if (vAccount != null && vAccount.getHasSubCustomers())
 }
 catch (Exception e)
 {
-e.printStackTrace();
+log.error(e.getMessage(), e);
 }
 %>
 		</table>

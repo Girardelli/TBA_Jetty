@@ -247,7 +247,7 @@ public class AdminDispatchServlet extends HttpServlet
                   catch (Exception e)
                   {
                      log.info("MailTimerTask exception");
-                     e.printStackTrace();
+                     log.error(e.getMessage(), e);
                   }
                   finally
                   {
@@ -308,7 +308,7 @@ public class AdminDispatchServlet extends HttpServlet
                 * vMailSession.sendMail(con, vAccountData.getFwdNumber()); } // Check the
                 * record and add it if it is a valid one. // //vMailSession.sendMail(5);
                 * vMailSession.remove(); } catch (Exception e) {
-                * log.info("MailTimerTask exception"); e.printStackTrace(); } finally
+                * log.info("MailTimerTask exception"); log.error(e.getMessage(), e); } finally
                 * { if (con == null) { try { con.close(); con = null; } catch (SQLException ex)
                 * { System.out .println("Error in Mailer: SQL connection could not be closed."
                 * ); } } }
@@ -1221,16 +1221,16 @@ public class AdminDispatchServlet extends HttpServlet
       }
       catch (SystemErrorException e)
       {
-         log.info("SystemErrorException caught");
-         e.printStackTrace();
+         log.error("SystemErrorException caught");
+         log.error(e.getMessage(), e);
          rd = sc.getRequestDispatcher(Constants.ADMIN_FAIL_JSP);
          req.setAttribute(Constants.ERROR_TXT, e.getMessage());
          rd.forward(req, res);
       }
       catch (Exception e)
       {
-         log.info("admin dispatch failed. URI:" + req.getRequestURI() + "?" + req.getQueryString());
-         e.printStackTrace();
+         log.error("admin dispatch failed. URI:" + req.getRequestURI() + "?" + req.getQueryString());
+         log.error(e.getMessage(), e);
          rd = sc.getRequestDispatcher(Constants.ADMIN_FAIL_JSP);
          req.setAttribute(Constants.ERROR_TXT, "de pagina kan niet worden getoond.");
          rd.forward(req, res);

@@ -156,7 +156,7 @@ public class CallRecordFacade
       }
       else if (vCallData.getIsImportantCall())
       {
-         log.info("INFO: expected a mail for important call. prevIsImportant=" + prevIsImportant + ", isDocumented=" + vCallData.getIsDocumented());
+         log.warn("expected a mail for important call. prevIsImportant=" + prevIsImportant + ", isDocumented=" + vCallData.getIsDocumented());
       }
       vCallLogWriterSession.setCallData(session, vCallData);
       
@@ -318,7 +318,7 @@ public class CallRecordFacade
          logStream.write((calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + " " + session.getUserId() + ": " + CallRecordEntityData.toSqlDeleteString(key)).getBytes());
       } catch (Exception e)
       {
-         e.printStackTrace();
+         log.error(e.getMessage(), e);
          return;
       } finally
       {
@@ -337,7 +337,7 @@ public class CallRecordFacade
          logStream.write((calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + " " + session.getUserId() + ": " + CallRecordEntityData.toSqlInsertString(record)).getBytes());
       } catch (Exception e)
       {
-         e.printStackTrace();
+         log.error(e.getMessage(), e);
          return;
       } finally
       {

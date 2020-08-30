@@ -150,7 +150,7 @@ public class AccountSqlAdapter extends AbstractSqlAdapter<AccountEntityData>
         }
         catch (Exception ex)
         {
-            ex.printStackTrace();
+            log.error(ex.getMessage(), ex);
         }
         return "Interne fout tijdens registratie";
     }

@@ -150,7 +150,7 @@ public class InvoiceHelper
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
     }
 
@@ -185,7 +185,7 @@ public class InvoiceHelper
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
     }
 

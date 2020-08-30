@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 
 public class DatabaseFixer
 {
-   final static Logger sLogger = LoggerFactory.getLogger(DatabaseFixer.class);
+   final static Logger log = LoggerFactory.getLogger(DatabaseFixer.class);
 
    WebSession mSession;
    InvoiceSqlAdapter mInvoiceSession;
@@ -28,7 +28,7 @@ public class DatabaseFixer
       catch (SQLException e)
       {
          // TODO Auto-generated catch block
-         e.printStackTrace();
+         log.error(e.getMessage(), e);
       }
       mInvoiceSession = new InvoiceSqlAdapter();
    }
@@ -69,7 +69,7 @@ public class DatabaseFixer
                         (Integer.parseInt(invDay) + entry.getMonth()*30 + entry.getYear()*365))
                   {
                      // al zeker fout
-                     sLogger.info("ASAP {}: inv: {} > payed: {}", entry.fintroId, entry.getInvoiceDate(), entry.getPayDate());
+                     log.info("ASAP {}: inv: {} > payed: {}", entry.fintroId, entry.getInvoiceDate(), entry.getPayDate());
 //                     changeDB(entry);
 //                     continue;
                      isBadList = true;
@@ -77,7 +77,7 @@ public class DatabaseFixer
                }
                else
                {
-                  sLogger.info("Hoe kan dat ##### {}: inv: {} > payed: {}", entry.fintroId, entry.getInvoiceDate(), entry.getPayDate());
+            	   log.info("Hoe kan dat ##### {}: inv: {} > payed: {}", entry.fintroId, entry.getInvoiceDate(), entry.getPayDate());
                                     
                }
 
@@ -107,7 +107,7 @@ public class DatabaseFixer
             }
             
             
-            //sLogger.info("{} fintroId={}, paydate={}", ++i, entry.fintroId, entry.getPayDate());
+            //log.info("{} fintroId={}, paydate={}", ++i, entry.fintroId, entry.getPayDate());
          } 
          if (!dateFormattedEntries.isEmpty())
          {
@@ -124,14 +124,14 @@ public class DatabaseFixer
       catch (Exception e)
       {
          // TODO Auto-generated catch block
-         e.printStackTrace();
+         log.error(e.getMessage(), e);
       }
       
    }
    
    private void changeDB(InvoiceEntityData badOne) throws Exception
    {
-      sLogger.info("{}: {} --> {}/{}/{}", badOne.fintroId, badOne.getPayDate(), getMonthNr(badOne.getPayDate()), badOne.getPayDate().substring(0, 2), badOne.getPayDate().substring(7));
+	   log.info("{}: {} --> {}/{}/{}", badOne.fintroId, badOne.getPayDate(), getMonthNr(badOne.getPayDate()), badOne.getPayDate().substring(0, 2), badOne.getPayDate().substring(7));
       badOne.setPayDate(String.format("%s/%s/%s", getMonthNr(badOne.getPayDate()), badOne.getPayDate().substring(0, 2), badOne.getPayDate().substring(7)));
       badOne.setValutaDate(badOne.getPayDate());
       mInvoiceSession.setPaymentDates(mSession, badOne);

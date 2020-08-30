@@ -46,7 +46,7 @@ public class UrlCheckerSqlAdapter extends AbstractSqlAdapter<UrlCheckerEntityDat
       } catch (Exception e)
       {
          log.error("Exception for getForMonth(month=" + Constants.MONTHS[month]);
-         e.printStackTrace();
+         log.error(e.getMessage(), e);
       }
       return null; 
    }
@@ -65,7 +65,7 @@ public class UrlCheckerSqlAdapter extends AbstractSqlAdapter<UrlCheckerEntityDat
       } catch (Exception e)
       {
          log.error("Exception for update(month=" + Constants.MONTHS[month] + ", deadTime=" + deadTime);
-         e.printStackTrace();
+         log.error(e.getMessage(), e);
       }
    }
    

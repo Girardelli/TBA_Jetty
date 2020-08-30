@@ -209,7 +209,7 @@ StringBuilder allEntryIds = new StringBuilder("[");
 }
 catch (Exception e)
 {
-    e.printStackTrace();
+    log.error(e.getMessage(), e);
 }
 		%>
 		</td>

@@ -404,14 +404,14 @@ public class CustomerDispatchServlet extends HttpServlet
       }
       catch (SystemErrorException e)
       {
-         e.printStackTrace();
+         log.error(e.getMessage(), e);
          rd = sc.getRequestDispatcher(Constants.PROTECT_FAIL_JSP);
          req.setAttribute(Constants.ERROR_TXT, e.getMessage());
          rd.forward(req, res);
       }
       catch (Exception e)
       {
-         e.printStackTrace();
+         log.error(e.getMessage(), e);
       }
    }
 

@@ -362,7 +362,7 @@ for (int i = 0; i < kMaxMailMinutes; i += 5)
 							</tr>
 		</table>
 		<p class="bodysubtitle"><img src=".\images\blueSphere.gif" width="10"
-			height="10">&nbsp;Facturatiegegevens:</p>
+			height="10">&nbsp;Factuur instellingen:</p>
 		<table name="mainTbl" border="0" cellspacing="2" cellpadding="2">
 			<tr>
 				<td width="250" valign="top" class="bodysubsubtitle">Maak GEEN	factuur</td>
@@ -407,7 +407,7 @@ for (int i = 0; i < kMaxMailMinutes; i += 5)
 			</tr>
 		</table>
 		<p class="bodysubtitle"><img src=".\images\blueSphere.gif" width="10"
-			height="10">&nbsp;&nbsp;&nbsp;Agenda beheer:</p>
+			height="10">&nbsp;&nbsp;&nbsp;Agendabeheer instellingen:</p>
 		<table border="0" cellspacing="2" cellpadding="2">
 			<tr>
 				<td width="250" valign="top" class="bodysubsubtitle">prijs en type	agenda beheer</td>
@@ -417,16 +417,16 @@ for (int i = 0; i < kMaxMailMinutes; i += 5)
 					<select	name=<%=Constants.ACCOUNT_FAC_AGENDA_UNIT%>>
 					<option value=<%=Constants.NONE%><%=((vAgendaPriceUnit == InvoiceHelper.kNoAgenda)?kSelected:"")%>> geen agenda beheer
 					<option value=<%=Constants.AGENDA_STANDARD%><%=((vAgendaPriceUnit == InvoiceHelper.kStandardAgenda)?kSelected:"")%>> standard (<%=Constants.kStandardAgendaCost%> euro)
-					<option value=<%=Constants.AGENDA_PERC_PER_CALL%><%=((vAgendaPriceUnit == InvoiceHelper.kPercentageOnAgendaCalls)?kSelected:"")%>> procent per afspraak
+<!--  					<option value=<%=Constants.AGENDA_PERC_PER_CALL%><%=((vAgendaPriceUnit == InvoiceHelper.kPercentageOnAgendaCalls)?kSelected:"")%>> procent per afspraak
 					<option value=<%=Constants.AGENDA_PERC_ALL_CALL%><%=((vAgendaPriceUnit == InvoiceHelper.kPercentageOnTotalCallCost)?kSelected:"")%>> procent op oproepenkost
-					<option value=<%=Constants.AGENDA_EURO_PER_CALL%><%=((vAgendaPriceUnit == InvoiceHelper.kEuroCentOnAgendaCalls)?kSelected:"")%>> Euro cent per afspraak
+-->					<option value=<%=Constants.AGENDA_EURO_PER_CALL%><%=((vAgendaPriceUnit == InvoiceHelper.kEuroCentOnAgendaCalls)?kSelected:"")%>> Euro cent per afspraak
 					<option value=<%=Constants.AGENDA_EURO_ALL_CALL%><%=((vAgendaPriceUnit == InvoiceHelper.kEuroCentOnAllCalls)?kSelected:"")%>> Euro cent op alle calls
 					</select>
 				</td>
 			</tr>
 		</table>
 		<p class="bodysubtitle"><img src=".\images\blueSphere.gif" width="10"
-			height="10">&nbsp;&nbsp;&nbsp;Settings speciale prijzen:</p>
+			height="10">&nbsp;&nbsp;&nbsp;Telefonie instellingen:</p>
 		<table border="0" cellspacing="2" cellpadding="2" >
 			<tr>
 				<td width="320" valign="top" class="bodysubsubtitle"></td>
@@ -529,7 +529,7 @@ for (int i = 0; i < kMaxMailMinutes; i += 5)
             </tr>
 		</table>
 		<p class="bodysubtitle"><img src=".\images\blueSphere.gif" width="10"
-			height="10">&nbsp;&nbsp;&nbsp;Settings Telemarketing:</p>
+			height="10">&nbsp;&nbsp;&nbsp;Telemarketing instellingen:</p>
 		<table border="0" cellspacing="2" cellpadding="2">
 			<tr>
 				<td width="320" valign="top" class="bodysubsubtitle">Level 1 (geen
@@ -612,7 +612,7 @@ for (int i = 0; i < kMaxMailMinutes; i += 5)
 }
 catch (Exception e)
 {
-e.printStackTrace();
+log.error(e.getMessage(), e);
 }
 
 %>

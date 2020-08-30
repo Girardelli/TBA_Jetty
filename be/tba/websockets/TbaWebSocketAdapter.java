@@ -70,7 +70,7 @@ public class TbaWebSocketAdapter extends WebSocketAdapter
          } catch (AccessDeniedException | LostSessionException e)
          {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
          }
       } else
       {
@@ -103,7 +103,7 @@ public class TbaWebSocketAdapter extends WebSocketAdapter
             {
                // TODO Auto-generated catch block
                log.info("WebSocket broadcast to client with sessionId=" + session.getSessionId() + ", user=" + session.getUserId() + " failed");
-               e.printStackTrace();
+               log.error(e.getMessage(), e);
             }
          }
       }
@@ -124,7 +124,7 @@ public class TbaWebSocketAdapter extends WebSocketAdapter
             {
                // TODO Auto-generated catch block
                log.info("WebSocket send to client with sessionId=" + session.getSessionId() + ", user=" + session.getUserId() + " failed");
-               e.printStackTrace();
+               log.error(e.getMessage(), e);
             }
          }
       }

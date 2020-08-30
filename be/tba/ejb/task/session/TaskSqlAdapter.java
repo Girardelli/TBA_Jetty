@@ -65,7 +65,7 @@ public class TaskSqlAdapter extends AbstractSqlAdapter<TaskEntityData>
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return new Vector<TaskEntityData>();
     }
@@ -82,7 +82,7 @@ public class TaskSqlAdapter extends AbstractSqlAdapter<TaskEntityData>
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return new Vector<TaskEntityData>();
     }
@@ -101,7 +101,7 @@ public class TaskSqlAdapter extends AbstractSqlAdapter<TaskEntityData>
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return new Vector<TaskEntityData>();
     }
@@ -119,7 +119,7 @@ public class TaskSqlAdapter extends AbstractSqlAdapter<TaskEntityData>
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return new Vector<TaskEntityData>();
     }
@@ -139,7 +139,7 @@ public class TaskSqlAdapter extends AbstractSqlAdapter<TaskEntityData>
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return new Hashtable<Integer, Collection<TaskEntityData>>();
     }

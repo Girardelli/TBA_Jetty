@@ -100,7 +100,7 @@ public class TbaPdfInvoice
         catch (Exception e)
         {
             System.err.println(e.getMessage());
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
 
     }
@@ -119,7 +119,7 @@ public class TbaPdfInvoice
        catch (Exception e)
        {
            System.err.println(e.getMessage());
-           e.printStackTrace();
+           log.error(e.getMessage(), e);
        }
     }
     
@@ -140,7 +140,7 @@ public class TbaPdfInvoice
         catch (Exception e)
         {
             System.err.println(e.getMessage());
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
     }
 

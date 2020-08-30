@@ -147,7 +147,7 @@ public class MailerSessionBean
       {
          if (vCustomer != null)
             MailError.getInstance().setError("Mail send failed to " + vCustomer.getFullName() + "\n" + e.getMessage());
-         e.printStackTrace();
+         log.error(e.getMessage(), e);
          return false;
       }
       return true;

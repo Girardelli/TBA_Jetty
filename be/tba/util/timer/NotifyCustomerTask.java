@@ -45,7 +45,7 @@ final public class NotifyCustomerTask
          mAccountEntityData = AccountCache.getInstance().get(mAccountId);
          if (mAccountEntityData == null)
          {
-            log.info("ERROR: MailNowThread.send with null account");
+            log.error("ERROR: MailNowThread.send with null account");
             return;
          }
          if (System.getenv("TBA_MAIL_ON") == null)
@@ -74,26 +74,26 @@ final public class NotifyCustomerTask
             {
                if (!MailerSessionBean.sendCallInfoMail(session, mAccountId))
                {
-                  log.info("NotifyCustomerThread sendmail failed: wait 5 sec and retry");
+                  log.error("NotifyCustomerThread sendmail failed: wait 5 sec and retry");
                   // wait another 5 seconds an retry once
                   Thread.sleep(5000);
                   if (!MailerSessionBean.sendCallInfoMail(session, mAccountId))
                   {
-                     log.info("NotifyCustomerThread sendmail failed again");
+                     log.error("NotifyCustomerThread sendmail failed again");
                   }
                }
             }
             session.Close();
          }
-         catch (InterruptedException e1)
+         catch (InterruptedException e)
          {
-            log.info("NotifyCustomerThread exception");
-            e1.printStackTrace();
+            log.error("NotifyCustomerThread exception");
+            log.error(e.getMessage(), e);
          }
          catch (Exception e)
          {
-            log.info("NotifyCustomerThread exception");
-            e.printStackTrace();
+            log.error("NotifyCustomerThread exception");
+            log.error(e.getMessage(), e);
          }
          finally
          {

@@ -216,7 +216,7 @@ else
 }
 catch (Exception e)
 {
-    e.printStackTrace();
+    log.error(e.getMessage(), e);
 }
 %>
 </table>

@@ -93,21 +93,21 @@ public class CustFileDownloadServlet extends HttpServlet
       }
       catch (AccessDeniedException e)
       {
-         e.printStackTrace();
+         log.error(e.getMessage(), e);
          rd = sc.getRequestDispatcher(Constants.PROTECT_FAIL_JSP);
          request.setAttribute(Constants.ERROR_TXT, e.getMessage());
          rd.forward(request, response);
       }
       catch (LostSessionException e)
       {
-         e.printStackTrace();
+         log.error(e.getMessage(), e);
          rd = sc.getRequestDispatcher(Constants.LOGIN_HTML);
          rd.forward(request, response);
       }
       catch (Exception e)
       {
          log.info("URI:" + request.getRequestURI() + "?" + request.getQueryString());
-         e.printStackTrace();
+         log.error(e.getMessage(), e);
          rd = sc.getRequestDispatcher(Constants.PROTECT_FAIL_JSP);
          request.setAttribute(Constants.ERROR_TXT, "Het bestand dat je wil downloaden is niet beschikbaar. ");
          rd.forward(request, response);

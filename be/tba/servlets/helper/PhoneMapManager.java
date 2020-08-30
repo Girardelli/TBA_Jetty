@@ -62,7 +62,7 @@ public class PhoneMapManager
       } catch (SQLException e)
       {
          // TODO Auto-generated catch block
-         e.printStackTrace();
+         log.error(e.getMessage(), e);
       }
 
       Collection<PhoneMapEntityData> phones = sqlAdapter.getAllRows(session);
@@ -177,7 +177,7 @@ public class PhoneMapManager
                } catch (SQLException e)
                {
                   // TODO Auto-generated catch block
-                  e.printStackTrace();
+                  log.error(e.getMessage(), e);
                }
             }
             sqlAdapter.deleteRow(session, phoneMapEntityData.phoneUserMap.id);

@@ -187,7 +187,7 @@ else
 }
 catch (Exception ex)
 {
-  ex.printStackTrace();
+  log.error(ex.getMessage(), ex);
 }
 %>
 <script src="/tba/css/picker.js"></script>

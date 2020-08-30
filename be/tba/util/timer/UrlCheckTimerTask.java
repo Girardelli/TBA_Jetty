@@ -80,7 +80,7 @@ public class UrlCheckTimerTask extends TimerTask implements TimerTaskIntf
 		   {
 		      log.info("UrlCheckTimerTask returned: " + e.getClass().getName());
 		   }
-			//e.printStackTrace();
+			//log.error(e.getMessage(), e);
 			if (con != null)
 			{
 				con.disconnect();

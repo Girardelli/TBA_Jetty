@@ -199,11 +199,8 @@ public abstract class AbstractSqlAdapter<T>
         {
             // handle any errors
             log.error("FAILED SQL statement: " + queryStr);
-            log.error("SQLException: " + ex.getMessage());
             log.error("SQLState: " + ex.getSQLState());
             log.error("VendorError: " + ex.getErrorCode());
-
-            log.error("FAILED SQL statement: {}", queryStr);
             log.error("", ex);
         }
         finally

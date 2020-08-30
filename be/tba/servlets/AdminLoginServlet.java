@@ -103,7 +103,7 @@ public class AdminLoginServlet extends HttpServlet
         }
         catch (Exception e)
         {
-            //e.printStackTrace();
+            //log.error(e.getMessage(), e);
             log.info("AdminLoginServlet: Mallicious admin access attempt. userid:" + vUserId + ", password:" + vPassword);
             // print error page!!
             String vMsg = e.getMessage();

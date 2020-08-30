@@ -91,7 +91,7 @@ final public class DbCleanTimerTask extends TimerTask implements TimerTaskIntf
         catch (Exception e)
         {
             log.info("DbCleanTimerTask ; lookup failed: " + obj);
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         finally
         {
