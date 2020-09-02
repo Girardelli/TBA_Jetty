@@ -111,11 +111,9 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
 			CallCalendar vCallCalendar = new CallCalendar();
 
 			Calendar targetCal = vCallCalendar.getDaysBack(daysBack);
-			Collection<CallRecordEntityData> vCollection = executeSqlQuery(webSession,
-					"SELECT * FROM CallRecordEntity WHERE IsDocumented=FALSE ORDER BY TimeStamp DESC");
-//         int monthInt = targetCal.get(Calendar.YEAR)*100 + targetCal.get(Calendar.MONTH);
-			int dayInt = targetCal.get(Calendar.YEAR) * 10000 + targetCal.get(Calendar.MONTH) * 100
-					+ targetCal.get(Calendar.DAY_OF_MONTH);
+			int dayInt = targetCal.get(Calendar.YEAR) * 10000 + targetCal.get(Calendar.MONTH) * 100 + targetCal.get(Calendar.DAY_OF_MONTH);
+         Collection<CallRecordEntityData> vCollection = executeSqlQuery(webSession,
+               "SELECT * FROM CallRecordEntity WHERE IsDocumented=FALSE ORDER BY TimeStamp DESC");
 
 			if (fwdNr == null || fwdNr.equals(Constants.ACCOUNT_FILTER_ALL)) {
 				vCollection.addAll(
@@ -262,116 +260,116 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
 	/**
 	 * @ejb:interface-method view-type="remote"
 	 */
-	public Collection<CallRecordEntityData> getInUnDocumented(WebSession webSession, String fwdNr) // throws
-																									// RemoteException
-	{
-		try {
-			if (fwdNr == null) {
-				return executeSqlQuery(webSession,
-						"SELECT * FROM CallRecordEntity WHERE IsIncomingCall=TRUE AND IsDocumented=FALSE ORDER BY TimeStamp DESC");
-			} else {
-				return executeSqlQuery(webSession,
-						"SELECT * FROM CallRecordEntity WHERE IsIncomingCall=TRUE AND IsDocumented=FALSE AND FwdNr='"
-								+ fwdNr + "' ORDER BY TimeStamp DESC");
-			}
-		} catch (Exception e) {
-			log.error(e.getMessage(), e);
-		}
-		return new Vector<CallRecordEntityData>();
-	}
+//	public Collection<CallRecordEntityData> getInUnDocumented(WebSession webSession, String fwdNr) // throws
+//																									// RemoteException
+//	{
+//		try {
+//			if (fwdNr == null) {
+//				return executeSqlQuery(webSession,
+//						"SELECT * FROM CallRecordEntity WHERE IsIncomingCall=TRUE AND IsDocumented=FALSE ORDER BY TimeStamp DESC");
+//			} else {
+//				return executeSqlQuery(webSession,
+//						"SELECT * FROM CallRecordEntity WHERE IsIncomingCall=TRUE AND IsDocumented=FALSE AND FwdNr='"
+//								+ fwdNr + "' ORDER BY TimeStamp DESC");
+//			}
+//		} catch (Exception e) {
+//			log.error(e.getMessage(), e);
+//		}
+//		return new Vector<CallRecordEntityData>();
+//	}
 
 	/**
 	 * @ejb:interface-method view-type="remote"
 	 */
-	public Collection<CallRecordEntityData> getOutUnDocumented(WebSession webSession, String fwdNr) {
-		try {
-			if (fwdNr == null) {
-				return executeSqlQuery(webSession,
-						"SELECT * FROM CallRecordEntity WHERE IsIncomingCall=FALSE AND IsDocumented=FALSE ORDER BY TimeStamp DESC");
-			} else {
-				return executeSqlQuery(webSession,
-						"SELECT * FROM CallRecordEntity WHERE IsIncomingCall=FALSE AND IsDocumented=FALSE AND FwdNr='"
-								+ fwdNr + "' ORDER BY TimeStamp DESC");
-			}
-		} catch (Exception e) {
-			log.error(e.getMessage(), e);
-		}
-		return new Vector<CallRecordEntityData>();
-	}
+//	public Collection<CallRecordEntityData> getOutUnDocumented(WebSession webSession, String fwdNr) {
+//		try {
+//			if (fwdNr == null) {
+//				return executeSqlQuery(webSession,
+//						"SELECT * FROM CallRecordEntity WHERE IsIncomingCall=FALSE AND IsDocumented=FALSE ORDER BY TimeStamp DESC");
+//			} else {
+//				return executeSqlQuery(webSession,
+//						"SELECT * FROM CallRecordEntity WHERE IsIncomingCall=FALSE AND IsDocumented=FALSE AND FwdNr='"
+//								+ fwdNr + "' ORDER BY TimeStamp DESC");
+//			}
+//		} catch (Exception e) {
+//			log.error(e.getMessage(), e);
+//		}
+//		return new Vector<CallRecordEntityData>();
+//	}
 
 	/**
 	 * @ejb:interface-method view-type="remote"
 	 */
-	public Collection<CallRecordEntityData> getUnDocumented(WebSession webSession, String fwdNr) {
-		try {
-			if (fwdNr == null) {
-				return executeSqlQuery(webSession,
-						"SELECT * FROM CallRecordEntity WHERE IsDocumented=FALSE ORDER BY TimeStamp DESC");
-			} else {
-				return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsDocumented=FALSE AND FwdNr='"
-						+ fwdNr + "' ORDER BY TimeStamp DESC");
-			}
-		} catch (Exception e) {
-			log.error(e.getMessage(), e);
-		}
-		return new Vector<CallRecordEntityData>();
-	}
+//	public Collection<CallRecordEntityData> getUnDocumented(WebSession webSession, String fwdNr) {
+//		try {
+//			if (fwdNr == null) {
+//				return executeSqlQuery(webSession,
+//						"SELECT * FROM CallRecordEntity WHERE IsDocumented=FALSE ORDER BY TimeStamp DESC");
+//			} else {
+//				return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsDocumented=FALSE AND FwdNr='"
+//						+ fwdNr + "' ORDER BY TimeStamp DESC");
+//			}
+//		} catch (Exception e) {
+//			log.error(e.getMessage(), e);
+//		}
+//		return new Vector<CallRecordEntityData>();
+//	}
 
 	/**
 	 * @ejb:interface-method view-type="remote"
 	 */
-	public Collection<CallRecordEntityData> getInDocumented(WebSession webSession, String fwdNr) {
-		try {
-			if (fwdNr == null) {
-				return executeSqlQuery(webSession,
-						"SELECT * FROM CallRecordEntity WHERE IsIncomingCall=TRUE AND IsDocumented=TRUE ORDER BY TimeStamp DESC");
-			} else {
-				return executeSqlQuery(webSession,
-						"SELECT * FROM CallRecordEntity WHERE IsIncomingCall=TRUE AND IsDocumented=TRUE AND FwdNr='"
-								+ fwdNr + "' ORDER BY TimeStamp DESC");
-			}
-		} catch (Exception e) {
-			log.error(e.getMessage(), e);
-		}
-		return new Vector<CallRecordEntityData>();
-	}
+//	public Collection<CallRecordEntityData> getInDocumented(WebSession webSession, String fwdNr) {
+//		try {
+//			if (fwdNr == null) {
+//				return executeSqlQuery(webSession,
+//						"SELECT * FROM CallRecordEntity WHERE IsIncomingCall=TRUE AND IsDocumented=TRUE ORDER BY TimeStamp DESC");
+//			} else {
+//				return executeSqlQuery(webSession,
+//						"SELECT * FROM CallRecordEntity WHERE IsIncomingCall=TRUE AND IsDocumented=TRUE AND FwdNr='"
+//								+ fwdNr + "' ORDER BY TimeStamp DESC");
+//			}
+//		} catch (Exception e) {
+//			log.error(e.getMessage(), e);
+//		}
+//		return new Vector<CallRecordEntityData>();
+//	}
 
 	/**
 	 * @ejb:interface-method view-type="remote"
 	 */
-	public Collection<CallRecordEntityData> getOutDocumented(WebSession webSession, String fwdNr) {
-		try {
-			if (fwdNr == null) {
-				return executeSqlQuery(webSession,
-						"SELECT * FROM CallRecordEntity WHERE IsIncomingCall=FALSE AND IsDocumented=TRUE ORDER BY TimeStamp DESC");
-			} else {
-				return executeSqlQuery(webSession,
-						"SELECT * FROM CallRecordEntity WHERE IsIncomingCall=FALSE AND IsDocumented=TRUE AND FwdNr='"
-								+ fwdNr + "' ORDER BY TimeStamp DESC");
-			}
-		} catch (Exception e) {
-			log.error(e.getMessage(), e);
-		}
-		return new Vector<CallRecordEntityData>();
-	}
+//	public Collection<CallRecordEntityData> getOutDocumented(WebSession webSession, String fwdNr) {
+//		try {
+//			if (fwdNr == null) {
+//				return executeSqlQuery(webSession,
+//						"SELECT * FROM CallRecordEntity WHERE IsIncomingCall=FALSE AND IsDocumented=TRUE ORDER BY TimeStamp DESC");
+//			} else {
+//				return executeSqlQuery(webSession,
+//						"SELECT * FROM CallRecordEntity WHERE IsIncomingCall=FALSE AND IsDocumented=TRUE AND FwdNr='"
+//								+ fwdNr + "' ORDER BY TimeStamp DESC");
+//			}
+//		} catch (Exception e) {
+//			log.error(e.getMessage(), e);
+//		}
+//		return new Vector<CallRecordEntityData>();
+//	}
 
 	/**
 	 * @ejb:interface-method view-type="remote"
 	 */
-	public Collection<CallRecordEntityData> getDocumentedUnReleased(WebSession webSession, String fwdNr) {
-		try {
-			if (fwdNr == null) {
-				return executeSqlQuery(webSession,
-						"SELECT * FROM CallRecordEntity WHERE IsDocumented=TRUE ORDER BY TimeStamp DESC");
-			} else {
-				return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE FwdNr='" + fwdNr
-						+ "' AND IsDocumented=TRUE ORDER BY TimeStamp DESC");
-			}
-		} catch (Exception e) {
-			log.error(e.getMessage(), e);
-		}
-		return new Vector<CallRecordEntityData>();
-	}
+//	public Collection<CallRecordEntityData> getDocumentedUnReleased(WebSession webSession, String fwdNr) {
+//		try {
+//			if (fwdNr == null) {
+//				return executeSqlQuery(webSession,
+//						"SELECT * FROM CallRecordEntity WHERE IsDocumented=TRUE ORDER BY TimeStamp DESC");
+//			} else {
+//				return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE FwdNr='" + fwdNr
+//						+ "' AND IsDocumented=TRUE ORDER BY TimeStamp DESC");
+//			}
+//		} catch (Exception e) {
+//			log.error(e.getMessage(), e);
+//		}
+//		return new Vector<CallRecordEntityData>();
+//	}
 
 	/**
 	 * @ejb:interface-method view-type="remote"

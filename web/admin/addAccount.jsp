@@ -111,7 +111,7 @@ out.println("</select>");
 	}
 	catch (Exception e)
 	{
-	    log.error(e.getMessage(), e);
+	    e.printStackTrace();
 	}
 %>
 

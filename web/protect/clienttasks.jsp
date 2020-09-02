@@ -174,7 +174,7 @@ Last Checked In By: $Author: Yves Willems $
 			}
 			catch (Exception ex)
 			{
-				log.error(ex.getMessage(), ex);
+				ex.printStackTrace();
 			}
 					%>
 

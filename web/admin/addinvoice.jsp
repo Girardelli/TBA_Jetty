@@ -182,14 +182,14 @@
     }
     catch (Exception e)
     {
-        log.error(e.getMessage(), e);
+        e.printStackTrace();
     }
 %>
 <script type="text/javascript">
 
 function cancelAdd()
 {
-  document.taskform.<%=Constants.SRV_ACTION%>.value="<%=Constants.GOTO_CANVAS%>";
+  document.invoiceform.<%=Constants.SRV_ACTION%>.value="<%=Constants.GOTO_CANVAS%>";
 }
 </script>
 

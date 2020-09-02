@@ -612,7 +612,7 @@ for (int i = 0; i < kMaxMailMinutes; i += 5)
 }
 catch (Exception e)
 {
-log.error(e.getMessage(), e);
+e.printStackTrace();
 }
 
 %>

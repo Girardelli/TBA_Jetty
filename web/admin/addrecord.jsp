@@ -185,7 +185,7 @@ String vTime = new String(vHour + ":" + ((vMinutes < 10) ? "0" : "") + vMinutes)
 }
 catch (Exception e)
 {
-  log.error(e.getMessage(), e);
+  e.printStackTrace();
 }
 %>
 

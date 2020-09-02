@@ -106,7 +106,9 @@ public class AnyTest
     	  Writer buffer = new StringWriter();
     	  PrintWriter pw = new PrintWriter(buffer);
     	  ex.printStackTrace(pw);
+        //ex.printStackTrace();
     	  log.error(buffer.toString());
+    	  
      }
       
       

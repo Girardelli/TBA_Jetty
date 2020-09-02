@@ -154,7 +154,7 @@ else
 }
 catch (Exception ex)
 {
-  log.error(ex.getMessage(), ex);
+  ex.printStackTrace();
 }
 %>
 <script>

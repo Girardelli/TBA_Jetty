@@ -218,7 +218,7 @@ StringBuilder allEntryIds = new StringBuilder("[");
  				}
  				allEntryIds.append("]");
  			} catch (Exception e) {
- 				log.error(e.getMessage(), e);
+ 				e.printStackTrace();
  			}
  %></td>
       </tr>

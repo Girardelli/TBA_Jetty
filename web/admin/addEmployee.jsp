@@ -136,7 +136,7 @@ for (Iterator n = AccountRole.iterator(); n.hasNext();)
 }
 catch (Exception e)
 {
-log.error(e.getMessage(), e);
+e.printStackTrace();
 }
 %>
 <script type="text/javascript">

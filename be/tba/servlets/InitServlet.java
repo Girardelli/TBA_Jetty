@@ -18,8 +18,6 @@ import be.tba.util.timer.MailTimerTask;
 import be.tba.util.timer.TimerManager;
 import be.tba.util.timer.UrlCheckTimerTask;
 
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
 
 public class InitServlet extends GenericServlet
 {

@@ -133,7 +133,7 @@ String vDate = new String(vDay + "/" + vMonth  + ((vYear < 10) ? "/0" : "/") + v
 }
 catch (Exception e)
 {
-  log.error(e.getMessage(), e);
+  e.printStackTrace();
 }
 %>
 
