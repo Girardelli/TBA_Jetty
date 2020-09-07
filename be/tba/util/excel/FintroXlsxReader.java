@@ -3,17 +3,13 @@ package be.tba.util.excel;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Vector;
 import java.util.Collection;
-import java.util.Date;
 
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.openxml4j.opc.PackageAccess;
 import org.apache.poi.ss.usermodel.Row;
@@ -27,7 +23,6 @@ import be.tba.ejb.invoice.interfaces.InvoiceEntityData;
 import be.tba.ejb.invoice.session.InvoiceSqlAdapter;
 import be.tba.servlets.session.WebSession;
 import be.tba.util.constants.Constants;
-import be.tba.util.data.AbstractSqlAdapter;
 import be.tba.util.data.FintroPayment;
 import be.tba.util.session.AccountCache;
 
@@ -121,7 +116,7 @@ final public class FintroXlsxReader
             // Row row = sheet.getRow(i);
             FintroPayment entry = new FintroPayment();
             entry.id = row.getCell(ID).toString();
-            
+/*            
             try 
             {
                // try reading it as a date field. (!!! it is not clear here what the date format was on the computer importing the content)
@@ -131,14 +126,19 @@ final public class FintroXlsxReader
                SimpleDateFormat dt1 = new SimpleDateFormat("MM/dd/yyyy");
                entry.payDate = dt1.format(date); 
             }
-            catch (Exception ex1)
+            catch (Exception e)
             {
-               log.error("date cell cannot be read as text. unknown cell format");
+               log.error(" execution date date cell cannot be read as text. unknown cell format");
+               //log.error(e.getMessage(), e);
                entry.payDate = row.getCell(EXEC_DATE).toString();
             }
 //            log.info(entry.payDate);
+*/
+            
+            entry.payDate = row.getCell(EXEC_DATE).toString();
             entry.valutaDate = row.getCell(VALUTA_DATE).toString();
-            entry.amount = row.getCell(AMOUNT).getNumericCellValue();
+            //entry.amount = row.getCell(AMOUNT).getNumericCellValue();
+            entry.amount = Double.parseDouble(row.getCell(AMOUNT).toString());
             entry.accountNrCustomer = row.getCell(CUST_ACCOUNT).toString();
             entry.details = (row.getCell(DETAILS) == null ? "" : row.getCell(DETAILS).toString());
             // remove ' and " chars
@@ -154,14 +154,14 @@ final public class FintroXlsxReader
                }
                customerPaymentList.add(entry);
                ++cnt;
-               log.info("entry added: size=" + cnt + " ##" + entry.toString());
+               log.trace("entry added: size=" + cnt + " ##" + entry.toString());
             }
          }
          log.info("--------------------------------------------------------");
          processPaymentsMap();
          createProcessLogs();
       }
-      catch (IOException | InvalidFormatException | SQLException e)
+      catch (Exception e)
       {
          log.error(e.getMessage(), e);
       }
