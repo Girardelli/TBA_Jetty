@@ -59,7 +59,7 @@ public class CustomerDispatchServlet extends HttpServlet
          if (vSession == null)
             throw new AccessDeniedException("U bent niet aangemeld.");
 
-         AccountEntityData customer = AccountCache.getInstance().get(vSession.getSessionFwdNr());
+         AccountEntityData customer = AccountCache.getInstance().get(vSession.mLoginData.getAccountId());
          if (customer == null)
          {
             SessionManager.getInstance().remove(vSession.getSessionId());
@@ -70,6 +70,8 @@ public class CustomerDispatchServlet extends HttpServlet
          String uploadedFile = null;
          FileUploader fileUploader = null;
          SessionParmsInf params = null;
+         
+         log.info("\nuserid:" + vSession.getUserId() + ", websessionid:" + vSession.getSessionId() + ", URI:" + req.getRequestURI() + "?" + req.getQueryString());
          
          if (ServletFileUpload.isMultipartContent(req))
          {
@@ -87,7 +89,7 @@ public class CustomerDispatchServlet extends HttpServlet
             
          }
          vAction = params.getParameter(Constants.SRV_ACTION);
-         SessionManager.getInstance().getSession(vSession.getSessionId(), "AdminDispatchServlet(" + vAction + ")");
+         SessionManager.getInstance().getSession(vSession.getSessionId(), "CustomerDispatchServlet(" + vAction + ")");
 
          // String vSessionId = params.getParameter(Constants.SESSION_ID);
          if (vAction == null)
@@ -306,6 +308,7 @@ public class CustomerDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.ACTION_GOTO_WORKORDERS:
             {
+               log.info("account id voor goto workorder: " + vSession.getAccountId());
                rd = sc.getRequestDispatcher(Constants.CLIENT_WORKORDERS_JSP);
                break;
             }

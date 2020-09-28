@@ -37,9 +37,9 @@
 
         <!-- account list -->
         <td valign="top" width="865" bgcolor="FFFFFF"><br>
-        <p><span class="bodytitle">Factuurlijst bewerken<br>
+        <p><span class="bodytitle">Niet betaalde facturen</span><br>
         <br>
-
+        <p><span class="bodytext">Selecteer een bankuitrekselbestand om op te laden</span>
 
 
 	<form name="loadfileform" method="POST" action="/tba/AdminDispatch" enctype="multipart/form-data">
@@ -120,10 +120,10 @@
 			<br>
 			<table border="0" cellspacing="2" cellpadding="2">
 				<tr>
-					<td width="90" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Nummer</td>
-					<td width="300" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Klant</td>
-					<td width="50" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Excl BTW</td>
-					<td width="50" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Incl BTW</td>
+					<td width="110" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Nummer</td>
+					<td width="600" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Klant</td>
+					<td width="60" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Excl BTW</td>
+					<td width="60" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Incl BTW</td>
 				</tr>
 	
 				<%
@@ -144,11 +144,11 @@
 				%>
 				<tr bgcolor=<%=vCollor%> id=<%=vId%> class="bodytekst"
 					onclick="updateDeleteFlag('<%=vId%>','<%=vEntry.getId()%>','<%=vRowInd%>')"
-					ondblclick="changeUrl('/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_INVOICE%>&<%=Constants.ACCOUNT_FILTER_CUSTOMER%>=<%=vEntry.getAccountFwdNr()%>&<%=Constants.INVOICE_ID%>=<%=vEntry.getId()%>');">
-                    <td width="90" valign="top"><%=vEntry.getInvoiceNr()%></td>
-					<td width="300" valign="top"><%=vAccount.getFullName()%></td>
-					<td width="50" valign="top"><%=vCostFormatter.format(vKost)%></td>
-					<td width="50" valign="top"><%=vCostFormatter.format(vKost * 1.21)%></td>
+					ondblclick="changeUrl('/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_INVOICE%>&<%=Constants.ACCOUNT_FILTER_CUSTOMER%>=<%=vEntry.getAccountId()%>&<%=Constants.INVOICE_ID%>=<%=vEntry.getId()%>');">
+                    <td width="110" valign="top"><%=vEntry.getInvoiceNr()%></td>
+					<td width="600" valign="top"><%=vAccount.getFullName()%></td>
+					<td width="60" valign="top"><%=vCostFormatter.format(vKost)%></td>
+					<td width="60" valign="top"><%=vCostFormatter.format(vKost * 1.21)%></td>
 				</tr>
 				<%
 	            

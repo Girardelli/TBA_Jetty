@@ -52,7 +52,7 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
     {
         setId(otherData.getId());
         setFileName(otherData.getFileName());
-        setAccountID(otherData.getAccountID());
+        setAccountID(otherData.getAccountId());
         setAccountFwdNr(otherData.getAccountFwdNr());
         setTotalCost(otherData.getTotalCost());
         setMonth(otherData.getMonth());
@@ -104,7 +104,7 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
         this.fileName = fileName;
     }
 
-    public int getAccountID()
+    public int getAccountId()
     {
         return this.accountID;
     }
@@ -411,7 +411,7 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
         str.append("FileName='");
         str.append((this.fileName != null) ? this.fileName : "");
         str.append("',AccountID=");
-        str.append(getAccountID());
+        str.append(getAccountId());
         str.append(",AccountFwdNr='");
         str.append((this.accountFwdNr != null) ? this.accountFwdNr : "");
         str.append("',TotalCost=");
@@ -470,7 +470,7 @@ public class InvoiceEntityData extends be.tba.util.data.AbstractData implements 
         str.append("'0','");
         str.append((this.fileName != null) ? this.fileName : "");
         str.append("',");
-        str.append(getAccountID());
+        str.append(getAccountId());
         str.append(",'");
         str.append((this.accountFwdNr != null) ? this.accountFwdNr : "");
         str.append("',");

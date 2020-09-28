@@ -12,6 +12,7 @@ javax.naming.InitialContext,
 
 
 be.tba.ejb.account.interfaces.*,
+be.tba.ejb.account.session.*,
 be.tba.ejb.pbx.interfaces.*,
 be.tba.ejb.task.interfaces.*,
 be.tba.util.constants.*,
@@ -30,7 +31,7 @@ be.tba.util.invoice.*"%>
 		<span class="bodytekst"> <!-- action name must be a URI name as it is set in the <application>.xml servlet-mapping tag.-->
 		<form name="taskform" method="POST"
 			action="/tba/AdminDispatch" onsubmit="return validate_form(this)">
-		<table width="100%" border="0" cellspacing="1" cellpadding="1">
+		<table border="0" cellspacing="1" cellpadding="1">
 			<tr>
 				<td width="50"></td>
 				<td width="190" valign="top" class="bodysubsubtitle"><img
@@ -39,17 +40,16 @@ be.tba.util.invoice.*"%>
 try
 {
 vSession.setCallingJsp(Constants.ADD_TASK_JSP);
-String vCustomerFilter = (String) vSession.getCallFilter().getCustFilter();
-if (vCustomerFilter == null)
-  vCustomerFilter = "";
-
+int vCustomerFilter = vSession.getCallFilter().getCustFilter();
 out.println("<select name=\"" + Constants.TASK_FORWARD_NUMBER + "\">");
 Collection<AccountEntityData> list = AccountCache.getInstance().getCustomerList();
+LoginSqlAdapter loginSqlAdapter = new LoginSqlAdapter();
+Collection<LoginEntityData> logins = loginSqlAdapter.getEmployeeList(vSession);
 synchronized(list) 
 {
     for (AccountEntityData account : list)
     {
-        out.println("<option value=\"" + account.getFwdNumber() + (vCustomerFilter.equals(account.getFwdNumber()) ? "\" selected>" : "\">") + account.getFullName());
+        out.println("<option value=\"" + account.getId() + (vCustomerFilter == account.getId() ? "\" selected>" : "\">") + account.getFullName());
     }
 }
 out.println("</select>");
@@ -61,15 +61,11 @@ out.println("</select>");
 					src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Uitgevoerd door</td>
 				<td width="580" valign="top"><%                  
 out.println("<select name=\"" + Constants.TASK_DONE_BY_EMPL + "\">");
-Collection<AccountEntityData> emplList = AccountCache.getInstance().getEmployeeList();
 out.println("<option value=\"\" selected> Selecteer een werknemer");
-synchronized(emplList) 
-{
-    for (AccountEntityData account : emplList)
-    {
-        out.println("<option value=\"" + account.getFwdNumber() + "\">" + account.getFullName());
-    }
-}
+ for (LoginEntityData account : logins)
+ {
+     out.println("<option value=\"" + account.getUserId() + "\">" + account.getName());
+ }
 out.println("</select>");
 
 Calendar vCalendar = Calendar.getInstance();

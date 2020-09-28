@@ -47,10 +47,7 @@ public class TaskFacade
 
         TaskSqlAdapter vTaskSession = new TaskSqlAdapter();
         session.setCurrentTask(vTaskSession.getTask(session, vKey));
-        if (parms.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER) != null)
-        {
-            session.getCallFilter().setCustFilter(parms.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER));
-        }
+        session.getCallFilter().setCustFilter(parms.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER));
     }
 
     public static void saveTask(SessionParmsInf parms, WebSession session)
@@ -129,8 +126,7 @@ public class TaskFacade
             }
         }
         vTaskSession.updateRow(session, vTask);
-        if (parms.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER) != null)
-            session.getCallFilter().setCustFilter(parms.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER));
+        session.getCallFilter().setCustFilter(parms.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER));
     }
 
     public static void addTask(SessionParmsInf parms, WebSession session)

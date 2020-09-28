@@ -67,7 +67,7 @@ vSession.setCallingJsp(Constants.ADMIN_WORK_ORDER_JSP);
             <table border="0" cellspacing="2" cellpadding="2">
                 <tr>
                     <td width="30"></td> 
-                    <td width="120" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Ingegeven op</td>
+                    <td width="140" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Ingegeven op</td>
                     <td width="300" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Klant</td>
                     <td width="60" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Status</td>
                     <td width="70" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Opleverdatum</td>
@@ -103,7 +103,7 @@ vSession.setCallingJsp(Constants.ADMIN_WORK_ORDER_JSP);
                     }
                     %>
                     </td>
-                    <td bgcolor=<%=bgColor%> width="120" valign="top"><%=workOrder.startDate%></td>
+                    <td bgcolor=<%=bgColor%> width="140" valign="top"><%=workOrder.startDate%></td>
                     <td bgcolor=<%=bgColor%> width="300" valign="top"><%=vAccount.getFullName()%></td>
                     <td bgcolor=<%=bgColor%> width="60" valign="top"><%=WorkOrderData.getStateStr(workOrder.state)%></td>
                     <td bgcolor=<%=bgColor%> width="70" valign="top"><%=workOrder.dueDate%></td>

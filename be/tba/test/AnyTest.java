@@ -3,6 +3,9 @@ package be.tba.test;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.Calendar;
+import java.util.zip.CRC32;
+import java.util.zip.Checksum;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +18,13 @@ public class AnyTest
    final static Logger log = LoggerFactory.getLogger(AnyTest.class);
 
    public static void main(String[] args)
+   {
+//      testIntegerPrint();
+//      testExceptionLogging();
+      testLoginCodeParsing();
+   }
+   
+   private static void testIntegerPrint()
    {
       // TODO Auto-generated method stub
       
@@ -76,22 +86,26 @@ public class AnyTest
       long f = 6372544342288L;
       long g = 6372544342289L;
 
-//      log.info("76372544342283L=" + (int)(a%6));
-//      log.info("76372544342284L=" + (int)(b%6));
-//      log.info("76372544342285L=" + (int) c%6);
-//      log.info("76372544342286L=" + (int) d%6);
-//      log.info("76372544342287L=" + (int) e%6);
-//      log.info("76372544342288L=" + (int) f%6);
-//      log.info("76372544342289L=" + (int) g%6);
-//      
-//      log.info("76372544342283L=" + kExtCall[(int)(a%6)]);
-//      log.info("76372544342284L=" + kExtCall[(int)(b%6)]);
-//      log.info("76372544342285L=" + kExtCall[(int) c%6]);
-//      log.info("76372544342286L=" + kExtCall[(int) d%6]);
-//      log.info("76372544342287L=" + kExtCall[(int) e%6]);
-//      log.info("76372544342288L=" + kExtCall[(int) f%6]);
-//      log.info("76372544342289L=" + kExtCall[(int) g%6]);
+      log.info("76372544342283L=" + (int)(a%6));
+      log.info("76372544342284L=" + (int)(b%6));
+      log.info("76372544342285L=" + (int) c%6);
+      log.info("76372544342286L=" + (int) d%6);
+      log.info("76372544342287L=" + (int) e%6);
+      log.info("76372544342288L=" + (int) f%6);
+      log.info("76372544342289L=" + (int) g%6);
       
+      log.info("76372544342283L=" + kExtCall[(int)(a%6)]);
+      log.info("76372544342284L=" + kExtCall[(int)(b%6)]);
+      log.info("76372544342285L=" + kExtCall[(int) c%6]);
+      log.info("76372544342286L=" + kExtCall[(int) d%6]);
+      log.info("76372544342287L=" + kExtCall[(int) e%6]);
+      log.info("76372544342288L=" + kExtCall[(int) f%6]);
+      log.info("76372544342289L=" + kExtCall[(int) g%6]);
+   }
+   
+   
+   private static void testExceptionLogging()
+   {
       try
       {
     	  throw new Exception("dit is mijn exception");
@@ -115,8 +129,63 @@ public class AnyTest
    }
    
    
+   private static void testLoginCodeParsing()
+   {
+      int [] accountIdArr = {1, 234, 9045, 2340 }; 
+      
+      Calendar calendar = Calendar.getInstance();
+      
+      for(int account : accountIdArr)
+      {
+         //log.info(String.format("%04d%02d%03d", account, calendar.get(Calendar.YEAR) - 2000, calendar.get(Calendar.DAY_OF_YEAR)));
+         String loginNr = String.format("%04d%06d", account, calendar.getTimeInMillis()/1000/60/60);
+         
+         
+         long code = Long.parseUnsignedLong(loginNr);
+         long checkDigit = code % 7;
+         loginNr = loginNr + checkDigit;
+         log.info("entered:" + String.format("%04d/%06d/%d", account, calendar.getTimeInMillis()/1000/60/60, checkDigit));
+         code = Long.parseUnsignedLong(loginNr);
+        
+         
+         
+         long checkTest = Long.parseUnsignedLong(loginNr.substring(10));
+         long codeTest = Long.parseUnsignedLong(loginNr.substring(0, 10));
+         
+         if (codeTest % 7 != checkTest)
+         {
+            log.error("checksum failed: " + codeTest + ", " + checkTest);
+         }
+         
+         
+         String timeRetr = loginNr.substring(4, 10);
+         String accountRetr = loginNr.substring(0, 4);
+         log.info("retrieved:" + accountRetr + "/" + timeRetr);
+         
+         log.info("---------");
+      }
+      
+      
+      
+   }
+   
+   private static String getInvoiceNumber(int year, int month, int seqNr)
+   {
+      Calendar calendar = Calendar.getInstance();
+
+      
+      log.info(String.format("%02d%03d", calendar.get(Calendar.YEAR) - 2000, calendar.get(Calendar.DAY_OF_YEAR)));
+      return String.format("%02d%02d%04d", year - 2000, month + 1, seqNr);
+   }
    
    
+  
+   public static long getCRC32Checksum(byte[] bytes) 
+   {
+       Checksum crc32 = new CRC32();
+       crc32.update(bytes, 0, bytes.length);
+       return crc32.getValue();
+   }
    
 
 }

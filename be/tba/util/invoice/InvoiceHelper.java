@@ -163,7 +163,7 @@ public class InvoiceHelper
             {
                 throw (new Exception("InvoiceHelper called with invoiceData=null"));
             }
-            log.info("InvoiceHelper(InvoiceData; id=" + invoiceData.getId() + ", accountId=" + invoiceData.getAccountID() + ". accountFwdNr=" + invoiceData.getAccountFwdNr());
+            log.info("InvoiceHelper(InvoiceData; id=" + invoiceData.getId() + ", accountId=" + invoiceData.getAccountId() + ". accountFwdNr=" + invoiceData.getAccountFwdNr());
             mInvoiceEntityData = invoiceData;
             mAccountEntityData = AccountCache.getInstance().get(mInvoiceEntityData);
             if (mAccountEntityData == null)

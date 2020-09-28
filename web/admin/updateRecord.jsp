@@ -74,7 +74,8 @@ try {
          <tr valign="top">
             <td width="30" bgcolor="FFFFFF"></td>
             <td bgcolor="FFFFFF"><br> <br> <span class="bodysubtitle"> Voeg extra informatie toe aan oproep voor <%=((mCustomerData == null) ? "" : mCustomerData.getFullName())%>.
-            </span> <br> <span class="bodytekst">
+            </span> <br><br>
+            <span class="bodytekst">
                   <table border="0" cellspacing="1" cellpadding="1">
                      <%
                         if (mCustomerData != null && mCustomerData.getHasSubCustomers()) {

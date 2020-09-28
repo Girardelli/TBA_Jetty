@@ -35,27 +35,17 @@ try {
 	// this is the websocket page. Make sure this user is known to the WS broadcast
 	vSession.setWsActive(true);
 
-	String vCustomerFilter = vSession.getCallFilter().getCustFilter();
-	if (vCustomerFilter == null) {
-		vSession.getCallFilter().setCustFilter(Constants.ACCOUNT_FILTER_ALL);
-		vCustomerFilter = Constants.ACCOUNT_FILTER_ALL;
-	}
-
+	int vCustomerFilter = vSession.getCallFilter().getCustFilter();
 	CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
 	//Collection<CallRecordEntityData> vRecords = vRecords = vQuerySession.getUnDocumented(vSession, null);
 	Collection<CallRecordEntityData> vRecords = null;
-	if (vCustomerFilter.equals(Constants.ACCOUNT_FILTER_ALL)) {
+	if (vCustomerFilter == Constants.ACCOUNT_NOFILTER) {
 		vRecords = vQuerySession.getxDaysBack(vSession, vSession.getDaysBack(), vCustomerFilter);
 	} else {
-		vRecords = vQuerySession.getDocumentedForMonth(vSession, vCustomerFilter, vSession.getMonthsBack(),
-				vSession.getYear());
+		vRecords = vQuerySession.getDocumentedForMonth(vSession, vCustomerFilter, vSession.getMonthsBack(),	vSession.getYear());
 	}
 %>
 <body>
-   <audio id="ringRing">
-      <source src="audio/Ringing_Phone.wav" type="audio/wav">
-      <source src="audio/Ringing_Phone.mp3" type="audio/mp3">
-   </audio>
    <form name="calllistform" method="POST" action="/tba/AdminDispatch">
       <input type=hidden name=<%=Constants.RECORD_URGENT%> value=""> 
       <input type=hidden name=<%=Constants.RECORD_ID%> value=""> 
@@ -102,20 +92,18 @@ try {
                                        <td width="50" valign="top" class="bodysubtitle">&nbsp;Klant</td>
                                        <td width="10" valign="top">:</td>
                                        <td valign="top"><select name="<%=Constants.ACCOUNT_FILTER_CUSTOMER%>" onchange="submit()">
+                                             <option value="<%=Constants.ACCOUNT_NOFILTER%>" <%=(vCustomerFilter == Constants.ACCOUNT_NOFILTER ? " selected" : "")%>>Alle klanten</option>
                                              <%
                                              	Collection<AccountEntityData> list = AccountCache.getInstance().getCallCustomerList();
                                              		synchronized (list) {
                                              			for (Iterator<AccountEntityData> vIter = list.iterator(); vIter.hasNext();) {
                                              				AccountEntityData vData = vIter.next();
                                              %>
-                                             <option value="<%=vData.getFwdNumber()%>" <%=(vCustomerFilter.equals(vData.getFwdNumber()) ? " selected" : "")%>><%=vData.getFullName()%></option>
+                                             <option value="<%=vData.getId()%>" <%=(vCustomerFilter == vData.getId() ? " selected" : "")%>><%=vData.getFullName()%></option>
                                              <%
                                              	}
                                              		}
                                              %>
-                                             <option value="<%=Constants.NUMBER_BLOCK[0][0]%>" <%=(vCustomerFilter.equals(Constants.NUMBER_BLOCK[0][0]) ? " selected" : "")%>><%=Constants.NUMBER_BLOCK[0][3]%></option>
-                                             <option value="<%=Constants.NUMBER_BLOCK[1][0]%>" <%=(vCustomerFilter.equals(Constants.NUMBER_BLOCK[1][0]) ? " selected" : "")%>><%=Constants.NUMBER_BLOCK[1][3]%></option>
-                                             <option value="<%=Constants.ACCOUNT_FILTER_ALL%>" <%=(vCustomerFilter.equals(Constants.ACCOUNT_FILTER_ALL) ? " selected" : "")%>>Alle klanten</option>
                                        </select></td>
                                     </tr>
                                  </table>
@@ -127,15 +115,15 @@ try {
                               <input class="tbabutton" type=submit name=action value="Verwijderen" onclick="deleteCalls()">
                               <input class="tbabutton" type=submit name=action value="Toevoegen" onclick="addRecord()"> 
                               <input class="tbabutton" type=submit name=action value="verzend mail" onclick="testMail()"> <%
- 	if (vSession.getUserId().equals("esosrv") && false) { // hidden
- %> <input class="tbabutton" type=submit name=action value="add intertel call" onclick="fixAccountIds()"> <%
+ 	if (vSession.getUserId().equals("esosrv")) { // hidden
+ %> <input class="tbabutton" type=submit name=action value="fix iets" onclick="fixAccountIds()"> <%
  	}
  %></td>
                            </tr>
                            <tr>
                               <td>
                                  <%
-                                 	if (vCustomerFilter == null || vCustomerFilter.equals(Constants.ACCOUNT_FILTER_ALL)) {
+                                 	if (vCustomerFilter == Constants.ACCOUNT_NOFILTER) {
                                  %> <input class="tbabutton" type=submit name=action value="10 dagen vroeger" onclick="showPrevious10()"> <input class="tbabutton" type=submit name=action value="1 dag vroeger" onclick="showPrevious()"> <%
  	if (vSession.getDaysBack() > 0) {
  %> <input class="tbabutton" type=submit name=action value="1 dag later" onclick="showNext()"> <%
@@ -309,8 +297,9 @@ try {
 <!--          <button id="onOffButton" onclick="alterAudioOnOff()" type="button"><img src="/tba/images/soundOff.jpg" alt="zet geluid aan / af" width='30' height='30' border='0'></button> --> 
       </p>
       <%
-      	if (vRecords == null || vRecords.size() == 0) {
-      			if (vCustomerFilter.equals(Constants.ACCOUNT_FILTER_ALL)) {
+      	if (vRecords == null || vRecords.size() == 0) 
+         {
+      			if (vCustomerFilter == Constants.ACCOUNT_NOFILTER) {
       %>
       <br> <span class="bodysubtitle">Er zijn geen oproepgegevens beschikbaar (<%=vSession.getDaysBack()%> dagen terug).
       </span>
@@ -322,7 +311,7 @@ try {
       <%
       	}
       		} else {
-      			if (vCustomerFilter.equals(Constants.ACCOUNT_FILTER_ALL)) {
+      			if (vCustomerFilter == Constants.ACCOUNT_NOFILTER) {
       %>
       <span class="bodysubtitle">Oproepen van <%=vSession.getDaysBack()%> dagen terug.
       </span>
@@ -463,7 +452,7 @@ try {
          e.printStackTrace();
    	}
    %>
-
+<br><br>
    <script>
 
 var linesToDelete = new Array();
@@ -472,7 +461,7 @@ var linesToDelete = new Array();
 if (System.getenv("TBA_MAIL_ON") != null)
 {
 %>
-var socket = new WebSocket("wss://thebusinessassistant.be/tba/ws");
+var socket = new WebSocket(Constants.TBA_URL_WS);
 <%
 }
 else
@@ -494,9 +483,6 @@ for (Iterator<String> i = calls.iterator(); i.hasNext();)
     <%
 }
 %>
-var isRingOn = getRingOn();
-//console.log(' at start isRingOn=' + isRingOn);
-var ring = document.getElementById("ringRing"); 
 
 
 window.onload = function() 
@@ -506,70 +492,8 @@ window.onload = function()
     setInterval(updatePendingCalls, 5000);
 };
 
-function playRing() 
-{ 
-  if (isRingOn == 1)
-  {
-      // wait 8,5 seconds to play to let the welcoe promt play first
-      setTimeout(function () {
-          ring.play();
-      }, 8500);
-  }
-} 
-
-function setOnOffText()
-{
-   if (isRingOn == 1)
-   {
-        document.getElementById('onOffButton').innerHTML = "<img src='/tba/images/soundOn.jpg' alt='zet geluid aan / af' width='30' height='30' border='0'>";
-   }
-   else
-   {
-	    document.getElementById('onOffButton').innerHTML = "<img src='/tba/images/soundOff.jpg' alt='zet geluid aan / af' width='30' height='30' border='0'>";
-   }
-   //console.log('isRingOn=' + isRingOn);
-}
 
 
-function alterAudioOnOff() 
-{ 
-    isRingOn ^= 1;
-    setOnOffText();
-    setCookie('ringOn', isRingOn, 7); 
-   //console.log('alter: isRingOn=' + isRingOn);
-} 
-
-
-function getRingOn()
-{
-    var isOn = getCookie('ringOn');
-    if (isOn == "1")
-    {
-        return 1;
-    }
-    else if (isOn != "0")
-   	{
-    	setCookie('ringOn', 0, 7); 
-   	}
-    return 0;
-}
-
-/*
-document.forms.publish.onsubmit = function() 
-{
-  var outgoingMessage = this.message.value;
-  
-  if (socket.isopen())
-  {
-	  //socket.send(outgoingMessage);
-  }
-  else
-  {
-	  alert("Socket is closed. Refresh your page first.");
-  }
-  return false;
-}
-*/
 socket.onopen = function() 
 { 
     socket.send('<%=Constants.WS_LOGIN + vSession.getSessionId()%>');
@@ -588,7 +512,6 @@ socket.onmessage = function(msg)
     {
         //console.log("add pending call");
         pendingCalls.push(json);
-    	playRing();
     }
     else if (json.operation == <%=WebSocketData.CALL_ANSWERED%>)
    	{
@@ -624,7 +547,7 @@ function updatePendingCalls()
     
     var now = Math.floor(Date.now() / 1000);
     
-	var content = "<table class='tdborder' width=100%>";
+	var content = "<table class='tdborder' width=500>";
     if (pendingCalls.length == 0)
     {
         content += "<tr><td>Er zijn geen wachtende oproepen.</td></tr>";
@@ -634,7 +557,7 @@ function updatePendingCalls()
         for (i = 0; i < pendingCalls.length; i++) 
         {
             content += "<tr>";
-            content += "<td><img src='/tba/images/deleteCross.gif' width='16' height='16' border='0' onclick=\"changeUrl('/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.REMOVE_PENDING_CALL%>&<%=Constants.PENDING_CALL_ID%>=" + pendingCalls[i].dbCallId + "');\"></td><td><table width=100% class='trBlock' onclick=\"changeUrl('/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACTION_GOTO_RECORD_UPDATE%>&<%=Constants.RECORD_ID%>=" + pendingCalls[i].dbCallId + "');\"><tr><td>" + 
+            content += "<td><img src='/tba/images/deleteCross.gif' width='16' height='16' border='0' onclick=\"changeUrl('/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.REMOVE_PENDING_CALL%>&<%=Constants.PENDING_CALL_ID%>=" + pendingCalls[i].dbCallId + "');\"></td><td><table class='trBlock' onclick=\"changeUrl('/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.ACTION_GOTO_RECORD_UPDATE%>&<%=Constants.RECORD_ID%>=" + pendingCalls[i].dbCallId + "');\"><tr><td>" + 
               timeStamp2Txt(pendingCalls[i].timeStamp, now) + "</td><td width=20px></td><td>" + 
               pendingCalls[i].customer + "</td></tr></table></td></tr>";
         }
@@ -855,6 +778,12 @@ window.onclick = function(event)
       modal.style.display = "none";
   }
 }
+
+function fixAccountIds()
+{
+    document.calllistform.<%=Constants.SRV_ACTION%>.value="<%=Constants.FIX_ACCOUNT_IDS%>";
+}
+
 </script>
 <%out.println(modalScriptStrBuffer.toString());%>
 </body>

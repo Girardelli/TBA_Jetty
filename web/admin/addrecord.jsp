@@ -25,7 +25,7 @@ be.tba.util.invoice.*"%>
 		<span class="bodytekst"> <!-- action name must be a URI name as it is set in the <application>.xml servlet-mapping tag.-->
 		<form name="calllistform" method="POST"
 			action="/tba/AdminDispatch">
-		<table width="100%" border="0" cellspacing="1" cellpadding="1">
+		<table border="0" cellspacing="1" cellpadding="1">
 			<tr>
 				<td width="50"></td>
 				<td width="120" valign="top" class="bodysubsubtitle"><img

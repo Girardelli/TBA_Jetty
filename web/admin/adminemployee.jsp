@@ -14,6 +14,7 @@ java.util.Iterator,
 javax.naming.InitialContext,
 
 be.tba.ejb.account.interfaces.*,
+be.tba.ejb.account.session.*,
 be.tba.util.constants.*,
 be.tba.util.session.*"%>
 
@@ -26,12 +27,14 @@ be.tba.util.session.*"%>
 		<!-- account list -->
 		<td valign="top" width="750" bgcolor="FFFFFF"><br>
 <%
+vSession.setCallingJsp(Constants.ADMIN_EMPLOYEE_JSP);
+int vRowInd = 0;
 StringBuilder allEntryIds = new StringBuilder("[");
 try
 {
 	
 %>
-		<p><span class="bodytitle"> Werknemers en Kaders</span></p>
+		<p><span class="bodytitle"> Werknemers beheren</span></p>
 		<form name="adminaccform" method="POST"
 			action="/tba/AdminDispatch"><input type=hidden
 			name=<%=Constants.ACCOUNT_TO_DELETE%> value=""> <input type=hidden
@@ -46,51 +49,45 @@ try
 			</tr>
 		</table>
 		<br>
-		<table width="100%" border="0" cellspacing="2" cellpadding="2">
+		<table border="0" cellspacing="2" cellpadding="2">
 			<tr>
 				<td width="60" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;UserId</td>
-				<td width="80" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;nummer</td>
-				<td width="190" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Naam</td>
-				<td width="200" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Laatste	login</td>
+				<td width="300" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Naam</td>
+                <td width="150" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Type</td>
+				<td width="150" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Laatste login</td>
 			</tr>
 			<%
-  vSession.setCallingJsp(Constants.ADMIN_EMPLOYEE_JSP);
-  int vRowInd = 0;
 
-  Collection list = AccountCache.getInstance().getEmployeeList();
-  synchronized(list) 
-  {
-      for (Iterator vIter = list.iterator(); vIter.hasNext();)
-      {
-          AccountEntityData vEntry = (AccountEntityData) vIter.next();
-          String vUserId = vEntry.getUserId();
-          vUserId = (vUserId == null) ? "" : vUserId;
-          String vNumber = vEntry.getFwdNumber();
-          vNumber = (vNumber == null) ? "" : vNumber;
-          String vFullName = vEntry.getFullName();
-          vFullName = (vFullName == null) ? "" : vFullName;
-          String vLastLogin = vEntry.getLastLogin();
-          vLastLogin = (vLastLogin == null) ? "" : vLastLogin;
-          String vId = "id" + vEntry.getId();
-    
+  LoginSqlAdapter loginSqlAdapter = new LoginSqlAdapter();
+  Collection<LoginEntityData> list = loginSqlAdapter.getEmployeeList(vSession);
+   for (LoginEntityData vEntry : list)
+   {
+       String vUserId = vEntry.getUserId();
+       vUserId = (vUserId == null) ? "" : vUserId;
+       String vFullName = vEntry.getName();
+       vFullName = (vFullName == null) ? "" : vFullName;
+       String vLastLogin = vEntry.getLastLogin();
+       vLastLogin = (vLastLogin == null) ? "" : vLastLogin;
+       String vId = "id" + vEntry.getId();
+       String type = (vEntry.getRole().equals(AccountRole.ADMIN.getShort()) ? "Administrator" : "Werknemer");
+ 
 %>
-			<tr bgcolor="FFCC66" id=<%=vId%> class="bodytekst"
-				onmouseover="hooverOnRow('<%=vId%>','<%=vRowInd%>','#FFFF99')"
-				onmouseout="hooverOffRow('<%=vId%>','<%=vRowInd%>','#FFCC66')"
-				onclick="updateDeleteFlag('<%=vId%>','<%=vEntry.getId()%>','<%=vRowInd%>')">
-				<td width="60" valign="top" class="bodytekst">&nbsp;<%=vUserId%></td>
-				<td width="80" valign="top" class="bodytekst">&nbsp;<%=vNumber%></td>
-				<td width="190" valign="top" class="bodytekst">&nbsp;<%=vFullName%></td>
-				<td width="200" valign="top" class="bodytekst">&nbsp;<%=vLastLogin%></td>
-			</tr>
-			<%
-	    vRowInd++;
-		allEntryIds.append("\"");
-		allEntryIds.append(vId);
-		allEntryIds.append("\"");
-		allEntryIds.append(",");
-      }
-  }
+		<tr bgcolor="FFCC66" id=<%=vId%> class="bodytekst"
+			onmouseover="hooverOnRow('<%=vId%>','<%=vRowInd%>','#FFFF99')"
+			onmouseout="hooverOffRow('<%=vId%>','<%=vRowInd%>','#FFCC66')"
+			onclick="updateDeleteFlag('<%=vId%>','<%=vEntry.getId()%>','<%=vRowInd%>')">
+			<td width="60" valign="top" class="bodytekst">&nbsp;<%=vUserId%></td>
+			<td width="300" valign="top" class="bodytekst">&nbsp;<%=vFullName%></td>
+            <td width="150" valign="top" class="bodytekst">&nbsp;<%=type%></td>
+			<td width="150" valign="top" class="bodytekst">&nbsp;<%=vLastLogin%></td>
+		</tr>
+		<%
+    vRowInd++;
+	allEntryIds.append("\"");
+	allEntryIds.append(vId);
+	allEntryIds.append("\"");
+	allEntryIds.append(",");
+   }
   if (vRowInd > 0)
   {
       allEntryIds.deleteCharAt(allEntryIds.length() - 1);
@@ -137,7 +134,7 @@ function deleteAccount()
     if (linesToDelete[i] != null)
       shorterArr[j++] = linesToDelete[i];
   document.adminaccform.<%=Constants.ACCOUNT_TO_DELETE%>.value=shorterArr.join();
-  document.adminaccform.<%=Constants.SRV_ACTION%>.value="<%=Constants.GOTO_ACCOUNT_DELETE%>";
+  document.adminaccform.<%=Constants.SRV_ACTION%>.value="<%=Constants.GOTO_EMPLOYEE_DELETE%>";
 }
 
 function updateDeleteFlag(rowid, id, rowInd)

@@ -21,6 +21,7 @@ import be.tba.util.data.AbstractSqlAdapter;
 import be.tba.util.data.CallFilter;
 import be.tba.util.data.RegisterData;
 import be.tba.util.exceptions.remote.AccountNotFoundException;
+import be.tba.util.session.AccountCache;
 
 /**
  * Session Bean Template
@@ -63,25 +64,25 @@ public class AccountSqlAdapter extends AbstractSqlAdapter<AccountEntityData>
         super("AccountEntity");
     }
 
-    public AccountEntityData logIn(WebSession webSession, String userid, String password) throws AccountNotFoundException
-    {
-        Collection<AccountEntityData> collection = executeSqlQuery(webSession, "SELECT * FROM AccountEntity WHERE Userid='" + userid + "' AND Password='" + password + "'");
-        if (collection.size() == 1)
-        {
-            AccountEntityData account = collection.iterator().next();
-            Calendar vCalendar = Calendar.getInstance();
-            int vMinutes = vCalendar.get(Calendar.MINUTE);
-            String vLoginTime = new String(vCalendar.get(Calendar.DAY_OF_MONTH) + "/" + (vCalendar.get(Calendar.MONTH) + 1) + "/" + vCalendar.get(Calendar.YEAR) + " " + vCalendar.get(Calendar.HOUR_OF_DAY) + ":" + (vMinutes < 10 ? "0" : "") + vMinutes);
-            account.setPreviousLoginTS(account.getLastLoginTS());
-            account.setLastLoginTS(vCalendar.getTimeInMillis());
-            account.setLastLogin(vLoginTime);
-            executeSqlQuery(webSession, "UPDATE AccountEntity SET LastLogin='" + vLoginTime + "' WHERE Id='" + account.getId() + "'");
-            log.info("Login: userid=" + userid + " (" + account.getFullName() + ")");
-            return account;
-        }
-        log.info("Login FAILED: userid=" + userid + ", Password=" + password);
-        throw new AccountNotFoundException("De user id/paswoord combinatie is foutief.");
-    }
+//    public AccountEntityData logIn(WebSession webSession, String userid, String password) throws AccountNotFoundException
+//    {
+//        Collection<AccountEntityData> collection = executeSqlQuery(webSession, "SELECT * FROM AccountEntity WHERE Userid='" + userid + "' AND Password='" + password + "'");
+//        if (collection.size() == 1)
+//        {
+//            AccountEntityData account = collection.iterator().next();
+//            Calendar vCalendar = Calendar.getInstance();
+//            int vMinutes = vCalendar.get(Calendar.MINUTE);
+//            String vLoginTime = new String(vCalendar.get(Calendar.DAY_OF_MONTH) + "/" + (vCalendar.get(Calendar.MONTH) + 1) + "/" + vCalendar.get(Calendar.YEAR) + " " + vCalendar.get(Calendar.HOUR_OF_DAY) + ":" + (vMinutes < 10 ? "0" : "") + vMinutes);
+//            account.setPreviousLoginTS(account.getLastLoginTS());
+//            account.setLastLoginTS(vCalendar.getTimeInMillis());
+//            account.setLastLogin(vLoginTime);
+//            executeSqlQuery(webSession, "UPDATE AccountEntity SET LastLogin='" + vLoginTime + "' WHERE Id='" + account.getId() + "'");
+//            log.info("Login: userid=" + userid + " (" + account.getFullName() + ")");
+//            return account;
+//        }
+//        log.info("Login FAILED: userid=" + userid + ", Password=" + password);
+//        throw new AccountNotFoundException("De user id/paswoord combinatie is foutief.");
+//    }
 
     public Collection<AccountEntityData> getAllNotArchived(WebSession session)
     {
@@ -100,60 +101,60 @@ public class AccountSqlAdapter extends AbstractSqlAdapter<AccountEntityData>
         throw new AccountNotFoundException("De user id/paswoord combinatie is foutief.");
     }
 */
-    public void deregister(WebSession webSession, int pkey) throws AccountNotFoundException
-    {
-        AccountEntityData account = getRow(webSession, pkey);
-        if (account != null)
-        {
-            account.setUserId("");
-            account.setPassword("");
-            account.setIsRegistered(false);
-            updateRow(webSession, account);
-            return;
-        }
-        throw new AccountNotFoundException("Geen gebruiker gevonden voor key=" + pkey);
-    }
-
-    public AccountEntityData getUnregistered(WebSession webSession, String regCode) throws AccountNotFoundException
-    {
-        Collection<AccountEntityData> collection = executeSqlQuery(webSession, "SELECT * FROM AccountEntity WHERE FwdNumber='" + regCode + "'");
-        if (collection.size() == 1)
-        {
-            return collection.iterator().next();
-        }
-        log.info("FAILED getUnregistered(" + regCode + ")");
-        throw new AccountNotFoundException("De registratie code is niet correct.");
-    }
-
-    public String register(WebSession webSession, RegisterData data)
-    {
-        try
-        {
-            AccountEntityData account = getUnregistered(webSession, data.getCode());
-            if (account != null)
-            {
-                Collection<AccountEntityData> collection = executeSqlQuery(webSession, "SELECT * FROM AccountEntity WHERE Userid='" + data.getUserId() + "'");
-                if (collection != null && collection.size() > 0)
-                {
-                    return "Uw login naam wordt al door iemand anders gebruikt. Kies een andere en registreer opnieuw.";
-                }
-                account.setUserId(data.getUserId());
-                account.setPassword(data.getPassword());
-                // if (data.getFullName() != null && data.getFullName().length() > 0)
-                // account.setFullName(data.getFullName());
-                if (data.getEmail() != null && data.getEmail().length() > 0)
-                    account.setEmail(data.getEmail());
-                account.setIsRegistered(true);
-                updateRow(webSession, account);
-                return null;
-            }
-        }
-        catch (Exception ex)
-        {
-            log.error(ex.getMessage(), ex);
-        }
-        return "Interne fout tijdens registratie";
-    }
+//    public void deregister(WebSession webSession, int pkey) throws AccountNotFoundException
+//    {
+//        AccountEntityData account = getRow(webSession, pkey);
+//        if (account != null)
+//        {
+//            account.setUserId("");
+//            account.setPassword("");
+//            account.setIsRegistered(false);
+//            updateRow(webSession, account);
+//            return;
+//        }
+//        throw new AccountNotFoundException("Geen gebruiker gevonden voor key=" + pkey);
+//    }
+//
+//    public AccountEntityData getUnregistered(WebSession webSession, String regCode) throws AccountNotFoundException
+//    {
+//        Collection<AccountEntityData> collection = executeSqlQuery(webSession, "SELECT * FROM AccountEntity WHERE FwdNumber='" + regCode + "'");
+//        if (collection.size() == 1)
+//        {
+//            return collection.iterator().next();
+//        }
+//        log.info("FAILED getUnregistered(" + regCode + ")");
+//        throw new AccountNotFoundException("De registratie code is niet correct.");
+//    }
+//
+//    public String register(WebSession webSession, RegisterData data)
+//    {
+//        try
+//        {
+//            AccountEntityData account = getUnregistered(webSession, data.getCode());
+//            if (account != null)
+//            {
+//                Collection<AccountEntityData> collection = executeSqlQuery(webSession, "SELECT * FROM AccountEntity WHERE Userid='" + data.getUserId() + "'");
+//                if (collection != null && collection.size() > 0)
+//                {
+//                    return "Uw login naam wordt al door iemand anders gebruikt. Kies een andere en registreer opnieuw.";
+//                }
+//                account.setUserId(data.getUserId());
+//                account.setPassword(data.getPassword());
+//                // if (data.getFullName() != null && data.getFullName().length() > 0)
+//                // account.setFullName(data.getFullName());
+//                if (data.getEmail() != null && data.getEmail().length() > 0)
+//                    account.setEmail(data.getEmail());
+//                account.setIsRegistered(true);
+//                updateRow(webSession, account);
+//                return null;
+//            }
+//        }
+//        catch (Exception ex)
+//        {
+//            log.error(ex.getMessage(), ex);
+//        }
+//        return "Interne fout tijdens registratie";
+//    }
 
     public void addAccount(WebSession webSession, AccountEntityData data)
     {
@@ -169,8 +170,15 @@ public class AccountSqlAdapter extends AbstractSqlAdapter<AccountEntityData>
 
     public void archiveAccount(WebSession webSession, int key)
     {
-        executeSqlQuery(webSession, "UPDATE AccountEntity SET IsArchived=true, FwdNumber='' WHERE Id=" + key);
-    }
+       if (AccountCache.getInstance().get(key).getNoInvoice()) 
+       {
+          deleteRow(webSession, key);
+       }
+       else
+       {
+          executeSqlQuery(webSession, "UPDATE AccountEntity SET IsArchived=true, FwdNumber='' WHERE Id=" + key);
+       }
+     }
 
     public void activateAccount(WebSession webSession, int key)
     {
@@ -184,7 +192,7 @@ public class AccountSqlAdapter extends AbstractSqlAdapter<AccountEntityData>
 
     public void setFilter(WebSession webSession, CallFilter filter, int pkey)
     {
-        executeSqlQuery(webSession, "UPDATE AccountEntity SET CustFilter='" + ((filter.getCustFilter() != null) ? filter.getCustFilter() : "") + "',StateFilter='" + ((filter.getStateFilter() != null) ? filter.getStateFilter() : "") + "',DirFilter='" + ((filter.getDirFilter() != null) ? filter.getDirFilter() : "' WHERE Id=" + pkey));
+        executeSqlQuery(webSession, "UPDATE AccountEntity SET CustFilter=" + filter.getCustFilter() + ",StateFilter='" + ((filter.getStateFilter() != null) ? filter.getStateFilter() : "") + "',DirFilter='" + ((filter.getDirFilter() != null) ? filter.getDirFilter() : "' WHERE Id=" + pkey));
     }
 
     public Collection<String> getFreeNumbers(WebSession webSession)

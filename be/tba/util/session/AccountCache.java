@@ -104,41 +104,42 @@ final public class AccountCache
 
    public void update()
    {
-      WebSession session = null;
-      try
-      {
-         session = new WebSession();
-         update(session);
-      } catch (SQLException e)
-      {
-         // TODO Auto-generated catch block
-         log.error(e.getMessage(), e);
-      } catch (Exception e)
-      {
-         // TODO Auto-generated catch block
-         log.error(e.getMessage(), e);
-      } finally
-      {
-         if (session != null && session.getConnection() != null)
-         {
-            try
-            {
-               session.getConnection().close();
-            } catch (SQLException ex)
-            {
-               // TODO Auto-generated catch block
-               log.info("FAILED update AccountCash");
-               log.info("SQLException: " + ex.getMessage());
-               log.info("SQLState: " + ex.getSQLState());
-               log.info("VendorError: " + ex.getErrorCode());
-               log.error(ex.getMessage(), ex);
-            }
-         }
-
-      }
+      WebSession session = new WebSession();
+      update(session);
+//      try
+//      {
+//         session = new WebSession();
+//         update(session);
+//      } catch (SQLException e)
+//      {
+//         // TODO Auto-generated catch block
+//         log.error(e.getMessage(), e);
+//      } catch (Exception e)
+//      {
+//         // TODO Auto-generated catch block
+//         log.error(e.getMessage(), e);
+//      } finally
+//      {
+//         if (session != null && session.getConnection() != null)
+//         {
+//            try
+//            {
+//               session.getConnection().close();
+//            } catch (SQLException ex)
+//            {
+//               // TODO Auto-generated catch block
+//               log.info("FAILED update AccountCash");
+//               log.info("SQLException: " + ex.getMessage());
+//               log.info("SQLState: " + ex.getSQLState());
+//               log.info("VendorError: " + ex.getErrorCode());
+//               log.error(ex.getMessage(), ex);
+//            }
+//         }
+//
+//      }
    }
 
-   // this function must be removed in herfst van 2020 wanneer alle records een
+   // deze functie moet worden verwijderd in herfst 2020 wanneer alle records een
    // accountId zullen hebben.
    // dan moet overal de get(int) function worden gebruikt.
    public AccountEntityData get(CallRecordEntityData record)
@@ -154,9 +155,9 @@ final public class AccountCache
 
    public AccountEntityData get(InvoiceEntityData invoice)
    {
-      if (invoice.getAccountID() > 0) // yves: to be changed in .getId() only in de herfst van 2020
+      if (invoice.getAccountId() > 0) // yves: to be changed in .getId() only in de herfst van 2020
       {
-         return get(invoice.getAccountID());
+         return get(invoice.getAccountId());
       } else
       {
          return get(invoice.getAccountFwdNr());
@@ -176,23 +177,26 @@ final public class AccountCache
 
    public AccountEntityData get(int id)
    {
-      return mIdKeyList.get(Integer.valueOf(id));
+      AccountEntityData data = mIdKeyList.get(Integer.valueOf(id));
+      if (data == null) log.warn("no account found for accountId=" + id);
+      
+      return data;
+      //return mIdKeyList.get(Integer.valueOf(id));
    }
 
    public AccountEntityData get(String fwdNumber)
    {
-      return (AccountEntityData) mFwdKeyList.get(fwdNumber);
+      return mFwdKeyList.get(fwdNumber);
    }
 
-   public void set(AccountEntityData data)
+//   public void set(AccountEntityData data)
+//   {
+//      
+//   }
+//   
+   public Collection<AccountEntityData> getRawUnachivedList()
    {
-      
-   }
-   
-   
-   public Collection<AccountEntityData> getEmployeeList()
-   {
-      return mEmployeeLists.values();
+      return mRawUnarchivedCollection;
    }
 
    public Collection<AccountEntityData> getSubCustomersList(int superCustomerId)
@@ -239,6 +243,11 @@ final public class AccountCache
       return mIdKeyList.keySet();
    }
 
+   public Collection<AccountEntityData> getAll()
+   {
+      return mIdKeyList.values();
+   }
+
    private void converToHashMap(Collection<AccountEntityData> rawList)
    {
       log.info("AccountCache::converToHashMap()");
@@ -251,13 +260,9 @@ final public class AccountCache
       mNameSortedFullList.clear();
       mSubCustomersLists.clear();
       mEmployeeLists.clear();
-      Vector<String> vSuperCustomers = new Vector<String>();
-      AccountEntityData vEntry = null;
-      // int y =0;
 
-      for (Iterator<AccountEntityData> i = rawList.iterator(); i.hasNext();)
+      for (AccountEntityData vEntry : rawList)
       {
-         vEntry = i.next();
          // log.info("check " + y++ + ": " + vEntry.getFwdNumber());
          mIdKeyList.put(Integer.valueOf(vEntry.getId()), vEntry);
          // log.info("mIdKeyList " + ++y + " (size=" +mIdKeyList.size() + "):
@@ -265,8 +270,8 @@ final public class AccountCache
          if (!vEntry.getIsArchived())
          {
             mRawUnarchivedCollection.add(vEntry);
-            if (vEntry.getRole().equals(AccountRole._vCustomer) || vEntry.getRole().equals(AccountRole._vSubCustomer))
-            {
+//            if (vEntry.getRole().equals(AccountRole._vCustomer) || vEntry.getRole().equals(AccountRole._vSubCustomer))
+//            {
                if (vEntry.getFwdNumber().matches("[0-9]+"))
                {
                   mCallCustomerSortedList.add(vEntry);
@@ -290,7 +295,7 @@ final public class AccountCache
                   }
                }
 
-               if (vEntry.getRole().equals(AccountRole._vSubCustomer) && vEntry.getSuperCustomer().length() > 0)
+               if (vEntry.getRole().equals(AccountRole._vSubCustomer) && vEntry.getSuperCustomerId() > 0)
                {
                   // add to mSubCustomersLists
                   Collection<AccountEntityData> vSubCustomerList = mSubCustomersLists.get(vEntry.getSuperCustomerId());
@@ -298,7 +303,6 @@ final public class AccountCache
                   {
                      vSubCustomerList = new Vector<AccountEntityData>();
                      mSubCustomersLists.put(vEntry.getSuperCustomerId(), vSubCustomerList);
-                     vSuperCustomers.add(vEntry.getSuperCustomer());
                      // log.info(++y +"added first sub klanten lijst voor " +
                      // vEntry.getSuperCustomer() + ", ID=" + vEntry.getSuperCustomerId());
                   }
@@ -306,14 +310,7 @@ final public class AccountCache
                   // log.info(" add sub customer " + vEntry.getFullName() + " to list
                   // for id=" + vEntry.getSuperCustomerId());
                }
-            } else if (vEntry.getRole().equals(AccountRole._vAdminstrator) || vEntry.getRole().equals(AccountRole._vEmployee))
-            {
-               // add to mEmployeeLists
-               mFwdKeyList.put(vEntry.getFwdNumber(), vEntry);
-               mEmployeeLists.put(vEntry.getFwdNumber(), vEntry);
-               // log.info("added employee " + vEntry.getFullName() + ", " +
-               // vEntry.getId() + ", " + vEntry.getUserId());
-            }
+//            } 
          }
          else
          {
@@ -367,7 +364,7 @@ final public class AccountCache
             }
          } else
          {
-            log.info("######## strange error for id=" + vSuperCustId);
+            log.error("######## strange error for id=" + vSuperCustId);
             continue;
          }
 

@@ -1,6 +1,5 @@
 package be.tba.servlets.helper;
 
-import java.sql.SQLException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -12,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import be.tba.ejb.pbx.interfaces.CallRecordEntityData;
 import be.tba.ejb.phoneMap.interfaces.PhoneMapEntityData;
 import be.tba.ejb.phoneMap.session.PhoneMapSqlAdapter;
-import be.tba.servlets.session.SessionManager;
 import be.tba.servlets.session.WebSession;
 import be.tba.util.data.IntertelCallData;
 
@@ -55,16 +53,7 @@ public class PhoneMapManager
    {
       mOperatorPhoneMap = new HashMap<String, PhoneMapData>();
       PhoneMapSqlAdapter sqlAdapter = new PhoneMapSqlAdapter();
-      WebSession session = null;
-      try
-      {
-         session = new WebSession();
-      } catch (SQLException e)
-      {
-         // TODO Auto-generated catch block
-         log.error(e.getMessage(), e);
-      }
-
+      WebSession session = new WebSession();
       Collection<PhoneMapEntityData> phones = sqlAdapter.getAllRows(session);
       for (Iterator<PhoneMapEntityData> i = phones.iterator(); i.hasNext();)
       {
@@ -171,14 +160,7 @@ public class PhoneMapManager
             if (sqlAdapter == null)
             {
                sqlAdapter = new PhoneMapSqlAdapter();
-               try
-               {
-                  session = new WebSession();
-               } catch (SQLException e)
-               {
-                  // TODO Auto-generated catch block
-                  log.error(e.getMessage(), e);
-               }
+               session = new WebSession();
             }
             sqlAdapter.deleteRow(session, phoneMapEntityData.phoneUserMap.id);
             i.remove();

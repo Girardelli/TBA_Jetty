@@ -30,13 +30,7 @@ be.tba.util.data.*"%>
 
 		boolean vCustomerFilterOn = false;
 		AccountEntityData vAccount = AccountCache.getInstance().get(vSession.getCallFilter().getCustFilter());
-		String vCustomerFilter = vSession.getCallFilter().getCustFilter();
-		if (vCustomerFilter != null)
-		{
-		  if (vCustomerFilter.equals(Constants.ACCOUNT_FILTER_ALL))
-		    vCustomerFilter = null;
-		}
-		if (vCustomerFilter == null) vCustomerFilter = Constants.ACCOUNT_FILTER_ALL;
+		int vCustomerFilter = vSession.getCallFilter().getCustFilter();
 	%>
 <body>
 <table  cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
@@ -49,21 +43,21 @@ be.tba.util.data.*"%>
 		<p><span class="bodytitle"> Oproepen zoeken</span></p>
 		<form name="searchform" method="POST" action="/tba/AdminDispatch">
         <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.GOTO_RECORD_SEARCH%>"> 
-		<table width="825" border="0" cellspacing="2" cellpadding="2">
+		<table border="0" cellspacing="2" cellpadding="2">
 			<tr>
 				<td width="225" valign="top" class="bodysubtitle">Klant</td>
 				<td width="10" valign="top">:</td>
 				<td width="590" valign="top"><select
 					name="<%=Constants.ACCOUNT_FILTER_CUSTOMER%>">
 					<%
-out.println("<option value=\"" + Constants.ACCOUNT_FILTER_ALL + (vCustomerFilter.equals(Constants.ACCOUNT_FILTER_ALL) ? "\" selected>" : "\">") + "selecteer klant");
+out.println("<option value=\"" + Constants.ACCOUNT_NOFILTER + (vCustomerFilter == Constants.ACCOUNT_NOFILTER ? "\" selected>" : "\">") + "selecteer klant");
 					Collection<AccountEntityData> list = AccountCache.getInstance().getCustomerList();
 					synchronized(list) 
 					{
 					    for (Iterator<AccountEntityData> vIter = list.iterator(); vIter.hasNext();)
 					    {
 					        AccountEntityData vData = (AccountEntityData) vIter.next();
-					        out.println("<option value=\"" + vData.getFwdNumber() + (vCustomerFilter.equals(vData.getFwdNumber()) ? "\" selected>" : "\">") + vData.getFullName());
+					        out.println("<option value=\"" + vData.getId() + (vCustomerFilter == vData.getId() ? "\" selected>" : "\">") + vData.getFullName());
 					    }
 					}
 %>
@@ -89,7 +83,7 @@ if (!vSession.isCurrentMonth())
 }
 %> <br>
 		<br>
-		<table width="825" border="0" cellspacing="2" cellpadding="4">
+		<table border="0" cellspacing="2" cellpadding="4">
 			<%
 
 Collection<CallRecordEntityData> vRecords = null;

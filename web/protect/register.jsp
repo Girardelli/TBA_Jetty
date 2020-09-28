@@ -25,7 +25,7 @@ be.tba.util.constants.*"%>
 
 	<tr>
 		<td>
-		<table width="100%" height="50" border="0" cellspacing="0"
+		<table height="50" border="0" cellspacing="0"
 			cellpadding="0" bgcolor="#FFFFFF">
 			<td><img src="/tba/images/TBA-Logo.png" style="padding:10px;" height="70" alt=""></td>
 		</table>
@@ -51,49 +51,58 @@ try
 			<%            
       if (vErrorList != null && vErrorList.size() > 0)
       {
-        out.println("<br><span class=\"bodyredbold\">");
-        for (Iterator<String> i = vErrorList.iterator(); i.hasNext();)
+         out.println("<span class='bodysubsubtitle'>Los volgende problemen op:</span>");
+         out.println("<br><span class=\"bodyredbold\">");
+        for (String str : vErrorList)
         {
-          out.println("<img src=\"/tba/images/blueVink.gif\" border=\"0\">" + i.next() + "<br>");
+          out.println("<img src=\"/tba/images/blueVink.gif\" border=\"0\">" + str + "<br>");
         }
         out.println("</span>");
       }
       else
       {
-        out.println("<br><span class=\"bodysubtitle\"> Om te registreren hebt u een registratiecode nodig. Contacteer ons voor meer informatie.</span>");
+        out.println("<br><span class=\"bodysubtitle\"> U bent niet geregistreerd. <br>Om te registreren hebt u een registratiecode nodig. Contacteer ons voor meer informatie.</span>");
       }
 %> <br>
-			<p><span class="bodytekst"> <!-- action name must be a URI name as it is set in the <application>.xml servlet-mapping tag.-->
+			<p><span class="bodysubsubtitle"> <!-- action name must be a URI name as it is set in the <application>.xml servlet-mapping tag.-->
 			Vul hier uw registratiecode in die je van The Business Assistant bekomen hebt.<br>
+            <br>
 			<table border="0" cellspacing="2" cellpadding="2">
 				<tr>
-					<td width="160" valign="top" class="bodyredbold">registratiecode</td>
+					<td width="200" valign="top" class="bodyredbold">Registratiecode</td>
 					<td width="350" valign="top"><input type=text
-						name=<%=Constants.ACCOUNT_REGCODE%> size=10></td>
+						name=<%=Constants.LOGIN_REGCODE%> size=10></td>
 				</tr>
 			</table>
 			<br>
-			Uw login naam moet tussen de 5 en 10 karakters bevatten.<br>
+            <table border="0" cellspacing="2" cellpadding="2">
+                <tr>
+                    <td width="200" valign="top" class="bodysubsubtitle">volledige naam</td>
+                    <td width="350" valign="top"><input type=text
+                        name=<%=Constants.LOGIN_NAME%> size=60></td>
+                </tr>
+            </table>
+			<br>
+            Uw login naam moet tussen de 5 en 10 karakters bevatten.
 			<table border="0" cellspacing="2" cellpadding="2">
-				<tr>
-					<td width="160" valign="top" class="bodysubsubtitle">login naam</td>
+            <tr>
+					<td width="200" valign="top" class="bodysubsubtitle">login naam</td>
 					<td width="350" valign="top"><input type=text
-						name=<%=Constants.ACCOUNT_USERID%> size=15></td>
+						name=<%=Constants.LOGIN_USERID%> size=20></td>
 				</tr>
 			</table>
 			<br>
-			Uw paswoord moet minstens de 6 karakters bevatten.<br>
+            Uw paswoord moet minstens 6 karakters bevatten.
 			<table border="0" cellspacing="2" cellpadding="2">
 				<tr>
-					<td width="160" valign="top" class="bodysubsubtitle">paswoord</td>
+					<td width="200" valign="top" class="bodysubsubtitle">paswoord</td>
 					<td width="350" valign="top"><input type=password
-						name=<%=Constants.ACCOUNT_PASSWORD%> size=15></td>
+						name=<%=Constants.LOGIN_PASSWORD%> size=20></td>
 				</tr>
 				<tr>
-					<td width="160" valign="top" class="bodysubsubtitle">herhaal uw
-					paswoord</td>
+					<td width="200" valign="top" class="bodysubsubtitle">herhaal uw	paswoord</td>
 					<td width="350" valign="top"><input type=password
-						name=<%=Constants.ACCOUNT_PASSWORD2%> size=15></td>
+						name=<%=Constants.LOGIN_PASSWORD2%> size=20></td>
 				</tr>
 			</table>
 			<br>

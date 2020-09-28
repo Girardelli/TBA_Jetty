@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import be.tba.ejb.account.interfaces.AccountEntityData;
+import be.tba.ejb.account.interfaces.LoginEntityData;
 import be.tba.ejb.pbx.interfaces.CallRecordEntityData;
 import be.tba.ejb.task.interfaces.TaskEntityData;
 import be.tba.util.constants.AccountRole;
@@ -35,77 +36,88 @@ import be.tba.util.invoice.InvoiceHelper;
  */
 final public class WebSession implements Serializable
 {
-	private static Logger log = LoggerFactory.getLogger(WebSession.class);
+	 private static Logger log = LoggerFactory.getLogger(WebSession.class);
     /**
      *
      */
     private static final long serialVersionUID = 1L;
 
-    private AccountRole mRole = null;
+    public AccountRole mRole = null;
 
-    private CallFilter mCallFilter;
+    public CallFilter mCallFilter;
 
-    private String mUserId = "";
+    public LoginEntityData mLoginData= null;
 
-    private String mId = "";
+    public String mId = "";
 
-    private long mLastAccess = 0;
+    public long mLastAccess = 0;
     
-    private int mWorkOrderId = 0;
+    public int mWorkOrderId = 0;
 
-    private String mFwdNumber = null;
+    public String mFwdNumber = null;
 
-    private String mCurrentRecordId = null;
+    public String mCurrentRecordId = null;
 
-    private CallRecordEntityData mCurrentRecord = null;
+    public CallRecordEntityData mCurrentRecord = null;
 
-    private TaskEntityData mCurrentTask = null;
+    public TaskEntityData mCurrentTask = null;
 
     private int mCurrentAccountId = 0;
-    private String mCurrentAccountFwdNr = null;
+    public String mCurrentAccountFwdNr = null;
 
-    private AccountEntityData mNewAccount = null;
+    public AccountEntityData mNewAccount = null;
 
-    private String mSearchString = "";
+    public String mSearchString = "";
 
-    private int mDaysBack = 0;
+    public int mDaysBack = 0;
 
-    private int mMonthsBack = 0;
+    public int mMonthsBack = 0;
 
-    private int mYear = 0;
+    public int mYear = 0;
 
-    private int mInvoiceId = -1;
-    private int accountIdToDelete = 0;
+    public int mInvoiceId = -1;
+    public int accountIdToDelete = 0;
 
-    private HttpServletRequest mOldRequest;
+    public HttpServletRequest mOldRequest;
 
-    private InvoiceHelper mInvoiceHelper;
+    public InvoiceHelper mInvoiceHelper;
 
-    private String mCurrentJsp;
+    public String mCurrentJsp;
 
-    //private Map<Integer, CallRecordEntityData> mNewUnmappedCalls = new HashMap<Integer, CallRecordEntityData>();
-    private CallRecordEntityData mNewUnmappedCall;
+    //public Map<Integer, CallRecordEntityData> mNewUnmappedCalls = new HashMap<Integer, CallRecordEntityData>();
+    public CallRecordEntityData mNewUnmappedCall;
     
-    private Connection mConnection;
+    public Connection mConnection;
     
-    private String mRecordId = null;
+    public int mRecordId;
+    public int mLoginId;
+    public int mLoginToDelete;
 
-    private String mUploadedFileName = null;
+    public String mUploadedFileName = null;
     
-    private String mFintroProcessLog = null;
-    private long mSqlTimer = 0;
-    private boolean mIsWebSocketActive = false;
-    private Session mWsSession = null;
-    private boolean mIsAutoUpdateRecord = false;
-    private Collection<String> mErrorList = new Vector<String>();
+    public String mFintroProcessLog = null;
+    public long mSqlTimer = 0;
+    public long mWebTimer = 0;
+    public boolean mIsWebSocketActive = false;
+    public Session mWsSession = null;
+    public boolean mIsAutoUpdateRecord = false;
+    public Collection<String> mErrorList = new Vector<String>();
 
-    public WebSession() throws SQLException
+    public WebSession()
     {
+      init();
+      initConnection();
+    }
+
+    
+    public WebSession(String mysqlURL)
+    {
+        init();
         try
         {
             //log.info("Create WebSession without DataSource");
             init();
-            mConnection = DriverManager.getConnection(Constants.MYSQL_URL);
+            mConnection = DriverManager.getConnection(mysqlURL);
         }
         catch (Exception ex)
         {
@@ -114,16 +126,10 @@ final public class WebSession implements Serializable
         }
     }
 
-    public WebSession(String mysqlURL) throws SQLException
-    {
-        init();
-        mConnection = DriverManager.getConnection(mysqlURL);
-    }
-
     
     public void userInit(String userId, String key)
     {
-        mUserId = userId;
+       mLoginData.setUserId(userId);
         mId = key;
     }
     
@@ -153,20 +159,25 @@ final public class WebSession implements Serializable
        mErrorList = list;
     }
     
-    public String getRecordId()
+    public int getRecordId()
     {
         return mRecordId;
     }
     
-    public void setRecordId(String id)
+    public void setRecordId(int id)
     {
         mRecordId = id;
     }
 
-    
+ 
     public Connection getConnection()
     {
-        return mConnection;
+       if (mConnection == null)
+       {
+          log.error("connection == null in session. Reinitialize the DB connection");
+          initConnection();
+       }
+       return mConnection;
     }
 
     public CallRecordEntityData getNewUnmappedCall()
@@ -191,12 +202,12 @@ final public class WebSession implements Serializable
 
     public void setUserId(String userid)
     {
-        mUserId = userid;
+       mLoginData.setUserId(userid);
     }
 
     public String getUserId()
     {
-        return mUserId;
+        return mLoginData.getUserId();
     }
 
     public String getSessionId()
@@ -271,7 +282,8 @@ final public class WebSession implements Serializable
 
     public void setAccountId(int id)
     {
-        mCurrentAccountId = id;
+       log.info("set account id: " + id); 
+       mCurrentAccountId = id;
     }
 
     public int getAccountId()
@@ -497,7 +509,7 @@ final public class WebSession implements Serializable
         {
             return false;
         }
-        log.info(caller + "(" + mUserId + ")WebSession.isExpired since " + (vCurrTime - vTimeout) / 1000 + " seconds.");
+        log.info(caller + "(" + mLoginData.getUserId() + ")WebSession.isExpired since " + (vCurrTime - vTimeout) / 1000 + " seconds.");
         return true;
     }
     
@@ -509,6 +521,7 @@ final public class WebSession implements Serializable
     public void resetSqlTimer()
     {
     	mSqlTimer = 0;
+    	mWebTimer = Calendar.getInstance().getTimeInMillis();
     }
     
     public void addSqlTimer(long cnt)
@@ -527,6 +540,21 @@ final public class WebSession implements Serializable
         mYear = calendar.get(Calendar.YEAR);
         mRole = AccountRole.CUSTOMER;
         mInvoiceId = -1;
+    }
+    
+    private void initConnection()
+    {
+       try
+       {
+           //log.info("Create WebSession without DataSource");
+           init();
+           mConnection = DriverManager.getConnection(Constants.MYSQL_URL);
+       }
+       catch (Exception ex)
+       {
+           log.error(ex.getMessage(), ex);
+           log.info("Error in WebSession. Can not create DB Connection.");
+       }
     }
 
 }

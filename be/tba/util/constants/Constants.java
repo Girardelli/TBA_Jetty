@@ -23,7 +23,9 @@ public class Constants
     public static final String EJB_ACC_ROLE_ADMIN = "admin";
 
     // HTML page names
-    public static final String TBA_URL_BASE = "https://thebusinessAssistant.be/tba/";
+    public static final String DOMAIN_NAME = "thebusinessassistant.be/tba/";
+    public static final String TBA_URL_BASE = "https://" + DOMAIN_NAME;
+    public static final String TBA_URL_WS = "wss://" + DOMAIN_NAME + "ws";
     public static final String MYSQL_URL = "jdbc:mysql://localhost/tbadb?user=root&password=gzb625$";
     // public static final String INVOICE_HEAD_TMPL =
     // "C:\\jboss-4.0.2\\projects\\TBA\\templates\\invoice-head-template.htm";
@@ -99,13 +101,8 @@ public class Constants
 
     // Accounts
     public static final String ACCOUNT_SELECT = "_sel";
-    public static final String ACCOUNT_PASSWORD = "_pwd";
-    public static final String ACCOUNT_PASSWORD2 = "_pwd2";
     public static final String ACCOUNT_FULLNAME = "_fn";
     public static final String ACCOUNT_FORWARD_NUMBER = "_fwnr";
-    public static final String ACCOUNT_USERID = "_uid";
-    public static final String ACCOUNT_ROLE = "_role";
-    public static final String ACCOUNT_REGCODE = "_rgcd";
     public static final String ACCOUNT_ID = "_aid";
     public static final String ACCOUNT_EMAIL = "_aem";
     public static final String ACCOUNT_INVOICE_EMAIL = "_aiem";
@@ -249,16 +246,20 @@ public class Constants
     public static final String RECORD_NOTIFY = "_nno";
     public static final String RECORD_URGENT = "_rur";
     
+    // Login
+    public static final String LOGIN_ID = "_lid";
+    public static final String LOGIN_NAME = "_lna";
+    public static final String LOGIN_PASSWORD = "_pwd";
+    public static final String LOGIN_PASSWORD2 = "_pwd2";
+    public static final String LOGIN_USERID = "_uid";
+    public static final String LOGIN_ROLE = "_role";
+    public static final String LOGIN_REGCODE = "_rgcd";
+    
     
     // filter
     public static final String ACCOUNT_FILTER_CUSTOMER = "_fcus";
     public static final String ACCOUNT_FILTER_CALL_STATE = "_fcst";
     public static final String ACCOUNT_FILTER_CALL_DIR = "_fdir";
-    public static final String ACCOUNT_FILTER_ALL = "_all";
-    public static final String ACCOUNT_FILTER_UNFINISHED = "_unf";
-    public static final String ACCOUNT_FILTER_FINISHED = "_fin";
-    public static final String ACCOUNT_FILTER_IN = "_f_in";
-    public static final String ACCOUNT_FILTER_OUT = "_f_out";
 
     // attribute names
     public static final String SESSION_OBJ = "_sobj";
@@ -294,7 +295,7 @@ public class Constants
     public static final String GOTO_ACCOUNT_ADMIN = "_a33";
     public static final String GOTO_ACCOUNT_DELETE = "_a34";
     public static final String GOTO_SAVE_ACCOUNT = "_a35";
-    public static final String SAVE_ACCOUNT = "_a36";
+    //public static final String SAVE_ACCOUNT = "_a36";
     public static final String ADMIN_HOME = "_a37";
     public static final String ADMIN_LOG_OFF = "_a38";
     public static final String ACCOUNT_DEREG = "_a39";
@@ -354,6 +355,11 @@ public class Constants
     public static final String UPLOAD_WORKORDER_FILE = "_a94";
     public static final String DELETE_WORKORDER_FILE = "_a95";
     public static final String GOTO_ARCHIVED_ACCOUNTS = "_a96";
+    public static final String DELETE_LOGIN = "_a97";
+    public static final String DELETE_LOGIN_CONFIRMED = "_a98";
+    public static final String GOTO_EMPLOYEE_DELETE = "_a99";
+    public static final String DELETE_EMPLOYEE_CONFIRMED = "_100";
+    public static final String EMPLOYEE_ADD = "_101";
     
     // LoginServlet actions
     public static final String ACTION_LOGIN = "_l88";
@@ -390,6 +396,12 @@ public class Constants
     public static final String RECORD_LEVEL2 = "_rl2";
     public static final String RECORD_LEVEL3 = "_rl3";
     public static final String RECORD_ARCHIVED = "_rar";
+    public static final String ACCOUNT_FILTER_ALL = "_afa";
+    public static final int    ACCOUNT_NOFILTER = 0;
+    public static final String ACCOUNT_FILTER_UNFINISHED = "_unf";
+    public static final String ACCOUNT_FILTER_FINISHED = "_fin";
+    public static final String ACCOUNT_FILTER_IN = "_f_in";
+    public static final String ACCOUNT_FILTER_OUT = "_f_out";
 
     // jsp-perms attribute
     public static final String FORM_NAME = "_fnm";

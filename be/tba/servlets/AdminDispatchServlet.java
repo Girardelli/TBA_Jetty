@@ -22,6 +22,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import be.tba.ejb.account.interfaces.AccountEntityData;
+import be.tba.ejb.account.interfaces.LoginEntityData;
+import be.tba.ejb.account.session.AccountSqlAdapter;
+import be.tba.ejb.account.session.LoginSqlAdapter;
 import be.tba.ejb.mail.session.MailerSessionBean;
 import be.tba.ejb.pbx.interfaces.CallRecordEntityData;
 import be.tba.ejb.pbx.session.CallRecordSqlAdapter;
@@ -29,6 +32,7 @@ import be.tba.servlets.helper.AccountFacade;
 import be.tba.servlets.helper.CallRecordFacade;
 import be.tba.servlets.helper.IntertelCallManager;
 import be.tba.servlets.helper.InvoiceFacade;
+import be.tba.servlets.helper.LoginFacade;
 import be.tba.servlets.helper.TaskFacade;
 import be.tba.servlets.session.SessionManager;
 import be.tba.servlets.session.WebSession;
@@ -78,6 +82,7 @@ public class AdminDispatchServlet extends HttpServlet
          String uploadedFile = null;
          FileUploader fileUploader = null;
          SessionParmsInf params = null;
+         String URI = null;
          if (ServletFileUpload.isMultipartContent(req))
          {
             fileUploader = new FileUploader(req);
@@ -86,6 +91,7 @@ public class AdminDispatchServlet extends HttpServlet
          }
          else
          {
+            URI = req.getRequestURI() + "?" + req.getQueryString();
             params = new SessionParms(req);
          }
          vAction = params.getParameter(Constants.SRV_ACTION);
@@ -98,8 +104,8 @@ public class AdminDispatchServlet extends HttpServlet
          vSession.resetSqlTimer();
          SessionManager.getInstance().getSession(vSession.getSessionId(), "AdminDispatchServlet(" + vAction + ")");
 
-         log.info("\nAdminDispatchServlet: userid:" + vSession.getUserId() + ", websessionid:" + vSession.getSessionId() + " action=" + vAction);
-
+         log.info("\nuserid:" + vSession.getUserId() + ", websessionid:" + vSession.getSessionId() + "Action: " + vAction + ", URI:" + URI);
+         
          synchronized (vSession)
          {
             vSession.setWsActive(false);
@@ -128,6 +134,47 @@ public class AdminDispatchServlet extends HttpServlet
             {
             case Constants.FIX_ACCOUNT_IDS:
             {
+               Collection<AccountEntityData> accountList = AccountCache.getInstance().getAll();
+               LoginSqlAdapter loginSqlAdapter = new LoginSqlAdapter();
+               AccountSqlAdapter accountSqlAdapter = new AccountSqlAdapter();
+               
+               for (AccountEntityData account : accountList)
+               {
+                  if (!account.getIsArchived())
+                  {
+                     LoginEntityData entry = new LoginEntityData();
+                     entry.setAccountId(account.getId());
+                     entry.setIsRegistered(true);
+                     entry.setLastLogin(account.getLastLogin());
+                     entry.setLastLoginTS(account.getLastLoginTS());
+                     entry.setName(account.getFullName());
+                     entry.setPassword(account.getPassword());
+                     entry.setPreviousLoginTS(account.getPreviousLoginTS());
+                     entry.setUserId(account.getUserId());
+                     switch (account.getRole())
+                     {
+                     case AccountRole._vAdminstrator:
+                     case AccountRole._vEmployee:
+                        entry.setRole(account.getRole());
+                        accountSqlAdapter.deleteRow(vSession, account.getId());
+                        break;
+                     case AccountRole._vCustomer:
+                        entry.setRole(account.getRole());
+                        break;
+                     case AccountRole._vSubCustomer:
+                        entry.setRole(AccountRole._vCustomer);
+                        break;
+                     }
+                     if (entry.getUserId() != null && !entry.getUserId().isEmpty() && entry.getPassword() != null && !entry.getPassword().isEmpty())
+                     {
+                        loginSqlAdapter.addRow(vSession, entry);
+                        log.info("added login " + entry.getUserId() + " voor klant " + entry.getName() + ", rol=" + entry.getRole());
+                     }
+                  }
+               }
+               AccountCache.getInstance().update(vSession);
+               
+               
 //               CallRecordSqlAdapter vCallLogWriterSession = new CallRecordSqlAdapter();
 //               Collection<CallRecordEntityData> calls = vCallLogWriterSession.getAllRows(vSession);
 //               Calendar timestamp = Calendar.getInstance();
@@ -198,7 +245,7 @@ public class AdminDispatchServlet extends HttpServlet
                 * continue; }
                 * 
                 * Collection<TaskEntityData> taskList =
-                * vTaskSession.getTasksFromTillTimestamp(vSession, invoice.getAccountID(),
+                * vTaskSession.getTasksFromTillTimestamp(vSession, invoice.getAccountId(),
                 * invoice.getStartTime(), invoice.getStopTime());
                 * //log.info(invoice.getInvoiceNr() + ": process " + taskList.size()
                 * + " tasks"); for (Iterator<TaskEntityData> i = taskList.iterator();
@@ -228,12 +275,11 @@ public class AdminDispatchServlet extends HttpServlet
 //                        }
 //                    }
 
-               String vCustomerFilter = (String) vSession.getCallFilter().getCustFilter();
-               if (vCustomerFilter != null && !vCustomerFilter.equals(Constants.ACCOUNT_FILTER_ALL))
+               if (vSession.getCallFilter().getCustFilter() > 0)
                {
                   try
                   {
-                     AccountEntityData vAccountData = AccountCache.getInstance().get(vCustomerFilter);
+                     AccountEntityData vAccountData = AccountCache.getInstance().get(vSession.getCallFilter().getCustFilter());
                      if (vAccountData != null)
                      {
                         String vEmail = vAccountData.getEmail();
@@ -352,8 +398,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.RECORD_SHOW_NEXT:
             {
-               String custFilter = (String) vSession.getCallFilter().getCustFilter();
-               if (custFilter != null && !custFilter.equals(Constants.ACCOUNT_FILTER_ALL))
+               if (vSession.getCallFilter().getCustFilter() > 0)
                {
                   if (!vSession.isCurrentMonth())
                      vSession.incrementMonthsBack();
@@ -371,8 +416,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.RECORD_SHOW_PREV:
             {
-               String custFilter = (String) vSession.getCallFilter().getCustFilter();
-               if (custFilter != null && !custFilter.equals(Constants.ACCOUNT_FILTER_ALL))
+               if (vSession.getCallFilter().getCustFilter() > 0)
                {
                   vSession.decrementMonthsBack();
                }
@@ -477,76 +521,6 @@ public class AdminDispatchServlet extends HttpServlet
             }
 
             // ==============================================================================================
-            // REFRESH_OPEN_CALLS
-            // ==============================================================================================
-//            case Constants.REFRESH_OPEN_CALLS:
-//            {
-//               CallRecordFacade.updateNewUnmappedCall(params, vSession);
-//               rd = sc.getRequestDispatcher(Constants.NEW_CALL_JSP);
-//               break;
-//            }
-
-            // ==============================================================================================
-            // SAVE_NEW_CALL
-            // ==============================================================================================
-            /*
-            case Constants.SAVE_NEW_CALL:
-            {
-               String vKey = params.getParameter(Constants.RECORD_ID);
-               if (vKey == null || vKey.isEmpty())
-               {
-                  rd = sc.getRequestDispatcher(Constants.NEW_CALL_JSP);
-               }
-               else
-               {
-                  if (CallRecordFacade.saveNewCall(params, vSession))
-                  {
-                     // log.info("fire SELECT_SUBCUSTOMER_JSP");
-                     rd = sc.getRequestDispatcher(Constants.SELECT_SUBCUSTOMER_JSP);
-                     // log.info("getRequestDispatcher done");
-                  }
-                  else
-                  {
-                     // log.info("fire CANVAS_JSP");
-                     rd = sc.getRequestDispatcher(Constants.CANVAS_JSP);
-                  }
-               }
-               break;
-            }*/
-
-            // ==============================================================================================
-            // SAVE_NEW_SUBCUSTOMER
-            // ==============================================================================================
-            /*
-            case Constants.SAVE_NEW_SUBCUSTOMER:
-            {
-               // String vKey = params.getParameter(Constants.RECORD_ID);
-               String vNewFwdNr = params.getParameter(Constants.ACCOUNT_NEW_FWDNR);
-               String vOldFwdNr = params.getParameter(Constants.ACCOUNT_FWDNR);
-
-               // log.info("SAVE_NEW_SUBCUSTOMER " + vNewFwdNr + ", " + vOldFwdNr);
-               if (vNewFwdNr == null)
-               {
-                  rd = sc.getRequestDispatcher(Constants.NEW_CALL_JSP);
-               }
-               else
-               {
-                  if (vOldFwdNr != null)
-                  {
-                     if (!vOldFwdNr.equals(vNewFwdNr))
-                     {
-                        CallRecordFacade.saveNewSubCustomer(params, vSession, vNewFwdNr);
-                     }
-                     rd = sc.getRequestDispatcher(Constants.CANVAS_JSP);
-                  }
-                  else
-                  {
-                     rd = sc.getRequestDispatcher(Constants.NEW_CALL_JSP);
-                  }
-               }
-               break;
-            }*/
-            // ==============================================================================================
             // REMOVE_OPEN_CALL
             // ==============================================================================================
             case Constants.REMOVE_OPEN_CALL:
@@ -580,7 +554,7 @@ public class AdminDispatchServlet extends HttpServlet
                   {
                      throw new SystemErrorException("Account not found for ID " + vLtd);
                   }
-                  AccountRole role = AccountRole.fromShort(accountData.getRole());
+                  AccountRole role = AccountRole.fromShort(vSession.mLoginData.getRole());
                   if (role == AccountRole.ADMIN || role == AccountRole.EMPLOYEE)
                   {
                      log.info("goto account delete: setAccountId=" + vLtd + ", account fwdnr=" + accountData.getFwdNumber());
@@ -622,22 +596,10 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.ACCOUNT_DELETE:
             {
-               log.info("account delete: current id=" + vSession.getAccountIdToDelete());
-               // String accountFwdNr =
-               // AccountCache.getInstance().idToFwdNr(Integer.parseInt(vSession.getAccountId()));
                AccountEntityData accountData = AccountCache.getInstance().get(vSession.getAccountIdToDelete());
                log.info("account delete: key=" + vSession.getAccountId() + ", fwd nr=" + accountData.getFwdNumber());
-
-               AccountRole role = AccountRole.fromShort(accountData.getRole());
                AccountFacade.archiveAccount(vSession, vSession.getAccountIdToDelete());
-               if (role == AccountRole.ADMIN || role == AccountRole.EMPLOYEE)
-               {
-                  rd = sc.getRequestDispatcher(Constants.ADMIN_EMPLOYEE_JSP);
-               }
-               else
-               {
-                  rd = sc.getRequestDispatcher(Constants.ADMIN_ACCOUNT_JSP);
-               }
+               rd = sc.getRequestDispatcher(Constants.ADMIN_ACCOUNT_JSP);
                break;
             }
 
@@ -664,52 +626,85 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.GOTO_SAVE_ACCOUNT:
             {
-               String accountIdStr = params.getParameter(Constants.ACCOUNT_ID);
-               int accountId = Integer.valueOf(accountIdStr);
-               AccountEntityData account = AccountCache.getInstance().get(accountId);
-               String vOldNr = account.getFwdNumber();
-               String vNewNr = params.getParameter(Constants.ACCOUNT_FORWARD_NUMBER);
                AccountEntityData newData = AccountFacade.updateAccountData(vSession, params);
-               log.info("old nr=" + vOldNr + ", new nr=" + vNewNr);
-               if (vOldNr != null && vNewNr != null && !vOldNr.equals(vNewNr))
-               {
-                  req.setAttribute(Constants.ERROR_TXT, "U hebt de doorschakelnummer van deze klant gewijzigd.\nWilt u hiermee verder gaan?");
-                  req.setAttribute(Constants.NEXT_PAGE, Constants.SAVE_ACCOUNT);
-                  req.setAttribute(Constants.PREVIOUS_PAGE, Constants.ACCOUNT_UPDATE);
-                  vSession.setNewAccount(newData);
-                  vSession.setAccountId(Integer.parseInt(vOldNr));
-                  rd = sc.getRequestDispatcher(Constants.ARE_YOU_SURE_JSP);
-               }
-               else
-               {
-                  AccountFacade.saveAccount(vSession, newData);
-                  rd = sc.getRequestDispatcher(Constants.ADMIN_ACCOUNT_JSP);
-               }
+               rd = sc.getRequestDispatcher(Constants.ADMIN_ACCOUNT_JSP);
                break;
             }
 
             // ==============================================================================================
             // SAVE ACCOUNT
             // ==============================================================================================
-            case Constants.SAVE_ACCOUNT:
-            {
-               AccountEntityData newData = vSession.getNewAccount();
-               AccountFacade.changeFwdNumber(vSession, vSession.getSessionFwdNr(), newData.getFwdNumber());
-               AccountFacade.saveAccount(vSession, newData);
-               rd = sc.getRequestDispatcher(Constants.ADMIN_ACCOUNT_JSP);
-               break;
-            }
+//            case Constants.SAVE_ACCOUNT:
+//            {
+//               AccountEntityData newData = vSession.getNewAccount();
+//               AccountFacade.changeFwdNumber(vSession, vSession.mLoginData.getAccountId(), newData.getFwdNumber());
+//               AccountFacade.saveAccount(vSession, newData);
+//               rd = sc.getRequestDispatcher(Constants.ADMIN_ACCOUNT_JSP);
+//               break;
+//            }
 
             // ==============================================================================================
-            // DEREGISTRATE ACCOUNT
+            // DELETE LOGIN
             // ==============================================================================================
-            case Constants.ACCOUNT_DEREG:
+            case Constants.DELETE_LOGIN:
             {
-               AccountFacade.deregisterAccount(vSession, params);
+               vSession.mLoginToDelete = Integer.parseInt(params.getParameter(Constants.LOGIN_ID));
+               req.setAttribute(Constants.ERROR_TXT, "Bent u zeker dat u het login van deze klantwerknemer wil verwijderen?");
+               req.setAttribute(Constants.NEXT_PAGE, Constants.DELETE_LOGIN_CONFIRMED);
+               req.setAttribute(Constants.PREVIOUS_PAGE, Constants.ACCOUNT_UPDATE);
+               req.setAttribute(Constants.ACCOUNT_ID, Integer.parseInt(params.getParameter(Constants.ACCOUNT_ID)));
+               rd = sc.getRequestDispatcher(Constants.ARE_YOU_SURE_JSP);
+               break;
+            }
+               
+            // ==============================================================================================
+            // DELETE EMPLOYEE
+            // ==============================================================================================
+            case Constants.GOTO_EMPLOYEE_DELETE:
+            {
+               String vLtd = params.getParameter(Constants.ACCOUNT_TO_DELETE);
+               StringTokenizer vStrTok = new StringTokenizer(vLtd, ",");
+               log.info("GOTO_EMPLOYEE_DELETE: " + vLtd);
+               if (vStrTok.countTokens() > 1)
+               {
+                  req.setAttribute(Constants.ERROR_TXT, "Je kan maar 1 werknemer per keer verwijderen!");
+                  req.setAttribute(Constants.NEXT_PAGE, Constants.GOTO_EMPLOYEE_ADMIN);
+                  rd = sc.getRequestDispatcher(Constants.ANNOUNCEMENT_JSP);
+               }
+               else
+               {
+                  // String vFwdNr = AccountCache.getInstance().idToFwdNr(Integer.parseInt(vLtd));
+                  vSession.mLoginToDelete = Integer.parseInt(vLtd);
+                  req.setAttribute(Constants.ERROR_TXT, "Bent u zeker dat u het login van deze werknemer wil verwijderen?");
+                  req.setAttribute(Constants.NEXT_PAGE, Constants.DELETE_EMPLOYEE_CONFIRMED);
+                  req.setAttribute(Constants.PREVIOUS_PAGE, Constants.GOTO_EMPLOYEE_ADMIN);
+                  rd = sc.getRequestDispatcher(Constants.ARE_YOU_SURE_JSP);
+               }
+               break;
+            }
+           
+            // ==============================================================================================
+            // DELETE_LOGIN_CONFIRMED
+            // ==============================================================================================
+            case Constants.DELETE_LOGIN_CONFIRMED:
+            {
+               LoginFacade.deleteLogin(vSession);
+               vSession.mLoginToDelete = 0;
                rd = sc.getRequestDispatcher(Constants.UPDATE_ACCOUNT_JSP);
                break;
             }
-
+            
+            // ==============================================================================================
+            // DELETE_LOGIN_CONFIRMED
+            // ==============================================================================================
+            case Constants.DELETE_EMPLOYEE_CONFIRMED:
+            {
+               LoginFacade.deleteLogin(vSession);
+               vSession.mLoginToDelete = 0;
+               rd = sc.getRequestDispatcher(Constants.ADMIN_EMPLOYEE_JSP);
+               break;
+            }
+            
             // ==============================================================================================
             // ADD ACCOUNT
             // ==============================================================================================
@@ -729,10 +724,29 @@ public class AdminDispatchServlet extends HttpServlet
             }
 
             // ==============================================================================================
+            // ADD ACCOUNT
+            // ==============================================================================================
+            case Constants.EMPLOYEE_ADD:
+            {
+               Vector<String> errorList = LoginFacade.addLogin(vSession, req, params);
+               if (errorList != null)
+               {
+                  vSession.setErrorList(errorList);
+                  rd = sc.getRequestDispatcher(Constants.ADD_EMPLOYEE_JSP);
+               }
+               else
+               {
+                  rd = sc.getRequestDispatcher(Constants.ADMIN_EMPLOYEE_JSP);
+               }
+               break;
+            }
+
+            // ==============================================================================================
             // UPDATE ACCOUNT
             // ==============================================================================================
             case Constants.ACCOUNT_UPDATE:
             {
+               vSession.setAccountId(Integer.parseInt(params.getParameter(Constants.ACCOUNT_ID)));
                rd = sc.getRequestDispatcher(Constants.UPDATE_ACCOUNT_JSP);
                break;
             }
@@ -743,7 +757,7 @@ public class AdminDispatchServlet extends HttpServlet
             case Constants.ACCOUNT_ADD:
             {
                Vector<String> errorList = AccountFacade.addAccount(vSession, req, params);
-               AccountRole role = AccountRole.fromShort(params.getParameter(Constants.ACCOUNT_ROLE));
+               AccountRole role = AccountRole.fromShort(params.getParameter(Constants.LOGIN_ROLE));
                if (role == AccountRole.ADMIN || role == AccountRole.EMPLOYEE)
                {
                   if (errorList != null)
@@ -777,7 +791,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.GOTO_ADD_INVOICE:
             {
-               vSession.getCallFilter().setCustFilter(params.getParameter(Constants.ACCOUNT_FILTER_ALL));
+               vSession.getCallFilter().setCustFilter(params.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER));
                rd = sc.getRequestDispatcher(Constants.ADD_INVOICE_JSP);
                break;
             }
@@ -797,8 +811,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.GOTO_INVOICE:
             {
-               if (params.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER) != null)
-                  vSession.getCallFilter().setCustFilter(params.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER));
+               vSession.getCallFilter().setCustFilter(params.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER));
                if (params.getParameter(Constants.INVOICE_MONTH) != null)
                   vSession.setMonthsBack(Integer.parseInt(params.getParameter(Constants.INVOICE_MONTH)));
                if (params.getParameter(Constants.INVOICE_YEAR) != null)
@@ -835,8 +848,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.GENERATE_INVOICE:
             {
-               if (params.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER) != null)
-                  vSession.getCallFilter().setCustFilter(params.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER));
+               vSession.getCallFilter().setCustFilter(params.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER));
                if (params.getParameter(Constants.INVOICE_MONTH) != null)
                   vSession.setMonthsBack(Integer.parseInt(params.getParameter(Constants.INVOICE_MONTH)));
 
@@ -970,8 +982,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.GOTO_RECORD_SEARCH:
             {
-               if (params.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER) != null)
-                  vSession.getCallFilter().setCustFilter(params.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER));
+               vSession.getCallFilter().setCustFilter(params.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER));
                if (params.getParameter(Constants.RECORD_SEARCH_STR) != null)
                   vSession.setSearchString(params.getParameter(Constants.RECORD_SEARCH_STR));
                Calendar calendar = Calendar.getInstance();
@@ -1019,8 +1030,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.GOTO_TASK_ADMIN:
             {
-               if (params.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER) != null)
-                  vSession.getCallFilter().setCustFilter(params.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER));
+               vSession.getCallFilter().setCustFilter(params.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER));
                rd = sc.getRequestDispatcher(Constants.ADMIN_TASK_JSP);
                break;
             }
@@ -1235,8 +1245,10 @@ public class AdminDispatchServlet extends HttpServlet
          req.setAttribute(Constants.ERROR_TXT, "de pagina kan niet worden getoond.");
          rd.forward(req, res);
       }
-//        if (vSession != null)
-//        	log.info("httprequest done: SQL timer=" + vSession.getSqlTimer());
+        if (vSession != null)
+        {
+        	log.info("########### httprequest done: java=" + (Calendar.getInstance().getTimeInMillis() - vSession.mWebTimer - vSession.getSqlTimer()) + ", SQL=" + vSession.getSqlTimer());
+        }
 
    }
 

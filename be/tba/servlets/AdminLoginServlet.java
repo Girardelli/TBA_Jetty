@@ -14,7 +14,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import be.tba.ejb.account.interfaces.AccountEntityData;
+import be.tba.ejb.account.interfaces.LoginEntityData;
 import be.tba.ejb.account.session.AccountSqlAdapter;
+import be.tba.ejb.account.session.LoginSqlAdapter;
 import be.tba.ejb.task.session.TaskSqlAdapter;
 import be.tba.servlets.helper.PhoneMapManager;
 import be.tba.servlets.session.SessionManager;
@@ -44,31 +46,29 @@ public class AdminLoginServlet extends HttpServlet
         try
         {
             HttpSession httpSession = req.getSession();
-            vUserId = req.getParameter(Constants.ACCOUNT_USERID);
-            vPassword = req.getParameter(Constants.ACCOUNT_PASSWORD);
-
-            AccountEntityData vAccount = null;
+            vUserId = req.getParameter(Constants.LOGIN_USERID);
+            vPassword = req.getParameter(Constants.LOGIN_PASSWORD);
+            vSession = new WebSession();
+            
+            LoginEntityData login = null;
             if (vUserId.equals(Constants.MASTER_LOGIN_NAME))
             {
-                vAccount = new AccountEntityData();
-                vAccount.setRole(AccountRole.ADMIN.getShort());
+                login = new LoginEntityData();
+                login.setRole(AccountRole.ADMIN.getShort());
             }
             else
             {
-                vSession = new WebSession();
-                AccountSqlAdapter vAccountSession = new AccountSqlAdapter();
-                vAccount = vAccountSession.logIn(vSession, vUserId, vPassword);
-                //log.info("LoginServlet: " + vAccount.getFullName() + " logged in.");
+                LoginSqlAdapter vAccountSession = new LoginSqlAdapter();
+                login = vAccountSession.logIn(vSession, vUserId, vPassword);
             }
-
-            if (vAccount.getRole().equals(AccountRole.ADMIN.getShort()) || vAccount.getRole().equals(AccountRole.EMPLOYEE.getShort()))
+            vSession.mLoginData = login;
+            if (login.getRole().equals(AccountRole.ADMIN.getShort()) || login.getRole().equals(AccountRole.EMPLOYEE.getShort()))
             {
-                if (vSession == null)
-                    vSession = new WebSession();
                 SessionManager.getInstance().add(vSession, vUserId);
-                vSession.setRole(AccountRole.fromShort(vAccount.getRole()));
-                vSession.setSessionFwdNr(vAccount.getFwdNumber());
-                vSession.setAccountId(vAccount.getId());
+                vSession.setRole(AccountRole.fromShort(login.getRole()));
+ //               vSession.setSessionFwdNr(login.getFwdNumber());
+                vSession.setAccountId(login.getId());
+   //             vSession.setLoginData(login);
                 PhoneMapManager.getInstance().mapNewLogin(vUserId, vSession.getSessionId());
                 
                 // do your thing
@@ -80,7 +80,7 @@ public class AdminLoginServlet extends HttpServlet
                 ServletContext sc = getServletContext();
                 RequestDispatcher rd = sc.getRequestDispatcher(Constants.CANVAS_JSP);
                 rd.forward(req, res);
-                //log.info("LoginServlet: " + vAccount.getUserId() + " got session id " + vSession.getSessionId());
+                //log.info("LoginServlet: " + login.getUserId() + " got session id " + vSession.getSessionId());
             }
             else
             {
@@ -93,7 +93,8 @@ public class AdminLoginServlet extends HttpServlet
         }
         catch (TbaException e)
         {
-           log.info("AdminLoginServlet: Mallicious admin access attempt. userid:" + vUserId + ", password:" + vPassword);
+           log.error("AdminLoginServlet: Mallicious admin access attempt. userid:" + vUserId + ", password:" + vPassword);
+           log.error(e.getMessage(), e);
            // print error page!!
            String vMsg = e.getMessage();
            req.setAttribute(Constants.ERROR_TXT, vMsg == null ? "Onbekende error." : vMsg);
@@ -104,7 +105,8 @@ public class AdminLoginServlet extends HttpServlet
         catch (Exception e)
         {
             //log.error(e.getMessage(), e);
-            log.info("AdminLoginServlet: Mallicious admin access attempt. userid:" + vUserId + ", password:" + vPassword);
+            log.error("AdminLoginServlet: Mallicious admin access attempt. userid:" + vUserId + ", password:" + vPassword);
+            log.error(e.getMessage(), e);
             // print error page!!
             String vMsg = e.getMessage();
             req.setAttribute(Constants.ERROR_TXT, vMsg == null ? "Onbekende error." : vMsg);

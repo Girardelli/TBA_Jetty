@@ -162,7 +162,7 @@ public class MailerSessionBean
       CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
       CallRecordSqlAdapter vWriterSession = new CallRecordSqlAdapter();
 
-      Collection<CallRecordEntityData> vRecords = vQuerySession.getDocumentedNotMailed(webSession, vCustomer.getFwdNumber());
+      Collection<CallRecordEntityData> vRecords = vQuerySession.getDocumentedNotMailed(webSession, vCustomer.getId());
 
       AtomicBoolean isImportant = new AtomicBoolean(false);
       if (!vRecords.isEmpty() || !vCustomer.getNoEmptyMails())
@@ -216,13 +216,13 @@ public class MailerSessionBean
       vBody.append("<span class=\"bodytekst\">");
       vBody.append("Geachte,<br><br>");
       vBody.append("Gelieve hieronder uw oproepen te willen vinden die wij genoteerd hebben");
-      if (account.getSuperCustomer() != null && !account.getSuperCustomer().isEmpty())
+      if (account.getSuperCustomerId() > 0)
       {
          vBody.append(" voor <b><i>" + account.getFullName() + "</i></b>");
       }
       vBody.append(" sinds de vorige mail.<br>");
 
-      vBody.append("Voor vragen kan u zich richten tot Nancy.<br>");
+      vBody.append("Voor vragen kan u zich richten tot het TBA team.<br>");
 
       long vCurrentTime = Calendar.getInstance().getTimeInMillis();
       // long vLastMailTime = account.getLastMailTime();

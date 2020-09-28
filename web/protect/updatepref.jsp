@@ -23,7 +23,7 @@ AccountEntityData vCustomer;
 					throw new AccessDeniedException("U bent niet aangemeld bij deze administratie pagina's.");
 
 				vSession.setCallingJsp(Constants.CLIENT_PREF_JSP);
-				vCustomer = AccountCache.getInstance().get(vSession.getSessionFwdNr());
+				vCustomer = AccountCache.getInstance().get(vSession.mLoginData.getAccountId());
 
 				String vEmail = vCustomer.getEmail();
 				vEmail = (vEmail == null) ? "" : vEmail;

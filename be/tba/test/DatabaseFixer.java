@@ -1,6 +1,5 @@
 package be.tba.test;
 
-import java.sql.SQLException;
 import java.util.Collection;
 import java.util.SortedSet;
 import java.util.Vector;
@@ -21,15 +20,7 @@ public class DatabaseFixer
    
    public DatabaseFixer()
    {
-      try
-      {
-         mSession = new WebSession();
-      }
-      catch (SQLException e)
-      {
-         // TODO Auto-generated catch block
-         log.error(e.getMessage(), e);
-      }
+      mSession = new WebSession();
       mInvoiceSession = new InvoiceSqlAdapter();
    }
    

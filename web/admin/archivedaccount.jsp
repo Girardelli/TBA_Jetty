@@ -49,7 +49,6 @@ try
                   <td valign="top" class="topMenu" bgcolor="#F89920">GSM</td>
                   <td valign="top" class="topMenu" bgcolor="#F89920">Naam</td>
                   <td valign="top" class="topMenu" bgcolor="#F89920">e-mail</td>
-                  <td valign="top" class="topMenu" bgcolor="#F89920">Laatste login</td>
                </tr>
                <%
                   vSession.setCallingJsp(Constants.ADMIN_ACCOUNT_JSP);
@@ -68,12 +67,6 @@ try
                						vFullName = (vFullName == null) ? "" : vFullName;
                						String vEmail = vEntry.getEmail();
                						vEmail = (vEmail == null) ? "" : vEmail;
-               						String vLastLogin = vEntry.getLastLogin();
-               						
-                                    if (!vEntry.getIsRegistered())
-                                       vLastLogin = "Niet geregistreerd";
-                                    else
-                                       vLastLogin = (vLastLogin == null) ? "" : vLastLogin;
                						String vRegImg;
                						//          if (vEntry.getIsRegistered())
                						if (vEntry.getNoInvoice())
@@ -88,7 +81,6 @@ try
                   <td valign="top" class="bodytekst"><%=vGsm%></td>
                   <td valign="top" class="bodytekst"><%=vFullName%></td>
                   <td valign="top" class="bodytekst"><%=vEmail%></td>
-                  <td valign="top" class="bodytekst"><%=vLastLogin%></td>
                </tr>
                <%
                   vRowInd++;

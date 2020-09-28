@@ -23,8 +23,9 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import be.tba.ejb.account.interfaces.AccountEntityData;
-import be.tba.ejb.account.session.AccountSqlAdapter;
+import be.tba.ejb.account.interfaces.LoginEntityData;
+//import be.tba.ejb.account.session.LoginSqlAdapter;
+import be.tba.servlets.helper.LoginFacade;
 import be.tba.servlets.session.SessionManager;
 import be.tba.servlets.session.WebSession;
 import be.tba.util.constants.AccountRole;
@@ -46,13 +47,13 @@ public class LoginServlet extends HttpServlet
     {
         req.setCharacterEncoding("UTF-8");
         res.setContentType("text/html");
-        AccountSqlAdapter vAccountSession = null;
+//        LoginSqlAdapter vLoginSqlSession = null;
         RequestDispatcher rd = null;
         ServletContext sc = null;
         WebSession vSession = null;
 
-        String vUserId = req.getParameter(Constants.ACCOUNT_USERID);
-        String vPassword = req.getParameter(Constants.ACCOUNT_PASSWORD);
+        String vUserId = req.getParameter(Constants.LOGIN_USERID);
+        String vPassword = req.getParameter(Constants.LOGIN_PASSWORD);
 
         try
         {
@@ -79,42 +80,43 @@ public class LoginServlet extends HttpServlet
                 if (vUserId == null || vPassword == null)
                     throw new SystemErrorException("User id or password null.");
 
-                AccountEntityData vAccount = null;
+//                LoginEntityData vLogin = null;
                  vSession = new WebSession();
-                 vAccountSession = new AccountSqlAdapter();
-                 vAccount = vAccountSession.logIn(vSession, vUserId, vPassword);
-                 log.info("LoginServlet: " + vAccount.getFullName() + " logged in.");
-
-                if (!vAccount.getIsRegistered())
-                {
-                    Vector<String> vErrorList = new Vector<String>();
-                    vErrorList.add("U bent nog niet geregistreerd.");
-                    req.setAttribute(Constants.ERROR_VECTOR, vErrorList);
-                    rd = sc.getRequestDispatcher(Constants.REGISTER_JSP);
-                }
-                else if (vAccount.getRole().equals(AccountRole.CUSTOMER.getShort()) || vAccount.getRole().equals(AccountRole.SUBCUSTOMER.getShort()))
-                {
-                    // Customer with access has logged in.
-                    HttpSession httpSession = req.getSession();
-                    httpSession.setAttribute(Constants.SESSION_OBJ, vSession);
-                    SessionManager.getInstance().add(vSession, vUserId);
-                    vSession.setRole(AccountRole.fromShort(vAccount.getRole()));
-                    vSession.setSessionFwdNr(vAccount.getFwdNumber());
-                    vSession.setAccountId(vAccount.getId());
-                    Calendar calendar = Calendar.getInstance();
-                    vSession.setYear(calendar.get(Calendar.YEAR));
-                    vSession.setMonthsBack(calendar.get(Calendar.MONTH));
-                    rd = sc.getRequestDispatcher(Constants.CLIENT_CALLS_JSP);
-                    log.info("LoginServlet: " + vAccount.getUserId() + " got session id " + vSession.getSessionId());
-                }
-                else
-                {
-                    Vector<String> vErrorList = new Vector<String>();
-                    vErrorList.add("Enkel een klant of administrator kan deze pagina's gebruiken!");
-                    req.setAttribute(Constants.ERROR_VECTOR, vErrorList);
-                    rd = sc.getRequestDispatcher(Constants.REGISTER_JSP);
-                }
-                break;
+                 LoginFacade.logIn(vSession, vUserId, vPassword);
+                 HttpSession httpSession = req.getSession();
+                 httpSession.setAttribute(Constants.SESSION_OBJ, vSession);
+                 
+//                if (!vSession.mLoginData.getIsRegistered())
+//                {
+//                    Vector<String> vErrorList = new Vector<String>();
+//                    vErrorList.add("U bent nog niet geregistreerd.");
+//                    req.setAttribute(Constants.ERROR_VECTOR, vErrorList);
+//                    rd = sc.getRequestDispatcher(Constants.REGISTER_JSP);
+//                }
+//                else if (vSession.mLoginData.getRole().equals(AccountRole.CUSTOMER.getShort()))
+//                {
+//                    // Customer with access has logged in.
+//                    HttpSession httpSession = req.getSession();
+//                    httpSession.setAttribute(Constants.SESSION_OBJ, vSession);
+//                    SessionManager.getInstance().add(vSession, vUserId);
+//                    vSession.setRole(AccountRole.fromShort(vSession.mLoginData.getRole()));
+//                    vSession.setAccountId(vLogin.getAccountId());
+//                    Calendar calendar = Calendar.getInstance();
+//                    vSession.setYear(calendar.get(Calendar.YEAR));
+//                    vSession.setMonthsBack(calendar.get(Calendar.MONTH));
+//                    rd = sc.getRequestDispatcher(Constants.CLIENT_CALLS_JSP);
+//                    log.info("LoginServlet: " + vSession.mLoginData.getUserId() + " got session id " + vSession.getSessionId());
+//                }
+//                else
+//                {
+//                    Vector<String> vErrorList = new Vector<String>();
+//                    vErrorList.add("Enkel een klant of administrator kan deze pagina's gebruiken!");
+//                    req.setAttribute(Constants.ERROR_VECTOR, vErrorList);
+//                    rd = sc.getRequestDispatcher(Constants.REGISTER_JSP);
+//                }
+                 log.info("LoginServlet: " + vSession.mLoginData.getUserId() + " got session id " + vSession.getSessionId());
+                 rd = sc.getRequestDispatcher(Constants.CLIENT_CALLS_JSP);
+                 break;
             }
 
             // ==============================================================================================
@@ -144,12 +146,8 @@ public class LoginServlet extends HttpServlet
                     }
                     else
                     {
-                        SessionManager.getInstance().add(vSession, vUserId);
-                        vSession.setRole(AccountRole.CUSTOMER);
-                        vSession.setSessionFwdNr(req.getParameter(Constants.ACCOUNT_REGCODE));
-                        vSession.setAccountId(AccountCache.getInstance().get(vSession.getSessionFwdNr()).getId());
-                        // req.setAttribute(Constants.SESSION_ID, vKey);
-                        // req.setAttribute(Constants.SESSION_OBJ, vSession);
+                       // register was successful, login
+                       LoginFacade.logIn(vSession, vUserId, vPassword);
                         rd = sc.getRequestDispatcher(Constants.CLIENT_CALLS_JSP);
                     }
                 }
@@ -202,7 +200,7 @@ public class LoginServlet extends HttpServlet
         }
         catch (Exception e)
         {
-            //log.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
             req.setAttribute(Constants.ERROR_TXT, "Onbekende error! Meldt deze error bij <a href=\"mailto:webmaster@thebusinessassistant.be\">webmaster@thebusinessassistant.be</a>.");
             rd = sc.getRequestDispatcher(Constants.PROTECT_FAIL_JSP);
         }
@@ -218,13 +216,15 @@ public class LoginServlet extends HttpServlet
     {
         Vector<String> vFormFaults = new Vector<String>();
 
-        String vCode = req.getParameter(Constants.ACCOUNT_REGCODE);
-        String vUserId = req.getParameter(Constants.ACCOUNT_USERID);
-        String vPassword = req.getParameter(Constants.ACCOUNT_PASSWORD);
-        String vPassword2 = req.getParameter(Constants.ACCOUNT_PASSWORD2);
+        String vCode = req.getParameter(Constants.LOGIN_REGCODE);
+        String vUserId = req.getParameter(Constants.LOGIN_USERID);
+        String vPassword = req.getParameter(Constants.LOGIN_PASSWORD);
+        String vPassword2 = req.getParameter(Constants.LOGIN_PASSWORD2);
 
         if (vCode == null)
             vFormFaults.add("Registratiecode niet ingevuld.");
+        else if (LoginEntityData.checkLoginCode(vCode) < 0)
+           vFormFaults.add("Foutieve registratiecode.");
         if (vUserId == null)
             vFormFaults.add("Login naam niet ingevuld.");
         if (vPassword == null)
@@ -244,25 +244,25 @@ public class LoginServlet extends HttpServlet
     {
         Vector<String> vFormFaults = new Vector<String>();
 
-        RegisterData vRegData = new RegisterData();
-        vRegData.setCode(req.getParameter(Constants.ACCOUNT_REGCODE));
-        vRegData.setUserId(req.getParameter(Constants.ACCOUNT_USERID));
-        vRegData.setPassword(req.getParameter(Constants.ACCOUNT_PASSWORD));
+        LoginEntityData vRegData = new LoginEntityData();
+        
+        int accountId = LoginEntityData.checkLoginCode(req.getParameter(Constants.LOGIN_REGCODE));
+        if (accountId < 0)
+        {
+           log.error("account id could not be retrieved from registration code " + req.getParameter(Constants.LOGIN_REGCODE));
+           vFormFaults.add("registratie code is geweigerd. Probeer opnieuw.");
+        }
+        vRegData.setRole(AccountRole.CUSTOMER.getShort());
+        vRegData.setUserId(req.getParameter(Constants.LOGIN_USERID));
+        vRegData.setPassword(req.getParameter(Constants.LOGIN_PASSWORD));
+        vRegData.setAccountId(accountId);
+        vRegData.setName(req.getParameter(Constants.LOGIN_NAME));
         try
         {
-            AccountSqlAdapter vAccountSession = new AccountSqlAdapter();
-            String vErrorStr = vAccountSession.register(session, vRegData);
-            AccountEntityData vAccount = null;
+            String vErrorStr = LoginFacade.register(session, vRegData);
             if (vErrorStr != null)
             {
                 vFormFaults.add(vErrorStr);
-            }
-            else
-            {
-                vAccount = vAccountSession.logIn(session, vRegData.getUserId(), vRegData.getPassword());
-                session.setSessionFwdNr(vAccount.getFwdNumber());
-                session.setAccountId(vAccount.getId());
-                AccountCache.getInstance().update(session);
             }
         }
         catch (Exception e)
@@ -270,6 +270,7 @@ public class LoginServlet extends HttpServlet
             log.error(e.getMessage(), e);
             vFormFaults.add("Fout: " + e.getMessage());
         }
+        // no errors in this list means successful registration
         return vFormFaults;
     }
 

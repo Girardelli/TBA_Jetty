@@ -13,63 +13,7 @@
 <link rel="stylesheet" type="text/css"
 	href="TheBusinessAssistant.css" title="main">
 </head>
-<!--
-<script language="JavaScript">
-var sURL = unescape(window.location.pathname);
 
-function doLoad()
-{
-    // the timeout value should be the same as in the "refresh" meta-tag
-    setTimeout( "refresh()", 30*1000 );
-}
-
-function refresh()
-{
-    //  This version of the refresh function will cause a new
-    //  entry in the visitor's history.  It is provided for
-    //  those browsers that only support JavaScript 1.0.
-    //
-    window.location.href = sURL;
-}
-
-</script>
-
-<script language="JavaScript1.1">
-
-function refresh()
-{
-    //  This version does NOT cause an entry in the browser's
-    //  page view history.  Most browsers will always retrieve
-    //  the document from the web-server whether it is already
-    //  in the browsers page-cache or not.
-    //
-    window.location.replace( sURL );
-}
-
-</script>
-
-<script language="JavaScript1.2">
-
-function refresh()
-{
-    //  This version of the refresh function will be invoked
-    //  for browsers that support JavaScript version 1.2
-    //
-
-    //  The argument to the location.reload function determines
-    //  if the browser should retrieve the document from the
-    //  web-server.  In our example all we need to do is cause
-    //  the JavaScript block in the document body to be
-    //  re-evaluated.  If we needed to pull the document from
-    //  the web-server again (such as where the document contents
-    //  change dynamically) we would pass the argument as 'true'.
-    //
-    window.location.reload( false );
-}
-
-</script>
-<body onload="doLoad()">
--->
 <body>
 
 <table border="0" cellspacing="0" cellpadding="0" bgcolor="FFFFFF">
@@ -106,9 +50,8 @@ if (vErrorMessage == null)
 
 	<tr valign="top">
 		<td>
-		<form name="announcement" method="POST"
-			action="/tba/AdminDispatch"><input type=hidden
-			name=<%=Constants.SRV_ACTION%> value="<%=vPrevAction%>"> 
+		<form name="announcement" method="POST"	action="/tba/AdminDispatch">
+        <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=vPrevAction%>"> 
 		<table border="0" cellspacing="0" cellpadding="0">
 			<!-- white space -->
 			<td valign="top" width="20" bgcolor="FFFFFF"></td>
@@ -117,9 +60,9 @@ if (vErrorMessage == null)
 			<td valign="top" width="750" bgcolor="FFFFFF"><br>
 			<p><span class="bodysubtitle"> <%= vErrorMessage%></span></p>
 			<br>
-			<input class="tbabutton" type=submit name=action value="Ja, voer uit"
-				onclick="yesContinue()"> <input class="tbabutton" type=submit name=action
-				value="Nee, ga terug" onclick="noGoBack()"></td>
+			<input class="tbabutton" type=submit name=action value="Ja, voer uit" onclick="yesContinue()"> 
+            <input class="tbabutton" type=submit name=action value="Nee, ga terug" onclick="noGoBack()">
+            </td>
 		</table>
 		</form>
 		</td>

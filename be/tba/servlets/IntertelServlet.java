@@ -38,20 +38,11 @@ public class IntertelServlet extends HttpServlet
 	
 	public IntertelServlet()
 	{
-		try 
-		{
-			log.info("IntertelServlet started");
-	    	
-			mCallRecordSqlAdapter = new CallRecordSqlAdapter();
-			mSession = new WebSession(Constants.MYSQL_URL);
-			mIntertelCallManager = IntertelCallManager.getInstance();
-		} 
-		catch (SQLException e) 
-		{
-			// TODO Auto-generated catch block
-			log.info(e.getMessage());
-			log.error(e.getMessage(), e);
-		}
+		log.info("IntertelServlet started");
+    	
+		mCallRecordSqlAdapter = new CallRecordSqlAdapter();
+		mSession = new WebSession(Constants.MYSQL_URL);
+		mIntertelCallManager = IntertelCallManager.getInstance();
 	}
     
 	/**
@@ -83,7 +74,7 @@ public class IntertelServlet extends HttpServlet
 			} 
     		catch (Exception e) 
     		{
-    			log.info("no connection available and could not be recovered");
+    			log.error("no connection available and could not be recovered");
     			log.error(e.getMessage(), e);
     			return;
     		}
@@ -105,7 +96,7 @@ public class IntertelServlet extends HttpServlet
 		data = mIntertelCallManager.get(intertelCallId);
 		if (data == null && !phase.equals("start"))
 		{
-			log.info("\r\nERROR: INtertel event with call ID not found: " + intertelCallId);
+			log.warn("Intertel event with call ID not found: " + intertelCallId);
 		}
 		switch (phase)
     	{
@@ -250,7 +241,7 @@ public class IntertelServlet extends HttpServlet
     		break;
 
     	default:
-    		log.info("Intertel servlet doPost: unknown 'origin'=" + phase);
+    		log.warn("Intertel servlet doPost: unknown 'origin'=" + phase);
         	        	
     	}
 		/*

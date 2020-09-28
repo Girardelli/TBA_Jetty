@@ -188,8 +188,7 @@ public class InvoiceFacade
     
     public static void generateInvoices(SessionParmsInf parms, WebSession session) throws IOException
     {
-        if (parms.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER) != null)
-            session.getCallFilter().setCustFilter(parms.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER));
+       session.getCallFilter().setCustFilter(parms.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER));
         if (parms.getParameter(Constants.INVOICE_MONTH) != null)
             session.setMonthsBack(Integer.parseInt(parms.getParameter(Constants.INVOICE_MONTH)));
 
@@ -219,7 +218,7 @@ public class InvoiceFacade
         int vYear = vCalendar.get(Calendar.YEAR);
         
         newInvoice.setAccountID(Integer.parseInt(parms.getParameter(Constants.ACCOUNT_ID)));
-        AccountEntityData account = AccountCache.getInstance().get(newInvoice.getAccountID());
+        AccountEntityData account = AccountCache.getInstance().get(newInvoice.getAccountId());
         newInvoice.setAccountFwdNr(account.getFwdNumber());
         newInvoice.setTotalCost(Double.parseDouble(parms.getParameter(Constants.INVOICE_AMONTH)));
         newInvoice.setMonth(Integer.parseInt(parms.getParameter(Constants.INVOICE_MONTH)));

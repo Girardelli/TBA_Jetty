@@ -97,7 +97,7 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
     public int addInvoice(WebSession webSession, InvoiceEntityData data)
     {
         addRow(webSession, data);
-        Collection<InvoiceEntityData> invoices = executeSqlQuery(webSession, "SELECT * FROM InvoiceEntity WHERE AccountID=" + data.getAccountID() + " AND TotalCost=" + data.getTotalCost()  + " AND StartTime=" + data.getStartTime() + " AND StopTime=" + data.getStopTime());
+        Collection<InvoiceEntityData> invoices = executeSqlQuery(webSession, "SELECT * FROM InvoiceEntity WHERE AccountID=" + data.getAccountId() + " AND TotalCost=" + data.getTotalCost()  + " AND StartTime=" + data.getStartTime() + " AND StopTime=" + data.getStopTime());
         return ((InvoiceEntityData) invoices.toArray()[0]).getId();
     }
 

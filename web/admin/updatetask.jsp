@@ -42,7 +42,7 @@ mCustomerData = AccountCache.getInstance().get(mTaskData);
 		<td valign="top" width="30" bgcolor="FFFFFF"></td>
 		<td valign="top" bgcolor="FFFFFF"><br>
 		<br>
-		<table width="100%" border="0" cellspacing="1" cellpadding="1">
+		<table border="0" cellspacing="1" cellpadding="1">
 		
 <% if ((!mTaskData.getIsRecuring() && mTaskData.getInvoiceId() > 0) ||
 		//or a recuring task that has been stopped
@@ -120,6 +120,8 @@ else
 	int vMonth = vCalendar.get(Calendar.MONTH) + 1;
 	int vYear = vCalendar.get(Calendar.YEAR) - 2000;
 	String vDate = new String(vDay + "/" + vMonth  + ((vYear < 10) ? "/0" : "/") + vYear);
+	LoginSqlAdapter loginSqlAdapter = new LoginSqlAdapter();
+	Collection<LoginEntityData> logins = loginSqlAdapter.getEmployeeList(vSession);
 %>
 				</td>
 			</tr>
@@ -129,18 +131,16 @@ else
 				<td width="250" valign="top" class="bodysubsubtitle"><img
 					src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Uitgevoerd door</td>
 				<td width="580" valign="top">
-<%                  
-	out.println("<select name=\"" + Constants.TASK_DONE_BY_EMPL + "\">");
-	Collection<AccountEntityData> emplList = AccountCache.getInstance().getEmployeeList();
-	synchronized(list) 
-	{
-	   for (Iterator<AccountEntityData> vIter = emplList.iterator(); vIter.hasNext();)
-	   {
-	       AccountEntityData vValue = (AccountEntityData) vIter.next();
-	       out.println("<option value=\"" + vValue.getFwdNumber() + (vValue.getFwdNumber().equals(mTaskData.getDoneBy()) ? "\" selected>" : "\">") + vValue.getFullName());
-	   }
-	}
-	out.println("</select>");
+<%    
+
+   out.println("<select name=\"" + Constants.TASK_DONE_BY_EMPL + "\">");
+   
+   out.println("<option value=\"\" selected> Selecteer een werknemer");
+    for (LoginEntityData account : logins)
+    {
+        out.println("<option value=\"" + account.getUserId() + (account.getUserId().equals(mTaskData.getDoneBy()) ? "\" selected>" : "\">" + account.getName()));
+    }
+   out.println("</select>");
 %>
 				</td>
 			</tr>
@@ -175,12 +175,12 @@ else
 				<td width="250" valign="top" class="bodysubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Maandelijks terugkerend</td>
 				<td width="580" valign="top" class="bodysubsubtitle">
 					<input type=checkbox name=<%=Constants.TASK_IS_RECURING%> value="<%=mTaskData.getIsRecuring()?Constants.YES:Constants.NO%>" <%=mTaskData.getIsRecuring()?" checked":""%>>
-					<%=mTaskData.getIsRecuring()?"&nbsp; verwijder selectie om deze wederkerende taak te stoppen vanaf nu.":""%>
+					<%=mTaskData.getIsRecuring()?"&nbsp; (verwijder selectie om deze wederkerende taak te stoppen vanaf nu.)":""%>
 				</td>
 			</tr>
 			<tr>
 				<td width="50"></td>
-				<td width="250" valign="top" class="bodysubsubtitle">Omschrijving</td>
+				<td width="250" valign="top" class="bodysubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Omschrijving</td>
 				<td width="580" valign="top">
 				    <textarea name=<%=Constants.TASK_DESCRIPTION%> rows=10 cols=70><%=mTaskData.getDescription()%></textarea>
 				</td>

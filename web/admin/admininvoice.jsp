@@ -32,6 +32,17 @@ StringBuilder allEntryIds = new StringBuilder("[");
                 int vCurYear = vToday.get(Calendar.YEAR);
 %>
 <body>
+
+<table  cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
+    <tr>
+        <!-- white space -->
+        <td valign="top" width="20" bgcolor="FFFFFF"></td>
+
+        <!-- account list -->
+        <td valign="top" width="865" bgcolor="FFFFFF"><br>
+
+
+
 <p><span class="bodytitle"> Factuurlijst bewerken<br>
 </span></p>
 <form name="invoicelistform" method="POST" action="/tba/AdminDispatch">
@@ -40,7 +51,7 @@ StringBuilder allEntryIds = new StringBuilder("[");
 	<input type=hidden name=<%=Constants.INVOICE_TO_DELETE%> value="">
 	<input type=hidden name=<%=Constants.INVOICE_ID%> value="">
 	<input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.GOTO_INVOICE_ADMIN%>"> 
-	<input type=hidden name=<%=Constants.ACCOUNT_FILTER_CUSTOMER%> value="">
+	<input type=hidden name=<%=Constants.ACCOUNT_FILTER_CUSTOMER%> value="0">
 	<table  cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
 		<tr>
 			<!-- white space -->
@@ -181,7 +192,7 @@ StringBuilder allEntryIds = new StringBuilder("[");
 					onmouseover="hooverOnRow('<%=vId%>','<%=vRowInd%>')"
 					onmouseout="hooverOffRow('<%=vId%>','<%=vRowInd%>')"
 					onclick="updateDeleteFlag('<%=vId%>','<%=vEntry.getId()%>','<%=vRowInd%>')"
-					ondblclick="changeUrl('/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_INVOICE%>&<%=Constants.ACCOUNT_FILTER_CUSTOMER%>=<%=vEntry.getAccountFwdNr()%>&<%=Constants.INVOICE_ID%>=<%=vEntry.getId()%>');">
+					ondblclick="changeUrl('/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_INVOICE%>&<%=Constants.ACCOUNT_FILTER_CUSTOMER%>=<%=vEntry.getAccountId()%>&<%=Constants.INVOICE_ID%>=<%=vEntry.getId()%>');">
 					<td width="150" valign="top"><%=vEuroGif%>&nbsp&nbsp<%=vEntry.getPayDate()%></td>
 					<td width="110" valign="top"><%=vStyleStart%><%=vEntry.getInvoiceNr()%><%=vStyleEnd%></td>
 					<td width="400" valign="top"><%=vStyleStart%><%=vCompanyName%><%=vStyleEnd%></td>
@@ -217,6 +228,9 @@ catch (Exception e)
 
 </table>
 </form>
+        </td>
+    </tr>
+</table>
 <br>
 <br>
 <br>

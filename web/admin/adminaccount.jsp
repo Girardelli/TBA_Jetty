@@ -51,7 +51,7 @@ StringBuilder allEntryIds = new StringBuilder("[");
                      <td >
                      <form name="adminaccform" method="POST" action="/tba/AdminDispatch">
                      <input type=hidden name=<%=Constants.ACCOUNT_TO_DELETE%> value=""> 
-                     <input type=hidden name=<%=Constants.SRV_ACTION%> value="yves">
+                     <input type=hidden name=<%=Constants.SRV_ACTION%> value="">
                      <input class="tbabutton" type=submit name=action value=" Toevoegen " onclick="addAccount()">
                      <input class="tbabutton" type=submit name=action value=" Archiveren " onclick="deleteAccount()">
                     </form>
@@ -74,18 +74,14 @@ StringBuilder allEntryIds = new StringBuilder("[");
                   <td valign="top" class="topMenu" bgcolor="#F89920">GSM</td>
                   <td valign="top" class="topMenu" bgcolor="#F89920">Naam</td>
                   <td valign="top" class="topMenu" bgcolor="#F89920">e-mail</td>
-                  <td valign="top" class="topMenu" bgcolor="#F89920">Laatste login</td>
                </tr>
                <%
                   vSession.setCallingJsp(Constants.ADMIN_ACCOUNT_JSP);
                				int vRowInd = 0;
                				Collection<AccountEntityData> list = AccountCache.getInstance().getCustomerList();
                				synchronized (list) {
-               					for (Iterator<AccountEntityData> vIter = list.iterator(); vIter.hasNext();) {
-               						AccountEntityData vEntry = vIter.next();
-
-               						if (AccountRole.fromShort(vEntry.getRole()) == AccountRole.SUBCUSTOMER ||
-               						      vEntry.getIsArchived())
+               					for (AccountEntityData vEntry : list) {
+               						if (AccountRole.fromShort(vEntry.getRole()) == AccountRole.SUBCUSTOMER || vEntry.getIsArchived())
                						{
                							continue;
                						}
@@ -97,12 +93,6 @@ StringBuilder allEntryIds = new StringBuilder("[");
                						vFullName = (vFullName == null) ? "" : vFullName;
                						String vEmail = vEntry.getEmail();
                						vEmail = (vEmail == null) ? "" : vEmail;
-               						String vLastLogin = vEntry.getLastLogin();
-               						
-                                    if (!vEntry.getIsRegistered())
-                                       vLastLogin = "Niet geregistreerd";
-                                    else
-                                       vLastLogin = (vLastLogin == null) ? "" : vLastLogin;
                						String vRegImg;
                						//          if (vEntry.getIsRegistered())
                						if (vEntry.getNoInvoice())
@@ -118,7 +108,6 @@ StringBuilder allEntryIds = new StringBuilder("[");
                   <td valign="top" class="bodytekst"><%=vGsm%></td>
                   <td valign="top" class="bodytekst"><%=vFullName%></td>
                   <td valign="top" class="bodytekst"><%=vEmail%></td>
-                  <td valign="top" class="bodytekst"><%=vLastLogin%></td>
                </tr>
                <%
                   vRowInd++;
@@ -137,9 +126,13 @@ StringBuilder allEntryIds = new StringBuilder("[");
  					for (Iterator<AccountEntityData> vIter = list.iterator(); vIter.hasNext();) {
  						AccountEntityData vEntry = vIter.next();
  						if (vEntry.getHasSubCustomers()) {
- 							Collection<AccountEntityData> subList = AccountCache.getInstance()
- 									.getSubCustomersList(vEntry.getId());
+ 							Collection<AccountEntityData> subList = AccountCache.getInstance().getSubCustomersList(vEntry.getId());
  							//System.out.print("sublist for " + vEntry.getFwdNumber() + " has " + subList.size() + " members");
+                           if (subList == null)
+                           {
+                              System.out.println("ERROR: no subcustomers found allthough the hasSubcustomer flag is set");
+                              continue;
+                           }
  %>
             <p>
                <span class="bodytitle"> <%=vEntry.getFullName()%></span>
@@ -157,7 +150,6 @@ StringBuilder allEntryIds = new StringBuilder("[");
                   <td valign="top" class="topMenu" bgcolor="#F89920">GSM</td>
                   <td valign="top" class="topMenu" bgcolor="#F89920">Naam</td>
                   <td valign="top" class="topMenu" bgcolor="#F89920">e-mail</td>
-                  <td valign="top" class="topMenu" bgcolor="#F89920">Laatste login</td>
                </tr>
                <%
                   for (Iterator<AccountEntityData> vSubIter = subList.iterator(); vSubIter.hasNext();) 
@@ -175,12 +167,6 @@ StringBuilder allEntryIds = new StringBuilder("[");
                								vFullName = (vFullName == null) ? "" : vFullName;
                								String vEmail = vSubEntry.getEmail();
                								vEmail = (vEmail == null) ? "" : vEmail;
-               								String vLastLogin = vSubEntry.getLastLogin();
-               								vLastLogin = (vLastLogin == null) ? "" : vLastLogin;
-                                             if (!vEntry.getIsRegistered())
-                                                vLastLogin = "Niet geregistreerd";
-                                             else
-                                                vLastLogin = (vLastLogin == null) ? "" : vLastLogin;
                								String vRegImg;
                								//			          if (vSubEntry.getIsRegistered())
                								//			            vRegImg = "\"/tba/images/greenVink.gif\"";
@@ -199,7 +185,6 @@ StringBuilder allEntryIds = new StringBuilder("[");
                   <td valign="top" class="bodytekst"><%=vGsm%></td>
                   <td valign="top" class="bodytekst"><%=vFullName%></td>
                   <td valign="top" class="bodytekst"><%=vEmail%></td>
-                  <td valign="top" class="bodytekst"><%=vLastLogin%></td>
                </tr>
                <%
                   vRowInd++;
@@ -211,6 +196,11 @@ StringBuilder allEntryIds = new StringBuilder("[");
                %>
             </table> <%
                         }
+ 						else
+ 						{
+                     
+ 						}           
+                  
  					}
  				}
  				if (vRowInd > 0) {
@@ -223,6 +213,7 @@ StringBuilder allEntryIds = new StringBuilder("[");
  %></td>
       </tr>
    </table>
+   <br><br>
 
 
       <script type="text/javascript">

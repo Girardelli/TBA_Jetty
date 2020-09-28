@@ -27,6 +27,7 @@
     <tr>
         <td style="padding: 0px;" colspan="0" bgcolor="#F89920" height="2"></td>
     </tr>
+    <tr><td><br><br></td></tr>
 	<%--
 File: protectfail.jsp
 Description:  
@@ -60,8 +61,11 @@ else if (vErrorMessage == null)
 			<td valign="top" width="20" bgcolor="FFFFFF"></td>
 
 			<!-- account list -->
-			<td valign="top" width="750" bgcolor="FFFFFF"><br>
-			<p><span class="tdborder bodytitle"> <%= vErrorMessage%></span></p>
+			<td valign="top" width="750" bgcolor="FFFFFF">
+            <table class='tdborder bodysubsubtitle' width=500>
+            <tr><td><%= vErrorMessage%>
+            </td></tr>
+            </table>
 			<br>
 			<p><span class="bodytekst">klik <a href=<%=Constants.LOGIN_HTML%>>hier</a></span>
 			om terug te keren naar het aanmeldpanel.</p>

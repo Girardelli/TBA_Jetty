@@ -42,18 +42,9 @@ be.tba.util.data.*"%>
 if (vSession == null)
   throw new AccessDeniedException("U bent niet aangemeld bij deze administratie pagina's.");
 vSession.setCallingJsp(Constants.CLIENT_SEARCH_JSP);  
-AccountEntityData vAccount = AccountCache.getInstance().get(vSession.getSessionFwdNr());
+AccountEntityData vAccount = AccountCache.getInstance().get(vSession.mLoginData.getAccountId());
 
-boolean vCustomerFilterOn = false;
 
-String vCustomerFilter = (String) vSession.getSessionFwdNr();//request.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER);
-if (vCustomerFilter != null)
-{
-  if (vCustomerFilter.equals(Constants.ACCOUNT_FILTER_ALL))
-    vCustomerFilter = null;
-}
-
-if (vCustomerFilter == null) vCustomerFilter = Constants.ACCOUNT_FILTER_ALL;
 %>
 <table  cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
     <tr>
@@ -100,7 +91,7 @@ if (vSession.getSearchString() != null && vSession.getSearchString().length() > 
 {
   CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
 
-  vRecords = vQuerySession.getSearchCalls(vSession, vCustomerFilter, vSession.getSearchString(), vSession.getMonthsBack(), vSession.getYear());
+  vRecords = vQuerySession.getSearchCalls(vSession, vSession.mLoginData.getAccountId(), vSession.getSearchString(), vSession.getMonthsBack(), vSession.getYear());
 
   out.println("<p><span class=\"bodysubsubtitle\"> Zoekresultaat voor tekst \"" + vSession.getSearchString() + "\" : </span>");
 

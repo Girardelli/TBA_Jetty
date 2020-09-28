@@ -91,10 +91,11 @@ public class CallRecordFacade
          {
             vCallData.setShortDescription(parms.getParameter(Constants.RECORD_SHORT_TEXT));
          }
-      } else
+      } 
+      String newFwdNr = parms.getParameter(Constants.ACCOUNT_FORWARD_NUMBER);
+      if (newFwdNr != null && !newFwdNr.isEmpty())
       {
          vCallData.setShortDescription(parms.getParameter(Constants.RECORD_SHORT_TEXT));
-         String newFwdNr = parms.getParameter(Constants.ACCOUNT_FORWARD_NUMBER);
          log.info("ACCOUNT_FORWARD_NUMBER=" + newFwdNr + ", vCallData.getFwdNr=" + vCallData.getFwdNr());
          if (newFwdNr != null)
          {
@@ -260,13 +261,13 @@ public class CallRecordFacade
    }
 
 
-   public static void saveNewSubCustomer(SessionParmsInf parms, WebSession webSession, String vNewFwdNr)
+   public static void saveNewSubCustomer(SessionParmsInf parms, WebSession webSession, int accountId)
    {
       log.info("saveNewSubCustomer()");
       CallRecordSqlAdapter vCallLogWriterSession = new CallRecordSqlAdapter();
-      vCallLogWriterSession.changeFwdNumber(webSession, webSession.getRecordId(), vNewFwdNr);
+      vCallLogWriterSession.changeFwdNumber(webSession, webSession.getRecordId(), accountId);
       webSession.setNewUnmappedCall(null);
-      webSession.setRecordId(null);
+      webSession.setRecordId(0);
    }
 
 
@@ -295,6 +296,12 @@ public class CallRecordFacade
       }
    }
    
+   public static void changeFwdNumber(WebSession session, int callId, int newAccountId)
+   {
+       CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
+       vQuerySession.changeFwdNumber(session, callId, newAccountId);
+   }
+
    
    // 'terug' button was called on the newCall page. User want to cancel this
    // entry.
@@ -304,7 +311,7 @@ public class CallRecordFacade
    {
       log.info("removeNewCall()");
       webSession.setNewUnmappedCall(null);
-      webSession.setRecordId(null);
+      webSession.setRecordId(0);
    }
 
    private static void printCallDelete(WebSession session, int key)

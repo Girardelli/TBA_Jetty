@@ -57,16 +57,12 @@ Last Checked In By: $Author: Yves Willems $
 						 						  			throw new AccessDeniedException("U bent niet aangemeld.");
 						 						  		vSession.setCallingJsp(Constants.CLIENT_SHOW_TASKS_JSP);  
 						 						  		  
-						 						  		if (vSession.getSessionFwdNr() == null)
-						 						  			throw new AccessDeniedException(
-						 						  			        "Account nummer not set in session.");
-
 						 						  		Collection<TaskEntityData> vTasks = null;
 						 						  		TaskSqlAdapter vTaskSession = new TaskSqlAdapter();
 
-						 						  		vTasks = vTaskSession.getTasksForMonthforFwdNr(vSession, vSession.getSessionFwdNr(), vSession.getMonthsBack(), vSession.getYear());
+						 						  		vTasks = vTaskSession.getTasksForMonthforCustomer(vSession, vSession.mLoginData.getAccountId(), vSession.getMonthsBack(), vSession.getYear());
 
-						 						  		AccountEntityData vAccountData = (AccountEntityData) AccountCache.getInstance().get(vSession.getSessionFwdNr());
+						 						  		AccountEntityData vAccountData = (AccountEntityData) AccountCache.getInstance().get(vSession.mLoginData.getAccountId());
 						 %> <input class="tbabutton" type=submit name=action value="Taken van vorige maand"
 				onclick="showPrevious()"> <%
  	if (!vSession.isCurrentMonth())

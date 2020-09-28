@@ -33,12 +33,7 @@
     
         boolean vCustomerFilterOn = false;
     
-        String vCustomerFilter = (String) vSession.getCallFilter().getCustFilter();//request.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER);
-        if (vCustomerFilter == null)
-        {
-            vCustomerFilter = Constants.ACCOUNT_FILTER_ALL;
-        }
-        
+        int vCustomerFilter = vSession.getCallFilter().getCustFilter();//request.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER);
         int vMonth = vSession.getMonthsBack();
         int vYear = vSession.getYear();
         int vInvoiceId = vSession.getInvoiceId();
@@ -58,7 +53,7 @@
                 vAccountData =  AccountCache.getInstance().get(vInvoiceData);
             }
         }
-        if (vAccountData == null && !vCustomerFilter.equals(Constants.ACCOUNT_FILTER_ALL))
+        if (vAccountData == null && vCustomerFilter > 0)
         {
             vAccountData =  AccountCache.getInstance().get(vCustomerFilter);
         }

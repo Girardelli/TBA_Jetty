@@ -42,14 +42,12 @@ try
    if (vSession == null)
     throw new AccessDeniedException("U bent niet aangemeld.");
   vSession.setCallingJsp(Constants.CLIENT_ARCHIVED_CALLS_JSP);  
-  if (vSession.getSessionFwdNr() == null)
-    throw new AccessDeniedException("Account nummer not set in session.");
 
   CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
 
-  Collection<CallRecordEntityData> vRecords = vQuerySession.getxWeeksBackIncludingSubcustomer(vSession, vSession.getDaysBack(), vSession.getSessionFwdNr(), true);
+  Collection<CallRecordEntityData> vRecords = vQuerySession.getxWeeksBackIncludingSubcustomer(vSession, vSession.getDaysBack(), vSession.mLoginData.getAccountId(), true);
   
-  AccountEntityData vAccount = AccountCache.getInstance().get(vSession.getSessionFwdNr());
+  AccountEntityData vAccount = AccountCache.getInstance().get(vSession.mLoginData.getAccountId());
 %>
 <input class="tbabutton" type=submit name=action value="Vorige Oproepen" onclick="showPrevious()"> 
 <%
@@ -80,7 +78,7 @@ out.println("<input class=\"tbabutton\" type=submit name=action value=\"Volgende
     else
       out.println("<span class=\"bodysubsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Er zijn </span><span class=\"bodysubsubredtitle\">" + vRecords.size() + "</span><span class=\"bodysubsubtitle\"> gearchiveerde oproepen beschikbaar voor deze periode.</span>");
     int vNewCnt = 0;
-    long vLastLogin = vAccount.getPreviousLoginTS();
+    long vLastLogin = vSession.mLoginData.getPreviousLoginTS();
     %>
     <br><br>
     <tr>

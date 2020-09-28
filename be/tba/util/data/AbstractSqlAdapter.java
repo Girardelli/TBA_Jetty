@@ -97,7 +97,7 @@ public abstract class AbstractSqlAdapter<T>
     	ResultSet rs = null;
         try
         {
-            stmt = session.getConnection().createStatement();
+           stmt = session.getConnection().createStatement();
             if (queryStr.startsWith("INSERT"))
             {
             	long startTime = Calendar.getInstance().getTimeInMillis();

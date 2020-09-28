@@ -29,9 +29,7 @@ StringBuilder allEntryIds = new StringBuilder("[");
 try {
 vSession.setCallingJsp(Constants.ADMIN_TASK_JSP);
 
-String vCustomerFilter = (String) vSession.getCallFilter().getCustFilter();//request.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER);
-
-if (vCustomerFilter == null) vCustomerFilter = Constants.ACCOUNT_FILTER_ALL;
+int vCustomerFilter = vSession.getCallFilter().getCustFilter();
 %>
 <body>
 <table  cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
@@ -41,29 +39,28 @@ if (vCustomerFilter == null) vCustomerFilter = Constants.ACCOUNT_FILTER_ALL;
 
 		<!-- account list -->
 		<td valign="top" width="865" bgcolor="FFFFFF"><br>
-		<p><span class="bodytitle"> Taken bewerken<br>
-		<br>
+		<p><span class="bodytitle"> Taken beheren<br>
 		<br>
 		</span></p>
 		<form name="taskform" method="POST"
 			action="/tba/AdminDispatch"><input type=hidden
 			name=<%=Constants.TASK_TO_DELETE%> value=""> <input type=hidden
 			name=<%=Constants.SRV_ACTION%> value="<%=Constants.GOTO_TASK_ADMIN%>">
-		<table width="330" border="0" cellspacing="0" cellpadding="0">
+		<table border="0" cellspacing="0" cellpadding="0">
 			<tr>
 				<td width="150" valign="top" class="bodysubtitle">&nbsp;Klant</td>
 				<td width="10" valign="top">:</td>
 				<td width="170" valign="top"><select
 					name="<%=Constants.ACCOUNT_FILTER_CUSTOMER%>" onchange="submit()">
 					<%
-out.println("<option value=\"" + Constants.ACCOUNT_FILTER_ALL + (vCustomerFilter.equals(Constants.ACCOUNT_FILTER_ALL) ? "\" selected>" : "\">") + "selecteer klant");
+out.println("<option value=\"" + Constants.ACCOUNT_NOFILTER + (vCustomerFilter == Constants.ACCOUNT_NOFILTER ? "\" selected>" : "\">") + "selecteer klant");
 					Collection<AccountEntityData> list = AccountCache.getInstance().getCustomerList();
 					synchronized(list) 
 					{
 					    for (Iterator<AccountEntityData> vIter = list.iterator(); vIter.hasNext();)
 					    {
 					        AccountEntityData vData = vIter.next();
-					        out.println("<option value=\"" + vData.getFwdNumber() + (vCustomerFilter.equals(vData.getFwdNumber()) ? "\" selected>" : "\">") + vData.getFullName());
+					        out.println("<option value=\"" + vData.getId() + (vCustomerFilter == vData.getId() ? "\" selected>" : "\">") + vData.getFullName());
 					    }
 					}
 %>
@@ -103,7 +100,7 @@ if (!vSession.isCurrentMonth())
 Collection<TaskEntityData> vTasks = null;
 TaskSqlAdapter vTaskSession = new TaskSqlAdapter();
 
-vTasks = vTaskSession.getTasksForMonthforFwdNr(vSession, vCustomerFilter, vSession.getMonthsBack(), vSession.getYear());
+vTasks = vTaskSession.getTasksForMonthforCustomer(vSession, vCustomerFilter, vSession.getMonthsBack(), vSession.getYear());
 
 AccountEntityData vAccountData = (AccountEntityData) AccountCache.getInstance().get(vCustomerFilter);
 
@@ -111,16 +108,16 @@ if (vTasks != null && vTasks.size() > 0)
 {
   if (!vSession.isCurrentMonth())
   {
-    out.println("<span class=\"bodysubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + vTasks.size() + " taken uitgevoerd tijdens de maand " + vSession.getMonthsBackString() + ".</span><br>");
+    out.println("<span class=\"bodysubtitle\">" + vTasks.size() + " taken uitgevoerd tijdens de maand " + vSession.getMonthsBackString() + ".</span><br>");
   }
   else
   {
-    out.println("<span class=\"bodysubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + vTasks.size() + " taken uitgevoerd deze maand.</span><br>");
+    out.println("<span class=\"bodysubtitle\">" + vTasks.size() + " taken uitgevoerd deze maand.</span><br>");
   }
   
 
 %> <br>
-		<table width="100%" border="0" cellspacing="2" cellpadding="2">
+		<table border="0" cellspacing="2" cellpadding="2">
 			<tr>
 				<td width="55" valign="top" class="topMenu" bgcolor="F89920">&nbsp;Datum</td>
 				<td width="250" valign="top" class="topMenu" bgcolor="F89920">&nbsp;Omschrijving</td>
@@ -132,10 +129,8 @@ if (vTasks != null && vTasks.size() > 0)
 			<%
   int vRowInd = 0;
   DecimalFormat vCostFormatter = new DecimalFormat("#0.00");
-  for (Iterator<TaskEntityData> i = vTasks.iterator(); i.hasNext();)
+  for (TaskEntityData vEntry : vTasks)
   {
-    TaskEntityData vEntry = i.next();
-
     String vId = "id" + vEntry.getId();
     String vKost;
     if (vEntry.getIsFixedPrice())

@@ -58,7 +58,10 @@ if (vErrorMessage == null)
 
 			<!-- account list -->
 			<td valign="top" width="750" bgcolor="FFFFFF"><br>
-            <p><span class="tdborder bodytitle"> <%= vErrorMessage%></span></p>
+            <table class='tdborder bodysubsubtitle' width=500>
+            <tr><td><%= vErrorMessage%>
+            </td></tr>
+            </table>
             <br>
             <p><span class="bodytekst">klik <a href=<%=Constants.ADMIN_LOGIN_HTML%>>hier</a></span>
             om terug te keren naar het aanmeldpanel.</p>

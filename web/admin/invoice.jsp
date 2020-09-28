@@ -29,11 +29,7 @@
 	
 	    boolean vCustomerFilterOn = false;
 	
-	    String vCustomerFilter = (String) vSession.getCallFilter().getCustFilter();//request.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER);
-        if (vCustomerFilter == null)
-        {
-            vCustomerFilter = Constants.ACCOUNT_FILTER_ALL;
-        }
+	    int vCustomerFilter = vSession.getCallFilter().getCustFilter();//request.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER);
         DecimalFormat costFormatter = new DecimalFormat("#0.00");
 	    int vMonth = vSession.getMonthsBack();
 	    int vYear = vSession.getYear();
@@ -54,7 +50,7 @@
 	            vAccountData =  AccountCache.getInstance().get(vInvoiceData);
 	        }
 		}
-		if (vAccountData == null && !vCustomerFilter.equals(Constants.ACCOUNT_FILTER_ALL))
+		if (vAccountData == null && vCustomerFilter != Constants.ACCOUNT_NOFILTER)
 		{
 			vAccountData =  AccountCache.getInstance().get(vCustomerFilter);
 		}
@@ -62,7 +58,7 @@
 
 %>
 <body>
-<p><span class="bodytitle">&nbsp;&nbsp;&nbsp;Facturen maken <%=(vAccountData == null)? "Selecteer een klant en maand." : "" %><br>
+<p><span class="bodytitle">&nbsp;&nbsp;&nbsp;Factuur maken <%=(vAccountData == null)? "<br>Selecteer een klant en maand." : "" %><br>
 <br>
 <br>
 </span></p>
@@ -87,7 +83,7 @@
 					name="<%=Constants.ACCOUNT_FILTER_CUSTOMER%>" onchange="submit()">
 					<%
 
-		out.println("<option value=\"" + Constants.ACCOUNT_FILTER_ALL + (vCustomerFilter.equals(Constants.ACCOUNT_FILTER_ALL) ? "\" selected>" : "\">") + "selecteer klant");
+		out.println("<option value=\"" + Constants.ACCOUNT_NOFILTER + (vCustomerFilter == Constants.ACCOUNT_NOFILTER ? "\" selected>" : "\">") + "selecteer klant");
 		Collection<TaskEntityData> vTasks = new Vector<TaskEntityData>();
 		Collection<CallRecordEntityData> vRecords = new Vector<CallRecordEntityData>();
 		Collection<AccountEntityData> list = AccountCache.getInstance().getInvoiceCustomerList();
@@ -96,7 +92,7 @@
 		    for (Iterator<AccountEntityData> vIter = list.iterator(); vIter.hasNext();)
 		    {
                 AccountEntityData vData = (AccountEntityData) vIter.next();
-		        out.println("<option value=\"" + vData.getFwdNumber() + (vCustomerFilter.equals(vData.getFwdNumber()) ? "\" selected>" : "\">") + vData.getFullName());
+		        out.println("<option value=\"" + vData.getId() + (vCustomerFilter == vData.getId() ? "\" selected>" : "\">") + vData.getFullName());
 		    }
 		}
 					%>
@@ -264,7 +260,7 @@
             TaskSqlAdapter vTaskSession = new TaskSqlAdapter();
      		vTasks = vTaskSession.getTasksForInvoice(vSession, vInvoiceData.getId());
      	    CallRecordSqlAdapter vCallRecordSession = new CallRecordSqlAdapter();
-            int accountId = vInvoiceData.getAccountID();
+            int accountId = vInvoiceData.getAccountId();
             if (accountId < 1)
             {
                accountId = AccountCache.getInstance().get(vInvoiceData).getId();
@@ -286,7 +282,7 @@
 		if (vInvoiceData == null || vInvoiceData.getFrozenFlag() == false)
        	{
      		// No invoice yet or not yet frozen, so get the help of InvoiceHelper to collect the current invoice
-             if (vSession.getMonthsBack() != CallFilter.kNoMonth && vCustomerFilter != null && !vCustomerFilter.equals(Constants.ACCOUNT_FILTER_ALL))
+             if (vSession.getMonthsBack() != CallFilter.kNoMonth && vCustomerFilter != Constants.ACCOUNT_NOFILTER)
              {
                  if (vInvoiceData != null)
                  {

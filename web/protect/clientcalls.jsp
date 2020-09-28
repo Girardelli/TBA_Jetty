@@ -33,14 +33,12 @@ try
 if (vSession == null)
  throw new AccessDeniedException("U bent niet aangemeld.");
 vSession.setCallingJsp(Constants.CLIENT_CALLS_JSP);  
-if (vSession.getSessionFwdNr() == null)
- throw new AccessDeniedException("Account nummer not set in session.");
 // this is the websocket page. Make sure this user is known to the WS broadcast
 vSession.setWsActive(true);
 
 CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
 
-Collection<CallRecordEntityData> vRecords = vQuerySession.getxWeeksBackIncludingSubcustomer(vSession, vSession.getDaysBack(), vSession.getSessionFwdNr(), false);
+Collection<CallRecordEntityData> vRecords = vQuerySession.getxWeeksBackIncludingSubcustomer(vSession, vSession.getDaysBack(), vSession.mLoginData.getAccountId(), false);
 
 boolean IsCustAttentionNeeded = false;
 for (CallRecordEntityData record : vRecords)
@@ -51,7 +49,7 @@ for (CallRecordEntityData record : vRecords)
    }
 }
 
-AccountEntityData vAccount = AccountCache.getInstance().get(vSession.getSessionFwdNr());
+AccountEntityData vAccount = AccountCache.getInstance().get(vSession.mLoginData.getAccountId());
 %>
 
 <form name="calllistform" method="POST" action="/tba/CustomerDispatch">
@@ -118,7 +116,7 @@ out.println("<input class=\"tbabutton\" type=submit value=\"Volgende Oproepen\" 
     else
       out.println("<span class=\"bodysubsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Er zijn </span><span class=\"bodysubsubredtitle\">" + vRecords.size() + "</span><span class=\"bodysubsubtitle\"> oproepen beschikbaar.</span>");
     int vNewCnt = 0;
-    long vLastLogin = vAccount.getPreviousLoginTS();
+    long vLastLogin = vSession.mLoginData.getPreviousLoginTS();
     %>
     <tr>
     <td width="30" bgcolor="FFFFFF"></td>

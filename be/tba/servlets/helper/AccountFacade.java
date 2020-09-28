@@ -12,7 +12,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import be.tba.ejb.account.interfaces.AccountEntityData;
+import be.tba.ejb.account.interfaces.LoginEntityData;
 import be.tba.ejb.account.session.AccountSqlAdapter;
+import be.tba.ejb.account.session.LoginSqlAdapter;
 import be.tba.ejb.mail.session.MailerSessionBean;
 import be.tba.ejb.pbx.session.CallRecordSqlAdapter;
 import be.tba.ejb.task.session.TaskSqlAdapter;
@@ -43,68 +45,37 @@ public class AccountFacade
         
         AccountEntityData account = AccountCache.getInstance().get(newData.getId());
         account.set(newData);
-        //AccountCache.getInstance().update(session);
-    }
-
-    public static void deregisterAccount(WebSession session, SessionParmsInf parms) throws AccountNotFoundException
-    {
-        String accountIdStr = (String) parms.getParameter(Constants.ACCOUNT_ID);
-        int accountId = Integer.valueOf(accountIdStr);
-        AccountSqlAdapter vAccountSession = new AccountSqlAdapter();
-        vAccountSession.deregister(session, accountId);
         AccountCache.getInstance().update(session);
     }
 
     public static Vector<String> addAccount(WebSession session, HttpServletRequest req, SessionParmsInf parms) throws SystemErrorException
     {
         log.info("addAccount");
-        String roleStr = parms.getParameter(Constants.ACCOUNT_ROLE);
-        String superCustomer = parms.getParameter(Constants.ACCOUNT_SUPER_CUSTOMER);
+        String roleStr = parms.getParameter(Constants.LOGIN_ROLE);
+        int superCustomerId = Integer.parseInt(parms.getParameter(Constants.ACCOUNT_SUPER_CUSTOMER));
         AccountRole role = AccountRole.fromShort(roleStr);
         
         AccountEntityData newAccount = new AccountEntityData();
         newAccount.setFullName(parms.getParameter(Constants.ACCOUNT_FULLNAME));
-        newAccount.setRole(roleStr);
         
-        if (role == AccountRole.ADMIN || role == AccountRole.EMPLOYEE)
+        if (role == AccountRole.SUBCUSTOMER)
         {
-            Vector<String> vErrorList = ValidateEmployeeFields(parms);
-            if (vErrorList.size() > 0)
+            if (superCustomerId == 0) 
             {
-                req.setAttribute(Constants.ERROR_VECTOR, vErrorList);
-                return vErrorList;
-            }
-            else
-            {
-                newAccount.setUserId(parms.getParameter(Constants.ACCOUNT_USERID));
-                newAccount.setPassword(parms.getParameter(Constants.ACCOUNT_PASSWORD));
-                log.info("no error on employee add");
-            }
-            newAccount.setSuperCustomer("");
-            newAccount.setSuperCustomerId(0);
-            newAccount.setFwdNumber(newAccount.getUserId());
-        }
-        else if (role == AccountRole.SUBCUSTOMER)
-        {
-            if (superCustomer == null || superCustomer.isEmpty() || superCustomer.equals("NO_VALUE")) 
-            {
-            	log.info("SystemErrorException()");
+            	log.info("Subcustomer selected but no supercustomer selected");
             	throw new SystemErrorException("je bent vergeten een superklant te selecteren");
             }
-        	newAccount.setUserId("");
-            newAccount.setPassword("");
-            newAccount.setSuperCustomer(superCustomer);
-            newAccount.setSuperCustomerId(AccountCache.getInstance().get(superCustomer).getId());
+            //newAccount.setSuperCustomer(superCustomer);
+            newAccount.setSuperCustomerId(superCustomerId);
             newAccount.setFwdNumber(parms.getParameter(Constants.ACCOUNT_FORWARD_NUMBER));
         }
         else
         {
-            newAccount.setUserId("");
-            newAccount.setPassword("");
-            newAccount.setSuperCustomer("");
+            //newAccount.setSuperCustomer("");
             newAccount.setSuperCustomerId(0);
             newAccount.setFwdNumber(parms.getParameter(Constants.ACCOUNT_FORWARD_NUMBER));
         }
+        newAccount.setRole(role.getShort());
         newAccount.setCompanyName("");
         newAccount.setAttToName("");
         newAccount.setStreet("");
@@ -116,15 +87,7 @@ public class AccountFacade
         AccountCache.getInstance().update(session);
         return null;
     }
-
-    public static void changeFwdNumber(WebSession session, String oldNr, String newNr)
-    {
-        log.info("changeFwdNumber: old nr=" + oldNr + ", new nr=" + newNr);
-        // AccountEntityData vOldData = AccountCache.getInstance().get(oldNr);
-        CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
-        vQuerySession.changeFwdNumber(session, oldNr, newNr);
-    }
-
+    
     public static void mailCustomer(SessionParmsInf parms, WebSession session)
     {
         String accountIdStr = (String) parms.getParameter(Constants.ACCOUNT_ID);
@@ -160,6 +123,7 @@ public class AccountFacade
 
     public static AccountEntityData updateAccountData(WebSession session, SessionParmsInf parms)
     {
+       AccountSqlAdapter vAccountSession = new AccountSqlAdapter();
         String accountIdStr = (String) parms.getParameter(Constants.ACCOUNT_ID);
         int accountId = Integer.valueOf(accountIdStr);
         AccountEntityData vAccount = new AccountEntityData(AccountCache.getInstance().get(accountId));
@@ -309,13 +273,15 @@ public class AccountFacade
         vAccount.setCallProcessInfo(parms.getParameter(Constants.ACCOUNT_INFO));
         if (parms.getParameter(Constants.ACCOUNT_REDIRECT_ACCOUNT_ID) != null)
            vAccount.setRedirectAccountId(Integer.parseInt((String) parms.getParameter(Constants.ACCOUNT_REDIRECT_ACCOUNT_ID)));
+        vAccountSession.updateRow(session, vAccount);
+        AccountCache.getInstance().update(session);
         return vAccount;
     }
 
     public static void updateCustomerPrefs(WebSession session, SessionParmsInf parms)
     {
        AccountSqlAdapter vAccountSession = new AccountSqlAdapter();
-       AccountEntityData vAccount = vAccountSession.getRow(session, AccountCache.getInstance().get(session.getSessionFwdNr()).getId());
+       AccountEntityData vAccount = vAccountSession.getRow(session, session.mLoginData.getAccountId());
        vAccount.setEmail(parms.getParameter(Constants.ACCOUNT_EMAIL));
        vAccount.setInvoiceEmail(parms.getParameter(Constants.ACCOUNT_INVOICE_EMAIL));
        vAccount.setGsm(parms.getParameter(Constants.ACCOUNT_GSM));
@@ -362,11 +328,11 @@ public class AccountFacade
     
     private static void RecursiveArchive(WebSession session, int accountID)
     {
-        AccountEntityData vRemovedAccount = AccountCache.getInstance().get(accountID);
+        AccountEntityData accountToArchive = AccountCache.getInstance().get(accountID);
 
-        if (vRemovedAccount != null)
+        if (accountToArchive != null)
         {
-            if (vRemovedAccount.getHasSubCustomers())
+            if (accountToArchive.getHasSubCustomers())
             {
                 Collection<AccountEntityData> list = AccountCache.getInstance().getSubCustomersList(accountID);
                 for (Iterator<AccountEntityData> vIter = list.iterator(); vIter.hasNext();)
@@ -377,32 +343,13 @@ public class AccountFacade
                 }
             }
         }
+        LoginSqlAdapter loginSqlAdapter = new LoginSqlAdapter();
+        Collection<LoginEntityData> logins = loginSqlAdapter.getLoginList(session, accountID);
+        for (LoginEntityData login : logins)
+        {
+           loginSqlAdapter.deleteRow(session, login.getId());
+        }
         AccountSqlAdapter vAccountSession = new AccountSqlAdapter();
         vAccountSession.archiveAccount(session, accountID);
     }
-
-    
-    private static Vector<String> ValidateEmployeeFields(SessionParmsInf parms)
-    {
-        Vector<String> vFormFaults = new Vector<String>();
-
-        String vUserId = parms.getParameter(Constants.ACCOUNT_USERID);
-        String vPassword = parms.getParameter(Constants.ACCOUNT_PASSWORD);
-        String vPassword2 = parms.getParameter(Constants.ACCOUNT_PASSWORD2);
-
-        if (vUserId == null)
-            vFormFaults.add("Login naam niet ingevuld.");
-        if (vPassword == null)
-            vFormFaults.add("Paswoord veld 1 niet ingevuld.");
-        if (vPassword2 == null)
-            vFormFaults.add("Paswoord veld 2 niet ingevuld.");
-        if (vUserId.length() < 5 || vUserId.length() > 10)
-            vFormFaults.add("login naam moet minstens 5 en maximaal 10 karakters bevatten.");
-        if (vPassword.length() < 6)
-            vFormFaults.add("Paswoord moet minimaal 6 karakters bevatten.");
-        if (!vPassword.equals(vPassword2))
-            vFormFaults.add("Paswoorden zijn niet identiek.");
-        return vFormFaults;
-    }
-
 }

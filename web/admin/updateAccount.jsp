@@ -12,6 +12,7 @@ javax.naming.InitialContext,
 
 
 be.tba.ejb.account.interfaces.*,
+be.tba.ejb.account.session.*,
 be.tba.util.data.*,
 be.tba.util.invoice.*,
 be.tba.util.constants.*,
@@ -28,11 +29,15 @@ AccountEntityData vCustomer;
 try {
 vSession.setCallingJsp(Constants.UPDATE_ACCOUNT_JSP);
 
-String accountIdStr = (String) request.getParameter(Constants.ACCOUNT_ID);
-if (accountIdStr == null)
+//String accountIdStr = (String) request.getParameter(Constants.ACCOUNT_ID);
+//if (accountIdStr != null)
+//{
+//   vSession.setAccountId(Integer.valueOf(accountIdStr));
+//}
+if (vSession.getAccountId() <= 0)
   throw new SystemErrorException("Interne fout: Account key null.");
-int accountId = Integer.valueOf(accountIdStr);
-vCustomer = AccountCache.getInstance().get(accountId);
+
+vCustomer = AccountCache.getInstance().get(vSession.getAccountId());
 
 String vFullName = vCustomer.getFullName();
 vFullName = (vFullName == null) ? "" : vFullName;
@@ -44,6 +49,8 @@ String vGsm = vCustomer.getGsm();
 vGsm = (vGsm == null) ? "" : vGsm;
 String vCallProcessInfo = vCustomer.getCallProcessInfo();
 
+LoginSqlAdapter loginSqlAdapter = new LoginSqlAdapter();
+Collection<LoginEntityData> loginList = loginSqlAdapter.getLoginList(vSession, vSession.getAccountId());
 
 
 int vMailHour1 = vCustomer.getMailHour1();
@@ -117,7 +124,6 @@ int redirectId = vCustomer.getRedirectAccountId();
 			</span> <br> <br><span class="bodytekst"> <!-- action name must be a URI name as it is set in the <application>.xml servlet-mapping tag.-->
 					<form name="updateForm" method="POST" action="/tba/AdminDispatch">
 						<input class="tbabutton" type=submit name=action value="Bewaar"	onclick="Bewaar()"> 
-						<input class="tbabutton" type=submit name=action value="De-registreren" onclick="Deregister()">&nbsp;&nbsp;
 						<input class="tbabutton" type=submit name=action value=" Terug " onclick="cancelUpdate()">&nbsp;&nbsp; 
 						<input class="tbabutton" type=submit name=action value=" Verstuur Mail " onclick="mailCustomer()"> 
                         <input class="tbabutton" type=submit name=action value=<%=(vCustomer.getIsArchived()?" Dearchiveer ":" Archiveer ")%> onclick="archive()"> 
@@ -127,20 +133,16 @@ int redirectId = vCustomer.getRedirectAccountId();
 						</p>
 						<table border="0" cellspacing="2" cellpadding="2">
 							<tr>
-								<td width="300" valign="top" class="bodysubsubtitle">login	naam</td>
-								<td width="700" valign="top" class="bodybold"><%=(vCustomer.getUserId() == null ? "" : vCustomer.getUserId())%></td>
-							</tr>
-							<tr>
-								<td width="300" valign="top" class="bodysubsubtitle">rol</td>
-								<td width="700" valign="top" class="bodybold"><%=AccountRole.fromShort(vCustomer.getRole()).getText()%></td>
+								<td width="300" valign="top" class="bodysubsubtitle">Registratie code</td>
+								<td width="700" valign="top" class="bodybold"><%=LoginEntityData.getLoginCode(vSession.getAccountId())%></td>
 							</tr>
                             <tr>
                                 <td width="300" valign="top" class="bodysubsubtitle">mijn super klant</td>
-                                <td width="700" valign="top" class="bodybold"> <%=(vCustomer.getSuperCustomer() != null ? vCustomer.getSuperCustomer() : "-") %> </td>
+                                <td width="700" valign="top" class="bodybold"> <%=(vCustomer.getSuperCustomerId() > 0 ? AccountCache.getInstance().get(vCustomer.getSuperCustomerId()).getFullName() : "-") %> </td>
 <!--                             </tr>
 
 
-								    <select	name=<%=Constants.ACCOUNT_ROLE%>>
+								    <select	name=<%=Constants.LOGIN_ROLE%>>
 <%
 /*
 					out.println("<option value=\"" + vCustomer.getRole() + "\">" + AccountRole.fromShort(vCustomer.getRole()).getText());
@@ -598,12 +600,49 @@ for (int i = 0; i < kMaxMailMinutes; i += 5)
             </tr>
 		</table>
 		<br>
-		<br>
+        <p class="bodysubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Login accounts:</p>
+<%
+if (loginList.size() > 0)
+{
+%>        
+         <table border="0" cellspacing="2" cellpadding="2">
+             <tr>
+                 <td width="20"></td>
+                 <td width="300" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;UserId</td>
+                 <td width="500" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Naam</td>
+             </tr>
+
+<% 
+for (LoginEntityData login : loginList)
+{
+
+ %>   
+             <tr bgcolor="FFCC66"  class="bodytekst">
+                 <td bgcolor="FFFFFF"><img src='/tba/images/deleteCross.gif' width="16" height="16" onclick="changeUrl('/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.DELETE_LOGIN%>&<%=Constants.ACCOUNT_ID%>=<%=login.getAccountId()%>&<%=Constants.LOGIN_ID%>=<%=login.getId()%>');"></td>
+                 <td width="300" valign="top"><%=login.getUserId()%></td>
+                 <td width="500" valign="top"><%=login.getName()%></td>
+             </tr>
+<%   
+}
+%>        
+		</table>
+        <br>
+        
+<%
+}
+else
+{
+   %>
+   <p class="bodysubtitle">nog geen geregistreerde gebruikers</p>  
+<%
+}
+%>
+        <br>
+        <br>
 		<input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.GOTO_SAVE_ACCOUNT%>"> 
-        <input type=hidden name=<%=Constants.ACCOUNT_ID%> value="<%=accountId%>"> 
-        <input type=hidden name=<%=Constants.ACCOUNT_TO_DELETE%> value="<%=accountId%>"> 
+        <input type=hidden name=<%=Constants.ACCOUNT_ID%> value="<%=vSession.getAccountId()%>"> 
+        <input type=hidden name=<%=Constants.ACCOUNT_TO_DELETE%> value="<%=vSession.getAccountId()%>"> 
         <input class="tbabutton" type=submit name=action value="Bewaar" onclick="Bewaar()"> 
-        <input class="tbabutton" type=submit name=action value="De-registreren" onclick="Deregister()">&nbsp;&nbsp;
 		<input class="tbabutton" type=submit name=action value="Terug" onclick="cancelUpdate()">
         </form>
 		</span></td>
@@ -622,11 +661,6 @@ function Bewaar()
   document.updateForm.<%=Constants.SRV_ACTION%>.value="<%=Constants.GOTO_SAVE_ACCOUNT%>";
 }
 
-function Deregister()
-{
-  document.updateForm.<%=Constants.SRV_ACTION%>.value="<%=Constants.ACCOUNT_DEREG%>";
-}
-
 function cancelUpdate()
 {
   document.updateForm.<%=Constants.SRV_ACTION%>.value="<%=Constants.GOTO_ACCOUNT_ADMIN%>";
@@ -642,6 +676,10 @@ function archive()
 	document.updateForm.<%=Constants.SRV_ACTION%>.value="<%=Constants.GOTO_ACCOUNT_DELETE%>";
 }
 
+function changeUrl(newURL) 
+{
+  location=newURL;
+}
 
 </script>
 </table>
