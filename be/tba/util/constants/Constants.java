@@ -185,6 +185,7 @@ public class Constants
     public static final String TASK_IS_PAYED = "_tispa";
     public static final String TASK_DONE_BY_EMPL = "_tdbe";
     public static final String TASK_TO_DELETE = "_ttd";
+    public static final String TASK_ACCOUNT_ID = "_tai";
 
     // Workorder
     public static final String WORKORDER_ID = "_woid";

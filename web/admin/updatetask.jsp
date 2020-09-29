@@ -102,15 +102,15 @@ else
 				<td width="250" valign="top" class="bodysubsubtitle"><img
 					src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Andere klant</td>
 				<td width="580" valign="top">
-<%                  
-	out.println("<select name=\"" + Constants.TASK_FORWARD_NUMBER + "\">");
+<%    
+	out.println("<select name=\"" + Constants.TASK_ACCOUNT_ID + "\">");
 	Collection<AccountEntityData> list = AccountCache.getInstance().getCustomerList();
 	synchronized(list) 
 	{
 	   for (Iterator<AccountEntityData> vIter = list.iterator(); vIter.hasNext();)
 	   {
 	       AccountEntityData vValue = (AccountEntityData) vIter.next();
-	       out.println("<option value=\"" + vValue.getFwdNumber() + (vValue.getFwdNumber().equals(mTaskData.getFwdNr()) ? "\" selected>" : "\">") + vValue.getFullName());
+	       out.println("<option value=\"" + vValue.getId() + (vValue.getId() == mTaskData.getAccountId() ? "\" selected>" : "\">") + vValue.getFullName());
 	   }
 	}
 	out.println("</select>");
@@ -135,10 +135,10 @@ else
 
    out.println("<select name=\"" + Constants.TASK_DONE_BY_EMPL + "\">");
    
-   out.println("<option value=\"\" selected> Selecteer een werknemer");
+   out.println("<option value=\"\"> Selecteer een werknemer");
     for (LoginEntityData account : logins)
     {
-        out.println("<option value=\"" + account.getUserId() + (account.getUserId().equals(mTaskData.getDoneBy()) ? "\" selected>" : "\">" + account.getName()));
+        out.println("<option value=\"" + account.getUserId() + ((account.getUserId().equals(mTaskData.getDoneBy()) ? "\" selected>" : "\">") + account.getName()));
     }
    out.println("</select>");
 %>

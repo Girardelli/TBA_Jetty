@@ -101,8 +101,7 @@ if (vInfoGifs.length() > 0)
 			</tr>
 			<tr>
 				<td width="200" valign="top" class="bodysubsubtitle"><img src="/tba/images/blueSphere.gif" width="10" height="10">&nbsp;Opvolging</td>
-				<td width="500" valign="middle"><textarea
-					name=<%=Constants.RECORD_SHORT_TEXT%> rows=10 cols=70></textarea></td>
+				<td width="500" valign="middle"><textarea name=<%=Constants.RECORD_SHORT_TEXT%> rows=10 cols=70></textarea></td>
 			</tr>
 			<%
 			if (mRecordData.getLongDescription() != null && !mRecordData.getLongDescription().isEmpty())

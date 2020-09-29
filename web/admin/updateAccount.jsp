@@ -216,9 +216,7 @@ for (Iterator<String> n = vFreeNumbers.iterator(); n.hasNext();)
 							<tr>
 								<td width="300" valign="top" class="bodysubsubtitle">Facturatie
 									e-mail</td>
-								<td width="700" valign="top"><input type=text
-									name=<%=Constants.ACCOUNT_INVOICE_EMAIL%> size=50
-									value="<%=vInvoiceEmail%>"></td>
+								<td width="700" valign="top"><input type=text name=<%=Constants.ACCOUNT_INVOICE_EMAIL%> size=50 value="<%=vInvoiceEmail%>"></td>
 							</tr>
 							<tr>
 								<td width="300" valign="top" class="bodysubsubtitle">GSM nummer (SMS)</td>

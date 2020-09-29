@@ -71,13 +71,14 @@ public class TaskFacade
                     vTask.setTimeStamp(dateStr2Timestamp(vNewDate));
                 }
             }
-            String newFwdNr = parms.getParameter(Constants.TASK_FORWARD_NUMBER);
+            AccountEntityData account = AccountCache.getInstance().get(Integer.parseInt(parms.getParameter(Constants.TASK_ACCOUNT_ID)));
+            String newFwdNr = account.getFwdNumber();
             if (newFwdNr != null && !newFwdNr.equals(vTask.getFwdNr()))
             {
                vTask.setFwdNr(newFwdNr);
-               vTask.setAccountId(AccountCache.getInstance().get(newFwdNr).getId());
+               vTask.setAccountId(account.getId());
             }
-            AccountEntityData account = AccountCache.getInstance().get(vTask.getFwdNr());
+            account = AccountCache.getInstance().get(vTask.getFwdNr());
             vTask.setDoneBy(parms.getParameter(Constants.TASK_DONE_BY_EMPL));
             vTask.setDate(parms.getParameter(Constants.TASK_DATE));
             vTask.setDescription(parms.getParameter(Constants.TASK_DESCRIPTION));
@@ -132,9 +133,10 @@ public class TaskFacade
     public static void addTask(SessionParmsInf parms, WebSession session)
     {
         TaskEntityData newTask = new TaskEntityData();
-        newTask.setFwdNr(parms.getParameter(Constants.TASK_FORWARD_NUMBER));
-        AccountEntityData account = AccountCache.getInstance().get(newTask.getFwdNr());
+        //newTask.setFwdNr(parms.getParameter(Constants.TASK_ACCOUNT_ID));
+        AccountEntityData account = AccountCache.getInstance().get(Integer.parseInt(parms.getParameter(Constants.TASK_ACCOUNT_ID)));
         newTask.setAccountId(account.getId());
+        newTask.setFwdNr(account.getFwdNumber());
         newTask.setDoneBy(parms.getParameter(Constants.TASK_DONE_BY_EMPL));
         newTask.setDate(parms.getParameter(Constants.TASK_DATE));
         newTask.setTimeStamp(dateStr2Timestamp(newTask.getDate()));

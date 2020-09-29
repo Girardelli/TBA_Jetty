@@ -29,8 +29,7 @@ be.tba.util.invoice.*"%>
 		<td valign="top" bgcolor="FFFFFF"><br>
 		<br>
 		<span class="bodytekst"> <!-- action name must be a URI name as it is set in the <application>.xml servlet-mapping tag.-->
-		<form name="taskform" method="POST"
-			action="/tba/AdminDispatch" onsubmit="return validate_form(this)">
+		<form name="taskform" method="POST" action="/tba/AdminDispatch" onsubmit="return validate_form(this)">
 		<table border="0" cellspacing="1" cellpadding="1">
 			<tr>
 				<td width="50"></td>
@@ -41,7 +40,7 @@ try
 {
 vSession.setCallingJsp(Constants.ADD_TASK_JSP);
 int vCustomerFilter = vSession.getCallFilter().getCustFilter();
-out.println("<select name=\"" + Constants.TASK_FORWARD_NUMBER + "\">");
+out.println("<select name=\"" + Constants.TASK_ACCOUNT_ID + "\">");
 Collection<AccountEntityData> list = AccountCache.getInstance().getCustomerList();
 LoginSqlAdapter loginSqlAdapter = new LoginSqlAdapter();
 Collection<LoginEntityData> logins = loginSqlAdapter.getEmployeeList(vSession);
@@ -96,8 +95,7 @@ String vDate = new String(vDay + "/" + vMonth  + ((vYear < 10) ? "/0" : "/") + v
 				<td width="50"></td>
 				<td width="250" valign="top" class="bodysubsubtitle"><img
 					src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Minuten gewerkt</td>
-				<td width="580" valign="top" class="bodysubsubtitle"><input
-					type=text size=20 name=<%=Constants.TASK_TIME_SPEND%> value=""></td>
+				<td width="580" valign="top" class="bodysubsubtitle"><input type=text size=20 name=<%=Constants.TASK_TIME_SPEND%> value=""></td>
 			</tr>
 			<tr>
 				<td width="50"></td>

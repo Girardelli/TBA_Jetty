@@ -112,15 +112,11 @@ out.println("</select>");
 			</tr>
 			<tr>
 				<td width="50"></td>
-				<td width="170" valign="top" class="bodysubsubtitle"><img
-					src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Telemarketing</td>
-				<td width="530" valign="top" class="bodysubsubtitle"><input
-					type=radio name="<%=Constants.RECORD_INVOICE_LEVEL%>"
-					value="<%=Constants.RECORD_LEVEL1%>">prijs 1<br>
-				<input type=radio name="<%=Constants.RECORD_INVOICE_LEVEL%>"
-					value="<%=Constants.RECORD_LEVEL2%>">prijs 2<br>
-				<input type=radio name="<%=Constants.RECORD_INVOICE_LEVEL%>"
-					value="<%=Constants.RECORD_LEVEL3%>">prijs 3<br>
+				<td width="170" valign="top" class="bodysubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Telemarketing</td>
+				<td width="530" valign="top" class="bodysubsubtitle">
+                <input type=radio name="<%=Constants.RECORD_INVOICE_LEVEL%>" value="<%=Constants.RECORD_LEVEL1%>">prijs 1<br>
+				<input type=radio name="<%=Constants.RECORD_INVOICE_LEVEL%>" value="<%=Constants.RECORD_LEVEL2%>">prijs 2<br>
+				<input type=radio name="<%=Constants.RECORD_INVOICE_LEVEL%>" value="<%=Constants.RECORD_LEVEL3%>">prijs 3<br>
 				</td>
 			</tr>
 <%
@@ -160,15 +156,13 @@ String vTime = new String(vHour + ":" + ((vMinutes < 10) ? "0" : "") + vMinutes)
 			<tr>
 				<td width="50"></td>
 				<td width="120" valign="top" class="bodysubsubtitle">Omschrijving</td>
-				<td width="580" valign="top"><textarea
-					name=<%=Constants.RECORD_SHORT_TEXT%> rows=10 cols=70></textarea></td>
+				<td width="580" valign="top"><textarea name=<%=Constants.RECORD_SHORT_TEXT%> rows=10 cols=70></textarea></td>
 			</tr>
 			<tr>
 				<td width="50"></td>
 				<td width="120" valign="top" class="bodysubsubtitle">Extra
 				Informatie</td>
-				<td width="580" valign="top"><textarea
-					name=<%=Constants.RECORD_LONG_TEXT%> rows=10 cols=70></textarea></td>
+				<td width="580" valign="top"><textarea name=<%=Constants.RECORD_LONG_TEXT%> rows=10 cols=70></textarea></td>
 			</tr>
 		</table>
 		<br>

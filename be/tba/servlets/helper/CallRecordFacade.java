@@ -55,7 +55,7 @@ public class CallRecordFacade
    public static void saveRecord(SessionParmsInf parms, WebSession session)
    {
       log.info("saveRecord()");
-
+log.info("shorttext:" + parms.getParameter(Constants.RECORD_SHORT_TEXT));
       // Check the record and add it if it is a valid one.
 
       CallRecordEntityData vCallData = session.getCurrentRecord();
@@ -92,10 +92,13 @@ public class CallRecordFacade
             vCallData.setShortDescription(parms.getParameter(Constants.RECORD_SHORT_TEXT));
          }
       } 
+      else
+      {
+         vCallData.setShortDescription(parms.getParameter(Constants.RECORD_SHORT_TEXT));
+      }
       String newFwdNr = parms.getParameter(Constants.ACCOUNT_FORWARD_NUMBER);
       if (newFwdNr != null && !newFwdNr.isEmpty())
       {
-         vCallData.setShortDescription(parms.getParameter(Constants.RECORD_SHORT_TEXT));
          log.info("ACCOUNT_FORWARD_NUMBER=" + newFwdNr + ", vCallData.getFwdNr=" + vCallData.getFwdNr());
          if (newFwdNr != null)
          {
