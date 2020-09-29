@@ -34,7 +34,7 @@ be.tba.util.invoice.*"%>
 		<table border="0" cellspacing="1" cellpadding="1">
 			<tr>
 				<td width="50"></td>
-				<td width="190" valign="top" class="bodysubsubtitle"><img
+				<td width="250" valign="top" class="bodysubsubtitle"><img
 					src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Klant</td>
 				<td width="580" valign="top"><%                  
 try
@@ -57,7 +57,7 @@ out.println("</select>");
 			</tr>
 			<tr>
 				<td width="50"></td>
-				<td width="190" valign="top" class="bodysubsubtitle"><img
+				<td width="250" valign="top" class="bodysubsubtitle"><img
 					src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Uitgevoerd door</td>
 				<td width="580" valign="top"><%                  
 out.println("<select name=\"" + Constants.TASK_DONE_BY_EMPL + "\">");
@@ -77,7 +77,7 @@ String vDate = new String(vDay + "/" + vMonth  + ((vYear < 10) ? "/0" : "/") + v
 			</tr>
 			<tr valign="top">
 				<td width="50"></td>
-				<td width="190" valign="top" class="bodysubsubtitle">
+				<td width="250" valign="top" class="bodysubsubtitle">
 					<img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Datum
 				</td>
 				<td width="580" valign="top"><input type=text size=20
@@ -85,7 +85,7 @@ String vDate = new String(vDay + "/" + vMonth  + ((vYear < 10) ? "/0" : "/") + v
 			</tr>
 			<tr>
 				<td width="50"></td>
-				<td width="190" valign="top" class="bodysubsubtitle"><img
+				<td width="250" valign="top" class="bodysubsubtitle"><img
 					src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Vaste prijs (in euro)</td>
 				<td width="580" valign="top" class="bodysubsubtitle">
 					<input type=checkbox name=<%=Constants.TASK_IS_FIXED_PRICE%> value="<%=Constants.YES%>">&nbsp;&nbsp;&nbsp;&nbsp; 
@@ -94,14 +94,14 @@ String vDate = new String(vDay + "/" + vMonth  + ((vYear < 10) ? "/0" : "/") + v
 			</tr>
 			<tr>
 				<td width="50"></td>
-				<td width="190" valign="top" class="bodysubsubtitle"><img
+				<td width="250" valign="top" class="bodysubsubtitle"><img
 					src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Minuten gewerkt</td>
 				<td width="580" valign="top" class="bodysubsubtitle"><input
 					type=text size=20 name=<%=Constants.TASK_TIME_SPEND%> value=""></td>
 			</tr>
 			<tr>
 				<td width="50"></td>
-				<td width="190" valign="top" class="bodysubsubtitle">
+				<td width="250" valign="top" class="bodysubsubtitle">
 					<img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Maandelijks terugkerend
 				</td>
 				<td width="580" valign="top" class="bodysubsubtitle">
@@ -110,7 +110,7 @@ String vDate = new String(vDay + "/" + vMonth  + ((vYear < 10) ? "/0" : "/") + v
 			</tr>
 			<tr>
 				<td width="50"></td>
-				<td width="190" valign="top" class="bodysubsubtitle">Omschrijving</td>
+				<td width="250" valign="top" class="bodysubsubtitle">Omschrijving</td>
 				<td width="580" valign="top"><textarea
 					name=<%=Constants.TASK_DESCRIPTION%> rows=10 cols=70></textarea></td>
 			</tr>
