@@ -461,7 +461,7 @@ var linesToDelete = new Array();
 if (System.getenv("TBA_MAIL_ON") != null)
 {
 %>
-var socket = new WebSocket(<%=Constants.TBA_URL_WS%>);
+var socket = new WebSocket("wss://thebusinessassistant.be/tba/ws");
 <%
 }
 else

@@ -25,7 +25,7 @@ public class Constants
     // HTML page names
     public static final String DOMAIN_NAME = "thebusinessassistant.be/tba/";
     public static final String TBA_URL_BASE = "https://" + DOMAIN_NAME;
-    public static final String TBA_URL_WS = "wss://" + DOMAIN_NAME + "ws";
+    public static final String TBA_URL_WS = "wss://thebusinessassistant.be/tba/ws";
     public static final String MYSQL_URL = "jdbc:mysql://localhost/tbadb?user=root&password=gzb625$";
     // public static final String INVOICE_HEAD_TMPL =
     // "C:\\jboss-4.0.2\\projects\\TBA\\templates\\invoice-head-template.htm";
