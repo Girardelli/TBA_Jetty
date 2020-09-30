@@ -15,7 +15,7 @@ public class Constants
     // Administrator-test account strings.
     public static final String MASTER_LOGIN_NAME = "esosrv";
     public static final String MASTER_LOGIN_PASWORD = "";
-    public static final String NANCY_EMAIL = "nancy.olyslaegers@theBusinessAssistant.be";
+    public static final String NANCY_EMAIL = "ine.hermans@theBusinessAssistant.be";
     public static final String WS_LOGIN = "loginid:";
     
     // Account Role strings.
@@ -44,7 +44,7 @@ public class Constants
     public static final String SERVLET_LOGIN_HTML = "/login.html";
     public static final String HOME_HTML = "/index.html";
     public static final String FORM_SUBMIT_SUCCESS = "/formok.html";
-    public static final String EMPL_MAIL_ADDR = "anke.rombouts@thebusinessassistant.be;jolien.driesen@thebusinessassistant.be;nancy.olyslaegers@TheBusinessAssistant.be;emily.van.ginneken@thebusinessassistant.be;jolien.soetemans@thebusinessassistant.be";
+    public static final String EMPL_MAIL_ADDR = "anke.rombouts@thebusinessassistant.be;jolien.driesen@thebusinessassistant.be;emily.van.ginneken@thebusinessassistant.be;jolien.soetemans@thebusinessassistant.be";
 
     // JSP page names
     public static final String ADMIN_FAIL_JSP = "/admin/adminfail.jsp";

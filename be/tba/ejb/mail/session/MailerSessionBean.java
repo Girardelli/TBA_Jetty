@@ -123,12 +123,12 @@ public class MailerSessionBean
          else
          {
             vTo = new InternetAddress[1];
-            vTo[0] = new InternetAddress("yves.willems@theBusinessAssistant.be");
+            vTo[0] = new InternetAddress("yves@wyno.be");
          }
          Properties prop = System.getProperties();
          Session session = Session.getInstance(prop, null);
          MimeMessage msg = new MimeMessage(session);
-         msg.setFrom(new InternetAddress("nancy.olyslaegers@thebusinessassistant.be"));
+         msg.setFrom(new InternetAddress("ine.hermans@thebusinessassistant.be"));
          msg.setRecipients(Message.RecipientType.TO, vTo);
          msg.setSubject(subject);
          msg.setSentDate(date);
