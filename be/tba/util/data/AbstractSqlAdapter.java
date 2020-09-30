@@ -180,9 +180,7 @@ public abstract class AbstractSqlAdapter<T>
             	rs = stmt.executeQuery(queryStr);
             	session.addSqlTimer(Calendar.getInstance().getTimeInMillis() - startTime);
             	Collection<T> col = translateRsToValueObjects(rs);
-                //log.info(col.size() + " entries: SQL query: " + queryStr);
-                
-                log.info("{} entries: SQL query: {}", col.size(), queryStr);
+                //log.info("{} entries: SQL query: {}", col.size(), queryStr);
                 return col;
             }
             else
@@ -190,8 +188,8 @@ public abstract class AbstractSqlAdapter<T>
             	long startTime = Calendar.getInstance().getTimeInMillis();
             	int cnt = stmt.executeUpdate(queryStr);
             	session.addSqlTimer(Calendar.getInstance().getTimeInMillis() - startTime);
-                log.info(cnt + " entries: SQL query: " + queryStr);
-                //log.info("{} entries: SQL querry: {}", cnt, queryStr);
+                //log.info(cnt + " entries: SQL query: " + queryStr);
+                log.info("{} entries: SQL querry: {}", cnt, queryStr);
                 return new Vector<T>(cnt);
             }
         }

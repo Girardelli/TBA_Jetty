@@ -119,7 +119,7 @@ public class LoginSqlAdapter extends AbstractSqlAdapter<LoginEntityData>
     
     public void updateLastLogin(WebSession webSession, LoginEntityData login)
     {
-       executeSqlQuery(webSession, "UPDATE LoginEntity SET LastLogin='" + login.getLastLogin() + "' WHERE Id='" + login.getId() + "'");
+       executeSqlQuery(webSession, "UPDATE LoginEntity SET LastLogin='" + login.getLastLogin() + "', LastLoginTS=" + login.getLastLoginTS() + ", PrevLoginTS=" + login.getPreviousLoginTS() + " WHERE Id=" + login.getId());
     }
 
     public void setFilter(WebSession webSession, CallFilter filter, int pkey)

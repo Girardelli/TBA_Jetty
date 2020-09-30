@@ -267,8 +267,6 @@ public class TaskSqlAdapter extends AbstractSqlAdapter<TaskEntityData>
 
     private Collection<TaskEntityData> queryAllTasksForCustomer(WebSession webSession, int accountId, long start, long stop)
     {
-       Calendar calender = Calendar.getInstance();
-       log.info("timestamp=" + calender.getTimeInMillis());
        Collection<TaskEntityData> vCollection = executeSqlQuery(webSession, "SELECT * FROM TaskEntity WHERE AccountID='" + accountId + "' AND TimeStamp>" + start + " AND TimeStamp<=" + stop + " AND IsRecuring=FALSE ORDER BY TimeStamp DESC");
        Collection<TaskEntityData> vRecuringCollection = executeSqlQuery(webSession, "SELECT * FROM TaskEntity WHERE AccountID='" + accountId + "' AND StartTime<" + start + " AND StopTime>" + stop + " AND IsRecuring=TRUE ORDER BY TimeStamp DESC");
        if (vCollection != null)

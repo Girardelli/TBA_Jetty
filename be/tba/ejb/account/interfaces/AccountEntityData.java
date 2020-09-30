@@ -22,18 +22,18 @@ public class AccountEntityData extends be.tba.util.data.AbstractData implements 
     private int id;
     private int wc_prime;
     private String wc_alfa;
-    private java.lang.String userId;
-    private java.lang.String password;
+//    private java.lang.String userId;
+//    private java.lang.String password;
     private java.lang.String fwdNumber;
     private java.lang.String role;
     private java.lang.String fullName;
-    private java.lang.String custFilter;
-    private java.lang.String stateFilter;
-    private java.lang.String dirFilter;
-    private java.lang.String lastLogin;
-    private long lastLoginTS;
-    private long previousLoginTS;
-    private boolean isRegistered;
+//    private java.lang.String custFilter;
+//    private java.lang.String stateFilter;
+//    private java.lang.String dirFilter;
+//    private java.lang.String lastLogin;
+//    private long lastLoginTS;
+//    private long previousLoginTS;
+//    private boolean isRegistered;
     private boolean isAutoRelease;
     private boolean isXmlMail;
     private java.lang.String email;
@@ -97,7 +97,7 @@ public class AccountEntityData extends be.tba.util.data.AbstractData implements 
 
     public AccountEntityData()
     {
-       isRegistered = false; 
+//       isRegistered = false; 
        isXmlMail = false;
        invoiceType = InvoiceHelper.kStandardInvoice;
        isMailInvoice = true;
@@ -143,18 +143,18 @@ public class AccountEntityData extends be.tba.util.data.AbstractData implements 
        setId(otherData.getId());
        setWcPrime(otherData.getWcPrime());
        setWcAlfa(otherData.getWcAlfa());
-       setUserId(otherData.getUserId());
-       setPassword(otherData.getPassword());
+//       setUserId(otherData.getUserId());
+//       setPassword(otherData.getPassword());
        setFwdNumber(otherData.getFwdNumber());
        setRole(otherData.getRole());
        setFullName(otherData.getFullName());
-       setCustFilter(otherData.getCustFilter());
-       setStateFilter(otherData.getStateFilter());
-       setDirFilter(otherData.getDirFilter());
-       setLastLogin(otherData.getLastLogin());
-       setLastLoginTS(otherData.getLastLoginTS());
-       setPreviousLoginTS(otherData.getPreviousLoginTS());
-       setIsRegistered(otherData.getIsRegistered());
+//       setCustFilter(otherData.getCustFilter());
+//       setStateFilter(otherData.getStateFilter());
+//       setDirFilter(otherData.getDirFilter());
+//       setLastLogin(otherData.getLastLogin());
+//       setLastLoginTS(otherData.getLastLoginTS());
+//       setPreviousLoginTS(otherData.getPreviousLoginTS());
+//       setIsRegistered(otherData.getIsRegistered());
        setIsAutoRelease(otherData.getIsAutoRelease());
        setIsXmlMail(otherData.getIsXmlMail());
        setEmail(otherData.getEmail());
@@ -253,26 +253,26 @@ public class AccountEntityData extends be.tba.util.data.AbstractData implements 
         this.wc_alfa = wc_alfa;
     }
 
-    public java.lang.String getUserId()
-    {
-        return this.userId;
-    }
-
-    public void setUserId(java.lang.String userId)
-    {
-        this.userId = userId;
-    }
-
-    public java.lang.String getPassword()
-    {
-        return this.password;
-    }
-
-    public void setPassword(java.lang.String password)
-    {
-        this.password = password;
-    }
-
+//    public java.lang.String getUserId()
+//    {
+//        return this.userId;
+//    }
+//
+//    public void setUserId(java.lang.String userId)
+//    {
+//        this.userId = userId;
+//    }
+//
+//    public java.lang.String getPassword()
+//    {
+//        return this.password;
+//    }
+//
+//    public void setPassword(java.lang.String password)
+//    {
+//        this.password = password;
+//    }
+//
     public java.lang.String getFwdNumber()
     {
         return this.fwdNumber;
@@ -303,75 +303,75 @@ public class AccountEntityData extends be.tba.util.data.AbstractData implements 
         this.fullName = fullName;
     }
 
-    public java.lang.String getCustFilter()
-    {
-        return this.custFilter;
-    }
-
-    public void setCustFilter(java.lang.String custFilter)
-    {
-        this.custFilter = custFilter;
-    }
-
-    public java.lang.String getStateFilter()
-    {
-        return this.stateFilter;
-    }
-
-    public void setStateFilter(java.lang.String stateFilter)
-    {
-        this.stateFilter = stateFilter;
-    }
-
-    public java.lang.String getDirFilter()
-    {
-        return this.dirFilter;
-    }
-
-    public void setDirFilter(java.lang.String dirFilter)
-    {
-        this.dirFilter = dirFilter;
-    }
-
-    public java.lang.String getLastLogin()
-    {
-        return this.lastLogin;
-    }
-
-    public void setLastLogin(java.lang.String lastLogin)
-    {
-        this.lastLogin = lastLogin;
-    }
-
-    public long getLastLoginTS()
-    {
-        return this.lastLoginTS;
-    }
-
-    public void setLastLoginTS(long lastLoginTS)
-    {
-        this.lastLoginTS = lastLoginTS;
-    }
-
-    public long getPreviousLoginTS()
-    {
-        return this.previousLoginTS;
-    }
-
-    public void setPreviousLoginTS(long previousLoginTS)
-    {
-        this.previousLoginTS = previousLoginTS;
-    }
-
-    public boolean getIsRegistered()
-    {
-        return this.isRegistered;
-    }
-
-    public void setIsRegistered(boolean isRegistered)
-    {
-        this.isRegistered = isRegistered;
-    }
+//    public java.lang.String getCustFilter()
+//    {
+//        return this.custFilter;
+//    }
+//
+//    public void setCustFilter(java.lang.String custFilter)
+//    {
+//        this.custFilter = custFilter;
+//    }
+//
+//    public java.lang.String getStateFilter()
+//    {
+//        return this.stateFilter;
+//    }
+//
+//    public void setStateFilter(java.lang.String stateFilter)
+//    {
+//        this.stateFilter = stateFilter;
+//    }
+//
+//    public java.lang.String getDirFilter()
+//    {
+//        return this.dirFilter;
+//    }
+//
+//    public void setDirFilter(java.lang.String dirFilter)
+//    {
+//        this.dirFilter = dirFilter;
+//    }
+//
+//    public java.lang.String getLastLogin()
+//    {
+//        return this.lastLogin;
+//    }
+//
+//    public void setLastLogin(java.lang.String lastLogin)
+//    {
+//        this.lastLogin = lastLogin;
+//    }
+//
+//    public long getLastLoginTS()
+//    {
+//        return this.lastLoginTS;
+//    }
+//
+//    public void setLastLoginTS(long lastLoginTS)
+//    {
+//        this.lastLoginTS = lastLoginTS;
+//    }
+//
+//    public long getPreviousLoginTS()
+//    {
+//        return this.previousLoginTS;
+//    }
+//
+//    public void setPreviousLoginTS(long previousLoginTS)
+//    {
+//        this.previousLoginTS = previousLoginTS;
+//    }
+//
+//    public boolean getIsRegistered()
+//    {
+//        return this.isRegistered;
+//    }
+//
+//    public void setIsRegistered(boolean isRegistered)
+//    {
+//        this.isRegistered = isRegistered;
+//    }
 
     public boolean getIsAutoRelease()
     {
@@ -982,31 +982,31 @@ public class AccountEntityData extends be.tba.util.data.AbstractData implements 
         str.append(this.wc_prime);
         str.append(",WC_Alfa='");
         str.append(((this.wc_alfa != null) ? this.wc_alfa : ""));
-        str.append("',UserId='");
-        str.append(((this.userId != null) ? this.userId : ""));
-        str.append("',Password='");
-        str.append(((this.password != null) ? this.password : ""));
+//        str.append("',UserId='");
+//        str.append(((this.userId != null) ? this.userId : ""));
+//        str.append("',Password='");
+//        str.append(((this.password != null) ? this.password : ""));
         str.append("',FwdNumber='");
         str.append(((this.fwdNumber != null) ? this.fwdNumber : ""));
         str.append("',Role='");
         str.append(((this.role != null) ? this.role : ""));
         str.append("',FullName='");
         str.append(((this.fullName != null) ? escapeQuotes(this.fullName) : ""));
-        str.append("',CustFilter='");
-        str.append(((this.custFilter != null) ? this.custFilter : ""));
-        str.append("',StateFilter='");
-        str.append(((this.stateFilter != null) ? this.stateFilter : ""));
-        str.append("',DirFilter='");
-        str.append(((this.dirFilter != null) ? this.dirFilter : ""));
-        str.append("',LastLogin='");
-        str.append(((this.lastLogin != null) ? this.lastLogin : ""));
-        str.append("',LastLoginTS=");
-        str.append(getLastLoginTS());
-        str.append(",PrevLoginTS=");
-        str.append(getPreviousLoginTS());
-        str.append(",IsRegistered=");
-        str.append(getIsRegistered());
-        str.append(",IsAutoRelease=");
+//        str.append("',CustFilter='");
+//        str.append(((this.custFilter != null) ? this.custFilter : ""));
+//        str.append("',StateFilter='");
+//        str.append(((this.stateFilter != null) ? this.stateFilter : ""));
+//        str.append("',DirFilter='");
+//        str.append(((this.dirFilter != null) ? this.dirFilter : ""));
+//        str.append("',LastLogin='");
+//        str.append(((this.lastLogin != null) ? this.lastLogin : ""));
+//        str.append("',LastLoginTS=");
+//        str.append(getLastLoginTS());
+//        str.append(",PrevLoginTS=");
+//        str.append(getPreviousLoginTS());
+//        str.append(",IsRegistered=");
+//        str.append(getIsRegistered());
+        str.append("',IsAutoRelease=");
         str.append(getIsAutoRelease());
         str.append(",IsXmlMail=");
         str.append(getIsXmlMail());
@@ -1141,30 +1141,30 @@ public class AccountEntityData extends be.tba.util.data.AbstractData implements 
         str.append(",'");
         str.append(((this.wc_alfa != null) ? this.wc_alfa : ""));
         str.append("','");
-        str.append(((this.userId != null) ? this.userId : ""));
-        str.append("','");
-        str.append(((this.password != null) ? this.password : ""));
-        str.append("','");
+//        str.append(((this.userId != null) ? this.userId : ""));
+//        str.append("','");
+//        str.append(((this.password != null) ? this.password : ""));
+//        str.append("','");
         str.append(((this.fwdNumber != null) ? this.fwdNumber : ""));
         str.append("','");
         str.append(((this.role != null) ? this.role : ""));
         str.append("','");
         str.append(((this.fullName != null) ? this.fullName : ""));
-        str.append("','");
-        str.append(((this.custFilter != null) ? this.custFilter : ""));
-        str.append("','");
-        str.append(((this.stateFilter != null) ? this.stateFilter : ""));
-        str.append("','");
-        str.append(((this.dirFilter != null) ? this.dirFilter : ""));
-        str.append("','");
-        str.append(((this.lastLogin != null) ? this.lastLogin : ""));
+//        str.append("','");
+//        str.append(((this.custFilter != null) ? this.custFilter : ""));
+//        str.append("','");
+//        str.append(((this.stateFilter != null) ? this.stateFilter : ""));
+//        str.append("','");
+//        str.append(((this.dirFilter != null) ? this.dirFilter : ""));
+//        str.append("','");
+//        str.append(((this.lastLogin != null) ? this.lastLogin : ""));
+//        str.append("',");
+//        str.append(getLastLoginTS());
+//        str.append(",");
+//        str.append(getPreviousLoginTS());
+//        str.append(",");
+//        str.append(getIsRegistered());
         str.append("',");
-        str.append(getLastLoginTS());
-        str.append(",");
-        str.append(getPreviousLoginTS());
-        str.append(",");
-        str.append(getIsRegistered());
-        str.append(",");
         str.append(getIsAutoRelease());
         str.append(",");
         str.append(getIsXmlMail());
@@ -1306,9 +1306,9 @@ public class AccountEntityData extends be.tba.util.data.AbstractData implements 
 
         result = 37 * result + (int) id;
 
-        result = 37 * result + ((this.userId != null) ? this.userId.hashCode() : 0);
-
-        result = 37 * result + ((this.password != null) ? this.password.hashCode() : 0);
+//        result = 37 * result + ((this.userId != null) ? this.userId.hashCode() : 0);
+//
+//        result = 37 * result + ((this.password != null) ? this.password.hashCode() : 0);
 
         result = 37 * result + ((this.fwdNumber != null) ? this.fwdNumber.hashCode() : 0);
         return result;

@@ -498,7 +498,8 @@ public class Constants
     public static final long MINUTES = SECONDS * 60;
     public static final long HOURS = MINUTES * 60;
     public static final long DAYS = HOURS * 24;
-    public static final long RECORD_DELETE_EXPIRE = DAYS * 500; // 90 days
+    public static final long RECORD_DELETE_EXPIRE = DAYS * 500; // 500 days
+    public static final long LOGIN_DELETE_EXPIRE = DAYS * 45; // 45 days
     public static final long RECORD_AUTO_RELEASE_EXPIRE = DAYS * 3; // 10 days
     public static final long CUSTOMER_SESSION_TIMEOUT = MINUTES * 120; // 5 minuten
     public static final long ADMIN_SESSION_TIMEOUT = MINUTES * 60; // 50 minuten

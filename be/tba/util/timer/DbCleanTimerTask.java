@@ -6,6 +6,7 @@ package be.tba.util.timer;
 
 import java.io.File;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.TimerTask;
@@ -14,6 +15,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
+
+import be.tba.ejb.account.interfaces.LoginEntityData;
+import be.tba.ejb.account.session.LoginSqlAdapter;
 import be.tba.ejb.pbx.session.CallRecordSqlAdapter;
 import be.tba.servlets.session.WebSession;
 import be.tba.util.constants.Constants;
@@ -70,6 +74,18 @@ final public class DbCleanTimerTask extends TimerTask implements TimerTaskIntf
             CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
             int deleted = vQuerySession.cleanDb(session);
 
+            LoginSqlAdapter loginSqlAdapter = new LoginSqlAdapter();
+            Collection<LoginEntityData> logins = loginSqlAdapter.getAllRows(session);
+            long now = Calendar.getInstance().getTimeInMillis();
+            for (LoginEntityData login : logins)
+            {
+               log.info("login TS=" + login.getLastLoginTS() + ", now=" + now);
+               if (login.getLastLoginTS() < now - Constants.LOGIN_DELETE_EXPIRE) 
+               {
+                  loginSqlAdapter.deleteRow(session, login.getId());
+               }
+            }
+            
             //
             // int cnt = 0;
             // for (int i = 0; i < 10; ++i)

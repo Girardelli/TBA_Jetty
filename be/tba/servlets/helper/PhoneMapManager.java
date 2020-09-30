@@ -77,9 +77,9 @@ public class PhoneMapManager
       IntertelCallData call = IntertelCallManager.getInstance().getByDbId(data.getId());
       PhoneMapSqlAdapter sqlAdapter = null;
       //log.info("updateOperatorMapping: data.getId()=" + data.getId() + ", sessionId=" + session.getSessionId() + ", call" + call);
-      if (call == null || call.answeredBy.isEmpty())
+      if (call == null || call.answeredBy.isEmpty() || !call.isIncoming)
       {
-         return; // to be removed once we have switched to Intertel
+         return; 
       }
       boolean addIt = false;
       if (mOperatorPhoneMap.containsKey(call.answeredBy))

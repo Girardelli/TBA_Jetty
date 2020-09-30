@@ -58,7 +58,15 @@
 
 %>
 <body>
-<p><span class="bodytitle">&nbsp;&nbsp;&nbsp;Factuur maken <%=(vAccountData == null)? "<br>Selecteer een klant en maand." : "" %><br>
+<table  cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
+    <tr>
+        <!-- white space -->
+        <td valign="top" width="20" bgcolor="FFFFFF"></td>
+
+        <!-- account list -->
+        <td valign="top" bgcolor="FFFFFF"><br>
+
+<p><span class="bodysubtitle">Factuur maken <%=(vAccountData == null)? "<br>Selecteer een klant en maand." : "" %><br>
 <br>
 <br>
 </span></p>
@@ -123,7 +131,7 @@
 					name="<%=Constants.INVOICE_YEAR%>" onchange="submit()">
 					<%
 		out.println("<option value=\"" + CallFilter.kNoYear + (CallFilter.kNoYear == vYear ? "\" selected>" : "\">") + "selecteer jaar");
-		for (int i = vCurYear; i > 2000; --i)
+		for (int i = vCurYear; i > 2019; --i)
 		{
 		    out.println("<option value=\"" + i + (i == vYear ? "\" selected>" : "\">") + i);
 		}
@@ -840,6 +848,9 @@
 <%
         }
 %>
+        </td>
+    </tr>
+</table>
 
 </body>
 

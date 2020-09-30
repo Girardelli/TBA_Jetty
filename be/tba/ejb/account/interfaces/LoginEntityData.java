@@ -299,6 +299,11 @@ public class LoginEntityData extends be.tba.util.data.AbstractData
     
     static public int checkLoginCode(String code)
     {
+       if (code == null || code.length() != 11)
+       {
+          log.warn("wrong code provided. null or not expected length of 11: " + code);
+          return -1;
+       }
        Calendar calendar = Calendar.getInstance();
        long checkTest = Long.parseUnsignedLong(code.substring(10));
        long codeTest = Long.parseUnsignedLong(code.substring(0, 10));

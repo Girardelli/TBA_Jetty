@@ -282,7 +282,6 @@ final public class WebSession implements Serializable
 
     public void setAccountId(int id)
     {
-       log.info("set account id: " + id); 
        mCurrentAccountId = id;
     }
 

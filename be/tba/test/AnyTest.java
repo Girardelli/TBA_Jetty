@@ -22,6 +22,8 @@ public class AnyTest
 //      testIntegerPrint();
 //      testExceptionLogging();
       testLoginCodeParsing();
+      long now = Calendar.getInstance().getTimeInMillis();
+      log.info("now=" + now);
    }
    
    private static void testIntegerPrint()

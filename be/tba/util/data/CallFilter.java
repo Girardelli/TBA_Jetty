@@ -44,12 +44,10 @@ final public class CallFilter implements Serializable
        if (accountIdStr == null || accountIdStr.isEmpty())
        {
          mCustFilter = 0;
-         log.info("customer filter reset");
        }
       else
       {
          mCustFilter = Integer.parseInt(accountIdStr);
-         log.info("customer filter set to " + mCustFilter);
       }
     }
     

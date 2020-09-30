@@ -54,8 +54,6 @@ public class CallRecordFacade
     */
    public static void saveRecord(SessionParmsInf parms, WebSession session)
    {
-      log.info("saveRecord()");
-log.info("shorttext:" + parms.getParameter(Constants.RECORD_SHORT_TEXT));
       // Check the record and add it if it is a valid one.
 
       CallRecordEntityData vCallData = session.getCurrentRecord();
@@ -76,7 +74,7 @@ log.info("shorttext:" + parms.getParameter(Constants.RECORD_SHORT_TEXT));
          AccountEntityData newCustomer = AccountCache.getInstance().get(vCallData.getFwdNr()); // take FwdNr because vCallDatat still has the previous accountId and shall make
                                                                                                // that new FwdNr shall be skipped.
          vCallData.setAccountId(newCustomer.getId());
-         log.info("Super customer call: set fwd number to " + vCallData.getFwdNr() + ", new account ID=" + newCustomer.getId());
+         //log.info("Super customer call: set fwd number to " + vCallData.getFwdNr() + ", new account ID=" + newCustomer.getId());
          
          // redirect function can only be applied for subcustomers
          if (newCustomer.getRedirectAccountId() != 0)
@@ -99,7 +97,7 @@ log.info("shorttext:" + parms.getParameter(Constants.RECORD_SHORT_TEXT));
       String newFwdNr = parms.getParameter(Constants.ACCOUNT_FORWARD_NUMBER);
       if (newFwdNr != null && !newFwdNr.isEmpty())
       {
-         log.info("ACCOUNT_FORWARD_NUMBER=" + newFwdNr + ", vCallData.getFwdNr=" + vCallData.getFwdNr());
+         //log.info("ACCOUNT_FORWARD_NUMBER=" + newFwdNr + ", vCallData.getFwdNr=" + vCallData.getFwdNr());
          if (newFwdNr != null)
          {
             // main customer has changed
@@ -175,7 +173,7 @@ log.info("shorttext:" + parms.getParameter(Constants.RECORD_SHORT_TEXT));
     */
    public static void saveManualRecord(SessionParmsInf parms, WebSession session)
    {
-      log.info("saveManualRecord()");
+      //log.info("saveManualRecord()");
       CallRecordEntityData newRecord = new CallRecordEntityData();
       Calendar vCalendar = Calendar.getInstance();
       newRecord.setIsVirgin(false);
@@ -230,7 +228,7 @@ log.info("shorttext:" + parms.getParameter(Constants.RECORD_SHORT_TEXT));
       }
 
       // Check the record and add it if it is a valid one.
-      log.info("saveManualRecord: id=" + newRecord.getId() + ", cust=" + newRecord.getFwdNr() + ", number=" + newRecord.getNumber());
+      //log.info("saveManualRecord: id=" + newRecord.getId() + ", cust=" + newRecord.getFwdNr() + ", number=" + newRecord.getNumber());
       CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
       int id = vQuerySession.addRow(session, newRecord);
       if (newRecord.getIsImportantCall() && newRecord.getIsDocumented())
@@ -266,7 +264,7 @@ log.info("shorttext:" + parms.getParameter(Constants.RECORD_SHORT_TEXT));
 
    public static void saveNewSubCustomer(SessionParmsInf parms, WebSession webSession, int accountId)
    {
-      log.info("saveNewSubCustomer()");
+      //log.info("saveNewSubCustomer()");
       CallRecordSqlAdapter vCallLogWriterSession = new CallRecordSqlAdapter();
       vCallLogWriterSession.changeFwdNumber(webSession, webSession.getRecordId(), accountId);
       webSession.setNewUnmappedCall(null);
@@ -277,7 +275,7 @@ log.info("shorttext:" + parms.getParameter(Constants.RECORD_SHORT_TEXT));
    public static void archiveRecords(SessionParmsInf parms, WebSession webSession)
    {
       String vLtd = parms.getParameter(Constants.RECORDS_TO_HANDLE);
-      log.info("archiveRecords()" + vLtd);
+      //log.info("archiveRecords() " + vLtd);
       if (vLtd != null && vLtd.length() > 0)
       {
          StringTokenizer vStrTok = new StringTokenizer(vLtd, ",");

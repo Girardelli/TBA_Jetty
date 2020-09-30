@@ -188,6 +188,8 @@ public class InvoiceFacade
     
     public static void generateInvoices(SessionParmsInf parms, WebSession session) throws IOException
     {
+       if (!allowToGenerateInvoice(parms))
+          return;
        session.getCallFilter().setCustFilter(parms.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER));
         if (parms.getParameter(Constants.INVOICE_MONTH) != null)
             session.setMonthsBack(Integer.parseInt(parms.getParameter(Constants.INVOICE_MONTH)));
@@ -207,6 +209,27 @@ public class InvoiceFacade
         }
     }
 
+    public static void prepareForSingleInvoice(SessionParmsInf parms, WebSession session)
+    {
+       if (!allowToGenerateInvoice(parms))
+          return;
+       session.getCallFilter().setCustFilter(parms.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER));
+       if (parms.getParameter(Constants.INVOICE_MONTH) != null)
+          session.setMonthsBack(Integer.parseInt(parms.getParameter(Constants.INVOICE_MONTH)));
+       if (parms.getParameter(Constants.INVOICE_YEAR) != null)
+          session.setYear(Integer.parseInt(parms.getParameter(Constants.INVOICE_YEAR)));
+       if (parms.getParameter(Constants.INVOICE_ID) != null)
+       {
+          session.setInvoiceId(Integer.parseInt(parms.getParameter(Constants.INVOICE_ID)));
+          log.info("admindispatch GOTO_INVOICE: INVOICE_ID = " + parms.getParameter(Constants.INVOICE_ID));
+       }
+       else
+       {
+          session.setInvoiceId(0);
+          log.info("admindispatch GOTO_INVOICE: INVOICE_ID = null");
+       }
+    }
+    
     public static void addManualInvoice(SessionParmsInf parms, WebSession session)
     {
        log.info("addManualInvoice enter");
@@ -397,5 +420,19 @@ public class InvoiceFacade
         return "";
     }
     
-
+    static private boolean allowToGenerateInvoice(SessionParmsInf parms)
+    {
+       if (parms.getParameter(Constants.INVOICE_MONTH) == null || parms.getParameter(Constants.INVOICE_YEAR) == null)
+          return true;
+       int month = Integer.parseInt(parms.getParameter(Constants.INVOICE_MONTH));
+       int year = Integer.parseInt(parms.getParameter(Constants.INVOICE_YEAR));
+       
+       if (year > 2020 || (year == 2020 && month > 8))
+       {
+          log.info("ALLOW allowToGenerateInvoice: year=" + year + ", month=" + month);
+          return true;
+       }
+       log.info("DISALLOW allowToGenerateInvoice: year=" + year + ", month=" + month);
+       return false;
+    }
 }

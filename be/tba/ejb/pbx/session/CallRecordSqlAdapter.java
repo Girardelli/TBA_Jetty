@@ -786,12 +786,15 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
     */
    public void setCallData(WebSession webSession, CallRecordEntityData data)
    {
-      setIsDocumentedFlag(data);
-      PhoneMapManager.getInstance().updateOperatorMapping(data, webSession);
       if (data.getCost().equals(Constants.kNullCost))
       {
          setOperatorLogging(webSession, data);
          return;
+      }
+      else
+      {
+         setIsDocumentedFlag(data);
+         PhoneMapManager.getInstance().updateOperatorMapping(data, webSession);
       }
       updateRow(webSession, data);
    }
@@ -908,7 +911,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
          newRecord.setFwdNr(IntertelCallData.last6Numbers(data.callingNr));
          newRecord.setNumber(data.calledNr);
       }
-      log.info("getAccount: FwdNr=" + newRecord.getFwdNr() + ", number=" + newRecord.getNumber());
+      //log.info("getAccount: FwdNr=" + newRecord.getFwdNr() + ", number=" + newRecord.getNumber());
       AccountEntityData vAccount = AccountCache.getInstance().get(newRecord.getFwdNr());
       if (vAccount == null)
       {
@@ -933,7 +936,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
          else
             newRecord.setIsMailed(true);
          dbId = addRow(webSession, newRecord);
-         log.info("addCallRecord: id={}, fwdnr={}, isMailed={}", dbId, newRecord.getFwdNr(), newRecord.getIsMailed());
+         //log.info("addCallRecord: id={}, fwdnr={}, isMailed={}", dbId, newRecord.getFwdNr(), newRecord.getIsMailed());
       }
       else
       {

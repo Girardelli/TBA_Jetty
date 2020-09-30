@@ -49,7 +49,7 @@ final public class SessionManager
       }
       session.userInit(userId, generateId());
       mMap.put(session.getSessionId(), session);
-      log.info("New session added with id " + session.getSessionId());
+      log.info("New session added with for " + userId  + "id " + session.getSessionId());
    }
 
    synchronized public WebSession remove(String sessionId)

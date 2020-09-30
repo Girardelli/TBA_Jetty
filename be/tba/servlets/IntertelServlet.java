@@ -63,7 +63,7 @@ public class IntertelServlet extends HttpServlet
     	//writeParmsToFile(req);
 		String phase = req.getParameter("origin");
 		//sLogger.info("Intertel servlet doPost");
-    	log.info("Intertel servlet doPost: " + phase);
+    	log.trace("Intertel servlet doPost: " + phase);
     	IntertelCallData data;
     	
     	if (mSession == null || mSession.getConnection() == null)

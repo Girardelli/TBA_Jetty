@@ -134,128 +134,6 @@ public class AdminDispatchServlet extends HttpServlet
             {
             case Constants.FIX_ACCOUNT_IDS:
             {
-               Collection<AccountEntityData> accountList = AccountCache.getInstance().getAll();
-               LoginSqlAdapter loginSqlAdapter = new LoginSqlAdapter();
-               AccountSqlAdapter accountSqlAdapter = new AccountSqlAdapter();
-               
-               for (AccountEntityData account : accountList)
-               {
-                  if (!account.getIsArchived())
-                  {
-                     LoginEntityData entry = new LoginEntityData();
-                     entry.setAccountId(account.getId());
-                     entry.setIsRegistered(true);
-                     entry.setLastLogin(account.getLastLogin());
-                     entry.setLastLoginTS(account.getLastLoginTS());
-                     entry.setName(account.getFullName());
-                     entry.setPassword(account.getPassword());
-                     entry.setPreviousLoginTS(account.getPreviousLoginTS());
-                     entry.setUserId(account.getUserId());
-                     switch (account.getRole())
-                     {
-                     case AccountRole._vAdminstrator:
-                     case AccountRole._vEmployee:
-                        entry.setRole(account.getRole());
-                        accountSqlAdapter.deleteRow(vSession, account.getId());
-                        break;
-                     case AccountRole._vCustomer:
-                        entry.setRole(account.getRole());
-                        break;
-                     case AccountRole._vSubCustomer:
-                        entry.setRole(AccountRole._vCustomer);
-                        break;
-                     }
-                     if (entry.getUserId() != null && !entry.getUserId().isEmpty() && entry.getPassword() != null && !entry.getPassword().isEmpty())
-                     {
-                        loginSqlAdapter.addRow(vSession, entry);
-                        log.info("added login " + entry.getUserId() + " voor klant " + entry.getName() + ", rol=" + entry.getRole());
-                     }
-                  }
-               }
-               AccountCache.getInstance().update(vSession);
-               
-               
-//               CallRecordSqlAdapter vCallLogWriterSession = new CallRecordSqlAdapter();
-//               Collection<CallRecordEntityData> calls = vCallLogWriterSession.getAllRows(vSession);
-//               Calendar timestamp = Calendar.getInstance();
-//               int i =0;
-//               for (CallRecordEntityData call : calls)
-//               {
-//                  timestamp.setTimeInMillis(call.getTimeStamp());
-//                  int monthInt = timestamp.get(Calendar.YEAR)*100 + timestamp.get(Calendar.MONTH);
-//                  int dayInt = timestamp.get(Calendar.YEAR)*10000 + timestamp.get(Calendar.MONTH)*100 + timestamp.get(Calendar.DAY_OF_MONTH);
-//                  log.info("index " + ++i + ", Id: " + call.getId() + ", monthInt=" + monthInt + ", dayInt=" + dayInt);
-//                  
-//                  vCallLogWriterSession.setIndexes(vSession, monthInt, dayInt, call.getId());
-//               }
-//               log.info("#records=" + calls.size());
-               
-               /*
-                * //Set<Integer> vTaskList = new HashSet<Integer>();
-                * 
-                * //********************************** // accounts (super-subklanten relation)
-                * Collection<Integer> idList = AccountCache.getInstance().getAllIds();
-                * AccountSqlAdapter accountSession = new AccountSqlAdapter();
-                * 
-                * for (Iterator<Integer> iter = idList.iterator(); iter.hasNext();) { Integer
-                * id = iter.next(); AccountEntityData account =
-                * AccountCache.getInstance().get(Integer.valueOf(id)); if
-                * (account.getSuperCustomer() != null && !account.getSuperCustomer().isEmpty())
-                * { AccountEntityData superCust =
-                * AccountCache.getInstance().get(account.getSuperCustomer());
-                * accountSession.setSuperCustomerId(vSession, account.getId(),
-                * superCust.getId()); } }
-                * 
-                * //********************************** // invoices!!! InvoiceSqlAdapter
-                * vInvoiceSession = new InvoiceSqlAdapter(); Collection<InvoiceEntityData>
-                * vInvoiceList = vInvoiceSession.getAllRows(vSession); for
-                * (Iterator<InvoiceEntityData> vIter = vInvoiceList.iterator();
-                * vIter.hasNext();) { InvoiceEntityData invoice = vIter.next();
-                * 
-                * // set account DB ID ipv fwdNumber //log.info("\t*** " +
-                * invoice.getFileName()); if (invoice.getFileName() == null ||
-                * invoice.getFileName().isEmpty()) { log.info(invoice.getInvoiceNr()
-                * + " NOK: null or empty file name"); continue; } AccountEntityData account =
-                * AccountCache.getInstance().get(invoice); if (account != null) { String
-                * invoiceName =
-                * invoice.getFileName().substring(invoice.getFileName().indexOf("FacN-") + 6);
-                * int stopIndex = invoiceName.indexOf(".doc"); if (stopIndex == -1) { stopIndex
-                * = invoiceName.indexOf(".pdf"); } if (stopIndex == -1) {
-                * log.info(invoice.getInvoiceNr() +
-                * " NOK: 'doc' or 'pdf' not found in file name"); continue; } invoiceName =
-                * invoiceName.substring(invoiceName.indexOf('-') + 1, stopIndex); String
-                * accountName = account.getFullName().replace(' ','_'); accountName =
-                * accountName.replace(':','_'); accountName = accountName.replace(',','_');
-                * accountName = accountName.replace(';','_');
-                * 
-                * if (accountName.equals(invoiceName)) {
-                * log.info(invoice.getInvoiceNr() + " OK: " + accountName);
-                * vInvoiceSession.setAccountId(vSession, invoice.getId(), account.getId(),
-                * account.getFullName()); } else { log.info(invoice.getInvoiceNr() +
-                * " NOK: invoice klant '" + invoiceName + "' != reffed account '" + accountName
-                * + "'"); } } else { log.info(invoice.getInvoiceNr() + " NOK: '" +
-                * invoice.getAccountFwdNr() + "' niet gevonden in account lijst");
-                * //vInvoiceSession.setAccountId(vSession, invoice.getId(), 0); }
-                * 
-                * //********************************** // assign the tasks this invoice id
-                * TaskSqlAdapter vTaskSession = new TaskSqlAdapter(); AccountEntityData
-                * account2 = AccountCache.getInstance().get(invoice); if
-                * (invoice.getAccountFwdNr() == null || account2 == null) {
-                * log.info("invoice with FwdNumber=null or does not exist anymore");
-                * continue; }
-                * 
-                * Collection<TaskEntityData> taskList =
-                * vTaskSession.getTasksFromTillTimestamp(vSession, invoice.getAccountId(),
-                * invoice.getStartTime(), invoice.getStopTime());
-                * //log.info(invoice.getInvoiceNr() + ": process " + taskList.size()
-                * + " tasks"); for (Iterator<TaskEntityData> i = taskList.iterator();
-                * i.hasNext();) { TaskEntityData task = i.next(); if (task.getInvoiceId() > 0)
-                * { log.info("###Task already assigned to invoice.");// list size=" +
-                * vTaskList.size()); } else { vTaskSession.fixDbIds(vSession, task.getId(),
-                * invoice.getId(), account2.getId()); }
-                * 
-                * } }
-                */
                break;
             }
 
@@ -264,17 +142,6 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.MAIL_IT:
             {
-//                    Collection<Integer> list = AccountCache.getInstance().getSuperCustomersList();
-//                    synchronized (list)
-//                    {
-//                        for (Iterator<Integer> vIter = list.iterator(); vIter.hasNext();)
-//                        {
-//                        	Integer accountId = vIter.next();
-//                            AccountEntityData accountData = AccountCache.getInstance().get(accountId);
-//                            log.info("addAccount: accountdata for vValue=" + accountId + " is " + (accountData == null ? "null" : accountData.getFullName()));
-//                        }
-//                    }
-
                if (vSession.getCallFilter().getCustFilter() > 0)
                {
                   try
@@ -299,68 +166,6 @@ public class AdminDispatchServlet extends HttpServlet
                   {
                   }
                }
-
-               // DbCleanTimerTask task = new DbCleanTimerTask();
-               // task.run();
-               // log.info("DB Clean done");
-
-               // CallLogWriterSessionHome vWrHome = (CallLogWriterSessionHome)
-               // vContext.lookup(EjbJndiNames.EJB_JNDI_CALL_LOG_WRITER_SESSION);
-               // CallLogWriterSession vCallLogWriterSession = vWrHome.create();
-               // CallRecordQuerySessionHome vQHome =
-               // (CallRecordQuerySessionHome)
-               // vContext.lookup(EjbJndiNames.EJB_JNDI_CALL_RECORD_QUERY_SESSION);
-               // CallRecordQuerySession vQuerySession = vQHome.create();
-               //
-               // Collection vRecords =
-               // vQuerySession.getDocumentedForMonth("473054", 9, 2011);
-               // for (Iterator i = vRecords.iterator(); i.hasNext();)
-               // {
-               // CallRecordEntityData vEntry = (CallRecordEntityData) i.next();
-               // vEntry.setIsMailed(true);
-               // vCallLogWriterSession.setCallData(vEntry);
-               // }
-               // vRecords = vQuerySession.getDocumentedForMonth("473054", 10,
-               // 2011);
-               // for (Iterator i = vRecords.iterator(); i.hasNext();)
-               // {
-               // CallRecordEntityData vEntry = (CallRecordEntityData) i.next();
-               // vEntry.setIsMailed(true);
-               // vCallLogWriterSession.setCallData(vEntry);
-               // }
-               // vRecords = vQuerySession.getDocumentedForMonth("473054", 11,
-               // 2011);
-               // for (Iterator i = vRecords.iterator(); i.hasNext();)
-               // {
-               // CallRecordEntityData vEntry = (CallRecordEntityData) i.next();
-               // vEntry.setIsMailed(true);
-               // vCallLogWriterSession.setCallData(vEntry);
-               // }
-               // vQuerySession.remove();
-               // vCallLogWriterSession.remove();
-
-               /*
-                * Connection con = null; try { con =
-                * DriverManager.getConnection("jdbc:mysql://localhost/tbadb");
-                * MailerSessionHome vHome = (MailerSessionHome)
-                * vContext.lookup(EjbJndiNames.EJB_JNDI_MAILER_SESSION); MailerSession
-                * vMailSession = vHome.create(); // vMailSession.sendMail(5);
-                *
-                * for (Iterator n = AccountCache.getInstance().getCustomerList().iterator();
-                * n.hasNext();) { AccountEntityData vAccountData = (AccountEntityData)
-                * n.next(); String vEmail = vAccountData.getEmail(); if (vEmail != null &&
-                * vEmail.length() > 0 && (vAccountData.getMailHour1() > 8 ||
-                * vAccountData.getMailHour2() > 8 || vAccountData.getMailHour3() > 8))
-                * vMailSession.sendMail(con, vAccountData.getFwdNumber()); } // Check the
-                * record and add it if it is a valid one. // //vMailSession.sendMail(5);
-                * vMailSession.remove(); } catch (Exception e) {
-                * log.info("MailTimerTask exception"); log.error(e.getMessage(), e); } finally
-                * { if (con == null) { try { con.close(); con = null; } catch (SQLException ex)
-                * { System.out .println("Error in Mailer: SQL connection could not be closed."
-                * ); } } }
-                */
-               // do nothing
-               // rd = sc.getRequestDispatcher(Constants.CANVAS_JSP);
                break;
             }
             // ==============================================================================================
@@ -811,21 +616,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.GOTO_INVOICE:
             {
-               vSession.getCallFilter().setCustFilter(params.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER));
-               if (params.getParameter(Constants.INVOICE_MONTH) != null)
-                  vSession.setMonthsBack(Integer.parseInt(params.getParameter(Constants.INVOICE_MONTH)));
-               if (params.getParameter(Constants.INVOICE_YEAR) != null)
-                  vSession.setYear(Integer.parseInt(params.getParameter(Constants.INVOICE_YEAR)));
-               if (params.getParameter(Constants.INVOICE_ID) != null)
-               {
-                  vSession.setInvoiceId(Integer.parseInt(params.getParameter(Constants.INVOICE_ID)));
-                  log.info("admindispatch GOTO_INVOICE: INVOICE_ID = " + params.getParameter(Constants.INVOICE_ID));
-               }
-               else
-               {
-                  vSession.setInvoiceId(0);
-                  log.info("admindispatch GOTO_INVOICE: INVOICE_ID = null");
-               }
+               InvoiceFacade.prepareForSingleInvoice(params, vSession);
                rd = sc.getRequestDispatcher(Constants.INVOICE_JSP);
                break;
             }

@@ -25,6 +25,7 @@ import be.tba.util.constants.AccountRole;
 import be.tba.util.constants.Constants;
 import be.tba.util.exceptions.AccessDeniedException;
 import be.tba.util.exceptions.TbaException;
+import be.tba.util.exceptions.remote.AccountNotFoundException;
 
 public class AdminLoginServlet extends HttpServlet
 {
@@ -91,10 +92,19 @@ public class AdminLoginServlet extends HttpServlet
                 throw new AccessDeniedException("U hebt geen administrator rechten!");
             }
         }
+        catch (AccountNotFoundException e)
+        {
+           log.error("AdminLoginServlet: Mallicious admin access attempt. userid:" + vUserId + ", password:" + vPassword);
+           String vMsg = e.getMessage();
+           req.setAttribute(Constants.ERROR_TXT, vMsg == null ? "Onbekende error." : vMsg);
+           ServletContext sc = getServletContext();
+           RequestDispatcher rd = sc.getRequestDispatcher(Constants.ADMIN_FAIL_JSP);
+           rd.forward(req, res);
+        }
         catch (TbaException e)
         {
            log.error("AdminLoginServlet: Mallicious admin access attempt. userid:" + vUserId + ", password:" + vPassword);
-           log.error(e.getMessage(), e);
+           //log.error(e.getMessage(), e);
            // print error page!!
            String vMsg = e.getMessage();
            req.setAttribute(Constants.ERROR_TXT, vMsg == null ? "Onbekende error." : vMsg);
