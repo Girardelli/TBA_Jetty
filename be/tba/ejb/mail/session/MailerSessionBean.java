@@ -347,7 +347,7 @@ public class MailerSessionBean
       StringBuffer vBody = new StringBuffer("");
       vBody.append("Geachte\n\n");
       vBody.append("Gelieve hieronder uw oproepen te willen vinden die wij genoteerd hebben sinds de vorige mail.\n");
-      vBody.append("Voor vragen kan u zich richten tot Nancy.\n");
+      vBody.append("Voor vragen kan u zich richten tot het TBA team.\n");
 
       //log.info("Mail send to " + account.getFullName() + " : " + records.size() + " records.");
 
