@@ -97,7 +97,7 @@ public class CallRecordFacade
          vCallData.setShortDescription(parms.getParameter(Constants.RECORD_SHORT_TEXT));
       }
       String newCustIdStr = parms.getParameter(Constants.ACCOUNT_FORWARD_NUMBER);
-      if (newCustIdStr != null && !newCustIdStr.isEmpty())
+      if (newCustIdStr != null && !newCustIdStr.isEmpty()) 
       {
          int newCustomerId = Integer.parseInt(newCustIdStr);
          if (newCustomerId > 0 && newCustomerId != vOldCustomer.getId())
