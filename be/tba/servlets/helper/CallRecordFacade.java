@@ -96,19 +96,23 @@ public class CallRecordFacade
          log.info("NO change to sub customer");
          vCallData.setShortDescription(parms.getParameter(Constants.RECORD_SHORT_TEXT));
       }
-      int newCustomerId = Integer.parseInt(parms.getParameter(Constants.ACCOUNT_FORWARD_NUMBER));
-      if (newCustomerId > 0 && newCustomerId != vOldCustomer.getId())
+      String newCustIdStr = parms.getParameter(Constants.ACCOUNT_FORWARD_NUMBER);
+      if (newCustIdStr != null && !newCustIdStr.isEmpty())
       {
-         log.info("ACCOUNT_FORWARD_NUMBER set=" + newCustomerId + ", old vCallData.getFwdNr=" + vOldCustomer.getId());
-         // customer changed!! Check the isMailed flag.
-         vCallData.setAccountId(newCustomerId);
-         vNewCustomer = AccountCache.getInstance().get(newCustomerId);
-         vCallData.setFwdNr(vNewCustomer.getFwdNumber());
+         int newCustomerId = Integer.parseInt(newCustIdStr);
+         if (newCustomerId > 0 && newCustomerId != vOldCustomer.getId())
+         {
+            log.info("ACCOUNT_FORWARD_NUMBER set=" + newCustomerId + ", old vCallData.getFwdNr=" + vOldCustomer.getId());
+            // customer changed!! Check the isMailed flag.
+            vCallData.setAccountId(newCustomerId);
+            vNewCustomer = AccountCache.getInstance().get(newCustomerId);
+            vCallData.setFwdNr(vNewCustomer.getFwdNumber());
 
-         if (AccountCache.getInstance().isMailEnabled(vNewCustomer))
-            vCallData.setIsMailed(false);
-         else
-            vCallData.setIsMailed(true);
+            if (AccountCache.getInstance().isMailEnabled(vNewCustomer))
+               vCallData.setIsMailed(false);
+            else
+               vCallData.setIsMailed(true);
+         }
       }
       AccountEntityData customer = AccountCache.getInstance().get(vCallData);
       if (vCallData.getAccountId() == 0)
