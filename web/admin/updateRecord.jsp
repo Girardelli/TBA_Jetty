@@ -84,7 +84,7 @@ try {
                         <td width="30"></td>
                         <td width="250" valign="top" class="bodysubsubtitle"><img src=".\images\blueSphere.gif" width="10" height="10">&nbsp;Oproep voor</td>
                         <td width="530" valign="top"><select name="<%=Constants.ACCOUNT_SUB_CUSTOMER%>">
-                              <option value="<%=mCustomerData.getFwdNumber()%>" selected>
+                              <option value="<%=mCustomerData.getId()%>" selected>
                                  <%=mCustomerData.getFullName()%></option>
                               <%
                                  Collection<AccountEntityData> list = AccountCache.getInstance()
@@ -93,7 +93,7 @@ try {
                               						for (Iterator<AccountEntityData> vIter = list.iterator(); vIter.hasNext();) {
                               							AccountEntityData vValue = vIter.next();
                               %>
-                              <option value="<%=vValue.getFwdNumber()%>"><%=vValue.getFullName()%></option>
+                              <option value="<%=vValue.getId()%>"><%=vValue.getFullName()%></option>
                               <%
                                  }
                               					}
@@ -199,8 +199,8 @@ try {
                            					synchronized (list) {
                            						for (Iterator<AccountEntityData> vIter = list.iterator(); vIter.hasNext();) {
                            							AccountEntityData vValue = vIter.next();
-                           							out.println("<option value=\"" + vValue.getFwdNumber()
-                           									+ (mRecordData.getFwdNr().equals(vValue.getFwdNumber()) ? "\" selected>" : "\">")
+                           							out.println("<option value=\"" + vValue.getId()
+                           									+ (mRecordData.getAccountId() == vValue.getId() ? "\" selected>" : "\">")
                            									+ vValue.getFullName());
                            						}
                            					}
