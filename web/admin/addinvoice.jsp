@@ -151,14 +151,6 @@
                    <textarea name=<%=Constants.INVOICE_DESCRIPTION%> rows=12 cols=70></textarea>
                 </td>
             </tr>
-            <tr>
-                <td width="250" valign="top" class="bodysubtitle">&nbsp;Is Credit Nota</td>
-                <td width="10" valign="top">:</td>
-                <td valign="top" class="bodysubsubtitle">
-                    <input type=checkbox name=<%=Constants.INVOICE_IS_CREDITNOTA%> value="">&nbsp;&nbsp;&nbsp;Voor Factuur nummer:&nbsp;&nbsp;
-                    <input type=text size=20 name=<%=Constants.INVOICE_NR%> value="">
-                </td>
-            </tr>
         </table>
         <br>
         <br>

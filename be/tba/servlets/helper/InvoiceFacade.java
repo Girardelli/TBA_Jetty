@@ -256,19 +256,19 @@ public class InvoiceFacade
         // -1 means regular invoice
         // 0 means this is a credit invoice
         // db id means it is a regular invoice with a credit invoice counterpart indicated by this id.
-        if (parms.getParameter(Constants.INVOICE_IS_CREDITNOTA) != null)
-        {
-           newInvoice.setCreditId(0);
-           newInvoice.setIsPayed(true);
-           if (newInvoice.getTotalCost() > 0)
-           {
-              newInvoice.setTotalCost(-newInvoice.getTotalCost());
-           }
-        }
-        else
-        {
+//        if (parms.getParameter(Constants.INVOICE_IS_CREDITNOTA) != null)
+//        {
+//           newInvoice.setCreditId(0);
+//           newInvoice.setIsPayed(true);
+//           if (newInvoice.getTotalCost() > 0)
+//           {
+//              newInvoice.setTotalCost(-newInvoice.getTotalCost());
+//           }
+//        }
+//        else
+//        {
            newInvoice.setCreditId(-1);
-        }
+//        }
        
         newInvoice.setCustomerName(parms.getParameter(Constants.INVOICE_CUSTOMER));
         //newInvoice.setAccountID(Integer.valueOf(parms.getParameter(Constants.ACCOUNT_ID)));

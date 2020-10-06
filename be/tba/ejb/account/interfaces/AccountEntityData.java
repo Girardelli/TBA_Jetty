@@ -1061,7 +1061,7 @@ public class AccountEntityData extends be.tba.util.data.AbstractData implements 
         str.append("',Street='");
         str.append(((this.street != null) ? escapeQuotes(this.street) : ""));
         str.append("',City='");
-        str.append(((this.city != null) ? this.city : ""));
+        str.append(((this.city != null) ? escapeQuotes(this.city) : ""));
         str.append("',BtwNumber='");
         str.append(((this.btwNumber != null) ? this.btwNumber : ""));
         str.append("',NoInvoice=");
@@ -1123,7 +1123,7 @@ public class AccountEntityData extends be.tba.util.data.AbstractData implements 
         str.append("',IsArchived=");
         str.append(getIsArchived());
         str.append(",CallProcessInfo='");
-        str.append(((this.callProcessInfo != null) ? this.callProcessInfo : ""));
+        str.append(((this.callProcessInfo != null) ? escapeQuotes(this.callProcessInfo) : ""));
         str.append("',RedirectAccountId=");
         str.append(this.redirectAccountId);
         return (str.toString());

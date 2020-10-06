@@ -114,8 +114,7 @@
 			                    }
 			                    out.println("<p><span class=\"bodysubtitle\"> Totaal openstaande facturen : " + vCostFormatter.format(vTotalInvoice) + " (Excl BTW)</span></p>");
 			%> 
-			<br>
-			<input class="tbabutton" type=submit name=action value=" Betaaldvlag zetten " onclick="setPayed();">
+
             </form>
 			<br>
 			<table border="0" cellspacing="2" cellpadding="2">
