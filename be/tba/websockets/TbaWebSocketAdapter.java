@@ -11,10 +11,11 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 
-import be.tba.servlets.helper.IntertelCallManager;
-import be.tba.servlets.helper.PhoneMapManager;
-import be.tba.servlets.session.SessionManager;
-import be.tba.servlets.session.WebSession;
+import be.tba.session.IntertelCallManager;
+import be.tba.session.PhoneMapManager;
+import be.tba.session.SessionManager;
+import be.tba.session.WebSession;
+import be.tba.util.constants.AccountRole;
 import be.tba.util.constants.Constants;
 import be.tba.util.exceptions.AccessDeniedException;
 import be.tba.util.exceptions.LostSessionException;
@@ -22,7 +23,7 @@ import be.tba.util.timer.TimerManager;
 
 public class TbaWebSocketAdapter extends WebSocketAdapter
 {
-	private static Logger log = LoggerFactory.getLogger(TbaWebSocketAdapter.class);
+   private static Logger log = LoggerFactory.getLogger(TbaWebSocketAdapter.class);
    private Session session;
    private WebSession webSession;
    private static Gson sGson = new Gson();
@@ -33,7 +34,7 @@ public class TbaWebSocketAdapter extends WebSocketAdapter
       super.onWebSocketConnect(session);
       this.session = session;
 
-      //log.info("MessagingAdapter.onWebSocketConnect");
+      // log.info("MessagingAdapter.onWebSocketConnect");
 
    }
 
@@ -41,11 +42,11 @@ public class TbaWebSocketAdapter extends WebSocketAdapter
    public void onWebSocketClose(int statusCode, String reason)
    {
       this.session = null;
-      //System.err.println("Close connection " + statusCode + ", " + reason);
+      // System.err.println("Close connection " + statusCode + ", " + reason);
       if (webSession != null)
       {
-          webSession.setWsSession(null);
-          webSession.setWsActive(false);
+         webSession.setWsSession(null);
+         webSession.setWsActive(false);
       }
       super.onWebSocketClose(statusCode, reason);
    }
@@ -54,7 +55,7 @@ public class TbaWebSocketAdapter extends WebSocketAdapter
    public void onWebSocketText(String message)
    {
       super.onWebSocketText(message);
-      //log.info("MessagingAdapter.onWebSocketText: " + message);
+      // log.info("MessagingAdapter.onWebSocketText: " + message);
 
       if (message.startsWith(Constants.WS_LOGIN))
       {
@@ -67,12 +68,14 @@ public class TbaWebSocketAdapter extends WebSocketAdapter
                webSession = newWebSession;
                newWebSession.setWsSession(this.session);
             }
-         } catch (AccessDeniedException | LostSessionException e)
+         }
+         catch (AccessDeniedException | LostSessionException e)
          {
             // TODO Auto-generated catch block
             log.error(e.getMessage(), e);
          }
-      } else
+      }
+      else
       {
          log.info("Message from WEbSocket: " + message);
       }
@@ -83,26 +86,28 @@ public class TbaWebSocketAdapter extends WebSocketAdapter
    {
       if (data.operation == WebSocketData.CALL_ANSWERED)
       {
-         // this session ID shall be used by the canvas JSP to open the call update window automatically.
+         // this session ID shall be used by the canvas JSP to open the call update
+         // window automatically.
          data.answeredBySession = PhoneMapManager.getInstance().getSessionIdForPhoneId(data.answeredByPhoneId);
-         //log.info("data.answeredBySession=" + data.answeredBySession);
-         
+         // log.info("data.answeredBySession=" + data.answeredBySession);
+
       }
-      
+
       Collection<WebSession> activeSessions = SessionManager.getInstance().getActiveWebSockets();
-      for (Iterator<WebSession> i = activeSessions.iterator(); i.hasNext();)
+      for (WebSession session : activeSessions)
       {
-         WebSession session = i.next();
-         if (session.isWsActive())
+         if (session.getRole() == AccountRole.ADMIN || session.getRole() == AccountRole.EMPLOYEE)
          {
             try
             {
-               //log.info("----------------------------------\r\nsend websocket event: " + data.toString());
+               // log.info("----------------------------------\r\nsend websocket event: " +
+               // data.toString());
                session.getWsSession().getRemote().sendString(sGson.toJson(data, WebSocketData.class));
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                // TODO Auto-generated catch block
-               log.info("WebSocket broadcast to client with sessionId=" + session.getSessionId() + ", user=" + session.getUserId() + " failed");
+               log.error("WebSocket broadcast to client with sessionId=" + session.getSessionId() + ", user=" + session.getUserId() + " failed");
                log.error(e.getMessage(), e);
             }
          }
@@ -118,9 +123,11 @@ public class TbaWebSocketAdapter extends WebSocketAdapter
          {
             try
             {
-               //log.info("----------------------------------\r\nsend websocket event: " + data.toString());
+               // log.info("----------------------------------\r\nsend websocket event: " +
+               // data.toString());
                session.getWsSession().getRemote().sendString(sGson.toJson(data, WebSocketData.class));
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                // TODO Auto-generated catch block
                log.info("WebSocket send to client with sessionId=" + session.getSessionId() + ", user=" + session.getUserId() + " failed");

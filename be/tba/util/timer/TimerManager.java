@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 
 final public class TimerManager
 {
-	private static Logger log = LoggerFactory.getLogger(TimerManager.class);
+   private static Logger log = LoggerFactory.getLogger(TimerManager.class);
    private final Collection<TimerTaskIntf> mTimerList;
 
    private static TimerManager mInstance;
@@ -45,7 +45,7 @@ final public class TimerManager
       log.info("TimerManager() added: " + task.getClass().getName());
       mTimerList.add(task);
    }
-   
+
    public void destroy()
    {
       for (TimerTaskIntf task : mTimerList)

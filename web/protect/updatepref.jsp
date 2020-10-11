@@ -4,13 +4,10 @@
 
 <%@ page import="
 java.util.*,
-javax.naming.Context,
-javax.naming.InitialContext,
-
-be.tba.ejb.account.interfaces.*,
+be.tba.sqldata.*,
 be.tba.util.constants.*,
 be.tba.util.exceptions.*,
-be.tba.util.session.*"%>
+be.tba.session.*"%>
 <%!
 private static final String kSelected = "selected";
 private static final String kChecked = "checked";

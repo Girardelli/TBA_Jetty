@@ -4,15 +4,9 @@
 
 <%@ page
    import="java.util.*,
-
-
-javax.naming.Context,
-javax.naming.InitialContext,
-be.tba.servlets.helper.IntertelCallManager,
-be.tba.ejb.pbx.interfaces.*,
-be.tba.ejb.account.interfaces.*,
-be.tba.ejb.account.session.*,
-be.tba.util.session.AccountCache,
+be.tba.sqldata.*,
+be.tba.sqladapters.*,
+be.tba.sqldata.AccountCache,
 be.tba.util.constants.Constants,
 be.tba.util.data.*,
 be.tba.util.invoice.*"%>

@@ -16,25 +16,23 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//import com.sun.enterprise.deployment.web.NameValuePair;
-
-import be.tba.ejb.account.interfaces.AccountEntityData;
-import be.tba.ejb.pbx.session.CallRecordSqlAdapter;
-import be.tba.servlets.helper.AccountFacade;
-import be.tba.servlets.helper.CallRecordFacade;
-import be.tba.servlets.helper.TaskFacade;
-import be.tba.servlets.session.SessionManager;
-import be.tba.servlets.session.WebSession;
+import be.tba.business.AccountBizzLogic;
+import be.tba.business.CallBizzLogic;
+import be.tba.business.TaskBIzzLogic;
+import be.tba.session.SessionManager;
+import be.tba.session.SessionParms;
+import be.tba.session.SessionParmsInf;
+import be.tba.session.WebSession;
+import be.tba.sqladapters.CallRecordSqlAdapter;
+import be.tba.sqldata.AccountCache;
+import be.tba.sqldata.AccountEntityData;
+import be.tba.util.common.FileUploader;
 import be.tba.util.common.Tools;
 import be.tba.util.constants.AccountRole;
 import be.tba.util.constants.Constants;
 import be.tba.util.exceptions.AccessDeniedException;
 import be.tba.util.exceptions.LostSessionException;
 import be.tba.util.exceptions.SystemErrorException;
-import be.tba.util.file.FileUploader;
-import be.tba.util.session.AccountCache;
-import be.tba.util.session.SessionParms;
-import be.tba.util.session.SessionParmsInf;
 
 public class CustomerDispatchServlet extends HttpServlet
 {
@@ -42,7 +40,7 @@ public class CustomerDispatchServlet extends HttpServlet
    *
    */
    private static final long serialVersionUID = 10002L;
-	private static Logger log = LoggerFactory.getLogger(CustomerDispatchServlet.class);
+   private static Logger log = LoggerFactory.getLogger(CustomerDispatchServlet.class);
 
    public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
    {
@@ -52,7 +50,7 @@ public class CustomerDispatchServlet extends HttpServlet
       {
          req.setCharacterEncoding("UTF-8");
          res.setContentType("text/html");
-         
+
          HttpSession httpSession = req.getSession();
          WebSession vSession = (WebSession) httpSession.getAttribute(Constants.SESSION_OBJ);
 
@@ -70,9 +68,9 @@ public class CustomerDispatchServlet extends HttpServlet
          String uploadedFile = null;
          FileUploader fileUploader = null;
          SessionParmsInf params = null;
-         
+
          log.info("\nuserid:" + vSession.getUserId() + ", websessionid:" + vSession.getSessionId() + ", URI:" + req.getRequestURI() + "?" + req.getQueryString());
-         
+
          if (ServletFileUpload.isMultipartContent(req))
          {
             fileUploader = new FileUploader(req);
@@ -80,13 +78,13 @@ public class CustomerDispatchServlet extends HttpServlet
             fileUploader.upload(req);
             log.info("multipart content detected");
             // getParameter cannot be used anymore. Also not further on.
-            
+
             params = fileUploader;
          }
          else
          {
             params = new SessionParms(req);
-            
+
          }
          vAction = params.getParameter(Constants.SRV_ACTION);
          SessionManager.getInstance().getSession(vSession.getSessionId(), "CustomerDispatchServlet(" + vAction + ")");
@@ -101,7 +99,7 @@ public class CustomerDispatchServlet extends HttpServlet
             SessionManager.getInstance().remove(vSession.getSessionId());
             throw new LostSessionException();
          }
-         
+
          // if (vSessionId == null)
          // throw new AccessDeniedException("U bent niet aangemeld.");
          // WebSession vSession =
@@ -210,7 +208,7 @@ public class CustomerDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.SAVE_PREFS:
             {
-               AccountFacade.updateCustomerPrefs(vSession, params);
+               AccountBizzLogic.updateCustomerPrefs(vSession, params);
                break;
             }
 
@@ -232,10 +230,9 @@ public class CustomerDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.SAVE_RECORD:
             {
-               CallRecordFacade.updateCustomerChanges(params, vSession, true);
-               //rd = sc.getRequestDispatcher(Constants.CLIENT_CALLS_JSP);
-               
-               
+               CallBizzLogic.updateCustomerChanges(params, vSession, true);
+               // rd = sc.getRequestDispatcher(Constants.CLIENT_CALLS_JSP);
+
                break;
             }
 
@@ -244,7 +241,7 @@ public class CustomerDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.ACTION_ARCHIVE_RECORDS:
             {
-               CallRecordFacade.archiveRecords(params, vSession);
+               CallBizzLogic.archiveRecords(params, vSession);
                rd = sc.getRequestDispatcher(Constants.CLIENT_CALLS_JSP);
                break;
             }
@@ -333,18 +330,18 @@ public class CustomerDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.ACTION_SAVE_WORKORDER:
             {
-               TaskFacade.saveWorkOrder(params, vSession);
+               TaskBIzzLogic.saveWorkOrder(params, vSession);
                rd = sc.getRequestDispatcher(Constants.CLIENT_WORKORDERS_JSP);
                break;
             }
-            
+
             // ==============================================================================================
             // UPLOAD WORKORDER INPUT FILE
             // ==============================================================================================
             case Constants.UPLOAD_WORKORDER_FILE:
             {
                uploadedFile = fileUploader.waitTillFinished();
-               if (TaskFacade.addWorkOrderFile(params, vSession, uploadedFile))
+               if (TaskBIzzLogic.addWorkOrderFile(params, vSession, uploadedFile))
                {
                   vSession.setUploadedFileName(uploadedFile);
                   rd = sc.getRequestDispatcher(Constants.CLIENT_UPDATE_WORKORDER_JSP);
@@ -356,13 +353,13 @@ public class CustomerDispatchServlet extends HttpServlet
                }
                break;
             }
-            
+
             // ==============================================================================================
             // DELETE WORKORDER
             // ==============================================================================================
             case Constants.ACTION_DELETE_WORKORDER:
             {
-               TaskFacade.deleteWorkOrder(params, vSession);
+               TaskBIzzLogic.deleteWorkOrder(params, vSession);
                rd = sc.getRequestDispatcher(Constants.CLIENT_WORKORDERS_JSP);
                break;
             }
@@ -372,7 +369,7 @@ public class CustomerDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.DELETE_WORKORDER_FILE:
             {
-               TaskFacade.deleteWorkOrderFile(params, vSession);
+               TaskBIzzLogic.deleteWorkOrderFile(params, vSession);
                rd = sc.getRequestDispatcher(Constants.CLIENT_UPDATE_WORKORDER_JSP);
                break;
             }
@@ -388,7 +385,7 @@ public class CustomerDispatchServlet extends HttpServlet
 
             if (rd == null)
             {
-               //log.info("rd is null: assign " + vSession.getCallingJsp());
+               // log.info("rd is null: assign " + vSession.getCallingJsp());
                rd = sc.getRequestDispatcher(vSession.getCallingJsp());
             }
             rd.forward(req, res);
@@ -435,7 +432,7 @@ public class CustomerDispatchServlet extends HttpServlet
 
    public void destroy()
    {
-       log.info("CustomerDispatchServlet destroyed.");
+      log.info("CustomerDispatchServlet destroyed.");
    }
 
 }

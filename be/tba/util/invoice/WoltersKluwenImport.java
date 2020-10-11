@@ -15,11 +15,11 @@ import java.util.StringTokenizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import be.tba.ejb.account.interfaces.AccountEntityData;
-import be.tba.ejb.invoice.interfaces.InvoiceEntityData;
+import be.tba.sqldata.AccountCache;
+import be.tba.sqldata.AccountEntityData;
+import be.tba.sqldata.InvoiceEntityData;
 import be.tba.test.AnyTest;
 import be.tba.util.constants.Constants;
-import be.tba.util.session.AccountCache;
 import be.tba.util.timer.CallCalendar;
 
 public class WoltersKluwenImport
@@ -70,7 +70,7 @@ public class WoltersKluwenImport
       {
          InvoiceEntityData vEntry = i.next();
          AccountEntityData account = AccountCache.getInstance().get(vEntry);
-         
+
          String exclStr = costFormatter.format(Math.abs(vEntry.getTotalCost()));
          String vatStr = costFormatter.format(Math.abs(vEntry.getTotalCost() * 0.21));
          String inclStr = costFormatter.format(Math.abs(Double.parseDouble(exclStr.replace(',', '.')) + Double.parseDouble(vatStr.replace(',', '.'))));

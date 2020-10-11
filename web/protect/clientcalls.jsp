@@ -7,21 +7,14 @@
 	<%@ page
 		import="
 java.util.*,
-
-
-javax.naming.Context,
-javax.naming.InitialContext,
 com.google.gson.Gson,
-
-be.tba.ejb.account.interfaces.*,
-be.tba.ejb.pbx.interfaces.CallRecordEntityData,
-be.tba.ejb.pbx.session.CallRecordSqlAdapter,
-be.tba.util.constants.EjbJndiNames,
-be.tba.util.constants.Constants,
+be.tba.sqldata.*,
+be.tba.sqladapters.*,
+be.tba.util.constants.*,
 be.tba.util.exceptions.AccessDeniedException,
 be.tba.websockets.WebSocketData,
-be.tba.servlets.session.SessionManager,
-be.tba.util.session.AccountCache,
+be.tba.session.SessionManager,
+be.tba.sqldata.AccountCache,
 be.tba.util.data.*"%>
 
 
@@ -137,9 +130,8 @@ if (vAccount != null && vAccount.getHasSubCustomers())
     </tr>
 <%
     int vRowInd = 0;
-    for (Iterator<CallRecordEntityData> i = vRecords.iterator(); i.hasNext();)
+    for (CallRecordEntityData vEntry : vRecords)
     {
-      CallRecordEntityData vEntry = i.next();
       String vId = "id" + vEntry.getId();
       String vDate = vEntry.getDate();
       String vTime = vEntry.getTime();

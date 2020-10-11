@@ -27,8 +27,7 @@ document.getElementById(elmnt).style.visibility="hidden";
 <%@ page session="false" isThreadSafe="true" isErrorPage="false"
 	errorPage="protectfail.jsp"
 	import="be.tba.util.constants.*,
-be.tba.servlets.session.*,
-be.tba.servlets.helper.*,
+be.tba.session.*,
 be.tba.util.exceptions.*"%>
 <%
 HttpSession httpSession = request.getSession();

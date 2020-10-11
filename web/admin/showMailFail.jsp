@@ -38,7 +38,8 @@ Last Checked In By: $Author: Yves Willems $
 
 	<%@ page isErrorPage="true" session="false"
 		import="be.tba.util.constants.*,
-be.tba.util.session.*"%>
+be.tba.session.*,
+be.tba.mail.*"%>
 
 <% 
 String vErrorMessage = MailError.getInstance().getError();

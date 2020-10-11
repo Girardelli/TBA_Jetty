@@ -6,19 +6,10 @@
 
 <%@ page import="
 java.util.*,
-
-
-javax.naming.Context,
-javax.naming.InitialContext,
-
-
-be.tba.ejb.pbx.interfaces.*,
-be.tba.ejb.pbx.session.CallRecordSqlAdapter,
-be.tba.ejb.account.interfaces.*,
-be.tba.ejb.task.interfaces.*,
-be.tba.ejb.task.session.*,
+be.tba.sqldata.*,
+be.tba.sqladapters.*,
 be.tba.util.constants.*,
-be.tba.util.session.*"%>
+be.tba.session.*"%>
 <%
 try 
 {

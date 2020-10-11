@@ -21,70 +21,70 @@ import be.tba.util.constants.Constants;
 final public class CallFilter implements Serializable
 {
    private static Logger log = LoggerFactory.getLogger(CallFilter.class);
-    static public int kNoMonth = 99;
-    static public int kNoYear = 99;
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 6853924082949848037L;
+   static public int kNoMonth = 99;
+   static public int kNoYear = 99;
+   /**
+    * 
+    */
+   private static final long serialVersionUID = 6853924082949848037L;
 
-    private int mCustFilter = 0;
+   private int mCustFilter = 0;
 
-    private String mStateFilter = "";
+   private String mStateFilter = "";
 
-    private String mDirFilter = "";
+   private String mDirFilter = "";
 
-    public void setCustFilter(int filter)
-    {
-       mCustFilter = filter;
-    }
+   public void setCustFilter(int filter)
+   {
+      mCustFilter = filter;
+   }
 
-    public void setCustFilter(String accountIdStr)
-    {
-       if (accountIdStr == null || accountIdStr.isEmpty())
-       {
+   public void setCustFilter(String accountIdStr)
+   {
+      if (accountIdStr == null || accountIdStr.isEmpty())
+      {
          mCustFilter = 0;
-       }
+      }
       else
       {
          mCustFilter = Integer.parseInt(accountIdStr);
       }
-    }
-    
-    public int getCustFilter()
-    {
-        return mCustFilter;
-    }
+   }
 
-    public void setStateFilter(String filter)
-    {
-        mStateFilter = filter;
-    }
+   public int getCustFilter()
+   {
+      return mCustFilter;
+   }
 
-    public String getStateFilter()
-    {
-        return mStateFilter;
-    }
+   public void setStateFilter(String filter)
+   {
+      mStateFilter = filter;
+   }
 
-    public void setDirFilter(String filter)
-    {
-        mDirFilter = filter;
-    }
+   public String getStateFilter()
+   {
+      return mStateFilter;
+   }
 
-    public String getDirFilter()
-    {
-        return mDirFilter;
-    }
+   public void setDirFilter(String filter)
+   {
+      mDirFilter = filter;
+   }
 
-    public String toString()
-    {
-        return new String("Cust:" + mCustFilter + " State:" + mStateFilter + " Dir:" + mDirFilter);
-    }
+   public String getDirFilter()
+   {
+      return mDirFilter;
+   }
 
-    public void init()
-    {
-        mCustFilter = 0;
-        mStateFilter = Constants.ACCOUNT_FILTER_ALL;
-        mDirFilter = Constants.ACCOUNT_FILTER_ALL;
-    }
+   public String toString()
+   {
+      return new String("Cust:" + mCustFilter + " State:" + mStateFilter + " Dir:" + mDirFilter);
+   }
+
+   public void init()
+   {
+      mCustFilter = 0;
+      mStateFilter = Constants.ACCOUNT_FILTER_ALL;
+      mDirFilter = Constants.ACCOUNT_FILTER_ALL;
+   }
 }

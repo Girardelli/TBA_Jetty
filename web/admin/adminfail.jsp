@@ -39,7 +39,7 @@ Last Checked In By: $Author: Yves Willems $
 
 	<%@ page isErrorPage="true" session="false"
 		import="be.tba.util.constants.*,
-be.tba.util.session.*"%>
+be.tba.session.*"%>
 
 	<%
 String vErrorMessage = (String) request.getAttribute(Constants.ERROR_TXT);

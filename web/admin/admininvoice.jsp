@@ -6,18 +6,15 @@
 </head>
 <%@ page
 	import="java.util.*,
-	javax.naming.InitialContext,
-	be.tba.ejb.invoice.interfaces.*,
-	be.tba.util.constants.EjbJndiNames,
+	be.tba.sqldata.*,
 	be.tba.util.constants.Constants,
 	be.tba.util.exceptions.AccessDeniedException,
-	be.tba.servlets.session.SessionManager,
-	be.tba.util.session.AccountCache,
+	be.tba.session.SessionManager,
+	be.tba.sqldata.AccountCache,
 	be.tba.util.invoice.InvoiceHelper,
-	
 	java.text.DecimalFormat,
-	be.tba.ejb.account.interfaces.AccountEntityData,
-	be.tba.ejb.invoice.session.InvoiceSqlAdapter,
+   be.tba.sqldata.AccountEntityData,
+   be.tba.sqladapters.InvoiceSqlAdapter,
 	be.tba.util.data.*"%>
 <%
 StringBuilder allEntryIds = new StringBuilder("[");

@@ -13,24 +13,17 @@ Last Checked In: $Date: 2003/06/18 04:11:35 $
 Last Checked In By: $Author: Yves Willems $
 --%>
 
-	<%@ page
-		import="
-		java.util.*,
-		
-		javax.naming.Context,
-		javax.naming.InitialContext,
-		
-		
-		be.tba.ejb.account.interfaces.*,
-		be.tba.ejb.task.interfaces.*,
-		be.tba.ejb.task.session.TaskSqlAdapter,
-		be.tba.util.constants.EjbJndiNames,
-		be.tba.util.constants.Constants,
-		be.tba.util.exceptions.AccessDeniedException,
-		be.tba.servlets.session.SessionManager,
-		be.tba.util.session.AccountCache,
-		be.tba.util.data.*,
-		java.text.*"%>
+<%@ page
+import="
+java.util.*,
+be.tba.sqldata.*,
+be.tba.sqladapters.*,
+be.tba.util.constants.*,
+be.tba.util.exceptions.AccessDeniedException,
+be.tba.session.SessionManager,
+be.tba.sqldata.AccountCache,
+be.tba.util.data.*,
+java.text.*"%>
 
 <%
 	try

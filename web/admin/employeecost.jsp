@@ -5,28 +5,14 @@
 	<%@ page
 		import="
 java.util.*,
-
-
-javax.naming.Context,
-javax.naming.InitialContext,
-
-
-be.tba.ejb.account.interfaces.*,
-be.tba.ejb.pbx.interfaces.*,
-be.tba.ejb.invoice.interfaces.*,
-be.tba.ejb.task.interfaces.*,
-be.tba.util.constants.EjbJndiNames,
+be.tba.sqldata.*,
 be.tba.util.constants.Constants,
 be.tba.util.exceptions.AccessDeniedException,
-be.tba.servlets.session.SessionManager,
-be.tba.util.session.AccountCache,
+be.tba.session.SessionManager,
+be.tba.sqldata.AccountCache,
 be.tba.util.invoice.InvoiceHelper,
 be.tba.util.data.*,
-be.tba.ejb.pbx.session.CallRecordSqlAdapter,
-be.tba.ejb.invoice.session.InvoiceSqlAdapter,
-be.tba.ejb.task.session.TaskSqlAdapter,
-be.tba.ejb.phoneMap.session.UrlCheckerSqlAdapter,
-be.tba.ejb.phoneMap.interfaces.UrlCheckerEntityData,
+be.tba.sqladapters.*,
 java.text.*"%>
 
 	<%

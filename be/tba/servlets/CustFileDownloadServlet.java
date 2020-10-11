@@ -16,22 +16,22 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import be.tba.ejb.task.interfaces.FileLocationData;
-import be.tba.ejb.task.session.FileLocationSqlAdapter;
-import be.tba.servlets.session.SessionManager;
-import be.tba.servlets.session.WebSession;
+import be.tba.session.SessionManager;
+import be.tba.session.SessionParms;
+import be.tba.session.SessionParmsInf;
+import be.tba.session.WebSession;
+import be.tba.sqladapters.FileLocationSqlAdapter;
+import be.tba.sqldata.FileLocationData;
 import be.tba.util.constants.Constants;
 import be.tba.util.exceptions.AccessDeniedException;
 import be.tba.util.exceptions.LostSessionException;
-import be.tba.util.session.SessionParms;
-import be.tba.util.session.SessionParmsInf;
 
 public class CustFileDownloadServlet extends HttpServlet
 {
    private static Logger log = LoggerFactory.getLogger(CustFileDownloadServlet.class);
    /**
-    * this servlet only takes care of file downloads : hat is from server to client (browser)
-    * The file uploads are taken care of by the jsp page servlets
+    * this servlet only takes care of file downloads : hat is from server to client
+    * (browser) The file uploads are taken care of by the jsp page servlets
     */
    private static final long serialVersionUID = 1L;
 
@@ -139,6 +139,6 @@ public class CustFileDownloadServlet extends HttpServlet
 
    public void destroy()
    {
-       log.info("CustFileDownloadServlet destroyed.");
+      log.info("CustFileDownloadServlet destroyed.");
    }
 }

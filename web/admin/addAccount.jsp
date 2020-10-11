@@ -3,7 +3,7 @@
 <%@ include file="adminheader.jsp"%>
 
 <%@ page
-	import="java.util.*,javax.naming.Context,javax.naming.InitialContext,be.tba.ejb.account.interfaces.*,be.tba.util.constants.EjbJndiNames,be.tba.util.constants.Constants,be.tba.util.constants.AccountRole,be.tba.util.session.AccountCache"%>
+	import="java.util.*,be.tba.sqldata.*,be.tba.util.constants.*,be.tba.sqldata.AccountCache"%>
 
 <%
 

@@ -8,25 +8,17 @@
 </head>
 <%@ page
 	import="java.util.*,
-	javax.naming.InitialContext,
-	be.tba.ejb.invoice.interfaces.*,
-	be.tba.util.constants.EjbJndiNames,
-	be.tba.util.constants.Constants,
+	be.tba.util.constants.*,
 	be.tba.util.exceptions.AccessDeniedException,
-	be.tba.servlets.session.SessionManager,
-	be.tba.util.session.AccountCache,
+	be.tba.session.*,
+	be.tba.sqldata.*,
+    be.tba.sqladapters.*,
 	java.text.DecimalFormat,
-	be.tba.ejb.account.interfaces.AccountEntityData,
-	be.tba.ejb.invoice.session.InvoiceSqlAdapter,
-	be.tba.util.file.FileUploader,
-	be.tba.util.excel.FintroXlsxReader,
-	java.io.File,
-	org.apache.commons.fileupload.FileItem,
-	be.tba.util.data.*"	%>
+	be.tba.util.common.FileUploader,be.tba.util.excel.PaymentXlsxReader,java.io.File,org.apache.commons.fileupload.FileItem,be.tba.util.data.*"	%>
 
 <%
-         try
-         {
+   try
+   {
 			 vSession.setCallingJsp(Constants.OPEN_INVOICE_JSP);
 %>
 <body>
@@ -56,13 +48,13 @@
 			<td valign="top" bgcolor="FFFFFF">
 			<%
 			   // check whether a Fintro file was uploaded
-									   	            String fintroFileName = vSession.getUploadedFileName();
-									   	            if (fintroFileName != null)
-									   	            {
-									   	                DecimalFormat vCostFormatter = new DecimalFormat("#0.00");
-									   	                FintroXlsxReader fintroXlsxReader = new FintroXlsxReader(fintroFileName);
-									   	                vSession.setUploadedFileName(null);
-										   	            vSession.setFintroProcessLog(fintroXlsxReader.getOutputFileName());
+												   	            String fintroFileName = vSession.getUploadedFileName();
+												   	            if (fintroFileName != null)
+												   	            {
+												   	                DecimalFormat vCostFormatter = new DecimalFormat("#0.00");
+												   	                PaymentXlsxReader fintroXlsxReader = new PaymentXlsxReader(fintroFileName);
+												   	                vSession.setUploadedFileName(null);
+													   	            vSession.setFintroProcessLog(fintroXlsxReader.getOutputFileName());
 			%> 
 				             <br>				   	            
 				   	         <form name="downloadfileform" method="POST" action="/tba/download" >

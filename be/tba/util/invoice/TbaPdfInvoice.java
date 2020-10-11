@@ -14,7 +14,7 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import be.tba.ejb.task.interfaces.TaskEntityData;
+import be.tba.sqldata.TaskEntityData;
 import be.tba.util.constants.Constants;
 import java.io.File;
 
@@ -261,9 +261,9 @@ public class TbaPdfInvoice
 
       if (mInvoiceData.TaskCost == mInvoiceData.TotalCost && mTaskList.size() == 1)
       {
-         mInvoiceData.Description = ((TaskEntityData)mTaskList.toArray()[0]).getDescription();
+         mInvoiceData.Description = ((TaskEntityData) mTaskList.toArray()[0]).getDescription();
       }
-      
+
       if (mInvoiceData.Description != null && !mInvoiceData.Description.isEmpty())
       {
          final int kWidth = 60;

@@ -126,7 +126,7 @@ public class CallCalendar
       // log.info("getDaysBack(" + daysBack + "): vCurrentYear = " +
       // vCurrentYear + "; vDay = " + vDay + "; vMonth = " + vMonth +
       // ", miliseconds=" + vStartCalendar.getTimeInMillis());
-      //return vStartCalendar.getTimeInMillis();
+      // return vStartCalendar.getTimeInMillis();
       return vStartCalendar;
    }
 
@@ -158,8 +158,8 @@ public class CallCalendar
    }
 
    /*
-    * str must have format yyyy-mm-dd and convert it to dd/mm/yyyy.
-    * This format is used overall in this application
+    * str must have format yyyy-mm-dd and convert it to dd/mm/yyyy. This format is
+    * used overall in this application
     * 
     */
    static public String calendarStrTbaStr(String str)

@@ -5,21 +5,12 @@
 <%@ page
 import="
 java.util.*,
-
-
-javax.naming.Context,
-javax.naming.InitialContext,
-
-
-be.tba.ejb.account.interfaces.*,
-be.tba.ejb.pbx.interfaces.*,
-be.tba.ejb.task.interfaces.*,
-be.tba.ejb.task.session.TaskSqlAdapter,
-be.tba.util.constants.EjbJndiNames,
-be.tba.util.constants.Constants,
+be.tba.sqldata.*,
+be.tba.sqladapters.*,
+be.tba.util.constants.*,
 be.tba.util.exceptions.AccessDeniedException,
-be.tba.servlets.session.SessionManager,
-be.tba.util.session.AccountCache,
+be.tba.session.SessionManager,
+be.tba.sqldata.AccountCache,
 be.tba.util.invoice.InvoiceHelper,
 be.tba.util.data.*,
 java.text.*" %>
@@ -100,9 +91,14 @@ if (!vSession.isCurrentMonth())
 Collection<TaskEntityData> vTasks = null;
 TaskSqlAdapter vTaskSession = new TaskSqlAdapter();
 
-vTasks = vTaskSession.getTasksForMonthforCustomer(vSession, vCustomerFilter, vSession.getMonthsBack(), vSession.getYear());
-
-AccountEntityData vAccountData = (AccountEntityData) AccountCache.getInstance().get(vCustomerFilter);
+if (vCustomerFilter > 0)
+{
+   vTasks = vTaskSession.getTasksForMonthforCustomer(vSession, vCustomerFilter, vSession.getMonthsBack(), vSession.getYear());
+}
+else
+{
+   vTasks = vTaskSession.getTasksForMonth(vSession, vSession.getMonthsBack(), vSession.getYear());
+}
 
 if (vTasks != null && vTasks.size() > 0)
 {
@@ -119,6 +115,14 @@ if (vTasks != null && vTasks.size() > 0)
 %> <br>
 		<table border="0" cellspacing="2" cellpadding="2">
 			<tr>
+<%
+if (vCustomerFilter <= 0)
+{
+%>
+                <td width="200" valign="top" class="topMenu" bgcolor="F89920">&nbsp;Klant</td>
+<%
+}
+%>
 				<td width="55" valign="top" class="topMenu" bgcolor="F89920">&nbsp;Datum</td>
 				<td width="250" valign="top" class="topMenu" bgcolor="F89920">&nbsp;Omschrijving</td>
 				<td width="100" valign="top" class="topMenu" bgcolor="F89920">&nbsp;Minuten</td>
@@ -131,17 +135,36 @@ if (vTasks != null && vTasks.size() > 0)
   DecimalFormat vCostFormatter = new DecimalFormat("#0.00");
   for (TaskEntityData vEntry : vTasks)
   {
-    String vId = "id" + vEntry.getId();
-    String vKost;
-    if (vEntry.getIsFixedPrice())
-    {
-      vKost = new String(vCostFormatter.format(vEntry.getFixedPrice()) + "Euro (fixed)");   
-    }
-    else
-    {
-      double vTaskCost = ((double) vEntry.getTimeSpend() / 60.00) * ((double) vAccountData.getTaskHourRate() / 100.00);
-      vKost = new String(vCostFormatter.format(vTaskCost) + "Euro");   
-    }
+     String vId = "id" + vEntry.getId();
+     String vKost;
+     AccountEntityData vAccountData = null;
+     String vCustomerName = "onbekend";
+     if (vEntry.getAccountId() == 0)
+     {
+        vAccountData = (AccountEntityData) AccountCache.getInstance().get(vEntry.getFwdNr());
+     }
+     else
+     {
+        vAccountData = (AccountEntityData) AccountCache.getInstance().get(vEntry.getAccountId());
+     }
+     if (vAccountData != null)
+     {
+        vCustomerName = vAccountData.getFullName();
+        if (vEntry.getIsFixedPrice())
+        {
+          vKost = new String(vCostFormatter.format(vEntry.getFixedPrice()) + "Euro (fixed)");   
+        }
+        else
+        {
+          double vTaskCost = ((double) vEntry.getTimeSpend() / 60.00) * ((double) vAccountData.getTaskHourRate() / 100.00);
+          vKost = new String(vCostFormatter.format(vTaskCost) + "Euro");   
+        }
+     }
+     else
+     {
+        vKost = new String(vCostFormatter.format(vEntry.getFixedPrice()) + "Euro (fixed)"); 
+     }
+     
     String vTimeSpend;
     if (vEntry.getTimeSpend() == 0)
     {
@@ -165,6 +188,14 @@ if (vTasks != null && vTasks.size() > 0)
 				onmouseout="hooverOffRow('<%=vId%>','<%=vRowInd%>')"
 				onclick="updateDeleteFlag('<%=vId%>','<%=vEntry.getId()%>','<%=vRowInd%>')"
 				ondblclick="changeUrl('/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.TASK_UPDATE%>&<%=Constants.TASK_ID%>=<%=vEntry.getId()%>');">
+<%
+if (vCustomerFilter <= 0)
+{
+%>
+            <td width="300" valign="top"><%=vCustomerName%></td>
+<%
+}
+%>
 				<td width="55" valign="top"><%=vEntry.getDate()%></td>
 				<td width="250" valign="top"><%=vEntry.getDescription()%></td>
 				<td width="100" valign="top"><%=vTimeSpend%></td>
@@ -179,6 +210,14 @@ if (vTasks != null && vTasks.size() > 0)
         <tr bgcolor="FFCC66" id=<%=vId%> class="bodytekst"
             onmouseover="hooverOnRow('<%=vId%>','<%=vRowInd%>')"
             onmouseout="hooverOffRow('<%=vId%>','<%=vRowInd%>')">
+<%
+if (vCustomerFilter <= 0)
+{
+%>
+            <td width="300" valign="top"><%=vCustomerName%></td>
+<%
+}
+%>
             <td width="55" valign="top"><%=vEntry.getDate()%></td>
             <td width="250" valign="top"><%=vEntry.getDescription()%></td>
             <td width="100" valign="top"><%=vTimeSpend%></td>

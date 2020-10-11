@@ -6,6 +6,6 @@ public class TbaException extends Exception
 
    public TbaException(String pMessage)
    {
-       super(pMessage);
+      super(pMessage);
    }
 }

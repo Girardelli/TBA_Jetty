@@ -9,15 +9,9 @@
 
 <%@ page import="
 java.util.*,
-
-
-javax.naming.Context,
-javax.naming.InitialContext,
-
-
-be.tba.ejb.account.interfaces.*,
+be.tba.sqldata.*,
 be.tba.util.constants.*,
-be.tba.util.session.*"%>
+be.tba.session.*"%>
 
 <body>
    <table cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">

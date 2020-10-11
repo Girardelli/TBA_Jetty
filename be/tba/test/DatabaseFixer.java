@@ -4,9 +4,9 @@ import java.util.Collection;
 import java.util.SortedSet;
 import java.util.Vector;
 
-import be.tba.ejb.invoice.interfaces.InvoiceEntityData;
-import be.tba.ejb.invoice.session.InvoiceSqlAdapter;
-import be.tba.servlets.session.WebSession;
+import be.tba.session.WebSession;
+import be.tba.sqladapters.InvoiceSqlAdapter;
+import be.tba.sqldata.InvoiceEntityData;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,21 +17,19 @@ public class DatabaseFixer
 
    WebSession mSession;
    InvoiceSqlAdapter mInvoiceSession;
-   
+
    public DatabaseFixer()
    {
       mSession = new WebSession();
       mInvoiceSession = new InvoiceSqlAdapter();
    }
-   
-   
-   public static void main(String args[]) throws Exception 
+
+   public static void main(String args[]) throws Exception
    {
       DatabaseFixer fixer = new DatabaseFixer();
       fixer.doIt(args);
    }
 
-   
    private void doIt(String args[])
    {
       int i = 0;
@@ -39,11 +37,11 @@ public class DatabaseFixer
       {
          SortedSet<InvoiceEntityData> invoices = mInvoiceSession.getAllRowsSorted(mSession);
          Collection<InvoiceEntityData> dateFormattedEntries = new Vector<InvoiceEntityData>();
-         
+
          String curDay = "";
          String curMonth = "";
          boolean isBadList = false;
-         for (InvoiceEntityData entry : invoices) 
+         for (InvoiceEntityData entry : invoices)
          {
             ++i;
             if (entry.getPayDate().length() > 10 && entry.getPayDate().charAt(2) == '-')
@@ -55,9 +53,8 @@ public class DatabaseFixer
                   String invDay = entry.getInvoiceDate().substring(0, entry.getInvoiceDate().indexOf('/'));
 
                   String nextYear = entry.getPayDate().substring(7);
-                  
-                  if ((Integer.parseInt(nextCurDay) + Integer.parseInt(nextCurMonth)*30 + Integer.parseInt(nextYear)*365) <
-                        (Integer.parseInt(invDay) + entry.getMonth()*30 + entry.getYear()*365))
+
+                  if ((Integer.parseInt(nextCurDay) + Integer.parseInt(nextCurMonth) * 30 + Integer.parseInt(nextYear) * 365) < (Integer.parseInt(invDay) + entry.getMonth() * 30 + entry.getYear() * 365))
                   {
                      // al zeker fout
                      log.info("ASAP {}: inv: {} > payed: {}", entry.fintroId, entry.getInvoiceDate(), entry.getPayDate());
@@ -68,8 +65,8 @@ public class DatabaseFixer
                }
                else
                {
-            	   log.info("Hoe kan dat ##### {}: inv: {} > payed: {}", entry.fintroId, entry.getInvoiceDate(), entry.getPayDate());
-                                    
+                  log.info("Hoe kan dat ##### {}: inv: {} > payed: {}", entry.fintroId, entry.getInvoiceDate(), entry.getPayDate());
+
                }
 
                if (nextCurDay.equals(curDay) && !nextCurMonth.equals(curMonth))
@@ -86,7 +83,7 @@ public class DatabaseFixer
                if (isBadList)
                {
                   // process the list
-                  for (InvoiceEntityData badOne : dateFormattedEntries) 
+                  for (InvoiceEntityData badOne : dateFormattedEntries)
                   {
                      changeDB(badOne);
                   }
@@ -96,16 +93,16 @@ public class DatabaseFixer
                curDay = "";
                curMonth = "";
             }
-            
-            
-            //log.info("{} fintroId={}, paydate={}", ++i, entry.fintroId, entry.getPayDate());
-         } 
+
+            // log.info("{} fintroId={}, paydate={}", ++i, entry.fintroId,
+            // entry.getPayDate());
+         }
          if (!dateFormattedEntries.isEmpty())
          {
             if (isBadList)
             {
                // process the list
-               for (InvoiceEntityData badOne : dateFormattedEntries) 
+               for (InvoiceEntityData badOne : dateFormattedEntries)
                {
                   changeDB(badOne);
                }
@@ -117,26 +114,26 @@ public class DatabaseFixer
          // TODO Auto-generated catch block
          log.error(e.getMessage(), e);
       }
-      
+
    }
-   
+
    private void changeDB(InvoiceEntityData badOne) throws Exception
    {
-	   log.info("{}: {} --> {}/{}/{}", badOne.fintroId, badOne.getPayDate(), getMonthNr(badOne.getPayDate()), badOne.getPayDate().substring(0, 2), badOne.getPayDate().substring(7));
+      log.info("{}: {} --> {}/{}/{}", badOne.fintroId, badOne.getPayDate(), getMonthNr(badOne.getPayDate()), badOne.getPayDate().substring(0, 2), badOne.getPayDate().substring(7));
       badOne.setPayDate(String.format("%s/%s/%s", getMonthNr(badOne.getPayDate()), badOne.getPayDate().substring(0, 2), badOne.getPayDate().substring(7)));
       badOne.setValutaDate(badOne.getPayDate());
       mInvoiceSession.setPaymentDates(mSession, badOne);
-      
+
    }
-   
+
    // input: 05-Feb-2019
    // output: 02
    private String getMonthNr(String str) throws Exception
    {
-      //sLogger.info("parse {}", str.substring(3, 6));
+      // sLogger.info("parse {}", str.substring(3, 6));
       switch (str.substring(3, 6))
       {
-      
+
       case "Jan":
          return "01";
       case "Feb":
@@ -165,6 +162,5 @@ public class DatabaseFixer
          throw new Exception("cannot parse " + str);
       }
    }
-   
 
 }

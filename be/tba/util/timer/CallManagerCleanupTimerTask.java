@@ -6,14 +6,15 @@ import java.util.TimerTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import be.tba.servlets.helper.IntertelCallManager;
-import be.tba.servlets.helper.PhoneMapManager;
+import be.tba.session.IntertelCallManager;
+import be.tba.session.PhoneMapManager;
+import be.tba.sqldata.AccountCache;
 import be.tba.util.constants.Constants;
-import be.tba.util.session.AccountCache;
 
-public class CallManagerCleanupTimerTask extends TimerTask implements TimerTaskIntf 
+public class CallManagerCleanupTimerTask extends TimerTask implements TimerTaskIntf
 {
-	private static Logger log = LoggerFactory.getLogger(CallManagerCleanupTimerTask.class);
+   private static Logger log = LoggerFactory.getLogger(CallManagerCleanupTimerTask.class);
+
    public CallManagerCleanupTimerTask()
    {
       super();
@@ -21,31 +22,34 @@ public class CallManagerCleanupTimerTask extends TimerTask implements TimerTaskI
    }
 
    @Override
-   public Date getStartTime() {
+   public Date getStartTime()
+   {
       // TODO Auto-generated method stub
       // start now
       return null;
    }
 
    @Override
-   public long getPeriod() {
+   public long getPeriod()
+   {
       // TODO Auto-generated method stub
 //    return Constants.SECONDS * 20;
       return Constants.MINUTES * 5;
    }
 
    @Override
-   public TimerTask getTimerTask() {
+   public TimerTask getTimerTask()
+   {
       // TODO Auto-generated method stub
       return this;
    }
 
    @Override
-   public void run() 
+   public void run()
    {
       IntertelCallManager.getInstance().cleanUpMap();
-      //PhoneMapManager.getInstance().cleanUpMap();
-      
+      // PhoneMapManager.getInstance().cleanUpMap();
+
    }
 
    @Override

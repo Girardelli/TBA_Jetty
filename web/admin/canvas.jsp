@@ -11,20 +11,14 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"
    import="java.util.*,
 	java.lang.*,
-javax.naming.InitialContext,
-be.tba.ejb.account.interfaces.*,
-be.tba.ejb.pbx.interfaces.*,
-be.tba.ejb.task.session.WorkOrderSqlAdapter,
-be.tba.ejb.task.interfaces.*,
-be.tba.util.constants.EjbJndiNames,
-be.tba.ejb.pbx.session.CallRecordSqlAdapter,
+be.tba.sqldata.*,
+be.tba.sqladapters.*,
 be.tba.util.constants.Constants,
 be.tba.websockets.WebSocketData,
 be.tba.util.exceptions.AccessDeniedException,
-be.tba.servlets.session.SessionManager,
-be.tba.servlets.helper.IntertelCallManager,
-be.tba.util.session.AccountCache,
-be.tba.util.session.MailError,
+be.tba.session.SessionManager,
+be.tba.sqldata.AccountCache,
+be.tba.mail.MailError,
 be.tba.util.timer.UrlCheckTimerTask"%>
 
 <%

@@ -27,21 +27,18 @@ document.getElementById(elmnt).style.visibility="hidden";
 
 <%@ page
 	import="java.util.*,
-javax.naming.InitialContext,
-be.tba.ejb.account.interfaces.*,
-be.tba.ejb.pbx.interfaces.*,
-be.tba.util.constants.EjbJndiNames,
+be.tba.sqldata.*,
 be.tba.util.constants.Constants,
 be.tba.util.constants.AccountRole,
 be.tba.util.exceptions.AccessDeniedException,
-be.tba.servlets.session.SessionManager,
-be.tba.util.session.AccountCache"%>
+be.tba.session.SessionManager,
+be.tba.sqldata.AccountCache"%>
 
 
 
 
 <%@ page session="false" isThreadSafe="true" isErrorPage="false"
-	errorPage="adminfail.jsp" import="be.tba.servlets.session.*"%>
+	errorPage="adminfail.jsp" import="be.tba.session.*"%>
 <%
   HttpSession httpSession = request.getSession();
   WebSession vSession = (WebSession) httpSession.getAttribute(Constants.SESSION_OBJ);

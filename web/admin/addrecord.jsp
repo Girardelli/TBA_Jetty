@@ -5,12 +5,9 @@
 <%@ page 
 contentType="text/html;charset=UTF-8" language="java"
 		import="java.util.*,
-javax.naming.Context,
-javax.naming.InitialContext,
-be.tba.ejb.account.interfaces.*,
-be.tba.ejb.pbx.interfaces.*,
+be.tba.sqldata.*,
 be.tba.util.constants.*,
-be.tba.util.session.*,
+be.tba.session.*,
 be.tba.util.data.*,
 be.tba.util.invoice.*"%>
 

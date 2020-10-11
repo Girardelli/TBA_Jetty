@@ -21,31 +21,31 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import be.tba.ejb.account.interfaces.AccountEntityData;
-import be.tba.ejb.account.interfaces.LoginEntityData;
-import be.tba.ejb.account.session.AccountSqlAdapter;
-import be.tba.ejb.account.session.LoginSqlAdapter;
-import be.tba.ejb.mail.session.MailerSessionBean;
-import be.tba.ejb.pbx.interfaces.CallRecordEntityData;
-import be.tba.ejb.pbx.session.CallRecordSqlAdapter;
-import be.tba.servlets.helper.AccountFacade;
-import be.tba.servlets.helper.CallRecordFacade;
-import be.tba.servlets.helper.IntertelCallManager;
-import be.tba.servlets.helper.InvoiceFacade;
-import be.tba.servlets.helper.LoginFacade;
-import be.tba.servlets.helper.TaskFacade;
-import be.tba.servlets.session.SessionManager;
-import be.tba.servlets.session.WebSession;
+import be.tba.sqladapters.AccountSqlAdapter;
+import be.tba.business.AccountBizzLogic;
+import be.tba.business.CallBizzLogic;
+import be.tba.business.InvoiceBizzLogic;
+import be.tba.business.LoginBizzLogic;
+import be.tba.business.TaskBIzzLogic;
+import be.tba.mail.MailerSessionBean;
+import be.tba.session.IntertelCallManager;
+import be.tba.session.SessionManager;
+import be.tba.session.SessionParms;
+import be.tba.session.SessionParmsInf;
+import be.tba.session.WebSession;
+import be.tba.sqladapters.CallRecordSqlAdapter;
+import be.tba.sqladapters.LoginSqlAdapter;
+import be.tba.sqldata.AccountCache;
+import be.tba.sqldata.AccountEntityData;
+import be.tba.sqldata.CallRecordEntityData;
+import be.tba.sqldata.LoginEntityData;
+import be.tba.util.common.FileUploader;
 import be.tba.util.common.Tools;
 import be.tba.util.constants.AccountRole;
 import be.tba.util.constants.Constants;
 import be.tba.util.exceptions.AccessDeniedException;
 import be.tba.util.exceptions.LostSessionException;
 import be.tba.util.exceptions.SystemErrorException;
-import be.tba.util.file.FileUploader;
-import be.tba.util.session.AccountCache;
-import be.tba.util.session.SessionParms;
-import be.tba.util.session.SessionParmsInf;
 
 @WebServlet("/upload")
 @MultipartConfig
@@ -105,7 +105,7 @@ public class AdminDispatchServlet extends HttpServlet
          SessionManager.getInstance().getSession(vSession.getSessionId(), "AdminDispatchServlet(" + vAction + ")");
 
          log.info("\nuserid:" + vSession.getUserId() + ", websessionid:" + vSession.getSessionId() + "Action: " + vAction + ", URI:" + URI);
-         
+
          synchronized (vSession)
          {
             vSession.setWsActive(false);
@@ -248,7 +248,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.UPDATE_SHORT_TEXT:
             {
-               CallRecordFacade.updateCustomerChanges(params, vSession, false);
+               CallBizzLogic.updateCustomerChanges(params, vSession, false);
                // rd = sc.getRequestDispatcher(Constants.CANVAS_JSP);
                break;
             }
@@ -258,7 +258,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.AUTO_RECORD_UPDATE:
             {
-               CallRecordFacade.retrieveRecordForUpdate(params, vSession);
+               CallBizzLogic.retrieveRecordForUpdate(params, vSession);
                vSession.setIsAutoUpdateRecord(true);
                rd = sc.getRequestDispatcher(Constants.UPDATE_RECORD_JSP);
                break;
@@ -269,7 +269,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.ACTION_GOTO_RECORD_UPDATE:
             {
-               CallRecordFacade.retrieveRecordForUpdate(params, vSession);
+               CallBizzLogic.retrieveRecordForUpdate(params, vSession);
                rd = sc.getRequestDispatcher(Constants.UPDATE_RECORD_JSP);
                break;
             }
@@ -279,7 +279,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.SAVE_RECORD:
             {
-               CallRecordFacade.saveRecord(params, vSession);
+               CallBizzLogic.saveRecord(params, vSession);
                vSession.setIsAutoUpdateRecord(false);
                rd = sc.getRequestDispatcher(Constants.CANVAS_JSP);
                break;
@@ -300,7 +300,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.SAVE_MAN_RECORD:
             {
-               CallRecordFacade.saveManualRecord(params, vSession);
+               CallBizzLogic.saveManualRecord(params, vSession);
                rd = sc.getRequestDispatcher(Constants.CANVAS_JSP);
                break;
             }
@@ -310,7 +310,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.RECORD_DELETE:
             {
-               CallRecordFacade.deleteRecords(params, vSession);
+               CallBizzLogic.deleteRecords(params, vSession);
                rd = sc.getRequestDispatcher(Constants.CANVAS_JSP);
                break;
             }
@@ -330,7 +330,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.REMOVE_OPEN_CALL:
             {
-               CallRecordFacade.removeNewCall(params, vSession);
+               CallBizzLogic.removeNewCall(params, vSession);
                rd = sc.getRequestDispatcher(Constants.CANVAS_JSP);
                break;
             }
@@ -363,7 +363,7 @@ public class AdminDispatchServlet extends HttpServlet
                   if (role == AccountRole.ADMIN || role == AccountRole.EMPLOYEE)
                   {
                      log.info("goto account delete: setAccountId=" + vLtd + ", account fwdnr=" + accountData.getFwdNumber());
-                     AccountFacade.archiveAccount(vSession, Integer.parseInt(vLtd));
+                     AccountBizzLogic.archiveAccount(vSession, Integer.parseInt(vLtd));
                      rd = sc.getRequestDispatcher(Constants.ADMIN_EMPLOYEE_JSP);
                   }
                   else
@@ -403,7 +403,7 @@ public class AdminDispatchServlet extends HttpServlet
             {
                AccountEntityData accountData = AccountCache.getInstance().get(vSession.getAccountIdToDelete());
                log.info("account delete: key=" + vSession.getAccountId() + ", fwd nr=" + accountData.getFwdNumber());
-               AccountFacade.archiveAccount(vSession, vSession.getAccountIdToDelete());
+               AccountBizzLogic.archiveAccount(vSession, vSession.getAccountIdToDelete());
                rd = sc.getRequestDispatcher(Constants.ADMIN_ACCOUNT_JSP);
                break;
             }
@@ -416,7 +416,7 @@ public class AdminDispatchServlet extends HttpServlet
                rd = sc.getRequestDispatcher(Constants.ADMIN_ACCOUNT_JSP);
                break;
             }
-            
+
             // ==============================================================================================
             // GOTO_ARCHIVED_ACCOUNTS
             // ==============================================================================================
@@ -431,7 +431,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.GOTO_SAVE_ACCOUNT:
             {
-               AccountEntityData newData = AccountFacade.updateAccountData(vSession, params);
+               AccountEntityData newData = AccountBizzLogic.updateAccountData(vSession, params);
                rd = sc.getRequestDispatcher(Constants.ADMIN_ACCOUNT_JSP);
                break;
             }
@@ -461,7 +461,7 @@ public class AdminDispatchServlet extends HttpServlet
                rd = sc.getRequestDispatcher(Constants.ARE_YOU_SURE_JSP);
                break;
             }
-               
+
             // ==============================================================================================
             // DELETE EMPLOYEE
             // ==============================================================================================
@@ -487,29 +487,29 @@ public class AdminDispatchServlet extends HttpServlet
                }
                break;
             }
-           
+
             // ==============================================================================================
             // DELETE_LOGIN_CONFIRMED
             // ==============================================================================================
             case Constants.DELETE_LOGIN_CONFIRMED:
             {
-               LoginFacade.deleteLogin(vSession);
+               LoginBizzLogic.deleteLogin(vSession);
                vSession.mLoginToDelete = 0;
                rd = sc.getRequestDispatcher(Constants.UPDATE_ACCOUNT_JSP);
                break;
             }
-            
+
             // ==============================================================================================
             // DELETE_LOGIN_CONFIRMED
             // ==============================================================================================
             case Constants.DELETE_EMPLOYEE_CONFIRMED:
             {
-               LoginFacade.deleteLogin(vSession);
+               LoginBizzLogic.deleteLogin(vSession);
                vSession.mLoginToDelete = 0;
                rd = sc.getRequestDispatcher(Constants.ADMIN_EMPLOYEE_JSP);
                break;
             }
-            
+
             // ==============================================================================================
             // ADD ACCOUNT
             // ==============================================================================================
@@ -533,7 +533,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.EMPLOYEE_ADD:
             {
-               Vector<String> errorList = LoginFacade.addLogin(vSession, req, params);
+               Vector<String> errorList = LoginBizzLogic.addLogin(vSession, req, params);
                if (errorList != null)
                {
                   vSession.setErrorList(errorList);
@@ -561,7 +561,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.ACCOUNT_ADD:
             {
-               Vector<String> errorList = AccountFacade.addAccount(vSession, req, params);
+               Vector<String> errorList = AccountBizzLogic.addAccount(vSession, req, params);
                AccountRole role = AccountRole.fromShort(params.getParameter(Constants.LOGIN_ROLE));
                if (role == AccountRole.ADMIN || role == AccountRole.EMPLOYEE)
                {
@@ -586,7 +586,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.MAIL_CUSTOMER:
             {
-               AccountFacade.mailCustomer(params, vSession);
+               AccountBizzLogic.mailCustomer(params, vSession);
                rd = sc.getRequestDispatcher(Constants.UPDATE_ACCOUNT_JSP);
                break;
             }
@@ -606,7 +606,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.INVOICE_ADD:
             {
-               InvoiceFacade.addManualInvoice(params, vSession);
+               InvoiceBizzLogic.addManualInvoice(params, vSession);
                rd = sc.getRequestDispatcher(Constants.CANVAS_JSP);
                break;
             }
@@ -616,7 +616,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.GOTO_INVOICE:
             {
-               InvoiceFacade.prepareForSingleInvoice(params, vSession);
+               InvoiceBizzLogic.prepareForSingleInvoice(params, vSession);
                rd = sc.getRequestDispatcher(Constants.INVOICE_JSP);
                break;
             }
@@ -683,7 +683,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.GENERATE_INVOICE_XML:
             {
-               InvoiceFacade.generateInvoiceXml(params, vSession);
+               InvoiceBizzLogic.generateInvoiceXml(params, vSession);
                rd = sc.getRequestDispatcher(Constants.ADMIN_INVOICE_JSP);
                break;
             }
@@ -693,7 +693,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.GENERATE_ALL_INVOICES:
             {
-               InvoiceFacade.generateInvoices(params, vSession);
+               InvoiceBizzLogic.generateInvoices(params, vSession);
                rd = sc.getRequestDispatcher(Constants.ADMIN_INVOICE_JSP);
                break;
             }
@@ -703,7 +703,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.INVOICE_FREEZE:
             {
-               InvoiceFacade.freezeInvoices(params, vSession);
+               InvoiceBizzLogic.freezeInvoices(params, vSession);
                rd = sc.getRequestDispatcher(Constants.ADMIN_INVOICE_JSP);
                break;
             }
@@ -713,7 +713,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.INVOICE_MAIL:
             {
-               InvoiceFacade.mailInvoices(params, vSession);
+               InvoiceBizzLogic.mailInvoices(params, vSession);
                rd = sc.getRequestDispatcher(Constants.ADMIN_INVOICE_JSP);
                break;
             }
@@ -723,7 +723,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.INVOICE_SETPAYED:
             {
-               InvoiceFacade.setInvoicesPayed(params, vSession);
+               InvoiceBizzLogic.setInvoicesPayed(params, vSession);
                rd = sc.getRequestDispatcher(Constants.OPEN_INVOICE_JSP);
                break;
             }
@@ -733,7 +733,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.INVOICE_DELETE:
             {
-               InvoiceFacade.deleteInvoices(params, vSession);
+               InvoiceBizzLogic.deleteInvoices(params, vSession);
                rd = sc.getRequestDispatcher(Constants.ADMIN_INVOICE_JSP);
                break;
             }
@@ -743,7 +743,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.SAVE_INVOICE:
             {
-               InvoiceFacade.saveInvoice(params, vSession);
+               InvoiceBizzLogic.saveInvoice(params, vSession);
                rd = sc.getRequestDispatcher(Constants.ADMIN_INVOICE_JSP);
                break;
             }
@@ -753,7 +753,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.SAVE_PAYDATE:
             {
-               InvoiceFacade.savePayDate(params, vSession);
+               InvoiceBizzLogic.savePayDate(params, vSession);
                rd = sc.getRequestDispatcher(Constants.ADMIN_INVOICE_JSP);
                break;
             }
@@ -763,7 +763,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.GENERATE_CREDITNOTE:
             {
-               InvoiceFacade.generateCreditInvoice(params, vSession);
+               InvoiceBizzLogic.generateCreditInvoice(params, vSession);
                rd = sc.getRequestDispatcher(Constants.ADMIN_INVOICE_JSP);
                break;
             }
@@ -811,7 +811,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.TASK_DELETE:
             {
-               TaskFacade.deleteTask(params, vSession);
+               TaskBIzzLogic.deleteTask(params, vSession);
                rd = sc.getRequestDispatcher(Constants.ADMIN_TASK_JSP);
                break;
             }
@@ -831,7 +831,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.TASK_UPDATE:
             {
-               TaskFacade.modifyTask(params, vSession);
+               TaskBIzzLogic.modifyTask(params, vSession);
                rd = sc.getRequestDispatcher(Constants.UPDATE_TASK_JSP);
                break;
             }
@@ -841,7 +841,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.SAVE_TASK:
             {
-               TaskFacade.saveTask(params, vSession);
+               TaskBIzzLogic.saveTask(params, vSession);
                rd = sc.getRequestDispatcher(Constants.ADMIN_TASK_JSP);
                break;
             }
@@ -860,7 +860,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.TASK_ADD:
             {
-               TaskFacade.addTask(params, vSession);
+               TaskBIzzLogic.addTask(params, vSession);
                rd = sc.getRequestDispatcher(Constants.ADMIN_TASK_JSP);
                break;
             }
@@ -911,11 +911,11 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.ACTION_SAVE_WORKORDER:
             {
-               TaskFacade.saveWorkOrder(params, vSession);
+               TaskBIzzLogic.saveWorkOrder(params, vSession);
                rd = sc.getRequestDispatcher(Constants.ADMIN_WORK_ORDER_JSP);
                break;
             }
-            
+
             // ==============================================================================================
             // UPLOAD WORKORDER INPUT FILE
             // ==============================================================================================
@@ -929,7 +929,7 @@ public class AdminDispatchServlet extends HttpServlet
                }
                fileUploader.setStoragePath(Constants.WORKORDER_FILEUPLOAD_DIR + File.separator + Tools.spaces2underscores(custAccount.getFullName()) + File.separator + "done");
                uploadedFile = fileUploader.waitTillFinished();
-               if (TaskFacade.addWorkOrderFile(params, vSession, uploadedFile))
+               if (TaskBIzzLogic.addWorkOrderFile(params, vSession, uploadedFile))
                {
                   vSession.setUploadedFileName(uploadedFile);
                   rd = sc.getRequestDispatcher(Constants.WORKORDER_JSP);
@@ -941,19 +941,17 @@ public class AdminDispatchServlet extends HttpServlet
                }
                break;
             }
-            
+
             // ==============================================================================================
             // DELETE WORKORDER FILE
             // ==============================================================================================
             case Constants.DELETE_WORKORDER_FILE:
             {
-               TaskFacade.deleteWorkOrderFile(params, vSession);
+               TaskBIzzLogic.deleteWorkOrderFile(params, vSession);
                rd = sc.getRequestDispatcher(Constants.WORKORDER_JSP);
                break;
             }
 
-            
-            
             // ==============================================================================================
             // EMPLCOST_SHOW_NEXT
             // ==============================================================================================
@@ -1036,10 +1034,10 @@ public class AdminDispatchServlet extends HttpServlet
          req.setAttribute(Constants.ERROR_TXT, "de pagina kan niet worden getoond.");
          rd.forward(req, res);
       }
-        if (vSession != null)
-        {
-        	log.info("########### httprequest done: java=" + (Calendar.getInstance().getTimeInMillis() - vSession.mWebTimer - vSession.getSqlTimer()) + ", SQL=" + vSession.getSqlTimer());
-        }
+      if (vSession != null)
+      {
+         log.info("########### httprequest done: java=" + (Calendar.getInstance().getTimeInMillis() - vSession.mWebTimer - vSession.getSqlTimer()) + ", SQL=" + vSession.getSqlTimer());
+      }
 
    }
 
@@ -1050,7 +1048,7 @@ public class AdminDispatchServlet extends HttpServlet
 
    public void destroy()
    {
-       log.info("AdminDispatchServlet destroyed.");
+      log.info("AdminDispatchServlet destroyed.");
    }
 
 }

@@ -6,14 +6,9 @@
 <%@ page
 import="
 java.util.*,
-javax.naming.Context,
-javax.naming.InitialContext,
-
-be.tba.ejb.account.interfaces.*,
-be.tba.ejb.task.interfaces.*,
-be.tba.ejb.task.session.*,
-be.tba.ejb.account.session.*,
-be.tba.util.session.AccountCache,
+be.tba.sqldata.*,
+be.tba.sqladapters.*,
+be.tba.sqldata.AccountCache,
 be.tba.util.constants.Constants,
 be.tba.util.timer.CallCalendar,
 be.tba.util.data.*"%>

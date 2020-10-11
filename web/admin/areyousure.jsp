@@ -38,8 +38,7 @@ Last Checked In By: $Author: Yves Willems $
 
 	<%@ page isErrorPage="false" session="false"
 		import="be.tba.util.constants.*,
-be.tba.servlets.session.*,
-be.tba.servlets.helper.*"%>
+be.tba.session.*"%>
 	<%
 String vNextAction = (String) request.getAttribute(Constants.NEXT_PAGE);
 String vPrevAction = (String) request.getAttribute(Constants.PREVIOUS_PAGE);

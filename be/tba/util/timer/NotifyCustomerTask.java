@@ -7,10 +7,10 @@ package be.tba.util.timer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import be.tba.ejb.account.interfaces.AccountEntityData;
-import be.tba.ejb.mail.session.MailerSessionBean;
-import be.tba.servlets.session.WebSession;
-import be.tba.util.session.AccountCache;
+import be.tba.mail.MailerSessionBean;
+import be.tba.session.WebSession;
+import be.tba.sqldata.AccountCache;
+import be.tba.sqldata.AccountEntityData;
 import be.tba.websockets.TbaWebSocketAdapter;
 import be.tba.websockets.WebSocketData;
 
@@ -22,9 +22,9 @@ import be.tba.websockets.WebSocketData;
  */
 final public class NotifyCustomerTask
 {
-	private static Logger log = LoggerFactory.getLogger(NotifyCustomerTask.class);
-   
-	static public void notify(int accountId, WebSocketData wsData, boolean alsoMail)
+   private static Logger log = LoggerFactory.getLogger(NotifyCustomerTask.class);
+
+   static public void notify(int accountId, WebSocketData wsData, boolean alsoMail)
    {
       Thread t = new Thread(new NotifyCustomerThread(accountId, wsData, alsoMail));
       t.start();
@@ -35,7 +35,7 @@ final public class NotifyCustomerTask
       private int mAccountId;
       private AccountEntityData mAccountEntityData;
       private WebSocketData mWsData = null;
-      private boolean mAlsoMail= false;
+      private boolean mAlsoMail = false;
 
       NotifyCustomerThread(int accountId, WebSocketData wsData, boolean alsoMail)
       {
@@ -65,7 +65,7 @@ final public class NotifyCustomerTask
             Thread.sleep(2000);
 
             session = new WebSession();
-            
+
             // send websocket event to customer
             TbaWebSocketAdapter.sendToCustomer(mWsData, mAccountId);
             // send mail to customer
