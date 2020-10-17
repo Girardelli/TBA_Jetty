@@ -261,13 +261,14 @@ public class Mailer
          }
          else
          {
+            // development path
             vTo = new InternetAddress[1];
-            vTo[0] = new InternetAddress("girardelli65@gmail.com");
+            vTo[0] = new InternetAddress("yves@wyno.be");
          }
-//         InitialContext vContext = new InitialContext();
-//         Session session = (Session) vContext.lookup("java:comp/env/mail/Session");
-       Properties prop = System.getProperties();
-      Session session = Session.getInstance(prop, null);
+         InitialContext vContext = new InitialContext();
+         Session session = (Session) vContext.lookup("java:comp/env/mail/Session");
+//       Properties prop = System.getProperties();
+//      Session session = Session.getInstance(prop, null);
 
          log.info("mail session=" + session);
 
@@ -303,20 +304,15 @@ public class Mailer
          multipart.addBodyPart(attachmentPart);
 
          msg.setContent(multipart);
-//         Transport.send(msg);
+         Transport.send(msg);
 
-         
-         SMTPTransport t = (SMTPTransport) session.getTransport("smtp");
+/*         SMTPTransport t = (SMTPTransport) session.getTransport("smtp");
 //       // connect
        t.connect("smtp.telenet.be", "a120569", "h7YUG6anja6Ak98u");
 //       // send
        t.sendMessage(msg, msg.getAllRecipients());
        t.close();
-
-         
-         
-         
-         
+*/
          
          log.info("Invoice mailed to " + vCustomer.getFullName() + " (" + vTo[0] + ")");
          return true;
