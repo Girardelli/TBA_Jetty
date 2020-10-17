@@ -27,7 +27,7 @@ import be.tba.business.CallBizzLogic;
 import be.tba.business.InvoiceBizzLogic;
 import be.tba.business.LoginBizzLogic;
 import be.tba.business.TaskBIzzLogic;
-import be.tba.mail.MailerSessionBean;
+import be.tba.mail.Mailer;
 import be.tba.session.IntertelCallManager;
 import be.tba.session.SessionManager;
 import be.tba.session.SessionParms;
@@ -152,7 +152,7 @@ public class AdminDispatchServlet extends HttpServlet
                         String vEmail = vAccountData.getEmail();
                         if (vEmail != null && !vEmail.isEmpty() && AccountCache.getInstance().isMailEnabled(vAccountData))
                         {
-                           MailerSessionBean.sendCallInfoMail(vSession, vAccountData.getId());
+                           Mailer.sendCallInfoMail(vSession, vAccountData.getId());
                         }
                      } // Check the record and add it if it is a valid one. //
                        // vMailSession.sendMail(5);

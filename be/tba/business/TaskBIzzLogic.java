@@ -8,7 +8,7 @@ import java.util.StringTokenizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import be.tba.mail.MailerSessionBean;
+import be.tba.mail.Mailer;
 import be.tba.session.SessionParmsInf;
 import be.tba.session.WebSession;
 import be.tba.sqladapters.FileLocationSqlAdapter;
@@ -215,7 +215,7 @@ public class TaskBIzzLogic
             workorder.state = WorkOrderData.StateStr2Enum(parms.getParameter(Constants.WORKORDER_STATE));
             if (workorder.state == WorkOrderData.State.kDone && oldState != workorder.state)
             {
-               MailerSessionBean.sendMail(session, workorder.accountId, "Uw opdracht is opgeleverd", kMailBody);
+               Mailer.sendMail(session, workorder.accountId, "Uw opdracht is opgeleverd", kMailBody);
             }
          }
          vWorkOrderSession.updateRow(session, workorder);
@@ -235,7 +235,7 @@ public class TaskBIzzLogic
          id = vWorkOrderSession.addRow(session, workorder);
          TaskBIzzLogic.log.info("new idStr=" + idStr + ", " + workorder.toString());
 
-         MailerSessionBean.sendMail(session, 0, "Nieuwe opdracht van " + vAccountData.getFullName(), "");
+         Mailer.sendMail(session, 0, "Nieuwe opdracht van " + vAccountData.getFullName(), "");
       }
       session.setWorkOrderId(id);
       return id;

@@ -88,9 +88,12 @@ public class TbaPdfInvoice
          fillAddress();
          fillCustomerRef();
          fillDescription(false);
-         fillSummaryTable();
-         fillTaskList();
-         fillSubcustomers();
+         if (System.getenv("TBA_MAIL_ON") != null)
+         {
+            fillSummaryTable();
+            fillTaskList();
+            fillSubcustomers();
+         }
       }
       catch (Exception e)
       {

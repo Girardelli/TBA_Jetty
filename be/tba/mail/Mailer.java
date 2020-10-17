@@ -1,5 +1,8 @@
 package be.tba.mail;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Collection;
@@ -10,11 +13,19 @@ import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import javax.activation.DataHandler;
+import javax.activation.FileDataSource;
 import javax.mail.Address;
 import javax.mail.Message;
+import javax.mail.Multipart;
 import javax.mail.Session;
+import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +38,7 @@ import be.tba.sqladapters.InvoiceSqlAdapter;
 import be.tba.sqldata.AccountCache;
 import be.tba.sqldata.AccountEntityData;
 import be.tba.sqldata.CallRecordEntityData;
+import be.tba.sqldata.InvoiceEntityData;
 import be.tba.util.constants.Constants;
 
 /**
@@ -44,9 +56,9 @@ import be.tba.util.constants.Constants;
  *                         res-man-jndi-name="be/tba/ejb/mail/MailerSession"
  *
  */
-public class MailerSessionBean
+public class Mailer
 {
-   private static Logger log = LoggerFactory.getLogger(MailerSessionBean.class);
+   private static Logger log = LoggerFactory.getLogger(Mailer.class);
 
    // -------------------------------------------------------------------------
    // Static
@@ -61,7 +73,7 @@ public class MailerSessionBean
    // -------------------------------------------------------------------------
 
    // private constructor; static class
-   private MailerSessionBean()
+   private Mailer()
    {
    }
 
@@ -124,8 +136,11 @@ public class MailerSessionBean
             vTo = new InternetAddress[1];
             vTo[0] = new InternetAddress("yves@wyno.be");
          }
-         Properties prop = System.getProperties();
-         Session session = Session.getInstance(prop, null);
+//         Properties prop = System.getProperties();
+//         Session session = Session.getInstance(prop, null);
+         InitialContext vContext = new InitialContext();
+         Session session = (Session) vContext.lookup("java:comp/env/mail/Session");
+         
          MimeMessage msg = new MimeMessage(session);
          msg.setFrom(new InternetAddress("ine.hermans@thebusinessassistant.be"));
          msg.setRecipients(Message.RecipientType.TO, vTo);
@@ -134,15 +149,17 @@ public class MailerSessionBean
          msg.setContent(body, "text/html");
          // Get SMTPTransport
          SMTPTransport t = (SMTPTransport) session.getTransport("smtp");
+//         // connect
+//         t.connect("smtp.telenet.be", "a120569", "h7YUG6anja6Ak98u");
+//         // send
+//         t.sendMessage(msg, msg.getAllRecipients());
+//         t.close();
 
-         // connect
-         // t.setStartTLS(true);
-         t.connect("smtp.telenet.be", "a120569", "h7YUG6anja6Ak98u");
-         // send
-         t.sendMessage(msg, msg.getAllRecipients());
-         t.close();
+         Transport.send(msg);
+
+      
       }
-      catch (javax.mail.MessagingException e)
+      catch (javax.mail.MessagingException | NamingException e)
       {
          if (vCustomer != null)
             MailError.getInstance().setError("Mail send failed to " + vCustomer.getFullName() + "\n" + e.getMessage());
@@ -190,6 +207,132 @@ public class MailerSessionBean
       return ret;
    }
 
+   
+   static public boolean mailInvoice(InvoiceEntityData invoiceData)
+   {
+      if (invoiceData == null || invoiceData.getFileName() == null || invoiceData.getFileName().length() == 0)
+      {
+         // log.info("Invoice not froozen for " + invoiceData.getAccountId());
+         return false;
+      }
+
+      AccountEntityData vCustomer = null;
+      Address[] vTo = new InternetAddress[1];
+      try
+      {
+         vCustomer = AccountCache.getInstance().get(invoiceData);
+
+         BufferedReader reader = new BufferedReader(new FileReader(Constants.INVOICE_DIR + "\\factuurMail.txt"));
+         String vBody = reader.readLine() + "\r\n";
+
+         String strLine;
+         // Read File Line By Line
+         while ((strLine = reader.readLine()) != null)
+         {
+            vBody = vBody.concat(strLine + "\r\n");
+         }
+         reader.close();
+
+         vBody = vBody.replace("#maand#", Constants.MONTHS[invoiceData.getMonth()]);
+         vBody = vBody.replace("#jaar#", Integer.toString(invoiceData.getYear()));
+
+         Date date = new Date();
+
+         if (System.getenv("TBA_MAIL_ON") != null)
+         {
+            String vEmailAddr = vCustomer.getInvoiceEmail();
+            if (vEmailAddr == null || vEmailAddr.length() == 0)
+            {
+               vEmailAddr = vCustomer.getEmail();
+               if (vEmailAddr == null || vEmailAddr.length() == 0)
+               {
+                  log.info("Invoice mail can not be send to " + vCustomer.getFullName() + " (no email address specified)");
+
+                  return false;
+               }
+            }
+            StringTokenizer vMailTokens = new StringTokenizer(vEmailAddr, ";");
+            vTo = new InternetAddress[vMailTokens.countTokens()];
+            int i = 0;
+            while (vMailTokens.hasMoreTokens())
+            {
+               vTo[i++] = new InternetAddress(vMailTokens.nextToken());
+            }
+         }
+         else
+         {
+            vTo = new InternetAddress[1];
+            vTo[0] = new InternetAddress("girardelli65@gmail.com");
+         }
+//         InitialContext vContext = new InitialContext();
+//         Session session = (Session) vContext.lookup("java:comp/env/mail/Session");
+       Properties prop = System.getProperties();
+      Session session = Session.getInstance(prop, null);
+
+         log.info("mail session=" + session);
+
+         MimeMessage msg = new MimeMessage(session);
+         //msg.setFrom();
+         msg.setFrom(new InternetAddress("ine.hermans@thebusinessassistant.be"));
+         
+         msg.setRecipients(Message.RecipientType.TO, vTo);
+         msg.setSubject("Factuur maand " + Constants.MONTHS[invoiceData.getMonth()]);
+         msg.setSentDate(date);
+         // msg.setContent(vBody.toString(), "text/html");
+
+         MimeBodyPart messagePart = new MimeBodyPart();
+         messagePart.setText(vBody.toString());
+
+         //
+         // Set the email attachment file
+         //
+         File attach = new File(invoiceData.getFileName());
+         MimeBodyPart attachmentPart = new MimeBodyPart();
+         FileDataSource fileDataSource = new FileDataSource(attach)
+         {
+            // @Override
+            public String getContentType()
+            {
+               return "application/octet-stream";
+            }
+         };
+         attachmentPart.setDataHandler(new DataHandler(fileDataSource));
+         attachmentPart.setFileName(invoiceData.getInvoiceNr() + ".pdf");
+         Multipart multipart = new MimeMultipart();
+         multipart.addBodyPart(messagePart);
+         multipart.addBodyPart(attachmentPart);
+
+         msg.setContent(multipart);
+//         Transport.send(msg);
+
+         
+         SMTPTransport t = (SMTPTransport) session.getTransport("smtp");
+//       // connect
+       t.connect("smtp.telenet.be", "a120569", "h7YUG6anja6Ak98u");
+//       // send
+       t.sendMessage(msg, msg.getAllRecipients());
+       t.close();
+
+         
+         
+         
+         
+         
+         log.info("Invoice mailed to " + vCustomer.getFullName() + " (" + vTo[0] + ")");
+         return true;
+      }
+      catch (Exception e)
+      {
+         if (vCustomer != null)
+         {
+            log.info("Invoice mail can not be send to " + vCustomer.getFullName() + " (" + vTo[0] + ")");
+         }
+         log.error(e.getMessage(), e);
+      }
+      return false;
+   }
+
+   
    static private StringBuffer buildMailBody(AccountEntityData account, Collection<CallRecordEntityData> records, AtomicBoolean isImportant)
    {
       StringBuffer vBody = new StringBuffer("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">");

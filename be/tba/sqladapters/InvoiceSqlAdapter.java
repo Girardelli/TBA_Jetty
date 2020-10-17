@@ -32,6 +32,7 @@ import javax.naming.InitialContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import be.tba.mail.Mailer;
 import be.tba.session.WebSession;
 import be.tba.sqladapters.AccountSqlAdapter;
 import be.tba.sqldata.AccountCache;
@@ -367,7 +368,7 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
          InvoiceEntityData vInvoiceData = getRow(webSession, vKey);
          if (vInvoiceData != null)
          {
-            if (mailIt(vInvoiceData))
+            if (Mailer.mailInvoice(vInvoiceData))
             {
                vInvoiceData.setIsInvoiceMailed(true);
                updateRow(webSession, vInvoiceData);
@@ -465,119 +466,7 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
       return false;
    }
 
-   private boolean mailIt(InvoiceEntityData invoiceData)
-   {
-      if (invoiceData == null || invoiceData.getFileName() == null || invoiceData.getFileName().length() == 0)
-      {
-         // log.info("Invoice not froozen for " + invoiceData.getAccountId());
-         return false;
-      }
-
-      AccountEntityData vCustomer = null;
-      Address[] vTo = new InternetAddress[1];
-      try
-      {
-         vCustomer = AccountCache.getInstance().get(invoiceData);
-
-         BufferedReader reader = new BufferedReader(new FileReader(Constants.INVOICE_DIR + "\\factuurMail.txt"));
-         String vBody = reader.readLine() + "\r\n";
-
-         String strLine;
-         // Read File Line By Line
-         while ((strLine = reader.readLine()) != null)
-         {
-            vBody = vBody.concat(strLine + "\r\n");
-         }
-         reader.close();
-
-         vBody = vBody.replace("#maand#", Constants.MONTHS[invoiceData.getMonth()]);
-         vBody = vBody.replace("#jaar#", Integer.toString(invoiceData.getYear()));
-
-         Date date = new Date();
-
-         if (System.getenv("TBA_MAIL_ON") != null)
-         {
-            String vEmailAddr = vCustomer.getInvoiceEmail();
-            if (vEmailAddr == null || vEmailAddr.length() == 0)
-            {
-               vEmailAddr = vCustomer.getEmail();
-               if (vEmailAddr == null || vEmailAddr.length() == 0)
-               {
-                  log.info("Invoice mail can not be send to " + vCustomer.getFullName() + " (no email address specified)");
-
-                  return false;
-               }
-            }
-            StringTokenizer vMailTokens = new StringTokenizer(vEmailAddr, ";");
-            vTo = new InternetAddress[vMailTokens.countTokens()];
-            int i = 0;
-            while (vMailTokens.hasMoreTokens())
-            {
-               vTo[i++] = new InternetAddress(vMailTokens.nextToken());
-            }
-         }
-         else
-         {
-            vTo = new InternetAddress[1];
-            vTo[0] = new InternetAddress("girardelli65@gmail.com");
-         }
-         InitialContext vContext = new InitialContext();
-         Session vSession = null;
-
-         // vSession = (Session)
-         // PortableRemoteObject.narrow(vContext.lookup("java:comp/env/mail/Session"),
-         // Session.class);
-         vSession = (Session) vContext.lookup("java:comp/env/mail/Session");
-
-         log.info("mail session=" + vSession);
-
-         MimeMessage m = new MimeMessage(vSession);
-         m.setFrom();
-
-         m.setRecipients(Message.RecipientType.TO, vTo);
-         m.setSubject("Factuur maand " + Constants.MONTHS[invoiceData.getMonth()]);
-         m.setSentDate(date);
-         // m.setContent(vBody.toString(), "text/html");
-
-         MimeBodyPart messagePart = new MimeBodyPart();
-         messagePart.setText(vBody.toString());
-
-         //
-         // Set the email attachment file
-         //
-         File attach = new File(invoiceData.getFileName());
-         MimeBodyPart attachmentPart = new MimeBodyPart();
-         FileDataSource fileDataSource = new FileDataSource(attach)
-         {
-            // @Override
-            public String getContentType()
-            {
-               return "application/octet-stream";
-            }
-         };
-         attachmentPart.setDataHandler(new DataHandler(fileDataSource));
-         attachmentPart.setFileName(invoiceData.getInvoiceNr() + ".pdf");
-         Multipart multipart = new MimeMultipart();
-         multipart.addBodyPart(messagePart);
-         multipart.addBodyPart(attachmentPart);
-
-         m.setContent(multipart);
-         Transport.send(m);
-
-         log.info("Invoice mailed to " + vCustomer.getFullName() + " (" + vTo[0] + ")");
-         return true;
-      }
-      catch (Exception e)
-      {
-         if (vCustomer != null)
-         {
-            log.info("Invoice mail can not be send to " + vCustomer.getFullName() + " (" + vTo[0] + ")");
-         }
-         log.error(e.getMessage(), e);
-      }
-      return false;
-   }
-
+   
    protected Vector<InvoiceEntityData> translateRsToValueObjects(ResultSet rs) throws SQLException
    {
       Vector<InvoiceEntityData> vVector = new Vector<InvoiceEntityData>();

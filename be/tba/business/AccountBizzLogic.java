@@ -18,7 +18,7 @@ import be.tba.util.exceptions.AccountNotFoundException;
 import be.tba.util.exceptions.SystemErrorException;
 import be.tba.util.invoice.InvoiceHelper;
 import be.tba.util.invoice.WoltersKluwenImport;
-import be.tba.mail.MailerSessionBean;
+import be.tba.mail.Mailer;
 import be.tba.servlets.UploadServlet;
 import be.tba.session.SessionParmsInf;
 import be.tba.session.WebSession;
@@ -97,7 +97,7 @@ public class AccountBizzLogic
       String vEmail = vAccountData.getEmail();
       if (vEmail != null && vEmail.length() > 0)
       {
-         MailerSessionBean.sendCallInfoMail(session, vAccountData.getId());
+         Mailer.sendCallInfoMail(session, vAccountData.getId());
       }
    }
 

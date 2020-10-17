@@ -15,7 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import be.tba.mail.MailError;
-import be.tba.mail.MailerSessionBean;
+import be.tba.mail.Mailer;
 import be.tba.session.WebSession;
 import be.tba.sqldata.AccountCache;
 import be.tba.sqldata.AccountEntityData;
@@ -81,7 +81,7 @@ final public class MailTimerTask extends TimerTask implements TimerTaskIntf
                   {
                      try
                      {
-                        if (!MailerSessionBean.sendCallInfoMail(session, vAccount.getId()))
+                        if (!Mailer.sendCallInfoMail(session, vAccount.getId()))
                         {
                            throw new Exception("Mail send failed!");
                         }

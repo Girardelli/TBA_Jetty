@@ -134,20 +134,20 @@ final public class PaymentXlsxReader
             
             BankPayment entry = mPaymentFileHandler.parseRow(row);
             log.info("Payment: " + entry.toString());
-//            
-//            
-//            if (entry.amount > 0)
-//            {
-//               Collection<FintroPayment> customerPaymentList = mPaymentsMap.get(entry.accountNrCustomer);
-//               if (customerPaymentList == null)
-//               {
-//                  customerPaymentList = new Vector<FintroPayment>();
-//                  mPaymentsMap.put(entry.accountNrCustomer, customerPaymentList);
-//               }
-//               customerPaymentList.add(entry);
-//               ++cnt;
-//               log.trace("entry added: size=" + cnt + " ##" + entry.toString());
-//            }
+            
+            
+            if (entry.amount > 0)
+            {
+               Collection<BankPayment> customerPaymentList = mPaymentsMap.get(entry.accountNrCustomer);
+               if (customerPaymentList == null)
+               {
+                  customerPaymentList = new Vector<BankPayment>();
+                  mPaymentsMap.put(entry.accountNrCustomer, customerPaymentList);
+               }
+               customerPaymentList.add(entry);
+               ++cnt;
+               log.trace("entry added: size=" + cnt + " ##" + entry.toString());
+            }
          }
          log.info("--------------------------------------------------------");
          processPaymentsMap();

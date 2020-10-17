@@ -7,7 +7,7 @@ package be.tba.util.timer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import be.tba.mail.MailerSessionBean;
+import be.tba.mail.Mailer;
 import be.tba.session.WebSession;
 import be.tba.sqldata.AccountCache;
 import be.tba.sqldata.AccountEntityData;
@@ -72,12 +72,12 @@ final public class NotifyCustomerTask
             String vEmail = mAccountEntityData.getEmail();
             if (mAlsoMail && vEmail != null && vEmail.length() > 0)
             {
-               if (!MailerSessionBean.sendCallInfoMail(session, mAccountId))
+               if (!Mailer.sendCallInfoMail(session, mAccountId))
                {
                   log.error("NotifyCustomerThread sendmail failed: wait 5 sec and retry");
                   // wait another 5 seconds an retry once
                   Thread.sleep(5000);
-                  if (!MailerSessionBean.sendCallInfoMail(session, mAccountId))
+                  if (!Mailer.sendCallInfoMail(session, mAccountId))
                   {
                      log.error("NotifyCustomerThread sendmail failed again");
                   }
