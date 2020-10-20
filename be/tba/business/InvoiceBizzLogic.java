@@ -17,6 +17,7 @@ import be.tba.session.SessionParmsInf;
 import be.tba.session.WebSession;
 import be.tba.sqladapters.AbstractSqlAdapter;
 import be.tba.sqladapters.InvoiceSqlAdapter;
+import be.tba.sqladapters.TaskSqlAdapter;
 import be.tba.sqldata.AccountCache;
 import be.tba.sqldata.AccountEntityData;
 import be.tba.sqldata.InvoiceEntityData;
@@ -118,6 +119,8 @@ public class InvoiceBizzLogic
          StringTokenizer vStrTok = new StringTokenizer(vLtd, ",");
 
          InvoiceSqlAdapter vInvoiceSession = new InvoiceSqlAdapter();
+         TaskSqlAdapter vTaskSession = new TaskSqlAdapter();
+         
          while (vStrTok.hasMoreTokens())
          {
             int key = Integer.parseInt(vStrTok.nextToken());
@@ -142,6 +145,7 @@ public class InvoiceBizzLogic
                // delete also the credit note
                vInvoiceSession.deleteRow(session, data.getCreditId());
             }
+            vTaskSession.unlinkTasksFromInvoice(session, data.getId());
             vInvoiceSession.deleteRow(session, key);
          }
       }

@@ -26,7 +26,8 @@ import be.tba.business.AccountBizzLogic;
 import be.tba.business.CallBizzLogic;
 import be.tba.business.InvoiceBizzLogic;
 import be.tba.business.LoginBizzLogic;
-import be.tba.business.TaskBIzzLogic;
+import be.tba.business.TaskBizzLogic;
+import be.tba.business.WorkorderBizzLogic;
 import be.tba.mail.Mailer;
 import be.tba.session.IntertelCallManager;
 import be.tba.session.SessionManager;
@@ -811,7 +812,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.TASK_DELETE:
             {
-               TaskBIzzLogic.deleteTask(params, vSession);
+               TaskBizzLogic.deleteTask(params, vSession);
                rd = sc.getRequestDispatcher(Constants.ADMIN_TASK_JSP);
                break;
             }
@@ -831,7 +832,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.TASK_UPDATE:
             {
-               TaskBIzzLogic.modifyTask(params, vSession);
+               TaskBizzLogic.modifyTask(params, vSession);
                rd = sc.getRequestDispatcher(Constants.UPDATE_TASK_JSP);
                break;
             }
@@ -841,7 +842,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.SAVE_TASK:
             {
-               TaskBIzzLogic.saveTask(params, vSession);
+               TaskBizzLogic.saveTask(params, vSession);
                rd = sc.getRequestDispatcher(Constants.ADMIN_TASK_JSP);
                break;
             }
@@ -860,7 +861,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.TASK_ADD:
             {
-               TaskBIzzLogic.addTask(params, vSession);
+               TaskBizzLogic.addTask(params, vSession);
                rd = sc.getRequestDispatcher(Constants.ADMIN_TASK_JSP);
                break;
             }
@@ -911,7 +912,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.ACTION_SAVE_WORKORDER:
             {
-               TaskBIzzLogic.saveWorkOrder(params, vSession);
+               WorkorderBizzLogic.saveWorkOrder(params, vSession);
                rd = sc.getRequestDispatcher(Constants.ADMIN_WORK_ORDER_JSP);
                break;
             }
@@ -929,7 +930,7 @@ public class AdminDispatchServlet extends HttpServlet
                }
                fileUploader.setStoragePath(Constants.WORKORDER_FILEUPLOAD_DIR + File.separator + Tools.spaces2underscores(custAccount.getFullName()) + File.separator + "done");
                uploadedFile = fileUploader.waitTillFinished();
-               if (TaskBIzzLogic.addWorkOrderFile(params, vSession, uploadedFile))
+               if (WorkorderBizzLogic.addWorkOrderFile(params, vSession, uploadedFile))
                {
                   vSession.setUploadedFileName(uploadedFile);
                   rd = sc.getRequestDispatcher(Constants.WORKORDER_JSP);
@@ -947,7 +948,7 @@ public class AdminDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.DELETE_WORKORDER_FILE:
             {
-               TaskBIzzLogic.deleteWorkOrderFile(params, vSession);
+               WorkorderBizzLogic.deleteWorkOrderFile(params, vSession);
                rd = sc.getRequestDispatcher(Constants.WORKORDER_JSP);
                break;
             }

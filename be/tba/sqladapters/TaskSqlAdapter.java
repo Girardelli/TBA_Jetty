@@ -15,6 +15,7 @@ import be.tba.sqldata.AccountCache;
 import be.tba.sqldata.AccountEntityData;
 import be.tba.sqldata.InvoiceEntityData;
 import be.tba.sqldata.TaskEntityData;
+import be.tba.util.constants.Constants;
 import be.tba.util.timer.CallCalendar;
 
 import java.sql.SQLException;
@@ -189,6 +190,13 @@ public class TaskSqlAdapter extends AbstractSqlAdapter<TaskEntityData>
       executeSqlQuery(webSession, "DELETE FROM TaskEntity WHERE FwdNr='" + accountID + "'");
    }
 
+   public void unlinkTasksFromInvoice(WebSession webSession, int invoiceId)
+   {
+      executeSqlQuery(webSession, "UPDATE TaskEntity set InvoiceId=0 where InvoiceId=" + invoiceId);
+   }
+
+   
+   
    /**
     * Describes the instance and its content for debugging purpose
     *

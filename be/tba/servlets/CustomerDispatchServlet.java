@@ -18,7 +18,8 @@ import org.slf4j.LoggerFactory;
 
 import be.tba.business.AccountBizzLogic;
 import be.tba.business.CallBizzLogic;
-import be.tba.business.TaskBIzzLogic;
+import be.tba.business.TaskBizzLogic;
+import be.tba.business.WorkorderBizzLogic;
 import be.tba.session.SessionManager;
 import be.tba.session.SessionParms;
 import be.tba.session.SessionParmsInf;
@@ -330,7 +331,7 @@ public class CustomerDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.ACTION_SAVE_WORKORDER:
             {
-               TaskBIzzLogic.saveWorkOrder(params, vSession);
+               WorkorderBizzLogic.saveWorkOrder(params, vSession);
                rd = sc.getRequestDispatcher(Constants.CLIENT_WORKORDERS_JSP);
                break;
             }
@@ -341,7 +342,7 @@ public class CustomerDispatchServlet extends HttpServlet
             case Constants.UPLOAD_WORKORDER_FILE:
             {
                uploadedFile = fileUploader.waitTillFinished();
-               if (TaskBIzzLogic.addWorkOrderFile(params, vSession, uploadedFile))
+               if (WorkorderBizzLogic.addWorkOrderFile(params, vSession, uploadedFile))
                {
                   vSession.setUploadedFileName(uploadedFile);
                   rd = sc.getRequestDispatcher(Constants.CLIENT_UPDATE_WORKORDER_JSP);
@@ -359,7 +360,7 @@ public class CustomerDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.ACTION_DELETE_WORKORDER:
             {
-               TaskBIzzLogic.deleteWorkOrder(params, vSession);
+               WorkorderBizzLogic.deleteWorkOrder(params, vSession);
                rd = sc.getRequestDispatcher(Constants.CLIENT_WORKORDERS_JSP);
                break;
             }
@@ -369,7 +370,7 @@ public class CustomerDispatchServlet extends HttpServlet
             // ==============================================================================================
             case Constants.DELETE_WORKORDER_FILE:
             {
-               TaskBIzzLogic.deleteWorkOrderFile(params, vSession);
+               WorkorderBizzLogic.deleteWorkOrderFile(params, vSession);
                rd = sc.getRequestDispatcher(Constants.CLIENT_UPDATE_WORKORDER_JSP);
                break;
             }
