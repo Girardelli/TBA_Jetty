@@ -153,7 +153,7 @@ public class AccountSqlAdapter extends AbstractSqlAdapter<AccountEntityData>
    {
       for (int i = 0; i < 2; ++i)
       {
-         if (data.getFwdNumber().equals(Constants.NUMBER_BLOCK[i][0]))
+         if (data.getFwdNumber().equals(Constants.NUMBER_BLOCK[i]))
          {
             return;
          }
@@ -195,7 +195,7 @@ public class AccountSqlAdapter extends AbstractSqlAdapter<AccountEntityData>
 
       for (int i = 1; i < Constants.NUMBER_BLOCK.length; i++)
       {
-         vFreeNumbers.add(Constants.NUMBER_BLOCK[i][0]);
+         vFreeNumbers.add(Constants.NUMBER_BLOCK[i]);
       }
       for (Iterator<AccountEntityData> i = accounts.iterator(); i.hasNext();)
       {

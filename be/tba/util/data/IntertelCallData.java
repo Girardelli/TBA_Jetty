@@ -6,8 +6,7 @@ import be.tba.util.constants.Constants;
 
 public class IntertelCallData
 {
-   public static String kTbaNr = Constants.NUMBER_BLOCK[0][0];
-   public static String kTbaName = Constants.NUMBER_BLOCK[0][3];
+   public static String kTbaNr = Constants.NUMBER_BLOCK[0];
 
    public String calledNr;
    public String callingNr;
@@ -67,7 +66,7 @@ public class IntertelCallData
          else
          {
             this.callingNr = kTbaNr;
-            this.customer = kTbaName;
+            this.customer = Constants.CMPNY_NAME;
          }
       }
    }

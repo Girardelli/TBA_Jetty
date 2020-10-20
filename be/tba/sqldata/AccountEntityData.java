@@ -108,6 +108,13 @@ public class AccountEntityData extends be.tba.sqldata.AbstractData implements Co
       isArchived = false;
       taskHourRate = Constants.kHourTarifCost;
       redirectAccountId = 0;
+      mailHour1 = 0;
+      mailMinutes1 = 0;
+      mailHour2 = 0;
+      mailMinutes2 = 0;
+      mailHour3 = 0;
+      mailMinutes3 = 0;
+
 
       facTblMinCalls_I = Constants.kFacTblMinCalls_I;
       facTblStartCost_I = Constants.kFacTblStartCost_I;

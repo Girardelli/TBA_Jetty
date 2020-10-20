@@ -777,7 +777,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
       AccountEntityData vAccount = AccountCache.getInstance().get(newRecord.getFwdNr());
       if (vAccount == null)
       {
-         vAccount = AccountCache.getInstance().get(Constants.NUMBER_BLOCK[0][0]);
+         vAccount = AccountCache.getInstance().get(Constants.NUMBER_BLOCK[0]);
       }
       newRecord.setTimeStamp(data.tsStart * 1000);
       newRecord.setTsStart(data.tsStart);

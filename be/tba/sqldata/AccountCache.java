@@ -381,20 +381,17 @@ final public class AccountCache
        * (AccountEntityData) vIter.next(); //log.info(vEntry.getFullName()); } }
        */
 
-      for (int i = 0; i < 2; ++i)
-      {
-         AccountEntityData vEntryCnst = new AccountEntityData();
-         vEntryCnst.setFullName(Constants.NUMBER_BLOCK[i][3]);
-         vEntryCnst.setFwdNumber(Constants.NUMBER_BLOCK[i][0]);
-         vEntryCnst.setMailMinutes1((short) 0);
-         vEntryCnst.setMailHour1((short) 0);
-         vEntryCnst.setMailMinutes2((short) 0);
-         vEntryCnst.setMailHour2((short) 0);
-         vEntryCnst.setMailMinutes3((short) 0);
-         vEntryCnst.setMailHour3((short) 0);
-         mNameSortedFullList.add(vEntryCnst);
-         mFwdKeyList.put(Constants.NUMBER_BLOCK[i][0], vEntryCnst);
-      }
+      AccountEntityData vEntryCnst = new AccountEntityData();
+      vEntryCnst.setFullName(Constants.CMPNY_NAME);
+      vEntryCnst.setFwdNumber(Constants.NUMBER_BLOCK[0]);
+      mNameSortedFullList.add(vEntryCnst);
+      mFwdKeyList.put(Constants.NUMBER_BLOCK[0], vEntryCnst);
+      vEntryCnst = new AccountEntityData();
+      vEntryCnst.setFullName("Fax");
+      vEntryCnst.setFwdNumber(Constants.NUMBER_BLOCK[1]);
+      mNameSortedFullList.add(vEntryCnst);
+      mFwdKeyList.put(Constants.NUMBER_BLOCK[1], vEntryCnst);
+
    }
 
    public Collection<String> getFreeNumbers()
@@ -403,7 +400,7 @@ final public class AccountCache
       {
          Vector<String> vFreeNumbers = new Vector<String>();
          for (int i = 1; i < Constants.NUMBER_BLOCK.length; i++)
-            vFreeNumbers.add(Constants.NUMBER_BLOCK[i][0]);
+            vFreeNumbers.add(Constants.NUMBER_BLOCK[i]);
          for (Iterator<AccountEntityData> i = mRawUnarchivedCollection.iterator(); i.hasNext();)
          {
             vFreeNumbers.remove((i.next()).getFwdNumber());
