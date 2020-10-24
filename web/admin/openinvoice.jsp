@@ -115,20 +115,25 @@
 					<td width="600" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Klant</td>
 					<td width="60" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Excl BTW</td>
 					<td width="60" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Incl BTW</td>
+                    <td width="30" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Info</td>
 				</tr>
 	
 				<%
-	
 				                    int vRowInd = 0;
-				                    for (Iterator<InvoiceEntityData> i = vInvoices.iterator(); i.hasNext();)
+				                    for (InvoiceEntityData vEntry : vInvoices)
 				                    {
-				                        InvoiceEntityData vEntry = i.next();
 				                        if (vEntry.getTotalCost() > 0)
 				                        {
 				                            String vCollor = "CCDD00";
 				                            String vId = "id" + vEntry.getId();
 				                            double vKost = vEntry.getTotalCost();
-				                            AccountEntityData vAccount = AccountCache.getInstance().get(vEntry);
+				                            String vInfoGifs = "";
+                                            if (!vEntry.getComment().isBlank()) 
+                                            {
+                                                vInfoGifs = vInfoGifs.concat(
+                                                      "<img src=\"/tba/images/info.gif\" height=\"16\" border=\"0\">");
+                                            }
+ 				                            AccountEntityData vAccount = AccountCache.getInstance().get(vEntry);
 				                            
 				                            if (vAccount != null)
 				                            {
@@ -140,6 +145,7 @@
 					<td width="600" valign="top"><%=vAccount.getFullName()%></td>
 					<td width="60" valign="top"><%=vCostFormatter.format(vKost)%></td>
 					<td width="60" valign="top"><%=vCostFormatter.format(vKost * 1.21)%></td>
+                    <td width="30" valign="top"><%=vInfoGifs%></td>
 				</tr>
 				<%
 	            

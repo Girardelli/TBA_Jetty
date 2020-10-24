@@ -181,7 +181,7 @@ public abstract class AbstractSqlAdapter<T>
             rs = stmt.executeQuery(queryStr);
             session.addSqlTimer(Calendar.getInstance().getTimeInMillis() - startTime);
             Collection<T> col = translateRsToValueObjects(rs);
-            log.info("{} entries: SQL query: {}", col.size(), queryStr);
+            //log.info("{} entries: SQL query: {}", col.size(), queryStr);
             return col;
          }
          else

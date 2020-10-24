@@ -40,6 +40,7 @@ public class LoginEntityData extends be.tba.sqldata.AbstractData
    public LoginEntityData()
    {
       isRegistered = false;
+      lastLogin = "";
    }
 
    public LoginEntityData(LoginEntityData otherData)

@@ -213,9 +213,9 @@
                 </td>
             </tr>
             <tr>
-                <td width="250" valign="top" class="bodysubsubtitle">&nbsp;Bedrag (excl BTW)</td>
+                <td width="250" valign="top" class="bodysubsubtitle">&nbsp;Bedrag (excl BTW) ; </td>
                 <td width="10" valign="top">:</td>
-                <td width="400" valign="top"><b> <%=costFormatter.format(vInvoiceData.getTotalCost())%></b>
+                <td width="400" valign="top"><b> <%=costFormatter.format(vInvoiceData.getTotalCost()*1.21)%> (<%=costFormatter.format(vInvoiceData.getTotalCost())%> excl BTW)</b>
                 </td>
             </tr>
             <tr>
@@ -664,7 +664,7 @@
                   <td width="20"></td>
                   <td width="180" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;Totaal</td>
                   <td width="1">:</td>
-                  <td width="200" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;<%=costFormatter.format(vInvoiceData.getTotalCost())%>&nbsp;&nbsp;(excl BTW)</td>
+                  <td width="200" valign="top" class="bodysubsubtitle">&nbsp;&nbsp;<%=costFormatter.format(vInvoiceData.getTotalCost() *1.21)%>&nbsp;&nbsp;(<%=costFormatter.format(vInvoiceData.getTotalCost())%> excl BTW)</td>
               </tr>
           </table>
            

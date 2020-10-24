@@ -57,14 +57,12 @@ public class LoginBizzLogic
          req.setAttribute(Constants.ERROR_VECTOR, vErrorList);
          return vErrorList;
       }
-      else
-      {
-         newLogin.setRole(parms.getParameter(Constants.LOGIN_ROLE));
-         newLogin.setUserId(parms.getParameter(Constants.LOGIN_USERID));
-         newLogin.setPassword(parms.getParameter(Constants.LOGIN_PASSWORD));
-         newLogin.setName(parms.getParameter(Constants.ACCOUNT_FULLNAME));
-         log.info("no error on employee add");
-      }
+      newLogin.setRole(parms.getParameter(Constants.LOGIN_ROLE));
+      newLogin.setUserId(parms.getParameter(Constants.LOGIN_USERID));
+      newLogin.setPassword(parms.getParameter(Constants.LOGIN_PASSWORD));
+      newLogin.setName(parms.getParameter(Constants.ACCOUNT_FULLNAME));
+      newLogin.setLastLoginTS(Calendar.getInstance().getTimeInMillis());
+      log.info("no error on employee add");
       LoginSqlAdapter vLoginSqlSession = new LoginSqlAdapter();
       vLoginSqlSession.addRow(session, newLogin);
       AccountCache.getInstance().update(session);
