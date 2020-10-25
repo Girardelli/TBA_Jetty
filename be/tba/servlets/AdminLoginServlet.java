@@ -50,6 +50,7 @@ public class AdminLoginServlet extends HttpServlet
          vUserId = req.getParameter(Constants.LOGIN_USERID);
          vPassword = req.getParameter(Constants.LOGIN_PASSWORD);
          vSession = new WebSession();
+         String URI = req.getRequestURI() + "?" + req.getQueryString();
 
          LoginEntityData login = null;
          if (vUserId.equals(Constants.MASTER_LOGIN_NAME))
@@ -63,6 +64,8 @@ public class AdminLoginServlet extends HttpServlet
             login = vAccountSession.logIn(vSession, vUserId, vPassword);
          }
          vSession.mLoginData = login;
+         log.info("\nname:" + login.getName() + ", websessionid:" + vSession.getSessionId() + ", URI:" + URI);
+
          if (login.getRole().equals(AccountRole.ADMIN.getShort()) || login.getRole().equals(AccountRole.EMPLOYEE.getShort()))
          {
             SessionManager.getInstance().add(vSession, vUserId);

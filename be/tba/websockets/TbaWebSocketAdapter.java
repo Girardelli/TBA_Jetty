@@ -72,7 +72,7 @@ public class TbaWebSocketAdapter extends WebSocketAdapter
          catch (AccessDeniedException | LostSessionException e)
          {
             // TODO Auto-generated catch block
-            log.error(e.getMessage(), e);
+            log.warn(e.getMessage());
          }
       }
       else

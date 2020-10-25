@@ -46,7 +46,13 @@ public class CustFileDownloadServlet extends HttpServlet
          vSession = (WebSession) httpSession.getAttribute(Constants.SESSION_OBJ);
          SessionParmsInf params = new SessionParms(request);
          SessionManager.getInstance().getSession(vSession.getSessionId(), "FileDownloadServlet()");
+         String URI = request.getRequestURI() + "?" + request.getQueryString();
 
+         if (vSession.mLoginData == null) 
+         {
+            throw new AccessDeniedException("No loginData object in session");
+         }
+         log.info("\nname:" + vSession.mLoginData.getName() + ", websessionid:" + vSession.getSessionId() + ", URI:" + URI);
          synchronized (vSession)
          {
             // You must tell the browser the file type you are going to send

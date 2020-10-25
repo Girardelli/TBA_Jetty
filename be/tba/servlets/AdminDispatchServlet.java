@@ -105,7 +105,7 @@ public class AdminDispatchServlet extends HttpServlet
          vSession.resetSqlTimer();
          SessionManager.getInstance().getSession(vSession.getSessionId(), "AdminDispatchServlet(" + vAction + ")");
 
-         log.info("\nuserid:" + vSession.getUserId() + ", websessionid:" + vSession.getSessionId() + "Action: " + vAction + ", URI:" + URI);
+         log.info("\nuserid:" + vSession.getUserId() + ", websessionid:" + vSession.getSessionId() + ", Action: " + vAction + ", URI:" + URI);
 
          synchronized (vSession)
          {
