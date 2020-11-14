@@ -31,12 +31,12 @@
         <td valign="top" width="865" bgcolor="FFFFFF"><br>
         <p><span class="bodytitle">Niet betaalde facturen</span><br>
         <br>
-        <p><span class="bodytext">Selecteer een bankuitrekselbestand om op te laden</span>
+        <p><span class="bodytext">Selecteer een bankafschriften bestand om op te laden</span>
 
 
 	<form name="loadfileform" method="POST" action="/tba/AdminDispatch" enctype="multipart/form-data">
 	<input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.GOTO_OPEN_INVOICE%>"> 
-	<input class="tbabutton" type=file name=<%=Constants.FINTRO_FILE%> value=" Fintro excel opladen " accept=".xlsx">
+	<input class="tbabutton" type=file name=<%=Constants.FINTRO_FILE%> value=" Bankafschriften excel opladen " accept=".xlsx">
 	<input class="tbabutton" type=submit name=action value=" Laad de file op " onclick="uploadFile()">
     </form>
 	<table cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
@@ -62,7 +62,7 @@
 						     <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.DOWNLOAD_FINTRO_PROCESS_TXT%>"> 
 							 <input type=hidden name=<%=Constants.FINTRO_PROCESS_FILE%> value="<%=fintroXlsxReader.getOutputFileName()%>"> 
                              </form>
-				   	         <p><span class="bodysubtitle"> Resultaten van de Fintro upload:  
+				   	         <p><span class="bodysubtitle"> Resultaten van de bankafschriften upload:  
                              </span></p>
 				   	         <p><span class="bodytekst" >
 				   	         <%=fintroXlsxReader.getHtmlProcessLog()%>

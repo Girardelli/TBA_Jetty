@@ -183,7 +183,7 @@
             </tr>
             <br>
             <tr>
-                <td width="250" valign="top" class="bodysubsubtitle">&nbsp;FintroID</td>
+                <td width="250" valign="top" class="bodysubsubtitle">&nbsp;Bankafschrift</td>
                 <td width="10" valign="top">:</td>
                 <td width="400" valign="top"> <%=fintroId%>
                 </td>
