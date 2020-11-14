@@ -131,7 +131,7 @@ public class PhoneMapManager
       return "";
    }
 
-   public void mapNewLogin(String userId, String sessionId)
+   public synchronized void mapNewLogin(String userId, String sessionId)
    {
       for (Iterator<PhoneMapData> i = mOperatorPhoneMap.values().iterator(); i.hasNext();)
       {

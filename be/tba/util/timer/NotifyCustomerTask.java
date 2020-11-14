@@ -83,7 +83,7 @@ final public class NotifyCustomerTask
                   }
                }
             }
-            session.Close();
+            session.close();
          }
          catch (InterruptedException e)
          {
@@ -99,7 +99,7 @@ final public class NotifyCustomerTask
          {
             if (session != null)
             {
-               session.Close();
+               session.close();
             }
          }
       }

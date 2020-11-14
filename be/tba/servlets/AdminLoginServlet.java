@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import be.tba.sqladapters.AccountSqlAdapter;
+import be.tba.business.LoginBizzLogic;
 import be.tba.session.PhoneMapManager;
 import be.tba.session.SessionManager;
 import be.tba.session.WebSession;
@@ -37,16 +38,15 @@ public class AdminLoginServlet extends HttpServlet
 
    public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
    {
-      res.setCharacterEncoding("UTF-8");
       req.setCharacterEncoding("UTF-8");
       res.setContentType("text/html");
       String vUserId = "";
       String vPassword = "";
       WebSession vSession = null;
-
+      HttpSession httpSession = null;
       try
       {
-         HttpSession httpSession = req.getSession();
+
          vUserId = req.getParameter(Constants.LOGIN_USERID);
          vPassword = req.getParameter(Constants.LOGIN_PASSWORD);
          vSession = new WebSession();
@@ -57,14 +57,12 @@ public class AdminLoginServlet extends HttpServlet
          {
             login = new LoginEntityData();
             login.setRole(AccountRole.ADMIN.getShort());
+            vSession.setLogin(login);
          }
          else
          {
-            LoginSqlAdapter vAccountSession = new LoginSqlAdapter();
-            login = vAccountSession.logIn(vSession, vUserId, vPassword);
+            login = LoginBizzLogic.logIn(vSession, vUserId, vPassword, false);
          }
-         vSession.mLoginData = login;
-         log.info("\nname:" + login.getName() + ", websessionid:" + vSession.getSessionId() + ", URI:" + URI);
 
          if (login.getRole().equals(AccountRole.ADMIN.getShort()) || login.getRole().equals(AccountRole.EMPLOYEE.getShort()))
          {
@@ -77,9 +75,11 @@ public class AdminLoginServlet extends HttpServlet
 
             // do your thing
             // res.setHeader("fullname", acctValue.getFullName());
+            httpSession = req.getSession();
+            httpSession.setMaxInactiveInterval(10*60*60); // set it to 10 hours to make sure it does not expire during working hours
             httpSession.setAttribute(Constants.SESSION_OBJ, vSession);
-
-            // req.setAttribute(Constants.SESSION_ID, vKey);
+            
+                        // req.setAttribute(Constants.SESSION_ID, vKey);
             // req.setAttribute(Constants.SESSION_OBJ, vSession);
             ServletContext sc = getServletContext();
             RequestDispatcher rd = sc.getRequestDispatcher(Constants.CANVAS_JSP);
@@ -91,33 +91,19 @@ public class AdminLoginServlet extends HttpServlet
          {
             if (vSession != null)
             {
-               vSession.Close();
+               vSession.close();
             }
             throw new AccessDeniedException("U hebt geen administrator rechten!");
          }
       }
-      catch (AccountNotFoundException e)
-      {
-         log.error("AdminLoginServlet: Mallicious admin access attempt. userid:" + vUserId + ", password:" + vPassword);
-         String vMsg = e.getMessage();
-         req.setAttribute(Constants.ERROR_TXT, vMsg == null ? "Onbekende error." : vMsg);
-         ServletContext sc = getServletContext();
-         RequestDispatcher rd = sc.getRequestDispatcher(Constants.ADMIN_FAIL_JSP);
-         rd.forward(req, res);
-      }
-      catch (TbaException e)
-      {
-         log.error("AdminLoginServlet: Mallicious admin access attempt. userid:" + vUserId + ", password:" + vPassword);
-         // log.error(e.getMessage(), e);
-         // print error page!!
-         String vMsg = e.getMessage();
-         req.setAttribute(Constants.ERROR_TXT, vMsg == null ? "Onbekende error." : vMsg);
-         ServletContext sc = getServletContext();
-         RequestDispatcher rd = sc.getRequestDispatcher(Constants.ADMIN_FAIL_JSP);
-         rd.forward(req, res);
-      }
       catch (Exception e)
       {
+         if (httpSession != null)
+            httpSession.invalidate();
+         if (vSession != null)
+         {
+            vSession.close();
+         }
          // log.error(e.getMessage(), e);
          log.error("AdminLoginServlet: Mallicious admin access attempt. userid:" + vUserId + ", password:" + vPassword);
          log.error(e.getMessage(), e);

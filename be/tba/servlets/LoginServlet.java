@@ -62,7 +62,7 @@ public class LoginServlet extends HttpServlet
          {
             vAction = (String) req.getAttribute(Constants.SRV_ACTION);
             log.error(Constants.SRV_ACTION + "=" + vAction);
-            throw new Exception("getAttribute called");
+            throw new Exception("action = null");
          }
          // log.info("LoginServlet: action=" + vAction);
 
@@ -78,42 +78,13 @@ public class LoginServlet extends HttpServlet
          {
             if (vUserId == null || vPassword == null)
                throw new SystemErrorException("User id or password null.");
-
-//                LoginEntityData vLogin = null;
             vSession = new WebSession();
-            LoginBizzLogic.logIn(vSession, vUserId, vPassword);
             HttpSession httpSession = req.getSession();
             httpSession.setAttribute(Constants.SESSION_OBJ, vSession);
+            httpSession.setMaxInactiveInterval(10*60*60); // set it to 10 hours to make sure it does not expire during working hours
+            LoginBizzLogic.logIn(vSession, vUserId, vPassword, true);
 
-//                if (!vSession.mLoginData.getIsRegistered())
-//                {
-//                    Vector<String> vErrorList = new Vector<String>();
-//                    vErrorList.add("U bent nog niet geregistreerd.");
-//                    req.setAttribute(Constants.ERROR_VECTOR, vErrorList);
-//                    rd = sc.getRequestDispatcher(Constants.REGISTER_JSP);
-//                }
-//                else if (vSession.mLoginData.getRole().equals(AccountRole.CUSTOMER.getShort()))
-//                {
-//                    // Customer with access has logged in.
-//                    HttpSession httpSession = req.getSession();
-//                    httpSession.setAttribute(Constants.SESSION_OBJ, vSession);
-//                    SessionManager.getInstance().add(vSession, vUserId);
-//                    vSession.setRole(AccountRole.fromShort(vSession.mLoginData.getRole()));
-//                    vSession.setAccountId(vLogin.getAccountId());
-//                    Calendar calendar = Calendar.getInstance();
-//                    vSession.setYear(calendar.get(Calendar.YEAR));
-//                    vSession.setMonthsBack(calendar.get(Calendar.MONTH));
-//                    rd = sc.getRequestDispatcher(Constants.CLIENT_CALLS_JSP);
-//                    log.info("LoginServlet: " + vSession.mLoginData.getUserId() + " got session id " + vSession.getSessionId());
-//                }
-//                else
-//                {
-//                    Vector<String> vErrorList = new Vector<String>();
-//                    vErrorList.add("Enkel een klant of administrator kan deze pagina's gebruiken!");
-//                    req.setAttribute(Constants.ERROR_VECTOR, vErrorList);
-//                    rd = sc.getRequestDispatcher(Constants.REGISTER_JSP);
-//                }
-            log.info("LoginServlet: " + vSession.mLoginData.getUserId() + " got session id " + vSession.getSessionId());
+            log.info("LoginServlet: " + vSession.getLogin().getUserId() + " got session id " + vSession.getSessionId());
             rd = sc.getRequestDispatcher(Constants.CLIENT_CALLS_JSP);
             break;
          }
@@ -137,6 +108,7 @@ public class LoginServlet extends HttpServlet
                   vSession = new WebSession();
                }
                httpSession.setAttribute(Constants.SESSION_OBJ, vSession);
+               httpSession.setMaxInactiveInterval(10*60*60); // set it to 10 hours to make sure it does not expire during working hours
                vErrorList = tryRegister(req, vSession);
                if (vErrorList.size() > 0)
                {
@@ -146,7 +118,7 @@ public class LoginServlet extends HttpServlet
                else
                {
                   // register was successful, login
-                  LoginBizzLogic.logIn(vSession, vUserId, vPassword);
+                  LoginBizzLogic.logIn(vSession, vUserId, vPassword, true);
                   rd = sc.getRequestDispatcher(Constants.CLIENT_CALLS_JSP);
                }
             }

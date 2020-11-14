@@ -282,7 +282,7 @@ public class AccountBizzLogic
    public static void updateCustomerPrefs(WebSession session, SessionParmsInf parms)
    {
       AccountSqlAdapter vAccountSession = new AccountSqlAdapter();
-      AccountEntityData vAccount = vAccountSession.getRow(session, session.mLoginData.getAccountId());
+      AccountEntityData vAccount = vAccountSession.getRow(session, session.getLogin().getAccountId());
       vAccount.setEmail(parms.getParameter(Constants.ACCOUNT_EMAIL));
       vAccount.setInvoiceEmail(parms.getParameter(Constants.ACCOUNT_INVOICE_EMAIL));
       vAccount.setGsm(parms.getParameter(Constants.ACCOUNT_GSM));
@@ -335,11 +335,14 @@ public class AccountBizzLogic
          if (accountToArchive.getHasSubCustomers())
          {
             Collection<AccountEntityData> list = AccountCache.getInstance().getSubCustomersList(accountID);
-            for (Iterator<AccountEntityData> vIter = list.iterator(); vIter.hasNext();)
+            synchronized(list)
             {
-               AccountEntityData vValue = vIter.next();
-               RecursiveArchive(session, vValue.getId());
-               log.info("deleteAccount: also deleted subcustomer " + vValue.getFullName());
+               for (Iterator<AccountEntityData> vIter = list.iterator(); vIter.hasNext();)
+               {
+                  AccountEntityData vValue = vIter.next();
+                  RecursiveArchive(session, vValue.getId());
+                  log.info("deleteAccount: also deleted subcustomer " + vValue.getFullName());
+               }
             }
          }
       }

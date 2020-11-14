@@ -25,24 +25,40 @@ public class LoginBizzLogic
 {
    private static Logger log = LoggerFactory.getLogger(LoginBizzLogic.class);
 
-   public static LoginEntityData logIn(WebSession webSession, String userid, String password) throws AccountNotFoundException
+   public static LoginEntityData logIn(WebSession webSession, String userid, String password, boolean isCustomer) throws AccountNotFoundException
    {
       LoginSqlAdapter loginSession = new LoginSqlAdapter();
       LoginEntityData login = loginSession.logIn(webSession, userid, password);
-
+      if (login != null)
+      {
+         if (isCustomer)
+         {
+            if (!login.getRole().equals(AccountRole._vCustomer) || login.getAccountId() == 0)
+               throw new AccountNotFoundException("Toegang geweigerd.");
+         }
+         else
+         {
+            if (login.getRole().equals(AccountRole._vCustomer))
+               throw new AccountNotFoundException("Toegang geweigerd.");
+         }
+      } 
+      else
+      {
+         log.error("login not found: userid=" + userid);
+         throw new AccountNotFoundException("Toegang geweigerd.");
+      }
+      
       Calendar vCalendar = Calendar.getInstance();
       int vMinutes = vCalendar.get(Calendar.MINUTE);
       String vLoginTime = new String(vCalendar.get(Calendar.DAY_OF_MONTH) + "/" + (vCalendar.get(Calendar.MONTH) + 1) + "/" + vCalendar.get(Calendar.YEAR) + " " + vCalendar.get(Calendar.HOUR_OF_DAY) + ":" + (vMinutes < 10 ? "0" : "") + vMinutes);
       login.setPreviousLoginTS(login.getLastLoginTS());
       login.setLastLoginTS(vCalendar.getTimeInMillis());
       login.setLastLogin(vLoginTime);
-      webSession.mLoginData = login;
+      webSession.setLogin(login);
       webSession.setAccountId(login.getAccountId());
       SessionManager.getInstance().add(webSession, userid);
-      webSession.setRole(AccountRole.CUSTOMER);
       loginSession.updateLastLogin(webSession, login);
-      AccountEntityData accountData = AccountCache.getInstance().get(login.getAccountId());
-      log.info("Login: userid=" + userid + " for customer " + accountData.getFullName());
+      //log.info("Login: userid=" + userid);
       return login;
    }
 

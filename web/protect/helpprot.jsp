@@ -22,7 +22,7 @@ vSession.setCallingJsp(Constants.CLIENT_CALLS_JSP);
 						<td valign="top" class="bodytekst">De informatie op de aangeboden webpagina is direct gekoppeld aan onze oproependatabase. Elke oproep die wij voor u behandelen wordt automatisch in deze database bewaard.<br>
                   Onze medewerkers voegen extra informatie toe om u zoveel mogelijk courante informatie te verschaffen. U beschikt dus steeds over de allerlaatste informatie. <br>
                   Om uw informatie te beschermen zal uw aanmeldsessie verlopen als u de webpagina enige tijd niet gebruikt. Deze tijdslimiet staat voor u ingesteld op
-                  <%=Constants.CUSTOMER_SESSION_TIMEOUT / 100000%> minuten.</td>
+                  <%=Constants.CUSTOMER_SESSION_TIMEOUT / 60000%> minuten.</td>
 					</tr>
 				</table> <br> <span class="bodysubtitle">Symbolen:</span>
 				<table border="0" cellspacing="4" cellpadding="4">

@@ -52,63 +52,61 @@ public class CustomerDispatchServlet extends HttpServlet
          req.setCharacterEncoding("UTF-8");
          res.setContentType("text/html");
 
-         HttpSession httpSession = req.getSession();
-         WebSession vSession = (WebSession) httpSession.getAttribute(Constants.SESSION_OBJ);
-
-         if (vSession == null)
+         HttpSession httpSession = req.getSession(false);
+         if (httpSession == null)
             throw new AccessDeniedException("U bent niet aangemeld.");
 
-         AccountEntityData customer = AccountCache.getInstance().get(vSession.mLoginData.getAccountId());
-         if (customer == null)
+         WebSession vSession = (WebSession) httpSession.getAttribute(Constants.SESSION_OBJ);
+         if (vSession == null || SessionManager.getInstance().isExpired(vSession) || vSession.getLogin() == null ) 
          {
-            SessionManager.getInstance().remove(vSession.getSessionId());
-            throw new LostSessionException();
+            httpSession.invalidate();
+            throw new AccessDeniedException("U bent niet aangemeld.");
          }
-
-         String vAction = null;
-         String uploadedFile = null;
-         FileUploader fileUploader = null;
-         SessionParmsInf params = null;
-
-         log.info("\nuserid:" + vSession.getUserId() + ", websessionid:" + vSession.getSessionId() + ", URI:" + req.getRequestURI() + "?" + req.getQueryString());
-
-         if (ServletFileUpload.isMultipartContent(req))
-         {
-            fileUploader = new FileUploader(req);
-            fileUploader.setStoragePath(Constants.WORKORDER_FILEUPLOAD_DIR + File.separator + Tools.spaces2underscores(customer.getFullName()) + File.separator + "todo");
-            fileUploader.upload(req);
-            log.info("multipart content detected");
-            // getParameter cannot be used anymore. Also not further on.
-
-            params = fileUploader;
-         }
-         else
-         {
-            params = new SessionParms(req);
-
-         }
-         vAction = params.getParameter(Constants.SRV_ACTION);
-         SessionManager.getInstance().getSession(vSession.getSessionId(), "CustomerDispatchServlet(" + vAction + ")");
-
-         // String vSessionId = params.getParameter(Constants.SESSION_ID);
-         if (vAction == null)
-         {
-            throw new SystemErrorException("Interne fout: geen actie in de request.");
-         }
-         if (vAction.equals(Constants.ACTION_LOGOFF))
-         {
-            SessionManager.getInstance().remove(vSession.getSessionId());
-            throw new LostSessionException();
-         }
-
-         // if (vSessionId == null)
-         // throw new AccessDeniedException("U bent niet aangemeld.");
-         // WebSession vSession =
-         // SessionManager.getInstance().getSession(vSessionId,
-         // "CustomerDispatchServlet(" + vAction + ")");
 
          synchronized (vSession)
          {
+            AccountEntityData customer = AccountCache.getInstance().get(vSession.getLogin().getAccountId());
+            if (customer == null)
+            {
+               SessionManager.getInstance().remove(vSession.getSessionId());
+               throw new LostSessionException();
+            }
+   
+            String vAction = null;
+            String uploadedFile = null;
+            FileUploader fileUploader = null;
+            SessionParmsInf params = null;
+   
+            log.info("\nuserid:" + vSession.getUserId() + ", websessionid:" + vSession.getSessionId() + ", URI:" + req.getRequestURI() + "?" + req.getQueryString());
+   
+            if (ServletFileUpload.isMultipartContent(req))
+            {
+               fileUploader = new FileUploader(req);
+               fileUploader.setStoragePath(Constants.WORKORDER_FILEUPLOAD_DIR + File.separator + Tools.spaces2underscores(customer.getFullName()) + File.separator + "todo");
+               fileUploader.upload(req);
+               log.info("multipart content detected");
+               // getParameter cannot be used anymore. Also not further on.
+   
+               params = fileUploader;
+            }
+            else
+            {
+               params = new SessionParms(req);
+   
+            }
+            vAction = params.getParameter(Constants.SRV_ACTION);
+   
+            // String vSessionId = params.getParameter(Constants.SESSION_ID);
+            if (vAction == null)
+            {
+               throw new SystemErrorException("Interne fout: geen actie in de request.");
+            }
+            if (vAction.equals(Constants.ACTION_LOGOFF))
+            {
+               SessionManager.getInstance().remove(vSession.getSessionId());
+               throw new LostSessionException();
+            }
+   
             vSession.setWsActive(false);
             if (!vSession.getRole().getShort().equals(AccountRole.ADMIN.getShort()) && !vSession.getRole().getShort().equals(AccountRole.CUSTOMER.getShort()) && !vSession.getRole().getShort().equals(AccountRole.SUBCUSTOMER.getShort()))
                throw new AccessDeniedException("access denied for " + vSession.getUserId() + " with role " + vSession.getRole().getShort());

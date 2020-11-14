@@ -62,7 +62,7 @@ public class TbaWebSocketAdapter extends WebSocketAdapter
          String sessionId = message.substring(Constants.WS_LOGIN.length());
          try
          {
-            WebSession newWebSession = SessionManager.getInstance().getSession(sessionId, "WebSockets");
+            WebSession newWebSession = SessionManager.getInstance().getSession(sessionId);
             if (newWebSession != null)
             {
                webSession = newWebSession;

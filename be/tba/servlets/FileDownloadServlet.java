@@ -47,10 +47,17 @@ public class FileDownloadServlet extends HttpServlet
       WebSession vSession = null;
       try
       {
-         HttpSession httpSession = request.getSession();
+         HttpSession httpSession = request.getSession(false);
+         if (httpSession == null)
+            throw new AccessDeniedException("U bent niet aangemeld.");
+
          vSession = (WebSession) httpSession.getAttribute(Constants.SESSION_OBJ);
+         if (vSession == null || SessionManager.getInstance().isExpired(vSession) || vSession.getLogin() == null ) 
+         {
+            httpSession.invalidate();
+            throw new AccessDeniedException("U bent niet aangemeld.");
+         }
          SessionParmsInf params = new SessionParms(request);
-         SessionManager.getInstance().getSession(vSession.getSessionId(), "FileDownloadServlet()");
 
          log.info("\nFileDownloadServlet (http session: " + vSession + "): userid:" + vSession.getUserId() + ", websessionid:" + vSession.getSessionId());
 
@@ -157,12 +164,6 @@ public class FileDownloadServlet extends HttpServlet
          log.error(e.getMessage(), e);
          rd = sc.getRequestDispatcher(Constants.ADMIN_FAIL_JSP);
          request.setAttribute(Constants.ERROR_TXT, e.getMessage());
-         rd.forward(request, response);
-      }
-      catch (LostSessionException e)
-      {
-         log.error(e.getMessage(), e);
-         rd = sc.getRequestDispatcher(Constants.ADMIN_LOGIN);
          rd.forward(request, response);
       }
       catch (Exception e)

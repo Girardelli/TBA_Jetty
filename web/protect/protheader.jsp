@@ -30,13 +30,16 @@ document.getElementById(elmnt).style.visibility="hidden";
 be.tba.session.*,
 be.tba.util.exceptions.*"%>
 <%
-HttpSession httpSession = request.getSession();
+HttpSession httpSession = request.getSession(false);
+if (httpSession == null)
+   throw new AccessDeniedException("U bent niet aangemeld.");
+
 WebSession vSession = (WebSession) httpSession.getAttribute(Constants.SESSION_OBJ);
-if (vSession == null)
+if (vSession == null || SessionManager.getInstance().isExpired(vSession) || vSession.getLogin() == null ) 
 {
-      throw new AccessDeniedException("U bent niet aangemeld.");
+   httpSession.invalidate();
+   throw new AccessDeniedException("U bent niet aangemeld.");
 }
-SessionManager.getInstance().getSession(vSession.getSessionId(), "clientcalls.jsp");
 %>
 <body>
 <table width='100%' cellspacing='0' cellpadding='0' border='0' bgcolor="#FFFFFF">

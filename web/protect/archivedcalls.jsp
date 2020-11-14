@@ -37,9 +37,9 @@ try
 
   CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
 
-  Collection<CallRecordEntityData> vRecords = vQuerySession.getxWeeksBackIncludingSubcustomer(vSession, vSession.getDaysBack(), vSession.mLoginData.getAccountId(), true);
+  Collection<CallRecordEntityData> vRecords = vQuerySession.getxWeeksBackIncludingSubcustomer(vSession, vSession.getDaysBack(), vSession.getLogin().getAccountId(), true);
   
-  AccountEntityData vAccount = AccountCache.getInstance().get(vSession.mLoginData.getAccountId());
+  AccountEntityData vAccount = AccountCache.getInstance().get(vSession.getLogin().getAccountId());
 %>
 <input class="tbabutton" type=submit name=action value="Vorige Oproepen" onclick="showPrevious()"> 
 <%
@@ -70,7 +70,7 @@ out.println("<input class=\"tbabutton\" type=submit name=action value=\"Volgende
     else
       out.println("<span class=\"bodysubsubtitle\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Er zijn </span><span class=\"bodysubsubredtitle\">" + vRecords.size() + "</span><span class=\"bodysubsubtitle\"> gearchiveerde oproepen beschikbaar voor deze periode.</span>");
     int vNewCnt = 0;
-    long vLastLogin = vSession.mLoginData.getPreviousLoginTS();
+    long vLastLogin = vSession.getLogin().getPreviousLoginTS();
     %>
     <br><br>
     <tr>

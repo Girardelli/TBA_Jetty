@@ -154,10 +154,13 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
             Collection<AccountEntityData> subCustomers = AccountCache.getInstance().getSubCustomersList(customer.getId());
             if (subCustomers != null)
             {
-               for (Iterator<AccountEntityData> i = subCustomers.iterator(); i.hasNext();)
+               synchronized(subCustomers)
                {
-                  AccountEntityData vEntry = i.next();
-                  customerIdsIN = customerIdsIN.concat(",'" + vEntry.getId() + "'");
+                  for (Iterator<AccountEntityData> i = subCustomers.iterator(); i.hasNext();)
+                  {
+                     AccountEntityData vEntry = i.next();
+                     customerIdsIN = customerIdsIN.concat(",'" + vEntry.getId() + "'");
+                  }
                }
             }
          }
@@ -334,10 +337,13 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
                Collection<AccountEntityData> subCustomers = AccountCache.getInstance().getSubCustomersList(customer.getId());
                if (subCustomers != null)
                {
-                  for (Iterator<AccountEntityData> i = subCustomers.iterator(); i.hasNext();)
+                  synchronized(subCustomers)
                   {
-                     AccountEntityData vEntry = i.next();
-                     customerIdsIN = customerIdsIN.concat("," + vEntry.getId());
+                     for (Iterator<AccountEntityData> i = subCustomers.iterator(); i.hasNext();)
+                     {
+                        AccountEntityData vEntry = i.next();
+                        customerIdsIN = customerIdsIN.concat("," + vEntry.getId());
+                     }
                   }
                }
             }
@@ -414,13 +420,16 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
                Collection<AccountEntityData> subCustomers = AccountCache.getInstance().getSubCustomersList(customer.getId());
                if (subCustomers != null)
                {
-                  for (Iterator<AccountEntityData> i = subCustomers.iterator(); i.hasNext();)
+                  synchronized(subCustomers)
                   {
-                     AccountEntityData vEntry = i.next();
-                     if (!AccountCache.getInstance().isMailEnabled(vEntry) || vEntry.getEmail() == null || vEntry.getEmail().isEmpty())
+                     for (Iterator<AccountEntityData> i = subCustomers.iterator(); i.hasNext();)
                      {
-                        // no email set for this subcustomer --> mail the calls to the supercustomer
-                        CustomerIdsIN = CustomerIdsIN.concat("," + vEntry.getId());
+                        AccountEntityData vEntry = i.next();
+                        if (!AccountCache.getInstance().isMailEnabled(vEntry) || vEntry.getEmail() == null || vEntry.getEmail().isEmpty())
+                        {
+                           // no email set for this subcustomer --> mail the calls to the supercustomer
+                           CustomerIdsIN = CustomerIdsIN.concat("," + vEntry.getId());
+                        }
                      }
                   }
                }
@@ -454,7 +463,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
    /**
     * @ejb:interface-method view-type="remote"
     */
-   public int cleanDb(WebSession webSession)
+   public void cleanDb(WebSession webSession)
    {
       // if (count == 0)
       // return 0;
@@ -465,15 +474,14 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
          long vCurTimeStamp = vCalendar.getTimeInMillis();
          long vEndTime = vCurTimeStamp - Constants.RECORD_DELETE_EXPIRE;
 
-         Collection<CallRecordEntityData> vDummyVec = executeSqlQuery(webSession, "DELETE FROM CallRecordEntity WHERE Timestamp<" + vEndTime);
-         log.info("cleanDb removed " + vDummyVec.size() + " call records");
-         return vDummyVec.size();
+         executeSqlQuery(webSession, "DELETE FROM CallRecordEntity WHERE Timestamp<" + vEndTime);
+         //log.info("cleanDb removed " + vDummyVec.size() + " call records");
       }
       catch (Exception e)
       {
          log.error(e.getMessage(), e);
       }
-      return 0;
+      return;
    }
 
    static final long PERIOD = Constants.DAYS * 20;
@@ -511,17 +519,20 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
          Collection<AccountEntityData> vSubCustomerList = AccountCache.getInstance().getSubCustomersList(customer.getId());
          if (vSubCustomerList != null)
          {
-            for (Iterator<AccountEntityData> i = vSubCustomerList.iterator(); i.hasNext();)
+            synchronized(vSubCustomerList)
             {
-               AccountEntityData vEntry = i.next();
+               for (Iterator<AccountEntityData> i = vSubCustomerList.iterator(); i.hasNext();)
+               {
+                  AccountEntityData vEntry = i.next();
 
-               if (vEntry.getNoInvoice())
-               {
-                  collectInvoiceCalls(webSession, vEntry, callList, year, month, start, stop);
-               }
-               else
-               {
-                  log.info("collectInvoiceCalls: " + customer.getFullName() + " has its invoice flag set.");
+                  if (vEntry.getNoInvoice())
+                  {
+                     collectInvoiceCalls(webSession, vEntry, callList, year, month, start, stop);
+                  }
+                  else
+                  {
+                     log.info("collectInvoiceCalls: " + customer.getFullName() + " has its invoice flag set.");
+                  }
                }
             }
          }
@@ -540,17 +551,20 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
       {
          Collection<AccountEntityData> vSubCustomerList = AccountCache.getInstance().getSubCustomersList(customer.getId());
          log.info(customer.getFullName() + " has " + vSubCustomerList.size() + " sub customers");
-         for (Iterator<AccountEntityData> i = vSubCustomerList.iterator(); i.hasNext();)
+         synchronized(vSubCustomerList)
          {
-            AccountEntityData vEntry = i.next();
+            for (Iterator<AccountEntityData> i = vSubCustomerList.iterator(); i.hasNext();)
+            {
+               AccountEntityData vEntry = i.next();
 
-            if (vEntry.getNoInvoice())
-            {
-               collectInvoiceCallsHashTable(webSession, vEntry, callList, start, stop);
-            }
-            else
-            {
-               log.info("collectInvoiceCalls: " + customer.getFullName() + " has its invoice flag set.");
+               if (vEntry.getNoInvoice())
+               {
+                  collectInvoiceCallsHashTable(webSession, vEntry, callList, start, stop);
+               }
+               else
+               {
+                  log.info("collectInvoiceCalls: " + customer.getFullName() + " has its invoice flag set.");
+               }
             }
          }
       }

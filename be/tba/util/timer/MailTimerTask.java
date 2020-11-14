@@ -74,29 +74,32 @@ final public class MailTimerTask extends TimerTask implements TimerTaskIntf
             Collection<AccountEntityData> mailGroup = AccountCache.getInstance().getMailingGroup(vKey);
             if (mailGroup != null)
             {
-               for (Iterator<AccountEntityData> j = mailGroup.iterator(); j.hasNext();)
+               synchronized(mailGroup)
                {
-                  AccountEntityData vAccount = j.next();
-                  if (System.getenv("TBA_MAIL_ON") != null)
+                  for (Iterator<AccountEntityData> j = mailGroup.iterator(); j.hasNext();)
                   {
-                     try
+                     AccountEntityData vAccount = j.next();
+                     if (System.getenv("TBA_MAIL_ON") != null)
                      {
-                        if (!Mailer.sendCallInfoMail(session, vAccount.getId()))
+                        try
                         {
-                           throw new Exception("Mail send failed!");
-                        }
+                           if (!Mailer.sendCallInfoMail(session, vAccount.getId()))
+                           {
+                              throw new Exception("Mail send failed!");
+                           }
 
+                        }
+                        catch (Exception e)
+                        {
+                           log.info("Mail send failed to " + vAccount.getFullName());
+                           MailError.getInstance().setError("Mail send failed to " + vAccount.getFullName() + "\n" + e.getMessage());
+                           log.error(e.getMessage(), e);
+                        }
                      }
-                     catch (Exception e)
+                     else
                      {
-                        log.info("Mail send failed to " + vAccount.getFullName());
-                        MailError.getInstance().setError("Mail send failed to " + vAccount.getFullName() + "\n" + e.getMessage());
-                        log.error(e.getMessage(), e);
+                        log.info("Mail supposed to be send but disabled to " + vAccount.getFullName());
                      }
-                  }
-                  else
-                  {
-                     log.info("Mail supposed to be send but disabled to " + vAccount.getFullName());
                   }
                }
             }
@@ -111,7 +114,7 @@ final public class MailTimerTask extends TimerTask implements TimerTaskIntf
          {
             if (session != null)
             {
-               session.Close();
+               session.close();
             }
          }
       }

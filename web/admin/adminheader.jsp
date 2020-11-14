@@ -40,13 +40,16 @@ be.tba.sqldata.AccountCache"%>
 <%@ page session="false" isThreadSafe="true" isErrorPage="false"
 	errorPage="adminfail.jsp" import="be.tba.session.*"%>
 <%
-  HttpSession httpSession = request.getSession();
+  HttpSession httpSession = request.getSession(false);
+  if (httpSession == null)
+     throw new AccessDeniedException("U bent niet aangemeld bij deze administratie pagina's.");
+
   WebSession vSession = (WebSession) httpSession.getAttribute(Constants.SESSION_OBJ);
-  if (vSession == null)
+  if (vSession == null || SessionManager.getInstance().isExpired(vSession) || vSession.getLogin() == null ) 
   {
-	  throw new AccessDeniedException("U bent niet aangemeld bij deze administratie pagina's.");
+     httpSession.invalidate();
+     throw new AccessDeniedException("U bent niet aangemeld bij deze administratie pagina's.");
   }
-  SessionManager.getInstance().getSession(vSession.getSessionId(), "xxx.jsp");
 %>
 
 

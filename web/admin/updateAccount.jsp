@@ -186,11 +186,14 @@ if (vCustomer.getRole().equals(AccountRole._vSubCustomer))
 										<%
 out.println("<option value=\"" + vCustomer.getFwdNumber() + "\">" + vCustomer.getFwdNumber());
 Collection<String> vFreeNumbers = AccountCache.getInstance().getFreeNumbers();
-for (Iterator<String> n = vFreeNumbers.iterator(); n.hasNext();)
+synchronized (vFreeNumbers)
 {
-  String vNumber = n.next();
-  if (!(vNumber.equals(vCustomer.getFwdNumber())))
-    out.println("<option value=\"" + vNumber + "\">" + vNumber);
+   for (Iterator<String> n = vFreeNumbers.iterator(); n.hasNext();)
+   {
+     String vNumber = n.next();
+     if (!(vNumber.equals(vCustomer.getFwdNumber())))
+       out.println("<option value=\"" + vNumber + "\">" + vNumber);
+   }
 }
 
 %>

@@ -146,6 +146,8 @@ StringBuilder allEntryIds = new StringBuilder("[");
                   <td valign="top" class="topMenu" bgcolor="#F89920">e-mail</td>
                </tr>
                <%
+                           synchronized(subList)
+                           {
                   for (Iterator<AccountEntityData> vSubIter = subList.iterator(); vSubIter.hasNext();) 
                   {
                								AccountEntityData vSubEntry = vSubIter.next();
@@ -187,6 +189,7 @@ StringBuilder allEntryIds = new StringBuilder("[");
                								allEntryIds.append("\"");
                								allEntryIds.append(",");
                							}
+ 						}
                %>
             </table> <%
                         }

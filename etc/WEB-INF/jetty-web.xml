@@ -9,9 +9,9 @@ org.eclipse.jetty.servlet.WebApplicationContext object
 -->
 
 <Configure id='wac'  class="org.eclipse.jetty.webapp.WebAppContext">
-<!-- Configure class="org.eclipse.jetty.quickstart.QuickStartWebApp"> -->
+<!-- Configure class="org.eclipse.jetty.quickstart.QuickStartWebApp"> 
   <Call name="prependServerClass"><Arg>-org.eclipse.jetty.util.</Arg></Call>
-  <Call name="prependServerClass"><Arg>-org.eclipse.jetty.servlets.</Arg></Call>
+  <Call name="prependServerClass"><Arg>-org.eclipse.jetty.servlets.</Arg></Call> -->
   <!-- <Set name="autoPreconfigure">true</Set> -->
   <Get class="org.eclipse.jetty.util.log.Log" name="rootLogger">
     <Call name="warn"><Arg>Yves's TBA webapp deployment!</Arg></Call>

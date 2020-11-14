@@ -62,7 +62,7 @@ public class InvoiceBizzLogic
          vInvoice.setPaymentDetails(parms.getParameter(Constants.TASK_PAY_DETAILS));
          vInvoice.setComment(parms.getParameter(Constants.INVOICE_INFO));
 
-         if (vInvoice.getPayDate() != null && vInvoice.getPayDate().length() > 0)
+         if (vInvoice.getFintroId() != null && !vInvoice.getFintroId().isEmpty())
          {
             vInvoice.setIsPayed(true);
          }

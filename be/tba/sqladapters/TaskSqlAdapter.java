@@ -225,17 +225,20 @@ public class TaskSqlAdapter extends AbstractSqlAdapter<TaskEntityData>
          Collection<AccountEntityData> vSubCustomerList = AccountCache.getInstance().getSubCustomersList(customer.getId());
          // log.info(customer.getFullName() + "has " + vSubCustomerList.size() + " sub
          // customers");
-         for (Iterator<AccountEntityData> i = vSubCustomerList.iterator(); i.hasNext();)
+         synchronized(vSubCustomerList)
          {
-            AccountEntityData vEntry = i.next();
-
-            if (vEntry.getNoInvoice())
+            for (Iterator<AccountEntityData> i = vSubCustomerList.iterator(); i.hasNext();)
             {
-               Collection<TaskEntityData> vSubCollection = queryAllTasksForCustomer(webSession, vEntry.getId(), start, stop);
+               AccountEntityData vEntry = i.next();
 
-               if (vSubCollection != null)
+               if (vEntry.getNoInvoice())
                {
-                  taskList.addAll(vSubCollection);
+                  Collection<TaskEntityData> vSubCollection = queryAllTasksForCustomer(webSession, vEntry.getId(), start, stop);
+
+                  if (vSubCollection != null)
+                  {
+                     taskList.addAll(vSubCollection);
+                  }
                }
             }
          }
@@ -254,16 +257,19 @@ public class TaskSqlAdapter extends AbstractSqlAdapter<TaskEntityData>
          Collection<AccountEntityData> vSubCustomerList = AccountCache.getInstance().getSubCustomersList(customer.getId());
          // log.info(customer.getFullName() + "has " + vSubCustomerList.size() + " sub
          // customers");
-         for (Iterator<AccountEntityData> i = vSubCustomerList.iterator(); i.hasNext();)
+         synchronized(vSubCustomerList)
          {
-            AccountEntityData vEntry = i.next();
-
-            if (vEntry.getNoInvoice())
+            for (Iterator<AccountEntityData> i = vSubCustomerList.iterator(); i.hasNext();)
             {
-               vCollection = queryAllTasksForCustomer(webSession, vEntry.getId(), start, stop);
-               if (vCollection != null)
+               AccountEntityData vEntry = i.next();
+
+               if (vEntry.getNoInvoice())
                {
-                  taskList.put(vEntry.getId(), vCollection);
+                  vCollection = queryAllTasksForCustomer(webSession, vEntry.getId(), start, stop);
+                  if (vCollection != null)
+                  {
+                     taskList.put(vEntry.getId(), vCollection);
+                  }
                }
             }
          }

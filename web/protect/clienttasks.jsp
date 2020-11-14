@@ -53,9 +53,9 @@ java.text.*"%>
 						 						  		Collection<TaskEntityData> vTasks = null;
 						 						  		TaskSqlAdapter vTaskSession = new TaskSqlAdapter();
 
-						 						  		vTasks = vTaskSession.getTasksForMonthforCustomer(vSession, vSession.mLoginData.getAccountId(), vSession.getMonthsBack(), vSession.getYear());
+						 						  		vTasks = vTaskSession.getTasksForMonthforCustomer(vSession, vSession.getLogin().getAccountId(), vSession.getMonthsBack(), vSession.getYear());
 
-						 						  		AccountEntityData vAccountData = (AccountEntityData) AccountCache.getInstance().get(vSession.mLoginData.getAccountId());
+						 						  		AccountEntityData vAccountData = (AccountEntityData) AccountCache.getInstance().get(vSession.getLogin().getAccountId());
 						 %> <input class="tbabutton" type=submit name=action value="Taken van vorige maand"
 				onclick="showPrevious()"> <%
  	if (!vSession.isCurrentMonth())

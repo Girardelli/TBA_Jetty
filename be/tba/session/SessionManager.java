@@ -48,29 +48,22 @@ final public class SessionManager
       }
       session.userInit(userId, generateId());
       mMap.put(session.getSessionId(), session);
-      log.info("New session added with for " + userId + "id " + session.getSessionId());
+      log.info("New session added for " + userId + ", id " + session.getSessionId() + ". active sessions:" + mMap.size());
    }
 
-   synchronized public WebSession remove(String sessionId)
+   synchronized public void remove(String sessionId)
    {
-      if (sessionId == null)
-         return null;
-      return removeAndClose(sessionId);
+      if (sessionId != null)
+         removeAndClose(sessionId);
    }
 
-   synchronized public WebSession getSession(String sessionId, String caller) throws AccessDeniedException, LostSessionException
+   synchronized public WebSession getSession(String sessionId) throws AccessDeniedException, LostSessionException
    {
       if (sessionId == null)
          throw new AccessDeniedException("Error: geen session id in de request.");
       WebSession vState = mMap.get(sessionId);
       if (vState == null)
          throw new AccessDeniedException("Aanmeld sessie is verlopen.");
-      if (vState.isExpired(caller))
-      {
-         vState.Close();
-         mMap.remove(sessionId);
-         throw new LostSessionException();
-      }
       return vState;
    }
 
@@ -87,6 +80,17 @@ final public class SessionManager
       }
       return result;
    }
+   
+   synchronized public boolean isExpired(WebSession session)
+   {
+      if (session.isExpiredAndRefresh())
+      {
+         remove(session.getSessionId());
+         return true;
+      }
+      return false;
+   }
+
 
    synchronized public void clean()
    {
@@ -96,9 +100,9 @@ final public class SessionManager
       {
          String sessionId = i.next();
          WebSession vState = mMap.get(sessionId);
-         if (vState.isExpired("cleaner"))
+         if (vState.isExpiredAndRefresh())
          {
-            vState.Close();
+            vState.close();
             i.remove();
             cnt++;
          }
@@ -109,7 +113,7 @@ final public class SessionManager
 
    private SessionManager()
    {
-      mMap = Collections.synchronizedMap(new HashMap<String, WebSession>());
+      mMap = new HashMap<String, WebSession>();
       mRand = new Random();
       log.info("SessionManager created");
 
@@ -141,11 +145,14 @@ final public class SessionManager
       return null;
    }
 
-   private WebSession removeAndClose(String sessionId)
+   private void removeAndClose(String sessionId)
    {
       WebSession vSession = (WebSession) mMap.get(sessionId);
-      vSession.Close();
-      return (WebSession) mMap.remove(sessionId);
+      if (vSession != null)
+      {
+         mMap.remove(sessionId);
+         vSession.close();
+      }
    }
 
 }

@@ -137,6 +137,7 @@ StringBuilder allEntryIds = new StringBuilder("[");
 					<td width="400" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Klant</td>
 					<td width="60" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Excl BTW</td>
 					<td width="60" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Incl BTW</td>
+                    <td width="30" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Info</td>
 				</tr>
 	
 				<%
@@ -184,6 +185,12 @@ StringBuilder allEntryIds = new StringBuilder("[");
 				{
 				    vEuroGif = "<img src=\"/tba/images/euro-16x16.png\" height=\"16\" border=\"0\">";
 				}
+                  String vInfoGifs = "";
+                  if (!vEntry.getComment().isBlank()) 
+                  {
+                      vInfoGifs = vInfoGifs.concat(
+                            "<img src=\"/tba/images/info.gif\" height=\"16\" border=\"0\">");
+                  }
 				%>
 				<tr bgcolor=<%=vCollor%> id=<%=vId%> class="bodytekst"
 					onmouseover="hooverOnRow('<%=vId%>','<%=vRowInd%>')"
@@ -195,6 +202,7 @@ StringBuilder allEntryIds = new StringBuilder("[");
 					<td width="400" valign="top"><%=vStyleStart%><%=vCompanyName%><%=vStyleEnd%></td>
 					<td width="60" valign="top"><%=vStyleStart%><%=vCostFormatter.format(vKost)%><%=vStyleEnd%></td>
 					<td width="60" valign="top"><%=vStyleStart%><%=((vAccount!= null && vAccount.getNoBtw()) ? "0.0" : vCostFormatter.format(vKost * 1.21))%><%=vStyleEnd%></td>
+                    <td width="30" valign="top"><%=vInfoGifs%></td>
 				</tr>
 				<%
 			    vRowInd++;

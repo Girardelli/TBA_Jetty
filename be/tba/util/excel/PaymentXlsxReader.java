@@ -87,6 +87,11 @@ final public class PaymentXlsxReader
          // Decide which rows to process
          int rowStart = 0;
          int rowEnd = Math.min(1500, sheet.getLastRowNum()) + 1;
+         if (sheet.getLastRowNum() >= 1500)
+         {
+            mLog.append("ERROR: file is too long to process. Only 1500 rows shall be processed.<br>");
+         }
+         
          log.info("last collumn: " + rowEnd);
          int i;
          int cnt = 0;
@@ -150,7 +155,31 @@ final public class PaymentXlsxReader
             }
          }
          log.info("--------------------------------------------------------");
+         mLog.append("INFO: " + cnt + " rows found to be processed.<br>");
          processPaymentsMap();
+         if (cnt != (mNewPayedInvoices.size() +
+                                       mConfirmedPayedInvoices.size() +
+                                       mNotMatchingPayments.size() +
+                                       mUnknownAccountNrs.size() + 
+                                       mWrongValuePayments.size() + 
+                                       mErrorPayments.size()))
+         {
+            mLog.append("ERROR: not all payments seem to have processed:<br>");
+            mLog.append("payments expected to be processed: " + cnt + "<br>");
+            mLog.append("processed payments sum up to: " + (mNewPayedInvoices.size() +
+                  mConfirmedPayedInvoices.size() +
+                  mNotMatchingPayments.size() +
+                  mUnknownAccountNrs.size() + 
+                  mWrongValuePayments.size() + 
+                  mErrorPayments.size()) + "<br>");
+            mLog.append("mNewPayedInvoices      : " + mNewPayedInvoices.size() + "<br>");
+            mLog.append("mConfirmedPayedInvoices: " + mConfirmedPayedInvoices.size() + "<br>");
+            mLog.append("mNotMatchingPayments   : " + mNotMatchingPayments.size() + "<br>");
+            mLog.append("mUnknownAccountNrs     : " + mUnknownAccountNrs.size() + "<br>");
+            mLog.append("mWrongValuePayments    : " + mWrongValuePayments.size() + "<br>");
+            mLog.append("mErrorPayments         : " + mErrorPayments.size() + "<br>");
+            
+         }
          createProcessLogs();
       }
       catch (Exception e)
@@ -299,8 +328,16 @@ final public class PaymentXlsxReader
                            // multiple
                            if (oldestMatchingInvoice != null)
                            {
-                              log.info("Confirmed " + oldestMatchingInvoice.getInvoiceNr() + " with \"" + payment.details + "\"");
-                              mConfirmedPayedInvoices.add(oldestMatchingInvoice);
+                              if (payment.id.equals(oldestMatchingInvoice.getFintroId()))
+                              {
+                                 mLog.append("INFO : payment " + payment.id + ": should have been found in DB based on FinrtoId on invoice " + oldestMatchingInvoice.getInvoiceNr() + " (id=" + oldestMatchingInvoice.getId() + ")<br>");
+                                 mConfirmedPayedInvoices.add(oldestMatchingInvoice);
+                              }
+                              else
+                              {
+                                 mLog.append("ERROR: payment " + payment.id + ": matches invoice " + oldestMatchingInvoice.getInvoiceNr() + " (id=" + oldestMatchingInvoice.getId() + "), but this invoice was set as payed with another BankId=" + oldestMatchingInvoice.getFintroId() + "<br>");
+                                 mErrorPayments.add(payment);
+                              }
                               isMatchFound = true;
                            }
                         }
@@ -390,27 +427,31 @@ final public class PaymentXlsxReader
    private void FillInvoiceWithPaymentInfo(InvoiceEntityData invoice, BankPayment payment)
    {
       Collection<InvoiceEntityData> alreadyUsedFintroIdInvoices = mInvoiceSession.getInvoiceByFintroId(mWebSession, payment.id);
-      if (alreadyUsedFintroIdInvoices.size() > 0)
+      if (alreadyUsedFintroIdInvoices.size() > 1)
       {
-         InvoiceEntityData dbInvoice = (InvoiceEntityData) alreadyUsedFintroIdInvoices.toArray()[0];
-         if (alreadyUsedFintroIdInvoices.size() == 1)
+         // multiple invoices linked to payment.id
+         mErrorPayments.add(payment);
+         mLog.append("ERROR: payment " + payment.id + " matches more than 1 invoice: ");
+         for (InvoiceEntityData entry : alreadyUsedFintroIdInvoices)
          {
-            mConfirmedPayedInvoices.add((InvoiceEntityData) alreadyUsedFintroIdInvoices.toArray()[0]);
-            if (dbInvoice.getId() != invoice.getId())
-            {
-               mLog.append("ERROR: payment " + payment.id + ": match found on open invoice " + invoice.getInvoiceNr() + " (id=" + invoice.getId() + "), but this payment was already linked in DB to " + dbInvoice.getInvoiceNr() + " (id=" + dbInvoice.getId() + ")<br>");
-            }
+            mLog.append(entry.getInvoiceNr());
+            mLog.append(", ");
+         }
+         mLog.append("Fix also the double links!!<br>");
+      }
+      else if (alreadyUsedFintroIdInvoices.size() == 1)
+      {
+         // 1 match on FintroID
+         InvoiceEntityData dbInvoice = (InvoiceEntityData) alreadyUsedFintroIdInvoices.toArray()[0];
+         if (dbInvoice.getId() == invoice.getId())
+         {
+            // the invoice matching the payment is already set with this FintroId
+            mConfirmedPayedInvoices.add(invoice);
          }
          else
          {
             mErrorPayments.add(payment);
-            mLog.append("ERROR: payment " + payment.id + ": already multiple matches found in DB for this FintoId: ");
-            for (InvoiceEntityData entry : alreadyUsedFintroIdInvoices)
-            {
-               mLog.append(", ");
-               mLog.append(entry.getInvoiceNr());
-            }
-            mLog.append("<br>");
+            mLog.append("ERROR: payment " + payment.id + ": match found on open invoice " + invoice.getInvoiceNr() + " (id=" + invoice.getId() + "), but this payment was already linked in DB to " + dbInvoice.getInvoiceNr() + " (id=" + dbInvoice.getId() + ")<br>");
          }
       }
       else
@@ -418,6 +459,7 @@ final public class PaymentXlsxReader
          // FintroId not found in the DB
          if (invoice.getIsPayed())
          {
+            // this should not happen because an already payed invoice should not be offered here for setting new payment info
             if (payment.id.equals(invoice.getFintroId()))
             {
                mLog.append("INFO : payment " + payment.id + ": should have been found in DB based on FinrtoId on invoice " + invoice.getInvoiceNr() + " (id=" + invoice.getId() + ")<br>");

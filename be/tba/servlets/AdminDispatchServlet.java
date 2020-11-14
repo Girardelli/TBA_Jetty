@@ -97,16 +97,19 @@ public class AdminDispatchServlet extends HttpServlet
          }
          vAction = params.getParameter(Constants.SRV_ACTION);
 
-         HttpSession httpSession = req.getSession();
-         vSession = (WebSession) httpSession.getAttribute(Constants.SESSION_OBJ);
-
-         if (vSession == null)
+         HttpSession httpSession = req.getSession(false);
+         if (httpSession == null)
             throw new AccessDeniedException("U bent niet aangemeld.");
+
+         vSession = (WebSession) httpSession.getAttribute(Constants.SESSION_OBJ);
+         if (vSession == null || SessionManager.getInstance().isExpired(vSession) || vSession.getLogin() == null ) 
+         {
+            httpSession.invalidate();
+            throw new AccessDeniedException("U bent niet aangemeld.");
+         }
          vSession.resetSqlTimer();
-         SessionManager.getInstance().getSession(vSession.getSessionId(), "AdminDispatchServlet(" + vAction + ")");
-
+         
          log.info("\nuserid:" + vSession.getUserId() + ", websessionid:" + vSession.getSessionId() + ", Action: " + vAction + ", URI:" + URI);
-
          synchronized (vSession)
          {
             vSession.setWsActive(false);
@@ -360,7 +363,7 @@ public class AdminDispatchServlet extends HttpServlet
                   {
                      throw new SystemErrorException("Account not found for ID " + vLtd);
                   }
-                  AccountRole role = AccountRole.fromShort(vSession.mLoginData.getRole());
+                  AccountRole role = vSession.getRole();
                   if (role == AccountRole.ADMIN || role == AccountRole.EMPLOYEE)
                   {
                      log.info("goto account delete: setAccountId=" + vLtd + ", account fwdnr=" + accountData.getFwdNumber());

@@ -44,15 +44,15 @@ public class CustFileDownloadServlet extends HttpServlet
       {
          HttpSession httpSession = request.getSession();
          vSession = (WebSession) httpSession.getAttribute(Constants.SESSION_OBJ);
-         SessionParmsInf params = new SessionParms(request);
-         SessionManager.getInstance().getSession(vSession.getSessionId(), "FileDownloadServlet()");
-         String URI = request.getRequestURI() + "?" + request.getQueryString();
-
-         if (vSession.mLoginData == null) 
+         if (vSession == null || SessionManager.getInstance().isExpired(vSession)|| vSession.getLogin() == null ) 
          {
+            httpSession.invalidate();
             throw new AccessDeniedException("No loginData object in session");
          }
-         log.info("\nname:" + vSession.mLoginData.getName() + ", websessionid:" + vSession.getSessionId() + ", URI:" + URI);
+         SessionParmsInf params = new SessionParms(request);
+         String URI = request.getRequestURI() + "?" + request.getQueryString();
+
+         log.info("\nname:" + vSession.getLogin().getName() + ", websessionid:" + vSession.getSessionId() + ", URI:" + URI);
          synchronized (vSession)
          {
             // You must tell the browser the file type you are going to send
@@ -102,12 +102,6 @@ public class CustFileDownloadServlet extends HttpServlet
          log.error(e.getMessage(), e);
          rd = sc.getRequestDispatcher(Constants.PROTECT_FAIL_JSP);
          request.setAttribute(Constants.ERROR_TXT, e.getMessage());
-         rd.forward(request, response);
-      }
-      catch (LostSessionException e)
-      {
-         log.error(e.getMessage(), e);
-         rd = sc.getRequestDispatcher(Constants.LOGIN_HTML);
          rd.forward(request, response);
       }
       catch (Exception e)

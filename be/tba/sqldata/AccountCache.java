@@ -4,7 +4,6 @@
  */
 package be.tba.sqldata;
 
-import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -24,7 +23,6 @@ import be.tba.sqladapters.AccountSqlAdapter;
 import be.tba.util.constants.AccountRole;
 import be.tba.util.constants.Constants;
 import be.tba.util.data.MailTriggerData;
-import be.tba.util.invoice.TbaPdfInvoice;
 
 final public class AccountCache
 {
@@ -41,7 +39,6 @@ final public class AccountCache
    private SortedSet<AccountEntityData> mNameSortedFullList;
    private SortedSet<AccountEntityData> mCallCustomerSortedList;
    private Map<Integer, Collection<AccountEntityData>> mSubCustomersLists;
-   private Map<String, AccountEntityData> mEmployeeLists;
    private Map<Integer, Collection<AccountEntityData>> mMailingGroups;
    private Map<String, Collection<Integer>> mBankAccountNr2AccountIdsMap;
    private int mLastMailTime = 0;
@@ -76,22 +73,12 @@ final public class AccountCache
 
    private AccountCache()
    {
-      mRawUnarchivedCollection = new Vector<AccountEntityData>();
-      mArchivedCollection = new Vector<AccountEntityData>();
-      mNameSortedList = Collections.synchronizedSortedSet(new TreeSet<AccountEntityData>());
-      mNameSortedFullList = Collections.synchronizedSortedSet(new TreeSet<AccountEntityData>());
-      mFwdKeyList = new HashMap<String, AccountEntityData>();
-      mIdKeyList = new HashMap<Integer, AccountEntityData>();
-      mCallCustomerSortedList = Collections.synchronizedSortedSet(new TreeSet<AccountEntityData>());
-      mSubCustomersLists = new HashMap<Integer, Collection<AccountEntityData>>();
-      mEmployeeLists = new HashMap<String, AccountEntityData>();
-      mMailingGroups = new HashMap<Integer, Collection<AccountEntityData>>();
-      mBankAccountNr2AccountIdsMap = new HashMap<String, Collection<Integer>>();
+      initializeLists();
       mLastMailTime = 0;
 
    }
 
-   public void update(WebSession session)
+   public synchronized void update(WebSession session)
    {
       Collection<AccountEntityData> fullList = Collections.synchronizedCollection(mAccountAdapter.getAllRows(session));
       converToHashMap(fullList);
@@ -102,37 +89,6 @@ final public class AccountCache
    {
       WebSession session = new WebSession();
       update(session);
-//      try
-//      {
-//         session = new WebSession();
-//         update(session);
-//      } catch (SQLException e)
-//      {
-//         // TODO Auto-generated catch block
-//         log.error(e.getMessage(), e);
-//      } catch (Exception e)
-//      {
-//         // TODO Auto-generated catch block
-//         log.error(e.getMessage(), e);
-//      } finally
-//      {
-//         if (session != null && session.getConnection() != null)
-//         {
-//            try
-//            {
-//               session.getConnection().close();
-//            } catch (SQLException ex)
-//            {
-//               // TODO Auto-generated catch block
-//               log.info("FAILED update AccountCash");
-//               log.info("SQLException: " + ex.getMessage());
-//               log.info("SQLState: " + ex.getSQLState());
-//               log.info("VendorError: " + ex.getErrorCode());
-//               log.error(ex.getMessage(), ex);
-//            }
-//         }
-//
-//      }
    }
 
    // deze functie moet worden verwijderd in herfst 2020 wanneer alle records een
@@ -174,7 +130,7 @@ final public class AccountCache
       }
    }
 
-   public AccountEntityData get(int id)
+   public synchronized AccountEntityData get(int id)
    {
       AccountEntityData data = mIdKeyList.get(Integer.valueOf(id));
       if (data == null)
@@ -184,7 +140,7 @@ final public class AccountCache
       // return mIdKeyList.get(Integer.valueOf(id));
    }
 
-   public AccountEntityData get(String fwdNumber)
+   public synchronized AccountEntityData get(String fwdNumber)
    {
       return mFwdKeyList.get(fwdNumber);
    }
@@ -194,27 +150,27 @@ final public class AccountCache
 //      
 //   }
 //   
-   public Collection<AccountEntityData> getRawUnachivedList()
+   public synchronized Collection<AccountEntityData> getRawUnachivedList()
    {
-      return mRawUnarchivedCollection;
+      return Collections.unmodifiableCollection(mRawUnarchivedCollection);
    }
 
-   public Collection<AccountEntityData> getSubCustomersList(int superCustomerId)
+   public synchronized Collection<AccountEntityData> getSubCustomersList(int superCustomerId)
    {
-      return mSubCustomersLists.get(superCustomerId);
+      return Collections.unmodifiableCollection(mSubCustomersLists.get(superCustomerId));
    }
 
-   public Collection<Integer> getSuperCustomersList()
+   public synchronized Collection<Integer> getSuperCustomersList()
    {
-      return mSubCustomersLists.keySet();
+      return Collections.unmodifiableCollection(mSubCustomersLists.keySet());
    }
 
-   public Collection<AccountEntityData> getCustomerList()
+   public synchronized Collection<AccountEntityData> getCustomerList()
    {
-      return mNameSortedList;
+      return Collections.unmodifiableCollection(mNameSortedList);
    }
 
-   public Collection<AccountEntityData> getInvoiceCustomerList()
+   public synchronized Collection<AccountEntityData> getInvoiceCustomerList()
    {
       Vector<AccountEntityData> vInvoiceCustomers = new Vector<AccountEntityData>();
 
@@ -225,41 +181,33 @@ final public class AccountCache
             continue;
          vInvoiceCustomers.add(vEntry);
       }
-      return vInvoiceCustomers;
+      return Collections.unmodifiableCollection(vInvoiceCustomers);
    }
 
-   public Collection<AccountEntityData> getAccountListWithoutTbaNrs()
+   public synchronized Collection<AccountEntityData> getAccountListWithoutTbaNrs()
    {
-      return mNameSortedList;
+      return Collections.unmodifiableCollection(mNameSortedList);
    }
 
-   public Collection<AccountEntityData> getCallCustomerList()
+   public synchronized Collection<AccountEntityData> getCallCustomerList()
    {
-      return mCallCustomerSortedList;
+      return Collections.unmodifiableCollection(mCallCustomerSortedList);
    }
 
-   public Collection<Integer> getAllIds()
+   public synchronized Collection<Integer> getAllIds()
    {
-      return mIdKeyList.keySet();
+      return Collections.unmodifiableCollection(mIdKeyList.keySet());
    }
 
-   public Collection<AccountEntityData> getAll()
+   public synchronized Collection<AccountEntityData> getAll()
    {
-      return mIdKeyList.values();
+      return Collections.unmodifiableCollection(mIdKeyList.values());
    }
 
    private void converToHashMap(Collection<AccountEntityData> rawList)
    {
       log.info("AccountCache::converToHashMap()");
-      mRawUnarchivedCollection.clear();
-      mArchivedCollection.clear();
-      mCallCustomerSortedList.clear();
-      mNameSortedList.clear();
-      mFwdKeyList.clear();
-      mIdKeyList.clear();
-      mNameSortedFullList.clear();
-      mSubCustomersLists.clear();
-      mEmployeeLists.clear();
+      initializeLists();
 
       for (AccountEntityData vEntry : rawList)
       {
@@ -414,7 +362,7 @@ final public class AccountCache
       return new Vector<String>();
    }
 
-   public String idToFwdNr(int id)
+   public synchronized String idToFwdNr(int id)
    {
       for (Iterator<AccountEntityData> i = mRawUnarchivedCollection.iterator(); i.hasNext();)
       {
@@ -434,7 +382,7 @@ final public class AccountCache
    /**
     * @ejb:interface-method view-type="remote"
     */
-   public Collection<MailTriggerData> getAccountTriggers()
+   public synchronized Collection<MailTriggerData> getAccountTriggers()
    {
       try
       {
@@ -458,7 +406,7 @@ final public class AccountCache
       return new Vector<MailTriggerData>();
    }
 
-   public boolean isMailEnabled(AccountEntityData entry)
+   public synchronized boolean isMailEnabled(AccountEntityData entry)
    {
       boolean vRes = false;
 
@@ -467,7 +415,7 @@ final public class AccountCache
       return vRes;
    }
 
-   public Collection<AccountEntityData> getMailingGroup(Integer aNewKey)
+   public synchronized Collection<AccountEntityData> getMailingGroup(Integer aNewKey)
    {
       if (mLastMailTime == 0)
       {
@@ -482,28 +430,28 @@ final public class AccountCache
          {
             Collection<AccountEntityData> mailGroup = mMailingGroups.get(vKey);
             mLastMailTime = aNewKey.intValue();
-            return mailGroup;
+            return Collections.unmodifiableCollection(mailGroup);
          }
       }
       mLastMailTime = aNewKey.intValue();
       return null;
    }
 
-   public Collection<Integer> getAccountIdsForBankAccountNr(String bankAccountNr)
+   public synchronized Collection<Integer> getAccountIdsForBankAccountNr(String bankAccountNr)
    {
       if (bankAccountNr != null && !bankAccountNr.isEmpty())
       {
          if (mBankAccountNr2AccountIdsMap.containsKey(bankAccountNr))
          {
-            return mBankAccountNr2AccountIdsMap.get(bankAccountNr);
+            return Collections.unmodifiableCollection(mBankAccountNr2AccountIdsMap.get(bankAccountNr));
          }
       }
       return new Vector<Integer>();
    }
 
-   public Collection<AccountEntityData> getArchivedList()
+   public synchronized Collection<AccountEntityData> getArchivedList()
    {
-      return mArchivedCollection;
+      return Collections.unmodifiableCollection(mArchivedCollection);
    }
 
    private void buildMailingGroups()
@@ -560,4 +508,19 @@ final public class AccountCache
        * (AccountEntityData) j.next(); log.info("\t" + vAccount.getFullName()); } }
        */
    }
+   
+   private void initializeLists()
+   {
+      mRawUnarchivedCollection = new Vector<AccountEntityData>();
+      mArchivedCollection = new Vector<AccountEntityData>();
+      mNameSortedList = Collections.synchronizedSortedSet(new TreeSet<AccountEntityData>());
+      mNameSortedFullList = Collections.synchronizedSortedSet(new TreeSet<AccountEntityData>());
+      mFwdKeyList = new HashMap<String, AccountEntityData>();
+      mIdKeyList = new HashMap<Integer, AccountEntityData>();
+      mCallCustomerSortedList = Collections.synchronizedSortedSet(new TreeSet<AccountEntityData>());
+      mSubCustomersLists = new HashMap<Integer, Collection<AccountEntityData>>();
+      mMailingGroups = new HashMap<Integer, Collection<AccountEntityData>>();
+      mBankAccountNr2AccountIdsMap = new HashMap<String, Collection<Integer>>();
+   }
+
 }

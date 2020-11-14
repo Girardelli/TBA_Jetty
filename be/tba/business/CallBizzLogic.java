@@ -68,7 +68,7 @@ public class CallBizzLogic
 
       if (vOldCustomer != null && vOldCustomer.getHasSubCustomers() && parms.getParameter(Constants.ACCOUNT_SUB_CUSTOMER) != null)
       {
-         log.info("change to sub customer");
+         //log.info("change to sub customer");
          // subcustomer has been selected to assign this call to
          vCallData.setAccountId(Integer.parseInt(parms.getParameter(Constants.ACCOUNT_SUB_CUSTOMER)));
          AccountEntityData newCustomer = AccountCache.getInstance().get(vCallData.getAccountId()); // take FwdNr because vCallDatat still has the previous accountId and shall make
@@ -93,7 +93,7 @@ public class CallBizzLogic
       }
       else
       {
-         log.info("NO change to sub customer");
+         //log.info("NO change to sub customer");
          vCallData.setShortDescription(parms.getParameter(Constants.RECORD_SHORT_TEXT));
       }
       String newCustIdStr = parms.getParameter(Constants.ACCOUNT_FORWARD_NUMBER);
@@ -357,20 +357,28 @@ public class CallBizzLogic
       }
    }
 
-   private static FileOutputStream getCallLogFileStream(Calendar calendar) throws IOException
+   private static FileOutputStream getCallLogFileStream(Calendar calendar)
    {
       int year = calendar.get(Calendar.YEAR);
       int month = calendar.get(Calendar.MONTH) + 1;
       int day = calendar.get(Calendar.DAY_OF_MONTH);
       String fileName = new String(Constants.RECORDS_OF_TODAY_PATH + year + "-" + month + "-" + day + ".sql");
-
-      File file = new File(fileName);
       FileOutputStream fileStream = null;
-      if (!file.exists())
+
+      try
       {
-         file.createNewFile();
+         File file = new File(fileName);
+         if (!file.exists())
+         {
+            file.createNewFile();
+         }
+         fileStream = new FileOutputStream(file, true);
       }
-      fileStream = new FileOutputStream(file, true);
+      catch (IOException e)
+      {
+         // TODO Auto-generated catch block
+         log.error(fileName + " could not be created.");
+      }
       return fileStream;
    }
 

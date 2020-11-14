@@ -46,7 +46,7 @@ final public class WebSession implements Serializable
 
    public CallFilter mCallFilter;
 
-   public LoginEntityData mLoginData = null;
+   private LoginEntityData mLoginData = null;
 
    public String mId = "";
 
@@ -132,7 +132,7 @@ final public class WebSession implements Serializable
       mId = key;
    }
 
-   public void Close()
+   public void close()
    {
       if (mConnection != null)
       {
@@ -146,6 +146,17 @@ final public class WebSession implements Serializable
             log.info("Error in WebSession.close(): SQL connection could not be closed.");
          }
       }
+   }
+
+   public LoginEntityData getLogin()
+   {
+      return mLoginData;
+   }
+
+   public void setLogin(LoginEntityData login)
+   {
+      mLoginData = login;
+      mRole = AccountRole.fromShort(login.getRole());
    }
 
    public Collection<String> getErrorList()
@@ -489,23 +500,20 @@ final public class WebSession implements Serializable
       mIsAutoUpdateRecord = state;
    }
 
-   public boolean isExpired(String caller)
+   public boolean isExpiredAndRefresh()
    {
       long vTimeout = Constants.ADMIN_SESSION_TIMEOUT;
-      if (mRole == AccountRole.CUSTOMER)
+      if (AccountRole.fromShort(mLoginData.getRole()) == AccountRole.CUSTOMER)
          vTimeout = Constants.CUSTOMER_SESSION_TIMEOUT;
       vTimeout += mLastAccess;
       long vCurrTime = Calendar.getInstance().getTimeInMillis();
 
-      if (!caller.equals("cleaner"))
-      {
-         mLastAccess = vCurrTime;
-      }
       if (vTimeout > vCurrTime)
       {
+         mLastAccess = vCurrTime;
          return false;
       }
-      log.info(caller + "(" + mLoginData.getUserId() + ")WebSession.isExpired since " + (vCurrTime - vTimeout) / 1000 + " seconds.");
+      log.info(mLoginData.getUserId() + ": WebSession.isExpired since " + (vCurrTime - vTimeout) / 1000 + " seconds.");
       return true;
    }
 
@@ -534,7 +542,7 @@ final public class WebSession implements Serializable
       mMonthsBack = calendar.get(Calendar.MONTH);
       mDaysBack = 0;
       mYear = calendar.get(Calendar.YEAR);
-      mRole = AccountRole.CUSTOMER;
+      //mRole = AccountRole.CUSTOMER;
       mInvoiceId = -1;
    }
 
