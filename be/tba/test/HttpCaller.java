@@ -46,7 +46,7 @@ public class HttpCaller
 //         log.info("ready to go:" + con.getURL());
          
 //         int status = con.getResponseCode();
-//         StringBuffer contentBuf = getContent(con);
+//         StringBuilder contentBuf = getContent(con);
 //         log.info("response: " + contentBuf.toString());
 //         con.disconnect();
 
@@ -76,7 +76,7 @@ public class HttpCaller
       con.setRequestMethod("POST");
       if (con.getResponseCode() != 200)
          log.error("login failed");
-      StringBuffer contentBuf = getContent(con);
+      StringBuilder contentBuf = getContent(con);
       log.info("response: " + contentBuf.toString());
 
       
@@ -127,10 +127,10 @@ public class HttpCaller
       }
    }
    
-   static private StringBuffer getContent(HttpURLConnection con)
+   static private StringBuilder getContent(HttpURLConnection con)
    {
       BufferedReader in;
-      StringBuffer content = new StringBuffer();
+      StringBuilder content = new StringBuilder();
       try
       {
          in = new BufferedReader(new InputStreamReader(con.getInputStream()));

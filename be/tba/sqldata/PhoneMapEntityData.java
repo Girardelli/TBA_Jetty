@@ -16,7 +16,7 @@ public class PhoneMapEntityData extends be.tba.sqldata.AbstractData implements j
 
    public String toNameValueString()
    {
-      StringBuffer str = new StringBuffer();
+      StringBuilder str = new StringBuilder();
       str.append("phoneId='");
       str.append((this.phoneId != null) ? this.phoneId : "");
       str.append("',userId='");
@@ -27,7 +27,7 @@ public class PhoneMapEntityData extends be.tba.sqldata.AbstractData implements j
 
    public String toValueString()
    {
-      StringBuffer str = new StringBuffer();
+      StringBuilder str = new StringBuilder();
 
       str.append("'0','");
       str.append((this.phoneId != null) ? this.phoneId : "");

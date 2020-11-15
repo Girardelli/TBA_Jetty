@@ -975,7 +975,7 @@ public class AccountEntityData extends be.tba.sqldata.AbstractData implements Co
 
    public String toNameValueString()
    {
-      StringBuffer str = new StringBuffer();
+      StringBuilder str = new StringBuilder();
 
       str.append("WC_Prime=");
       str.append(this.wc_prime);
@@ -1131,7 +1131,7 @@ public class AccountEntityData extends be.tba.sqldata.AbstractData implements Co
 
    public String toValueString()
    {
-      StringBuffer str = new StringBuffer();
+      StringBuilder str = new StringBuilder();
 
       // "(1, '409031', '04/10/05', 1128528272192, 1, 220, 0, 'Nabelactie voor
       // client'. ',0 ,0 ,0 ,0 ,'')

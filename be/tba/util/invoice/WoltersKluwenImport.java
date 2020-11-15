@@ -64,7 +64,7 @@ public class WoltersKluwenImport
       CallCalendar calendar = new CallCalendar();
 
       File xml = new File(Constants.FILEUPLOAD_DIR + File.separator + Calendar.getInstance().getTimeInMillis() + Constants.WC_VERKOPEN_XML);
-      StringBuffer xmlBuf = new StringBuffer("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
+      StringBuilder xmlBuf = new StringBuilder("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
       xmlBuf.append("\r\n<ImportExpMPlus xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n<Sales>\r\n");
       for (Iterator<InvoiceEntityData> i = invoiceList.iterator(); i.hasNext();)
       {
@@ -158,7 +158,7 @@ public class WoltersKluwenImport
    static public File generateKlantenXml(Collection<AccountEntityData> invoiceList)
    {
       File xml = new File(Constants.FILEUPLOAD_DIR + File.separator + Calendar.getInstance().getTimeInMillis() + Constants.WC_VERKOPEN_XML);
-      StringBuffer xmlBuf = new StringBuffer("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
+      StringBuilder xmlBuf = new StringBuilder("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
       xmlBuf.append("\r\n<ImportExpMPlus xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n<Customers>\r\n");
       for (Iterator<AccountEntityData> i = invoiceList.iterator(); i.hasNext();)
       {
@@ -244,7 +244,7 @@ public class WoltersKluwenImport
    static public String vatNrFormatter(String rawStr, String country)
    {
       // create bank account numbers of the following format:0887.975.711
-      StringBuffer formattedStr = new StringBuffer("");
+      StringBuilder formattedStr = new StringBuilder("");
 
       if (rawStr != null && rawStr.length() > 8 && country != null && country.length() == 2)
       {

@@ -267,7 +267,7 @@ public class LoginServlet extends HttpServlet
 
       if (vFormFaults.size() == 0)
       {
-         StringBuffer vBody = new StringBuffer();
+         StringBuilder vBody = new StringBuilder();
 
          String vCompany = (String) req.getParameter(Constants.FORM_COMPANY);
          if (vCompany == null)

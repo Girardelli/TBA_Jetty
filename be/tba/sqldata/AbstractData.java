@@ -41,7 +41,7 @@ public abstract class AbstractData implements Cloneable, Serializable
 
    public String toString()
    {
-      StringBuffer str = new StringBuffer("{");
+      StringBuilder str = new StringBuilder("{");
 
       str.append(getId() + ",");
       str.append(toNameValueString().toString());

@@ -388,7 +388,7 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
 
    public Collection<InvoiceEntityData> getInvoiceListByIdList(WebSession webSession, Collection<Integer> freezeList)
    {
-      StringBuffer strBuf = new StringBuffer();
+      StringBuilder strBuf = new StringBuilder();
       for (Iterator<Integer> i = freezeList.iterator(); i.hasNext();)
       {
          int vKey = i.next().intValue();

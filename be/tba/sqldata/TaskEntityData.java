@@ -213,7 +213,7 @@ public class TaskEntityData extends be.tba.sqldata.AbstractData
 
    public String toNameValueString()
    {
-      StringBuffer str = new StringBuffer();
+      StringBuilder str = new StringBuilder();
 
       str.append("FwdNr='");
       str.append((this.fwdNr != null) ? this.fwdNr : "");
@@ -246,7 +246,7 @@ public class TaskEntityData extends be.tba.sqldata.AbstractData
 
    public String toValueString()
    {
-      StringBuffer str = new StringBuffer();
+      StringBuilder str = new StringBuilder();
 
       // "(1, '409031', '04/10/05', 1128528272192, 1, 220, 0, 'Nabelactie voor
       // client'. ',0 ,0 ,0 ,0 ,'', 0)

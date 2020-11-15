@@ -909,6 +909,16 @@ public class AdminDispatchServlet extends HttpServlet
                rd = sc.getRequestDispatcher(Constants.WORKORDER_JSP);
                break;
             }
+            
+            // ==============================================================================================
+            // DELETE RECORD
+            // ==============================================================================================
+            case Constants.ARCHIVE_WORKORDERS:
+            {
+               WorkorderBizzLogic.archiveWorkorders(params, vSession);
+               rd = sc.getRequestDispatcher(Constants.ADMIN_WORK_ORDER_JSP);
+               break;
+            }
 
             // ==============================================================================================
             // UPLOAD WORKORDER FILE

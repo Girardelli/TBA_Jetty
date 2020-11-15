@@ -264,7 +264,7 @@ public class IntertelServlet extends HttpServlet
       FileOutputStream fileStream = new FileOutputStream(file, true);
 
       Enumeration<String> dataNames = req.getParameterNames();
-      StringBuffer strBuf = new StringBuffer();
+      StringBuilder strBuf = new StringBuilder();
 
       while (dataNames.hasMoreElements())
       {
@@ -298,7 +298,7 @@ public class IntertelServlet extends HttpServlet
          int week = calendar.get(Calendar.WEEK_OF_YEAR);
          fileName = new String(year + "-" + week + ".log");
       }
-      StringBuffer strBuf = new StringBuffer();
+      StringBuilder strBuf = new StringBuilder();
       File file = new File(Constants.INTERTELL_CALLLOG_PATH, fileName);
       if (!file.exists())
       {

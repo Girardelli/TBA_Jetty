@@ -29,7 +29,7 @@ public class UrlCheckerEntityData extends be.tba.sqldata.AbstractData implements
 
    public String toNameValueString()
    {
-      StringBuffer str = new StringBuffer();
+      StringBuilder str = new StringBuilder();
       str.append("SecondsOut=");
       str.append(this.secondsOut);
       str.append(",Year=");
@@ -43,7 +43,7 @@ public class UrlCheckerEntityData extends be.tba.sqldata.AbstractData implements
 
    public String toValueString()
    {
-      StringBuffer str = new StringBuffer();
+      StringBuilder str = new StringBuilder();
 
       str.append("'0',");
       str.append(this.secondsOut);

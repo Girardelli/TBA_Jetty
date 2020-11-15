@@ -395,7 +395,7 @@ public class CallRecordEntityData extends AbstractData
 
    public String toNameValueString()
    {
-      StringBuffer str = new StringBuffer();
+      StringBuilder str = new StringBuilder();
       str.append("AccountID=" + getAccountId());
       str.append(",FwdNr='" + ((this.getFwdNr() != null) ? this.getFwdNr() : ""));
       str.append("',Date='" + ((this.getDate() != null) ? this.getDate() : ""));
@@ -430,7 +430,7 @@ public class CallRecordEntityData extends AbstractData
 
    public String toValueString()
    {
-      StringBuffer str = new StringBuffer();
+      StringBuilder str = new StringBuilder();
       str.append("'0'," + getAccountId());
       str.append(",'" + ((this.getFwdNr() != null) ? this.getFwdNr() : ""));
       str.append("','" + ((this.getDate() != null) ? this.getDate() : ""));

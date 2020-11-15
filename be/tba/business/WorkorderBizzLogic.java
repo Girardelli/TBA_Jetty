@@ -3,6 +3,7 @@ package be.tba.business;
 import java.io.File;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.StringTokenizer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,11 +11,13 @@ import org.slf4j.LoggerFactory;
 import be.tba.mail.Mailer;
 import be.tba.session.SessionParmsInf;
 import be.tba.session.WebSession;
+import be.tba.sqladapters.CallRecordSqlAdapter;
 import be.tba.sqladapters.FileLocationSqlAdapter;
 import be.tba.sqladapters.TaskSqlAdapter;
 import be.tba.sqladapters.WorkOrderSqlAdapter;
 import be.tba.sqldata.AccountCache;
 import be.tba.sqldata.AccountEntityData;
+import be.tba.sqldata.CallRecordEntityData;
 import be.tba.sqldata.FileLocationData;
 import be.tba.sqldata.TaskEntityData;
 import be.tba.sqldata.WorkOrderData;
@@ -137,6 +140,30 @@ public class WorkorderBizzLogic
       else
       {
          log.error("setWorkOrderState failed because workorder.id = 0");
+      }
+   }
+   
+   public static void archiveWorkorders(SessionParmsInf parms, WebSession session)
+   {
+      String vLtd = parms.getParameter(Constants.RECORDS_TO_HANDLE);
+      log.info("workorders to archive list: " + vLtd);
+      if (vLtd != null && vLtd.length() > 0)
+      {
+         StringTokenizer vStrTok = new StringTokenizer(vLtd, ",");
+         WorkOrderSqlAdapter vWorkOrderSession = new WorkOrderSqlAdapter();
+         StringBuilder inStrBuf = new StringBuilder();
+
+         while (vStrTok.hasMoreTokens())
+         {
+            int key = Integer.parseInt(vStrTok.nextToken());
+            inStrBuf.append(key);
+            inStrBuf.append(",");
+         }
+         if (inStrBuf.length() > 0) 
+         {
+            inStrBuf.deleteCharAt(inStrBuf.length() - 1);
+         }
+         vWorkOrderSession.archive(session, inStrBuf.toString());
       }
    }
 

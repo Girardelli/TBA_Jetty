@@ -54,7 +54,7 @@ final public class PaymentXlsxReader
    private String mTxtProcessLog;
    private File mInputFile;
    private String mOutputFileName;
-   private StringBuffer mLog;
+   private StringBuilder mLog;
    private DecimalFormat mCostFormatter;
    private PaymentFileHandlerInterf mPaymentFileHandler;
 
@@ -70,7 +70,7 @@ final public class PaymentXlsxReader
       mUnknownAccountNrs = new Vector<BankPayment>();
       mWrongValuePayments = new Vector<InvoicePaymentStr>();
       mErrorPayments = new Vector<BankPayment>();
-      mLog = new StringBuffer();
+      mLog = new StringBuilder();
       mCostFormatter = new DecimalFormat("#0.00");
 
       try

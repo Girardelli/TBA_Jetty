@@ -417,7 +417,7 @@ public class CustomerDispatchServlet extends HttpServlet
    public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
    {
 //      Enumeration<String> dataNames = req.getParameterNames();
-//      StringBuffer strBuf = new StringBuffer();
+//      StringBuilder strBuf = new StringBuilder();
 //      
 //      while (dataNames.hasMoreElements()) 
 //      {

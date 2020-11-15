@@ -206,7 +206,7 @@ public class AccountSqlAdapter extends AbstractSqlAdapter<AccountEntityData>
 
    public Collection<AccountEntityData> getAccountListByIdList(WebSession webSession, Collection<Integer> list)
    {
-      StringBuffer strBuf = new StringBuffer();
+      StringBuilder strBuf = new StringBuilder();
       for (Iterator<Integer> i = list.iterator(); i.hasNext();)
       {
          int vKey = i.next().intValue();

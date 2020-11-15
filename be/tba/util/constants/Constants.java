@@ -362,6 +362,7 @@ public class Constants
    public static final String GOTO_EMPLOYEE_DELETE = "_a99";
    public static final String DELETE_EMPLOYEE_CONFIRMED = "_100";
    public static final String EMPLOYEE_ADD = "_101";
+   public static final String ARCHIVE_WORKORDERS = "_102";
 
    // LoginServlet actions
    public static final String ACTION_LOGIN = "_l88";

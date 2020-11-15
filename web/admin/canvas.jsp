@@ -23,7 +23,7 @@ be.tba.util.timer.UrlCheckTimerTask"%>
 
 <%
 StringBuilder allEntryIds = new StringBuilder("[");
-StringBuffer modalScriptStrBuffer = new StringBuffer("<!-- \r\n//#######  My Modal scripts ######\r\n\r\n -->");
+StringBuilder modalScriptStrBuffer = new StringBuilder("<!-- \r\n//#######  My Modal scripts ######\r\n\r\n -->");
 try {
 	vSession.setCallingJsp(Constants.CANVAS_JSP);
 	// this is the websocket page. Make sure this user is known to the WS broadcast
@@ -150,7 +150,7 @@ try {
                               <td class="tdborder" width="300px"><span class="bodytitle">Mijn chats</span> <br> <br> <%
  	Collection<CallRecordEntityData> chatRecords = vQuerySession.getChatRecords(vSession);
  		int cnt = 0;
- 		StringBuffer modalStrBuffer = new StringBuffer("<!-- \r\n#######  My Modals ######-->\r\n\r\n");
+ 		StringBuilder modalStrBuffer = new StringBuilder("<!-- \r\n#######  My Modals ######-->\r\n\r\n");
 
  		if (!chatRecords.isEmpty()) {
  			for (Iterator<CallRecordEntityData> i = chatRecords.iterator(); i.hasNext();) {

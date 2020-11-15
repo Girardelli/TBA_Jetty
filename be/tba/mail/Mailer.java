@@ -184,7 +184,7 @@ public class Mailer
       if (!vRecords.isEmpty() || !vCustomer.getNoEmptyMails())
       {
          log.info("sendMail start for:" + vCustomer.getFullName());
-         StringBuffer vBody;
+         StringBuilder vBody;
          if (vCustomer.getIsXmlMail())
          {
             vBody = buildXmlBody(vCustomer, vRecords, isImportant);
@@ -329,9 +329,9 @@ public class Mailer
    }
 
    
-   static private StringBuffer buildMailBody(AccountEntityData account, Collection<CallRecordEntityData> records, AtomicBoolean isImportant)
+   static private StringBuilder buildMailBody(AccountEntityData account, Collection<CallRecordEntityData> records, AtomicBoolean isImportant)
    {
-      StringBuffer vBody = new StringBuffer("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">");
+      StringBuilder vBody = new StringBuilder("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">");
       vBody.append("<HTML><HEAD>"); // <TITLE>TheBusinessAssistant administrator pages</TITLE>");
       vBody.append("<META http-equiv=Content-Type content=\"text/html; charset=iso-8859-1\"><BASE ");
       vBody.append("href=" + Constants.TBA_URL_BASE + "index.html>");
@@ -483,9 +483,9 @@ public class Mailer
       return vBody;
    }
 
-   static private StringBuffer buildTextMailBody(AccountEntityData account, Collection<CallRecordEntityData> records, AtomicBoolean isImportant)
+   static private StringBuilder buildTextMailBody(AccountEntityData account, Collection<CallRecordEntityData> records, AtomicBoolean isImportant)
    {
-      StringBuffer vBody = new StringBuffer("");
+      StringBuilder vBody = new StringBuilder("");
       vBody.append("Geachte\n\n");
       vBody.append("Gelieve hieronder uw oproepen te willen vinden die wij genoteerd hebben sinds de vorige mail.\n");
       vBody.append("Voor vragen kan u zich richten tot het TBA team.\n");
@@ -531,9 +531,9 @@ public class Mailer
       return vBody;
    }
 
-   static private StringBuffer buildXmlBody(AccountEntityData account, Collection<CallRecordEntityData> records, AtomicBoolean isImportant)
+   static private StringBuilder buildXmlBody(AccountEntityData account, Collection<CallRecordEntityData> records, AtomicBoolean isImportant)
    {
-      StringBuffer vBody = new StringBuffer("<?xml version=\"1.0\"?>\n");
+      StringBuilder vBody = new StringBuilder("<?xml version=\"1.0\"?>\n");
       vBody.append("<objects>\n");
 
       long vCurrentTime = Calendar.getInstance().getTimeInMillis();

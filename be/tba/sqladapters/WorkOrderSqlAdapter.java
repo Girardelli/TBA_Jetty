@@ -5,11 +5,16 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Vector;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import be.tba.business.WorkorderBizzLogic;
 import be.tba.session.WebSession;
 import be.tba.sqldata.WorkOrderData;
 
 public class WorkOrderSqlAdapter extends AbstractSqlAdapter<WorkOrderData>
 {
+   private static Logger log = LoggerFactory.getLogger(WorkOrderSqlAdapter.class);
 
    public WorkOrderSqlAdapter()
    {
@@ -33,6 +38,11 @@ public class WorkOrderSqlAdapter extends AbstractSqlAdapter<WorkOrderData>
          return executeSqlQuery(webSession, "SELECT * FROM WorkOrderEntity WHERE AccountId=" + accountId + " AND State!='" + WorkOrderData.State.kArchived.name() + "' ORDER BY Id DESC");
       }
 
+   }
+   
+   public void archive(WebSession webSession, String idString)
+   {
+      executeSqlQuery(webSession, "UPDATE WorkOrderEntity set State='" + WorkOrderData.State.kArchived.name() + "' WHERE Id IN (" + idString + ")");
    }
 
    @Override

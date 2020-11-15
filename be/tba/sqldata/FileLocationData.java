@@ -41,7 +41,7 @@ public class FileLocationData extends be.tba.sqldata.AbstractData
    @Override
    public String toValueString()
    {
-      StringBuffer str = new StringBuffer();
+      StringBuilder str = new StringBuilder();
 
       str.append("0,");
       str.append(workorderId);
@@ -60,7 +60,7 @@ public class FileLocationData extends be.tba.sqldata.AbstractData
    @Override
    public String toNameValueString()
    {
-      StringBuffer str = new StringBuffer();
+      StringBuilder str = new StringBuilder();
 
       str.append("WorkorderId=");
       str.append(workorderId);

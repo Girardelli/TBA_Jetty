@@ -27,7 +27,7 @@ public class AnyTest
    {
       // TODO Auto-generated method stub
 
-      StringBuffer formattedStr = new StringBuffer("");
+      StringBuilder formattedStr = new StringBuilder("");
       String rawStr = "520505213";
 
       char[] rawArr = rawStr.toCharArray();
