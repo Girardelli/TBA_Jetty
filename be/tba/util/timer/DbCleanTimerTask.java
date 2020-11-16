@@ -76,6 +76,8 @@ final public class DbCleanTimerTask extends TimerTask implements TimerTaskIntf
          int deleted = 0;
          vQuerySession.cleanDb(session);
 
+         // logins
+         /*
          LoginSqlAdapter loginSqlAdapter = new LoginSqlAdapter();
          Collection<LoginEntityData> logins = loginSqlAdapter.getAllRows(session);
          long now = Calendar.getInstance().getTimeInMillis();
@@ -88,25 +90,11 @@ final public class DbCleanTimerTask extends TimerTask implements TimerTaskIntf
                ++deleted;
             }
          }
+         */
+         
+         // sessions
          SessionManager.getInstance().clean();
-
-         //
-         // int cnt = 0;
-         // for (int i = 0; i < 10; ++i)
-         // {
-         // CallRecordQuerySession vQuerySession = vQueryHome.create();
-         // int deleted = vQuerySession.cleanDb(con, kCleanPerSession);
-         // if (deleted != kCleanPerSession)
-         // {
-         // vQuerySession.remove();
-         // cnt += deleted;
-         // break;
-         // }
-         // vQuerySession.remove();
-         // cnt += kCleanPerSession;
-         // Thread.sleep(10000);
-         // }
-         log.info("DB clean deleted " + deleted + " call records.");
+         //log.info("DB clean deleted " + deleted + " call records.");
       }
       catch (Exception e)
       {
