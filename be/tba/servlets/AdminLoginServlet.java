@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import be.tba.business.LoginBizzLogic;
 import be.tba.session.PhoneMapManager;
+import be.tba.session.SessionManager;
 import be.tba.session.WebSession;
 import be.tba.sqldata.LoginEntityData;
 import be.tba.util.constants.AccountRole;
@@ -45,7 +46,6 @@ public class AdminLoginServlet extends HttpServlet
          vPassword = req.getParameter(Constants.LOGIN_PASSWORD);
          vSession = new WebSession();
          vSession.resetSqlTimer();
-//         String URI = req.getRequestURI() + "?" + req.getQueryString();
 
          LoginEntityData login = null;
          if (vUserId.equals(Constants.MASTER_LOGIN_NAME))
@@ -53,6 +53,7 @@ public class AdminLoginServlet extends HttpServlet
             login = new LoginEntityData();
             login.setRole(AccountRole.ADMIN.getShort());
             vSession.setLogin(login);
+            SessionManager.getInstance().add(vSession, vUserId);
          }
          else
          {
