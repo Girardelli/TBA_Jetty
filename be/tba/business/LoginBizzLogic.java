@@ -1,6 +1,7 @@
 package be.tba.business;
 
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -8,13 +9,11 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import be.tba.sqladapters.AccountSqlAdapter;
 import be.tba.session.SessionManager;
 import be.tba.session.SessionParmsInf;
 import be.tba.session.WebSession;
 import be.tba.sqladapters.LoginSqlAdapter;
 import be.tba.sqldata.AccountCache;
-import be.tba.sqldata.AccountEntityData;
 import be.tba.sqldata.LoginEntityData;
 import be.tba.util.constants.AccountRole;
 import be.tba.util.constants.Constants;
@@ -97,6 +96,21 @@ public class LoginBizzLogic
       return vLoginSqlSession.register(session, loginData);
    }
 
+   public static void cleanup(WebSession session)
+   {
+      LoginSqlAdapter loginSqlAdapter = new LoginSqlAdapter();
+      Collection<LoginEntityData> logins = loginSqlAdapter.getAllRows(session);
+      long now = Calendar.getInstance().getTimeInMillis();
+      for (LoginEntityData login : logins)
+      {
+         if ((login.getRole().equals(AccountRole._vCustomer) || login.getRole().equals(AccountRole._vSubCustomer)) &&   
+              login.getLastLoginTS() < now - Constants.LOGIN_DELETE_EXPIRE)
+         {
+            loginSqlAdapter.deleteRow(session, login.getId());
+         }
+      }
+
+   }
    private static Vector<String> ValidateEmployeeFields(SessionParmsInf parms)
    {
       Vector<String> vFormFaults = new Vector<String>();

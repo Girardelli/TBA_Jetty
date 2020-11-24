@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
 
+import be.tba.business.LoginBizzLogic;
 import be.tba.session.SessionManager;
 import be.tba.session.WebSession;
 import be.tba.sqladapters.CallRecordSqlAdapter;
@@ -73,24 +74,10 @@ final public class DbCleanTimerTask extends TimerTask implements TimerTaskIntf
          }
 
          CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
-         int deleted = 0;
          vQuerySession.cleanDb(session);
-
+         
          // logins
-         /*
-         LoginSqlAdapter loginSqlAdapter = new LoginSqlAdapter();
-         Collection<LoginEntityData> logins = loginSqlAdapter.getAllRows(session);
-         long now = Calendar.getInstance().getTimeInMillis();
-         for (LoginEntityData login : logins)
-         {
-            //log.info("login TS=" + login.getLastLoginTS() + ", now=" + now);
-            if (login.getLastLoginTS() < now - Constants.LOGIN_DELETE_EXPIRE)
-            {
-               loginSqlAdapter.deleteRow(session, login.getId());
-               ++deleted;
-            }
-         }
-         */
+         //LoginBizzLogic.cleanup(session);
          
          // sessions
          SessionManager.getInstance().clean();

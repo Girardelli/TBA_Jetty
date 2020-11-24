@@ -1,6 +1,7 @@
 package be.tba.servlets;
 
 import java.io.IOException;
+import java.util.Calendar;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -13,20 +14,13 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import be.tba.sqladapters.AccountSqlAdapter;
 import be.tba.business.LoginBizzLogic;
 import be.tba.session.PhoneMapManager;
-import be.tba.session.SessionManager;
 import be.tba.session.WebSession;
-import be.tba.sqladapters.LoginSqlAdapter;
-import be.tba.sqladapters.TaskSqlAdapter;
-import be.tba.sqldata.AccountEntityData;
 import be.tba.sqldata.LoginEntityData;
 import be.tba.util.constants.AccountRole;
 import be.tba.util.constants.Constants;
 import be.tba.util.exceptions.AccessDeniedException;
-import be.tba.util.exceptions.AccountNotFoundException;
-import be.tba.util.exceptions.TbaException;
 
 public class AdminLoginServlet extends HttpServlet
 {
@@ -50,7 +44,8 @@ public class AdminLoginServlet extends HttpServlet
          vUserId = req.getParameter(Constants.LOGIN_USERID);
          vPassword = req.getParameter(Constants.LOGIN_PASSWORD);
          vSession = new WebSession();
-         String URI = req.getRequestURI() + "?" + req.getQueryString();
+         vSession.resetSqlTimer();
+//         String URI = req.getRequestURI() + "?" + req.getQueryString();
 
          LoginEntityData login = null;
          if (vUserId.equals(Constants.MASTER_LOGIN_NAME))
@@ -66,7 +61,6 @@ public class AdminLoginServlet extends HttpServlet
 
          if (login.getRole().equals(AccountRole.ADMIN.getShort()) || login.getRole().equals(AccountRole.EMPLOYEE.getShort()))
          {
-            SessionManager.getInstance().add(vSession, vUserId);
             vSession.setRole(AccountRole.fromShort(login.getRole()));
             // vSession.setSessionFwdNr(login.getFwdNumber());
             vSession.setAccountId(login.getId());
@@ -113,6 +107,10 @@ public class AdminLoginServlet extends HttpServlet
          ServletContext sc = getServletContext();
          RequestDispatcher rd = sc.getRequestDispatcher(Constants.ADMIN_FAIL_JSP);
          rd.forward(req, res);
+      }
+      if (vSession != null)
+      {
+         log.info("########### httprequest admin login done: java=" + (Calendar.getInstance().getTimeInMillis() - vSession.mWebTimer - vSession.getSqlTimer()) + ", SQL=" + vSession.getSqlTimer());
       }
    }
 

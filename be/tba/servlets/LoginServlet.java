@@ -24,13 +24,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import be.tba.business.LoginBizzLogic;
-import be.tba.session.SessionManager;
 import be.tba.session.WebSession;
-import be.tba.sqldata.AccountCache;
 import be.tba.sqldata.LoginEntityData;
 import be.tba.util.constants.AccountRole;
 import be.tba.util.constants.Constants;
-import be.tba.util.data.RegisterData;
 import be.tba.util.exceptions.AccountNotFoundException;
 import be.tba.util.exceptions.SystemErrorException;
 
@@ -79,6 +76,7 @@ public class LoginServlet extends HttpServlet
             if (vUserId == null || vPassword == null)
                throw new SystemErrorException("User id or password null.");
             vSession = new WebSession();
+            vSession.resetSqlTimer();
             HttpSession httpSession = req.getSession();
             httpSession.setAttribute(Constants.SESSION_OBJ, vSession);
             httpSession.setMaxInactiveInterval(10*60*60); // set it to 10 hours to make sure it does not expire during working hours
@@ -106,6 +104,7 @@ public class LoginServlet extends HttpServlet
                if (vSession == null)
                {
                   vSession = new WebSession();
+                  vSession.resetSqlTimer();
                }
                httpSession.setAttribute(Constants.SESSION_OBJ, vSession);
                httpSession.setMaxInactiveInterval(10*60*60); // set it to 10 hours to make sure it does not expire during working hours
@@ -176,6 +175,10 @@ public class LoginServlet extends HttpServlet
          rd = sc.getRequestDispatcher(Constants.PROTECT_FAIL_JSP);
       }
       rd.forward(req, res);
+      if (vSession != null)
+      {
+         log.info("########### httprequest customer login done: java=" + (Calendar.getInstance().getTimeInMillis() - vSession.mWebTimer - vSession.getSqlTimer()) + ", SQL=" + vSession.getSqlTimer());
+      }
    }
 
    public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException

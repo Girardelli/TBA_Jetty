@@ -47,6 +47,8 @@ public class CustomerDispatchServlet extends HttpServlet
    {
       ServletContext sc = getServletContext();
       RequestDispatcher rd = null;
+      WebSession vSession = null;
+
       try
       {
          req.setCharacterEncoding("UTF-8");
@@ -56,13 +58,14 @@ public class CustomerDispatchServlet extends HttpServlet
          if (httpSession == null)
             throw new AccessDeniedException("U bent niet aangemeld.");
 
-         WebSession vSession = (WebSession) httpSession.getAttribute(Constants.SESSION_OBJ);
+         vSession = (WebSession) httpSession.getAttribute(Constants.SESSION_OBJ);
          if (vSession == null || SessionManager.getInstance().isExpired(vSession) || vSession.getLogin() == null ) 
          {
             httpSession.invalidate();
             throw new AccessDeniedException("U bent niet aangemeld.");
          }
-
+         vSession.resetSqlTimer();
+         
          synchronized (vSession)
          {
             AccountEntityData customer = AccountCache.getInstance().get(vSession.getLogin().getAccountId());
@@ -411,6 +414,10 @@ public class CustomerDispatchServlet extends HttpServlet
       catch (Exception e)
       {
          log.error(e.getMessage(), e);
+      }
+      if (vSession != null)
+      {
+         log.info("########### httprequest customer done: java=" + (Calendar.getInstance().getTimeInMillis() - vSession.mWebTimer - vSession.getSqlTimer()) + ", SQL=" + vSession.getSqlTimer());
       }
    }
 

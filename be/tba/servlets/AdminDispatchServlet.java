@@ -1050,7 +1050,7 @@ public class AdminDispatchServlet extends HttpServlet
       }
       if (vSession != null)
       {
-         log.info("########### httprequest done: java=" + (Calendar.getInstance().getTimeInMillis() - vSession.mWebTimer - vSession.getSqlTimer()) + ", SQL=" + vSession.getSqlTimer());
+         log.info("########### httprequest admin done: java=" + (Calendar.getInstance().getTimeInMillis() - vSession.mWebTimer - vSession.getSqlTimer()) + ", SQL=" + vSession.getSqlTimer());
       }
 
    }

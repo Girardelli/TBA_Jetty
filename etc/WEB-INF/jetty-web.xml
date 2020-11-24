@@ -14,7 +14,7 @@ org.eclipse.jetty.servlet.WebApplicationContext object
   <Call name="prependServerClass"><Arg>-org.eclipse.jetty.servlets.</Arg></Call> -->
   <!-- <Set name="autoPreconfigure">true</Set> -->
   <Get class="org.eclipse.jetty.util.log.Log" name="rootLogger">
-    <Call name="warn"><Arg>Yves's TBA webapp deployment!</Arg></Call>
+    <Call name="warn"><Arg>----Restart----Restart----Restart----Restart----Restart----Restart----Restart----Restart----Restart----Restart----Restart----Restart----Restart----Restart----</Arg></Call>
   </Get>
 
 	
