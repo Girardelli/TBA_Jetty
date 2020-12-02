@@ -80,7 +80,6 @@ public class CustomerDispatchServlet extends HttpServlet
             FileUploader fileUploader = null;
             SessionParmsInf params = null;
    
-            log.info("\nuserid:" + vSession.getUserId() + ", websessionid:" + vSession.getSessionId() + ", URI:" + req.getRequestURI() + "?" + req.getQueryString());
    
             if (ServletFileUpload.isMultipartContent(req))
             {
@@ -98,11 +97,12 @@ public class CustomerDispatchServlet extends HttpServlet
    
             }
             vAction = params.getParameter(Constants.SRV_ACTION);
+            log.info("\nuserid:" + vSession.getUserId() + ", websessionid:" + vSession.getSessionId() + " ----" + params.getParameter("action") + "----" + ", URI:" + req.getRequestURI() + "?" + params.getQueryString());
    
             // String vSessionId = params.getParameter(Constants.SESSION_ID);
             if (vAction == null)
             {
-               throw new SystemErrorException("Interne fout: geen actie in de request.");
+               throw new SystemErrorException("Interne fout: geen actie in de request!!!! --> start of hanging");
             }
             if (vAction.equals(Constants.ACTION_LOGOFF))
             {
@@ -113,8 +113,6 @@ public class CustomerDispatchServlet extends HttpServlet
             vSession.setWsActive(false);
             if (!vSession.getRole().getShort().equals(AccountRole.ADMIN.getShort()) && !vSession.getRole().getShort().equals(AccountRole.CUSTOMER.getShort()) && !vSession.getRole().getShort().equals(AccountRole.SUBCUSTOMER.getShort()))
                throw new AccessDeniedException("access denied for " + vSession.getUserId() + " with role " + vSession.getRole().getShort());
-            log.info("\nCustomerDispatchServlet: userid:" + vSession.getUserId() + ", websessionid:" + vSession.getSessionId() + " action=" + vAction);
-
             switch (vAction)
             {
 
@@ -406,7 +404,7 @@ public class CustomerDispatchServlet extends HttpServlet
       }
       catch (SystemErrorException e)
       {
-         log.error(e.getMessage(), e);
+         log.error(e.getMessage());
          rd = sc.getRequestDispatcher(Constants.PROTECT_FAIL_JSP);
          req.setAttribute(Constants.ERROR_TXT, e.getMessage());
          rd.forward(req, res);

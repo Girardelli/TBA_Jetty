@@ -1,9 +1,6 @@
 package be.tba.websockets;
 
-import java.io.IOException;
 import java.util.Collection;
-import java.util.Iterator;
-
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketAdapter;
 import org.slf4j.Logger;
@@ -11,7 +8,6 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 
-import be.tba.session.IntertelCallManager;
 import be.tba.session.PhoneMapManager;
 import be.tba.session.SessionManager;
 import be.tba.session.WebSession;
@@ -19,20 +15,25 @@ import be.tba.util.constants.AccountRole;
 import be.tba.util.constants.Constants;
 import be.tba.util.exceptions.AccessDeniedException;
 import be.tba.util.exceptions.LostSessionException;
-import be.tba.util.timer.TimerManager;
 
 public class TbaWebSocketAdapter extends WebSocketAdapter
 {
    private static Logger log = LoggerFactory.getLogger(TbaWebSocketAdapter.class);
    private Session session;
    private WebSession webSession;
-   private static Gson sGson = new Gson();
 
+   public TbaWebSocketAdapter()
+   {
+      super();
+      session = null;
+      webSession = null;
+   }
+   
    @Override
    public void onWebSocketConnect(Session session)
    {
-      super.onWebSocketConnect(session);
       this.session = session;
+      super.onWebSocketConnect(session);
 
       // log.info("MessagingAdapter.onWebSocketConnect");
 
@@ -41,20 +42,13 @@ public class TbaWebSocketAdapter extends WebSocketAdapter
    @Override
    public void onWebSocketClose(int statusCode, String reason)
    {
-      this.session = null;
-      // System.err.println("Close connection " + statusCode + ", " + reason);
-      if (webSession != null)
-      {
-         webSession.setWsSession(null);
-         webSession.setWsActive(false);
-      }
+      cleanup();
       super.onWebSocketClose(statusCode, reason);
    }
 
    @Override
    public void onWebSocketText(String message)
    {
-      super.onWebSocketText(message);
       // log.info("MessagingAdapter.onWebSocketText: " + message);
 
       if (message.startsWith(Constants.WS_LOGIN))
@@ -79,10 +73,18 @@ public class TbaWebSocketAdapter extends WebSocketAdapter
       {
          log.info("Message from WEbSocket: " + message);
       }
-
+      super.onWebSocketText(message);
    }
 
-   public static void broadcast(WebSocketData data)
+   public void onWebSocketError(Throwable cause)
+   {
+      cleanup();
+      log.error(cause.getMessage());
+      super.onWebSocketError(cause);
+   }
+
+   
+   public static synchronized void broadcast(WebSocketData data)
    {
       if (data.operation == WebSocketData.CALL_ANSWERED)
       {
@@ -92,8 +94,10 @@ public class TbaWebSocketAdapter extends WebSocketAdapter
          // log.info("data.answeredBySession=" + data.answeredBySession);
 
       }
+      Gson sGson = new Gson();
 
       Collection<WebSession> activeSessions = SessionManager.getInstance().getActiveWebSockets();
+      String jsonString = sGson.toJson(data, WebSocketData.class);
       for (WebSession session : activeSessions)
       {
          if (session.getRole() == AccountRole.ADMIN || session.getRole() == AccountRole.EMPLOYEE)
@@ -102,7 +106,7 @@ public class TbaWebSocketAdapter extends WebSocketAdapter
             {
                // log.info("----------------------------------\r\nsend websocket event: " +
                // data.toString());
-               session.getWsSession().getRemote().sendString(sGson.toJson(data, WebSocketData.class));
+               session.getWsSession().getRemote().sendString(jsonString);
             }
             catch (Exception e)
             {
@@ -117,6 +121,8 @@ public class TbaWebSocketAdapter extends WebSocketAdapter
    public static void sendToCustomer(WebSocketData data, int accountId)
    {
       Collection<WebSession> activeSessions = SessionManager.getInstance().getActiveWebSockets();
+      Gson sGson = new Gson();
+      String jsonString = sGson.toJson(data, WebSocketData.class);
       for (WebSession session : activeSessions)
       {
          if (session.getAccountId() == accountId)
@@ -125,7 +131,7 @@ public class TbaWebSocketAdapter extends WebSocketAdapter
             {
                // log.info("----------------------------------\r\nsend websocket event: " +
                // data.toString());
-               session.getWsSession().getRemote().sendString(sGson.toJson(data, WebSocketData.class));
+               session.getWsSession().getRemote().sendString(jsonString);
             }
             catch (Exception e)
             {
@@ -150,5 +156,20 @@ public class TbaWebSocketAdapter extends WebSocketAdapter
 
       session.close(status, reason);
       disconnect(status, reason);
+   }
+   
+   private void cleanup()
+   {
+      if (this.session != null)
+      {
+         this.session = null;
+      }
+      // System.err.println("Close connection " + statusCode + ", " + reason);
+      if (webSession != null)
+      {
+         webSession.setWsSession(null);
+         webSession.setWsActive(false);
+      }
+
    }
 }

@@ -74,15 +74,15 @@ if (true) //vUrgentRecords.size() > 0)
         <td valign="top" bgcolor="FFFFFF"><br>
          <!-- ################ buttons ################ -->
         <p><span class="bodysubtitle"> Huidig geregistreerde oproepen:
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="tbabutton" type=submit value="Herlaad (Vandaag)" onclick="refresh()"> 
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="archiveButton" class="tbabutton" type="submit" value="Archiveer" onclick="archive()"> 
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="tbabutton" type=submit name=action value="Herlaad (Vandaag)" onclick="refresh()"> 
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="archiveButton" class="tbabutton" type="submit" name=action value="Archiveer" onclick="archive()"> 
         </span></p>
 
-<input class="tbabutton" type=submit value="Vorige Oproepen" onclick="showPrevious()"> 
+<input class="tbabutton" type=submit name=action value="Vorige Oproepen" onclick="showPrevious()"> 
 <%
 if (vSession.getDaysBack() > 0)
 {
-out.println("<input class=\"tbabutton\" type=submit value=\"Volgende Oproepen\"  onclick=\"showNext()\">");
+out.println("<input class=\"tbabutton\" type=submit name=action value=\"Volgende Oproepen\"  onclick=\"showNext()\">");
 }
 %>
   

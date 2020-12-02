@@ -119,7 +119,7 @@ if (vInfoGifs.length() > 0)
         <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.SAVE_RECORD%>"> 
         <input type=hidden name=<%=Constants.RECORD_ID%> value="<%=mRecordData.getId()%>"> 
         <input class="tbabutton" type=submit name=action value=" Bewaar "> 
-        <input class="tbabutton" type=submit value=" Terug " onclick="cancelUpdate();">
+        <input class="tbabutton" type=submit name=action value=" Terug " onclick="cancelUpdate();">
         </td>
       </tr>
 </table>

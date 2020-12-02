@@ -84,23 +84,9 @@ public class AdminDispatchServlet extends HttpServlet
          FileUploader fileUploader = null;
          SessionParmsInf params = null;
          String URI = null;
-         if (ServletFileUpload.isMultipartContent(req))
-         {
-            fileUploader = new FileUploader(req);
-            fileUploader.upload(req);
-            params = fileUploader;
-         }
-         else
-         {
-            URI = req.getRequestURI() + "?" + req.getQueryString();
-            params = new SessionParms(req);
-         }
-         vAction = params.getParameter(Constants.SRV_ACTION);
-
          HttpSession httpSession = req.getSession(false);
          if (httpSession == null)
             throw new AccessDeniedException("U bent niet aangemeld.");
-
          vSession = (WebSession) httpSession.getAttribute(Constants.SESSION_OBJ);
          if (vSession == null || SessionManager.getInstance().isExpired(vSession) || vSession.getLogin() == null ) 
          {
@@ -109,9 +95,23 @@ public class AdminDispatchServlet extends HttpServlet
          }
          vSession.resetSqlTimer();
          
-         log.info("\nuserid:" + vSession.getUserId() + ", websessionid:" + vSession.getSessionId() + ", Action: " + vAction + ", URI:" + URI);
+         //log.info("\nuserid:" + vSession.getUserId() + ", websessionid:" + vSession.getSessionId() + ", Action: " + vAction + ", URI:" + URI);
+
          synchronized (vSession)
          {
+            if (ServletFileUpload.isMultipartContent(req))
+            {
+               fileUploader = new FileUploader(req);
+               fileUploader.upload(req);
+               params = fileUploader;
+            }
+            else
+            {
+               URI = req.getRequestURI() + "?" + req.getQueryString();
+               params = new SessionParms(req);
+            }
+            vAction = params.getParameter(Constants.SRV_ACTION);
+            log.info("\nuserid:" + vSession.getUserId() + ", websessionid:" + vSession.getSessionId() + " ----" + params.getParameter("action") + "----" + ", URI:" + req.getRequestURI() + "?" + params.getQueryString());
             vSession.setWsActive(false);
             if (vSession.getRole() != AccountRole.ADMIN && vSession.getRole() != AccountRole.EMPLOYEE)
                throw new AccessDeniedException("access denied for " + vSession.getUserId());
@@ -119,7 +119,7 @@ public class AdminDispatchServlet extends HttpServlet
             rd = sc.getRequestDispatcher(vSession.getCallingJsp());
             if (vAction == null)
             {
-               throw new SystemErrorException("Interne fout. geen actie.");
+               throw new SystemErrorException("Interne fout. geen actie!!!!! --> start of hanging");
             }
 
             // if (!vAction.equals(Constants.GOTO_INVOICE)
@@ -1034,8 +1034,7 @@ public class AdminDispatchServlet extends HttpServlet
       }
       catch (SystemErrorException e)
       {
-         log.error("SystemErrorException caught");
-         log.error(e.getMessage(), e);
+         log.error(e.getMessage());
          rd = sc.getRequestDispatcher(Constants.ADMIN_FAIL_JSP);
          req.setAttribute(Constants.ERROR_TXT, e.getMessage());
          rd.forward(req, res);

@@ -210,4 +210,11 @@ public class FileUploader implements SessionParmsInf
       }
 
    }
+
+   @Override
+   public String getQueryString()
+   {
+      // TODO Auto-generated method stub
+      return "FileUpload items";
+   }
 }

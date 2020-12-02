@@ -34,7 +34,7 @@ try
         <td valign="top" bgcolor="FFFFFF"><br>
         <p><span class="bodytitle">Mijn opdrachten</span><br>
         <br>
-        <input class="tbabutton" type=submit value=" Maak nieuwe opdracht " onclick="addWorkOrder();"> 
+        <input class="tbabutton" type=submit name=action value=" Maak nieuwe opdracht " onclick="addWorkOrder();"> 
         <br>
         <table cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
            <tr>
@@ -127,8 +127,8 @@ catch (Exception e)
 <p>De opdracht die je wil verwijderen bevat misschien opgeladen bestanden.<br>
 Ben je zeker dat je de opdracht wil verwijderen en de bestanden die hieraan eventueel gekoppeld zijn.</p>
 <p align="right">
-<input class="tbabutton" type=submit value="Terug">
-<input class="tbabutton" type=submit value="Ga door" onclick="removeWorkOrder('868961', 'modalText_1')">
+<input class="tbabutton" type=submit name=action value="Terug">
+<input class="tbabutton" type=submit name=action value="Ga door" onclick="removeWorkOrder('868961', 'modalText_1')">
 </p></div></div>
 
 </form>

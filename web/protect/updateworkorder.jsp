@@ -82,7 +82,7 @@ try
 if (workOrder.state == WorkOrderData.State.kDone)
 {
    %>
-   <input class="tbabutton" type=submit value=" Archiveer " onclick="archive('<%=workOrder.state.name()%>')">
+   <input class="tbabutton" type=submit name=action value=" Archiveer " onclick="archive('<%=workOrder.state.name()%>')">
    <%
 }
 
@@ -139,7 +139,7 @@ else
 %>
   </table>
      <input class="tbabutton" type=file name=<%=Constants.WORKORDER_FILE%> value=null accept=".*">
-     <input class="tbabutton" type=submit value=" Laad de file op " onclick="uploadFile()">
+     <input class="tbabutton" type=submit name=action value=" Laad de file op " onclick="uploadFile()">
   <br>
   <br>
   <span class="bodysubtitle">Opgeleverde bestanden door The Business Assistant:</span>
@@ -172,8 +172,8 @@ else
 %>
     </table>
    <br><br>
-		<input class="tbabutton" type=submit value="Bewaar" onclick="save();"> 
-		<input class="tbabutton" type=submit value="Cancel" onclick="cancelUpdate();">
+		<input class="tbabutton" type=submit name=action value="Bewaar" onclick="save();"> 
+		<input class="tbabutton" type=submit name=action value="Cancel" onclick="cancelUpdate();">
    </form>
 </td></tr>
  </table>
