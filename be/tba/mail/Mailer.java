@@ -140,24 +140,17 @@ public class Mailer
 //         Session session = Session.getInstance(prop, null);
          InitialContext vContext = new InitialContext();
          Session session = (Session) vContext.lookup("java:comp/env/mail/Session");
-         
+
          MimeMessage msg = new MimeMessage(session);
-         msg.setFrom(new InternetAddress("ine.hermans@thebusinessassistant.be"));
+         //msg.setFrom(new InternetAddress("ine.hermans@thebusinessassistant.be"));
+         msg.setFrom(new InternetAddress("ine.hermans5@telenet.be"));
          msg.setRecipients(Message.RecipientType.TO, vTo);
          msg.setSubject(subject);
          msg.setSentDate(date);
          msg.setContent(body, "text/html");
-         // Get SMTPTransport
-         SMTPTransport t = (SMTPTransport) session.getTransport("smtp");
-//         // connect
-//         t.connect("smtp.telenet.be", "a120569", "h7YUG6anja6Ak98u");
-//         // send
-//         t.sendMessage(msg, msg.getAllRecipients());
-//         t.close();
-
          Transport.send(msg);
+//         log.info("mail sent to: " + vTo[0]);
 
-      
       }
       catch (javax.mail.MessagingException | NamingException e)
       {
@@ -207,7 +200,7 @@ public class Mailer
       return ret;
    }
 
-   
+
    static public boolean mailInvoice(InvoiceEntityData invoiceData)
    {
       if (invoiceData == null || invoiceData.getFileName() == null || invoiceData.getFileName().length() == 0)
@@ -275,7 +268,7 @@ public class Mailer
          MimeMessage msg = new MimeMessage(session);
          //msg.setFrom();
          msg.setFrom(new InternetAddress("ine.hermans@thebusinessassistant.be"));
-         
+
          msg.setRecipients(Message.RecipientType.TO, vTo);
          msg.setSubject("Factuur maand " + Constants.MONTHS[invoiceData.getMonth()]);
          msg.setSentDate(date);
@@ -313,7 +306,7 @@ public class Mailer
        t.sendMessage(msg, msg.getAllRecipients());
        t.close();
 */
-         
+
          log.info("Invoice mailed to " + vCustomer.getFullName() + " (" + vTo[0] + ")");
          return true;
       }
@@ -328,7 +321,7 @@ public class Mailer
       return false;
    }
 
-   
+
    static private StringBuilder buildMailBody(AccountEntityData account, Collection<CallRecordEntityData> records, AtomicBoolean isImportant)
    {
       StringBuilder vBody = new StringBuilder("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">");
@@ -476,7 +469,7 @@ public class Mailer
       vBody.append("U kan het tijdstip van deze mail zelf instellen als u zich aanmeldt op onze webpagina (<a href=\"http://www.theBusinessAssistant.be\">www.theBusinessAssistant.be</a>).<br>");
 
 //      vBody.append("Eventuele extra informatie aangegeven met het <img src=\"" + Constants.TBA_URL_BASE + "images/info.gif\" alt=\"Extra info\" height=\"16\" border=\"0\"> &nbsp;icoontje, kan daar ook geraadpleegd worden.<br>");
-      
+
       vBody.append("<br><br>Vriendelijke groeten<br>");
       vBody.append("<br><br>Het TBA team<br>");
       vBody.append("</TBODY></TABLE></BODY></HTML>");
