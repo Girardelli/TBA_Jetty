@@ -103,7 +103,8 @@ be.tba.sqldata.AccountCache"%>
 						<table class="menu" id="tba_admin">
 							<tr>
 								<td class="menu">
-                                    <a class='norm' href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_INVOICE_ADMIN%>">Factuur lijst</a> <br> 
+                                    <a class='norm' href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_INVOICE_ADMIN_MONTH%>">Factuur lijst per maand</a> <br> 
+                                    <a class='norm' href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_INVOICE_ADMIN_CUSTOMER%>">Factuur lijst per klant</a> <br> 
                                     <a class='norm' href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_INVOICE%>">Maak Factuur</a> <br> 
                                     <a class='norm' href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_ADD_INVOICE%>">Maak Manueel Factuur</a> <br> 
                                     <a class='norm' href="/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_OPEN_INVOICE%>">Open facturen</a> <br> 

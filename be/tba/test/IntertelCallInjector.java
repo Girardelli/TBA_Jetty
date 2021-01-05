@@ -36,7 +36,7 @@ public class IntertelCallInjector
    {
       String[] mPosts;
       String mIdPrefix;
-      static final private int kCycles = 50;
+      static final private int kCycles = 5000;
       static final private int kEventPeriodMin = 1000; // 10 seconds
       static final private int kEventPeriodMax = 3000;
 

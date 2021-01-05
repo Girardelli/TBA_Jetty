@@ -626,15 +626,26 @@ public class AdminDispatchServlet extends HttpServlet
             }
 
             // ==============================================================================================
-            // ADMIN INVOICES
+            // ADMIN INVOICES per month
             // ==============================================================================================
-            case Constants.GOTO_INVOICE_ADMIN:
+            case Constants.GOTO_INVOICE_ADMIN_MONTH:
             {
                if (params.getParameter(Constants.INVOICE_MONTH) != null)
                   vSession.setMonthsBack(Integer.parseInt(params.getParameter(Constants.INVOICE_MONTH)));
                if (params.getParameter(Constants.INVOICE_YEAR) != null)
                   vSession.setYear(Integer.parseInt(params.getParameter(Constants.INVOICE_YEAR)));
                rd = sc.getRequestDispatcher(Constants.ADMIN_INVOICE_JSP);
+               break;
+            }
+            
+            // ==============================================================================================
+            // ADMIN INVOICES per customer
+            // ==============================================================================================
+            case Constants.GOTO_INVOICE_ADMIN_CUSTOMER:
+            {
+               if (params.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER) != null)
+                  vSession.setAccountId(Integer.parseInt(params.getParameter(Constants.ACCOUNT_FILTER_CUSTOMER)));
+               rd = sc.getRequestDispatcher(Constants.ADMIN_INVOICE_CUST_JSP);
                break;
             }
 

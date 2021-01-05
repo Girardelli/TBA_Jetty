@@ -895,7 +895,7 @@ function createCreditNote()
 
 function backToList()
 {
-    document.invoiceform.<%=Constants.SRV_ACTION%>.value="<%=Constants.GOTO_INVOICE_ADMIN%>";
+    document.invoiceform.<%=Constants.SRV_ACTION%>.value="<%=Constants.GOTO_INVOICE_ADMIN_MONTH%>";
 }
 
 </script>

@@ -73,6 +73,7 @@ public class Constants
    public static final String ARE_YOU_SURE_JSP = "/admin/areyousure.jsp";
    // public static final String NEW_CALL_JSP = "/admin/newcall.jsp";
    public static final String ADMIN_INVOICE_JSP = "/admin/admininvoice.jsp";
+   public static final String ADMIN_INVOICE_CUST_JSP = "/admin/admininvoicepercustomer.jsp";
    public static final String OPEN_INVOICE_JSP = "/admin/openinvoice.jsp";
    public static final String CANVAS_JSP = "/admin/canvas.jsp";
    public static final String ADMIN_WORK_ORDER_JSP = "/admin/adminWorkOrders.jsp";
@@ -329,7 +330,7 @@ public class Constants
    // public static final String SAVE_NEW_CALL = "_a65";
    public static final String SAVE_NEW_SUBCUSTOMER = "_a66";
    public static final String REMOVE_OPEN_CALL = "_a67";
-   public static final String GOTO_INVOICE_ADMIN = "_a68";
+   public static final String GOTO_INVOICE_ADMIN_MONTH = "_a68";
    public static final String GOTO_OPEN_INVOICE = "_a69";
    public static final String PROCESS_FINTRO_XLSX = "_a70";
    public static final String DOWNLOAD_FINTRO_PROCESS_TXT = "_a71";
@@ -363,7 +364,8 @@ public class Constants
    public static final String DELETE_EMPLOYEE_CONFIRMED = "_100";
    public static final String EMPLOYEE_ADD = "_101";
    public static final String ARCHIVE_WORKORDERS = "_102";
-
+   public static final String GOTO_INVOICE_ADMIN_CUSTOMER = "_103";
+   
    // LoginServlet actions
    public static final String ACTION_LOGIN = "_l88";
    public static final String ACTION_REGISTER = "_l89";

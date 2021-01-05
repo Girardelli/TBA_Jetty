@@ -19,14 +19,15 @@
 <%
 StringBuilder allEntryIds = new StringBuilder("[");
 
-            try
-            {
-                vSession.setCallingJsp(Constants.ADMIN_INVOICE_JSP);
-
-                int vMonth = vSession.getMonthsBack();
-                int vYear = vSession.getYear();
-                Calendar vToday = Calendar.getInstance();
-                int vCurYear = vToday.get(Calendar.YEAR);
+try
+{
+    vSession.setCallingJsp(Constants.ADMIN_INVOICE_CUST_JSP);
+    AccountEntityData vAccount = null;
+    int accountId = vSession.getAccountId();
+    if (accountId != 0)
+    {
+       vAccount = AccountCache.getInstance().get(accountId);
+    }
 %>
 <body>
 
@@ -43,12 +44,10 @@ StringBuilder allEntryIds = new StringBuilder("[");
 <p><span class="bodytitle"> Factuurlijst bewerken<br>
 </span></p>
 <form name="invoicelistform" method="POST" action="/tba/AdminDispatch">
-	<input type=hidden name=<%=Constants.INVOICE_TO_FREEZE%> value=""> 
 	<input type=hidden name=<%=Constants.INVOICE_TO_SETPAYED%> value=""> 
 	<input type=hidden name=<%=Constants.INVOICE_TO_DELETE%> value="">
 	<input type=hidden name=<%=Constants.INVOICE_ID%> value="">
-	<input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.GOTO_INVOICE_ADMIN_MONTH%>"> 
-	<input type=hidden name=<%=Constants.ACCOUNT_FILTER_CUSTOMER%> value="0">
+	<input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.GOTO_INVOICE_ADMIN_CUSTOMER%>"> 
 	<table  cellspacing='0' cellpadding='0' border='0' bgcolor="FFFFFF">
 		<tr>
 			<!-- white space -->
@@ -57,86 +56,65 @@ StringBuilder allEntryIds = new StringBuilder("[");
 			<!-- account list -->
 			<td valign="top" width="865" bgcolor="FFFFFF"><br>
 			<table>
-				<tr>
-					<td width="100" valign="top" class="bodysubtitle">&nbsp;Maand</td>
-					<td width="10" valign="top">:</td>
-					<td width="170" valign="top">
-						<select	name="<%=Constants.INVOICE_MONTH%>" onchange="submit()">
-<%
-	out.println("<option value=\"" + CallFilter.kNoMonth + ((CallFilter.kNoMonth == vMonth) ? "\" selected>" : "\">") + "selecteer maand");
-	for (int i = 0; i < Constants.MONTHS.length; ++i)
-	{
-	    out.println("<option value=\"" + i + (i == vMonth ? "\" selected>" : "\">") + Constants.MONTHS[i]);
-	}
-%>
-						</select>
-					</td>
-					<td width="100" valign="top" class="bodysubtitle">&nbsp;Jaar</td>
-					<td width="10" valign="top">:</td>
-					<td width="170" valign="top">
-						<select
-						name="<%=Constants.INVOICE_YEAR%>" onchange="submit()">
-						<%
-	
-						                out.println("<option value=\"" + CallFilter.kNoYear + (CallFilter.kNoYear == vYear ? "\" selected>" : "\">") + "selecteer jaar");
-						                for (int i = vCurYear; i > 2000; --i)
-						                {
-						                    out.println("<option value=\"" + i + (i == vYear ? "\" selected>" : "\">") + i);
-						                }
-						%>
-						</select> 
-						<br>
-						<br>
-						<br>
-					</td>
-				</tr>
+            <tr>
+                <td width="250" valign="top" class="bodysubtitle">&nbsp;Klant</td>
+                <td width="10" valign="top">:</td>
+                <td width="270" valign="top">
+                <select
+                    name="<%=Constants.ACCOUNT_FILTER_CUSTOMER%>" onchange="submit()">
+                    <%
+
+        out.println("<option value=\"" + Constants.ACCOUNT_NOFILTER + (accountId == 0 ? "\" selected>" : "\">") + "selecteer klant");
+        Collection<AccountEntityData> list = AccountCache.getInstance().getInvoiceCustomerList();
+        synchronized(list) 
+        {
+            for (Iterator<AccountEntityData> vIter = list.iterator(); vIter.hasNext();)
+            {
+                AccountEntityData vData = (AccountEntityData) vIter.next();
+                out.println("<option value=\"" + vData.getId() + (accountId == vData.getId() ? "\" selected>" : "\">") + vData.getFullName());
+            }
+        }
+                    %>
+                </select>
+                </td>
+            </tr>
 			</table>
 			<br>
 			<!--  <input class="tbabutton" type=submit name=action value=" Factuur toevoegen " onclick="toevoegen()">-->
 			<input class="tbabutton" type=submit name=action value=" Verwijderen " onclick="verwijderen()">
-			<input class="tbabutton" type=submit name=action value=" Bevriezen en docs genereren " onclick="vriezen()">
             <input class="tbabutton" type=submit name=action value=" Mailen " onclick="mailen()">
 			<input class="tbabutton" type=submit name=action value=" Betaaldvlag zetten " onclick="setPayed()">
 			<br>
-			<input class="tbabutton" type=submit name=action value=" Genereer factuurlijst " onclick="generateAllInvoices()">
-            
-            </form>
-			<form name="downloadfileform" method="POST" action="/tba/download" >
-		    <input type=hidden name=<%=Constants.INVOICE_TO_SETPAYED%> value="">
-		    <input type=hidden name=<%=Constants.SRV_ACTION%> value="<%=Constants.DOWNLOAD_WK_VERKOPEN_XML%>"> 
-			<input class="tbabutton" type=submit name=action value=" Download export file " onclick="downloadExportFile()">
-			</form>
-            
-			<br>
 			<%
-			                Collection<InvoiceEntityData> vInvoices = null;
-			                InvoiceSqlAdapter vInvoiceSession = new InvoiceSqlAdapter();
-	
-			                vInvoices = vInvoiceSession.getInvoiceList(vSession, vMonth, vYear);
-	
-			                if (vInvoices == null || vInvoices.size() == 0)
-			                {
-			                    out.println("<p><span class=\"bodysubtitle\"> Geen facturen gevonden voor deze " + Constants.MONTHS[vMonth] + "/" + vYear + ".</span></p>");
-			                }
-			                else
-			                {
-			                    DecimalFormat vCostFormatter = new DecimalFormat("#0.00");
-			                    double vTotalInvoice = 0.0;
-			                    
-			                    for (Iterator<InvoiceEntityData> i = vInvoices.iterator(); i.hasNext();)
-			                    {
-			                        InvoiceEntityData vEntry = ((InvoiceEntityData) i.next());
-			                        vTotalInvoice += vEntry.getTotalCost();
-			                    }
-			                    out.println("<p><span class=\"bodysubtitle\"> Totaal gefactureerd voor " + Constants.MONTHS[vMonth] + "/" + vYear + ": " + vCostFormatter.format(vTotalInvoice) + " (Excl BTW)</span></p>");
+          Collection<InvoiceEntityData> vInvoices = null;
+          InvoiceSqlAdapter vInvoiceSession = new InvoiceSqlAdapter();
+
+          if (accountId > 0)
+             vInvoices = vInvoiceSession.getCustomerInvoiceList(vSession, accountId);
+
+          if (vInvoices == null || vInvoices.size() == 0)
+          {
+              out.println("<p><span class=\"bodysubtitle\"> Geen facturen gevonden voor deze klant.</span></p>");
+          }
+          else
+          {
+              DecimalFormat vCostFormatter = new DecimalFormat("#0.00");
+              double vTotalInvoice = 0.0;
+              
+              for (Iterator<InvoiceEntityData> i = vInvoices.iterator(); i.hasNext();)
+              {
+                  InvoiceEntityData vEntry = ((InvoiceEntityData) i.next());
+                  vTotalInvoice += vEntry.getTotalCost();
+              }
+              out.println("<p><span class=\"bodysubtitle\"> Totaal gefactureerd: " + vCostFormatter.format(vTotalInvoice) + " (Excl BTW)</span></p>");
 			%> <br>
 			<table border="0" cellspacing="2" cellpadding="2">
 				<tr>
 					<td width="150" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Betaald</td>
 					<td width="110" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Nummer</td>
-					<td width="400" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Klant</td>
 					<td width="60" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Excl BTW</td>
 					<td width="60" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Incl BTW</td>
+                    <td width="110" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Uittreksel</td>
                     <td width="30" valign="top" class="topMenu" bgcolor="#F89920">&nbsp;Info</td>
 				</tr>
 	
@@ -153,6 +131,10 @@ StringBuilder allEntryIds = new StringBuilder("[");
                  {
                      vCollor = "CCDD00";
                  }
+                 if (!vEntry.getIsPayed())
+                 {
+                    vCollor = "FF9797";
+                 }
                  String vMailed = "";
                  String vStyleStart = "";
                  String vStyleEnd = "";
@@ -163,24 +145,10 @@ StringBuilder allEntryIds = new StringBuilder("[");
                  }
                  String vId = "id" + vEntry.getId();
                  String vEuroGif = "";
-                 String vCompanyName = "";
                  double vKost = vEntry.getTotalCost();
-                 AccountEntityData vAccount = AccountCache.getInstance().get(vEntry);
                  
                  //extractCustomerNameFromInvoiceFileName
                  
-                 if (vAccount != null)
-                 {
-                	 vCompanyName = vAccount.getFullName();
-                 }
-                 else if (vEntry.getCustomerName() != null && vEntry.getCustomerName().length() > 0)
-			 	 {
-                	 vCompanyName = vEntry.getCustomerName();
-				 }
-                 else
-                 {
-                	 vCompanyName = InvoiceHelper.extractCustomerNameFromInvoiceFileName(vEntry.getFileName());
-                 }
 				if (vEntry.getIsPayed())
 				{
 				    vEuroGif = "<img src=\"/tba/images/euro-16x16.png\" height=\"16\" border=\"0\">";
@@ -196,12 +164,12 @@ StringBuilder allEntryIds = new StringBuilder("[");
 					onmouseover="hooverOnRow('<%=vId%>','<%=vRowInd%>')"
 					onmouseout="hooverOffRow('<%=vId%>','<%=vRowInd%>')"
 					onclick="updateDeleteFlag('<%=vId%>','<%=vEntry.getId()%>','<%=vRowInd%>')"
-					ondblclick="changeUrl('/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_INVOICE%>&<%=Constants.ACCOUNT_FILTER_CUSTOMER%>=<%=vEntry.getAccountId()%>&<%=Constants.INVOICE_ID%>=<%=vEntry.getId()%>');">
-					<td width="150" valign="top"><%=vEuroGif%>&nbsp&nbsp<%=vEntry.getPayDate()%></td>
+					ondblclick="changeUrl('/tba/AdminDispatch?<%=Constants.SRV_ACTION%>=<%=Constants.GOTO_INVOICE%>&<%=Constants.ACCOUNT_FILTER_CUSTOMER%>=<%=accountId%>&<%=Constants.INVOICE_ID%>=<%=vEntry.getId()%>');">
+					<td width="150" valign="top"><%=vEuroGif%><%=vEntry.getPayDate()%></td>
 					<td width="110" valign="top"><%=vStyleStart%><%=vEntry.getInvoiceNr()%><%=vStyleEnd%></td>
-					<td width="400" valign="top"><%=vStyleStart%><%=vCompanyName%><%=vStyleEnd%></td>
 					<td width="60" valign="top"><%=vStyleStart%><%=vCostFormatter.format(vKost)%><%=vStyleEnd%></td>
 					<td width="60" valign="top"><%=vStyleStart%><%=((vAccount!= null && vAccount.getNoBtw()) ? "0.0" : vCostFormatter.format(vKost * 1.21))%><%=vStyleEnd%></td>
+                    <td width="110" valign="top"><%=vEntry.getFintroId()%></td>
                     <td width="30" valign="top"><%=vInfoGifs%></td>
 				</tr>
 				<%

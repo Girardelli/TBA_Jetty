@@ -213,12 +213,14 @@ public class InvoiceSqlAdapter extends AbstractSqlAdapter<InvoiceEntityData>
       return executeSqlQuery(webSession, "SELECT * FROM InvoiceEntity WHERE Month=" + month + " AND Year=" + year + " ORDER BY YearSeqNr DESC");
    }
 
-   /**
-    * @ejb:interface-method view-type="remote"
-    */
    public Collection<InvoiceEntityData> getOpenInvoiceList(WebSession webSession)
    {
       return executeSqlQuery(webSession, "SELECT * FROM InvoiceEntity WHERE IsPayed=FALSE AND FrozenFlag=TRUE ORDER BY InvoiceNr DESC");
+   }
+
+   public Collection<InvoiceEntityData> getCustomerInvoiceList(WebSession webSession, int accountId)
+   {
+      return executeSqlQuery(webSession, "SELECT * FROM InvoiceEntity WHERE AccountId=" + accountId + " ORDER BY Id DESC");
    }
 
    public Collection<InvoiceEntityData> getCreditedInvoice(WebSession webSession, int creditNoteId)
