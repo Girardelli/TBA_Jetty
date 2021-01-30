@@ -136,27 +136,18 @@ public class Mailer
             vTo = new InternetAddress[1];
             vTo[0] = new InternetAddress("yves@wyno.be");
          }
-//         Properties prop = System.getProperties();
-//         Session session = Session.getInstance(prop, null);
          InitialContext vContext = new InitialContext();
          Session session = (Session) vContext.lookup("java:comp/env/mail/Session");
          
          MimeMessage msg = new MimeMessage(session);
-         msg.setFrom(new InternetAddress("ine.hermans@thebusinessassistant.be"));
+         msg.setFrom(new InternetAddress(Constants.EMAIL_FROM));
          msg.setRecipients(Message.RecipientType.TO, vTo);
          msg.setSubject(subject);
          msg.setSentDate(date);
          msg.setContent(body, "text/html");
-         // Get SMTPTransport
-         SMTPTransport t = (SMTPTransport) session.getTransport("smtp");
-//         // connect
-//         t.connect("smtp.telenet.be", "a120569", "h7YUG6anja6Ak98u");
-//         // send
-//         t.sendMessage(msg, msg.getAllRecipients());
-//         t.close();
-
          Transport.send(msg);
 
+         log.info("send mail done");
       
       }
       catch (javax.mail.MessagingException | NamingException e)
@@ -171,6 +162,7 @@ public class Mailer
 
    static public boolean sendCallInfoMail(WebSession webSession, int accountId)
    {
+      log.info("sendCallInfoMail entry");
       AccountEntityData vCustomer = null;
       boolean ret = true;
       vCustomer = AccountCache.getInstance().get(accountId);
@@ -193,16 +185,20 @@ public class Mailer
          {
             vBody = buildTextMailBody(vCustomer, vRecords, isImportant);
             // vEmailAddr = vEmailAddr.concat(";" +
-            // Constants.NANCY_EMAIL);
+            // Constants.EMAIL_FROM);
          }
          else
          {
             vBody = buildMailBody(vCustomer, vRecords, isImportant);
             // vEmailAddr = vEmailAddr.concat(";" +
-            // Constants.NANCY_EMAIL);
+            // Constants.EMAIL_FROM);
          }
          ret = sendMail(webSession, accountId, "Uw oproepenlijst tot " + DateFormat.getDateInstance(DateFormat.LONG, new Locale("nl", "BE")).format(new Date()) + " " + vCustomer.getFullName(), vBody.toString());
          flagRecordsAsMailed(webSession, vRecords, vWriterSession);
+      }
+      else
+      {
+         sendMail(webSession, accountId, "Uw oproepenlijst tot vandaag van Yves", "blablabla");
       }
       return ret;
    }
@@ -267,19 +263,15 @@ public class Mailer
          }
          InitialContext vContext = new InitialContext();
          Session session = (Session) vContext.lookup("java:comp/env/mail/Session");
-//       Properties prop = System.getProperties();
-//      Session session = Session.getInstance(prop, null);
 
          log.info("mail session=" + session);
 
          MimeMessage msg = new MimeMessage(session);
-         //msg.setFrom();
-         msg.setFrom(new InternetAddress("ine.hermans@thebusinessassistant.be"));
+         msg.setFrom(new InternetAddress(Constants.EMAIL_FROM));
          
          msg.setRecipients(Message.RecipientType.TO, vTo);
          msg.setSubject("Factuur maand " + Constants.MONTHS[invoiceData.getMonth()]);
          msg.setSentDate(date);
-         // msg.setContent(vBody.toString(), "text/html");
 
          MimeBodyPart messagePart = new MimeBodyPart();
          messagePart.setText(vBody.toString());
@@ -306,14 +298,6 @@ public class Mailer
          msg.setContent(multipart);
          Transport.send(msg);
 
-/*         SMTPTransport t = (SMTPTransport) session.getTransport("smtp");
-//       // connect
-       t.connect("smtp.telenet.be", "a120569", "h7YUG6anja6Ak98u");
-//       // send
-       t.sendMessage(msg, msg.getAllRecipients());
-       t.close();
-*/
-         
          log.info("Invoice mailed to " + vCustomer.getFullName() + " (" + vTo[0] + ")");
          return true;
       }

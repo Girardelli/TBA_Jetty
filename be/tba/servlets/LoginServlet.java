@@ -305,7 +305,7 @@ public class LoginServlet extends HttpServlet
             Address[] vTo = new InternetAddress[1];
             // vTo[0] = new
             // InternetAddress("yves.willems@theBusinessAssistant.be");
-            vTo[0] = new InternetAddress(Constants.NANCY_EMAIL);
+            vTo[0] = new InternetAddress(Constants.EMAIL_FROM);
 
             InitialContext vContext = new InitialContext();
             // Session vMailSession = (Session)

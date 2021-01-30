@@ -15,7 +15,8 @@ public class Constants
    // Administrator-test account strings.
    public static final String MASTER_LOGIN_NAME = "esosrv";
    public static final String MASTER_LOGIN_PASWORD = "";
-   public static final String NANCY_EMAIL = "ine.hermans@theBusinessAssistant.be";
+   //public static final String EMAIL_FROM = "ine.hermans@theBusinessAssistant.be";
+   public static final String EMAIL_FROM = "ine.hermans5@telenet.be";
    public static final String WS_LOGIN = "loginid:";
 
    // Account Role strings.

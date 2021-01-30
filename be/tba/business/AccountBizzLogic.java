@@ -91,6 +91,7 @@ public class AccountBizzLogic
 
    public static void mailCustomer(SessionParmsInf parms, WebSession session)
    {
+      log.info("mailCustomer");
       String accountIdStr = (String) parms.getParameter(Constants.ACCOUNT_ID);
       int accountId = Integer.valueOf(accountIdStr);
       AccountEntityData vAccountData = AccountCache.getInstance().get(accountId);
