@@ -196,7 +196,7 @@ public class Mailer
       }
       else
       {
-         sendMail(webSession, accountId, "Uw oproepenlijst tot vandaag van Yves", "blablabla");
+//         sendMail(webSession, accountId, "Uw oproepenlijst tot vandaag van Yves", "blablabla");
       }
       return ret;
    }
