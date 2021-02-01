@@ -194,10 +194,10 @@ public class Mailer
          ret = sendMail(webSession, accountId, "Uw oproepenlijst tot " + DateFormat.getDateInstance(DateFormat.LONG, new Locale("nl", "BE")).format(new Date()) + " " + vCustomer.getFullName(), vBody.toString());
          flagRecordsAsMailed(webSession, vRecords, vWriterSession);
       }
-      else
-      {
+//      else
+//      {
 //         sendMail(webSession, accountId, "Uw oproepenlijst tot vandaag van Yves", "blablabla");
-      }
+//      }
       return ret;
    }
 
