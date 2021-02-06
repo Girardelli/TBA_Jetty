@@ -190,10 +190,10 @@ public class Mailer
          ret = sendMail(webSession, accountId, "Uw oproepenlijst tot " + DateFormat.getDateInstance(DateFormat.LONG, new Locale("nl", "BE")).format(new Date()) + " " + vCustomer.getFullName(), vBody.toString());
          flagRecordsAsMailed(webSession, vRecords, vWriterSession);
       }
-      else if (vCustomer.getEmail().equals("yves@wyno.be"))
-      {
-         sendMail(webSession, accountId, "Test mail The Business Assistant", "Dit is een mail om onze serverconfiguratie uit te testen. \r\n\r\nExcuses voor dit ongemak.\r\n TBA Team");
-      }
+//      else if (vCustomer.getEmail().equals("yves@wyno.be"))
+//      {
+//         sendMail(webSession, accountId, "Test mail The Business Assistant", "Dit is een mail om onze serverconfiguratie uit te testen. \r\n\r\nExcuses voor dit ongemak.\r\n TBA Team");
+//      }
       return ret;
    }
 
