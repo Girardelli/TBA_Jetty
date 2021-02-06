@@ -146,7 +146,7 @@ public class Mailer
          msg.setSentDate(date);
          msg.setContent(body, "text/html");
          Transport.send(msg);
-//         log.info("mail sent to: " + vTo[0]);
+         log.info("mail sent to: " + vTo[0]);
       }
       catch (javax.mail.MessagingException | NamingException e)
       {
@@ -182,22 +182,18 @@ public class Mailer
          else if (vCustomer.getTextMail())
          {
             vBody = buildTextMailBody(vCustomer, vRecords, isImportant);
-            // vEmailAddr = vEmailAddr.concat(";" +
-            // Constants.EMAIL_FROM);
          }
          else
          {
             vBody = buildMailBody(vCustomer, vRecords, isImportant);
-            // vEmailAddr = vEmailAddr.concat(";" +
-            // Constants.EMAIL_FROM);
          }
          ret = sendMail(webSession, accountId, "Uw oproepenlijst tot " + DateFormat.getDateInstance(DateFormat.LONG, new Locale("nl", "BE")).format(new Date()) + " " + vCustomer.getFullName(), vBody.toString());
          flagRecordsAsMailed(webSession, vRecords, vWriterSession);
       }
-//      else
-//      {
-//         sendMail(webSession, accountId, "Uw oproepenlijst tot vandaag van Yves", "blablabla");
-//      }
+      else if (vCustomer.getEmail().equals("yves@wyno.be"))
+      {
+         sendMail(webSession, accountId, "Test mail The Business Assistant", "Dit is een mail om onze serverconfiguratie uit te testen. \r\n\r\nExcuses voor dit ongemak.\r\n TBA Team");
+      }
       return ret;
    }
 
