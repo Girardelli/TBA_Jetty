@@ -111,12 +111,12 @@ public abstract class AbstractSqlAdapter<T>
             {
                return rs.getInt(1);
             }
-            // log.info("{} entries: SQL querry: {}", col.size(), queryStr);
+            // log.info("{} entries: SQL query: {}", col.size(), queryStr);
          }
          else
          {
             log.error("Error: expected INSERT statement: " + queryStr);
-            // log.info("{} entries: SQL querry: {}", cnt, queryStr);
+            // log.info("{} entries: SQL query: {}", cnt, queryStr);
          }
          return 0;
       }
@@ -170,6 +170,11 @@ public abstract class AbstractSqlAdapter<T>
 
    protected Collection<T> executeSqlQuery(WebSession session, String queryStr)
    {
+      return executeSqlQuery(session, queryStr, false);
+   }
+   
+   protected Collection<T> executeSqlQuery(WebSession session, String queryStr, boolean isLogOn)
+   {
       Statement stmt = null;
       ResultSet rs = null;
       try
@@ -181,7 +186,7 @@ public abstract class AbstractSqlAdapter<T>
             rs = stmt.executeQuery(queryStr);
             session.addSqlTimer(Calendar.getInstance().getTimeInMillis() - startTime);
             Collection<T> col = translateRsToValueObjects(rs);
-            //log.info("{} entries: SQL query: {}", col.size(), queryStr);
+            if (isLogOn) log.info("{} entries: SQL query: {}", col.size(), queryStr);
             return col;
          }
          else
@@ -189,7 +194,7 @@ public abstract class AbstractSqlAdapter<T>
             long startTime = Calendar.getInstance().getTimeInMillis();
             int cnt = stmt.executeUpdate(queryStr);
             session.addSqlTimer(Calendar.getInstance().getTimeInMillis() - startTime);
-            // log.info(cnt + " entries: SQL query: " + queryStr);
+            //log.info(cnt + " entries: SQL query: " + queryStr);
             log.info("{} entries: SQL querry: {}", cnt, queryStr);
             return new Vector<T>(cnt);
          }

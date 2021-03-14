@@ -156,7 +156,7 @@ public class AdminDispatchServlet extends HttpServlet
                         String vEmail = vAccountData.getEmail();
                         if (vEmail != null && !vEmail.isEmpty() && AccountCache.getInstance().isMailEnabled(vAccountData))
                         {
-                           Mailer.sendCallInfoMail(vSession, vAccountData.getId());
+                           Mailer.sendCallInfoMail(vSession, vAccountData.getId(), true);
                         }
                      } // Check the record and add it if it is a valid one. //
                        // vMailSession.sendMail(5);

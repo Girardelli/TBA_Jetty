@@ -404,6 +404,12 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
     */
    public Collection<CallRecordEntityData> getDocumentedNotMailed(WebSession webSession, int id)
    {
+      return getDocumentedNotMailed(webSession, id, false);
+   }
+  
+   
+   public Collection<CallRecordEntityData> getDocumentedNotMailed(WebSession webSession, int id, boolean isLogOn)
+   {
       try
       {
          if (id <= 0)
@@ -434,7 +440,7 @@ public class CallRecordSqlAdapter extends AbstractSqlAdapter<CallRecordEntityDat
                   }
                }
             }
-            return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsDocumented=TRUE AND IsMailed=FALSE AND AccountID IN (" + CustomerIdsIN + ") ORDER BY TimeStamp DESC");
+            return executeSqlQuery(webSession, "SELECT * FROM CallRecordEntity WHERE IsDocumented=TRUE AND IsMailed=FALSE AND AccountID IN (" + CustomerIdsIN + ") ORDER BY TimeStamp DESC", isLogOn);
          }
       }
       catch (Exception e)

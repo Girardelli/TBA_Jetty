@@ -436,7 +436,7 @@ public class InvoiceHelper
 
       if (mAccountEntityData.getHasSubCustomers())
       {
-         mTasksHashTable = vTaskSession.getTasksFromTillTimestampHashtable(webSession, mAccountEntityData.getId(), vStart, vEnd);
+         mTasksHashTable = vTaskSession.getNotInvoicedTasksForCustomerHashtable(webSession, mAccountEntityData.getId());
          if (mTasks == null)
          {
             mTasks = new Vector<TaskEntityData>();
@@ -449,7 +449,7 @@ public class InvoiceHelper
       }
       else
       {
-         mTasks = vTaskSession.getTasksFromTillTimestamp(webSession, mAccountEntityData.getId(), vStart, vEnd);
+         mTasks = vTaskSession.getNotInvoicedTasksForCustomer(webSession, mAccountEntityData.getId());
       }
       mInvoiceData.NrOfTasks = mTasks.size();
       // log.info(mInvoiceData.NrOfTasks + " Tasks found!!!");

@@ -94,11 +94,13 @@ public class Mailer
          vEmailAddresses = vCustomer.getEmail();
          if (vEmailAddresses == null)
          {
+            log.warn("Customer has no mail address set.");
             return false;
          }
          vEmailAddresses = vEmailAddresses.trim();
          if (vEmailAddresses.length() == 0)
          {
+            log.warn("Customer has no mail address set after trim.");
             return false;
          }
 
@@ -160,20 +162,29 @@ public class Mailer
 
    static public boolean sendCallInfoMail(WebSession webSession, int accountId)
    {
-      log.info("sendCallInfoMail entry");
+      return sendCallInfoMail(webSession, accountId, false);
+   }
+   
+   static public boolean sendCallInfoMail(WebSession webSession, int accountId, boolean isLogOn)
+   {
       AccountEntityData vCustomer = null;
       boolean ret = true;
       vCustomer = AccountCache.getInstance().get(accountId);
+      if (vCustomer == null)
+      {
+         log.error("sendCallInfoMail: no customer found for id: " + accountId);
+         return false;
+      }
+      log.info("sendCallInfoMail for: " + vCustomer.getFullName());
 
       CallRecordSqlAdapter vQuerySession = new CallRecordSqlAdapter();
       CallRecordSqlAdapter vWriterSession = new CallRecordSqlAdapter();
 
-      Collection<CallRecordEntityData> vRecords = vQuerySession.getDocumentedNotMailed(webSession, vCustomer.getId());
+      Collection<CallRecordEntityData> vRecords = vQuerySession.getDocumentedNotMailed(webSession, vCustomer.getId(), isLogOn);
 
       AtomicBoolean isImportant = new AtomicBoolean(false);
       if (!vRecords.isEmpty() || !vCustomer.getNoEmptyMails())
       {
-         log.info("sendMail start for:" + vCustomer.getFullName());
          StringBuilder vBody;
          if (vCustomer.getIsXmlMail())
          {
@@ -189,11 +200,13 @@ public class Mailer
          }
          ret = sendMail(webSession, accountId, "Uw oproepenlijst tot " + DateFormat.getDateInstance(DateFormat.LONG, new Locale("nl", "BE")).format(new Date()) + " " + vCustomer.getFullName(), vBody.toString());
          flagRecordsAsMailed(webSession, vRecords, vWriterSession);
+         log.info("sendCallInfoMail ended success for: " + vCustomer.getFullName());
+
       }
-//      else if (vCustomer.getEmail().equals("yves@wyno.be"))
-//      {
-//         sendMail(webSession, accountId, "Test mail The Business Assistant", "Dit is een mail om onze serverconfiguratie uit te testen. \r\n\r\nExcuses voor dit ongemak.\r\n TBA Team");
-//      }
+      else
+      {
+         log.info("Mail not send: #records=" + vRecords.size() + ", noEmptyMailsFlag=" + vCustomer.getNoEmptyMails());
+      }
       return ret;
    }
 

@@ -56,6 +56,7 @@ public class TaskSqlAdapter extends AbstractSqlAdapter<TaskEntityData>
    {
       try
       {
+         log.info("getTasksForMonthforCustomer");
          CallCalendar vCalendar = new CallCalendar();
          long vStart = vCalendar.getStartOfMonth(month, year);
          long vEnd = vCalendar.getEndOfMonth(month, year);
@@ -73,6 +74,7 @@ public class TaskSqlAdapter extends AbstractSqlAdapter<TaskEntityData>
    {
       try
       {
+         log.info("getTasksForMonth");
          CallCalendar vCalendar = new CallCalendar();
          long vStart = vCalendar.getStartOfMonth(month, year);
          long vEnd = vCalendar.getEndOfMonth(month, year);
@@ -108,12 +110,15 @@ public class TaskSqlAdapter extends AbstractSqlAdapter<TaskEntityData>
    /**
     * @ejb:interface-method view-type="remote"
     */
-   public Collection<TaskEntityData> getTasksFromTillTimestamp(WebSession webSession, int accountId, long start, long stop)
+   public Collection<TaskEntityData> getNotInvoicedTasksForCustomer(WebSession webSession, int accountId)
    {
       try
       {
-         Collection<TaskEntityData> vTaskList = new Vector<TaskEntityData>();
-         collectInvoiceTasks(webSession, AccountCache.getInstance().get(accountId), vTaskList, start, stop);
+         log.info("getTasksFromTillTimestamp");
+         Collection<TaskEntityData> vTaskList = queryNotInvoicedTasksForCustomer(webSession, accountId);
+         
+//         Collection<TaskEntityData> vTaskList = new Vector<TaskEntityData>();
+//         collectInvoiceTasks(webSession, AccountCache.getInstance().get(accountId), vTaskList, start, stop);
          return vTaskList;
       }
       catch (Exception e)
@@ -126,12 +131,12 @@ public class TaskSqlAdapter extends AbstractSqlAdapter<TaskEntityData>
    /**
     * @ejb:interface-method view-type="remote"
     */
-   public Hashtable<Integer, Collection<TaskEntityData>> getTasksFromTillTimestampHashtable(WebSession webSession, int accountId, long start, long stop)
+   public Hashtable<Integer, Collection<TaskEntityData>> getNotInvoicedTasksForCustomerHashtable(WebSession webSession, int accountId)
    {
       try
       {
          Hashtable<Integer, Collection<TaskEntityData>> vTaskList = new Hashtable<Integer, Collection<TaskEntityData>>();
-         collectInvoiceTasksHashTable(webSession, AccountCache.getInstance().get(accountId), vTaskList, start, stop);
+         collectNotInvoicedTasksHashTable(webSession, AccountCache.getInstance().get(accountId), vTaskList);
 
          // log.info("getTasksFromTillTimestamp for " + fwdNr + ": " + vTaskList.size() +
          // " entries.");
@@ -245,9 +250,9 @@ public class TaskSqlAdapter extends AbstractSqlAdapter<TaskEntityData>
       }
    }
 
-   private void collectInvoiceTasksHashTable(WebSession webSession, AccountEntityData customer, Hashtable<Integer, Collection<TaskEntityData>> taskList, long start, long stop)
+   private void collectNotInvoicedTasksHashTable(WebSession webSession, AccountEntityData customer, Hashtable<Integer, Collection<TaskEntityData>> taskList)
    {
-      Collection<TaskEntityData> vCollection = queryAllTasksForCustomer(webSession, customer.getId(), start, stop);
+      Collection<TaskEntityData> vCollection = queryNotInvoicedTasksForCustomer(webSession, customer.getId());
       if (vCollection != null)
       {
          taskList.put(customer.getId(), vCollection);
@@ -265,7 +270,7 @@ public class TaskSqlAdapter extends AbstractSqlAdapter<TaskEntityData>
 
                if (vEntry.getNoInvoice())
                {
-                  vCollection = queryAllTasksForCustomer(webSession, vEntry.getId(), start, stop);
+                  vCollection = queryNotInvoicedTasksForCustomer(webSession, vEntry.getId());
                   if (vCollection != null)
                   {
                      taskList.put(vEntry.getId(), vCollection);
@@ -294,7 +299,8 @@ public class TaskSqlAdapter extends AbstractSqlAdapter<TaskEntityData>
    private Collection<TaskEntityData> queryNotInvoicedTasksForCustomer(WebSession webSession, int accountId)
    {
       Collection<TaskEntityData> vRecuringCollection = new Vector<TaskEntityData>();
-      Collection<TaskEntityData> vCollection = executeSqlQuery(webSession, "SELECT * FROM TaskEntity WHERE AccountID='" + accountId + "' AND IsInvoiced=false AND IsRecuring=FALSE ORDER BY TimeStamp DESC");
+      // tasks before 1600000000000 do not use invoiceID
+      Collection<TaskEntityData> vCollection = executeSqlQuery(webSession, "SELECT * FROM TaskEntity WHERE AccountID='" + accountId + "' AND TimeStamp>" + 1600000000000L + " AND InvoiceId=0 AND IsRecuring=FALSE ORDER BY TimeStamp DESC");
 
       InvoiceSqlAdapter vInvoiceSession = new InvoiceSqlAdapter();
       Calendar vStartCalendar = Calendar.getInstance();
@@ -320,8 +326,8 @@ public class TaskSqlAdapter extends AbstractSqlAdapter<TaskEntityData>
 
       if (!isRecuringAlreadyInvoiced)
       {
-         long now = Calendar.getInstance().getTimeInMillis();
-         vRecuringCollection = executeSqlQuery(webSession, "SELECT * FROM TaskEntity WHERE AccountID='" + accountId + "' AND StartTime<" + now + "' AND StopTime>" + now + " AND IsRecuring=TRUE ORDER BY TimeStamp DESC");
+         //long now = Calendar.getInstance().getTimeInMillis();
+         vRecuringCollection = executeSqlQuery(webSession, "SELECT * FROM TaskEntity WHERE AccountID='" + accountId + "' AND IsRecuring=TRUE ORDER BY TimeStamp DESC");
       }
       if (vCollection != null)
       {

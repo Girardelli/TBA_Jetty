@@ -61,7 +61,7 @@ final public class MailTimerTask extends TimerTask implements TimerTaskIntf
          return;
       }
       WebSession session = null;
-      // log.info("MailTimerTask run");
+      log.info("MailTimerTask run");
 
       GregorianCalendar vCalendar = new GregorianCalendar();
       if (vCalendar.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY && vCalendar.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY)
@@ -76,25 +76,12 @@ final public class MailTimerTask extends TimerTask implements TimerTaskIntf
             {
                synchronized(mailGroup)
                {
-                  for (Iterator<AccountEntityData> j = mailGroup.iterator(); j.hasNext();)
+                  for (AccountEntityData vAccount : mailGroup)
                   {
-                     AccountEntityData vAccount = j.next();
                      if (System.getenv("TBA_MAIL_ON") != null)
                      {
-                        try
-                        {
-                           if (!Mailer.sendCallInfoMail(session, vAccount.getId()))
-                           {
-                              throw new Exception("Mail send failed!");
-                           }
-
-                        }
-                        catch (Exception e)
-                        {
-                           log.info("Mail send failed to " + vAccount.getFullName());
-                           MailError.getInstance().setError("Mail send failed to " + vAccount.getFullName() + "\n" + e.getMessage());
-                           log.error(e.getMessage(), e);
-                        }
+                        log.info("Check call mail for " + vAccount.getFullName());
+                        Mailer.sendCallInfoMail(session, vAccount.getId());
                      }
                      else
                      {
@@ -117,8 +104,12 @@ final public class MailTimerTask extends TimerTask implements TimerTaskIntf
                session.close();
             }
          }
+         log.info("MailTimerTask run ended");
       }
-
+      else
+      {
+         log.info("MailTimerTask run ended: weekend");
+      }
    }
 
    static public String long2String(long time)
