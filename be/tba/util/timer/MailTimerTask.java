@@ -81,7 +81,7 @@ final public class MailTimerTask extends TimerTask implements TimerTaskIntf
                      if (System.getenv("TBA_MAIL_ON") != null)
                      {
                         log.info("Check call mail for " + vAccount.getFullName());
-                        Mailer.sendCallInfoMail(session, vAccount.getId());
+                        Mailer.sendCallInfoMail(session, vAccount.getId(), true);
                      }
                      else
                      {
