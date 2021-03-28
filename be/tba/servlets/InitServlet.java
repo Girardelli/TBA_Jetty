@@ -16,7 +16,9 @@ import be.tba.util.timer.CallManagerCleanupTimerTask;
 import be.tba.util.timer.DbCleanTimerTask;
 import be.tba.util.timer.MailTimerTask;
 import be.tba.util.timer.TimerManager;
+import be.tba.util.timer.TimerTaskIntf;
 import be.tba.util.timer.UrlCheckTimerTask;
+import be.tba.util.timer.WatchDogMailTimerTask;
 
 public class InitServlet extends GenericServlet
 {
@@ -37,10 +39,12 @@ public class InitServlet extends GenericServlet
          AccountCache vAccountCache = AccountCache.getInstance();
          log.info("AccountCache initialized");
 
+         TimerTaskIntf mailerTask = new MailTimerTask();
          vTimerManager.add(new DbCleanTimerTask());
-         vTimerManager.add(new MailTimerTask());
+         vTimerManager.add(mailerTask);
          vTimerManager.add(new UrlCheckTimerTask());
          vTimerManager.add(new CallManagerCleanupTimerTask());
+         vTimerManager.add(new WatchDogMailTimerTask(mailerTask));
       }
       catch (Exception e)
       {

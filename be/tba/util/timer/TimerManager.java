@@ -7,6 +7,7 @@ package be.tba.util.timer;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Timer;
+import java.util.TimerTask;
 import java.util.Vector;
 
 import org.slf4j.Logger;
@@ -51,6 +52,19 @@ final public class TimerManager
       for (TimerTaskIntf task : mTimerList)
       {
          task.cleanUp();
+      }
+   }
+   
+   public void destroyTimer(TimerTaskIntf timerTask)
+   {
+      for (TimerTaskIntf task : mTimerList)
+      {
+      	if (task == timerTask)
+         {
+         	task.cleanUp();
+         	mTimerList.remove(task);
+         	break;
+         }
       }
    }
 }

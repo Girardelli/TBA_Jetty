@@ -8,7 +8,6 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Iterator;
 import java.util.TimerTask;
 
 import org.slf4j.Logger;
@@ -24,9 +23,11 @@ import be.tba.util.constants.Constants;
 final public class MailTimerTask extends TimerTask implements TimerTaskIntf
 {
    private static Logger log = LoggerFactory.getLogger(MailTimerTask.class);
+   private static long lastRunStart = 0; 
 
    public MailTimerTask()
    {
+   	setLastRunStart(); 
    }
 
    @Override
@@ -41,7 +42,7 @@ final public class MailTimerTask extends TimerTask implements TimerTaskIntf
    public long getPeriod()
    {
       // TODO Auto-generated method stub
-      return Constants.MINUTES * 5;
+      return Constants.MAILER_DRUMBEAT;
    }
 
    @Override
@@ -51,43 +52,33 @@ final public class MailTimerTask extends TimerTask implements TimerTaskIntf
       return this;
    }
 
+   public static synchronized long getLastRunStart()
+   {
+   	return lastRunStart;
+   }
+   
    public void run()
    {
-      // log.info("Mail send for " + mAccountNr + ". Schedule time "
-      // + long2String(scheduledExecutionTime()));
-      // return;
-      if (System.getenv("TBA_MAIL_ON") == null)
-      {
-         return;
-      }
       WebSession session = null;
       log.info("MailTimerTask run");
-
+      setLastRunStart();
+      
       GregorianCalendar vCalendar = new GregorianCalendar();
       if (vCalendar.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY && vCalendar.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY)
       {
          try
          {
-            session = new WebSession();
+         	session = new WebSession();
             Integer vKey = Integer.valueOf(vCalendar.get(Calendar.HOUR_OF_DAY) * 60 + vCalendar.get(Calendar.MINUTE));
 
             Collection<AccountEntityData> mailGroup = AccountCache.getInstance().getMailingGroup(vKey);
             if (mailGroup != null)
             {
-               synchronized(mailGroup)
+            	//log.info("MailTimerTask processing account list of size: " + mailGroup.size());
+               for (AccountEntityData vAccount : mailGroup)
                {
-                  for (AccountEntityData vAccount : mailGroup)
-                  {
-                     if (System.getenv("TBA_MAIL_ON") != null)
-                     {
-                        log.info("Check call mail for " + vAccount.getFullName());
-                        Mailer.sendCallInfoMail(session, vAccount.getId(), true);
-                     }
-                     else
-                     {
-                        log.info("Mail supposed to be send but disabled to " + vAccount.getFullName());
-                     }
-                  }
+                  //log.info("Check call mail for " + vAccount.getFullName());
+                  Mailer.sendCallInfoMail(session, vAccount.getId(), false);
                }
             }
          }
@@ -124,7 +115,13 @@ final public class MailTimerTask extends TimerTask implements TimerTaskIntf
    public void cleanUp()
    {
       // TODO Auto-generated method stub
-      log.info("Cancel MailTimerTask");
-      this.cancel();
+      log.info("Cancel MailTimerTask returns " + this.cancel());
    }
+   
+   private static synchronized void setLastRunStart()
+   {
+      GregorianCalendar vCalendar = new GregorianCalendar();
+   	lastRunStart = vCalendar.getTimeInMillis();
+   }
+
 }

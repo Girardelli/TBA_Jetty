@@ -80,9 +80,11 @@ final public class AccountCache
 
    public synchronized void update(WebSession session)
    {
-      Collection<AccountEntityData> fullList = Collections.synchronizedCollection(mAccountAdapter.getAllRows(session));
+      //log.info("start update()");
+   	Collection<AccountEntityData> fullList = Collections.synchronizedCollection(mAccountAdapter.getAllRows(session));
       converToHashMap(fullList);
       buildMailingGroups();
+      //log.info("end update()");
    }
 
    public void update()
@@ -419,22 +421,21 @@ final public class AccountCache
    {
       if (mLastMailTime == 0)
       {
-         mLastMailTime = aNewKey.intValue();
-         return null;
+         mLastMailTime = aNewKey.intValue() - 1; // current - 9 minutes
       }
+      Collection<AccountEntityData> mailGroup = new Vector<AccountEntityData>();
       Set<Integer> vMailGroupKeys = mMailingGroups.keySet();
-      for (Iterator<Integer> i = vMailGroupKeys.iterator(); i.hasNext();)
+      //log.info("collect mailgroup for key: " + aNewKey. intValue() + " and lastMailTime=" + mLastMailTime);
+      for (Integer vKey : vMailGroupKeys)
       {
-         Integer vKey = i.next();
-         if (aNewKey.intValue() > vKey.intValue() && mLastMailTime <= vKey.intValue())
+         if (aNewKey.intValue() >= vKey.intValue() && mLastMailTime < vKey.intValue())
          {
-            Collection<AccountEntityData> mailGroup = mMailingGroups.get(vKey);
-            mLastMailTime = aNewKey.intValue();
-            return Collections.unmodifiableCollection(mailGroup);
+         	mailGroup.addAll(mMailingGroups.get(vKey));
+         	//log.info("added group with key:" + vKey.intValue());
          }
       }
       mLastMailTime = aNewKey.intValue();
-      return null;
+      return mailGroup;
    }
 
    public synchronized Collection<Integer> getAccountIdsForBankAccountNr(String bankAccountNr)

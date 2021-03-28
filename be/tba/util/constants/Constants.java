@@ -706,6 +706,7 @@ public class Constants
    public static final long RECORD_AUTO_RELEASE_EXPIRE = DAYS * 3; 
    public static final long CUSTOMER_SESSION_TIMEOUT = MINUTES * 120; 
    public static final long ADMIN_SESSION_TIMEOUT = MINUTES * 60; 
+   public static final long MAILER_DRUMBEAT = MINUTES * 2;
    public static final long NORMAL_CALL_LENGTH = 90; // 90 seconds
    public static final int kOutCost = 120; // euro cent
    public static final int kSmsCost = 100; // euro cent
