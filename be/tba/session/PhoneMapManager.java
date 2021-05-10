@@ -74,10 +74,12 @@ public class PhoneMapManager
    {
       IntertelCallData call = IntertelCallManager.getInstance().getByDbId(data.getId());
       PhoneMapSqlAdapter sqlAdapter = null;
-      // log.info("updateOperatorMapping: data.getId()=" + data.getId() + ",
-      // sessionId=" + session.getSessionId() + ", call" + call);
       if (call == null || call.answeredBy.isEmpty() || !call.isIncoming)
       {
+         if (call == null || call.answeredBy.isEmpty())
+      	{
+         	log.info("updateOperatorMapping failed: call=" + call);
+      	}
          return;
       }
       boolean addIt = false;
@@ -87,14 +89,13 @@ public class PhoneMapManager
          if (phoneMapData.phoneUserMap.phoneId.equals(call.answeredBy))
          {
             // already mapped: update timestamp
-            // log.info("updateOperatorMapping : match");
+            //log.info("updateOperatorMapping : match");
             phoneMapData.lastUsed = System.currentTimeMillis() / 1000l;
             phoneMapData.sessionId = session.getSessionId();
          }
          else
          {
-            // log.info("updateOperatorMapping : no match. remove " +
-            // phoneMapData.toString());
+            log.info("updateOperatorMapping : operator switched device. remove " + phoneMapData.toString() + ", and add new one for " + call.answeredBy);
             mOperatorPhoneMap.remove(phoneMapData.phoneUserMap.phoneId);
             sqlAdapter = new PhoneMapSqlAdapter();
             sqlAdapter.deleteRow(session, phoneMapData.phoneUserMap.id);
@@ -103,7 +104,8 @@ public class PhoneMapManager
       }
       else
       {
-         addIt = true;
+      	log.info("updateOperatorMapping: new operator=" + call.answeredBy);
+      	addIt = true;
       }
       if (addIt)
       {
@@ -142,6 +144,8 @@ public class PhoneMapManager
             return;
          }
       }
+      log.info("mapNewLogin failed for user: " + userId);
+
    }
 
    public synchronized void cleanUpMap()
