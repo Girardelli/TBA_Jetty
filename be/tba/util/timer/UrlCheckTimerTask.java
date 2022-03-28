@@ -42,7 +42,7 @@ public class UrlCheckTimerTask extends TimerTask implements TimerTaskIntf
    {
       // TODO Auto-generated method stub
 //		return Constants.MINUTES;
-      return Constants.SECONDS * 15;
+      return Constants.SECONDS * 5;
    }
 
    @Override

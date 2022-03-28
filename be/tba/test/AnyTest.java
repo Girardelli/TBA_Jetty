@@ -1,5 +1,6 @@
 package be.tba.test;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -7,8 +8,13 @@ import java.util.Calendar;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
 
+import org.apache.poi.openxml4j.opc.OPCPackage;
+import org.apache.poi.openxml4j.opc.PackageAccess;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import be.tba.session.WebSession;
+import be.tba.sqladapters.InvoiceSqlAdapter;
 
 public class AnyTest
 {
@@ -18,11 +24,42 @@ public class AnyTest
    {
 //      testIntegerPrint();
 //      testExceptionLogging();
-      testLoginCodeParsing();
-      long now = Calendar.getInstance().getTimeInMillis();
-      log.info("now=" + now);
+   	poiTest();
    }
 
+   
+   private static void poiTest()
+   {
+   	OPCPackage pkg = null;
+   	try
+      {
+         log.info("2222");
+
+         // XSSFWorkbook, File
+        	pkg = OPCPackage.open("c:\\temp\\TBAuploads\\BE71143070729269-20190217.xlsx", PackageAccess.READ);
+      }
+      catch (Exception e)
+      {
+         log.info("6666");
+
+      	log.error(e.getMessage(), e);
+      }
+      finally
+      {
+         log.info("77");
+         try
+         {
+            if (pkg != null)
+               pkg.close();
+         }
+         catch (IOException e)
+         {
+            log.error(e.getMessage(), e);
+         }
+      }
+
+   }
+   
    private static void testIntegerPrint()
    {
       // TODO Auto-generated method stub

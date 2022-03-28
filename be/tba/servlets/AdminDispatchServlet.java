@@ -1034,6 +1034,7 @@ public class AdminDispatchServlet extends HttpServlet
       }
       catch (AccessDeniedException e)
       {
+      	log.error(e.getMessage(), e);
          rd = sc.getRequestDispatcher(Constants.ADMIN_FAIL_JSP);
          req.setAttribute(Constants.ERROR_TXT, e.getMessage());
          rd.forward(req, res);

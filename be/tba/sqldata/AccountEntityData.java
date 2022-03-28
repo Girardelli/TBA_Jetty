@@ -405,7 +405,9 @@ public class AccountEntityData extends be.tba.sqldata.AbstractData implements Co
 
    public java.lang.String getInvoiceEmail()
    {
-      return this.invoiceEmail;
+      if (this.invoiceEmail == null || this.invoiceEmail.isEmpty())
+      	return getEmail();
+   	return this.invoiceEmail;
    }
 
    public void setInvoiceEmail(java.lang.String invoiceEmail)

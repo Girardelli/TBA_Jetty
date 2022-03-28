@@ -95,12 +95,13 @@ public final class IBANCheckDigit implements Serializable
    /*
     * 
     * N-1911nr693 19110693 +++191/1000/69307+++
+    * 22030004 +++220/3000/00424+++
     */
    public String calculateOGM(String invoiceNr)
    {
-      // expects something like this: N-1710nr591
-
-      if (invoiceNr == null)
+      // expects something like this: 22030004
+   	//
+   	if (invoiceNr == null)
       {
          log.info("input parm = null");
          return null;
@@ -118,8 +119,8 @@ public final class IBANCheckDigit implements Serializable
 
       String code = String.format("%s00%s", invoiceNr.substring(0, 4), invoiceNr.substring(4, 8));
       // log.info("Invoice nr: invoiceNr: " + invoiceNr + " --> " + code);
-      int i = Integer.parseUnsignedInt(code);
-      int y = i % 97;
+      long i = Long.parseLong(code);
+      long y = i % 97;
       y = (y == 97 ? 0 : y);
       DecimalFormat vCostFormatter = new DecimalFormat("#00");
       // +++191/1000/69307+++

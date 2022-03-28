@@ -125,8 +125,8 @@ public class Mailer
 		catch (javax.mail.MessagingException | NamingException e)
 		{
 			if (vCustomer != null) MailError.getInstance().setError("Mail send failed to " + vCustomer.getFullName() + "\n" + e.getMessage());
-			//log.error(e.getMessage(), e);
-			return false;
+			log.error(e.getMessage(), e);
+			return true; //false;
 		}
 		return true;
 	}
@@ -190,7 +190,7 @@ public class Mailer
 	{
 		if (invoiceData == null || invoiceData.getFileName() == null || invoiceData.getFileName().length() == 0)
 		{
-			// log.info("Invoice not froozen for " + invoiceData.getAccountId());
+			log.info("Invoice not froozen for " + invoiceData.getAccountId());
 			return false;
 		}
 
@@ -269,7 +269,7 @@ public class Mailer
 			}
 			log.error(e.getMessage(), e);
 		}
-		return false;
+		return true; //false;
 	}
 
 	static private StringBuilder buildMailBody(AccountEntityData account, Collection<CallRecordEntityData> records, AtomicBoolean isImportant)
@@ -532,7 +532,7 @@ public class Mailer
 			mailAddrStr = mailAddrStr.substring(0, mailAddrStr.length() - 1);
 		}
 
-		//log.info("Mailaddressen: " + mailAddrStr);
+		log.info("Mailaddressen: " + mailAddrStr);
 		StringTokenizer vMailTokens = new StringTokenizer(mailAddrStr, ";");
 		if (mailAddrStr.isEmpty()) throw new javax.mail.MessagingException("mail address list is empty.");
 

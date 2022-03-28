@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Vector;
 import java.util.Collection;
 
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.openxml4j.opc.PackageAccess;
 import org.apache.poi.ss.usermodel.Row;
@@ -80,8 +81,10 @@ final public class PaymentXlsxReader
          mInvoiceSession = new InvoiceSqlAdapter();
 
          // XSSFWorkbook, File
-         pkg = OPCPackage.open(mInputFile, PackageAccess.READ);
+        	pkg = OPCPackage.open(mInputFile, PackageAccess.READ);
+
          wb = new XSSFWorkbook(pkg);
+
          Sheet sheet = wb.getSheetAt(0);
 
          // Decide which rows to process
@@ -184,7 +187,7 @@ final public class PaymentXlsxReader
       }
       catch (Exception e)
       {
-         log.error(e.getMessage(), e);
+      	log.error(e.getMessage(), e);
       }
       finally
       {

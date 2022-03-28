@@ -269,29 +269,41 @@ public class TbaPdfInvoice
 
       if (mInvoiceData.Description != null && !mInvoiceData.Description.isEmpty())
       {
-         final int kWidth = 60;
+         final int kWidth = 68;
          int start = 0;
-         int end = kWidth;
          int len = mInvoiceData.Description.length();
+         int end = Integer.min(kWidth, len);
          int lineCnt = 0;
 
          while (lineCnt < 4)
          {
-            int extra = mInvoiceData.Description.indexOf(' ', end);
-            if (extra > end)
+            String tmp = null;
+            int extra = 0;
+            if (end < len) 
             {
-               end = extra;
+            	tmp = mInvoiceData.Description.substring(start, end);
+            	extra = tmp.lastIndexOf(' ');
             }
-            end = Integer.min(end, len);
-            writeText(mPage1, mInvoiceData.Description.substring(start, end), PDType1Font.TIMES_ITALIC, 11, 100, 420 - (kDescrSpacing * lineCnt));
-            if (start + end > len)
+            else
             {
-               break;
+            	tmp = mInvoiceData.Description.substring(start, len);
+            	extra = len - start;
             }
-            start = end;
-            end = end + kWidth;
+            writeText(mPage1, tmp.substring(0, extra), PDType1Font.TIMES_ITALIC, 11, 100, 420 - (kDescrSpacing * lineCnt));
+            if (start + extra > len)
+            {
+            	//log.info("all words printed");
+            	break;
+            }
+            start = start + extra + 1;
+            end = start + kWidth;
             ++lineCnt;
          }
+         if (lineCnt >= 4)
+         {
+         	log.error("Description concatenated. lost the following: " + mInvoiceData.Description.substring(start, len));
+         }
+         
       }
       else if (isCreditNote)
       {
