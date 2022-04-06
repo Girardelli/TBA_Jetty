@@ -289,13 +289,14 @@ public class TbaPdfInvoice
             	tmp = mInvoiceData.Description.substring(start, len);
             	extra = len - start;
             }
-            writeText(mPage1, tmp.substring(0, extra), PDType1Font.TIMES_ITALIC, 11, 100, 420 - (kDescrSpacing * lineCnt));
+            tmp = tmp.substring(0, extra);
+            writeText(mPage1, tmp.stripLeading(), PDType1Font.TIMES_ITALIC, 11, 100, 420 - (kDescrSpacing * lineCnt));
             if (start + extra > len)
             {
             	//log.info("all words printed");
             	break;
             }
-            start = start + extra + 1;
+            start = start + extra;
             end = start + kWidth;
             ++lineCnt;
          }
